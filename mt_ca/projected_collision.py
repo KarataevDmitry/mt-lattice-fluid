@@ -109,19 +109,6 @@ def saturating_phi_kick(
     return mod_lane(phi, cfg.mod_bits)
 
 
-def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 ledger)."""
-    fb = cfg.frac_bits
-    u0 = f[..., 0].to(torch.int64)
-    v0 = f[..., 1].to(torch.int64)
-    sum_n = int_neighbor_sum(f, cfg.stencil)
-    su0, sv0 = sum_n[..., 0], sum_n[..., 1]
-    zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
-    rho2 = rho2_int(u0, v0, frac_bits=fb)
-    phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
-    return mod_lane(phi + pauli_phi_int(f, cfg), cfg.mod_bits)
-
-
 def rot_kick_uv(
     u: torch.Tensor,
     v: torch.Tensor,
@@ -163,6 +150,78 @@ def pauli_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     kick = float(pauli_kick_disc(phase_bits=cfg.phase_bits))
     ticks = torch.where(extra > 0, torch.full_like(extra, kick), torch.zeros_like(extra))
     return mod_lane(ticks.to(torch.int64), cfg.mod_bits)
+
+
+def cr_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """§3.9: CR defect + holomorphy sync → extra Φ ticks on Z_N (2D slice).
+
+    Maps float ``cr_phase_drive`` + ``holomorphy_sync_step`` phase into ticks.
+    FCC bulk CR — open.
+    """
+    import math
+
+    if f.ndim != 3:
+        return torch.zeros(f.shape[:-1], device=f.device, dtype=torch.int64)
+
+    from mt_ca.cauchy_riemann import cauchy_riemann_residual
+    from mt_ca.update import wrapped_phase_diff
+
+    z = decode_spinor(f, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits)
+    phi_rad = torch.zeros(z.shape[:-1], device=z.device, dtype=z.real.dtype)
+
+    if cfg.cr_strength > 0:
+        drive = torch.zeros_like(phi_rad)
+        for comp in (0, 1):
+            r1, r2 = cauchy_riemann_residual(z[..., comp])
+            drive = drive + torch.sqrt(r1.square() + r2.square())
+        phi_rad = phi_rad + cfg.cr_strength * 0.25 * drive
+
+    if cfg.holomorphy_sync and cfg.sync_strength > 0:
+        from mt_ca.spinor import spinor_neighbor_sum, holonomy_zeta
+
+        sum_n = spinor_neighbor_sum(z, cfg)
+        zeta = holonomy_zeta(z, sum_n)
+        phase_pull = wrapped_phase_diff(zeta, torch.ones_like(zeta))
+        phi_rad = phi_rad + cfg.sync_strength * phase_pull
+
+    n_ring = 1 << cfg.phase_bits
+    ticks = torch.round(phi_rad * (n_ring / (2.0 * math.pi))).to(torch.int64)
+    return mod_lane(ticks, cfg.mod_bits)
+
+
+def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 ledger)."""
+    fb = cfg.frac_bits
+    u0 = f[..., 0].to(torch.int64)
+    v0 = f[..., 1].to(torch.int64)
+    sum_n = int_neighbor_sum(f, cfg.stencil)
+    su0, sv0 = sum_n[..., 0], sum_n[..., 1]
+    zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
+    rho2 = rho2_int(u0, v0, frac_bits=fb)
+    # Floor after CR/Pauli so ledger Heisenberg-always still holds.
+    phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
+    phi = mod_lane(phi + pauli_phi_int(f, cfg) + cr_phi_int(f, cfg), cfg.mod_bits)
+    if cfg.heisenberg_floor:
+        phi_min = heisenberg_phi_min_int(cfg)
+        shape = phi.shape
+        coords = []
+        for dim, size in enumerate(shape):
+            view = [1] * len(shape)
+            view[dim] = size
+            coords.append(torch.arange(size, device=phi.device, dtype=torch.int64).view(*view))
+        parity = coords[0]
+        for c in coords[1:]:
+            parity = parity + c
+        stagger = torch.where(parity % 2 == 0, torch.ones_like(phi), -torch.ones_like(phi))
+        # unwrap to signed for floor compare
+        half = 1 << (cfg.mod_bits - 1)
+        signed = torch.where(phi >= half, phi - (1 << cfg.mod_bits), phi)
+        below = signed.abs() < phi_min
+        sign = torch.sign(signed)
+        sign = torch.where(sign == 0, stagger, sign)
+        signed = torch.where(below, stagger * phi_min, sign * torch.maximum(signed.abs(), torch.full_like(signed, phi_min)))
+        phi = mod_lane(signed, cfg.mod_bits)
+    return phi
 
 
 def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
