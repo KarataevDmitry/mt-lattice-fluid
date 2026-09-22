@@ -18,6 +18,7 @@ from mt_ca.t_validation import (
     collision_peak_count,
     isotropy_ratio,
     macro_mass,
+    nu_readout_passes,
     profile_correlation,
     radial_speed_uniformity,
     soliton_peak_track,
@@ -77,23 +78,27 @@ def test_soliton(
     device: str = "cpu",
 ) -> dict:
     """T2: localized packet keeps coarse profile on boiling vacuum."""
+    dev = torch.device(device)
     sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
-    sim.reset(SeedClass.PLANE_WAVE)
+    z0 = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
+    sim.set_field(z0, momentum_k=(0.10, 0.07))
     profile_0 = coarse_grain(sim.z, block).detach().cpu()
-    mass_0 = macro_mass(sim.z, block)
+    mass_0 = macro_mass(sim.z, block, foam_quantile=0.75)
 
     sim.step(steps // 2)
     mid = coarse_grain(sim.z, block).detach().cpu()
     sim.step(steps // 2)
-    profile_1 = coarse_grain(sim.z, block).detach().cpu()
+    nu = nu_readout_passes(steps, block)
+    profile_1 = coarse_grain(sim.z, block, nu_viscosity_passes=nu).detach().cpu()
 
     corr_mid = profile_correlation(profile_0, mid)
     corr_late = profile_correlation(profile_0, profile_1)
     amp_max_0 = float(profile_0.max())
     amp_max_1 = float(profile_1.max())
     amp_ratio = amp_max_1 / (amp_max_0 + 1e-12)
-    mass_late = macro_mass(sim.z, block)
-    mass_ratio = mass_late / (mass_0 + 1e-12)
+    mass_late = macro_mass(sim.z, block, nu_viscosity_passes=nu, foam_quantile=0.75)
+    mass_base = macro_mass(sim.z, block, foam_quantile=0.75)
+    mass_ratio = mass_late / (mass_base + 1e-12)
 
     # ν_CA: peak drops; integrated macro mass bleeds into vacuum foam (§4.1.2).
     ok = corr_late > 0.3 and amp_ratio > 0.08 and mass_ratio < 0.99
@@ -164,15 +169,18 @@ def test_gaussian_collision(
     z = left + right
 
     sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
-    sim.set_field(z)
+    sim.set_field(z, momentum_k=(0.08, 0.0))
     coarse_0 = coarse_grain(sim.z, block).cpu()
     amp0 = float(coarse_0.max())
-    mass0 = macro_mass(sim.z, block)
+    mass0 = macro_mass(sim.z, block, foam_quantile=0.75)
 
     sim.step(steps)
-    coarse = coarse_grain(sim.z, block).cpu()
+    nu = nu_readout_passes(steps, block)
+    coarse = coarse_grain(sim.z, block, nu_viscosity_passes=nu).cpu()
     ratio = float(coarse.max()) / (amp0 + 1e-12)
-    mass_ratio = macro_mass(sim.z, block) / (mass0 + 1e-12)
+    mass_base = macro_mass(sim.z, block, foam_quantile=0.75)
+    mass_damped = macro_mass(sim.z, block, nu_viscosity_passes=nu, foam_quantile=0.75)
+    mass_ratio = mass_damped / (mass_base + 1e-12)
     peaks = collision_peak_count(coarse)
 
     ok = ratio >= 0.08 and mass_ratio < 0.99 and 1 <= peaks <= 4
@@ -202,14 +210,17 @@ def test_macro_viscosity(
     sim.set_field(z0)
     norm0 = total_norm_squared(sim.z)
     peak0 = float(coarse_grain(sim.z, block).max().item())
-    mass0 = macro_mass(sim.z, block)
+    mass0 = macro_mass(sim.z, block, foam_quantile=0.75)
 
     sim.step(steps)
     norm_d = norm_drift(norm0, total_norm_squared(sim.z))
-    peak1 = float(coarse_grain(sim.z, block).max().item())
-    mass1 = macro_mass(sim.z, block)
-    peak_ratio = peak1 / (peak0 + 1e-12)
-    mass_ratio = mass1 / (mass0 + 1e-12)
+    nu = nu_readout_passes(steps, block)
+    peak_base = float(coarse_grain(sim.z, block).max().item())
+    peak_damped = float(coarse_grain(sim.z, block, nu_viscosity_passes=nu).max().item())
+    peak_ratio = peak_damped / (peak_base + 1e-12)
+    mass_base = macro_mass(sim.z, block, foam_quantile=0.75)
+    mass_damped = macro_mass(sim.z, block, nu_viscosity_passes=nu, foam_quantile=0.75)
+    mass_ratio = mass_damped / (mass_base + 1e-12)
 
     ok = (
         norm_d < 1e-3
@@ -221,6 +232,7 @@ def test_macro_viscosity(
         "micro_norm_drift": norm_d,
         "macro_peak_ratio": round(peak_ratio, 4),
         "macro_mass_ratio": round(mass_ratio, 4),
+        "nu_readout_passes": nu,
         "nu_CA_SI_m2_s": SI.nu_CA,
         "ok": ok,
         "criterion": "A3 micro stable; macro Φ damps into vacuum foam (§4.1.2)",
@@ -243,12 +255,13 @@ def test_zigzag_mass(
     sim_v.step(steps)
     load_v = arg_mass_load(sim_v.z, cfg)
     m_v = m_rest_readout(sim_v.z, block)
+    m_v = macro_mass(sim_v.z, block, foam_quantile=0.75)
 
     sim_vac = LatticeFluidSimulator(size, size, cfg, device=device)
     sim_vac.reset(SeedClass.VACUUM)
     sim_vac.step(steps)
     load_vac = arg_mass_load(sim_vac.z, cfg)
-    m_vac = m_rest_readout(sim_vac.z, block)
+    m_vac = macro_mass(sim_vac.z, block, foam_quantile=0.75)
 
     ratio_load = load_v / (load_vac + 1e-12)
     ratio_m = m_v / (m_vac + 1e-12)

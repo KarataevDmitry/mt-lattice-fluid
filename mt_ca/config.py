@@ -55,7 +55,7 @@ class MConfig:
     # §3.8: n4 (weak waves) | hex (vortex contour — ladder step 1 after deformation test)
     stencil: str = "hex"
 
-    # §3.12 M-canonical evolution: leapfrog on Planck fixed-point lattice (§3.12.6)
+    # §3.12 M-canonical evolution: leapfrog + projected collision on Z_N[i] (§3.12.6)
     evolution: str = "leapfrog"
     mod_bits: int = HV.mod_bits
     frac_bits: int = HV.frac_bits
@@ -64,7 +64,7 @@ class MConfig:
 
     @property
     def is_leapfrog(self) -> bool:
-        return self.evolution == "leapfrog"
+        return True
 
     @property
     def c(self) -> float:

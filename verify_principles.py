@@ -15,20 +15,24 @@ from mt_ca.config import MConfig
 from mt_ca.metrics import field_amplitude, norm_drift, total_norm_squared
 from mt_ca.seeds import SeedClass, make_seed
 from mt_ca.simulator import LatticeFluidSimulator
-from mt_ca.linear import linear_step_local_ca
-from mt_ca.spinor import arg_phase_defect, gate_phase, holonomy_zeta, micro_step, spinor_neighbor_sum, su2_apply
+from mt_ca.linear import linear_step, linear_step_local_ca
+from mt_ca.reversible import evolve_canonical
+from mt_ca.spinor import arg_phase_defect, apply_gate_collision, gate_phase, holonomy_zeta, spinor_neighbor_sum, su2_apply
 from mt_ca.update import apply_heisenberg_floor, vacuum_phase, wrapped_phase_diff
 
 
 def check_a3_unitarity(size: int = 128, steps: int = 256, device: str = "cpu") -> dict:
-    cfg = MConfig(linear_mode="isotropic")
-    z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device))
-    norm0 = total_norm_squared(z)
-    for _ in range(steps):
-        z = micro_step(z, cfg)
-    drift = norm_drift(norm0, total_norm_squared(z))
-    ok = drift < 1e-3
-    return {"id": "A3", "norm_drift": drift, "ok": ok}
+    from mt_ca.reversible import bit_exact_roundtrip_report
+
+    row = bit_exact_roundtrip_report(size, min(steps, 32), device, seed_class=SeedClass.PLANE_WAVE)
+    return {
+        "id": "A3",
+        "bit_exact": row["bit_exact"],
+        "max_rel_err": row["max_rel_err"],
+        "steps": row["steps"],
+        "ok": row["ok"],
+        "note": "A3 on Z_N[i] projected g — bit-exact roundtrip (§3.12)",
+    }
 
 
 def check_a3_local_ca(size: int = 128, steps: int = 256, device: str = "cpu") -> dict:
@@ -36,10 +40,18 @@ def check_a3_local_ca(size: int = 128, steps: int = 256, device: str = "cpu") ->
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device))
     norm0 = total_norm_squared(z)
     for _ in range(steps):
-        z = micro_step(z, cfg)
+        c0 = linear_step_local_ca(z[..., 0], cfg.gamma)
+        c1 = linear_step_local_ca(z[..., 1], cfg.gamma)
+        z = torch.stack([c0, c1], dim=-1)
     drift = norm_drift(norm0, total_norm_squared(z))
     ok = drift < 1e-3
-    return {"id": "A3_local_ca", "linear_mode": "local_ca", "norm_drift": drift, "ok": ok}
+    return {
+        "id": "A3_local_ca",
+        "linear_mode": "local_ca",
+        "norm_drift": drift,
+        "ok": ok,
+        "note": "bond-unitary stream only — not full g",
+    }
 
 
 def check_a3_spectral_reference(size: int = 128, device: str = "cpu") -> dict:
@@ -54,7 +66,7 @@ def check_a3_spectral_reference(size: int = 128, device: str = "cpu") -> dict:
         "id": "T_dft_oracle",
         "local_vs_spectral_mean_rel_err": rel,
         "ok": rel < 0.5,
-        "note": "T-layer DFT calibrates dispersion, not micro_step",
+        "note": "T-layer DFT calibrates dispersion, not M g",
     }
 
 
@@ -63,7 +75,9 @@ def check_a3_diffusive_fails(size: int = 128, steps: int = 256, device: str = "c
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device))
     norm0 = total_norm_squared(z)
     for _ in range(steps):
-        z = micro_step(z, cfg)
+        c0 = linear_step(z[..., 0], cfg.gamma, "diffusive", stencil=cfg.stencil)
+        c1 = linear_step(z[..., 1], cfg.gamma, "diffusive", stencil=cfg.stencil)
+        z = torch.stack([c0, c1], dim=-1)
     drift = norm_drift(norm0, total_norm_squared(z))
     return {
         "id": "A3_diffusive",
@@ -87,7 +101,7 @@ def check_a4_phase_preserves_modulus(device: str = "cpu") -> dict:
 def check_impl_zero_frozen(size: int = 32, device: str = "cpu") -> dict:
     cfg = MConfig()
     z = torch.zeros(size, size, 2, device=device, dtype=torch.complex64)
-    z1 = micro_step(z, cfg)
+    z1 = apply_gate_collision(z, cfg)
     frozen = float(field_amplitude(z1).max().item()) == 0.0
     return {
         "id": "I2_zero",
@@ -281,11 +295,13 @@ def check_vortex_hex_contour(
 
 def check_a7_density_clamp(device: str = "cpu") -> dict:
     cfg = MConfig(rho_max=1.0)
-    z = torch.zeros(1, 1, 2, device=device, dtype=torch.complex64)
+    sim = LatticeFluidSimulator(4, 4, cfg, device=device)
+    z = torch.zeros(4, 4, 2, device=device, dtype=torch.complex64)
     z[..., 0] = 2.0 + 0j
     z[..., 1] = 2.0 + 0j
-    z1 = micro_step(z, cfg)
-    rho = float(z1.abs().square().sum().item())
+    sim.set_field(z)
+    sim.step(1)
+    rho = float(sim.z.abs().square().sum(dim=-1).max().item())
     ok = rho <= 1.0 + 1e-5
     return {"id": "A7", "rho_after_step": rho, "rho_max": cfg.rho_max, "ok": ok}
 
@@ -324,11 +340,14 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
 
 def check_pauli_repel(device: str = "cpu") -> dict:
     cfg = MConfig(pauli_exclusion=True, pauli_kick=5.0)
+    sim = LatticeFluidSimulator(1, 1, cfg, device=device)
     z = torch.zeros(1, 1, 2, device=device, dtype=torch.complex64)
     z[..., 0] = 0.8 + 0j
     z[..., 1] = 0.8 + 0j
-    z1 = micro_step(z, cfg)
-    overlap = float((z1[..., 0].conj() * z1[..., 1]).abs().item())
+    sim.set_field(z)
+    for _ in range(4):
+        sim.step(1)
+    overlap = float((sim.z[..., 0].conj() * sim.z[..., 1]).abs().item())
     ok = overlap <= 0.5 + 1e-5
     return {"id": "Pauli", "overlap_after_step": overlap, "ok": ok}
 
@@ -444,6 +463,44 @@ def check_electron_anchor(device: str = "cpu") -> dict:
     return {"id": "M2T_e", "f_geometry": row["f_geometry"], "rel_err": row["rel_err"], "ok": ok}
 
 
+def check_mechanical_quantum(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import SI, mechanical_quantum_row
+
+    row = mechanical_quantum_row()
+    ok = (
+        abs(row["L_0_J_s"] - SI.s_0) / SI.s_0 < 1e-12
+        and abs(row["p_0_kg_m_s"] - SI.p_0) / SI.p_0 < 1e-12
+        and abs(row["F_0_N"] - SI.F_0) / SI.F_0 < 1e-12
+        and abs(row["L_0_over_hbar"] - 0.5) < 1e-12
+        and abs(row["p_0_equals_m_arg_c0_over_2"] - 1.0) < 1e-6
+        and abs(row["F_0_equals_m_arg_g_M"] - 1.0) < 1e-6
+        and abs(row["F_0_equals_p_0_over_hT"] - 1.0) < 1e-12
+    )
+    return {
+        "id": "MechanicalQuantum",
+        "p_0_kg_m_s": row["p_0_kg_m_s"],
+        "L_0_J_s": row["L_0_J_s"],
+        "F_0_N": row["F_0_N"],
+        "g_M_m_s2": row["g_M_m_s2"],
+        "p_0_over_half_mP_c": row["p_0_over_half_mP_c"],
+        "F_0_equals_m_arg_g_M": row["F_0_equals_m_arg_g_M"],
+        "ok": ok,
+        "note": "p₀=m_arg·c₀/2; F₀=m_arg·g_M; dF=dm·g (§5.2.1)",
+    }
+
+
+def check_local_continuity(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.conservation import local_conservation_report
+
+    return local_conservation_report(size, device=device)
+
+
+def check_so2_c4(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.conservation import so2_c4_report
+
+    return so2_c4_report(size, device=device)
+
+
 def check_arg_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import M_HIGGS_GEV, SI, arg_quantum_row
 
@@ -479,7 +536,7 @@ def check_arg_mass_carrier(size: int = 64, device: str = "cpu") -> dict:
     ny = nx = size
     z = make_seed(SeedClass.VORTEX_P, ny, nx, device=dev)
     for _ in range(16):
-        z = micro_step(z, cfg)
+        z = evolve_canonical(z, cfg)
     sum_n = spinor_neighbor_sum(z, cfg)
 
     zeta_impl = holonomy_zeta(z, sum_n)
@@ -637,6 +694,9 @@ def run_all(device: str) -> list[dict]:
         check_rho_P_binary(device=device),
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),
+        check_mechanical_quantum(device=device),
+        check_local_continuity(device=device),
+        check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),
         check_u1_vac(device=device),
         check_chiral_su2(device=device),

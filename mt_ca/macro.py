@@ -75,10 +75,14 @@ def macro_amplitude(
     radius: int,
     stride: int = 1,
     sigma: float | None = None,
+    nu_viscosity_passes: int = 0,
 ) -> torch.Tensor:
     """|Φ| on macro grid — primary T readout amplitude map."""
     phi = macro_average_spinor(z, radius=radius, stride=stride, sigma=sigma)
-    return phi.abs().square().sum(dim=-1).sqrt()
+    amp = phi.abs().square().sum(dim=-1).sqrt()
+    if nu_viscosity_passes > 0:
+        amp = binomial121_smooth(amp, passes=nu_viscosity_passes)
+    return amp
 
 
 # Legacy name — returns 3×3 binomial stencil for one pass (sum = 1).

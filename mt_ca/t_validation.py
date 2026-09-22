@@ -8,21 +8,42 @@ from mt_ca.macro import macro_amplitude
 from mt_ca.metrics import coarse_amplitude, ring_anisotropy
 
 
-def coarse_grain(z: torch.Tensor, block: int, *, radius: int | None = None) -> torch.Tensor:
-    """Binomial (1-2-1) macro readout |Φ| — MODEL §4.1.1 (stride = block, R ≈ block).
-
-    Falls back to legacy block mean only when block <= 1.
-    """
+def coarse_grain(
+    z: torch.Tensor,
+    block: int,
+    *,
+    radius: int | None = None,
+    nu_viscosity_passes: int = 0,
+) -> torch.Tensor:
+    """Binomial (1-2-1) macro readout |Φ| — MODEL §4.1.1 (stride = block, R ≈ block)."""
     if block <= 1:
         return coarse_amplitude(z, max(block, 1))
     r = radius if radius is not None else block
-    return macro_amplitude(z, radius=r, stride=block)
+    return macro_amplitude(
+        z,
+        radius=r,
+        stride=block,
+        nu_viscosity_passes=nu_viscosity_passes,
+    )
 
 
-def macro_mass(z: torch.Tensor, block: int) -> float:
-    """Integrated macro amplitude Σ|Φ|² — less brittle than peak under ν_CA decay."""
-    coarse = coarse_grain(z, block)
-    return float(coarse.square().sum().item())
+def nu_readout_passes(steps: int, block: int) -> int:
+    """Extra binomial passes on T readout — ν_CA coarse-graining loss (§4.1.2)."""
+    from mt_ca.si_constants import nu_CA_natural
+
+    return max(0, int(round(2.0 * steps * nu_CA_natural() / max(block, 1))))
+def macro_mass(
+    z: torch.Tensor,
+    block: int,
+    *,
+    foam_quantile: float = 0.5,
+    nu_viscosity_passes: int = 0,
+) -> float:
+    """Integrated macro amplitude Σ|Φ−Φ_foam|² — ν_CA coherent mass (§4.1.2, §5.0.1)."""
+    coarse = coarse_grain(z, block, nu_viscosity_passes=nu_viscosity_passes)
+    floor = float(torch.quantile(coarse.reshape(-1), foam_quantile).item())
+    signal = (coarse - floor).clamp_min(0.0)
+    return float(signal.square().sum().item())
 
 
 def covariance_isotropy(rho: torch.Tensor, *, threshold: float = 0.08) -> float:
@@ -199,7 +220,7 @@ def wave_particle_readout(
     z_wave[cy, cx + sep, 0] = 0.45 + 0j
 
     sim_w = LatticeFluidSimulator(size, size, cfg, device=dev)
-    sim_w.set_field(z_wave)
+    sim_w.set_field(z_wave, momentum_k=(0.06, 0.0))
     sim_w.step(steps)
     coarse_w = coarse_grain(sim_w.z, block).detach().cpu()
     wave_peaks = collision_peak_count(coarse_w)

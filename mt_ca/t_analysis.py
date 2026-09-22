@@ -1,7 +1,8 @@
-"""T-layer: discrete analysis on the lattice (not M micro_step).
+"""T-layer: discrete analysis on the lattice (not M g).
 
 DFT / spectral tools read macro structure and calibrate dispersion — they do not
-replace local CA update. Continuity is a T hypothesis, not an M operator.
+replace local CA update. Bond continuity + SO(2) on N₄ are M operators (§5.2.1);
+spectral continuity is a T readout aid.
 """
 
 from __future__ import annotations
