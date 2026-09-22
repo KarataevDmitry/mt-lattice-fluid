@@ -502,6 +502,21 @@ class SIConstants:
             "note": "§8.4.3: bare=3/13=d/(|N12|+1); N_φ=⌈4π⌉ coincides; eff=1/8+1/(dπ) soft",
         }
 
+    def coulomb_row(self) -> dict[str, float]:
+        """§8.2 Coulomb — F = α_fs · F_P · n1 n2 / N² from carrier (no new knob)."""
+        f_p = self.c**4 / self.G
+        alpha = self.alpha_fs
+        # unit charges on adjacent cells
+        f_nn = alpha * f_p
+        return {
+            "alpha_fs": alpha,
+            "F_P_N": f_p,
+            "F_over_F_P_N1_unit": alpha,
+            "F_NN_N": f_nn,
+            "rel_F_over_FP_is_alpha": abs(f_nn / f_p - alpha) / alpha,
+            "note": "§8.2: F=α_fs F_P n1 n2/N²; N=1,|n|=1 → |F|/F_P=α_fs",
+        }
+
     def alpha_runner_row(self) -> dict[str, float]:
         """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
         b_hv = self.bekenstein_bits_hv
