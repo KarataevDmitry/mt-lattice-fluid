@@ -896,7 +896,108 @@ $$
 
 Кривизна не калибровочное поле: $z$ эволюционирует жёстким локальным $g$ (leapfrog, §3.12); $g_{\mu\nu}=\eta+h$ **проявляется** для macro-наблюдателя через живой stencil. Эйнштейн §D — сборка $\delta_e$ в $G_{\mu\nu}$, не отдельная динамика.
 
-**Статус:** чтение ✅ · формула §C′ ✅ линейно · живой stencil / IR-моды ⚠️ (DoD §G).
+##### C′′′ · BC домена насыщения $\rho=\rho_\star$ и профиль $h$ вокруг ядра
+
+**Домен**
+
+$$
+D_\star
+:=
+\{x\in\Lambda:\rho(x)=\rho_\star\},
+\qquad
+R_\star
+:=
+\mathrm{rad}(D_\star)\ge\ell_P,
+\qquad
+\partial D_\star
+=
+\{e=(c\to y):c\in D_\star,\ y\notin D_\star\}.
+$$
+
+Pra-ядро: часто $|D_\star|=1$ (один $v_p$, $b=1$, $m_{\mathrm{cell}}=m_P$).
+
+**1 · Внутри $D_\star$ (Dirichlet)**
+
+$$
+\rho=\rho_\star,
+\quad
+\varepsilon=\varepsilon_\star,
+\quad
+\Phi[\varepsilon]\ \text{насыщен (§3.12.5a)},
+\quad
+b=1,
+\quad
+m_{\mathrm{cell}}=m_P.
+$$
+
+**2 · На $\partial D_\star$ (интерфейс)**
+
+Для каждого ребра $e=(c\to y)\in\partial D_\star$:
+
+$$
+\rho_e=\frac{\rho_\star+\rho(y)}{2},
+\qquad
+\varepsilon_e^{(\partial)}
+=
+\frac{\rho_e-\rho_{\mathrm{vac}}}{\rho_{\mathrm{vac}}},
+\qquad
+\ell_e=\ell_P\bigl(1+\varepsilon_e^{(\partial)}\bigr),
+$$
+
+$$
+\Delta\varphi_e=\mathrm{Arg}\bigl(z(c)^\dagger z(y)\bigr).
+$$
+
+Поток occupancy: $\rho(c)$ не растёт выше $\rho_\star$ (A7 clamp). Спинор на границе — обычный $g$ (A1–A2).
+
+**3 · Снаружи (асимптотика)**
+
+$$
+\mathrm{dist}(x,D_\star)\to\infty
+\quad\Rightarrow\quad
+\rho\to\rho_{\mathrm{vac}},\ \
+\varepsilon\to 0,\ \
+h_{\mu\nu}\to 0.
+$$
+
+**4 · Профиль эффективной метрики**
+
+Near-zone (интерфейс):
+
+$$
+h_\star^{(\mathrm{near})}
+:=
+-\frac{2}{|N|}\sum_{e\in\partial D_\star}\varepsilon_e^{(\partial)}
+=
+-\frac{1}{6}\sum_{e\in\partial D_\star}\varepsilon_e^{(\partial)}
+\quad(|N|=12).
+$$
+
+Far-zone (Ньютон §B, $G=\ell_P^{\,2}$, $m\le m_P$):
+
+$$
+h_{00}^{(\mathrm{far})}(R)
+=
+-\frac{2m}{m_P}\,\frac{\ell_P}{R}
+\qquad(R>R_\star).
+$$
+
+Сшивка моделирования:
+
+$$
+h_{00}(R)
+=
+\begin{cases}
+h_\star^{(\mathrm{near})} & R\le R_\star\\
+-\dfrac{2m}{m_P}\,\dfrac{\ell_P}{R} & R>R_\star
+\end{cases}
+\qquad
+\frac{m}{m_P}\le 1.
+$$
+
+**Sim:** $D_\star$ с $\rho=\rho_\star$ → $\{\varepsilon_e^{(\partial)}\}$ → $h_\star^{(\mathrm{near})}$ → far $1/R$ с $m\le m_P$.
+
+Код: `SI.saturation_bc_row()`.
 
 ##### D · Тензор Эйнштейна из strain (не пятое поле)
 

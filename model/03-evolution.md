@@ -637,6 +637,8 @@ $$
 
 Pra-occupancy (§5.0): $b\in\{0,1\}\Rightarrow m_{\mathrm{cell}}=b\,m_P\le m_P$. При $\rho\to\rho_\star$ — $\Phi[\varepsilon]\to$ насыщению, дальше масса в одном $v_p$ не растёт.
 
+BC домена $D_\star=\{\rho=\rho_\star\}$ и профиль $h_{00}$ (near $\varepsilon$ / far $1/R$) — §8.4.2-C′′′ · `SI.saturation_bc_row()`.
+
 Код: `SI.leapfrog_eps_row()` · kick: `saturating_phi_kick` (`|Z|²≡ρ_vac(1+ε)`).
 
 #### 3.12.6 Bit budget of `hV` — вывод из Planck (дна ниже нет)

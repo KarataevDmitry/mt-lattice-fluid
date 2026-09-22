@@ -652,6 +652,33 @@ class SIConstants:
             "note": "§8.4.3-E: tree with α(MZ) from B_hV runner + bare 3/13",
         }
 
+    def saturation_bc_row(self) -> dict[str, float]:
+        """§8.4.2-C′′′ — D_★ BC; near h_★[ε]; far h_00=2(m/m_P)ℓ_P/R."""
+        from mt_ca.fixed_point import vacuum_amplitude_quantum
+
+        rho_star = 1.0
+        vac_amp = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
+        rho_vac = vac_amp * vac_amp
+        rho_e = 0.5 * (rho_star + rho_vac)
+        eps_partial = (rho_e - rho_vac) / rho_vac
+        h_star_near = -2.0 * eps_partial  # |N|=12 equal NN edges: −(2/12)·12·ε
+        r_star = 1.0  # hops / ℓ_P
+        m_over_m_P = 1.0  # pra-core ceiling
+        h_star_newton = -2.0 * m_over_m_P / r_star  # h_00(R_★)=−2m/(m_P R_★)
+        return {
+            "rho_star": rho_star,
+            "rho_vac": rho_vac,
+            "eps_partial_NN": eps_partial,
+            "h_star_near": h_star_near,
+            "h_star_newton": h_star_newton,
+            "R_star_over_l_P": r_star,
+            "m_over_m_P": m_over_m_P,
+            "h00_far_at_R_eq_2": h_star_newton * 0.5,
+            "N12": 12.0,
+            "m_P": self.m_P,
+            "l_P": self.l_P,
+        }
+
     def leapfrog_eps_row(self) -> dict[str, float]:
         """§3.12.5a — ε in Φ-kick; ℓ_e bound; m_loc ≤ m_P."""
         from mt_ca.fixed_point import vacuum_amplitude_quantum
