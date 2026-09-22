@@ -151,7 +151,7 @@ R_⊥ = (c₀ t) / 2   ⇒   c = k c₀ ,  k = 1/2
 
 | § манифеста | Файл / § |
 |-------------|----------|
-| 1–3 | `MODEL.md` §0–§2 |
+| 1–3 | `MODEL.md` §0–§2 (основания + аксиомы; genesis → `DEVLOG.md` §7) |
 | 4 | `MODEL.md` §3 · `mt_ca/update.py` |
 | 5 | `MODEL.md` §7 · `config.py` (SI anchors) |
 | 6 | `MODEL.md` §4–§5 · §5.1 fluid |
