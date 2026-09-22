@@ -255,12 +255,12 @@ $$
 \nabla\times\mathbf{B}\propto\mathbf{J}+\partial_t\mathbf{E}.
 $$
 
-Свет:
+Свет (та же $c$, что §1.1 / §5.1.1 — не второй расчёт):
 
 $$
-c^2 = K_P/\mu_P = \kappa^2 c_0^2,
+c = \kappa\, c_0 = c_0/\sqrt{2},
 \qquad \kappa=1/\sqrt{2},
-\qquad c = c_0/\sqrt{2}.
+\qquad K_P:=\mu_P c^2\ \Rightarrow\ c^2=K_P/\mu_P.
 $$
 
 | кусок | статус |
@@ -274,12 +274,18 @@ $$
 
 #### Lorentz / изотропия света (из упругости + binomial)
 
-**Не** отдельная группа SO(3,1) на M. Macro-$c$ и круг — из двух формул:
+**Не** отдельная группа SO(3,1) на M. Macro-$c$ — **одна** цепочка; $K_P/\mu_P$ — не второй расчёт числа $c$:
 
 $$
-c^2 = K_P/\mu_P,
-\qquad
-c = \kappa\, c_0 = c_0/\sqrt{2}.
+c = \kappa\, c_0 = c_0/\sqrt{2}
+\qquad(\kappa=1/\sqrt{2}\ \text{из FCC},\ c_0=\ell_P/hT),
+$$
+
+$$
+K_P := \mu_P\, c^2
+\quad\Rightarrow\quad
+c^2 = K_P/\mu_P
+\quad\text{(тождество гидродинамики, §5.1.1)}.
 $$
 
 Фотон на M = безмассовая мода бегущей фазовой голономии ($n=0$, $\Phi_\square$-фронт). Macro-readout — binomial $(1{-}2{-}1)$ по многим плакеткам (§4.1 · T1):
@@ -294,7 +300,7 @@ $$
 
 | кусок | статус |
 |-------|--------|
-| $c^2=K_P/\mu_P$, $\kappa=1/\sqrt{2}$ | ✅ |
+| $c=\kappa c_0$; $K_P:=\mu_P c^2$ (тождество) | ✅ |
 | фотон = holonomy $n=0$ | ✅ схема |
 | binomial → макро-круг (T1) | ✅ §4.2 |
 | количественный LIV/MDR budget (MAGIC/Fermi) | ⚠️ open |
