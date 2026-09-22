@@ -226,8 +226,7 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
 
     in_ring = bool(((phi_disc >= 0) & (phi_disc < n_ring)).all())
     mod_ok = bool(torch.equal(phi_disc, phi_disc % n_ring))
-    nz = phi_disc != 0
-    disc_floor_ok = bool((phi_disc[nz].abs() >= phi_min_disc).all()) if bool(nz.any()) else True
+    disc_floor_ok = bool((phi_disc.abs() >= phi_min_disc).all())
 
     ok = (
         abs(phi_min_rad - DELTA_PHI_MIN) < 1e-12
@@ -821,9 +820,10 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
 
     amp = z_min
     z_const = torch.full((size, size, 2), amp, device=dev, dtype=torch.complex64)
-    f_const = canonical_fixed(z_const, cfg)
-    kick_const = projected_collision_kick(f_const, cfg)
-    f_next, _, _ = leapfrog_forward_fixed(f_const, f_const, cfg)
+    cfg_d5 = MConfig(heisenberg_floor=False)
+    f_const = canonical_fixed(z_const, cfg_d5)
+    kick_const = projected_collision_kick(f_const, cfg_d5)
+    f_next, _, _ = leapfrog_forward_fixed(f_const, f_const, cfg_d5)
     const_kick_zero = int(kick_const.abs().max().item()) == 0
     const_step_fixed = bool(torch.equal(mod_lane(f_next, cfg.mod_bits), mod_lane(f_const, cfg.mod_bits)))
 
@@ -883,6 +883,51 @@ def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
     }
 
 
+def check_ladder_ledger(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.ledger import ladder_ledger_report
+
+    return ladder_ledger_report(size, device=device)
+
+
+def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.macro import macro_amplitude, macro_matter_b
+    from mt_ca.spinor import spinor_density
+    from mt_ca.topology import matter_occupancy_b, matter_occupancy_b_field, winding_number
+
+    dev = torch.device(device)
+    radius = 2
+
+    z_v = make_seed(SeedClass.VACUUM, size, size, device=dev)
+    vac_b_mean = float(matter_occupancy_b_field(z_v).float().mean().item())
+    vac_macro_b = float(macro_matter_b(z_v, radius=radius).mean().item())
+    vac_macro_amp = float(macro_amplitude(z_v, radius=radius).mean().item())
+
+    z_p = make_seed(SeedClass.VORTEX_P, size, size, device=dev)
+    cy, cx = torch.unravel_index(spinor_density(z_p).argmax(), z_p.shape[:2])
+    cy, cx = int(cy.item()), int(cx.item())
+    w = winding_number(z_p, center=(cy, cx), radius=2)
+    core_b = 1 if w == w and abs(w) >= 0.75 else matter_occupancy_b(z_p, y=cy, x=cx)
+    vortex_macro_b = float(macro_matter_b(z_p, radius=radius).max().item())
+
+    ok = (
+        vac_b_mean < 0.05
+        and vac_macro_b < 0.05
+        and vac_macro_amp > vac_macro_b
+        and core_b == 1
+        and vortex_macro_b > 0.1
+    )
+    return {
+        "id": "MatterOccupancyB",
+        "vac_b_mean": vac_b_mean,
+        "vac_macro_b": vac_macro_b,
+        "vac_macro_amp": vac_macro_amp,
+        "vortex_core_b": core_b,
+        "vortex_macro_b_max": vortex_macro_b,
+        "ok": ok,
+        "note": "§5.0: b=min(1,|n_∂|); macro ⟨b⟩ primary over |z|²",
+    }
+
+
 def run_all(device: str) -> list[dict]:
     return [
         check_a3_unitarity(device=device),
@@ -918,6 +963,8 @@ def run_all(device: str) -> list[dict]:
         check_no_m_heat_death(device=device),
         check_theorem_2_3_8(device=device),
         check_planck_vacuum_floor(device=device),
+        check_ladder_ledger(device=device),
+        check_matter_b_readout(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_vortex_hex_contour(device=device),

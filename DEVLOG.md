@@ -53,12 +53,12 @@
 |----------|--------|-----|
 | **`κ_link`, `γ`, `cr_strength`, `ν_CA`** | ✅ **`¼`** | — |
 | **`s₀`, `p₀`, `L₀`, `E₀`, `F₀`, `g_M`** | ✅ §5.2.1 | — |
-| **`sync`, Pauli, `ρ_Q`, `n_E` map** | ✅ §5.2.3 | sim verify **EnergyLedger** open |
+| **`sync`, Pauli, `ρ_Q`, `n_E` map** | ✅ §5.2.3 | **`LadderLedger`** (E/p/L + Heisenberg every tick) |
 | **`R(Φ)=ω^Φ` vs `exp(i·Θ·σ/2)`** | ✅ §3.10.3 · §3.12.5 | verify **`DiscreteRotExp`** |
-| **`b ∈ {0,1}`** | ✅ §5.0 / §5.2.3 | sim primary readout — open |
+| **`b ∈ {0,1}`** | ✅ §5.0 / §5.2.3 | **`MatterOccupancyB`** (n_∂ + ρ gate, not \|z\|²) |
 | **`α_s`, G_F, динамическая метрика** | ❌ | **model-gap** SM/GR |
 
-Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rho_P_binary`**.
+Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rho_P_binary`**, **`LadderLedger`**, **`MatterOccupancyB`**.
 
 ---
 
@@ -169,8 +169,8 @@ Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rh
 | §5.0 binary ρ | ✅ **`Rho_P_binary`** · occupancy T — open |
 | §5.0.1 Arg mass | ✅ **`Arg_mass_carrier`** · **`T_zigzag_mass`** · sim open |
 | §5.0.3 antimatter | ✅ A10 seeds · annihilation sim open |
-| §5.2.1 mechanical | ✅ **`MechanicalQuantum`**, **`LocalContinuity`**, **`SO2_C4`** |
-| §5.2.3 elementary | ✅ **`ElementaryQuanta`** · **EnergyLedger** verify open |
+| §5.2.1 mechanical | ✅ **`MechanicalQuantum`**, **`LocalContinuity`**, **`LadderLedger`** |
+| §5.2.3 elementary | ✅ **`ElementaryQuanta`** · **`LadderLedger`** · **`MatterOccupancyB`** |
 | §5.3 gas / VdW | ✅ algebra · sim EOS open |
 
 ### §8 SM / Higgs

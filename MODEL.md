@@ -1915,9 +1915,9 @@ b(x) = 1  ⟺  |Δφ_N₄(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
 
 **Pauli (§3.10.4):** parallel **`z₁ ∥ z₂`** при **`ρ_i ≥ ρ_max/2`** (два fermion на **`v_p`** делят потолок A7) и **`|cos θ| > cos(Δφ_min)`** → extra **`Φ += pauli_kick`** (**π** = **`N_ring/2`** ticks).
 
-**Energy ledger (§3.12):** saturating **`Φ`** [ticks] → **`n_E = ⌊|Φ|/Δφ_disc⌋`**; локально **`Σ_{N₄} n_E·E₀ ≡ 0 (mod E₀)`**.
+**Energy ledger (§3.12):** saturating **`Φ`** [ticks] → **`n_E = ⌊|Φ|/Δφ_disc⌋`**; локально **`Σ_{N₄} n_E·E₀ ≡ 0 (mod E₀)`** (checkerboard floor + **`LadderLedger`**).
 
-**Audit / verify:** [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · **`elementary_quanta_row()`** · **`MConfig`** defaults.
+**Audit / verify:** [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · **`elementary_quanta_row()`** · **`MConfig`** defaults · **`LadderLedger`** · **`MatterOccupancyB`**.
 
 ### 5.3 Макро-газ: нет «пустого пространства»
 
