@@ -44,6 +44,12 @@ def binomial_spectral_row(*, n_k: int = 256, r_passes: int = 16) -> dict[str, fl
     # identity checks at sample k
     k0 = math.pi / 3.0
     w0 = 0.5 + 0.5 * math.cos(k0)
+    # Leading coeff: log(Ŵ_R/G_R) ∼ −R k⁴/96  (§4.1.0-T(A3))
+    k_probe = 0.05
+    w_r = math.cos(k_probe / 2.0) ** (2 * r_passes)
+    g = math.exp(-sig2 * k_probe * k_probe / 2.0)
+    log_ratio = math.log(w_r / g)
+    leading = -r_passes * (k_probe**4) / 96.0
     return {
         "R": float(r_passes),
         "sigma2": sig2,
@@ -51,7 +57,8 @@ def binomial_spectral_row(*, n_k: int = 256, r_passes: int = 16) -> dict[str, fl
         "multiplier_id_err": abs(w0 - math.cos(k0 / 2.0) ** 2),
         "max_rel_err_k_sigma_lt_0_30": max_rel_030,
         "max_rel_err_k_sigma_lt_0_50": max_rel_050,
-        "note": "§4.1.0-T(A): cos^{2R}(k/2) ↔ exp(−σ²k²/2), σ²=R/2",
+        "taylor_leading_R_over_96": abs(log_ratio - leading) / abs(leading),
+        "note": "§4.1.0-T(A): cos^{2R}(k/2) ↔ exp(−σ²k²/2), σ²=R/2; log∼−R k⁴/96",
     }
 
 
@@ -108,6 +115,7 @@ def t_continuum_readout_row() -> dict[str, float | int | bool | str]:
         "multiplier_id_err": spec["multiplier_id_err"],
         "max_rel_err_k_sigma_lt_0_30": spec["max_rel_err_k_sigma_lt_0_30"],
         "max_rel_err_k_sigma_lt_0_50": spec["max_rel_err_k_sigma_lt_0_50"],
+        "taylor_leading_R_over_96": spec["taylor_leading_R_over_96"],
         "path_atom_conv": conv,
         "path_atom_is_121": conv == (1, 2, 1),
         "fcc_n_nn": fcc["n_nn"],

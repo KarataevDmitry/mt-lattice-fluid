@@ -748,6 +748,7 @@ def check_t_continuum_readout(device: str = "cpu") -> dict:
         and row["multiplier_id_err"] < 1e-15
         and row["max_rel_err_k_sigma_lt_0_30"] < 1e-4
         and row["max_rel_err_k_sigma_lt_0_50"] < 1e-3
+        and row["taylor_leading_R_over_96"] < 0.02
         and row["fcc_n_nn"] == 12
         and row["fcc_n_walks"] == 144
         and row["fcc_w_origin"] == 12
