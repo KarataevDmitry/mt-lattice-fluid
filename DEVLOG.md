@@ -65,7 +65,7 @@
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
 | **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / stencil / Aρη | EW+GR+CKM скелет ✅ | census · IR · stencil · Aρη |
-| **Higgs = T-пена** | §5.0.1 · §8.3 | T | — | **`Higgs_mass`** ≈123 GeV (`m_P α⁸√(π/2)`); width open |
+| **Higgs = T-пена** | §5.0.1 · §8.3.1 | T | — | `m_H=m_P α⁸√(π/2)` if `λ=1/N_hier` ansatz; λ open; width open |
 
 **Приоритет sim-gap:** A9 absolute ν_CA plateau · FCC bulk CR · Young/tunnel/census leaves.
 
@@ -251,7 +251,8 @@
 | 2026-09-23 | §4.9 T2 | probes: soliton=vortex; wave=dual Gaussian; 1-2-1 = T readout (не M); fringes≠fail |
 | 2026-09-23 | §4.1.0 | вывод `(1-2-1)`: атом `[1,1]/2` → `w∗w`; 2D `⊗`; FCC 3D multinomial — hinge |
 | 2026-09-23 | §4.1.0 physics | A1: depth-2 return-paths → `[1,2,1]`; `⊗`≠hex/FCC; κ независимо от бинома |
-| 2026-09-23 | §8.3.1 | `m_H=v/2=m_P α⁸√(π/2)` · `λ=1/N_hier` · ~123 vs PDG 125 (~1.8%) |
+| 2026-09-23 | §8.3.1 | `m_H=v/2=m_P α⁸√(π/2)` · `λ=1/N_hier` ansatz · ~123 vs PDG 125 (~1.8%) |
+| 2026-09-23 | §8.3.1 fix | снята фальш-теорема soft-wall «поля занятости»; `b`=бит, объём=`z` |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---

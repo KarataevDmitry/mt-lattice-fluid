@@ -673,7 +673,7 @@ class SIConstants:
             "m_H_PDG_GeV": M_HIGGS_GEV_PDG,
             "m_H_rel_err": abs(m_h - M_HIGGS_GEV_PDG) / M_HIGGS_GEV_PDG,
             "m_H_over_v": m_h / v,
-            "note": "§8.3: m_H=v/2 from λ=1/N_hier; = α_fs^8 E_P √(π/2)",
+            "note": "§8.3.1: m_H=v/2 if λ=1/N_hier ansatz; = α_fs^8 E_P √(π/2)",
         }
 
     def saturation_bc_row(self) -> dict[str, float]:
