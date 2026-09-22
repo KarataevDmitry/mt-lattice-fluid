@@ -808,15 +808,18 @@ def check_no_m_heat_death(device: str = "cpu") -> dict:
 
 
 def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
-    """§2.3.8: D5 on Z_N[i] = constants only; A5 float gate ≠ frozen vacuum."""
+    """§2.3.8: D5 on Z_N[i] = constants only; Planck VACUUM ≠ D5."""
+    from mt_ca.fixed_point import vacuum_amplitude_quantum
     from mt_ca.projected_collision import projected_collision_kick
     from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
+    from mt_ca.simulator import LatticeFluidSimulator
     from mt_ca.z_ring import mod_lane
 
     cfg = MConfig()
     dev = torch.device(device)
+    z_min = vacuum_amplitude_quantum(frac_bits=cfg.frac_bits)
 
-    amp = 0.01 + 0.02j
+    amp = z_min
     z_const = torch.full((size, size, 2), amp, device=dev, dtype=torch.complex64)
     f_const = canonical_fixed(z_const, cfg)
     kick_const = projected_collision_kick(f_const, cfg)
@@ -824,7 +827,6 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     const_kick_zero = int(kick_const.abs().max().item()) == 0
     const_step_fixed = bool(torch.equal(mod_lane(f_next, cfg.mod_bits), mod_lane(f_const, cfg.mod_bits)))
 
-    # Non-constant on Z_N[i] (manual): holonomy ≠ 0 ⇒ ⌊𝒩⌋ ≠ 0 (2.3.8a converse probe).
     f_nc = torch.zeros(size, size, 4, device=dev, dtype=torch.int64)
     f_nc[..., 0] = 10
     f_nc[..., 1] = 5
@@ -832,20 +834,52 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     f_nc[0, 0, 1] = 8
     nonconst_kick = int(projected_collision_kick(f_nc, cfg).abs().max().item()) > 0
 
-    # A5: float vacuum gate fires at ρ→0 even when one tick is D4-limited after quantize (§10.2).
-    rho = torch.tensor([[1e-8]], device=dev)
-    phi = vacuum_phase(rho, cfg)
-    a5_gate_live = float(phi.abs().item()) > 0.1
+    sim = LatticeFluidSimulator(size, size, cfg, device=dev)
+    sim.reset(SeedClass.VACUUM)
+    kick_vac = projected_collision_kick(sim._f_curr, cfg)
+    vac_not_frozen = int(kick_vac.abs().max().item()) > 0
 
-    ok = const_kick_zero and const_step_fixed and nonconst_kick and a5_gate_live
+    ok = const_kick_zero and const_step_fixed and nonconst_kick and vac_not_frozen
     return {
         "id": "Theorem_2_3_8",
         "const_kick_zero": const_kick_zero,
         "const_step_fixed": const_step_fixed,
         "nonconst_kick": nonconst_kick,
-        "a5_gate_live": a5_gate_live,
+        "vac_not_frozen": vac_not_frozen,
         "ok": ok,
-        "note": "§2.3.8a on Z_N[i]; A5 gate on float layer (quantize may D4-limit one tick)",
+        "note": "§2.3.8a–b; VACUUM at z_min with gauge_fix=False encode",
+    }
+
+
+def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
+    """§0.5 / §10.2: vacuum_amplitude = z_min; no |z|→0 knob; VACUUM boils on Z_N[i]."""
+    from mt_ca.fixed_point import vacuum_amplitude_quantum
+    from mt_ca.projected_collision import projected_collision_kick
+    from mt_ca.simulator import LatticeFluidSimulator
+
+    cfg = MConfig()
+    dev = torch.device(device)
+    z_min = vacuum_amplitude_quantum(frac_bits=cfg.frac_bits)
+    amp_match = abs(cfg.vacuum_amplitude - z_min) < 1e-12
+
+    sim = LatticeFluidSimulator(size, size, cfg, device=dev)
+    sim.reset(SeedClass.VACUUM)
+    from mt_ca.metrics import field_amplitude
+
+    decoded_min = float(field_amplitude(sim.z).min().item())
+    above_floor = decoded_min >= 0.5 * z_min
+    kick = projected_collision_kick(sim._f_curr, cfg)
+    boils = int(kick.abs().max().item()) > 0
+
+    ok = amp_match and above_floor and boils
+    return {
+        "id": "PlanckVacuumFloor",
+        "z_min": z_min,
+        "vacuum_amplitude": cfg.vacuum_amplitude,
+        "decoded_min": decoded_min,
+        "boils": boils,
+        "ok": ok,
+        "note": "§0.5: z_min derived; global U(1) gauge on encode (not per-cell §10.2)",
     }
 
 
@@ -883,6 +917,7 @@ def run_all(device: str) -> list[dict]:
         check_leapfrog_bit_exact(device=device),
         check_no_m_heat_death(device=device),
         check_theorem_2_3_8(device=device),
+        check_planck_vacuum_floor(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_vortex_hex_contour(device=device),

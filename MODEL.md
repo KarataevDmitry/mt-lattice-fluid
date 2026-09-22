@@ -102,6 +102,16 @@ z(x,t) ∈ Z_N[i]  на v_p           — целочисленный спино�
 
 **Следствие 0.4 — Континуум на M.** **Нет** (§1.4). Непрерывные поля, диффуры, «плавное» время — **T** (readout на **фиксированной** решётке), не предел **`hL → 0`**.
 
+**Следствие 0.5 — Планковский пол амплитуды (A5 · §3.12.6).** На **`hV`** нет «устремления в ноль» — ни как knob, ни как предел:
+
+```
+z_min = 2^{−B_amp} = 1 / Q(frac_bits)     — одна амплитудная кванта кирпича
+|z(x)| ≥ z_min   на M (Z_N[i]);  |z|² = 0  только c=0 — excluded §10.2
+vacuum_amplitude = z_min                    — derived, не fitted
+```
+
+**A5:** абсолютный ноль **недостижим** ⇒ **`ρ_field > 0`** на вакууме; **Heisenberg **`Δφ_min=½`**** + **`N_ring`** (§3.12.6) — фазовая сетка тоже с дном. Некуда «сжать» вселенную ниже **`hV`**-бюджета.
+
 **§2** — полный реестр **абсолютных условий A1–A16**, ограничивающих допустимый **`g`**.
 
 ---
@@ -459,7 +469,9 @@ T: |Ψ|², Born — термодинамика + масштаб наблюден
 
 **Verify `NoMHeatDeath`:** consistency probe: impl **`mt_ca`** на finite grid **не** нарушает **A3 + A5 + A13** (необходимое, **не** достаточное на **`|Λ|→∞`**).
 
-**Verify `Theorem_2_3_8`:** **2.3.8a** на finite torus — const ⟺ **`⌊𝒩⌋=0` step**; **2.3.8b** — **`VACUUM`** seed **`≠ D5`** after one tick.
+**Verify `Theorem_2_3_8`:** **2.3.8a** на finite torus — const ⟺ **`⌊𝒩⌋=0` step**; **2.3.8b** — **`VACUUM`** при **`z_min`** **`≠ D5`** after one tick.
+
+**Verify `PlanckVacuumFloor`:** **`vacuum_amplitude = z_min`**, encode **без** per-cell gauge (§10.2), **`⌊𝒩⌋≠0`** on **`VACUUM`**.
 
 Фазы цикла I–IV — **META §3** (narrative; **не** knobs **`g`**).
 
@@ -2220,18 +2232,28 @@ N₄ на краю сшивает правый↔левый, верхний↔н
 **Код:** `laplacian.von_neumann_laplacian` — `torch.roll`; `linear_step_local_ca` — wrap в bond-sweeps.  
 **Зачем:** глобальная норма без стенки-поглощателя; унитарность на торе.
 
-### 10.2 Инициализация: «первичный бульон», не `z≡0`
+### 10.2 Инициализация: «первичный бульон», не `z≡0` · Планковский пол
 
-При `z=0` gate даёт `φ = 2π/(4π)`, но **`z·exp(iφ)=0`** — поле заморожено, кипение не стартует (A5).
+При **`z=0`** gate даёт **`φ = 2π/(4π)`**, но **`z·exp(iΦ)=0`** — deadlock; кипение не стартует (A5).
 
-**t=0:** комплексный фазовый шум, **`|z| ~ vacuum_amplitude`**:
+**Планковский пол (§0.5 · §3.12.6) — не knob, некуда устремлять:**
 
 ```
-vacuum_amplitude = 1e-6     (default; config MConfig.vacuum_amplitude)
-SeedClass.VACUUM → N(0, amp) + i·N(0, amp)
+B_amp = ⌈log₂(N_ring / N_φ)⌉ = frac_bits = 6
+z_min = 2^{−B_amp} = 1/64          — smallest |z| on Q(frac_bits) lattice
+vacuum_amplitude = z_min             — MConfig default (derived)
+|z(x)| ≥ z_min  after encode        — enforce_planck_cell_floor; A5
 ```
 
-**Код:** `seeds.make_seed(VACUUM)` · `simulator.reset()`.
+**t=0:** комплексный фазовый шум **`~ z_min`**, не **`1e-6`**, не **`→0`**:
+
+```
+SeedClass.VACUUM → N(0, z_min) + i·N(0, z_min)   per spinor lane
+```
+
+**Encode (M-canonical):** **`gauge_fix=False`** — per-cell U(1) **убивает** **`ζ_imag`**; global gauge — только T/reporting (**`gauge_fix_u1_global`**), не tick path.
+
+**Код:** `fixed_point.vacuum_amplitude_quantum` · `seeds.make_seed(VACUUM)` · `simulator.reset()` · `encode_spinor(gauge_fix=False)`.
 
 ### 10.3 Алгебра шага: `exp(iφ)` / `ω^Φ`, не Euler `z += iφz`
 

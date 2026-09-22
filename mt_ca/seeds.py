@@ -5,6 +5,8 @@ from enum import Enum
 
 import torch
 
+from mt_ca.fixed_point import vacuum_amplitude_quantum
+
 
 class SeedClass(str, Enum):
     VACUUM = "vacuum"
@@ -48,10 +50,12 @@ def make_seed(
     *,
     device: torch.device,
     dtype: torch.dtype = torch.complex64,
-    amplitude: float = 1e-6,
+    amplitude: float | None = None,
     impulse_amplitude: float = 0.35,
 ) -> torch.Tensor:
     """Spinor z=(z₁,z₂) ∈ ℂ² per cell."""
+    if amplitude is None:
+        amplitude = vacuum_amplitude_quantum()
     real_dtype = torch.float32 if dtype == torch.complex64 else torch.float64
     yy, xx = _mesh(ny, nx, device, real_dtype)
     cy, cx = ny / 2.0, nx / 2.0

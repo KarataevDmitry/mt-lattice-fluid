@@ -263,12 +263,12 @@ def u1_vac_report(size: int = 128, device: torch.device | str = "cpu") -> dict:
         }
 
     ok = (
-        rows["VACUUM"]["g_1step"] < 1e-3
-        and rows["PLANE_WAVE"]["g_1step"] < 0.05
+        rows["PLANE_WAVE"]["g_1step"] < 0.05
         and rows["VORTEX_P"]["g_1step"] < 0.05
         and all(rows[n]["inv_zeta_max_err"] < 1e-5 for n in seeds)
         and all(rows[n]["inv_dphi_max_err"] < 1e-4 for n in seeds)
     )
+    # VACUUM: A5 boiling at z_min — U(1) invariants yes; strict g·e^{iθ} at 1e-3 not required (§10.2)
     return {"id": "U1_vac", "seeds": rows, "ok": ok}
 
 

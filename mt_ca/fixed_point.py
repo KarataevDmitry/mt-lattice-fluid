@@ -19,8 +19,26 @@ def scale(frac_bits: int = DEFAULT_FRAC_BITS) -> float:
     return float(1 << frac_bits)
 
 
-def gauge_fix_u1(z: torch.Tensor, eps: float = 1e-15) -> torch.Tensor:
-    """Canonical U(1) gauge before Q encode — quantize is then phase-equivariant."""
+def gauge_fix_u1_global(z: torch.Tensor, eps: float = 1e-15) -> torch.Tensor:
+    """Remove global U(1) phase before Q encode — preserves spatial ζ (A5, §3.11)."""
+    ref = z[..., 0].mean()
+    if float(ref.abs().item()) < eps:
+        ref = z[..., 1].mean()
+    if float(ref.abs().item()) < eps:
+        return z
+    phase = torch.angle(ref)
+    factor = torch.exp(-1j * phase.to(z.real.dtype))
+    return z * factor
+
+
+def gauge_fix_u1(z: torch.Tensor, eps: float = 1e-15, *, per_cell: bool = False) -> torch.Tensor:
+    """U(1) gauge before Q encode.
+
+    Default **global** (§3.11 U(1)_vac): preserves neighbor holonomy / A5 boiling.
+    ``per_cell=True`` — legacy T-only; kills ζ_imag on M encode (§10.2).
+    """
+    if not per_cell:
+        return gauge_fix_u1_global(z, eps)
     ref = z[..., 0]
     fallback = z[..., 1]
     use_fallback = ref.abs() < eps
@@ -32,14 +50,33 @@ def gauge_fix_u1(z: torch.Tensor, eps: float = 1e-15) -> torch.Tensor:
     return torch.where(mask.unsqueeze(-1), z * factor.unsqueeze(-1), z)
 
 
+def enforce_planck_cell_floor(
+    f: torch.Tensor,
+    *,
+    mod_bits: int = DEFAULT_MOD_BITS,
+) -> torch.Tensor:
+    """A5 + §3.12.6: no hV cell is exact zero — one Q(frac_bits) quanta minimum."""
+    mag = f.abs().sum(dim=-1)
+    dead = mag == 0
+    if not bool(dead.any().item()):
+        return f
+    out = f.clone()
+    out[dead, 0] = 1
+    return mod_lane(out, mod_bits)
+
+
 def encode_spinor(
     z: torch.Tensor,
     *,
     frac_bits: int = DEFAULT_FRAC_BITS,
     mod_bits: int = DEFAULT_MOD_BITS,
-    gauge_fix: bool = True,
+    gauge_fix: bool = False,
 ) -> torch.Tensor:
-    """complex (...,2) → int32 (...,4) [re1,im1,re2,im2] in Z_N[i]."""
+    """complex (...,2) → int32 (...,4) [re1,im1,re2,im2] in Z_N[i].
+
+    Default gauge_fix=False on M encode (§10.2): per-cell gauge kills ζ_imag;
+    global gauge optional via gauge_fix_u1_global for T/reporting only.
+    """
     if gauge_fix:
         z = gauge_fix_u1(z)
     s = scale(frac_bits)
@@ -52,7 +89,7 @@ def encode_spinor(
         ],
         dim=-1,
     )
-    return mod_lane(out, mod_bits)
+    return enforce_planck_cell_floor(mod_lane(out, mod_bits), mod_bits=mod_bits)
 
 
 def decode_spinor(
