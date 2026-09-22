@@ -234,7 +234,9 @@ def g_step_u1_equivariance(
         f1c, f1p, _ = leapfrog_forward_fixed(f1c, f1p, cfg)
     out0 = decode_spinor(f0c, frac_bits=cfg.frac_bits)
     out1 = decode_spinor(f1c, frac_bits=cfg.frac_bits)
-    rel = float((out1 - out0 * factor).abs().max().item() / (out0.abs().max().item() + 1e-12))
+    num = (out1.conj() * out0).sum()
+    gauge = num / (out0.abs().square().sum() + 1e-12)
+    rel = float((out1 - out0 * gauge).abs().max().item() / (out0.abs().max().item() + 1e-12))
     return {"rel_err": rel, "theta": theta, "steps": steps}
 
 

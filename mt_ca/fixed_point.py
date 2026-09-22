@@ -19,13 +19,29 @@ def scale(frac_bits: int = DEFAULT_FRAC_BITS) -> float:
     return float(1 << frac_bits)
 
 
+def gauge_fix_u1(z: torch.Tensor, eps: float = 1e-15) -> torch.Tensor:
+    """Canonical U(1) gauge before Q encode — quantize is then phase-equivariant."""
+    ref = z[..., 0]
+    fallback = z[..., 1]
+    use_fallback = ref.abs() < eps
+    ref = torch.where(use_fallback, fallback, ref)
+    mag = ref.abs()
+    phase = torch.angle(ref)
+    factor = torch.exp(-1j * phase.to(z.real.dtype))
+    mask = mag > eps
+    return torch.where(mask.unsqueeze(-1), z * factor.unsqueeze(-1), z)
+
+
 def encode_spinor(
     z: torch.Tensor,
     *,
     frac_bits: int = DEFAULT_FRAC_BITS,
     mod_bits: int = DEFAULT_MOD_BITS,
+    gauge_fix: bool = True,
 ) -> torch.Tensor:
     """complex (...,2) → int32 (...,4) [re1,im1,re2,im2] in Z_N[i]."""
+    if gauge_fix:
+        z = gauge_fix_u1(z)
     s = scale(frac_bits)
     out = torch.stack(
         [
