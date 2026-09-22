@@ -33,7 +33,7 @@
 
 | # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
-| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** по оси | только **`N₄`**, Moore **запрещён** | §2 · §1.3–§1.4 | — | — (структура) | `laplacian` **`N₄`** | — |
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — / sim | — (структура) · MVP=`N₄` | `laplacian` N₄ | stencil → N₁₂ |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
 | **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** (bond) | `reversible` · `z_ring` | **`div j=0`** на full **`projected_step`** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
@@ -47,7 +47,7 @@
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
 | **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
 | **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | **sim** | **`A14`** · **`U1_vac`** · **`SO2_C4` FAIL** · **`Chiral_SU2` PASS** | `symmetry` · `chiral` | **equivariant encode + step** (одна ось с A9) |
-| **A15** | **Геометрия N₄** | **`κ=1/√2`**, **`γ=¼`**, **`α*`** | §2 · §5.2.2 | — | **`QuarterQuantum`** PASS | `si_constants` | — |
+| **A15** | **Геометрия / κ_link** | **`κ`** из многогранника; **`γ=1/\|N\|`**; канон **`\|N\|=12`** | §1.6 · §5.2.2 | sim | **`QuarterQuantum`** PASS (MVP ¼) | `si_constants` | FCC `1/12` row |
 | **A16** | **Pauli / 720°** | **`2π→−1`**, repulsion | §2 · §3.10.4 | sim | **`A16`** · **`Pauli`** PASS | `pauli_phi` | — |
 
 **§2.3 (блок):** ¬heat death · fixed points · Planck floor — MODEL §2.3 · **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** PASS.
@@ -57,7 +57,7 @@
 | ограничение | MODEL | gap | verify | следующий шаг |
 |-------------|-------|-----|--------|---------------|
 | **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
-| **тайл:** квадрат MVP · гекс 2D · **FCC 3D кандидат** (`κ_link=1/12`, `κ^(1)=1/√2`) | §1.4 · §1.6 | model→sim | MVP=`N₄` | 3D FCC; α_fs не трогать |
+| **тайл / ε:** **FCC N₁₂ обоснован** (упаковка ∧ конус); гекс=(2+1) срез; квадрат=MVP | §1.3 · §1.6.1 | sim | MVP=`N₄` | FCC stencil + `v_hV` |
 | **лестница ФТТ:** `G`, BZ, умклапп, `N_pack`, `b_atom` | §5.2.4 | model | — | quanta + probe |
 | leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
@@ -206,7 +206,7 @@
 | 2026-09-22 | §3.12 | float32 1st order на 4070 → chirality dance `n` |
 | 2026-09-22 | night canon | split MODEL/META; canonical Z_N[i]; quantization ladder |
 | 2026-09-22 | §3.10.3 | `exp(i·Θ·σ/2)` → discrete `R(Φ)=ω^Φ` on Z_N[i] |
-| 2026-09-22 | §1.4–§1.5 | гекс из упаковки; обратный ход ФТТ → два вложенных Вороного |
+| 2026-09-22 | §1.6.1 | теорема выбора: упаковка∧конус ⇒ FCC N₁₂ (обоснованный канон ε) |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
