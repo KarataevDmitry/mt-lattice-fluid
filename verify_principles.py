@@ -548,6 +548,30 @@ def check_electron_anchor(device: str = "cpu") -> dict:
     return {"id": "M2T_e", "f_geometry": row["f_geometry"], "rel_err": row["rel_err"], "ok": ok}
 
 
+def check_saturation_bc(device: str = "cpu") -> dict:
+    """§8.4.2-C′′′ — live D_★ strain vs Newton; hinge = mismatch, not stitch."""
+    from mt_ca.si_constants import SI
+    from mt_ca.strain_metric import saturation_core_probe
+
+    alg = SI.saturation_bc_row()
+    live = saturation_core_probe(size=64, device=device)
+    # Pass = hinge confirmed (near ≫ Newton), algebra↔field agree on order
+    hinge = live["near_over_newton"] > 100.0 and alg["near_over_newton"] > 100.0
+    agree = abs(math.log10(live["near_over_newton"] + 1e-30) - math.log10(alg["near_over_newton"] + 1e-30)) < 0.5
+    ok = hinge and agree
+    return {
+        "id": "SatBC_Cppp",
+        "h_star_near": live["h_star_near"],
+        "h_star_newton": live["h_star_newton"],
+        "near_over_newton": live["near_over_newton"],
+        "alg_near_over_newton": alg["near_over_newton"],
+        "far_R2_ratio": live["far_R2_ratio"],
+        "far_R8_ratio": live["far_R8_ratio"],
+        "ok": ok,
+        "note": "C′′′: |h_near/h_Newton|≫1 on A5-floor; far 1/R not claimed",
+    }
+
+
 def check_mechanical_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import SI, mechanical_quantum_row
 
@@ -967,6 +991,7 @@ def run_all(device: str) -> list[dict]:
         check_matter_b_readout(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
+        check_saturation_bc(device=device),
         check_vortex_hex_contour(device=device),
         check_spinor_360_sign(device=device),
         check_su2_720_sign(device=device),

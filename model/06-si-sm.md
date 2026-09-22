@@ -1012,7 +1012,9 @@ $$
 
 Фальсификация: если после фиксации единого $\rho_{\mathrm{vac}}$ и нелинейного strain far-хвост $\neq 1/R$ при $m\le m_P$ — ломается паспорт §B/§C, не крутим α.
 
-Код: `SI.saturation_bc_row()` (поля `h_star_near`, `h_star_newton`, отношение live).
+**Sim (live, 2026-09-22):** `SatBC_Cppp` PASS — $D_\star$ one-cell: $h_{\mathrm{near}}/h_{\mathrm{Newton}}=2047.5$; far shells $h_{\mathrm{strain}}=0$ (vacuum flat ≠ $1/R$). Vortex$_+$ after 32 leapfrog ticks: $h_{\mathrm{strain}}(R)$ flat $\sim -2.4\times 10^{5}$ for $R=1..8$, not $\propto 1/R$ (`strain_metric` · N₄ MVP).
+
+Код: `SI.saturation_bc_row()` · `mt_ca/strain_metric.py` · verify `SatBC_Cppp`.
 
 ##### D · Тензор Эйнштейна из strain (не пятое поле)
 
