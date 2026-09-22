@@ -63,7 +63,7 @@
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
-| **4 силы** · v · α_s · Weinberg $3/13$ · **$\alpha(M_Z)=\alpha_{fs}^{-1}-B_{hV}$** · $m_W,m_Z$ · GR | §8.4.1–§8.4.3 | census / IR / Einstein / CKM | EW tree+runners ✅ | census · IR · $G_{μν}$ · CKM |
+| **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / stencil / Aρη | EW+GR+CKM скелет ✅ | census · IR · stencil · Aρη |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
 **Приоритет sim-gap:** **A14 + A9** (equivariant canonical step) → затем A10 evolution, A3 full continuity.
@@ -94,7 +94,7 @@
 - **§5.3 gas:** sim EOS / `P(ρ)` readout — open
 - **§5.3.2 v_s:** численный `v_s` on T-readout — open
 - **§5.3.3 VdW:** T compression / occupancy — open
-- **§8.4.1–§8.4.3:** α_s runner ✅ · girth ✅ · GR ✅ · Weinberg $3/13$ ✅ · **α(MZ) из $B_{hV}$** ✅ · **$m_W,m_Z$ дерево** ✅ · sim census / IR / Einstein / CKM — open
+- **§8.4.1–§8.4.4:** α_s runner ✅ · girth ✅ · GR+Эйнштейн ✅ · Weinberg+α+массы ✅ · **CKM $N_{gen}=d$, $\lambda=3/13$** ✅ · stencil/GW/Λ / census / IR / Aρη — open
 - **§8 Higgs:** численный `m_H` / Higgs width leaf — open
 
 ---
@@ -191,7 +191,7 @@
 
 ### §8 SM / Higgs
 
-- ✅ онтология M→T · **v / α_s / Weinberg 3/13 / α(MZ)=α_fs⁻¹−B_hV / m_W,m_Z дерево** ✅ · **`m_H` leaf** open · не refute LHC — переинтерпретация слоя
+- ✅ онтология M→T · **v / α_s / Weinberg / α(MZ) / m_W,m_Z / G_μν / CKM λ=3/13** ✅ · **`m_H` leaf** open · не refute LHC — переинтерпретация слоя
 
 ---
 
@@ -208,6 +208,7 @@
 | 2026-09-22 | night canon | split MODEL/META; canonical Z_N[i]; quantization ladder |
 | 2026-09-22 | §3.10.3 | `exp(i·Θ·σ/2)` → discrete `R(Φ)=ω^Φ` on Z_N[i] |
 | 2026-09-22 | §1.6.1 | теорема выбора: упаковка∧конус ⇒ FCC N₁₂ (обоснованный канон ε) |
+| 2026-09-22 | §8.4.2-D · §8.4.4 | $G_{\mu\nu}$ из strain+$8\pi\ell_P^{2}$ · CKM $N_{gen}=d$, $\lambda=3/13$ |
 | 2026-09-22 | §8.4.3-D/E | бегунок α: $1/\alpha(M_Z)=1/\alpha_{fs}-B_{hV}$ · дерево $m_W,m_Z$ |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
