@@ -62,9 +62,13 @@ class LatticeFluidSimulator:
         self.z_past = self.z.clone()
 
     def reset(self, seed_class: SeedClass = SeedClass.VACUUM) -> None:
-        kw: dict = {"device": self.device, "dtype": self.dtype}
-        if seed_class is SeedClass.VACUUM:
-            kw["amplitude"] = self.cfg.vacuum_amplitude
+        kw: dict = {
+            "device": self.device,
+            "dtype": self.dtype,
+            "mod_bits": self.cfg.mod_bits,
+            "frac_bits": self.cfg.frac_bits,
+            "phase_bits": self.cfg.phase_bits,
+        }
         if self.cfg.stencil == "fcc":
             kw["nz"] = self.nz
         self.z = make_seed(seed_class, self.ny, self.nx, **kw)

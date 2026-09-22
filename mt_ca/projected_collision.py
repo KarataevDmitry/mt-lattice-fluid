@@ -72,6 +72,24 @@ def holonomy_zeta_int(
     return zeta_r, zeta_i
 
 
+def apply_heisenberg_floor_signed(
+    phi_signed: torch.Tensor,
+    phi_min: int,
+) -> torch.Tensor:
+    """Quantize sub-threshold kicks to 0; leave |Φ|≥φ_min and exact 0 alone.
+
+    Model §3.7: |Δφ| < Δφ_min is not resolvable on the Heisenberg ring.
+    §2.3.8 remark: holomorphic Φ=0 is locally admissible (anti-smear ≠ forced noise).
+    Snap-*up* to ±φ_min on tiny holonomy pumps amplitude under leapfrog (dogfood).
+    Snap-*down* to 0 matches discrete resolution and keeps vacuum ocean stable.
+    """
+    abs_phi = phi_signed.abs()
+    sub = (abs_phi > 0) & (abs_phi < phi_min)
+    if not bool(sub.any().item()):
+        return phi_signed
+    return torch.where(sub, torch.zeros_like(phi_signed), phi_signed)
+
+
 def saturating_phi_kick(
     zeta_r: torch.Tensor,
     zeta_i: torch.Tensor,
@@ -85,26 +103,7 @@ def saturating_phi_kick(
     phi = (kp * zeta_i) // denom
 
     if cfg.heisenberg_floor:
-        phi_min = heisenberg_phi_min_int(cfg)
-        # stagger on spatial lattice (2D or 3D)
-        shape = zeta_i.shape
-        coords = []
-        for dim, size in enumerate(shape):
-            view = [1] * len(shape)
-            view[dim] = size
-            coords.append(torch.arange(size, device=zeta_i.device, dtype=torch.int64).view(*view))
-        parity = coords[0]
-        for c in coords[1:]:
-            parity = parity + c
-        stagger = torch.where(parity % 2 == 0, torch.ones_like(zeta_i), -torch.ones_like(zeta_i))
-        below = phi.abs() < phi_min
-        sign = torch.sign(phi)
-        sign = torch.where(sign == 0, stagger, sign)
-        phi = torch.where(
-            below,
-            stagger * phi_min,
-            sign * torch.maximum(phi.abs(), torch.full_like(phi, phi_min)),
-        )
+        phi = apply_heisenberg_floor_signed(phi, heisenberg_phi_min_int(cfg))
 
     return mod_lane(phi, cfg.mod_bits)
 
@@ -156,6 +155,7 @@ def cr_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     """§3.9: CR defect + holomorphy sync → extra Φ ticks on Z_N (2D slice).
 
     Maps float ``cr_phase_drive`` + ``holomorphy_sync_step`` phase into ticks.
+    Cap at ±sync_strength_disc (§5.2.3) — uncapped sync·Arg pumped amp under leapfrog.
     FCC bulk CR — open.
     """
     import math
@@ -164,6 +164,7 @@ def cr_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
         return torch.zeros(f.shape[:-1], device=f.device, dtype=torch.int64)
 
     from mt_ca.cauchy_riemann import cauchy_riemann_residual
+    from mt_ca.si_constants import sync_strength_disc
     from mt_ca.update import wrapped_phase_diff
 
     z = decode_spinor(f, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits)
@@ -186,11 +187,19 @@ def cr_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
     n_ring = 1 << cfg.phase_bits
     ticks = torch.round(phi_rad * (n_ring / (2.0 * math.pi))).to(torch.int64)
+    cap = sync_strength_disc(phase_bits=cfg.phase_bits)
+    ticks = torch.clamp(ticks, -cap, cap)
     return mod_lane(ticks, cfg.mod_bits)
 
 
 def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 ledger)."""
+    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 ledger).
+
+    Canon: Φ from saturating holonomy ζ only. §3.9 defect Arg(⟨z⟩/z) *is* Δφ_N
+    inside that gate — not a second CR/sync kick stacked on Φ (that double-count
+    pumped |Z| under leapfrog; sim: vortex stable iff CR extras off).
+    Pauli (A16) remains an extra on v_p overlap.
+    """
     fb = cfg.frac_bits
     u0 = f[..., 0].to(torch.int64)
     v0 = f[..., 1].to(torch.int64)
@@ -198,29 +207,9 @@ def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     su0, sv0 = sum_n[..., 0], sum_n[..., 1]
     zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
     rho2 = rho2_int(u0, v0, frac_bits=fb)
-    # Floor after CR/Pauli so ledger Heisenberg-always still holds.
     phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
-    phi = mod_lane(phi + pauli_phi_int(f, cfg) + cr_phi_int(f, cfg), cfg.mod_bits)
-    if cfg.heisenberg_floor:
-        phi_min = heisenberg_phi_min_int(cfg)
-        shape = phi.shape
-        coords = []
-        for dim, size in enumerate(shape):
-            view = [1] * len(shape)
-            view[dim] = size
-            coords.append(torch.arange(size, device=phi.device, dtype=torch.int64).view(*view))
-        parity = coords[0]
-        for c in coords[1:]:
-            parity = parity + c
-        stagger = torch.where(parity % 2 == 0, torch.ones_like(phi), -torch.ones_like(phi))
-        # unwrap to signed for floor compare
-        half = 1 << (cfg.mod_bits - 1)
-        signed = torch.where(phi >= half, phi - (1 << cfg.mod_bits), phi)
-        below = signed.abs() < phi_min
-        sign = torch.sign(signed)
-        sign = torch.where(sign == 0, stagger, sign)
-        signed = torch.where(below, stagger * phi_min, sign * torch.maximum(signed.abs(), torch.full_like(signed, phi_min)))
-        phi = mod_lane(signed, cfg.mod_bits)
+    if cfg.pauli_exclusion:
+        phi = mod_lane(phi + pauli_phi_int(f, cfg), cfg.mod_bits)
     return phi
 
 

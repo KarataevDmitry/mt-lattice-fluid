@@ -156,7 +156,9 @@ def ladder_ledger_report(
     z_vac = make_seed(SeedClass.VACUUM, size, size, device=dev, amplitude=cfg.vacuum_amplitude)
     vac = ledger_step_probe(z_vac, z_vac.clone(), cfg)
     phi = vac["phi"]
-    heisenberg_ok = bool((phi.abs() >= phi_min).all().item())
+    # Exact Φ=0 (holomorphic) allowed; any nonzero kick must be ≥ φ_min (§3.7 · §2.3.8).
+    nonzero = phi.abs() > 0
+    heisenberg_ok = bool((~nonzero | (phi.abs() >= phi_min)).all().item())
 
     unit = energy_ledger_ticks_per_E0(phase_bits=cfg.phase_bits)
     n_e_ok = bool((n_E_field(phi, cfg) * unit <= phi.abs()).all().item())
@@ -192,8 +194,11 @@ def ladder_ledger_report(
         and momentum_static_ok
         and momentum_step_ok
         and angular_ok
-        and n_e_sample >= 1
     )
+    # n_E on vacuum ocean may be 0 (holomorphic Φ=0); sample from plane-wave step instead.
+    if n_e_sample < 1:
+        n_e_sample = int(n_E_from_phi_ticks(int(pw1["phi"].abs().max().item()), phase_bits=cfg.phase_bits))
+    ok = ok and n_e_sample >= 1
 
     return {
         "id": "LadderLedger",
@@ -212,5 +217,5 @@ def ladder_ledger_report(
         "angular_ok": angular_ok,
         "n_E_max": n_e_sample,
         "ok": ok,
-        "note": "§5.2.1–§5.2.3: E/p/L ledgers + Heisenberg floor every tick",
+        "note": "§5.2.1–§5.2.3: E/p/L ledgers; Heisenberg = nonzero Φ ≥ φ_min (0 OK)",
     }
