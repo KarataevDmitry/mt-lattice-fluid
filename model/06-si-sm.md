@@ -259,7 +259,7 @@ $$
 
 $$
 c = \kappa\, c_0 = c_0/\sqrt{2},
-\qquad \kappa=1/\sqrt{2},
+\qquad \kappa=\kappa_{\mathrm{FCC}}=1/\sqrt{2},
 \qquad K_P:=\mu_P c^2\ \Rightarrow\ c^2=K_P/\mu_P.
 $$
 
