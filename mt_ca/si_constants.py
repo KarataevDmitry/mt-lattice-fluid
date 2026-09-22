@@ -453,7 +453,7 @@ class SIConstants:
             "G_F_rel_err": abs(g_f - 1.1663787e-5) / 1.1663787e-5,
             "N_hier": float(n_hier),
             "d_spatial": float(d_spatial),
-            "note": "§8.4.1: 8=occ; α_s=d/(N_hier π); √(2π)=Gaussian",
+            "note": "§8.4.1: α_s=d/(N_hier π); π=α_fs tower foot",
         }
 
 

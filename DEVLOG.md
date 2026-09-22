@@ -63,7 +63,7 @@
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
-| **4 силы** · v=α_fs^8 E_P √(2π) · α_s=d/(N_hier π) d=3≠N_c · 8=⌊B_hV⌋−1_occ | §8.4.1 | T(runner) / topology | v/G_F · α_s passport ✅ | α_s runner · composite multiplicity∼d · GR |
+| **4 силы** · v · α_s=d/(N_hier π) · π=терминал α_fs⁻¹ · кратность∼d (FCC plaquette) | §8.4.1 | T(runner)/sim census | seed passport ✅ | runner · census · GR |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
 **Приоритет sim-gap:** **A14 + A9** (equivariant canonical step) → затем A10 evolution, A3 full continuity.
