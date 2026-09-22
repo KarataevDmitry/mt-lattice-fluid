@@ -481,6 +481,27 @@ class SIConstants:
             "note": "§8.4.2: G≡ℓ_P² c³/ℏ; F₀=m_arg g_M; g_μν=T-strain",
         }
 
+    def weinberg_row(self) -> dict[str, float]:
+        """§8.4.3 — bare sin²θ_W = d / (|N12|+1) = 3/13 from FCC cluster."""
+        d_spatial = 3
+        n12 = 12  # FCC coordination §1.6
+        n_cluster = n12 + 1
+        n_phi = math.ceil(2.0 * math.pi / DELTA_PHI_MIN)
+        sin2 = d_spatial / n_cluster
+        sin2_eff = 1.0 / 8.0 + 1.0 / (d_spatial * math.pi)  # soft neighbor, not SSOT
+        pdg = 0.23122
+        return {
+            "sin2_theta_W_bare": sin2,
+            "sin2_theta_W_eff_neighbor": sin2_eff,
+            "sin2_theta_W_PDG_MSbar": pdg,
+            "bare_rel_err_vs_PDG": abs(sin2 - pdg) / pdg,
+            "d_spatial": float(d_spatial),
+            "N12": float(n12),
+            "N_cluster": float(n_cluster),
+            "N_phi": float(n_phi),
+            "note": "§8.4.3: bare=3/13=d/(|N12|+1); N_φ=⌈4π⌉ coincides; eff=1/8+1/(dπ) soft",
+        }
+
     @property
     def m_P(self) -> float:
         """Planck mass [kg]."""
