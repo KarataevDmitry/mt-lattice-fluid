@@ -557,6 +557,26 @@ class SIConstants:
             "note": "§8.2 Planck: s0/E0/F0 ladder; |F|/F_P=α at N=1; c0=√2 c",
         }
 
+    def radiation_row(self) -> dict[str, float]:
+        """§8.2 radiation — s0/E0 ladder + Debye UV; Bose/Planck spectrum still open."""
+        e0 = self.E_0
+        nu0 = 1.0 / self.hT
+        h = 2.0 * math.pi * self.hbar
+        h_nu0 = h * nu0
+        return {
+            "s_0": self.s_0,
+            "E_0": e0,
+            "nu_0_Hz": nu0,
+            "omega_0_rad_s": 2.0 * math.pi * nu0,
+            "h_nu0_J": h_nu0,
+            "h_nu0_over_E0": h_nu0 / e0,
+            "c0": self.c0,
+            "c": self.c,
+            "kappa_FCC": KAPPA_FCC_1TICK,
+            "omega_D_over_nu0": 1.0,
+            "note": "§8.2 rad: h ν0=4π E0; ω_D∼1/hT; Bose u(ω) open",
+        }
+
     def alpha_runner_row(self) -> dict[str, float]:
         """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
         b_hv = self.bekenstein_bits_hv
