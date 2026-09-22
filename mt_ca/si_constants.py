@@ -543,9 +543,27 @@ def planck_density_from_cell(*, m_P: float | None = None, l_P: float | None = No
 
 def macro_density_illusion(*, occupied_fraction: float) -> float:
 
-    """T-readout: ρ_macro ≈ f_occ · ρ_P (§5.0)."""
+    """T-readout: ρ_macro ≈ ⟨b⟩ · ρ_P (§5.0); ⟨b⟩ = mean occupancy, not mean |z|²."""
 
     return occupied_fraction * SI.rho_P
+
+
+
+
+def matter_density_from_b(*, b: int) -> float:
+
+    """ρ_matter(x) = ρ_P · b(x), b ∈ {0,1} (§5.0)."""
+
+    return float(b) * SI.rho_P
+
+
+
+
+def matter_cell_mass_from_b(*, b: int) -> float:
+
+    """m_cell(x) = m_P · b(x) (§5.0, §8.1)."""
+
+    return float(b) * SI.m_P
 
 
 

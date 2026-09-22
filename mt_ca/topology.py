@@ -121,3 +121,44 @@ def winding_robust(
 
 def winding_nearest_int(n: float) -> int:
     return int(round(n))
+
+
+def plaquette_winding(
+    z: torch.Tensor,
+    y: int,
+    x: int,
+) -> float:
+    """Discrete ∮ d arg(z₂/z₁) on ∂(hV) — local n_∂ for cell (y,x) (A10, §5.0)."""
+    ny, nx = z.shape[0], z.shape[1]
+    if y < 0 or x < 0 or y + 1 >= ny or x + 1 >= nx:
+        return float("nan")
+    ratio = z[..., 1] / (z[..., 0] + 1e-12)
+    phase = torch.angle(ratio)
+
+    def _wrap(d: torch.Tensor) -> torch.Tensor:
+        return (d + math.pi) % (2.0 * math.pi) - math.pi
+
+    total = 0.0
+    total += float(_wrap(phase[y, x + 1] - phase[y, x]).item())
+    total += float(_wrap(phase[y + 1, x + 1] - phase[y, x + 1]).item())
+    total += float(_wrap(phase[y + 1, x] - phase[y + 1, x + 1]).item())
+    total += float(_wrap(phase[y, x] - phase[y + 1, x]).item())
+    return total / (2.0 * math.pi)
+
+
+def matter_occupancy_b(
+    z: torch.Tensor,
+    *,
+    y: int | None = None,
+    x: int | None = None,
+) -> int:
+    """b(x) = min(1, |n_∂|) at cell — §5.0: ρ_matter = ρ_P·b, m_cell = m_P·b."""
+    if y is None or x is None:
+        from mt_ca.spinor import spinor_density
+
+        cy, cx = torch.unravel_index(spinor_density(z).argmax(), z.shape[:2])
+        y, x = int(cy.item()), int(cx.item())
+    n = plaquette_winding(z, y, x)
+    if n != n:
+        return 0
+    return min(1, abs(winding_nearest_int(n)))
