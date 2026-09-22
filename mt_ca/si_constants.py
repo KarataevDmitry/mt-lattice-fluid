@@ -502,6 +502,50 @@ class SIConstants:
             "note": "§8.4.3: bare=3/13=d/(|N12|+1); N_φ=⌈4π⌉ coincides; eff=1/8+1/(dπ) soft",
         }
 
+    def alpha_runner_row(self) -> dict[str, float]:
+        """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
+        b_hv = self.bekenstein_bits_hv
+        inv0 = self.alpha_fs_inv
+        inv_mz = inv0 - b_hv
+        inv_mz_floor = inv0 - math.floor(b_hv)
+        pdg_inv = 127.955
+        return {
+            "alpha_fs_inv": inv0,
+            "B_hV": b_hv,
+            "alpha_MZ_inv": inv_mz,
+            "alpha_MZ": 1.0 / inv_mz,
+            "alpha_MZ_inv_floor_neighbor": inv_mz_floor,
+            "alpha_MZ_inv_PDG": pdg_inv,
+            "alpha_MZ_inv_rel_err": abs(inv_mz - pdg_inv) / pdg_inv,
+            "note": "§8.4.3-D: 1/α(MZ)=1/α_fs−B_hV; ≠ α_s packing ln",
+        }
+
+    def electroweak_mass_row(self) -> dict[str, float]:
+        """§8.4.3-E — m_W=gv/2, m_Z=m_W/cosθ with α(MZ) and sin²=3/13."""
+        w = self.weinberg_row()
+        a = self.alpha_runner_row()
+        v = self.force_ansatz_row()["v_GeV"]
+        sin2 = w["sin2_theta_W_bare"]
+        cos2 = 1.0 - sin2
+        e2 = 4.0 * math.pi * a["alpha_MZ"]
+        g = math.sqrt(e2 / sin2)
+        m_w = g * v / 2.0
+        m_z = m_w / math.sqrt(cos2)
+        return {
+            "v_GeV": v,
+            "sin2_theta_W": sin2,
+            "alpha_MZ": a["alpha_MZ"],
+            "g": g,
+            "m_W_GeV": m_w,
+            "m_Z_GeV": m_z,
+            "m_W_PDG": 80.377,
+            "m_Z_PDG": 91.1876,
+            "m_W_rel_err": abs(m_w - 80.377) / 80.377,
+            "m_Z_rel_err": abs(m_z - 91.1876) / 91.1876,
+            "mass_ratio_sin2": 1.0 - (m_w / m_z) ** 2,
+            "note": "§8.4.3-E: tree with α(MZ) from B_hV runner + bare 3/13",
+        }
+
     @property
     def m_P(self) -> float:
         """Planck mass [kg]."""
