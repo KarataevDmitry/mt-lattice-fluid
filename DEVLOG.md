@@ -63,7 +63,7 @@
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из **`n_∂`**, не **`\|z\|²`** | §5.0 · §5.2.3 | sim | **`MatterOccupancyB`** PASS | T occupancy — open |
-| **`α_s`, G_F, GR метрика** | — | **model** | — | сознательно вне M |
+| **4 силы симметрично** из одного `g` (EM/weak/strong/GR-каналы) | §8.4 | model | EM:`α_fs` ✅ · остальное gap | вывести `α_s`, `G_F`, metric |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
 **Приоритет sim-gap:** **A14 + A9** (equivariant canonical step) → затем A10 evolution, A3 full continuity.
