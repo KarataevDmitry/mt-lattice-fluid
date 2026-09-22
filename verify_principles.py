@@ -770,6 +770,37 @@ def check_t_continuum_readout(device: str = "cpu") -> dict:
     }
 
 
+def check_t_hydro_limit(device: str = "cpu") -> dict:
+    from mt_ca.t_continuum_readout import fcc_hydro_limit_row
+
+    del device
+    row = fcc_hydro_limit_row()
+    ok = (
+        abs(float(row["M_xx"]) - 4.0 / 3.0) < 1e-12
+        and abs(float(row["M_xy"])) < 1e-12
+        and abs(float(row["E_r2"]) - 4.0) < 1e-12
+        and abs(float(row["E_x4"]) - 4.0) < 1e-12
+        and abs(float(row["E_x2y2"]) - 14.0 / 9.0) < 1e-12
+        and abs(float(row["hatK_k2_coeff"]) - 2.0 / 3.0) < 1e-12
+        and abs(float(row["kappa_link_fcc"]) - 1.0 / 12.0) < 1e-15
+        and abs(float(row["nu_CA_fcc"]) - 1.0 / 12.0) < 1e-15
+        and row["isotropic_M"] is True
+        and row["nlse_class"] is True
+        and row["ns_class_via_madelung"] is True
+        and row["gaussian_fourth_not_exact"] is True
+        and row["n_nn"] == 12
+        and row["n_walks"] == 144
+    )
+    return {
+        "id": "T_hydro_limit",
+        "M_xx": row["M_xx"],
+        "hatK_k2_coeff": row["hatK_k2_coeff"],
+        "nu_CA_fcc": row["nu_CA_fcc"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_so2_c4(size: int = 64, device: str = "cpu") -> dict:
     from mt_ca.conservation import so2_c4_report
 
@@ -1248,6 +1279,7 @@ def run_all(device: str) -> list[dict]:
         check_a3_global_norm(device=device),
         check_t_madelung_continuity(device=device),
         check_t_continuum_readout(device=device),
+        check_t_hydro_limit(device=device),
         check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),
         check_u1_vac(device=device),

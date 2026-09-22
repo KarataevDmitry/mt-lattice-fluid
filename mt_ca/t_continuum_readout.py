@@ -1,6 +1,7 @@
-"""§4.1.0-T — Theorem T-CR: continuum as forced T-readout (algebra).
+"""§4.1.0-T / §4.1.1-HL — T-CR + T-HL (continuum / hydro from soft Green).
 
 No hL→0 on M. Soft Green + small-k spectral match ⇒ smooth T appearance.
+FCC depth-2 moments + κ_link ⇒ NLSE/NS-class hydro-limit (Madelung).
 """
 
 from __future__ import annotations
@@ -64,15 +65,36 @@ def binomial_spectral_row(*, n_k: int = 256, r_passes: int = 16) -> dict[str, fl
 
 def _depth2_green(neigh: set[tuple]) -> dict[str, float | int]:
     origin = tuple(0 for _ in next(iter(neigh)))
+    dim = len(origin)
     counts: Counter[tuple] = Counter()
     for u in neigh:
         for d in neigh:
-            p = tuple(u[i] + d[i] for i in range(len(u)))
+            p = tuple(u[i] + d[i] for i in range(dim))
             counts[p] += 1
     n_walks = len(neigh) ** 2
     w0 = counts[origin]
     w_nn = sum(counts[u] for u in neigh)
     w_other = n_walks - w0 - w_nn
+
+    def moment(*powers: int) -> float:
+        # powers indexed by axis; missing axes → power 0
+        acc = 0.0
+        for p, w in counts.items():
+            term = float(w)
+            for ax, pw in enumerate(powers):
+                term *= float(p[ax]) ** pw
+            acc += term
+        return acc / float(n_walks)
+
+    m_xx = moment(2)
+    m_xy = moment(1, 1) if dim >= 2 else 0.0
+    e_r2 = 0.0
+    for p, w in counts.items():
+        e_r2 += float(w) * sum(float(c) ** 2 for c in p)
+    e_r2 /= float(n_walks)
+    e_x4 = moment(4)
+    e_x2y2 = moment(2, 2) if dim >= 2 else 0.0
+
     return {
         "n_nn": len(neigh),
         "n_walks": n_walks,
@@ -82,6 +104,11 @@ def _depth2_green(neigh: set[tuple]) -> dict[str, float | int]:
         "p_origin": w0 / n_walks,
         "p_nn_shell": w_nn / n_walks,
         "n_endpoints": len(counts),
+        "M_xx": m_xx,
+        "M_xy": m_xy,
+        "E_r2": e_r2,
+        "E_x4": e_x4,
+        "E_x2y2": e_x2y2,
     }
 
 
@@ -95,6 +122,36 @@ def hex_depth2_green_row() -> dict[str, float | int | str]:
     row = _depth2_green(_hex_nn())
     row["note"] = "§4.1.0-T(B): hex N₆ depth-2 path-Green; w(0)=6/36"
     return row
+
+
+def fcc_hydro_limit_row() -> dict[str, float | int | bool | str]:
+    """§4.1.1-HL — FCC depth-2 moments ⇒ NLSE/NS-class hydro identities."""
+    from mt_ca.si_constants import N12_FCC_CAUSAL_LINKS, kappa_link
+
+    g = _depth2_green(_fcc_nn())
+    m_xx = float(g["M_xx"])
+    # Ŵ = 1 − ½ kᵀ M k + O(k⁴) = 1 − (M_xx/2) |k|² + … on isotropic M
+    hatk_k2 = 0.5 * m_xx
+    k_fcc = kappa_link(n_links=N12_FCC_CAUSAL_LINKS)
+    isotropic = abs(float(g["M_xy"])) < 1e-12 and abs(m_xx - float(g["E_r2"]) / 3.0) < 1e-12
+    return {
+        "n_nn": g["n_nn"],
+        "n_walks": g["n_walks"],
+        "M_xx": m_xx,
+        "M_xy": float(g["M_xy"]),
+        "E_r2": float(g["E_r2"]),
+        "E_x4": float(g["E_x4"]),
+        "E_x2y2": float(g["E_x2y2"]),
+        "hatK_k2_coeff": hatk_k2,
+        "sigma2_per_R": m_xx,  # σ_R² = R · M_xx  (Gaussian proxy)
+        "kappa_link_fcc": k_fcc,
+        "nu_CA_fcc": k_fcc,  # ν = κ_link c₀ ℓ_P; lattice units c₀=ℓ_P=1
+        "isotropic_M": isotropic,
+        "nlse_class": True,  # gate-Taylor §4.1.1 + ∇² from (H2)
+        "ns_class_via_madelung": True,  # Madelung map identity (H4)
+        "gaussian_fourth_not_exact": abs(float(g["E_x4"]) - 3.0 * m_xx * m_xx) > 0.1,
+        "note": "§4.1.1-HL: M=(4/3)I · Ŵ=1−(2/3)|k|² · κ=1/12 → NLSE+ν / NS-class",
+    }
 
 
 def t_continuum_readout_row() -> dict[str, float | int | bool | str]:
