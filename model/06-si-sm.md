@@ -550,14 +550,50 @@ M   Arg(⟨z⟩/z) + K_P + зигзаг в hV     — истинный меха�
       ↓ coarse + resonance
 T   m_rest, effective scalar «Higgs-like» fluctuation
       ↓ accelerator readout
-SM  125 GeV Higgs boson — macro wave packet, not micro root
+SM  m_H boson — macro wave packet, not micro root
 ```
 
-**125 GeV** — энергия **macro-возбуждения** цифрового океана (конгломерат **`Arg`-квантов**), не «создание mass ex nihilo». Коллайдер **раскачивает T-слой** и регистрирует **волну пены**; под ней — детерминированный **планковский фазовый затвор** + **`ρ ∈ {0, ρ_P}`**.
+**Энергетическая иерархия (§5.0.2):** один **`Arg`-квант** несёт **`E₀ = E_P/√2`** — на **~16 порядков** выше **`m_H`**. LHC видит **T-конгломерат**; M-переносчик — **`s₀=ℏ/2`**.
 
-**Энергетическая иерархия (§5.0.2):** один **`Arg`-квант** несёт **`E₀ ≈ 8.6×10²⁷ eV`** — на **~16 порядков** выше **Higgs ~1.25×10¹¹ eV**. LHC видит **T-конгломерат**; M-переносчик — **`s₀=ℏ/2`** на каждом **`hT`**.
+#### 8.3.1 Вывод **`m_H = f(m_P)`** (условный)
 
-**Следствие для модели:** **`m_e`, `m_p`** считаем через **`m_P · α_fs · f_геом`** (§8.2) и **zigzag/topology** — **без** fitted Higgs VEV как axiom M. Higgs sector = **emergent T** (open: correlate **`m_H`** with **`N_вихрей`** pack). **Sim leaf:** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс) · **не refute** LHC — **переинтерпретация** слоя.
+Уже выведено без Higgs-knob (**§8.4.1**):
+
+$$
+v = \alpha_{\mathrm{fs}}^{N_{\mathrm{hier}}} E_P \sqrt{2\pi}
+= \alpha_{\mathrm{fs}}^{8}\, E_P\, \sqrt{2\pi}
+\approx 246.08\,\mathrm{GeV},
+\qquad
+N_{\mathrm{hier}}=\lfloor B_{hV}\rfloor-1=8.
+$$
+
+**Посылка (λ):** бюджет иерархии — **`N_{\mathrm{hier}}`** равных каналов ослабления; безразмерная quartic T-пены делит единичный бюджет поровну →
+
+$$
+\lambda = \frac{1}{N_{\mathrm{hier}}} = \frac{1}{8}.
+$$
+
+**SM-дерево** на T (не новый M-закон): **`m_H = \sqrt{2\lambda}\, v`**. Подстановка:
+
+$$
+m_H = \sqrt{2\cdot\tfrac{1}{8}}\, v = \frac{v}{2}
+= \alpha_{\mathrm{fs}}^{8}\, E_P\, \sqrt{\tfrac{\pi}{2}}
+= m_P\, c^{2}\cdot \alpha_{\mathrm{fs}}^{8}\, \sqrt{\tfrac{\pi}{2}}.
+$$
+
+Эквивалент через Arg-тик: **`m_H c^{2} = \alpha_{\mathrm{fs}}^{8}\, E_0\, \sqrt{\pi}`** (**`E_0=E_P/√2`**).
+
+| величина | из вывода | PDG / внешняя |
+|----------|-----------|----------------|
+| **`v`** | ≈ **246.08 GeV** | ≈ **246.22 GeV** |
+| **`λ`** | **`1/8`** | — |
+| **`m_H`** | ≈ **123.04 GeV** | ≈ **125.25 GeV** (rel ≈ **1.8%**) |
+
+**Статус:** **`v`** и **`N_{\mathrm{hier}}`** — forced из §8.4.1; шаг **`λ=1/N_{\mathrm{hier}}`** — **условный** (бюджет каналов), не теорема уровня A1. Численный hit ~2% — контроль, не подгонка PDG в формулу.
+
+**Код / verify:** `SI.higgs_mass_row` · **`Higgs_mass`**.
+
+**Следствие:** **`m_e`, `m_p`** — через **`m_P · α_fs² · f_геом`** (§8.2); **`m_H`** — через **`m_P · α_fs⁸ · √(π/2)`**. Higgs VEV не axiom M. Width / lineshape — open sim leaf.
 
 ### 8.4 Четыре взаимодействия — симметрично, потому что всё квантуется
 

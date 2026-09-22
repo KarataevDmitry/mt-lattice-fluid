@@ -62,9 +62,12 @@ EV_J = 1.602176634e-19
 
 
 
-# Higgs mass scale (T-layer anchor, CODATA-ish)
+# Higgs mass — PDG reference for rel_err only; prediction = m_P·α_fs^8·√(π/2) (§8.3)
 
-M_HIGGS_GEV = 125.0
+M_HIGGS_GEV_PDG = 125.25
+
+# Back-compat alias (tests comparing hierarchy E0 ≫ m_H)
+M_HIGGS_GEV = M_HIGGS_GEV_PDG
 
 
 
@@ -650,6 +653,27 @@ class SIConstants:
             "m_Z_rel_err": abs(m_z - 91.1876) / 91.1876,
             "mass_ratio_sin2": 1.0 - (m_w / m_z) ** 2,
             "note": "§8.4.3-E: tree with α(MZ) from B_hV runner + bare 3/13",
+        }
+
+    def higgs_mass_row(self) -> dict[str, float]:
+        """§8.3 — m_H = v/2 = m_P c² · α_fs^8 · √(π/2); λ=1/N_hier."""
+        row = self.force_ansatz_row()
+        v = float(row["v_GeV"])
+        n_hier = float(row["N_hier"])
+        lam = 1.0 / n_hier
+        m_h = v * math.sqrt(2.0 * lam)  # = v/2 when N_hier=8
+        e_p_gev = self.E_P / EV_J / 1e9
+        m_h_direct = (self.alpha_fs**8) * e_p_gev * math.sqrt(math.pi / 2.0)
+        return {
+            "v_GeV": v,
+            "N_hier": n_hier,
+            "lambda_quartic": lam,
+            "m_H_GeV": m_h,
+            "m_H_direct_GeV": m_h_direct,
+            "m_H_PDG_GeV": M_HIGGS_GEV_PDG,
+            "m_H_rel_err": abs(m_h - M_HIGGS_GEV_PDG) / M_HIGGS_GEV_PDG,
+            "m_H_over_v": m_h / v,
+            "note": "§8.3: m_H=v/2 from λ=1/N_hier; = α_fs^8 E_P √(π/2)",
         }
 
     def saturation_bc_row(self) -> dict[str, float]:

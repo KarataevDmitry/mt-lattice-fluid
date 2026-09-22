@@ -743,6 +743,28 @@ def check_so2_c4(size: int = 64, device: str = "cpu") -> dict:
     return so2_c4_report(size, device=device)
 
 
+def check_higgs_mass(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.higgs_mass_row()
+    ok = (
+        abs(row["m_H_GeV"] - row["m_H_direct_GeV"]) / row["m_H_GeV"] < 1e-12
+        and abs(row["m_H_over_v"] - 0.5) < 1e-12
+        and row["N_hier"] == 8.0
+        and row["m_H_rel_err"] < 0.03
+    )
+    return {
+        "id": "Higgs_mass",
+        "m_H_GeV": row["m_H_GeV"],
+        "v_GeV": row["v_GeV"],
+        "lambda_quartic": row["lambda_quartic"],
+        "m_H_rel_err": row["m_H_rel_err"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_arg_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import M_HIGGS_GEV, SI, arg_quantum_row
 
@@ -1080,6 +1102,7 @@ def run_all(device: str) -> list[dict]:
         check_rho_P_binary(device=device),
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),
+        check_higgs_mass(device=device),
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),
         check_energy_quantum(device=device),
