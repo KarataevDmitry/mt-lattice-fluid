@@ -594,7 +594,7 @@ def check_saturation_bc(device: str = "cpu") -> dict:
 
 
 def check_fcc_n12(device: str = "cpu") -> dict:
-    """§1.6 — default stencil FCC N₁₂; κ_link=1/12; 3D multi-tick with HF=False."""
+    """§1.6 — default stencil FCC N₁₂; κ_link=1/12; 3D multi-tick with HF ON (A5)."""
     from mt_ca.config import MConfig
     from mt_ca.laplacian import _FCC_OFFSETS, fcc_neighbor_sum, stencil_n_links
     from mt_ca.seeds import SeedClass
@@ -605,8 +605,8 @@ def check_fcc_n12(device: str = "cpu") -> dict:
     ok_geom = cfg.stencil == "fcc" and n == 12 and len(_FCC_OFFSETS) == 12
     ok_kappa = abs(cfg.gamma - 1.0 / 12.0) < 1e-15
 
-    # Localized multi-tick: HF=True = A5 vacuum boil (fills grid) — not FCC bug.
-    cfg_dyn = MConfig.for_stencil("fcc", heisenberg_floor=False)
+    # Canon: floor ON. After gate-only Φ (no CR double-count) + N_φ vacuum, multi-tick holds.
+    cfg_dyn = MConfig.for_stencil("fcc", heisenberg_floor=True)
     sim = LatticeFluidSimulator(8, 8, cfg_dyn, device=device)
     sim.reset(SeedClass.IMPULSE)
     n0 = sim.norm()
@@ -633,9 +633,9 @@ def check_fcc_n12(device: str = "cpu") -> dict:
         "norm0": n0,
         "norm_late": n_late,
         "ticks": 16,
-        "heisenberg_floor": False,
+        "heisenberg_floor": True,
         "ok": ok,
-        "note": "§1.6 cuboctahedral ε; multi-tick stable iff HF off (HF on = A5 boil)",
+        "note": "§1.6 cuboctahedral ε; multi-tick stable with HF ON (A5)",
     }
 
 

@@ -34,7 +34,7 @@
 
 | # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
-| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, HF off) | `laplacian` fcc · default | HF on = A5 boil (не баг FCC) |
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, **HF ON**) | `laplacian` fcc · default | — |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
 | **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** (bond) | `reversible` · `z_ring` | **`div j=0`** на full **`projected_step`** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
@@ -58,7 +58,7 @@
 | ограничение | MODEL | gap | verify | следующий шаг |
 |-------------|-------|-----|--------|---------------|
 | **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
-| **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | sim | **`FCC_N12`** | multi-tick stability · true Bravais parity leaf |
+| **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | — | **`FCC_N12`** PASS (пол ON) | true Bravais parity leaf open |
 | **лестница ФТТ:** `G`, BZ, умклапп, `N_pack`, `b_atom` | §5.2.4 | model | — | quanta + probe |
 | leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
@@ -76,7 +76,6 @@
 ## §3. Open leaves (индекс)
 
 - **§3.9 DA:** long-run exact `n` conservation on contour (T-readout шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
-- **§3.12.5 / A5:** HF on FCC multi-tick (2D hex+HF ✅ vacuum/vortex; bulk FCC+HF — open dogfood)
 - **§3.10 SU(2):** full SM electron-from-`hV` sim (anchor `m_e` via `electron_v_p_anchor` ✅ algebra only)
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
@@ -242,6 +241,7 @@
 | 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · **не сшивка**: $|h_{\mathrm{near}}/h_{\mathrm{Newton}}|\sim 2\times 10^{3}$ · dual $\rho_{\mathrm{vac}}$ hinge |
 | 2026-09-22 | SatBC sim | `strain_metric` · verify `SatBC_Cppp` PASS · near/N=2047.5 · far $h=0$ · vortex 32t: $h(R)$ flat ≠$1/R$ |
 | 2026-09-22 | FCC N₁₂ | default stencil cuboctahedral ℤ³ · κ=1/12 · `FCC_N12` 1-tick PASS · multi-tick fill open |
+| 2026-09-23 | FCC+HF | объёмный куб с полом: vacuum/impulse/wave/vortex multi-tick ✅ · verify HF ON |
 | 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
