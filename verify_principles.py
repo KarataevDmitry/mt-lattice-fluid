@@ -803,7 +803,7 @@ def check_no_m_heat_death(device: str = "cpu") -> dict:
         "a3_norm_drift": a3.get("norm_drift"),
         "a5_ok": a5["ok"],
         "a13_ok": a13["ok"],
-        "note": "§2.3: heat death is T-only; M ticks forever (A3,A5,A13)",
+        "note": "§2.3 consistency probe (A3+A5+A13); not a proof certificate",
     }
 
 
