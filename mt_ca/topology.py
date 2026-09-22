@@ -151,14 +151,49 @@ def matter_occupancy_b(
     *,
     y: int | None = None,
     x: int | None = None,
+    rho_frac: float = 0.25,
+    contour_radius: int = 2,
 ) -> int:
     """b(x) = min(1, |n_∂|) at cell — §5.0: ρ_matter = ρ_P·b, m_cell = m_P·b."""
-    if y is None or x is None:
-        from mt_ca.spinor import spinor_density
+    from mt_ca.config import MConfig
+    from mt_ca.spinor import spinor_density
 
+    if y is None or x is None:
         cy, cx = torch.unravel_index(spinor_density(z).argmax(), z.shape[:2])
         y, x = int(cy.item()), int(cx.item())
-    n = plaquette_winding(z, y, x)
-    if n != n:
+
+    rho = spinor_density(z)
+    if float(rho[y, x].item()) < rho_frac * MConfig().rho_max:
         return 0
-    return min(1, abs(winding_nearest_int(n)))
+
+    w = winding_number(z, center=(y, x), radius=contour_radius)
+    if w != w or abs(w) < 0.75:
+        return 0
+    return min(1, abs(winding_nearest_int(w)))
+
+
+def matter_occupancy_b_field(
+    z: torch.Tensor,
+    *,
+    rho_min: float | None = None,
+    rho_frac: float = 0.25,
+    contour_radius: int = 2,
+) -> torch.Tensor:
+    """b(x) ∈ {0,1} — primary matter readout; needs ρ ≥ ρ_frac·ρ_P and |n_∂|≥¾ (§5.2.3)."""
+    from mt_ca.spinor import spinor_density
+
+    cfg = MConfig()
+    q = rho_frac * cfg.rho_max if rho_min is None else rho_min
+    rho = spinor_density(z)
+    ny, nx = rho.shape
+    b = torch.zeros(ny, nx, dtype=torch.int64, device=z.device)
+    candidates = (rho >= q).nonzero(as_tuple=False)
+    margin = contour_radius + 1
+    for idx in candidates:
+        y, x = int(idx[0].item()), int(idx[1].item())
+        if y < margin or x < margin or y >= ny - margin or x >= nx - margin:
+            continue
+        w = winding_number(z, center=(y, x), radius=contour_radius)
+        if w == w and abs(w) >= 0.75:
+            b[y, x] = min(1, abs(winding_nearest_int(w)))
+    return b

@@ -86,11 +86,33 @@ def saturating_phi_kick(
 
     if cfg.heisenberg_floor:
         phi_min = heisenberg_phi_min_int(cfg)
-        # Floor only non-zero kicks: holomorphic modes may have Φ=0 (§3.7.2 anti-smear, not forced noise).
-        needs_floor = (phi != 0) & (phi.abs() < phi_min)
-        phi = torch.where(needs_floor, torch.sign(phi).to(torch.int64) * phi_min, phi)
+        ny, nx = zeta_i.shape[-2], zeta_i.shape[-1]
+        ys = torch.arange(ny, device=zeta_i.device, dtype=torch.int64).view(-1, 1)
+        xs = torch.arange(nx, device=zeta_i.device, dtype=torch.int64).view(1, -1)
+        stagger = torch.where((ys + xs) % 2 == 0, torch.ones_like(zeta_i), -torch.ones_like(zeta_i))
+        below = phi.abs() < phi_min
+        sign = torch.sign(phi)
+        sign = torch.where(sign == 0, stagger, sign)
+        phi = torch.where(
+            below,
+            stagger * phi_min,
+            sign * torch.maximum(phi.abs(), torch.full_like(phi, phi_min)),
+        )
 
     return mod_lane(phi, cfg.mod_bits)
+
+
+def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 ledger)."""
+    fb = cfg.frac_bits
+    u0 = f[..., 0].to(torch.int64)
+    v0 = f[..., 1].to(torch.int64)
+    sum_n = int_neighbor_sum(f, cfg.stencil)
+    su0, sv0 = sum_n[..., 0], sum_n[..., 1]
+    zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
+    rho2 = rho2_int(u0, v0, frac_bits=fb)
+    phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
+    return mod_lane(phi + pauli_phi_int(f, cfg), cfg.mod_bits)
 
 
 def rot_kick_uv(
@@ -138,19 +160,12 @@ def pauli_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
 def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     """⌊𝒩⌋: integer saturating Φ + LUT rot kick on both spinor components (§3.12.5)."""
-    fb = cfg.frac_bits
     u0 = f[..., 0].to(torch.int64)
     v0 = f[..., 1].to(torch.int64)
     u1 = f[..., 2].to(torch.int64)
     v1 = f[..., 3].to(torch.int64)
 
-    sum_n = int_neighbor_sum(f, cfg.stencil)
-    su0, sv0 = sum_n[..., 0], sum_n[..., 1]
-
-    zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
-    rho2 = rho2_int(u0, v0, frac_bits=fb)
-    phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
-    phi = mod_lane(phi + pauli_phi_int(f, cfg), cfg.mod_bits)
+    phi = projected_phi_int(f, cfg)
 
     du0, dv0 = rot_kick_uv(u0, v0, phi, phase_bits=cfg.phase_bits)
     du1, dv1 = rot_kick_uv(u1, v1, phi, phase_bits=cfg.phase_bits)

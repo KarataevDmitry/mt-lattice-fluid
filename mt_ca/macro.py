@@ -77,12 +77,28 @@ def macro_amplitude(
     sigma: float | None = None,
     nu_viscosity_passes: int = 0,
 ) -> torch.Tensor:
-    """|Φ| on macro grid — primary T readout amplitude map."""
+    """|Φ| on macro grid — T amplitude readout (field density)."""
     phi = macro_average_spinor(z, radius=radius, stride=stride, sigma=sigma)
     amp = phi.abs().square().sum(dim=-1).sqrt()
     if nu_viscosity_passes > 0:
         amp = binomial121_smooth(amp, passes=nu_viscosity_passes)
     return amp
+
+
+def macro_matter_b(
+    z: torch.Tensor,
+    *,
+    radius: int,
+    stride: int = 1,
+) -> torch.Tensor:
+    """⟨b⟩ macro readout — ρ_matter primary, not |z|² (§5.0 · §5.2.3 IV)."""
+    from mt_ca.topology import matter_occupancy_b_field
+
+    b = matter_occupancy_b_field(z).to(torch.float32)
+    coarse = binomial121_smooth(b, passes=radius)
+    if stride > 1:
+        coarse = coarse[radius::stride, radius::stride]
+    return coarse
 
 
 # Legacy name — returns 3×3 binomial stencil for one pass (sum = 1).
