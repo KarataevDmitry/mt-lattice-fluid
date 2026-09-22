@@ -199,13 +199,16 @@ Macro-«твердое тело» = **нелинейный волновой уз
 
 Валидация — **чистая математическая симметрия** на константной сетке. Readout — **binomial (1-2-1) §4.1**, не block-mean.
 
-#### T1 · «Угловatость» (Lorentz)
+#### T1 · «Угловатость» (Lorentz)
 
 **Micro:** isotropic streaming (§3.6) → **micro_anisotropy ≈ 1**. **Macro:** binomial readout + **`κ=1/√2`** → круг.
+
+**Архитектура (§8.2):** $c^2=K_P/\mu_P$; фотон = holonomy $n=0$; контуры $\Phi_\square$ усредняют анизотропию рёбер FCC. T1 — измерение этой цепочки, не отдельный Lorentz-axiom.
 
 | Метрика | PASS |
 |---------|------|
 | `isotropy_ratio` → 1 | macro < 1.2 и macro ≤ micro |
+
 
 #### T2 · Солитон и интерференция
 

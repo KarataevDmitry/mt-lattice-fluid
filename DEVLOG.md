@@ -214,6 +214,8 @@
 | 2026-09-22 | §8.2 Кулон | $F=\alpha_{fs} F_P n_1 n_2/N^{2}$ из носителя · `SI.coulomb_row` |
 | 2026-09-22 | §8.2 Максвелл | Arg/j/Madelung/$K_P$ → E,B,J,c · `SI.maxwell_row` · sim ≠ model-gap |
 | 2026-09-22 | §8.2 планк. ЭМ | M: $s_0/F_0/j$/Гаусс/Кулон $N=1$ · не ∇ на $\ell_P$ · `SI.planck_em_row` |
+| 2026-09-22 | §8.2 Stokes+$\Phi_\square$ | дискретный контур = сумма рёбер · $B_\square=\Phi_\square/\ell_P^{2}$ |
+| 2026-09-22 | §8.2 Lorentz из $K_P$ | $c^2=K_P/\mu_P$ + binomial(1-2-1) → макро-круг; ЭМ-блок закрыт контуром |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
