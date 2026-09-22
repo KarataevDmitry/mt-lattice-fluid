@@ -434,11 +434,13 @@ class SIConstants:
 
 
     def force_ansatz_row(self) -> dict[str, float]:
-        """§8.4.1 — N_hier=floor(B_hV)-1_occupancy; v from α_fs ladder + Gaussian T."""
+        """§8.4.1 — N_hier, v ladder; α_s seed = d/(N_hier π), d=spatial (§1.6)."""
         pi = math.pi
         e_p_gev = self.E_P / EV_J / 1.0e9
-        alpha_s0 = 3.0 / (8.0 * pi)
-        v = (self.alpha_fs**8) * e_p_gev * math.sqrt(2.0 * pi)
+        n_hier = int(math.floor(2.0 * math.pi / LN2)) - 1
+        d_spatial = 3  # Minkowski space §1.6 — not N_c
+        alpha_s0 = d_spatial / (n_hier * pi)
+        v = (self.alpha_fs**n_hier) * e_p_gev * math.sqrt(2.0 * pi)
         g_f = 1.0 / (math.sqrt(2.0) * v * v)
         return {
             "alpha_s_seed": alpha_s0,
@@ -449,8 +451,9 @@ class SIConstants:
             "G_F_GeV_m2": g_f,
             "G_F_CODATA": 1.1663787e-5,
             "G_F_rel_err": abs(g_f - 1.1663787e-5) / 1.1663787e-5,
-            "N_hier": float(int(math.floor(2.0 * math.pi / LN2)) - 1),
-            "note": "§8.4.1: 8=floor(B_hV)-1_occ; sqrt(2pi)=Gaussian §4.1",
+            "N_hier": float(n_hier),
+            "d_spatial": float(d_spatial),
+            "note": "§8.4.1: 8=occ; α_s=d/(N_hier π); √(2π)=Gaussian",
         }
 
 
