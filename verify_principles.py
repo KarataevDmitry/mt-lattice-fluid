@@ -737,6 +737,38 @@ def check_t_madelung_continuity(size: int = 64, device: str = "cpu") -> dict:
     return t_madelung_continuity_report(size, device=device)
 
 
+def check_t_continuum_readout(device: str = "cpu") -> dict:
+    from mt_ca.t_continuum_readout import t_continuum_readout_row
+
+    del device
+    row = t_continuum_readout_row()
+    ok = (
+        row["path_atom_is_121"] is True
+        and row["var_atom"] == 0.5
+        and row["multiplier_id_err"] < 1e-15
+        and row["max_rel_err_k_sigma_lt_0_30"] < 1e-4
+        and row["max_rel_err_k_sigma_lt_0_50"] < 1e-3
+        and row["fcc_n_nn"] == 12
+        and row["fcc_n_walks"] == 144
+        and row["fcc_w_origin"] == 12
+        and abs(float(row["fcc_p_origin"]) - 1.0 / 12.0) < 1e-15
+        and row["fcc_w_nn_shell"] == 48
+        and row["hex_n_nn"] == 6
+        and row["hex_n_walks"] == 36
+        and row["hex_w_origin"] == 6
+        and abs(float(row["hex_p_origin"]) - 1.0 / 6.0) < 1e-15
+        and row["separable_121_is_not_fcc_law"] is True
+    )
+    return {
+        "id": "T_continuum_readout",
+        "max_rel_err_k_sigma_lt_0_30": row["max_rel_err_k_sigma_lt_0_30"],
+        "fcc_p_origin": row["fcc_p_origin"],
+        "hex_p_origin": row["hex_p_origin"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_so2_c4(size: int = 64, device: str = "cpu") -> dict:
     from mt_ca.conservation import so2_c4_report
 
@@ -1214,6 +1246,7 @@ def run_all(device: str) -> list[dict]:
         check_elementary_quanta(device=device),
         check_a3_global_norm(device=device),
         check_t_madelung_continuity(device=device),
+        check_t_continuum_readout(device=device),
         check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),
         check_u1_vac(device=device),
