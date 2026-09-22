@@ -2,6 +2,7 @@
 
 **Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».  
 **Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`.  
+**Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.  
 **SM constants** — §8, часть **MODEL**, не meta.
 
 ### Иерархия слоёв (SSOT)
@@ -16,18 +17,18 @@
                       T    coarse, readout     — наблюдаемый слой
                            ↓  (интерпретация)
                       Meta META.md           — космология, UI, access; **не refute M**
+                      Devlog DEVLOG.md       — impl status, verify, open; **не refute M**
 ```
 
 **Истина идёт из MODEL.** Impl и sim **догоняют**. Пока MODEL строится — разрывы **двух родов** (ниже).
 
-### M vs Meta (не смешивать)
+### M vs Meta / Devlog (не смешивать)
 
-| | **MODEL** | **META** |
-|---|-----------|----------|
-| Роль | **SSOT физики** | следствия / UI / космология **над** M |
-| Примеры | `g`, `Z_N[i]`, A1–A16, §5.2.1, SM §8 | циклы §3 META, observer lock §1 META |
-| Verify | `verify_principles.py` | логика закрыта; long-run sim — leaf |
-| Спор | «что делает `g`?» → только MODEL | «что видит мозг?» → META, не отменяет A3 |
+| | **MODEL** | **META** | **DEVLOG** |
+|---|-----------|----------|------------|
+| Роль | **SSOT физики** | UI / космология **над** M | impl / verify / open |
+| Примеры | `g`, `Z_N[i]`, A1–A16, §5.2 | циклы §3 META, observer | ✅/⚠️, provenance, GPU DoD |
+| Спор | «что делает `g`?» → только MODEL | «что видит мозг?» → META | «догнали код?» → DEVLOG |
 
 ### Три вида gap (пока M строится)
 
@@ -278,26 +279,26 @@ v_T ≈ (c₀ / c_T) · c_T  = √2 · c_T        (относительно macr
 
 Навешиваются **на каркас `g`** (§3.1), **после** дискретности + КА. Не наоборот.
 
-| # | Условие | Следствие для `g` | Статус |
-|---|---------|-------------------|--------|
-| A1 | **Каузальность**, `c = dl/hT = 1` | один тик → `N₄`, Moore запрещён | ✅ структура M |
-| A2 | **Локальность** | `g` зависит только от ε-окрестности | ✅ структура M |
-| A3 | **Унитарность / сохранение информации** | `Σ|z|²` invariant; linear unitary; nonlinear = `exp(iφ)` | ✅ `local_ca` (M) |
-| A4 | **U(1) заряд / SU(2) спин** | спинор **`ℂ²`**, gate **SU(2)** (§3.10); A4 = unitary **`exp(iΦ)`** на спиноре | ✅ **§3.10** · impl SU(2) |
-| A5 | **3-й закон: абсолютный ноль недостижим** | vacuum gate при \|z\|→0; вакуум = осциллирующий фон | ✅ gate в §3.4 |
-| A6 | **2-й закон (локально): энтропия не убывает** | mixing / max локальной фазовой энтропии при фикс. норме → `Δ₄` | ⚠️ мотив linear step; **не доказано для полного `g`** |
-| A7 | **Планковский потолок плотности** | `\|z\|² ↔ ρ_E/u_P ≤ 1`; знаменатель `+ε`, `ε↔u_P` | ✅ **`rho_max` clamp** · `clamp_density` |
-| A8 | **Макро-линейность** | при больших \|z\| нелинейность **затухает** (T-гладкость) | ✅ gate asymptotics + `w(ρ)` |
-| A9 | **Дискретная аналитичность (Коши–Риман)** | `g` = оператор удержания голоморфности; CR-единственность → глобальное поле Λ | ✅ **§3.9** · impl **`cr_strength` + holomorphy sync** |
-| A10 | **Топологическая квантованность заряда** | полюс **`hV`**; **`∮ d arg = 2πn`**, **`n∈ℤ`** (вычет ДА) | ✅ **§3.9** · seeds **`n∈{±1,±2}`** · T contour readout |
-| A11 | **Устойчивость солитона / anti-smear** | размазанное **не голоморфно**; **`K_P`+`Δφ` затвор** → самофокусировка | ✅ **§3.7–§3.9** · A11 PASS · T-readout binomial |
-| A12 | **Изотропия / Lorentz (T)** | micro: **isotropic streaming** (§3.6); macro-круг — **(1-2-1)** readout + **`κ=1/√2`** | ✅ T1 PASS (512² CUDA) |
-| A13 | **Обратимость шага (микро)** | **2-й порядок** **`z⁺=−z⁻+2z+⌊𝒩⌋`** на **ℤ** (§3.12); **`g⁻¹`** = algebra / swap | ✅ **§3.12** · **`Leapfrog`** bit-exact |
-| A14 | **P / C / T / U(1)_vac** | discrete symmetry probes on `g`; long **`g·P`** open | ✅ **`U1_vac`** · **`Chiral_SU2`** · P/C seeds · ⚠️ long **`g·P`** |
-| A15 | **Принцип наименьшего действия** | **`κ=1/√2`**, **`γ=κ_link=1/4`**, **`α*=1+1/(4π)`** из геометрии N₄ + gate (§5.2.2, §7.1) | ✅ **`κ_link`** · **`α*`** · **`sync=κ_link·Δφ_min`** (§5.2.3) |
-| A16 | **Фермион / запрет Паули** | спин **`1/2`**: **`2π` → −1**, **`4π` → +1**; два совпадающих спинора в **`v_p`** запрещены | ✅ **§3.10** · SU(2) + **`pauli_phi`** + verify |
+| # | Условие | Следствие для `g` |
+|---|---------|-------------------|
+| A1 | **Каузальность**, `c = dl/hT = 1` | один тик → `N₄`, Moore запрещён |
+| A2 | **Локальность** | `g` зависит только от ε-окрестности |
+| A3 | **Унитарность / сохранение информации** | `Σ|z|²` invariant; linear unitary; nonlinear = `exp(iφ)` |
+| A4 | **U(1) заряд / SU(2) спин** | спинор **`ℂ²`**, gate **SU(2)** (§3.10); A4 = unitary **`exp(iΦ)`** на спиноре |
+| A5 | **3-й закон: абсолютный ноль недостижим** | vacuum gate при \|z\|→0; вакуум = осциллирующий фон |
+| A6 | **2-й закон (локально): энтропия не убывает** | mixing / max локальной фазовой энтропии при фикс. норме → `Δ₄` |
+| A7 | **Планковский потолок плотности** | `\|z\|² ↔ ρ_E/u_P ≤ 1`; знаменатель `+ε`, `ε↔u_P` |
+| A8 | **Макро-линейность** | при больших \|z\| нелинейность **затухает** (T-гладкость) |
+| A9 | **Дискретная аналитичность (Коши–Риман)** | `g` = оператор удержания голоморфности; CR-единственность → глобальное поле Λ |
+| A10 | **Топологическая квантованность заряда** | полюс **`hV`**; **`∮ d arg = 2πn`**, **`n∈ℤ`** (вычет ДА) |
+| A11 | **Устойчивость солитона / anti-smear** | размазанное **не голоморфно**; **`K_P`+`Δφ` затвор** → самофокусировка |
+| A12 | **Изотропия / Lorentz (T)** | micro: **isotropic streaming** (§3.6); macro-круг — **(1-2-1)** readout + **`κ=1/√2`** |
+| A13 | **Обратимость шага (микро)** | **2-й порядок** **`z⁺=−z⁻+2z+⌊𝒩⌋`** на **ℤ** (§3.12); **`g⁻¹`** = algebra / swap |
+| A14 | **P / C / T / U(1)_vac** | discrete symmetry probes on `g`; long **`g·P`** open |
+| A15 | **Принцип наименьшего действия** | **`κ=1/√2`**, **`γ=κ_link=1/4`**, **`α*=1+1/(4π)`** из геометрии N₄ + gate (§5.2.2, §7.1) |
+| A16 | **Фермион / запрет Паули** | спин **`1/2`**: **`2π` → −1**, **`4π` → +1**; два совпадающих спинора в **`v_p`** запрещены |
 
-**Легенда:** ✅ слой M · ⚠️ impl/sim · ❌ не разбирали.
+**Verify / impl:** [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-аксиом-a1a16-verify).
 
 **Поле и целевой закон (A3):**
 
@@ -482,7 +483,7 @@ def linear_step_local_ca(z: torch.Tensor, gamma: float) -> torch.Tensor:
 z' = z · exp( i · 2π · [ α*/(|z|²+ε) · Δφ − 1 ] · w(ρ) )
 ```
 
-**Статус:** ✅ shipped · T1 **micro≈1.0** · macro radial probe — open.
+**Impl:** [`DEVLOG.md` §4](DEVLOG.md#§4-impl-status-по-разделам) · default **`⟨z⟩_N₄` + phase** (§3.6).
 
 | подход | micro изотропия | каузальность | код |
 |--------|-----------------|--------------|-----|
@@ -493,7 +494,7 @@ z' = z · exp( i · 2π · [ α*/(|z|²+ε) · Δφ − 1 ] · w(ρ) )
 
 ### 3.7 Размазывание → Гейзенберг → триггер `K_P` (канон M)
 
-**Provenance:** 2026-09-22. **Дилемма закрыта на слое M** (§3.7.2); impl/sim — §3.7.4.
+**Impl backlog:** [`DEVLOG.md` §4](DEVLOG.md#§37-heisenberg--anti-smear) · GPU DoD §3.7.3.
 
 #### 3.7.1 Конфликт двух лагерей (чистая физика поля)
 
@@ -515,21 +516,11 @@ z' = z · exp( i · 2π · [ α*/(|z|²+ε) · Δφ − 1 ] · w(ρ) )
 
 #### 3.7.3 GPU-leaf (4070)
 
-§3.4 без правок M. DoD: T1-круг · Gaussian head-on · vortex **`n=±1`** (axis ratio) · hex §3.8 **если** квадрат проступит.
-
-#### 3.7.4 Impl/sim v3 (backlog — не канон)
-
-| probe | метрика | isotropic | local_ca | комментарий |
-|-------|---------|-----------|----------|-------------|
-| один Gaussian σ=5, 192 steps | `max(coarse)_late/0` | **0.15** | 0.32 | impl readout сырой |
-| два Gaussian σ=6, 256 steps | `max(coarse)_ratio` | **0.12** | 0.28 | ⏳ T-test |
-| T2_collision (δ) | `peaks_late` | 2 | 2 | метрика слабая |
-
-**Не вердикт M:** `mt_ca` v3 + coarse — **догоняют** §3.7.2–§3.9.
+§3.4 без правок M. DoD: T1-круг · Gaussian head-on · vortex **`n=±1`** (axis ratio) · hex §3.8 **если** квадрат проступит. См. [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 ### 3.8 Квадрат N₄ · hex/D2Q9 (канон M · условный ladder)
 
-**Provenance:** 2026-09-22 — «тяжёлый vortex на квадрате» + «есть дискретный анализ».
+**GPU test:** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 3.8.1 Слабые волны vs тяжёлый vortex на N₄
 
@@ -538,7 +529,7 @@ z' = z · exp( i · 2π · [ α*/(|z|²+ε) · Δφ − 1 ] · w(ρ) )
 | слабые волны / фотон | ✅ каузально чист | T1: **круглый** coarse-фронт, micro≈1 |
 | плотный vortex **n=±1** | ⚠️ **квадратная** симметрия решётки | macro-профиль может **проступать** — «круг → сглаженный квадрат» |
 
-**Статус:** гипотеза до GPU-leaf §3.7.3 / §9.7. Метрика: **анизотропия контура vortex** (Fourier `r(θ)` или axis ratio) на coarse при высоком `ρ_E`.
+**GPU метрика:** anisotropy контура vortex — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 3.8.2 Условный fix-ladder (не сейчас)
 
@@ -556,9 +547,7 @@ z' = z · exp( i · 2π · [ α*/(|z|²+ε) · Δφ − 1 ] · w(ρ) )
 
 ### 3.8 bis Квадрат N₄ · hex/D2Q9 (канон M · условный ladder)
 
-**Provenance:** 2026-09-22 — «строгий ДА убирает физические натяжки».
-
-**Канон:** §3.9 + §3.4 **`g`** = **слой M**. `mt_ca` **следует**; где impl проще (локальный `N₄` на tick, нет явного CR) — это **implementation debt**, не отмена ДА-формулировки.
+**Канон:** §3.9 + §3.4 **`g`** = **слой M**. `mt_ca` **следует**; implementation debt → [`DEVLOG.md` §4.9](DEVLOG.md#§39-da--cr).
 
 #### 3.9.1 Пространство как дискретная голоморфная среда
 
@@ -621,16 +610,9 @@ z(x,t+Δt) = z(x,t) · exp( i · 2π · [ K_P·α* / (ρ_E + K_P) · Δφ_N₄ �
 | метрика **`K_P`** | `α*/(ρ+ε)` | Планковский барьер |
 | риманова поверхность на графе | **`Λ×S¹`** (фаза) | — |
 
-#### 3.9.5 Impl status (2026-09-22)
+#### 3.9.5 Impl
 
-| пункт | статус |
-|-------|--------|
-| CR + **`cr_strength`** | ✅ shipped · A9 PASS |
-| **`Δφ ≥ 1/2`** Heisenberg floor | ✅ **`heisenberg_floor`** · A16 |
-| winding **`n`** seeds + T readout | ✅ A10 · `topology.winding_robust` |
-| **holomorphy sync** on tick | ✅ **`holomorphy_sync_step`** |
-
-**Open:** long-run **exact** `n` conservation on contour (T-readout шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test.
+→ [`DEVLOG.md` §4.9](DEVLOG.md#§39-da--cr)
 
 #### 3.9.6 A9 — порог дисперсионной CR-энергии (не legacy `0.05`)
 
@@ -644,15 +626,13 @@ z(x,t+Δt) = z(x,t) · exp( i · 2π · [ K_P·α* / (ρ_E + K_P) · Δφ_N₄ �
 | **`E_CR,stab`** | **`ν_CA·(1+{B_hV})`** — потолок после burn-in | **≈ 0.266** |
 | **`|ΔE_CR|`** (stationarity) | **`≤ {B_hV}·E_CR`** между двумя поздними окнами | **≈ 6.5%** |
 
-**Verify `A9`:** `PLANE_WAVE` · burn-in **32** + settle **32** · **`e₀ ≤ E_CR,seed`**, **`e₁ ≤ E_CR,stab`**, стационарность. Старый порог **`e₁ < 0.05`** — **отвергнут** (GPU-rounding / continuum-иллюзия).
+**Verify `A9`:** `PLANE_WAVE` · burn-in **32** + settle **32** · **`e₀ ≤ E_CR,seed`**, **`e₁ ≤ E_CR,stab`**, стационарность.
 
 **Код:** `si_constants.cr_seed_ceiling` · `cr_dispersion_ceiling` · `cauchy_riemann.cr_stationarity_tolerance`.
 
 **Итог §3.9:** ДА = **строгий язык M**. **`g`** = **SU(2) spinor gate** (§3.10); §3.4 — **бозонный предел** `|z|²` invariant.
 
 ### 3.10 Спин SU(2): фермионы, знак при 360°, запрет Паули (канон M)
-
-**Provenance:** 2026-09-22 — «без спина Вселенная плоская и мёртвая».
 
 #### 3.10.1 Проблема U(1)-only
 
@@ -709,21 +689,11 @@ z_A ∥ z_B  ⇒  z_A + z_B → 0   (аннигиляция / выталкива
 
 **Цепочка масштабов замкнута:** **`hV`** (топология) + **SU(2)** (спин) + **Паули** (matter) + **`K_P`** (упругость).
 
-#### 3.10.5 Impl status (2026-09-22)
+#### 3.10.5 Impl
 
-| слой M | impl (`mt_ca`) |
-|--------|----------------|
-| **`z ∈ ℂ²`** | ✅ **единственное** поле |
-| **SU(2) gate** | ✅ **`su2_apply`** · holonomy axis |
-| **360° → −1** | ✅ verify **`SU2_360`** |
-| **720° → +1** | ✅ verify **`SU2_720`** |
-| **Pauli на `v_p`** | ✅ **`pauli_phi`** · verify **`Pauli`** |
-
-**Open:** full SM electron-from-**`hV`** sim (anchor **`m_e`** via **`electron_v_p_anchor`** ✅ algebra only).
+→ [`DEVLOG.md` §4.10](DEVLOG.md#§310-su2--pauli)
 
 ### 3.11 U(1)_vac gauge + хиральная упаковка SU(2)_L × SU(2)_R (канон M)
-
-**Provenance:** 2026-09-22 — «доводи impl»: global phase не должен ломать `g`; chirality = упаковка, не второе поле.
 
 #### 3.11.1 U(1)_vac на спиноре
 
@@ -740,7 +710,7 @@ z → z · e^{iθ}     (одна global phase на обе компоненты)
 | axis | **`n_z × n_s`**, fallback **`n_z`** | ✅ (не фикс. **`(0,0,1)`**) |
 | Arg carrier | **`Δφ = wrap(Arg ζ)`** | ✅ |
 
-**Impl-gap (closed 2026-09-22):** fallback **`defect_axis → [0,0,1]`** ломал equivariance на **`PLANE_WAVE`** (~200% error). Fix: **`axis ← n_z`** when **`‖n_z×n_s‖→0`**.
+**`defect_axis`:** local Bloch fallback when **`‖n_z×n_s‖→0`**.
 
 #### 3.11.2 Хиральность без второго поля
 
@@ -785,7 +755,7 @@ Product **`Θ`** на projected **`Z_N[i]` g** после gauge-fix encode **н�
 | **T** | **`σ_x` boost**: **χ→−χ** | chirality flip proxy |
 | **CPT** | product **`Θ`** | optional diagnostic only |
 
-**Open:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2).
+**Open (long-run P·g):** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 3.11.4 A14 на решётке (impl probes)
 
@@ -799,19 +769,11 @@ Product **`Θ`** на projected **`Z_N[i]` g** после gauge-fix encode **н�
 
 **Не путать:** отсутствие long-run **`P·g`** commute ≠ «Вселенная right-handed» — это **contingent seed + chirality dance**, не аксиома M (§9.2).
 
-#### 3.11.5 Impl status (2026-09-22)
+#### 3.11.5 Impl
 
-| слой M | impl (`mt_ca`) |
-|--------|----------------|
-| **`U(1)_vac` equivariance** | ✅ **`defect_axis` fix** · verify **`U1_vac`** |
-| **`P_L/P_R` projectors** | ✅ **`chiral.py`** · verify **`Chiral_SU2`** |
-| **projected 𝒩 on Z_N[i]** | ✅ **`projected_collision.py`** |
-| **CPT product (`Θ g Θ`)** | optional · **`cpt_unwind`** in `symmetry.py` · **`run_symmetry_probe.py`** |
-| **A14 bundle** | ✅ **`verify_principles`**: P/C/U1/chiral · long **`g_P_steps`** logged |
+→ [`DEVLOG.md` §4.11](DEVLOG.md#§311-symmetries)
 
 ### 3.12 Эволюция M: обратимый КА 2-го порядка на планковском базисе (канон)
-
-**Provenance:** 2026-09-22 — float32 1-го порядка на 4070 → киральная «пляска» `n`; из M следует **не трюк**, а **единственный** закон счёта.
 
 #### 3.12.0 Из первых принципов (Planck natural units)
 
@@ -1108,7 +1070,7 @@ A5 ⇒ перманентное **micro-кипение**. Столкновени
 
 **GPU DoD:** волна **без компенсации** → плавное macro-затухание в фоновое кипение; **micro norm** stable (A3).
 
-**Статус:** ✅ канон M→T · **`si_constants.nu_CA`** (algebraic) · verify **`Nu_CA`** · **`T3_macro_viscosity`** · fit **`ν_eff`** open.
+**Impl / T-fit:** [`DEVLOG.md` §4](DEVLOG.md#§4-t-layer) · **`ν_eff`** open.
 
 ### 4.9 Волна ↔ «частица»: демистификация корпускулярно-волнового дуализма
 
@@ -1138,7 +1100,7 @@ Macro-«твердое тело» = **нелинейный волновой уз
 
 **Не суперпозиция миров** — **один** нелинейный объект: размазан в T при propagation, **локализован** при interaction threshold.
 
-**Статус:** ✅ онтология M→T · GPU leaf: **barrier + detector screen + slit** — open · partial: **`T2_collision`**, **A11 vortex**, **Heisenberg+K_P** gate ✅
+**GPU Young leaf:** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 ### 4.2 Самопроверка M→T (без внешних эталонов)
 
@@ -1156,7 +1118,7 @@ Macro-«твердое тело» = **нелинейный волновой уз
 
 Macro-пакет живёт на вакууме; два пакета → интерференция, не mush. Gaussian head-on — **`T2_gaussian`**.
 
-`python validate_mt.py` — **T1/T2/T3/T_dispersion PASS** на 512² CUDA (2026-09-22).
+**Validate:** `python validate_mt.py` — см. [`DEVLOG.md` §6](DEVLOG.md#§6-команды-verify).
 
 ### 4.3 Дискретный анализ (не «непрерывность из коробки»)
 
@@ -1287,7 +1249,7 @@ b(x) = ρ_matter(x) / ρ_P = m_cell(x) / m_P
 | предел сжатия | **`ρ → ρ_P`** монолит | VdW **`b`**, §5.3.3 |
 | «сингулярность» BH | **нет `ρ > ρ_P`:** монолит — все пиксели = 1 | continuum **`ρ → ∞`** |
 
-**Статус:** ✅ канон M · **`si_constants.rho_P`** · verify **`Rho_P_binary`** · occupancy readout on T — open.
+**Verify:** **`Rho_P_binary`** · occupancy readout — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 5.0.1 Истинный переносчик массы: квант **`Arg`-давления** (не Higgs)
 
@@ -1317,7 +1279,7 @@ b(x) = ρ_matter(x) / ρ_P = m_cell(x) / m_P
 | **T** | **`m_rest`** readout; **Higgs** = macro-возбуждение поля плотности |
 | **SM fit** | **`m = m_P α_fs² f_геом`** (§8.2) — check topology, не Higgs-knob |
 
-**Статус:** ✅ канон M→T · §8.3 · verify **`Arg_mass_carrier`** · validate **`T_zigzag_mass`** · sim: **`m_H` vs N_вихрей** — open.
+**Sim leaf:** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 5.0.2 Фундаментальный квант фазового действия **`s₀`** (переносчик **`Arg`**)
 
@@ -1386,7 +1348,7 @@ n = +1  +  n = −1  →  n_net = 0     (фазовые градиенты пр�
 
 **Baryon asymmetry (§9.2 Phase IV→I):** не «50/50 случайность». M **детерминирован** (§2.1): первый A5-сдвиг «лёда» задаёт **хиральность** пузыря — **доминирует `n=+1`**. Антиматерия **локально** рождается (коллайдер, U-вихрь), но живёт в **«правой воде»** — быстро встречает **`n=+1`** фон → annihilation. **«Левые круги на правой воде»** — не мистика, а **геометрия стартового зародыша** (§9.7 leaf: какой класс «наш»).
 
-**Статус:** ✅ канон M→T · verify **A10** (signs at seeds) · sim **VORTEX_P + VORTEX_M → n_net→0 + 2-front** — open.
+**Sim leaf:** annihilation **VORTEX_P + VORTEX_M** → **`n_net→0` + 2-front** — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 **Объём ячейки:**
 
@@ -1496,7 +1458,7 @@ c² = K / ρ_mass        ⇒        K_P = μ_P · c²
 | **A5 кипение** | микро-вязкость | `|z|≫0` вакуум, не ламинар |
 | **`γ = κ_link = 1/4`** | кинетическое смешивание по **`N₄`** | §5.2.2 · `local_ca` |
 
-**Статус:** **`si_constants.kappa_link()`** · **`γ = cr_strength = ν_CA_natural = 1/4`** (§5.2.2) · sim ballistic check на `c` — open.
+**Impl / sim:** **`κ_link = ¼`** — [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · ballistic check на **`c`** — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 ### 5.2 Гидродинамика M → T (Madelung на **N₄**)
 
@@ -1647,7 +1609,7 @@ L_z(x) = ε_{ab} x^a π^b(x)     →     L_z = Σ_x L_z(x) ∈ L₀ · ℤ
 | **время** (**`hT`**) | **`E`** per tick | **`E ∈ E₀·ℤ`**, ledger |
 | **CR / topo** (§3.9) | winding | **`n ∈ ℤ`** (A10) |
 
-**Статус:** ✅ канон M→T · **`si_constants.p_0/L_0/F_0/g_M`** · verify **`MechanicalQuantum`**, **`LocalContinuity`**, **`SO2_C4`** ( **`Z_N[i]`** ).
+**Verify / impl:** mechanical quanta — [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · §5.2.1.
 
 #### 5.2.2 Полная лестница квантования · **`κ_link = ¼`** · **`b ∈ {0,1}`** · **`E ∈ E₀·ℤ`**
 
@@ -1703,8 +1665,6 @@ E₀ = L₀ / hT           ,   L₀ = s₀
 Σ_{y∈N₄(x)} ΔE(y) = 0   (mod E₀)     за один hT на hV x
 ```
 
-**Verify:** **`EnergyQuantum`** — алгебра **`E₀ = p₀·c₀ = F₀·l_P = L₀/hT`**.
-
 ##### III · Заряд **`Q = n·e₀`** — топологический, не импульсный
 
 **A10:** **`n ∈ ℤ`** — winding / вычет ДА. **Электрический заряд** — **не** **`n_p · p₀`**, а **идентификация**:
@@ -1751,8 +1711,6 @@ b(x) = 1  ⟺  |Δφ_N₄(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
 ρ_macro ≈ ⟨b⟩ · ρ_P     ,   ⟨b⟩ ≪ 1   ⇒   «1000 kg/m³» (§5.0)
 ```
 
-**Verify:** **Rho_P_binary** — **ρ_P = m_P/l_P³**; **MatterOccupancy** — **b from n_∂**.
-
 ##### V · **`α* = 1 + 1/(4π)`** — dimensionless, из tick budget
 
 **§7.1:** **`hT·ω = 2π`** — полный фазовый цикл вакуума за M-тик. **Vacuum residue** на tick:
@@ -1788,19 +1746,7 @@ b(x) = 1  ⟺  |Δφ_N₄(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
 
 **Energy ledger (§3.12):** saturating **`Φ`** [ticks] → **`n_E = ⌊|Φ|/Δφ_disc⌋`**; локально **`Σ_{N₄} n_E·E₀ ≡ 0 (mod E₀)`**.
 
-**Impl:** **`si_constants.elementary_quanta_row()`** · verify **`ElementaryQuanta`**. **`MConfig`** defaults — **только** из этой таблицы.
-
-##### VII · Audit (2026-09-22)
-
-| величина | статус | gap |
-|----------|--------|-----|
-| **`κ_link`, `γ`, `cr_strength`, `ν_CA`** | ✅ **`¼`** | — |
-| **`s₀`, `p₀`, `L₀`, `E₀`, `F₀`, `g_M`** | ✅ §5.2.1 | — |
-| **`sync`, Pauli, `ρ_Q`, `n_E` map** | ✅ §5.2.3 | sim verify **EnergyLedger** open |
-| **`b ∈ {0,1}`** | ✅ §5.0 / §5.2.3 | sim primary readout — open |
-| **`α_s`, G_F, динамическая метрика** | ❌ | **model-gap** SM/GR |
-
-**Статус:** ✅ §5.2.2–§5.2.3 · **`elementary_quanta_row`** · verify **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rho_P_binary`**.
+**Audit / verify:** [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · **`elementary_quanta_row()`** · **`MConfig`** defaults.
 
 ### 5.3 Макро-газ: нет «пустого пространства»
 
@@ -1832,7 +1778,7 @@ P = (N_вихрей / V) · k_B · T     ⟹     PV = nRT
 
 **Менделеев–Клапейрон** — **статистическое следствие** дискретного Коши–Римана + gate (§3.9), **не** отдельная аксиoma M.
 
-**Статус:** ✅ формулировка M→T · sim EOS / **`P(ρ)`** readout — open · ideal gas → §5.3.3 VdW.
+**Sim leaf:** EOS / **`P(ρ)`** readout — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 5.3.2 Две скорости «звука»: свет **`c`** vs газ **`v_s`**
 
@@ -1845,7 +1791,7 @@ P = (N_вихрей / V) · k_B · T     ⟹     PV = nRT
 
 **Инвариант:** **`v_s ≪ c`** — средняя скорость теплового зигзага macro-вихрей **строго меньше** скорости света из-за **внутренней инерции** зигзага (§5). Звук в газе **ползёт** относительно **света в вакууме**.
 
-**Статус:** ✅ разделение **`c`** / **`v_s`** на слое M · численный **`v_s`** на T-readout — open.
+**Sim leaf:** численный **`v_s`** на T-readout — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 #### 5.3.3 Уравнение Ван-дер-Ваальса из геометрии ДА (не fitted)
 
@@ -1905,9 +1851,7 @@ a = N_A² · N_вихрей² · K_P · l_P⁶ · α_fs
 
 **«Сингулярность» ЧД на M:** не **`ρ → ∞`**, а macro-область, где **каждый пиксель = 1** (вещество). BH = **упакованный монолит **`ρ_P`**, не математический pole плотности.
 
-**Impl:** `si_constants.vdw_a`, `vdw_b`, `vdw_pressure` · verify **`VdW_algebra`**, **`Rho_P_binary`** · T compression / occupancy — open.
-
-**Статус:** ✅ алгебра M→T · **`N_вихрей`** — fractal depth параметр молекулы (не knob среды) · sim leaf open.
+**Код / verify:** `si_constants.vdw_*` · **`VdW_algebra`** — [`DEVLOG.md` §4](DEVLOG.md#§5-matter--quantization--gas) · T compression — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 ---
 
@@ -2045,17 +1989,7 @@ f_геометрия(e) = m_e / (m_P · α_fs²) ≈ 7.86×10⁻¹⁹     (CODAT
 | **`α_fs`** | **`1/(4π³+π²+π)`** | **считается** |
 | `m_e`, `m_p` | `m_P · α_fs^… · f_геометрия(n,N₄)` | **f из ε + топологии** |
 
-**Проверка M→T (§4.0.1):** sim + electron node geometry → `F_lepton` → `m_e` **без** нового knob.
-
-**Статус:**
-
-| Утверждение | Тип |
-|-------------|-----|
-| dV=(dl)³, элементар = 1 v_p | структура M |
-| m₀=m_P, e₀=e, ν₀, u_P, μ_P | Planck-арифметика |
-| **`α_fs = 1/(4π³+π²+π)`** | **вычислено из gate geometry** |
-| m_e, m_p через α_fs, F_*(n) | **структура SM**; F_* = combinatorics узла |
-| sim подтверждает F_* для e/p | **численный check** (leaf) |
+**Проверка M→T (§4.0.1):** sim + electron node geometry → `F_lepton` → `m_e` **без** нового knob. **Impl / sim:** [`DEVLOG.md` §4](DEVLOG.md#§8-sm--higgs).
 
 **Не meta:** электрон, протон, α, иерархия кварков — **целевые observables модели M→T→SM**.
 
@@ -2077,9 +2011,7 @@ SM  125 GeV Higgs boson — macro wave packet, not micro root
 
 **Энергетическая иерархия (§5.0.2):** один **`Arg`-квант** несёт **`E₀ ≈ 8.6×10²⁷ eV`** — на **~16 порядков** выше **Higgs ~1.25×10¹¹ eV**. LHC видит **T-конгломерат**; M-переносчик — **`s₀=ℏ/2`** на каждом **`hT`**.
 
-**Следствие для модели:** **`m_e`, `m_p`** считаем через **`m_P · α_fs · f_геом`** (§8.2) и **zigzag/topology** — **без** fitted Higgs VEV как axiom M. Higgs sector = **emergent T** (open: correlate **`m_H`** with **`N_вихрей`** pack).
-
-**Статус:** ✅ онтология M→T · численный **`m_H` / Higgs width** leaf — open · **не refute** LHC — **переинтерпретация** слоя.
+**Следствие для модели:** **`m_e`, `m_p`** считаем через **`m_P · α_fs · f_геом`** (§8.2) и **zigzag/topology** — **без** fitted Higgs VEV как axiom M. Higgs sector = **emergent T** (open: correlate **`m_H`** with **`N_вихрей`** pack). **Sim leaf:** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс) · **не refute** LHC — **переинтерпретация** слоя.
 
 ---
 
