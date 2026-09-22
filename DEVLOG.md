@@ -47,7 +47,7 @@
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
 | **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
 | **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | **sim** | **`A14`** · **`U1_vac`** · **`SO2_C4` FAIL** · **`Chiral_SU2` PASS** | `symmetry` · `chiral` | **equivariant encode + step** (одна ось с A9) |
-| **A15** | **Геометрия / κ_link** | **`κ`** из многогранника; **`γ=1/\|N\|`**; канон **`\|N\|=12`** | §1.6 · §5.2.2 | sim | **`QuarterQuantum`** PASS (MVP ¼) | `si_constants` | FCC `1/12` row |
+| **A15** | **Геометрия / kappa_link** | kappa из многогранника; gamma = 1/N; канон N=12 | §1.6 · §5.2.2 | sim | **QuarterQuantum** PASS (MVP 1/4) | `si_constants` | FCC 1/12 row |
 | **A16** | **Pauli / 720°** | **`2π→−1`**, repulsion | §2 · §3.10.4 | sim | **`A16`** · **`Pauli`** PASS | `pauli_phi` | — |
 
 **§2.3 (блок):** ¬heat death · fixed points · Planck floor — MODEL §2.3 · **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** PASS.
