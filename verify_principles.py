@@ -830,6 +830,43 @@ def check_electron_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_neutrino_mass(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import HV, SI
+
+    del device
+    row = SI.neutrino_mass_row()
+    n_phi = float(HV.N_phi)
+    n_hier = float(row["N_hier"])
+    a = row["alpha_fs"]
+    expected = (a**5) * (2.0 * row["m_H_GeV"]) / (n_hier * n_phi) * 1e9
+    bare = (a**5) * row["v_GeV"] / (n_hier * n_phi) * 1e9
+    bridge = (a**3) * row["m_e_GeV"] / (n_hier / 2.0) * 1e9
+    ok = (
+        row["N_phi"] == n_phi
+        and n_phi == 13.0
+        and n_hier == 8.0
+        and abs(row["m_nu_atm_eV"] - expected) / expected < 1e-12
+        and abs(row["m_nu_atm_bare_eV"] - bare) / bare < 1e-12
+        and abs(row["m_nu_atm_eV"] - bridge) / bridge < 1e-12
+        and row["bridge_equals_stack"] < 1e-12
+        and row["m_nu_atm_bare_rel_err"] < 0.03
+        and row["m_nu_atm_rel_err"] < 0.005
+    )
+    return {
+        "id": "Neutrino_mass",
+        "m_nu_atm_bare_eV": row["m_nu_atm_bare_eV"],
+        "m_nu_atm_eV": row["m_nu_atm_eV"],
+        "m_nu_sol_lemma_eV": row["m_nu_sol_lemma_eV"],
+        "m_nu_lightest_lemma_eV": row["m_nu_lightest_lemma_eV"],
+        "N_hier": row["N_hier"],
+        "N_phi": row["N_phi"],
+        "m_nu_atm_bare_rel_err": row["m_nu_atm_bare_rel_err"],
+        "m_nu_atm_rel_err": row["m_nu_atm_rel_err"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_arg_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import M_HIGGS_GEV, SI, arg_quantum_row
 
@@ -1170,6 +1207,7 @@ def run_all(device: str) -> list[dict]:
         check_higgs_mass(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),
+        check_neutrino_mass(device=device),
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),
         check_energy_quantum(device=device),

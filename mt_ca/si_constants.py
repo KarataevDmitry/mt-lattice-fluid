@@ -75,6 +75,9 @@ M_PROTON_GEV_PDG = 0.93827208816
 # Electron mass — PDG reference for rel_err only; prediction = α_fs²·m_H/N_φ (§8.2)
 M_ELECTRON_GEV_PDG = 0.00051099895
 
+# Neutrino atmospheric scale √|Δm²₃₁| [eV] — PDG-ish; prediction = α⁵·2m_H/(N_hier N_φ) (§8.2)
+M_NU_ATM_EV_PDG = 0.05
+
 
 
 
@@ -744,6 +747,43 @@ class SIConstants:
             "m_e_rel_err": abs(m_e - M_ELECTRON_GEV_PDG) / M_ELECTRON_GEV_PDG,
             "f_geom": f_geom,
             "note": "§8.2: bare α²·(v/2)/N_φ; stack α²·m_H/N_φ (same empty-cell as Higgs)",
+        }
+
+    def neutrino_mass_row(self) -> dict[str, float]:
+        """§8.2 — atm √|Δm²|: α⁵·v/(N_hier N_φ); stack α⁵·2m_H/(N_hier N_φ)."""
+        higgs = self.higgs_mass_row()
+        elec = self.electron_mass_row()
+        v = float(higgs["v_GeV"])
+        m_h = float(higgs["m_H_GeV"])
+        n_hier = float(higgs["N_hier"])
+        n_phi = float(elec["N_phi"])
+        m_e = float(elec["m_e_GeV"])
+        a = self.alpha_fs
+        a5 = a**5
+        m_nu0_gev = a5 * v / (n_hier * n_phi)
+        m_nu_gev = a5 * (2.0 * m_h) / (n_hier * n_phi)
+        bridge_gev = (a**3) * m_e / (n_hier / 2.0)
+        m_nu0_ev = m_nu0_gev * 1e9
+        m_nu_ev = m_nu_gev * 1e9
+        # lemmas (reported, not hard-gated)
+        m_sol_ev = (a**3) * m_e / (n_phi * math.sqrt(math.pi)) * 1e9
+        m_light_ev = (a**4) * m_e / n_phi * 1e9
+        return {
+            "v_GeV": v,
+            "m_H_GeV": m_h,
+            "m_e_GeV": m_e,
+            "alpha_fs": a,
+            "N_hier": n_hier,
+            "N_phi": n_phi,
+            "m_nu_atm_bare_eV": m_nu0_ev,
+            "m_nu_atm_eV": m_nu_ev,
+            "m_nu_atm_PDG_eV": M_NU_ATM_EV_PDG,
+            "m_nu_atm_bare_rel_err": abs(m_nu0_ev - M_NU_ATM_EV_PDG) / M_NU_ATM_EV_PDG,
+            "m_nu_atm_rel_err": abs(m_nu_ev - M_NU_ATM_EV_PDG) / M_NU_ATM_EV_PDG,
+            "bridge_equals_stack": abs(bridge_gev - m_nu_gev) / m_nu_gev,
+            "m_nu_sol_lemma_eV": m_sol_ev,
+            "m_nu_lightest_lemma_eV": m_light_ev,
+            "note": "§8.2: atm α⁵·2m_H/(N_hier N_φ)=α³·m_e/(N_hier/2); sol/lightest lemmas",
         }
 
     def saturation_bc_row(self) -> dict[str, float]:
