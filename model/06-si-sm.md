@@ -166,79 +166,92 @@ $$
 
 **Код:** `SI.coulomb_row()`.
 
-#### Планковский ЭМ (на M — не continuum Maxwell)
+#### Планковский ЭМ (формулы на соседних ячейках)
 
-**Жёсткое:** на $\ell_P$ **нет** второго набора $\{\nabla\cdot\mathbf{E},\,\nabla\times\mathbf{B}\}$ как float-полей. Continuum Maxwell на планковской ячейке — **ошибка continuum-мышления** (§5.2.1). Планковский ЭМ — **уже записанная** дискретная лестница + топология на `hV`/`N`.
+Уже есть в носителе (§5.0.2 · §5.2.1). Не fitted Maxwell — **сбор** тех же кусков, что Кулон.
 
-| объект M | формула / локус | роль |
-|----------|-----------------|------|
-| фаза на brick | $\varphi=\mathrm{Arg}(z)$, U(1)$_{\mathrm{vac}}$ (§3.11 · §5.0.1) | калибровка на одном `hV` |
-| квант действия Arg | $s_0=\hbar/2$ (§5.0.2) | минимальное фазовое событие за `hT` |
-| энергия / «масса» кванта | $E_0=E_P/\sqrt{2}$, $m_{\mathrm{arg}}=m_P/\sqrt{2}$ | не rest mass частицы |
-| импульс / сила | $p_0=s_0/\ell_P$, $F_0=p_0/hT=m_{\mathrm{arg}} g_M$ (§5.2.1) | целые $n_p,n_F\in\mathbb{Z}$ |
-| ток по связи | $j_i=\mathrm{Im}(z^* z_{\hat e_i})/hT$ | дискретный Ampère-носитель |
-| непрерывность | $\Delta\rho/\Delta t+\mathrm{div}_\varepsilon j=0$ | на звезде $N$, не $\partial_t$ в $\mathbb{R}^3$ |
-| Гаусс | $\oint_S j\propto n=Q/e_0$ | топология pra-дефекта |
-| Кулон на соседях | $\|F\|/F_P=\alpha_{\mathrm{fs}}$ при $N=1$, $\|n_i\|=1$ (§ Кулон выше) | сила в единицах $F_P=c^4/G$ |
-| свет на осях M | $c_0=\ell_P/hT=\sqrt{2}\,c$ | тактическая скорость CA; **не** macro-$c$ |
-| «$B$» на M | вихрь / holonomy $\zeta$, plaquette Arg вокруг грани $\varepsilon$ | целое / wrapped фаза — не $\mathbf{B}(x)\in\mathbb{R}^3$ |
-| «$E$» на M | $-\Delta_\varepsilon\varphi$ / kick $\Delta p\in p_0\mathbb{Z}$ | разность фазы / ledger, не $\mathbf{E}$ SI |
+**Кванты на одном шаге** ($\ell_P$, $hT$):
 
-**Одно предложение:** планковский Maxwell = **`g` + Arg + $j$ + $F_0$-лестница + Гаусс**; имена $\{E,B\}$ появляются только после coarse-grain → T (следующий абзац).
+$$
+s_0 = \hbar/2,
+\qquad
+E_0 = s_0/hT = E_P/\sqrt{2},
+\qquad
+p_0 = s_0/\ell_P,
+\qquad
+F_0 = p_0/hT = m_{\mathrm{arg}}\, g_M.
+$$
+
+**Поля на связи / грани** (целые $n\in\mathbb{Z}$):
+
+$$
+E_i = -\frac{\varphi(x)-\varphi(x+\hat e_i)}{\ell_P}
+\quad(\varphi=\mathrm{Arg}\,z),
+\qquad
+B_\square = \frac{1}{\ell_P^{2}}\,
+\mathrm{Arg}\!\prod_{\mathrm{cycle}\,\square}\! z,
+\qquad
+j_i = \frac{\mathrm{Im}\bigl(z^*(x)\,z(x+\hat e_i)\bigr)}{hT}.
+$$
+
+**Законы на решётке:**
+
+$$
+\frac{\Delta\rho}{\Delta t}+\mathrm{div}_\varepsilon\, j = 0,
+\qquad
+\oint_S j \propto n = Q/e_0,
+\qquad
+F = n_F F_0\ \ (n_F\in\mathbb{Z}).
+$$
+
+**Кулон на соседях** ($N=1$, $|n_i|=1$) — частный случай:
+
+$$
+|F|/F_P = \alpha_{\mathrm{fs}},
+\qquad F_P = c^4/G.
+$$
+
+**Скорость фронта по осям** (не macro-$c$):
+
+$$
+c_0 = \ell_P/hT = \sqrt{2}\, c.
+$$
+
+Макро-Maxwell ($\nabla\cdot E$, $\nabla\times B$, свет $c$) — **следующий** абзац: те же величины после усреднения.
 
 | кусок | статус |
 |-------|--------|
-| лестница $s_0,E_0,p_0,F_0$ | ✅ §5.0.2 · §5.2.1 |
-| $j$, div, Гаусс, Кулон $N=1$ | ✅ |
-| запрет float-$\nabla$ Maxwell на $\ell_P$ | ✅ §5.2.1 |
-| dogfood plaquette-holonomy ↔ $n_B$ на GPU | ⚠️ sim |
-
-**Фальсификация:** для ЭМ на соседних ячейках нужна шкала $\neq(\ell_P,hT,s_0)$, или сила $\notin F_0\mathbb{Z}$ / $\alpha_{\mathrm{fs}} F_P$, или «Maxwell» как отдельное continuum-поле **внутри** `hV` — claim мёртв.
+| $s_0,E_0,p_0,F_0$ | ✅ |
+| $E_i$, $B_\square$, $j_i$, Гаусс, Кулон $N=1$ | ✅ |
+| sim plaquette на GPU | ⚠️ |
 
 **Код:** `SI.planck_em_row()`.
 
-#### Макро-Максвелл (T-readout, не планковский)
+#### Макро-Максвелл (после усреднения)
 
-**Жёсткое:** взаимодействия **не** схлопнулись. ЭМ на T — **имена** того же U(1)$_{\mathrm{vac}}$ + Madelung (§3.11 · §5.1 · §5.2). Не вводят второе поле $A_\mu$ на M. Ниже — **макроскопический** continuum-язык после coarse-grain; планковский слой — абзац выше.
-
-**Словарь M → Maxwell (T-readout):**
-
-| носитель M | имя на T (Maxwell) |
-|------------|---------------------|
-| $\varphi=\mathrm{Arg}(z)$ · U(1)$_{\mathrm{vac}}$ (§3.11) | калибровочная фаза; связи по $N$ → $A_\mu$ |
-| $-\nabla_\varepsilon\varphi$ (статика) | $\mathbf{E}$ → Кулон § выше |
-| bond-flux $j_i=\mathrm{Im}(z^* z_{\hat e_i})/hT$ (§5.2.1) | ток $\mathbf{J}$ / вклад $\partial_t\mathbf{D}$ |
-| $\partial_t\rho+\mathrm{div}_\varepsilon j=0$ | непрерывность заряда |
-| $\oint_S j\propto n=Q/e_0$ | закон Гаусса $\nabla\cdot\mathbf{E}\propto\rho_Q$ |
-| ротация / вихрь Arg-потока на $\varepsilon$ | $\mathbf{B}\sim\nabla\times\mathbf{v}_\varphi$ |
-| Euler/Madelung + gate pressure (§5.2) | Ампер / индукция как T-имена импульсного баланса |
-| волна давления несжимаемой среды: $c^2=K_P/\mu_P$, $n=0$ (§5.1.1 · §5.3.2) | **свет** = ЭМ-излучение со скоростью $c=\kappa\,c_0$ |
-| $c^2=1/(\varepsilon_0\mu_0)$ в SI | тот же $c$ из $K_P=\mu_P c^2$ — импеданс вакуума из fluid, не knob |
-
-**Четыре уравнения — не новые axioms.** На M достаточно: непрерывность + Гаусс из топологии + фазовый поток U(1) + волна на $K_P$. На T их **читают** как
+Те же $E_i$, $B_\square$, $j$ → обычные поля на T. Четыре уравнения:
 
 $$
 \nabla\cdot\mathbf{E}\propto\rho_Q,
 \quad
 \nabla\cdot\mathbf{B}=0,
 \quad
-\nabla\times\mathbf{E}\sim-\partial_t\mathbf{B},
+\nabla\times\mathbf{E}=-\partial_t\mathbf{B},
 \quad
-\nabla\times\mathbf{B}\sim\mathbf{J}+\partial_t\mathbf{E},
+\nabla\times\mathbf{B}\propto\mathbf{J}+\partial_t\mathbf{E}.
 $$
 
-где левые части — discrete $\mathrm{div}_\varepsilon$/curl на звезде $N$, правые — $n$, $j$, gate. Фотон (§8.4.3-A) = безмассовая комбинация той же фазы — согласован с $n=0$ pressure wave.
+Свет:
+
+$$
+c^2 = K_P/\mu_P = \kappa^2 c_0^2,
+\qquad \kappa=1/\sqrt{2}.
+$$
 
 | кусок | статус |
 |-------|--------|
-| словарь Madelung/U(1) ↔ $\{E,B,J,\rho_Q,c\}$ | ✅ |
-| Кулон = статический предел | ✅ § выше |
-| свет = волна $K_P$ при $n=0$ | ✅ §5.1.1 |
-| dogfood двух зарядов / свободной ЭМ-волны на GPU | ⚠️ sim (не model-gap) |
-
-**Запрещено:** объявлять «Maxwell open / пропал», пока живы §5.1–5.2 и U(1)$_{\mathrm{vac}}$; вводить отдельный Maxwell-Lagrangian **снаружи** `g`; путать sim-gap излучения с отсутствием закона.
-
-**Фальсификация:** T-readout даёт $\nabla\cdot B\neq 0$, или свет $\neq$ pressure wave $c=\kappa c_0$, или для $\{E,B\}$ нужна шкала $\neq\ell_P,hT,K_P$ — канал мёртв.
+| макро-уравнения = readout планк. слоя | ✅ |
+| sim свободной волны | ⚠️ |
 
 **Код:** `SI.maxwell_row()`.
 
@@ -304,7 +317,7 @@ SM  125 GeV Higgs boson — macro wave packet, not micro root
 
 | канал (T/SM имя) | носитель на M (рабочая гипотеза) | квант / заряд | статус |
 |------------------|-----------------------------------|---------------|--------|
-| **электромагнетизм** | **M:** Arg/$j$/$F_0$/Гаусс/Кулон $N=1$ (§8.2 планк.); **T:** макро-Maxwell Madelung/$K_P$ (§8.2); **`α_fs`** из gate | `e₀`, `n∈ℤ`; $n_F\in\mathbb{Z}$ | **алгебра ✅** (планк. + макро); sim plaquette / волны — soft |
+| **электромагнетизм** | планк.: $E_i$, $B_\square$, $j$, Кулон $N=1$; макро: 4 ур. Maxwell + $c^2=K_P/\mu_P$ (§8.2) | `e₀`, $n$ | **формулы ✅**; sim — soft |
 | **слабое** | хиральность **`P_L/P_R`**, SU(2) flip (§3.11); смена оболочки/`n` | $v$; $G_F$; $\sin^2\theta_W=3/13$; $\alpha(M_Z)$ из $B_{hV}$; $m_W,m_Z$; $N_{\mathrm{gen}}=d$; $\lambda=3/13$ | **EW+CKM-скелет ✅**; $A,\rho,\eta$ — open |
 | **сильное** | составные узлы (§6); `f_геометрия`; Паули+`K_P` | $\alpha_s(v)=d/(N_{\mathrm{hier}}\pi)$; бегунок $1/(d\pi)\ln(v/\mu)$ | **seed+runner ✅**; census sim open |
 | **гравитация** | конус/`κ`/упаковка Λ; инерция = Arg-зигзаг (§5.0.1); **$g_{\mu\nu}$ = T-strain**; **$G_{\mu\nu}=\mathcal{E}(\delta)=8\pi\ell_P^{2}T_{\mu\nu}$** (§8.4.2) | `E₀`,`p₀`,`F₀`; $G$ в $l_P$ | **паспорт+Эйнштейн ✅**; stencil/GW/Λ — open |
