@@ -36,7 +36,7 @@
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
 | **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, **HF ON**) | `laplacian` fcc · default | — |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
-| **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** on projected `g` | `reversible` · `z_ring` | Madelung one-tick residual — readout hinge |
+| **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | — | **`Leapfrog`** · **`A3`** · **`A3_global_norm`** PASS | `reversible` · `z_ring` | гладкая непрерывность → **T** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
 | **A5** | **Абс. ноль недостижим** | boiling vac; **`z≡0`** excluded | §2 · §0.5 | sim | **`A5`** · **`PlanckVacuumFloor`** PASS | `heisenberg_floor` · seeds | ≠ D5 при floor — MODEL §2.3.8 |
 | **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
@@ -67,7 +67,7 @@
 | **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / stencil / Aρη | EW+GR+CKM скелет ✅ | census · IR · stencil · Aρη |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
-**Приоритет sim-gap:** A9 absolute ν_CA plateau · FCC bulk CR · A3 full continuity · Young/tunnel/census leaves.
+**Приоритет sim-gap:** A9 absolute ν_CA plateau · FCC bulk CR · Young/tunnel/census leaves.
 
 **Цикл:** (1) строка реестра → (2) есть в MODEL? иначе **model-gap** → (3) режет **`g`**? impl отстаёт → **sim-gap** → (4) T-only → **`validate_mt`** → (5) несовместимость → правим MODEL/ansatz, не порог verify.
 
@@ -185,6 +185,7 @@
 | раздел | статус |
 |--------|--------|
 | §4.1.2 **`ν_CA`** | ✅ algebraic · verify **`Nu_CA`** · **`T3_macro_viscosity`** · fit **`ν_eff`** open |
+| §4.3 Madelung continuity | ✅ **T** · **`T_MadelungContinuity`** (диагностика; не M hard) |
 | §4.9 Young | ✅ онтология · GPU slit leaf open · partial T2, A11 |
 | §4.2 validate | **`validate_mt.py`** T1/T2/T3/T_dispersion PASS 512² CUDA (2026-09-22) |
 
@@ -195,7 +196,7 @@
 | §5.0 binary ρ | ✅ **`Rho_P_binary`** · occupancy T — open |
 | §5.0.1 Arg mass | ✅ **`Arg_mass_carrier`** · **`T_zigzag_mass`** · sim open |
 | §5.0.3 antimatter | ✅ A10 seeds · annihilation sim open |
-| §5.2.1 mechanical | ✅ **`MechanicalQuantum`**, **`LocalContinuity`**, **`LadderLedger`** |
+| §5.2.1 mechanical | ✅ **`MechanicalQuantum`**, **`A3_global_norm`**, **`LadderLedger`** · smooth continuity → **T** |
 | §5.2.3 elementary | ✅ **`ElementaryQuanta`** · **`LadderLedger`** · **`MatterOccupancyB`** |
 | §5.3 gas / VdW | ✅ algebra · sim EOS open |
 
@@ -244,6 +245,7 @@
 | 2026-09-22 | FCC N₁₂ | default stencil cuboctahedral · κ=1/12 · `FCC_N12` multi-tick **HF ON** PASS |
 | 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
+| 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete ledgers; **`T_MadelungContinuity`** |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
@@ -310,7 +312,7 @@ python scripts/run_symmetry_probe.py
 | 20 | **P / C / T legs (T-layer probes):** mirror, `z*`, chirality boost — **не** M `g⁻¹` | §3.11.3 · A14 |
 | 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
-| 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; **`div j=0`** на **ε канона** (FCC N₁₂ / гекс-срез); **`L_z ∈ L₀·ℤ`** | §5.2.1 · §1.6 |
+| 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; A3 + discrete ledgers на M; гладкий **`div j`** = **T** | §5.2.1 · §4.3 · §1.6 |
 | 24 | **`κ_link = 1/|N|`:** FCC **`1/12`** (канон 3+1); гекс-срез **`1/6`**; **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 · §1.6 |
 | 25 | **Gate M = `ω^Φ`:** **`exp(i·Θ·σ/2)`** — T-нотация; tick = **`R(Φ)`** / Rot_LUT на **`Z_N[i]`**, не matrix exp | §3.10.3 · §3.12.5 |
 | 26 | **Theorem 2.3:** ¬M heat death, ¬shutdown — Lemmas 2.3.1–2.3.8 | §2.3 |
