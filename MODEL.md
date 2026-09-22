@@ -72,6 +72,7 @@
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
 | 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; **`div j=0`** на **`N₄`**; **`L_z ∈ L₀·ℤ`** | §5.2.1 |
 | 24 | **`κ_link = 1/4`:** **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 |
+| 25 | **Gate M = `ω^Φ`:** **`exp(i·Θ·σ/2)`** — T-нотация; tick = **`R(Φ)`** / Rot_LUT на **`Z_N[i]`**, не matrix exp | §3.10.3 · §3.12.5 |
 
 ---
 
@@ -653,22 +654,44 @@ z(x,t) = ( z₁(x,t) , z₂(x,t) )ᵀ  ∈  ℂ²
 
 **ДА-носитель:** не одна фаза на **`S¹`**, а **спинорное** поле на **`ℂ²`**; голоморфность + gate — в **SU(2)**, не только U(1).
 
-#### 3.10.3 Эволюция: от `exp(iφ)` к SU(2)
+#### 3.10.3 Эволюция: от `exp(iφ)` к SU(2) — и **дискретный M-канон**
 
-**Scalar §3.4 (impl v3):**
+**Scalar §3.4 (бозонный предел / T-нотация):**
 
 ```
 z' = z · exp(iΦ)     ,   Φ ∈ ℝ        — U(1)
 ```
 
-**Канон M (fermion-ready):** gate = **unitary доворот в SU(2)** через **матрицы Паули** **`σ_a`**:
+**SU(2) на T / continuous limit (смысл gate, не M-tick):**
 
 ```
 z'(x) = U(x,t) · z(x)     ,   U ∈ SU(2)
-U = exp( i · Θ_a · σ_a / 2 )     (или эквивалент из дефекта ⟨z⟩_N₄ / K_P)
+U = exp( i · Θ_a · σ_a / 2 )     — Lie-алгебра; **не** matrix `expm` на M
 ```
 
-**Следствие spin-½:**
+**Канон M (§3.12.5): дискретная «экспонента» на кольце**
+
+```
+ω = exp(i · 2π / N_ring)     ,   N_ring = 512 (§3.12.6)
+Φ ∈ Z_{N_ring}                 — целые ticks mod N_ring, не float rad
+
+R(Φ) : (U,V) ↦ ( U·c_Φ − V·s_Φ , U·s_Φ + V·c_Φ )   (mod N)
+  c_Φ = cos(2π·Φ/N_ring) , s_Φ = sin(2π·Φ/N_ring)   — Rot_LUT Q30, без float trig
+
+δZ(Φ) = R(Φ) − Z     — kick ⌊𝒩⌋ на каждой lane спинора
+```
+
+**Эквивалентность слоёв (не смешивать запись и реализацию):**
+
+| режим | discrete M | continuum alias |
+|-------|------------|-----------------|
+| **canonical tick `g`** | один **`Φ`** → **`R(Φ)`** на **`z₁`** и **`z₂`** lanes | **`exp(i·Φ·σ_z/2)`** как общая фаза (подгруппа **`U(1)_vac`**) |
+| **SU(2) mix** | **`U(n,φ)`** — half-angle LUT + Pauli (`su2_apply`) | **`exp(i·φ·n·σ/2)`** — holomorphy sync, chiral; **не** один leapfrog-tick |
+| **spin-½ sign** | **`R(N_ring/2)`** → **`−z`** на компоненте; **`U(n,4π)=+1`** | verify **`SU2_360`**, **`SU2_720`** |
+
+**Правило:** на M **`g`** = **`ω^Φ`** / **`Rot_LUT`**, не **`scipy.linalg.expm`**. Float **`su2_apply`** — probe/readout; единственный forward-tick — **`projected_step_fixed`** (§3.12.3).
+
+**Следствие spin-½ (T-смысл, проверяется probe):**
 
 ```
 U(2π) = −𝟙     (один оборот вихря hV → знак минус)
@@ -842,6 +865,13 @@ z(t−1) = 2z(t) + ⌊𝒩(z(t))⌋ − z(t+1)        — exact на ℤ / fixed
 
 **Модульное пространство:** \(Z = U + iV \in \mathbb{Z}_{N}[i]\), **`N_ring = 2^{⌊B_{hV}⌋} = 512`**, **`2\pi_{\mathrm{disc}} = N_ring`**. Wrap — **`mod N_ring`**, не произвол GPU.
 
+**Дискретная экспонента (§3.10.3):**
+
+\[
+\omega = e^{i\cdot 2\pi/N_{\mathrm{ring}}},\qquad
+R(\Phi) = \omega^{\Phi}\ \text{on each }(U,V)\ \text{lane via Rot\_LUT}
+\]
+
 **Шаг 1 — holonomy (без `atan2`):**
 
 \[
@@ -855,15 +885,15 @@ z(t−1) = 2z(t) + ⌊𝒩(z(t))⌋ − z(t+1)        — exact на ℤ / fixed
 \Phi_{\mathrm{kick}} = \left\lfloor \frac{K_P\,\zeta_{\mathrm{imag}}}{\zeta_{\mathrm{real}} + |Z|^2 + K_P} \right\rfloor \in \mathbb{Z}_{N}
 \]
 
-+ Heisenberg floor \(|\Phi|\ge \Delta\Phi_{\min}^{\mathrm{disc}}\). **`⌊𝒩⌋`** = LUT rotation **`δZ(Φ)`** on both spinor components.
++ Heisenberg floor \(|\Phi|\ge \Delta\Phi_{\min}^{\mathrm{disc}}\). **`⌊𝒩⌋`** = **`δZ(Φ) = R(Φ)−Z`** on both spinor components (same **`Φ`** → **`U(1)_vac`** on tick; full **`U(n,φ)`** — §3.10.3 probe path).
+
+**`Rot_LUT`:** 4096-entry cos/sin Q30; **без float trig** on GPU hot path. Verify **`DiscreteRotExp`** — **`R(Φ)=ω^Φ`**, not matrix **`exp(i·Θ·σ/2)`**.
 
 **Шаг 3 — 2-й порядок (symmetric, one line):**
 
 \[
 Z(x,t+\Delta t) + Z(x,t-\Delta t) = 2Z(x,t) + \lfloor \mathcal{N} \rfloor \pmod N
 \]
-
-**`Rot_LUT`:** 4096-entry cos/sin Q30; **без float trig** on GPU hot path.
 
 #### 3.12.6 Bit budget of `hV` — вывод из Planck (дна ниже нет)
 
@@ -2074,13 +2104,15 @@ SeedClass.VACUUM → N(0, amp) + i·N(0, amp)
 
 **Код:** `seeds.make_seed(VACUUM)` · `simulator.reset()`.
 
-### 10.3 Алгебра шага: `exp(iφ)`, не Euler `z += iφz`
+### 10.3 Алгебра шага: `exp(iφ)` / `ω^Φ`, не Euler `z += iφz`
 
 Нелинейность **только** модуль-сохраняющий доворот (A3, A4). Linear — product локальных 2×2 unitaries, не raw add.
 
+**Canonical M (§3.12.5):** **`R(Φ)=ω^Φ`** на **`Z_N[i]`** — дискретный аналог **`exp(iφ)`**; float **`exp`** только decode/probe.
+
 ```
 z* = local_ca(z; γ)
-z' = z* · exp(i·φ)          ← не z* + i·φ·z*
+z' = z* · exp(i·φ)          ← T-нотация; на M: R(Φ_disc) via Rot_LUT
 φ  = 2π · (α*/(|z*|²+ε)−1) · w(ρ)
 ```
 

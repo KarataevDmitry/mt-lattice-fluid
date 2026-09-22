@@ -53,6 +53,7 @@
 | **`κ_link`, `γ`, `cr_strength`, `ν_CA`** | ✅ **`¼`** | — |
 | **`s₀`, `p₀`, `L₀`, `E₀`, `F₀`, `g_M`** | ✅ §5.2.1 | — |
 | **`sync`, Pauli, `ρ_Q`, `n_E` map** | ✅ §5.2.3 | sim verify **EnergyLedger** open |
+| **`R(Φ)=ω^Φ` vs `exp(i·Θ·σ/2)`** | ✅ §3.10.3 · §3.12.5 | verify **`DiscreteRotExp`** |
 | **`b ∈ {0,1}`** | ✅ §5.0 / §5.2.3 | sim primary readout — open |
 | **`α_s`, G_F, динамическая метрика** | ❌ | **model-gap** SM/GR |
 
@@ -188,6 +189,7 @@ Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rh
 | 2026-09-22 | §3.11 | «доводи impl» — U1_vac + chirality |
 | 2026-09-22 | §3.12 | float32 1st order на 4070 → chirality dance `n` |
 | 2026-09-22 | night canon | split MODEL/META; canonical Z_N[i]; quantization ladder |
+| 2026-09-22 | §3.10.3 | `exp(i·Θ·σ/2)` → discrete `R(Φ)=ω^Φ` on Z_N[i] |
 
 ---
 
