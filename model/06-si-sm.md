@@ -397,15 +397,28 @@ $$
 
 **Итог опроса:** дискретный RJ / Planck **не закрыты**. Закрыты лишь: квант, бозонный сектор $n=0$, конечный набор мод. Формулы $\langle n\rangle$, $u(\omega)$, Stefan — open DoD на T.
 
+**Упущения чеклиста** (вердикт не меняют; без них даже после Bose $u(\omega)$ не собрать):
+
+| hinge | статус | зачем |
+|-------|--------|-------|
+| $\mu=0$ (число $\gamma$ не сохраняется) | ✅ схема: аннигиляция → 2γ · A3 | иначе не Bose, а $\mu\neq0$ |
+| A6 + хаос §2.1 → равновесная мера на T | ⚠️ hinge, не формула | путь к ансамблю, не $\langle n\rangle$ |
+| $T_{\gamma}$ vs $T$ gas (§5.3.1) | ⚠️ open контакт | одна $T$ в Planck — не stamped |
+| $\omega(k)\approx c\|k\|$ (IR) · DOS | ⚠️ open (есть только $\omega_D$) | без DOS нет $u(\omega)\,d\omega$ |
+| $g_{\mathrm{pol}}=2$ (поперечные) | ⚠️ open | фактор 2 в $u(\omega)$ |
+| мода = осциллятор → $\langle E\rangle\to k_BT$ | ⚠️ open | классический угол RJ |
+
 | кусок | статус |
 |-------|--------|
 | $s_0,E_0,h\nu_0=4\pi E_0$; $E=\hbar\omega$ | ✅ |
 | фотон $=n=0$ (bosonic limit); $c$ vs $c_0$ | ✅ |
 | BZ + $\omega_D$ режет continuum-catastrophe | ✅ геометрия |
 | $n=0,1,2,\ldots$ на моде (нет Паули) | ✅ из A16-scope |
+| $\mu=0$ (число $\gamma$ не сохраняется) | ✅ схема |
 | аннигиляция → 2γ (два фронта) | ✅ схема · ⚠️ sim |
 | дискретный RJ $\langle E\rangle=k_BT$ | ⚠️ T-статистика, не закрыт |
-| Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open (тот же T-лист) |
+| Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open (T + DOS + $g_{\mathrm{pol}}$) |
+| $T_{\gamma}$, $\omega(k)$, $g_{\mathrm{pol}}=2$, A6→мера | ⚠️ hinges выше |
 
 **Код:** `SI.radiation_row()`.
 
