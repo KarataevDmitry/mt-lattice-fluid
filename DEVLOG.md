@@ -88,6 +88,7 @@
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
 - **§4.1.0 FCC/hex Green:** depth-2 path-Green algebra ✅ (`T_continuum_readout`); R-fold accumulation / soft sim leaf open
+- **§4.1.1-HL hydro:** Thm **T-HL** algebra ✅ (`T_hydro_limit`: `M=(4/3)I`, `Ŵ=1−(2/3)|k|²`, `κ=1/12` → NLSE+ν / NS-class); live FCC R-fold + `ω_macro` fit open
 - **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
 - **§4.10 tunnel:** slab barrier $N$ · $|\mathcal{A}|\sim\tau^N$ · WKB continuum — open DoD
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
@@ -258,6 +259,7 @@
 | 2026-09-23 | §8.2 m_p pack | stack `1+κ²/N₁₂` (`κ=1/√2`, `N₁₂=12`) → m_p≈0.9353 GeV (0.32%); inscribed sphere, not soft |E| |
 | 2026-09-23 | §8.2 m_e | bare `α²·(v/2)/N_φ`≈0.504 MeV (1.37%); stack `α²·m_H/N_φ`≈0.513 MeV (0.45%); `N_φ=⌈4π⌉=13`; `f_геом` = следствие |
 | 2026-09-23 | §8.2 m_ν | atm `α⁵·2m_H/(N_hier N_φ)`≈0.04986 eV (0.21% vs √Δm²≈0.05); =`α³·m_e/(N_hier/2)`; sol/lightest lemmas |
+| 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
