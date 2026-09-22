@@ -200,7 +200,7 @@
 | 2026-09-22 | §3.12 | float32 1st order на 4070 → chirality dance `n` |
 | 2026-09-22 | night canon | split MODEL/META; canonical Z_N[i]; quantization ladder |
 | 2026-09-22 | §3.10.3 | `exp(i·Θ·σ/2)` → discrete `R(Φ)=ω^Φ` on Z_N[i] |
-| 2026-09-22 | §1 | единый реестр ограничений · honest verify |
+| 2026-09-22 | §1.4–§1.5 | гекс из упаковки; обратный ход ФТТ → два вложенных Вороного |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
