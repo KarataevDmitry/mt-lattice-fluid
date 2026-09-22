@@ -771,25 +771,31 @@ def check_higgs_mass(device: str = "cpu") -> dict:
 
 
 def check_proton_mass(device: str = "cpu") -> dict:
-    from mt_ca.si_constants import N_CUBOCTA_EDGES, SI
+    from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI
 
     del device
     row = SI.proton_mass_row()
+    delta_pack = (KAPPA_FCC_1TICK ** 2) / float(N12_FCC_CAUSAL_LINKS)
     ok = (
         abs(row["m_p_over_m_H_bare"] - row["alpha_fs"]) < 1e-12
         and abs(row["m_p_bare_GeV"] - row["alpha_fs"] * row["m_H_bare_GeV"]) < 1e-12
-        and abs(row["edge_stack_factor"] - (1.0 + 1.0 / N_CUBOCTA_EDGES)) < 1e-15
-        and row["N_cubocta_edges"] == float(N_CUBOCTA_EDGES)
+        and abs(row["kappa_FCC"] - KAPPA_FCC_1TICK) < 1e-15
+        and row["N12"] == float(N12_FCC_CAUSAL_LINKS)
+        and abs(row["delta_pack"] - delta_pack) < 1e-15
+        and abs(row["pack_stack_factor"] - (1.0 + delta_pack)) < 1e-15
+        and abs(row["m_p_GeV"] - row["m_p_bare_GeV"] * row["pack_stack_factor"]) < 1e-12
         and row["m_p_bare_rel_err"] < 0.05
+        and row["m_p_rel_err"] < 0.005
     )
     return {
         "id": "Proton_mass",
         "m_p_bare_GeV": row["m_p_bare_GeV"],
-        "m_p_edge_GeV": row["m_p_edge_GeV"],
+        "m_p_GeV": row["m_p_GeV"],
         "m_H_bare_GeV": row["m_H_bare_GeV"],
         "v_GeV": row["v_GeV"],
+        "delta_pack": row["delta_pack"],
         "m_p_bare_rel_err": row["m_p_bare_rel_err"],
-        "m_p_edge_rel_err": row["m_p_edge_rel_err"],
+        "m_p_rel_err": row["m_p_rel_err"],
         "ok": ok,
         "note": row["note"],
     }

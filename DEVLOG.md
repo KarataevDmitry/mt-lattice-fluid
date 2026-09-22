@@ -255,6 +255,7 @@
 | 2026-09-23 | §8.3.1 | `m_H=v/2=m_P α⁸√(π/2)` · топология: peak·√(π/2); `λ=1/8` SM-readout |
 | 2026-09-23 | §8.3.1 fix | снята фальш soft-wall «поля занятости»; `b`=бит, объём=`z` |
 | 2026-09-23 | §8.2 m_p | bare `m_p=α_fs·v/2≈0.8979 GeV` (−4.3% PDG) · тот же контур что `m_H=v/2` · edge `1+1/24` кандидат |
+| 2026-09-23 | §8.2 m_p pack | stack `1+κ²/N₁₂` (`κ=1/√2`, `N₁₂=12`) → m_p≈0.9353 GeV (0.32%); inscribed sphere, not soft |E| |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
