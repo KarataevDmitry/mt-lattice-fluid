@@ -56,9 +56,10 @@
 
 | ограничение | MODEL | gap | verify | следующий шаг |
 |-------------|-------|-----|--------|---------------|
-| **`hL=l_P`**, **`hT=t_P/√2`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
+| **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
+| **тайл:** квадрат MVP · **гекс кандидат** (`κ=√3/2`, `hT=(√3/2)t_P`, `κ_link=1/6`) | §1.4 | model→sim | MVP=`N₄` | hex stencil + C₆; **`α_fs`/`c` не трогать** |
 | leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
-| **`s₀→p₀,L₀,E₀`**, **`κ_link=¼`** | §5.2.1–§5.2.2 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | — |
+| **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex) | §5.2.1–§5.2.2 · §1.4 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | hex: пересчитать row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из **`n_∂`**, не **`\|z\|²`** | §5.0 · §5.2.3 | sim | **`MatterOccupancyB`** PASS | T occupancy — open |
 | **`α_s`, G_F, GR метрика** | — | **model** | — | сознательно вне M |
@@ -77,7 +78,7 @@
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
-- **§3.8 hex:** гипотеза до GPU-leaf; метрика anisotropy контура vortex
+- **§3.8 / §1.4 hex:** кандидат канона (упаковка→Voronoi); мост `κ=√3/2` пересчитан; impl MVP ещё `N₄`; C₆ + stencil — open
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
 - **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
 - **§5.0 binary ρ:** occupancy readout on T — open
