@@ -34,7 +34,7 @@
 
 | # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
-| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | sim | **`FCC_N12`** PASS (1-tick) | `laplacian` fcc · default | multi-tick FCC fill open |
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, HF off) | `laplacian` fcc · default | HF on = A5 boil (не баг FCC) |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
 | **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** (bond) | `reversible` · `z_ring` | **`div j=0`** на full **`projected_step`** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
@@ -42,12 +42,12 @@
 | **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
 | **A7** | **`ρ ≤ ρ_P`** | **`K_P`** в Φ; clamp | §2 · §3.12.5 | sim | **`A7`** PASS | `bekenstein_scale_spinor` | — |
 | **A8** | **Macro-линейность** | **`w(ρ)`** затухает | §2 · §3.4 | T | **`A8`** PASS | gate **`w(ρ)`** | T-readout probes |
-| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | **sim** | **`A9` FAIL** | `cr_strength` · holomorphy sync | CR на **`Φ(ζ)`**, не stationarity seed |
-| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | **sim** | seeds OK · **`A10`** evolution **FAIL** | `topology` · seeds | long-run **`n`** — §3 open |
+| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | sim | **`A9`** stationarity PASS · plateau ceiling open | `cr_phi_int` in Φ | absolute ν_CA band |
+| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | — | seeds OK · **`A10`** evolution PASS (HF off) | `topology` · seeds | — |
 | **A11** | **Soliton / anti-smear** | **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | sim | **`A11`** PASS | saturating Φ | — |
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
 | **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
-| **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | **sim** | **`A14`** · **`U1_vac`** · **`SO2_C4` FAIL** · **`Chiral_SU2` PASS** | `symmetry` · `chiral` | **equivariant encode + step** (одна ось с A9) |
+| **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | — | **`A14`** · **`U1_vac`** · **`SO2_C4`** PASS · **`Chiral_SU2`** PASS | `symmetry` · `chiral` | g·e^{iθ} on Z_N Q-gap (invariants OK) |
 | **A15** | **Геометрия / kappa_link** | kappa из многогранника; gamma = 1/N; канон N=12 | §1.6 · §5.2.2 | sim | **QuarterQuantum** PASS (MVP 1/4) | `si_constants` | FCC 1/12 row |
 | **A16** | **Pauli / 720°** | **`2π→−1`**, repulsion | §2 · §3.10.4 | sim | **`A16`** · **`Pauli`** PASS | `pauli_phi` | — |
 
@@ -67,7 +67,7 @@
 | **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / stencil / Aρη | EW+GR+CKM скелет ✅ | census · IR · stencil · Aρη |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
-**Приоритет sim-gap:** **FCC multi-tick** (impulse fills grid by t=2) → **A14 + A9** → A10 evolution → A3 full continuity.
+**Приоритет sim-gap:** A9 absolute ν_CA plateau · FCC bulk CR · A3 full continuity · Young/tunnel/census leaves.
 
 **Цикл:** (1) строка реестра → (2) есть в MODEL? иначе **model-gap** → (3) режет **`g`**? impl отстаёт → **sim-gap** → (4) T-only → **`validate_mt`** → (5) несовместимость → правим MODEL/ansatz, не порог verify.
 
