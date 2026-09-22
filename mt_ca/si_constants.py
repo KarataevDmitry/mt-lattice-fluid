@@ -518,7 +518,7 @@ class SIConstants:
         }
 
     def maxwell_row(self) -> dict[str, float]:
-        """§8.2 Maxwell — light = K_P/μ_P pressure wave; same c (no new knob)."""
+        """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
         k_p = self.K_P
         u_p = self.u_P
@@ -533,7 +533,28 @@ class SIConstants:
             "rel_c_fluid": abs(c_from_fluid - c) / c,
             "rel_K_eq_u": abs(k_p - u_p) / u_p,
             "kappa": KAPPA,
-            "note": "§8.2: c²=K_P/μ_P; K_P=u_P; Maxwell=Madelung/U(1) T-names",
+            "note": "§8.2 macro: c²=K_P/μ_P; Planck EM = planck_em_row",
+        }
+
+    def planck_em_row(self) -> dict[str, float]:
+        """§8.2 Planck EM — discrete Arg/j/F₀ ladder; Coulomb N=1 = α F_P (no ∇ on ℓ_P)."""
+        f_p = self.c**4 / self.G
+        f0 = self.F_0
+        alpha = self.alpha_fs
+        f_nn = alpha * f_p
+        return {
+            "s_0": self.s_0,
+            "E_0": self.E_0,
+            "p_0": self.p_0,
+            "F_0": f0,
+            "F_P": f_p,
+            "F_over_F_P_N1_unit": alpha,
+            "F_NN_N": f_nn,
+            "c0": self.c0,
+            "c": self.c,
+            "c0_over_c": self.c0 / self.c,
+            "rel_F0_mg": abs(f0 - self.m_arg * self.g_M) / f0,
+            "note": "§8.2 Planck: s0/E0/F0 ladder; |F|/F_P=α at N=1; c0=√2 c",
         }
 
     def alpha_runner_row(self) -> dict[str, float]:

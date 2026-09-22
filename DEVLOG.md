@@ -213,6 +213,7 @@
 | 2026-09-22 | §8.4.3-D/E | бегунок α: $1/\alpha(M_Z)=1/\alpha_{fs}-B_{hV}$ · дерево $m_W,m_Z$ |
 | 2026-09-22 | §8.2 Кулон | $F=\alpha_{fs} F_P n_1 n_2/N^{2}$ из носителя · `SI.coulomb_row` |
 | 2026-09-22 | §8.2 Максвелл | Arg/j/Madelung/$K_P$ → E,B,J,c · `SI.maxwell_row` · sim ≠ model-gap |
+| 2026-09-22 | §8.2 планк. ЭМ | M: $s_0/F_0/j$/Гаусс/Кулон $N=1$ · не ∇ на $\ell_P$ · `SI.planck_em_row` |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
