@@ -85,32 +85,32 @@ def bekenstein_scale_spinor(
     rho_max_int: int,
     mod_bits: int = HV.mod_bits,
 ) -> torch.Tensor:
-    """A7 on ℤ: scale (U,V) pairs when |z|² > ρ_max — fixed-point ratio, no decode/encode."""
+    """A7 on ℤ: scale full spinor when z†z > ρ_max — one factor on all lanes (§5.0 ρ_field)."""
     if rho_max_int <= 0:
         return mod_lane(f, mod_bits)
 
     fb = frac_bits
-    rho_cap = float(int(rho_max_int) << fb)
+    rho_cap_raw = float(int(rho_max_int)) * float(1 << (2 * fb))
     scale_q = float(1 << fb)
     out = f.to(torch.int64).clone()
 
-    for re_i, im_i in ((0, 1), (2, 3)):
-        u = signed_from_mod(out[..., re_i], mod_bits)
-        v = signed_from_mod(out[..., im_i], mod_bits)
-        out[..., re_i] = u
-        out[..., im_i] = v
-        rho2 = (u * u + v * v).to(torch.float64)
-        over = rho2 > rho_cap
-        if not bool(over.any()):
-            continue
-        factor = (
-            torch.sqrt(rho_cap / torch.clamp(rho2, min=1.0)) * scale_q
-        ).floor().to(torch.int64)
-        u_s = (u * factor) >> fb
-        v_s = (v * factor) >> fb
-        out[..., re_i] = torch.where(over, u_s, u)
-        out[..., im_i] = torch.where(over, v_s, v)
+    for lane_i in range(out.shape[-1]):
+        out[..., lane_i] = signed_from_mod(out[..., lane_i], mod_bits)
 
+    u0, v0, u1, v1 = out[..., 0], out[..., 1], out[..., 2], out[..., 3]
+    rho_raw = (u0 * u0 + v0 * v0 + u1 * u1 + v1 * v1).to(torch.float64)
+    over = rho_raw > rho_cap_raw
+    if not bool(over.any()):
+        return mod_lane(out, mod_bits)
+
+    factor = (torch.sqrt(rho_cap_raw / torch.clamp(rho_raw, min=1.0)) * scale_q).floor().to(
+        torch.int64
+    )
+    u0 = torch.where(over, (u0 * factor) >> fb, u0)
+    v0 = torch.where(over, (v0 * factor) >> fb, v0)
+    u1 = torch.where(over, (u1 * factor) >> fb, u1)
+    v1 = torch.where(over, (v1 * factor) >> fb, v1)
+    out[..., 0], out[..., 1], out[..., 2], out[..., 3] = u0, v0, u1, v1
     return mod_lane(out, mod_bits)
 
 
