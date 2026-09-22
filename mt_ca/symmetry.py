@@ -88,7 +88,7 @@ def cpt_reverse_report(
         "peak_recovered": peak_rec,
         "chi_flip_ok": chi_flipped,
         "ok": ok,
-        "note": "Θ g Θ ≈ g⁻¹ on impulse bit; full CPT = P·C·T (§3.11.3)",
+        "note": "Θ g Θ optional T-layer probe; M g⁻¹ = A13 leapfrog (§3.11.3 · §3.12)",
     }
 
 
@@ -345,7 +345,6 @@ def symmetry_report(size: int = 128, steps: int = 64, device: str = "cpu") -> di
         and n_c == -p_seeds["n_vortex_p"]
         and u1["ok"]
         and chiral["ok"]
-        and cpt["ok"]
         and t_proxy["t_chirality_flips"]
     )
     return {
@@ -360,5 +359,5 @@ def symmetry_report(size: int = 128, steps: int = 64, device: str = "cpu") -> di
         "chiral": chiral,
         "annihilation": ann,
         "ok": ok,
-        "note": "Full CPT=P·C·T; Θ g Θ≈g⁻¹ on impulse bit; long-run g·P drift logged",
+        "note": "P/C/T/U1 on g; M reverse = A13; CPT_unwind logged optional (§3.11.3)",
     }

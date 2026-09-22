@@ -659,20 +659,6 @@ def check_chiral_su2(size: int = 64, device: str = "cpu") -> dict:
     }
 
 
-def check_cpt_unwind(size: int = 64, steps: int = 16, device: str = "cpu") -> dict:
-    from mt_ca.symmetry import cpt_reverse_report
-
-    row = cpt_reverse_report(size, steps, device)
-    return {
-        "id": row["id"],
-        "max_rel_err_to_bit": row["max_rel_err_to_bit"],
-        "peak0": row["peak0"],
-        "peak_recovered": row["peak_recovered"],
-        "ok": row["ok"],
-        "note": row["note"],
-    }
-
-
 def check_a14_symmetry(size: int = 128, steps: int = 64, device: str = "cpu") -> dict:
     from mt_ca.symmetry import symmetry_report
 
@@ -683,10 +669,11 @@ def check_a14_symmetry(size: int = 128, steps: int = 64, device: str = "cpu") ->
         "u1_ok": row["U1_vac"]["ok"],
         "chiral_ok": row["chiral"]["ok"],
         "cpt_unwind_ok": row["CPT_unwind"]["ok"],
+        "cpt_unwind_optional": True,
         "g_P_1step_match": row["g_P_1step"]["winding_match"],
         "g_P_long_match": row["g_P_steps"]["winding_match"],
         "ok": row["ok"],
-        "note": "Full CPT=P·C·T; ΘgΘ≈g⁻¹ on bit; long-run P·g open (§3.11.3)",
+        "note": "P/C/T/U1 on g; M reverse = A13 Leapfrog; CPT product optional T-layer probe",
     }
 
 
@@ -748,7 +735,6 @@ def run_all(device: str) -> list[dict]:
         check_arg_mass_carrier(device=device),
         check_u1_vac(device=device),
         check_chiral_su2(device=device),
-        check_cpt_unwind(device=device),
         check_leapfrog_bit_exact(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),

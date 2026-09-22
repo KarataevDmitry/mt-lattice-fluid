@@ -31,7 +31,7 @@ def main() -> int:
         print(f"device={args.device} ({gpu}) size={args.size} steps={args.steps}")
         status = "PASS" if row["ok"] else "FAIL"
         print(f"{row['id']:16} {status}")
-        for key in ("parity_seeds", "charge_seed", "CPT_unwind", "U1_vac", "chiral", "g_P_1step", "g_P_steps", "T_proxy", "annihilation"):
+        for key in ("parity_seeds", "charge_seed", "U1_vac", "chiral", "g_P_1step", "g_P_steps", "T_proxy", "annihilation", "CPT_unwind"):
             print(f"  {key}: {row[key]}")
         print(f"  {row['note']}")
     return 0 if row["ok"] else 1
