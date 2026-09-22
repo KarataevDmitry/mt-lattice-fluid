@@ -76,6 +76,7 @@
 ## §3. Open leaves (индекс)
 
 - **§3.9 DA:** long-run exact `n` conservation on contour (T-readout шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
+- **§3.12.5 / A5:** HF on FCC multi-tick (2D hex+HF ✅ vacuum/vortex; bulk FCC+HF — open dogfood)
 - **§3.10 SU(2):** full SM electron-from-`hV` sim (anchor `m_e` via `electron_v_p_anchor` ✅ algebra only)
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
@@ -128,14 +129,21 @@
 
 | пункт | статус |
 |-------|--------|
-| CR + **`cr_strength`** | ✅ shipped · verify **`A9` FAIL** — §1 |
-| **`Δφ ≥ 1/2`** Heisenberg floor | ✅ **`heisenberg_floor`** · A16 |
-| winding **`n`** seeds + T readout | ✅ A10 · `topology.winding_robust` |
-| holomorphy sync on tick | ✅ **`holomorphy_sync_step`** |
+| **Φ = saturating ζ only** (§3.12.5) | ✅ 2026-09-23: CR residual / sync **не** второй канал Φ — дефект Arg(⟨z⟩/z) = Δφ_N **внутри** gate |
+| **`Δφ` Heisenberg** | ✅ snap-*down* subthreshold → 0 (snap-up качал amp; Φ=0 локально OK §2.3.8) |
+| winding **`n`** | ✅ **`A10` PASS** HF ON · `winding_robust` |
+| holomorphy sync float | float `holomorphy_sync_step` — T/legacy; **не** в projected `g` |
 
-**Verify A9:** `PLANE_WAVE` · burn-in 32 + settle 32 · пороги `cr_seed_ceiling` / `cr_dispersion_ceiling`. Старый **`e₁ < 0.05`** — отвергнут.
+**Verify A9:** `PLANE_WAVE` · HF ON · burn-in 32 + settle 32 · stationarity на gate-only. Absolute ν_CA ceiling — open.
 
-**Implementation debt:** где impl проще (локальный `N₄` на tick без явного CR) — backlog, не отмена ДА-формулировки.
+**Dogfood:** CR+sync как extra Φ → fill; без них + Heisenberg-класс вакуум → vacuum/vortex устойчивы, `n` живёт.
+
+### §3.12.6 / IC
+
+| пункт | статус |
+|-------|--------|
+| Vacuum ocean | ✅ полный Z_N кирпич · **N_φ=13** класс (не RNG) · `phase_class=0` U(1)_vac gauge |
+| SeedClass | VACUUM / IMPULSE / PLANE_WAVE / VORTEX_* поверх океана |
 
 ### §3.10 SU(2) · Pauli
 
@@ -234,6 +242,8 @@
 | 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · **не сшивка**: $|h_{\mathrm{near}}/h_{\mathrm{Newton}}|\sim 2\times 10^{3}$ · dual $\rho_{\mathrm{vac}}$ hinge |
 | 2026-09-22 | SatBC sim | `strain_metric` · verify `SatBC_Cppp` PASS · near/N=2047.5 · far $h=0$ · vortex 32t: $h(R)$ flat ≠$1/R$ |
 | 2026-09-22 | FCC N₁₂ | default stencil cuboctahedral ℤ³ · κ=1/12 · `FCC_N12` 1-tick PASS · multi-tick fill open |
+| 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
+| 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---

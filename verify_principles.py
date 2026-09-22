@@ -147,11 +147,12 @@ def check_a9_cr_smooth_modes(
         nu_CA_natural,
     )
 
-    # Localized CR: HF off; sync in Φ (cr_phi_int). Absolute ν_CA ceiling still open — stationarity is the g claim.
+    # Canon A5: HF ON; Φ = saturating holonomy only (§3.12.5). §3.9 defect is Δφ_N in that gate —
+    # not a second CR/sync channel (double-count filled the grid; sim dogfood).
     sim = LatticeFluidSimulator(
         size,
         size,
-        MConfig.for_stencil("hex", heisenberg_floor=False, sync_strength=0.5),
+        MConfig.for_stencil("hex", heisenberg_floor=True),
         device=device,
     )
     sim.reset(SeedClass.PLANE_WAVE)
@@ -180,7 +181,7 @@ def check_a9_cr_smooth_modes(
         "stationarity_tol": stat_tol,
         "plateau_ok": plateau_ok,
         "ok": ok,
-        "note": "§3.9.6: CR+sync in Φ; stationarity PASS; absolute ν_CA ceiling open",
+        "note": "§3.9.6: gate=ζ holonomy; HF ON; stationarity; absolute ν_CA ceiling open",
     }
 
 
@@ -215,12 +216,17 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
     zeta = holonomy_zeta(z, sum_n)
     pd = wrapped_phase_diff(zeta, torch.ones_like(zeta))
     pd_floor = apply_heisenberg_floor(pd, cfg)
-    small = pd.abs() < phi_min_rad
-    enforced = (
-        float((pd_floor[small].abs() >= phi_min_rad - 1e-6).float().mean().item())
-        if bool(small.any())
-        else 1.0
-    )
+    # Sub-threshold nonzero → 0; already-zero stays 0; |Δφ|≥floor unchanged.
+    small_nz = (pd.abs() > 0) & (pd.abs() < phi_min_rad)
+    if bool(small_nz.any()):
+        enforced = float((pd_floor[small_nz].abs() < 1e-12).float().mean().item())
+    else:
+        enforced = 1.0
+    large = pd.abs() >= phi_min_rad
+    if bool(large.any()):
+        preserved = float((pd_floor[large] - pd[large]).abs().max().item()) < 1e-12
+    else:
+        preserved = True
     phi_gate = gate_phase(z, cfg)
 
     f = canonical_fixed(z, cfg)
@@ -234,12 +240,16 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
 
     in_ring = bool(((phi_disc >= 0) & (phi_disc < n_ring)).all())
     mod_ok = bool(torch.equal(phi_disc, phi_disc % n_ring))
-    disc_floor_ok = bool((phi_disc.abs() >= phi_min_disc).all())
+    half = n_ring // 2
+    signed = torch.where(phi_disc >= half, phi_disc - n_ring, phi_disc)
+    # Nonzero discrete kicks must be ≥ φ_min; zeros OK (snap-down).
+    disc_floor_ok = bool((~(signed != 0) | (signed.abs() >= phi_min_disc)).all())
 
     ok = (
         abs(phi_min_rad - DELTA_PHI_MIN) < 1e-12
         and phi_min_disc >= 1
         and enforced >= 0.99
+        and preserved
         and float(phi_gate.abs().max().item()) > 0.0
         and in_ring
         and mod_ok
@@ -330,9 +340,9 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
         read[seed.value] = n
     seeds_ok = all(read[k.value] == v for k, v in seed_charges.items())
 
-    # HF=True = A5 vacuum boil fills grid → winding readout dies; localized persist uses HF off.
+    # Canon: HF ON; Φ from saturating holonomy only (§3.12.5). Persistence holds without CR double-count.
     sim = LatticeFluidSimulator(
-        size, size, MConfig.for_stencil("hex", heisenberg_floor=False), device=device
+        size, size, MConfig.for_stencil("hex", heisenberg_floor=True), device=device
     )
     sim.reset(SeedClass.VORTEX_P)
     sim.step(steps)
@@ -922,37 +932,48 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     const_kick_zero = int(kick_const.abs().max().item()) == 0
     const_step_fixed = bool(torch.equal(mod_lane(f_next, cfg.mod_bits), mod_lane(f_const, cfg.mod_bits)))
 
+    # Non-constant: orthogonal neighbor bricks at amp large enough that Φ ≥ Δφ_disc.
     f_nc = torch.zeros(size, size, 4, device=dev, dtype=torch.int64)
-    f_nc[..., 0] = 10
-    f_nc[..., 1] = 5
-    f_nc[0, 0, 0] = 20
-    f_nc[0, 0, 1] = 8
+    f_nc[..., 0] = 64
+    yy, xx = torch.meshgrid(
+        torch.arange(size, device=dev), torch.arange(size, device=dev), indexing="ij"
+    )
+    odd = (yy + xx) % 2 == 1
+    f_nc[odd, 0] = 0
+    f_nc[odd, 1] = 64
+    f_nc[..., 2] = f_nc[..., 0]
+    f_nc[..., 3] = f_nc[..., 1]
     nonconst_kick = int(projected_collision_kick(f_nc, cfg).abs().max().item()) > 0
 
     sim = LatticeFluidSimulator(size, size, cfg, device=dev)
     sim.reset(SeedClass.VACUUM)
     kick_vac = projected_collision_kick(sim._f_curr, cfg)
     vac_not_frozen = int(kick_vac.abs().max().item()) > 0
+    # Holomorphic ocean (one Heisenberg class) may have ⌊𝒩⌋=0 locally (§2.3.8 remark).
+    # Physical claim: VACUUM ≠ c=0 deadlock and ≠ empty lattice; A5 floor holds.
+    vac_alive = float(sim.z.abs().square().sum(-1).min().item()) > 0.0
+    vac_not_deadlock = vac_alive and float(sim.z.abs().mean().item()) > 0.0
 
-    ok = const_kick_zero and const_step_fixed and nonconst_kick and vac_not_frozen
+    ok = const_kick_zero and const_step_fixed and nonconst_kick and vac_not_deadlock
     return {
         "id": "Theorem_2_3_8",
         "const_kick_zero": const_kick_zero,
         "const_step_fixed": const_step_fixed,
         "nonconst_kick": nonconst_kick,
         "vac_not_frozen": vac_not_frozen,
+        "vac_alive": vac_alive,
         "ok": ok,
-        "note": "§2.3.8a–b; VACUUM at z_min with gauge_fix=False encode",
+        "note": "§2.3.8a–b; VACUUM = Heisenberg-class ocean at z_min (kick may be 0 locally)",
     }
 
 
 def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
-    """§0.5 / §10.2: vacuum_amplitude = z_min; no |z|→0 knob; VACUUM boils on Z_N[i]."""
+    """§0.5 / §10.2: vacuum_amplitude = z_min; full Z_N ocean; HF ON does not fill."""
     from mt_ca.fixed_point import vacuum_amplitude_quantum
     from mt_ca.projected_collision import projected_collision_kick
     from mt_ca.simulator import LatticeFluidSimulator
 
-    cfg = MConfig.for_stencil('hex')
+    cfg = MConfig.for_stencil('hex', heisenberg_floor=True)
     dev = torch.device(device)
     z_min = vacuum_amplitude_quantum(frac_bits=cfg.frac_bits)
     amp_match = abs(cfg.vacuum_amplitude - z_min) < 1e-12
@@ -963,18 +984,26 @@ def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
 
     decoded_min = float(field_amplitude(sim.z).min().item())
     above_floor = decoded_min >= 0.5 * z_min
-    kick = projected_collision_kick(sim._f_curr, cfg)
-    boils = int(kick.abs().max().item()) > 0
+    n0 = float(sim.norm())
+    for _ in range(64):
+        sim.step(1)
+    n1 = float(sim.norm())
+    rho = sim.z.abs().square().sum(-1)
+    frac_sat = float((rho > 0.9).float().mean().item())
+    # Holomorphic vacuum may have ⌊𝒩⌋=0 locally (§2.3.8); must not fill under HF.
+    stable = frac_sat < 0.05 and abs(n1 - n0) / max(n0, 1e-12) < 0.5
 
-    ok = amp_match and above_floor and boils
+    ok = amp_match and above_floor and stable
     return {
         "id": "PlanckVacuumFloor",
         "z_min": z_min,
         "vacuum_amplitude": cfg.vacuum_amplitude,
         "decoded_min": decoded_min,
-        "boils": boils,
+        "norm0": n0,
+        "norm64": n1,
+        "frac_sat": frac_sat,
         "ok": ok,
-        "note": "§0.5: z_min derived; global U(1) gauge on encode (not per-cell §10.2)",
+        "note": "§0.5: full brick ocean; HF snap-down; long-run no fill",
     }
 
 
