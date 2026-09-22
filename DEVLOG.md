@@ -36,7 +36,7 @@
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
 | **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, **HF ON**) | `laplacian` fcc · default | — |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
-| **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** (bond) | `reversible` · `z_ring` | **`div j=0`** на full **`projected_step`** |
+| **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** on projected `g` | `reversible` · `z_ring` | Madelung one-tick residual — readout hinge |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
 | **A5** | **Абс. ноль недостижим** | boiling vac; **`z≡0`** excluded | §2 · §0.5 | sim | **`A5`** · **`PlanckVacuumFloor`** PASS | `heisenberg_floor` · seeds | ≠ D5 при floor — MODEL §2.3.8 |
 | **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
