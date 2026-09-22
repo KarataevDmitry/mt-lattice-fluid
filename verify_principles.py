@@ -770,6 +770,31 @@ def check_higgs_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_proton_mass(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import N_CUBOCTA_EDGES, SI
+
+    del device
+    row = SI.proton_mass_row()
+    ok = (
+        abs(row["m_p_over_m_H_bare"] - row["alpha_fs"]) < 1e-12
+        and abs(row["m_p_bare_GeV"] - row["alpha_fs"] * row["m_H_bare_GeV"]) < 1e-12
+        and abs(row["edge_stack_factor"] - (1.0 + 1.0 / N_CUBOCTA_EDGES)) < 1e-15
+        and row["N_cubocta_edges"] == float(N_CUBOCTA_EDGES)
+        and row["m_p_bare_rel_err"] < 0.05
+    )
+    return {
+        "id": "Proton_mass",
+        "m_p_bare_GeV": row["m_p_bare_GeV"],
+        "m_p_edge_GeV": row["m_p_edge_GeV"],
+        "m_H_bare_GeV": row["m_H_bare_GeV"],
+        "v_GeV": row["v_GeV"],
+        "m_p_bare_rel_err": row["m_p_bare_rel_err"],
+        "m_p_edge_rel_err": row["m_p_edge_rel_err"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_arg_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import M_HIGGS_GEV, SI, arg_quantum_row
 
@@ -1108,6 +1133,7 @@ def run_all(device: str) -> list[dict]:
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),
         check_higgs_mass(device=device),
+        check_proton_mass(device=device),
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),
         check_energy_quantum(device=device),

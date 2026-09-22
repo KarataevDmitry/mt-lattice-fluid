@@ -69,6 +69,12 @@ M_HIGGS_GEV_PDG = 125.25
 # Back-compat alias (tests comparing hierarchy E0 ≫ m_H)
 M_HIGGS_GEV = M_HIGGS_GEV_PDG
 
+# Proton mass — PDG reference for rel_err only; prediction = α_fs · v/2 (§8.2)
+M_PROTON_GEV_PDG = 0.93827208816
+
+# Cuboctahedron edge count (FCC shell) — candidate stack factor 1+1/|E|
+N_CUBOCTA_EDGES = 24
+
 
 
 
@@ -684,6 +690,29 @@ class SIConstants:
             "m_H_over_v_bare": m_h0 / v,
             "m_H_over_v": m_h / v,
             "note": "§8.3.1: bare v/2; λ=1/8+N_hier·(α_fs/4π) empty-cell stack",
+        }
+
+    def proton_mass_row(self) -> dict[str, float]:
+        """§8.2 — bare m_p=α_fs·v/2; candidate edge stack ×(1+1/24)."""
+        higgs = self.higgs_mass_row()
+        v = float(higgs["v_GeV"])
+        m_h_bare = float(higgs["m_H_bare_GeV"])
+        m_p0 = self.alpha_fs * m_h_bare  # = α · v/2
+        edge_factor = 1.0 + 1.0 / float(N_CUBOCTA_EDGES)
+        m_p_edge = m_p0 * edge_factor
+        return {
+            "v_GeV": v,
+            "m_H_bare_GeV": m_h_bare,
+            "alpha_fs": self.alpha_fs,
+            "m_p_bare_GeV": m_p0,
+            "N_cubocta_edges": float(N_CUBOCTA_EDGES),
+            "edge_stack_factor": edge_factor,
+            "m_p_edge_GeV": m_p_edge,
+            "m_p_PDG_GeV": M_PROTON_GEV_PDG,
+            "m_p_bare_rel_err": abs(m_p0 - M_PROTON_GEV_PDG) / M_PROTON_GEV_PDG,
+            "m_p_edge_rel_err": abs(m_p_edge - M_PROTON_GEV_PDG) / M_PROTON_GEV_PDG,
+            "m_p_over_m_H_bare": m_p0 / m_h_bare,
+            "note": "§8.2: bare α·v/2; edge stack 1+1/24 candidate (not theorem)",
         }
 
     def saturation_bc_row(self) -> dict[str, float]:
@@ -1430,7 +1459,7 @@ def elementary_quanta_row(
 
 def baryon_geometry_factor(m_p: float, *, alpha_fs: float | None = None) -> float:
 
-    """f_геометрия(p): m_p = m_P · (α_fs/3) · f (§8.2)."""
+    """Legacy invert of old placeholder m_p=m_P·(α/3)·f. Prefer SI.proton_mass_row (§8.2)."""
 
     a = alpha_fs if alpha_fs is not None else SI.alpha_fs
 
