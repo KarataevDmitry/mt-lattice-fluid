@@ -338,8 +338,33 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
     }
 
 
+def check_elementary_quanta(device: str = "cpu") -> dict:
+    from mt_ca.config import MConfig
+    from mt_ca.si_constants import elementary_quanta_row
+
+    row = elementary_quanta_row()
+    cfg = MConfig()
+    ok = (
+        abs(cfg.sync_strength - row["sync_strength_rad"]) < 1e-12
+        and abs(cfg.pauli_kick - row["pauli_kick_rad"]) < 1e-12
+        and abs(cfg.pauli_rho_min - row["pauli_rho_min_natural"]) < 1e-12
+        and abs(cfg.pauli_overlap_cos - row["pauli_overlap_cos"]) < 1e-12
+        and row["sync_equals_kappa_times_delta_phi"] == 1.0
+        and row["pauli_kick_disc_equals_half_ring"]
+        and row["pauli_kick_disc"] == row["N_ring"] // 2
+        and row["energy_ticks_per_E0"] == row["delta_phi_min_disc"]
+    )
+    return {
+        "id": "ElementaryQuanta",
+        "config_matches_row": ok,
+        "row": row,
+        "ok": ok,
+        "note": "§5.2.3: no mechanical float-knobs; CODATA only for e₀ T-anchor",
+    }
+
+
 def check_pauli_repel(device: str = "cpu") -> dict:
-    cfg = MConfig(pauli_exclusion=True, pauli_kick=5.0)
+    cfg = MConfig(pauli_exclusion=True)
     sim = LatticeFluidSimulator(1, 1, cfg, device=device)
     z = torch.zeros(1, 1, 2, device=device, dtype=torch.complex64)
     z[..., 0] = 0.8 + 0j
@@ -730,6 +755,7 @@ def run_all(device: str) -> list[dict]:
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),
         check_energy_quantum(device=device),
+        check_elementary_quanta(device=device),
         check_local_continuity(device=device),
         check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),

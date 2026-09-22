@@ -123,9 +123,11 @@ def pauli_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
     z = decode_spinor(f, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits)
     extra = pauli_phi(z, cfg)
-    n_ring = 1 << cfg.phase_bits
-    ticks = torch.round(extra * n_ring / (2.0 * math.pi)).to(torch.int64)
-    return mod_lane(ticks, cfg.mod_bits)
+    from mt_ca.si_constants import pauli_kick_disc
+
+    kick = float(pauli_kick_disc(phase_bits=cfg.phase_bits))
+    ticks = torch.where(extra > 0, torch.full_like(extra, kick), torch.zeros_like(extra))
+    return mod_lane(ticks.to(torch.int64), cfg.mod_bits)
 
 
 def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
