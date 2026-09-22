@@ -665,12 +665,14 @@ class SIConstants:
         r_star = 1.0  # hops / ℓ_P
         m_over_m_P = 1.0  # pra-core ceiling
         h_star_newton = -2.0 * m_over_m_P / r_star  # h_00(R_★)=−2m/(m_P R_★)
+        mismatch = abs(h_star_near / h_star_newton) if h_star_newton != 0 else float("inf")
         return {
             "rho_star": rho_star,
             "rho_vac": rho_vac,
             "eps_partial_NN": eps_partial,
             "h_star_near": h_star_near,
             "h_star_newton": h_star_newton,
+            "near_over_newton": mismatch,
             "R_star_over_l_P": r_star,
             "m_over_m_P": m_over_m_P,
             "h00_far_at_R_eq_2": h_star_newton * 0.5,

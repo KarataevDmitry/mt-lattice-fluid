@@ -231,7 +231,7 @@
 | 2026-09-22 | §4.10 | tunnel M→T: leak$\to\tau^N=e^{-\kappa L/\ell_P}$ · sim slab DoD open |
 | 2026-09-22 | §4.9.2a | birth = lock-in germ $V$; M-ID = invariants ($n$, Pauli, $E$); SM-словарь open |
 | 2026-09-22 | §3.12.5a | $\varepsilon$ in $\Phi$-kick · $Z^{+}=2Z+\lfloor\mathcal{N}[\varepsilon]\rfloor-Z^{-}$ · $m_{\mathrm{loc}}\le m_P$ |
-| 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · $h_\star^{(\mathrm{near})}[\varepsilon]$ · $h_{00}^{(\mathrm{far})}=-2(m/m_P)\ell_P/R$ |
+| 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · **не сшивка**: $|h_{\mathrm{near}}/h_{\mathrm{Newton}}|\sim 2\times 10^{3}$ · dual $\rho_{\mathrm{vac}}$ hinge |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---

@@ -960,20 +960,17 @@ $$
 h_{\mu\nu}\to 0.
 $$
 
-**4 · Профиль эффективной метрики**
+**4 · Профиль $h$ — и где красота врёт**
 
-Near-zone (интерфейс):
+Near (интерфейс, линейный strain §C′):
 
 $$
 h_\star^{(\mathrm{near})}
 :=
--\frac{2}{|N|}\sum_{e\in\partial D_\star}\varepsilon_e^{(\partial)}
-=
--\frac{1}{6}\sum_{e\in\partial D_\star}\varepsilon_e^{(\partial)}
-\quad(|N|=12).
+-\frac{2}{|N|}\sum_{e\in\partial D_\star}\varepsilon_e^{(\partial)}.
 $$
 
-Far-zone (Ньютон §B, $G=\ell_P^{\,2}$, $m\le m_P$):
+Far (Ньютон §B, $G=\ell_P^{\,2}$, $m\le m_P$):
 
 $$
 h_{00}^{(\mathrm{far})}(R)
@@ -982,22 +979,40 @@ h_{00}^{(\mathrm{far})}(R)
 \qquad(R>R_\star).
 $$
 
-Сшивка моделирования:
+**Не сшивка.** На pra-ядре ($|D_\star|=1$, $12$ NN к A5-floor $\rho_{\mathrm{vac}}=(\mathrm{vac\_amp})^2$) live:
 
 $$
-h_{00}(R)
-=
-\begin{cases}
-h_\star^{(\mathrm{near})} & R\le R_\star\\
--\dfrac{2m}{m_P}\,\dfrac{\ell_P}{R} & R>R_\star
-\end{cases}
+h_\star^{(\mathrm{near})}\approx -4095,
 \qquad
-\frac{m}{m_P}\le 1.
+h_\star^{(\mathrm{Newton})}:=-\frac{2m}{m_P}\frac{\ell_P}{R_\star}=-2
+\quad(m=m_P,\ R_\star=\ell_P),
 $$
 
-**Sim:** $D_\star$ с $\rho=\rho_\star$ → $\{\varepsilon_e^{(\partial)}\}$ → $h_\star^{(\mathrm{near})}$ → far $1/R$ с $m\le m_P$.
+$$
+\frac{|h_\star^{(\mathrm{near})}|}{|h_\star^{(\mathrm{Newton})}|}\approx 2\times 10^{3}.
+$$
 
-Код: `SI.saturation_bc_row()`.
+Если же $\rho_{\mathrm{vac}}\sim 1$ ("залитая" жидкость §5) и $\rho_\star=1$ — то $\varepsilon_e^{(\partial)}=0$ и $h_\star^{(\mathrm{near})}=0$: плотности нет, а Ньютон с $m=m_P$ всё равно хочет $|h|=2$. Оба полюса убивают "красивую" склейку.
+
+**Что это значит**
+
+1. Линейный $\varepsilon\to h$ **не** продолжает быть weak-field на $\partial D_\star$ при A5-floor.
+2. Два разных $\rho_{\mathrm{vac}}$ (floor vs filled) — не один объект; пока не зафиксирован **один** vacuum для strain, профиль $h(R)$ из $\varepsilon$ не претендует на $1/R$.
+3. Far $1/R$ — **анзац Ньютона**, не вывод из суммы $\varepsilon_e$ по оболочкам. Regge-дефицит на ядре → IR $1/R$ ещё не доказан stencil'ом.
+
+**Рабочая постановка sim (без притворства)**
+
+$$
+\text{мерить }h_{00}^{(\mathrm{strain})}(R)\text{ из §C′ на живом }z;
+\quad
+\text{сравнивать с }-\frac{2m}{m_P}\frac{\ell_P}{R};
+\quad
+\text{не подгонять }\rho_{\mathrm{vac}}.
+$$
+
+Фальсификация: если после фиксации единого $\rho_{\mathrm{vac}}$ и нелинейного strain far-хвост $\neq 1/R$ при $m\le m_P$ — ломается паспорт §B/§C, не крутим α.
+
+Код: `SI.saturation_bc_row()` (поля `h_star_near`, `h_star_newton`, отношение live).
 
 ##### D · Тензор Эйнштейна из strain (не пятое поле)
 
