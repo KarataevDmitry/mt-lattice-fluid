@@ -216,6 +216,7 @@
 | 2026-09-22 | §8.2 планк. ЭМ | M: $s_0/F_0/j$/Гаусс/Кулон $N=1$ · не ∇ на $\ell_P$ · `SI.planck_em_row` |
 | 2026-09-22 | §8.2 Stokes+$\Phi_\square$ | дискретный контур = сумма рёбер · $B_\square=\Phi_\square/\ell_P^{2}$ |
 | 2026-09-22 | §8.2 Lorentz из $K_P$ | $c^2=K_P/\mu_P$ + binomial(1-2-1) → макро-круг; ЭМ-блок закрыт контуром |
+| 2026-09-22 | §8.2 излучение | $h\nu_0=4\pi E_0$ · $n=0$ · Debye $\omega_D$ · Bose $u(\omega)$ open · `SI.radiation_row` |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
