@@ -87,6 +87,7 @@
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
+- **§4.1.0 FCC/hex Green:** native path-count soft-readout on N₁₂ / N₆ (not separable 1-2-1) — open
 - **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
 - **§4.10 tunnel:** slab barrier $N$ · $|\mathcal{A}|\sim\tau^N$ · WKB continuum — open DoD
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
@@ -185,7 +186,7 @@
 | раздел | статус |
 |--------|--------|
 | §4.1.2 **`ν_CA`** | ✅ algebraic · verify **`Nu_CA`** · **`T3_macro_viscosity`** · fit **`ν_eff`** open |
-| §4.1.0 **(1-2-1) derive** | ✅ lemma: `[1,1]/2→[1,2,1]/4→⊗2D`; FCC-3D hinge open |
+| §4.1.0 **(1-2-1) derive** | ✅ из A1: глубина 2 = return-paths; `⊗` только product-срез; FCC Green — open |
 | §4.3 Madelung continuity | ✅ **T** · **`T_MadelungContinuity`** (диагностика; не M hard) |
 | §4.9 Young | ✅ онтология · GPU slit leaf open · partial T2, A11 |
 | §4.2 validate | **`validate_mt.py`** T1/T2/T3/T_dispersion · T2 aligned §4.9 (vortex soliton · dual Gaussian · 1-2-1 fringes OK) |
@@ -249,6 +250,7 @@
 | 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete ledgers; **`T_MadelungContinuity`** |
 | 2026-09-23 | §4.9 T2 | probes: soliton=vortex; wave=dual Gaussian; 1-2-1 = T readout (не M); fringes≠fail |
 | 2026-09-23 | §4.1.0 | вывод `(1-2-1)`: атом `[1,1]/2` → `w∗w`; 2D `⊗`; FCC 3D multinomial — hinge |
+| 2026-09-23 | §4.1.0 physics | A1: depth-2 return-paths → `[1,2,1]`; `⊗`≠hex/FCC; κ независимо от бинома |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
