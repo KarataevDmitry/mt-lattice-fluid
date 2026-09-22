@@ -577,6 +577,15 @@ class SIConstants:
             "note": "§8.2 rad: h ν0=4π E0; ω_D∼1/hT; Bose u(ω) open",
         }
 
+    def decay_row(self) -> dict[str, float]:
+        """§8.2 decay — topo frame; Γ/τ/BR still open (T-stats)."""
+        return {
+            "E_0": self.E_0,
+            "s_0": self.s_0,
+            "hbar": self.hbar,
+            "note": "§8.2 decay: annihilation≠decay; free γ stable; Γ=ℏ/τ open",
+        }
+
     def alpha_runner_row(self) -> dict[str, float]:
         """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
         b_hv = self.bekenstein_bits_hv
