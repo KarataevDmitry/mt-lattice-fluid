@@ -38,7 +38,7 @@ def vortex_contour_readout(size: int, steps: int, block: int, device: str) -> di
 
 
 def unitarity_smoke(size: int, steps: int, device: str) -> dict:
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.PLANE_WAVE)
     n0 = sim.norm()
     sim.step(steps)

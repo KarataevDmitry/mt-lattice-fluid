@@ -61,7 +61,7 @@ def sim_kappa(device: str) -> None:
     cy, cx = size // 2, size // 2
 
     for steps in (64, 128, 256):
-        sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+        sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
         sim.set_field(z0.clone())
         c0 = coarse_grain(sim.z, block)
         sim.step(steps)
@@ -78,7 +78,7 @@ def sim_kappa(device: str) -> None:
             f"(0.5={0.5:.4f}, 1/sqrt2={1/math.sqrt(2):.4f})  angle-CV={cv:.4f}"
         )
 
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.set_field(z0.clone())
     ext0 = axis_extent(sim.z.abs(), cy, cx)
     steps = 256

@@ -211,7 +211,7 @@ def wave_particle_readout(
     from mt_ca.simulator import LatticeFluidSimulator
 
     dev = torch.device(device)
-    cfg = MConfig()
+    cfg = MConfig.for_stencil("hex")
     cy, cx = size // 2, size // 2
     sep = size // 6
 

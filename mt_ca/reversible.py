@@ -103,7 +103,7 @@ def bit_exact_roundtrip_report(
         seed_class = SeedClass.IMPULSE
 
     dev = torch.device(device)
-    cfg = MConfig(evolution="leapfrog", use_projected_collision=True)
+    cfg = MConfig.for_stencil("hex", evolution="leapfrog", use_projected_collision=True)
     z0 = make_seed(seed_class, size, size, device=dev)
     f0 = canonical_fixed(z0, cfg)
     f_past = f0.clone()

@@ -33,7 +33,7 @@ def test_isotropy(
     device: str = "cpu",
 ) -> dict:
     """T1: localized packet → coarse front should approach a circle (Lorentz on macro)."""
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     z0 = make_wave_packet(size, size, device=torch.device(device), amplitude=0.55, sigma=5.0)
     sim.set_field(z0)
     coarse_0 = coarse_grain(sim.z, block)
@@ -79,7 +79,7 @@ def test_soliton(
 ) -> dict:
     """T2: localized packet keeps coarse profile on boiling vacuum."""
     dev = torch.device(device)
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     z0 = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
     sim.set_field(z0, momentum_k=(0.10, 0.07))
     profile_0 = coarse_grain(sim.z, block).detach().cpu()
@@ -127,7 +127,7 @@ def test_collision(
     z[cy, cx - sep, 0] = 0.45 + 0j
     z[cy, cx + sep, 0] = 0.45 + 0j
 
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.set_field(z)
     coarse_0 = coarse_grain(sim.z, block).cpu()
     peaks_0 = collision_peak_count(coarse_0)
@@ -168,7 +168,7 @@ def test_gaussian_collision(
     left = torch.roll(left, shifts=-sep, dims=2)
     z = left + right
 
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.set_field(z, momentum_k=(0.08, 0.0))
     coarse_0 = coarse_grain(sim.z, block).cpu()
     amp0 = float(coarse_0.max())
@@ -206,7 +206,7 @@ def test_macro_viscosity(
 
     dev = torch.device(device)
     z0 = make_wave_packet(size, size, device=dev, amplitude=0.55, sigma=5.0)
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.set_field(z0)
     norm0 = total_norm_squared(sim.z)
     peak0 = float(coarse_grain(sim.z, block).max().item())
@@ -248,7 +248,7 @@ def test_zigzag_mass(
     """§5.0.1: vortex Arg-activity + macro m_rest exceed dilute vacuum (mass from zigzag)."""
     from mt_ca.m_to_t import arg_mass_load, m_rest_readout
 
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
 
     sim_v = LatticeFluidSimulator(size, size, cfg, device=device)
     sim_v.reset(SeedClass.VORTEX_P)
@@ -308,7 +308,7 @@ def test_dispersion(size: int = 128, steps: int = 64, device: str = "cpu") -> di
     """§4.6: plane-wave phase advance vs γ (T readout)."""
     from mt_ca.t_analysis import estimate_phase_velocity_plane_wave
 
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.PLANE_WAVE)
     z0 = sim.z[..., 0].clone()
     sim.step(steps)

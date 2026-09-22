@@ -149,7 +149,7 @@ def ladder_ledger_report(
 ) -> dict:
     """Verify §5.2.1 / §5.2.3 local ledgers on canonical g."""
     dev = torch.device(device)
-    cfg = MConfig(heisenberg_floor=True)
+    cfg = MConfig.for_stencil("hex", heisenberg_floor=True)
     phi_min = heisenberg_min_ticks(cfg)
     p0_nat = float(kappa_link())
 

@@ -163,7 +163,7 @@ def matter_occupancy_b(
         y, x = int(cy.item()), int(cx.item())
 
     rho = spinor_density(z)
-    if float(rho[y, x].item()) < rho_frac * MConfig().rho_max:
+    if float(rho[y, x].item()) < rho_frac * MConfig.for_stencil("hex").rho_max:
         return 0
 
     w = winding_number(z, center=(y, x), radius=contour_radius)
@@ -182,7 +182,7 @@ def matter_occupancy_b_field(
     """b(x) ∈ {0,1} — primary matter readout; needs ρ ≥ ρ_frac·ρ_P and |n_∂|≥¾ (§5.2.3)."""
     from mt_ca.spinor import spinor_density
 
-    cfg = MConfig()
+    cfg = MConfig.for_stencil("hex")
     q = rho_frac * cfg.rho_max if rho_min is None else rho_min
     rho = spinor_density(z)
     ny, nx = rho.shape

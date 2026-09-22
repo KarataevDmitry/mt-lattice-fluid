@@ -32,7 +32,7 @@ def run_case(
     block: int,
     device: str,
 ) -> dict:
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(seed)
     norm0 = sim.norm0
 

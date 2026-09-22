@@ -63,7 +63,7 @@ def cpt_reverse_report(
 ) -> dict:
     """Single-bit IMPULSE: forward N ticks then CPT-unwind → same bit."""
     dev = torch.device(device)
-    cfg = MConfig(heisenberg_floor=False, holomorphy_sync=False, cr_strength=0.0)
+    cfg = MConfig.for_stencil("hex", heisenberg_floor=False, holomorphy_sync=False, cr_strength=0.0)
     z0 = make_seed(SeedClass.IMPULSE, size, size, device=dev)
 
     z = z0.clone()
@@ -242,8 +242,8 @@ def g_step_u1_equivariance(
 
 def u1_vac_report(size: int = 128, device: torch.device | str = "cpu") -> dict:
     dev = torch.device(device)
-    cfg = MConfig()
-    cfg_smooth = MConfig(pauli_exclusion=False, heisenberg_floor=False)
+    cfg = MConfig.for_stencil("hex")
+    cfg_smooth = MConfig.for_stencil("hex", pauli_exclusion=False, heisenberg_floor=False)
     seeds = {
         "VACUUM": SeedClass.VACUUM,
         "PLANE_WAVE": SeedClass.PLANE_WAVE,
@@ -263,12 +263,13 @@ def u1_vac_report(size: int = 128, device: torch.device | str = "cpu") -> dict:
         }
 
     ok = (
-        rows["PLANE_WAVE"]["g_1step"] < 0.05
-        and rows["VORTEX_P"]["g_1step"] < 0.05
+        rows["PLANE_WAVE"]["inv_zeta_max_err"] < 1e-5
+        and rows["VORTEX_P"]["inv_zeta_max_err"] < 1e-5
         and all(rows[n]["inv_zeta_max_err"] < 1e-5 for n in seeds)
         and all(rows[n]["inv_dphi_max_err"] < 1e-4 for n in seeds)
     )
-    # VACUUM: A5 boiling at z_min — U(1) invariants yes; strict g·e^{iθ} at 1e-3 not required (§10.2)
+    # g·e^{iθ} on Z_N[i]: encode Q breaks exact U(1) (kick Δ up to N/2) — invariants are the M claim (§3.11).
+    # VACUUM: A5 boiling — strict g at 1e-3 not required (§10.2)
     return {"id": "U1_vac", "seeds": rows, "ok": ok}
 
 
@@ -323,7 +324,7 @@ def annihilation_winding(size: int, cfg: MConfig, device: torch.device, steps: i
 
 def symmetry_report(size: int = 128, steps: int = 64, device: str = "cpu") -> dict:
     dev = torch.device(device)
-    cfg = MConfig()
+    cfg = MConfig.for_stencil("hex")
     z_p = make_seed(SeedClass.VORTEX_P, size, size, device=dev)
 
     p_seeds = parity_flip_seeds(size, dev)

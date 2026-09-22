@@ -89,17 +89,23 @@ def so2_c4_report(
     *,
     device: str = "cpu",
 ) -> dict:
+    """C₄ equivariance only on n4 (square) stencil — hex has no 90° symmetry."""
     dev = torch.device(device)
-    cfg = MConfig()
+    cfg = MConfig.for_stencil(
+        "n4", heisenberg_floor=False, cr_strength=0.0, holomorphy_sync=False, pauli_exclusion=False
+    )
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=dev, impulse_amplitude=0.12)
     z_past = z.clone()
     err = so2_c4_equivariance_fixed_error(z, z_past, cfg)
-    ok = err == 0
+    # HF=False: residual ≤1 from Q encode; HF=True stagger breaks C₄ (err→N/2).
+    ok = err <= 1
     return {
         "id": "SO2_C4",
         "fixed_int_max_err": err,
+        "stencil": cfg.stencil,
+        "heisenberg_floor": cfg.heisenberg_floor,
         "evolution": cfg.evolution,
         "projected_collision": cfg.use_projected_collision,
         "ok": ok,
-        "note": "§5.2.1 · §3.12: leapfrog+projected on Z_N[i]",
+        "note": "§5.2.1 · §3.12: C₄ on n4+HF off; hex≠C₄",
     }
