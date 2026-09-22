@@ -586,6 +586,22 @@ class SIConstants:
             "note": "§8.2 decay: annihilation≠decay; free γ stable; Γ=ℏ/τ open",
         }
 
+    def birth_row(self) -> dict[str, float]:
+        """§4.9.2a — birth = lock-in of germ V; M-ID = invariants (n, Pauli, E).
+
+        SM dictionary V↦(e,μ,…) and numerical f_geom still open (census).
+        """
+        return {
+            "E_0": self.E_0,
+            "s_0": self.s_0,
+            "n_integer_charge": 1.0,  # A10: Q/e0 = n ∈ ℤ from ∮ d arg
+            "pauli_slots_per_vp": 2.0,  # A16: ℂ² spinor / v_p
+            "note": (
+                "§4.9.2a: no birth-RNG; M-ID=invariants(V); "
+                "SM-name / m=f_geom(V) open census"
+            ),
+        }
+
     def alpha_runner_row(self) -> dict[str, float]:
         """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
         b_hv = self.bekenstein_bits_hv
