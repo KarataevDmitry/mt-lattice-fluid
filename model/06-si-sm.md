@@ -366,27 +366,46 @@ $$
 
 Энергия не уничтожается (A3) — уходит волнами $n=0$.
 
-**5 · Спектр / чёрное тело — open DoD**
+**5 · Ответ модели: занятость — не закон M**
 
-Есть моды $\omega(k)$ и кинетическая $T$ macro-газа (§5.3.1). **Нет** ещё stamped занятость Бозе → закон Планка:
+Спросили носитель (§2.1 · A3 · A16 · §5.2 · BZ):
 
 $$
-\langle n\rangle = \frac{1}{e^{\hbar\omega/k_B T}-1},
-\qquad
-u(\omega)\,d\omega
-\quad\text{(T-readout; ⚠️)}.
+g\ \text{строго детерминирован (без RNG).}
+\quad
+\text{Вероятность / }\langle n\rangle\ \text{— T-readout, не микро-шаг.}
 $$
 
-Стефан / Wien — след того же, когда занятость закрыта; не вписывать как ✅.
+Что M **закрывает** (без ансамбля):
+
+| факт носителя | следствие |
+|---------------|----------|
+| ledger $\Delta E = n_E E_0$, $n_E\in\mathbb{Z}$ (§5.2) | энергия моды ступенями |
+| scalar / photon limit $z\in\mathbb{C}$, $n=0$ (§2 A4 note · §8.2) | **нет** Паули на моде → $n=0,1,2,\ldots$ допустимы |
+| A16 Паули | только совпадающие спиноры в одном $v_p$ — **не** на $n=0$-фронт |
+| BZ + $\omega_D$ | $N_{\mathrm{modes}}<\infty$ → continuum-RJ мёртв |
+
+Что M **не** закрывает:
+
+$$
+\langle n\rangle = \frac{1}{e^{\hbar\omega/k_B T}-1}
+\quad\text{и}\quad
+\langle E\rangle \xrightarrow[\hbar\omega\ll k_BT]{} k_B T
+$$
+
+— это **T-статистика** (грубый прибор + хаос из детерминизма, §2.1). $T$ в §5.3.1 — kinetic zigzag **macro-газа материи**, не stamped как температура фотонной ванны.
+
+**Итог опроса:** дискретный RJ / Planck **не закрыты**. Закрыты лишь: квант, бозонный сектор $n=0$, конечный набор мод. Формулы $\langle n\rangle$, $u(\omega)$, Stefan — open DoD на T.
 
 | кусок | статус |
 |-------|--------|
 | $s_0,E_0,h\nu_0=4\pi E_0$; $E=\hbar\omega$ | ✅ |
-| фотон $=n=0$; $c$ vs $c_0$ | ✅ |
-| BZ + $\omega_D\sim 1/hT$ режет continuum-catastrophe | ✅ геометрия |
-| дискретный RJ ($\langle E\rangle=k_BT$ на моде) | ⚠️ не закрыт — угол open Bose |
+| фотон $=n=0$ (bosonic limit); $c$ vs $c_0$ | ✅ |
+| BZ + $\omega_D$ режет continuum-catastrophe | ✅ геометрия |
+| $n=0,1,2,\ldots$ на моде (нет Паули) | ✅ из A16-scope |
 | аннигиляция → 2γ (два фронта) | ✅ схема · ⚠️ sim |
-| Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open |
+| дискретный RJ $\langle E\rangle=k_BT$ | ⚠️ T-статистика, не закрыт |
+| Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open (тот же T-лист) |
 
 **Код:** `SI.radiation_row()`.
 
