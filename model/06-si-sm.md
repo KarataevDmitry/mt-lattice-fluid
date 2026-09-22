@@ -188,11 +188,25 @@ $$
 E_i = -\frac{\varphi(x)-\varphi(x+\hat e_i)}{\ell_P}
 \quad(\varphi=\mathrm{Arg}\,z),
 \qquad
-B_\square = \frac{1}{\ell_P^{2}}\,
-\mathrm{Arg}\!\prod_{\mathrm{cycle}\,\square}\! z,
-\qquad
 j_i = \frac{\mathrm{Im}\bigl(z^*(x)\,z(x+\hat e_i)\bigr)}{hT}.
 $$
+
+**Контур по грани $\square$** (дискретный $\oint$ = сумма по рёбрам):
+
+$$
+\Phi_\square
+=
+\sum_{e\in\partial\square}\!\Delta\varphi_e
+=
+\mathrm{Arg}\!\prod_{e\in\partial\square}\! z
+\quad\in (-\pi,\pi],
+\qquad
+B_\square = \Phi_\square / \ell_P^{2},
+\qquad
+\sum_{e\in\partial\square} E_e\,\ell_P = -\Phi_\square.
+$$
+
+Это Stokes на решётке: циркуляция $E$ вокруг $\square$ = минус поток $B$ через $\square$. Большой контур = сумма граней внутри (телескопирование).
 
 **Законы на решётке:**
 
