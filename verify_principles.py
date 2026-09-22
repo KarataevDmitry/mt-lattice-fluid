@@ -749,16 +749,21 @@ def check_higgs_mass(device: str = "cpu") -> dict:
     del device
     row = SI.higgs_mass_row()
     ok = (
-        abs(row["m_H_GeV"] - row["m_H_direct_GeV"]) / row["m_H_GeV"] < 1e-12
-        and abs(row["m_H_over_v"] - 0.5) < 1e-12
+        abs(row["m_H_bare_GeV"] - row["m_H_direct_GeV"]) / row["m_H_bare_GeV"] < 1e-12
+        and abs(row["m_H_over_v_bare"] - 0.5) < 1e-12
         and row["N_hier"] == 8.0
-        and row["m_H_rel_err"] < 0.03
+        and abs(row["delta_lambda_stack"] - 8.0 * row["delta_lambda_quantum"]) < 1e-15
+        and row["m_H_rel_err"] < 0.001
+        and row["m_H_bare_rel_err"] < 0.03
     )
     return {
         "id": "Higgs_mass",
+        "m_H_bare_GeV": row["m_H_bare_GeV"],
         "m_H_GeV": row["m_H_GeV"],
         "v_GeV": row["v_GeV"],
+        "lambda_bare": row["lambda_bare"],
         "lambda_quartic": row["lambda_quartic"],
+        "delta_lambda_stack": row["delta_lambda_stack"],
         "m_H_rel_err": row["m_H_rel_err"],
         "ok": ok,
         "note": row["note"],
