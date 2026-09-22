@@ -299,7 +299,7 @@ v_T ≈ (c₀ / c_T) · c_T  = √2 · c_T        (относительно macr
 | A15 | **Принцип наименьшего действия** | **`κ=1/√2`**, **`γ=κ_link=1/4`**, **`α*=1+1/(4π)`** из геометрии N₄ + gate (§5.2.2, §7.1) |
 | A16 | **Фермион / запрет Паули** | спин **`1/2`**: **`2π` → −1**, **`4π` → +1**; два совпадающих спинора в **`v_p`** запрещены |
 
-**Verify / impl:** [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-аксиом-a1a16-verify).
+**Verify / impl:** [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-ограничений-единый-указатель).
 
 **Поле и целевой закон (A3):**
 
@@ -1629,7 +1629,7 @@ c² = K / ρ_mass        ⇒        K_P = μ_P · c²
 | **A5 кипение** | микро-вязкость | `|z|≫0` вакуум, не ламинар |
 | **`γ = κ_link = 1/4`** | кинетическое смешивание по **`N₄`** | §5.2.2 · `local_ca` |
 
-**Impl / sim:** **`κ_link = ¼`** — [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · ballistic check на **`c`** — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
+**Impl / sim:** **`κ_link = ¼`** — [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-ограничений-единый-указатель) · ballistic check на **`c`** — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
 
 ### 5.2 Гидродинамика M → T (Madelung на **N₄**)
 
@@ -1780,7 +1780,7 @@ L_z(x) = ε_{ab} x^a π^b(x)     →     L_z = Σ_x L_z(x) ∈ L₀ · ℤ
 | **время** (**`hT`**) | **`E`** per tick | **`E ∈ E₀·ℤ`**, ledger |
 | **CR / topo** (§3.9) | winding | **`n ∈ ℤ`** (A10) |
 
-**Verify / impl:** mechanical quanta — [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · §5.2.1.
+**Verify / impl:** mechanical quanta — [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-ограничений-единый-указатель) · §5.2.1.
 
 #### 5.2.2 Полная лестница квантования · **`κ_link = ¼`** · **`b ∈ {0,1}`** · **`E ∈ E₀·ℤ`**
 
@@ -1917,7 +1917,7 @@ b(x) = 1  ⟺  |Δφ_N₄(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
 
 **Energy ledger (§3.12):** saturating **`Φ`** [ticks] → **`n_E = ⌊|Φ|/Δφ_disc⌋`**; локально **`Σ_{N₄} n_E·E₀ ≡ 0 (mod E₀)`** (checkerboard floor + **`LadderLedger`**).
 
-**Audit / verify:** [`DEVLOG.md` §2](DEVLOG.md#§2-audit--gap-tracker) · **`elementary_quanta_row()`** · **`MConfig`** defaults · **`LadderLedger`** · **`MatterOccupancyB`**.
+**Audit / verify:** [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-ограничений-единый-указатель) · **`elementary_quanta_row()`** · **`MConfig`** defaults · **`LadderLedger`** · **`MatterOccupancyB`**.
 
 ### 5.3 Макро-газ: нет «пустого пространства»
 
