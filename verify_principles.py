@@ -807,6 +807,48 @@ def check_no_m_heat_death(device: str = "cpu") -> dict:
     }
 
 
+def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
+    """§2.3.8: D5 on Z_N[i] = constants only; A5 float gate ≠ frozen vacuum."""
+    from mt_ca.projected_collision import projected_collision_kick
+    from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
+    from mt_ca.z_ring import mod_lane
+
+    cfg = MConfig()
+    dev = torch.device(device)
+
+    amp = 0.01 + 0.02j
+    z_const = torch.full((size, size, 2), amp, device=dev, dtype=torch.complex64)
+    f_const = canonical_fixed(z_const, cfg)
+    kick_const = projected_collision_kick(f_const, cfg)
+    f_next, _, _ = leapfrog_forward_fixed(f_const, f_const, cfg)
+    const_kick_zero = int(kick_const.abs().max().item()) == 0
+    const_step_fixed = bool(torch.equal(mod_lane(f_next, cfg.mod_bits), mod_lane(f_const, cfg.mod_bits)))
+
+    # Non-constant on Z_N[i] (manual): holonomy ≠ 0 ⇒ ⌊𝒩⌋ ≠ 0 (2.3.8a converse probe).
+    f_nc = torch.zeros(size, size, 4, device=dev, dtype=torch.int64)
+    f_nc[..., 0] = 10
+    f_nc[..., 1] = 5
+    f_nc[0, 0, 0] = 20
+    f_nc[0, 0, 1] = 8
+    nonconst_kick = int(projected_collision_kick(f_nc, cfg).abs().max().item()) > 0
+
+    # A5: float vacuum gate fires at ρ→0 even when one tick is D4-limited after quantize (§10.2).
+    rho = torch.tensor([[1e-8]], device=dev)
+    phi = vacuum_phase(rho, cfg)
+    a5_gate_live = float(phi.abs().item()) > 0.1
+
+    ok = const_kick_zero and const_step_fixed and nonconst_kick and a5_gate_live
+    return {
+        "id": "Theorem_2_3_8",
+        "const_kick_zero": const_kick_zero,
+        "const_step_fixed": const_step_fixed,
+        "nonconst_kick": nonconst_kick,
+        "a5_gate_live": a5_gate_live,
+        "ok": ok,
+        "note": "§2.3.8a on Z_N[i]; A5 gate on float layer (quantize may D4-limit one tick)",
+    }
+
+
 def run_all(device: str) -> list[dict]:
     return [
         check_a3_unitarity(device=device),
@@ -840,6 +882,7 @@ def run_all(device: str) -> list[dict]:
         check_chiral_su2(device=device),
         check_leapfrog_bit_exact(device=device),
         check_no_m_heat_death(device=device),
+        check_theorem_2_3_8(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_vortex_hex_contour(device=device),

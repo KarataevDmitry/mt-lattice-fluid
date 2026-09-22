@@ -38,7 +38,7 @@
 | A11 | ✅ **§3.7–§3.9** · A11 PASS · T-readout binomial |
 | A12 | ✅ T1 PASS (512² CUDA) |
 | A13 | ✅ **§3.12** · **`Leapfrog`** bit-exact |
-| **§2.3** | ✅ **`NoMHeatDeath`** probe · proof = Lemmas 2.3.1–2.3.7 in MODEL |
+| **§2.3** | ✅ **`NoMHeatDeath`** · **`Theorem_2_3_8`** · proof Lemmas 2.3.1–2.3.8 in MODEL |
 | A14 | ✅ **`U1_vac`** · **`Chiral_SU2`** · P/C seeds · ⚠️ long **`g·P`** |
 | A15 | ✅ **`κ_link`** · **`α*`** · **`sync=κ_link·Δφ_min`** (§5.2.3) |
 | A16 | ✅ **§3.10** · SU(2) + **`pauli_phi`** + verify |
