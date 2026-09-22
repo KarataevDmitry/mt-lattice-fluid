@@ -434,86 +434,63 @@ class SIConstants:
 
 
     def force_ansatz_row(self) -> dict[str, float]:
-        """§8.4.1 — N_hier, v ladder; α_s seed = d/(N_hier π), d=spatial (§1.6)."""
+        """§8.4.1 — v ladder; α_s(v)=d/(N_hier π); runner 1/(dπ) ln(v/μ) → M_Z."""
         pi = math.pi
         e_p_gev = self.E_P / EV_J / 1.0e9
         n_hier = int(math.floor(2.0 * math.pi / LN2)) - 1
         d_spatial = 3  # Minkowski space §1.6 — not N_c
-        alpha_s0 = d_spatial / (n_hier * pi)
+        alpha_s_v = d_spatial / (n_hier * pi)
         v = (self.alpha_fs**n_hier) * e_p_gev * math.sqrt(2.0 * pi)
+        m_z = 91.1876  # GeV PDG pole mass (T control scale)
+        beta_pack = 1.0 / (d_spatial * pi)
+        alpha_s_mz = 1.0 / (1.0 / alpha_s_v + beta_pack * math.log(v / m_z))
         g_f = 1.0 / (math.sqrt(2.0) * v * v)
         return {
-            "alpha_s_seed": alpha_s0,
+            "alpha_s_seed": alpha_s_v,
+            "alpha_s_at_v": alpha_s_v,
+            "alpha_s_MZ_model": alpha_s_mz,
             "alpha_s_MZ_pdg": 0.1179,
-            "alpha_s_seed_rel_to_MZ": abs(alpha_s0 - 0.1179) / 0.1179,
+            "alpha_s_MZ_rel_err": abs(alpha_s_mz - 0.1179) / 0.1179,
+            "alpha_s_beta_pack": beta_pack,
             "v_GeV": v,
             "v_CODATA_GeV": 246.22,
+            "M_Z_GeV": m_z,
             "G_F_GeV_m2": g_f,
             "G_F_CODATA": 1.1663787e-5,
             "G_F_rel_err": abs(g_f - 1.1663787e-5) / 1.1663787e-5,
             "N_hier": float(n_hier),
             "d_spatial": float(d_spatial),
-            "note": "§8.4.1: α_s=d/(N_hier π); π=α_fs tower foot",
+            "note": "§8.4.1: runner 1/(d π) ln(v/MZ); π=α_fs foot",
         }
 
-
-
     @property
-
     def m_P(self) -> float:
-
         """Planck mass [kg]."""
-
         return math.sqrt(self.hbar * self.c / self.G)
 
-
-
     @property
-
     def E_P(self) -> float:
-
         """Conventional Planck energy ℏ/t_P [J] — textbook tick, not M (§7.1)."""
-
         return self.hbar / self.t_P
 
-
-
     @property
-
     def bekenstein_bits_hv(self) -> float:
-
         """I_hV = 2π E_P l_P / (ℏ c ln 2) = 2π/ln 2 — §3.12.6."""
-
         return 2.0 * math.pi * self.E_P * self.l_P / (self.hbar * self.c * LN2)
 
-
-
     @property
-
     def delta_phi_min(self) -> float:
-
         """Heisenberg holonomy floor Δφ_min [rad] — §3.7.2, §5.0.2."""
-
         return DELTA_PHI_MIN
 
-
-
     @property
-
     def s_0(self) -> float:
-
         """Fundamental Arg action quantum s₀ = ℏ·Δφ_min = ℏ/2 [J·s] (§5.0.2)."""
-
         return self.hbar * self.delta_phi_min
 
-
-
     @property
-
     def E_0(self) -> float:
-
         """Arg-carrier energy per M tick E₀ = s₀/hT = E_P/√2 [J] (§5.0.2)."""
-
         return self.s_0 / self.hT
 
 
@@ -599,6 +576,34 @@ N_AVOGADRO = 6.02214076e23
 
 
 SI = SIConstants()
+
+
+def fcc_nn_plaquette_row() -> dict[str, float | int | bool]:
+    """§8.4.1-D3: FCC equal-NN girth = 3 = d_spatial (algebra, not CA sim)."""
+    neigh: set[tuple[int, int, int]] = set()
+    for x, y in ((1, 1), (1, -1), (-1, 1), (-1, -1)):
+        neigh.add((x, y, 0))
+        neigh.add((x, 0, y))
+        neigh.add((0, x, y))
+    assert len(neigh) == 12
+    triangles = 0
+    for u in neigh:
+        for v in neigh:
+            if u >= v:
+                continue
+            duv = (u[0] - v[0]) ** 2 + (u[1] - v[1]) ** 2 + (u[2] - v[2]) ** 2
+            if duv == 2:  # same NN length^2 ⇒ edge of packing graph
+                triangles += 1
+    girth = 3 if triangles > 0 else 0
+    d_spatial = 3
+    return {
+        "n_nn": len(neigh),
+        "n_triangles_at_origin": triangles,
+        "girth": girth,
+        "d_spatial": d_spatial,
+        "girth_eq_d": girth == d_spatial,
+        "note": "§8.4.1-D3 census algebra",
+    }
 
 HV = hv_bit_budget()
 

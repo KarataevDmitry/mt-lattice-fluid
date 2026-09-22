@@ -63,7 +63,7 @@
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
-| **4 силы** · v · α_s=d/(N_hier π) · π=терминал α_fs⁻¹ · кратность∼d (FCC plaquette) | §8.4.1 | T(runner)/sim census | seed passport ✅ | runner · census · GR |
+| **4 силы** · v · α_s(v)=d/(N_hier π) · runner 1/(dπ)ln(v/MZ) · girth FCC=d | §8.4.1 | sim census / IR / GR | seed+runner+girth ✅ | census sim · IR · GR |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
 **Приоритет sim-gap:** **A14 + A9** (equivariant canonical step) → затем A10 evolution, A3 full continuity.
@@ -94,7 +94,7 @@
 - **§5.3 gas:** sim EOS / `P(ρ)` readout — open
 - **§5.3.2 v_s:** численный `v_s` on T-readout — open
 - **§5.3.3 VdW:** T compression / occupancy — open
-- **§8.4:** четыре взаимодействия = симметричные каналы одного квантованного `g`; `α_s`/`G_F`/metric — model-gap (не «вне M»)
+- **§8.4.1:** α_s runner $v\to M_Z$ ✅ · FCC girth algebra ✅ · **sim census** составных узлов (DoD кратность=$d$) — open · IR runner · GR strain
 - **§8 Higgs:** численный `m_H` / Higgs width leaf — open
 
 ---
