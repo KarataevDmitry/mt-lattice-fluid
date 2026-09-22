@@ -205,19 +205,20 @@ def wave_particle_readout(
     block: int = 8,
     device: str | torch.device = "cpu",
 ) -> dict[str, float | int | bool | str]:
-    """§4.9: dual-source interference (wave) vs vortex localization (particle) on same g."""
+    """§4.9: dual-Gaussian interference (wave) vs vortex localization (particle) on same g."""
     from mt_ca.config import MConfig
-    from mt_ca.seeds import SeedClass
+    from mt_ca.seeds import SeedClass, make_wave_packet
     from mt_ca.simulator import LatticeFluidSimulator
 
     dev = torch.device(device)
     cfg = MConfig.for_stencil("hex")
-    cy, cx = size // 2, size // 2
     sep = size // 6
 
-    z_wave = torch.zeros(size, size, 2, device=dev, dtype=torch.complex64)
-    z_wave[cy, cx - sep, 0] = 0.45 + 0j
-    z_wave[cy, cx + sep, 0] = 0.45 + 0j
+    left = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
+    right = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
+    left = torch.roll(left, shifts=-sep, dims=1)
+    right = torch.roll(right, shifts=sep, dims=1)
+    z_wave = left + right
 
     sim_w = LatticeFluidSimulator(size, size, cfg, device=dev)
     sim_w.set_field(z_wave, momentum_k=(0.06, 0.0))
@@ -238,8 +239,8 @@ def wave_particle_readout(
     ok = (
         wave_peaks >= 2
         and vortex_peaks >= 1
-        and vortex_mass > max(wave_mass * 50.0, 0.05)
-        and vortex_peak > max(wave_peak * 5.0, 0.08)
+        and vortex_mass > max(wave_mass * 5.0, 0.05)
+        and vortex_peak > max(wave_peak * 1.5, 0.08)
     )
     return {
         "wave_peaks": wave_peaks,

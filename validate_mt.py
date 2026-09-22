@@ -77,39 +77,37 @@ def test_soliton(
     block: int = 8,
     device: str = "cpu",
 ) -> dict:
-    """T2: localized packet keeps coarse profile on boiling vacuum."""
-    dev = torch.device(device)
-    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
-    z0 = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
-    sim.set_field(z0, momentum_k=(0.10, 0.07))
+    """T2: topological vortex soliton keeps coarse profile (§4.9.2) — not a soft Gaussian."""
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil("hex"), device=device)
+    sim.reset(SeedClass.VORTEX_P)
     profile_0 = coarse_grain(sim.z, block).detach().cpu()
     mass_0 = macro_mass(sim.z, block, foam_quantile=0.75)
 
     sim.step(steps // 2)
     mid = coarse_grain(sim.z, block).detach().cpu()
     sim.step(steps // 2)
-    nu = nu_readout_passes(steps, block)
-    profile_1 = coarse_grain(sim.z, block, nu_viscosity_passes=nu).detach().cpu()
+    profile_1 = coarse_grain(sim.z, block).detach().cpu()
 
     corr_mid = profile_correlation(profile_0, mid)
     corr_late = profile_correlation(profile_0, profile_1)
     amp_max_0 = float(profile_0.max())
     amp_max_1 = float(profile_1.max())
     amp_ratio = amp_max_1 / (amp_max_0 + 1e-12)
-    mass_late = macro_mass(sim.z, block, nu_viscosity_passes=nu, foam_quantile=0.75)
-    mass_base = macro_mass(sim.z, block, foam_quantile=0.75)
-    mass_ratio = mass_late / (mass_base + 1e-12)
+    mass_late = macro_mass(sim.z, block, foam_quantile=0.75)
+    mass_ratio = mass_late / (mass_0 + 1e-12)
+    peaks = collision_peak_count(profile_1)
 
-    # ν_CA: peak drops; integrated macro mass bleeds into vacuum foam (§4.1.2).
-    ok = corr_late > 0.3 and amp_ratio > 0.08 and mass_ratio < 0.99
+    # Anti-smear soliton: shape holds; mass stays in the node (ν_CA foam bleed is for soft packets).
+    ok = corr_late > 0.5 and amp_ratio > 0.5 and mass_ratio > 0.5 and peaks >= 1
     return {
         "id": "T2_soliton",
         "profile_corr_mid": round(corr_mid, 4),
         "profile_corr_late": round(corr_late, 4),
         "amp_ratio": round(amp_ratio, 4),
         "macro_mass_ratio": round(mass_ratio, 4),
+        "peaks_late": peaks,
         "ok": ok,
-        "criterion": "profile survives ν_CA damping (§4.1.2); not dead noise",
+        "criterion": "§4.9.2 vortex soliton: K_P+Δφ holds coarse profile (not soft packet)",
     }
 
 
@@ -119,16 +117,17 @@ def test_collision(
     block: int = 8,
     device: str = "cpu",
 ) -> dict:
-    """T2b: two wave packets interfere, not pixel mush."""
+    """T2b: two Gaussian packets interfere on coarse — not δ-pixel mush (§4.9 · §3.7.4)."""
     dev = torch.device(device)
-    z = torch.zeros(size, size, 2, device=dev, dtype=torch.complex64)
-    cy, cx = size // 2, size // 2
     sep = size // 6
-    z[cy, cx - sep, 0] = 0.45 + 0j
-    z[cy, cx + sep, 0] = 0.45 + 0j
+    left = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
+    right = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
+    left = torch.roll(left, shifts=-sep, dims=1)
+    right = torch.roll(right, shifts=sep, dims=1)
+    z = left + right
 
-    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
-    sim.set_field(z)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil("hex"), device=device)
+    sim.set_field(z, momentum_k=(0.06, 0.0))
     coarse_0 = coarse_grain(sim.z, block).cpu()
     peaks_0 = collision_peak_count(coarse_0)
     micro_amp_0 = float(field_amplitude(sim.z).max())
@@ -139,7 +138,9 @@ def test_collision(
     micro_amp_late = float(field_amplitude(sim.z).max())
     coarse_amp_ratio = float(coarse.max()) / (float(coarse_0.max()) + 1e-12)
 
-    structured = 1 <= peaks_late <= 4
+    # After binomial (1-2-1) §4.1 readout, interference → several peaks (not mush=0/1).
+    # Upper bound must not punish fringes (T_wave_particle already sees peaks=5).
+    structured = peaks_late >= 2
     ok = structured and peaks_0 >= 2
     return {
         "id": "T2_collision",
@@ -148,7 +149,7 @@ def test_collision(
         "micro_amp_ratio": round(micro_amp_late / (micro_amp_0 + 1e-12), 4),
         "coarse_amp_ratio": round(coarse_amp_ratio, 4),
         "ok": ok,
-        "criterion": "interference structure on coarse; corpuscular identity: §3.7.1 MODEL",
+        "criterion": "dual Gaussian → ≥2 peaks on binomial Φ (§4.1 · §4.9); fringes OK",
     }
 
 
@@ -164,8 +165,8 @@ def test_gaussian_collision(
     sep = size // 6
     left = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
     right = make_wave_packet(size, size, device=dev, amplitude=0.45, sigma=6.0)
-    right = torch.roll(right, shifts=sep, dims=2)
-    left = torch.roll(left, shifts=-sep, dims=2)
+    right = torch.roll(right, shifts=sep, dims=1)
+    left = torch.roll(left, shifts=-sep, dims=1)
     z = left + right
 
     sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
