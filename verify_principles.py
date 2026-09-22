@@ -725,10 +725,16 @@ def check_energy_quantum(device: str = "cpu") -> dict:
     }
 
 
-def check_local_continuity(size: int = 64, device: str = "cpu") -> dict:
-    from mt_ca.conservation import local_conservation_report
+def check_a3_global_norm(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.conservation import a3_global_norm_report
 
-    return local_conservation_report(size, device=device)
+    return a3_global_norm_report(size, device=device)
+
+
+def check_t_madelung_continuity(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.conservation import t_madelung_continuity_report
+
+    return t_madelung_continuity_report(size, device=device)
 
 
 def check_so2_c4(size: int = 64, device: str = "cpu") -> dict:
@@ -1078,7 +1084,8 @@ def run_all(device: str) -> list[dict]:
         check_quarter_quantum(device=device),
         check_energy_quantum(device=device),
         check_elementary_quanta(device=device),
-        check_local_continuity(device=device),
+        check_a3_global_norm(device=device),
+        check_t_madelung_continuity(device=device),
         check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),
         check_u1_vac(device=device),
@@ -1116,7 +1123,7 @@ def main() -> int:
             status = "PASS" if row["ok"] else "FAIL"
             print(f"{row['id']:12}  {status}  { {k: v for k, v in row.items() if k not in ('id', 'ok')} }")
 
-    failed = [r for r in results if not r["ok"] and r["id"] not in ("A3_diffusive", "T_dft_oracle", "I2_zero")]
+    failed = [r for r in results if not r["ok"] and r["id"] not in ("A3_diffusive", "T_dft_oracle", "I2_zero", "T_MadelungContinuity")]
     return 1 if failed else 0
 
 

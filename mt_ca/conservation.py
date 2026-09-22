@@ -1,4 +1,4 @@
-"""M-layer local conservation probes — §5.2.1 on the one canonical g (projected leapfrog)."""
+"""Conservation probes: M = A3 global norm + discrete ledgers; smooth Madelung = T."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ def rotate_c4(z: torch.Tensor) -> torch.Tensor:
 
 
 def madelung_div_j(z: torch.Tensor) -> torch.Tensor:
-    """Discrete Madelung flux divergence on the first spinor component (2D readout)."""
+    """Discrete Madelung flux divergence on the first spinor component (2D T-readout)."""
     u = spinor_scalar(z)
     jx = (u.conj() * torch.roll(u, -1, 1)).imag
     jy = (u.conj() * torch.roll(u, -1, 0)).imag
@@ -54,7 +54,7 @@ def projected_madelung_residual(
     *,
     device: str = "cpu",
 ) -> float:
-    """One-tick |Δρ + div j| / max ρ on canonical g (Madelung probe; leapfrog is 2nd order)."""
+    """One-tick |Δρ + div j| / max ρ — T Madelung probe (not an M hard law)."""
     cfg = MConfig.for_stencil("hex", heisenberg_floor=True)
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device), impulse_amplitude=0.12)
     f0 = canonical_fixed(z, cfg)
@@ -84,25 +84,48 @@ def so2_c4_equivariance_fixed_error(
     return int((f_next_rot - f_next_via_rot).abs().max().item())
 
 
+def a3_global_norm_report(
+    size: int = 64,
+    *,
+    device: str = "cpu",
+) -> dict:
+    """M-layer A3: global Σ|z|² on the one projected g (vacuum + impulse)."""
+    vac_drift = projected_global_drift(SeedClass.VACUUM, size, steps=32, device=device)
+    impulse_drift = projected_global_drift(SeedClass.IMPULSE, size, steps=32, device=device)
+    ok = vac_drift < 1e-6 and impulse_drift < 1e-3
+    return {
+        "id": "A3_global_norm",
+        "layer": "M",
+        "vacuum_global_drift_32": vac_drift,
+        "impulse_global_drift_32": impulse_drift,
+        "ok": ok,
+        "note": "A3 = global Σ|z|²; smooth continuity is T (§4.3 · §5.2)",
+    }
+
+
+def t_madelung_continuity_report(
+    size: int = 64,
+    *,
+    device: str = "cpu",
+) -> dict:
+    """T-layer Madelung residual — emergent readout, never an M hard fail."""
+    madelung = projected_madelung_residual(size, device=device)
+    return {
+        "id": "T_MadelungContinuity",
+        "layer": "T",
+        "madelung_one_tick_rel": madelung,
+        "ok": True,
+        "note": "Planck world is discrete; Δρ+div j is T probe (§4.3), not M law",
+    }
+
+
 def local_conservation_report(
     size: int = 64,
     *,
     device: str = "cpu",
 ) -> dict:
-    """§5.2.1 on the one automaton — projected leapfrog, not bond-sweep probes."""
-    vac_drift = projected_global_drift(SeedClass.VACUUM, size, steps=32, device=device)
-    impulse_drift = projected_global_drift(SeedClass.IMPULSE, size, steps=32, device=device)
-    madelung = projected_madelung_residual(size, device=device)
-    # Global A3 on vacuum/impulse must hold; Madelung one-tick residual is reported (2nd-order hinge).
-    ok = vac_drift < 1e-6 and impulse_drift < 1e-3
-    return {
-        "id": "LocalContinuity",
-        "vacuum_global_drift_32": vac_drift,
-        "impulse_global_drift_32": impulse_drift,
-        "madelung_one_tick_rel": madelung,
-        "ok": ok,
-        "note": "§5.2.1 on projected g; Madelung one-tick residual is readout (leapfrog 2nd order)",
-    }
+    """Compat shim: M global norm only (smooth Madelung moved to t_madelung_continuity_report)."""
+    return a3_global_norm_report(size, device=device)
 
 
 def so2_c4_report(
