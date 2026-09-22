@@ -631,16 +631,24 @@ class SIConstants:
         }
 
     def einstein_strain_row(self) -> dict[str, float]:
-        """§8.4.2-D — G_μν from Regge deficit of strain; 8π ℓ_P² from Newton."""
+        """§8.4.2-D/C′ — G_μν from Regge deficit; strain from ρ-edges + Δφ."""
         g_model = 1.0  # G/ℓ_P² in MODEL units
         eight_pi_g = 8.0 * math.pi * g_model
+        n12 = 12.0
         return {
             "G_over_l_P2": g_model,
             "field_eq_coeff_8pi_G": eight_pi_g,
             "flat_deficit": 0.0,  # strain=0 ⇒ δ=0
             "girth_plaquette": 3.0,  # FCC triangle = d
             "d_spatial": 3.0,
-            "note": "§8.4.2-D: G_μν=ℰ(δ[strain])=8π ℓ_P² T_μν; stencil soft",
+            "N12_FCC": n12,
+            "strain_edge_from": 1.0,  # ε_e = (ρ_e-ρ_vac)/ρ_vac
+            "h0i_from_dphi": 1.0,  # h_0i ← Δφ_e ê_i
+            "hij_from_eps": 1.0,  # h_ij ← ε_e ê_i ê_j
+            "note": (
+                "§8.4.2-C′: ε_e[δρ]→ℓ_e→θ_f→δ_e; "
+                "h_0i[Δφ_e]; h_ij[ε_e]; not ε∝Δφ; stencil soft"
+            ),
         }
 
     def ckm_row(self) -> dict[str, float]:
