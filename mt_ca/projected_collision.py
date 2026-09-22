@@ -100,10 +100,16 @@ def rot_kick_uv(
     *,
     phase_bits: int,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """δU, δV from LUT rotation by Φ (mod 2^phase_bits)."""
+    """δU, δV from LUT rotation by Φ (mod 2^phase_bits).
+
+    Φ ticks live on N_ring = 2^phase_bits; finer Rot_LUT subsamples that circle.
+    """
     cu, sv = trig_lut(u.device)
-    shift = max(0, phase_bits - LUT_BITS)
-    idx = (phi.to(torch.int64) >> shift) % LUT_SIZE
+    phi_i = phi.to(torch.int64)
+    if phase_bits >= LUT_BITS:
+        idx = (phi_i >> (phase_bits - LUT_BITS)) % LUT_SIZE
+    else:
+        idx = (phi_i << (LUT_BITS - phase_bits)) % LUT_SIZE
     cos_v = cu[idx]
     sin_v = sv[idx]
     ur = (u * cos_v - v * sin_v) >> TRIG_SHIFT
