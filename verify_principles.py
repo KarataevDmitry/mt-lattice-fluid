@@ -801,6 +801,35 @@ def check_proton_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_electron_mass(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import HV, SI
+
+    del device
+    row = SI.electron_mass_row()
+    n_phi = float(HV.N_phi)
+    a2 = row["alpha_fs"] ** 2
+    ok = (
+        row["N_phi"] == n_phi
+        and n_phi == 13.0
+        and abs(row["m_e_bare_GeV"] - a2 * row["m_H_bare_GeV"] / n_phi) < 1e-18
+        and abs(row["m_e_GeV"] - a2 * row["m_H_GeV"] / n_phi) < 1e-18
+        and row["m_e_bare_rel_err"] < 0.02
+        and row["m_e_rel_err"] < 0.005
+    )
+    return {
+        "id": "Electron_mass",
+        "m_e_bare_GeV": row["m_e_bare_GeV"],
+        "m_e_GeV": row["m_e_GeV"],
+        "m_H_GeV": row["m_H_GeV"],
+        "N_phi": row["N_phi"],
+        "f_geom": row["f_geom"],
+        "m_e_bare_rel_err": row["m_e_bare_rel_err"],
+        "m_e_rel_err": row["m_e_rel_err"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_arg_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import M_HIGGS_GEV, SI, arg_quantum_row
 
@@ -1140,6 +1169,7 @@ def run_all(device: str) -> list[dict]:
         check_arg_quantum(device=device),
         check_higgs_mass(device=device),
         check_proton_mass(device=device),
+        check_electron_mass(device=device),
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),
         check_energy_quantum(device=device),

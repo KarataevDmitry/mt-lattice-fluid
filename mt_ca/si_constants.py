@@ -72,6 +72,9 @@ M_HIGGS_GEV = M_HIGGS_GEV_PDG
 # Proton mass — PDG reference for rel_err only; prediction = α_fs·v/2·(1+κ²/N₁₂) (§8.2)
 M_PROTON_GEV_PDG = 0.93827208816
 
+# Electron mass — PDG reference for rel_err only; prediction = α_fs²·m_H/N_φ (§8.2)
+M_ELECTRON_GEV_PDG = 0.00051099895
+
 
 
 
@@ -717,6 +720,32 @@ class SIConstants:
             "note": "§8.2: bare α·v/2; pack 1+κ²/N₁₂ (inscribed sphere)",
         }
 
+    def electron_mass_row(self) -> dict[str, float]:
+        """§8.2 — bare α²·(v/2)/N_φ; stack α²·m_H/N_φ, N_φ=⌈4π⌉."""
+        higgs = self.higgs_mass_row()
+        m_h_bare = float(higgs["m_H_bare_GeV"])
+        m_h = float(higgs["m_H_GeV"])
+        n_phi = float(HV.N_phi)
+        a2 = self.alpha_fs * self.alpha_fs
+        m_e0 = a2 * m_h_bare / n_phi
+        m_e = a2 * m_h / n_phi
+        e_p_gev = self.m_P * (C * C) / EV_J / 1e9  # E_P [GeV]
+        f_geom = m_h / (e_p_gev * n_phi)
+        return {
+            "v_GeV": float(higgs["v_GeV"]),
+            "m_H_bare_GeV": m_h_bare,
+            "m_H_GeV": m_h,
+            "alpha_fs": self.alpha_fs,
+            "N_phi": n_phi,
+            "m_e_bare_GeV": m_e0,
+            "m_e_GeV": m_e,
+            "m_e_PDG_GeV": M_ELECTRON_GEV_PDG,
+            "m_e_bare_rel_err": abs(m_e0 - M_ELECTRON_GEV_PDG) / M_ELECTRON_GEV_PDG,
+            "m_e_rel_err": abs(m_e - M_ELECTRON_GEV_PDG) / M_ELECTRON_GEV_PDG,
+            "f_geom": f_geom,
+            "note": "§8.2: bare α²·(v/2)/N_φ; stack α²·m_H/N_φ (same empty-cell as Higgs)",
+        }
+
     def saturation_bc_row(self) -> dict[str, float]:
         """§8.4.2-C′′′ — D_★ BC; near h_★[ε]; far h_00=2(m/m_P)ℓ_P/R."""
         from mt_ca.fixed_point import vacuum_amplitude_quantum
@@ -1208,7 +1237,7 @@ def system_quanta(
 
 def lepton_geometry_factor(m_e: float | None = None) -> float:
 
-    """f_геометрия(e): m_e = m_P · α_fs² · f (§8.2, §1.3)."""
+    """Legacy CODATA invert of m_e = m_P·α²·f. Prefer SI.electron_mass_row (§8.2)."""
 
     m_e = m_e if m_e is not None else SI.m_e_CODATA
 
