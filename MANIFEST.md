@@ -151,10 +151,11 @@ R_⊥ = (c₀ t) / 2   ⇒   c = k c₀ ,  k = 1/2
 
 | § манифеста | Файл / § |
 |-------------|----------|
-| 1–3 | `MODEL.md` §0–§2 (основания + аксиомы; genesis → `DEVLOG.md` §7) |
-| 4 | `MODEL.md` §3 · `mt_ca/update.py` |
-| 5 | `MODEL.md` §7 · `config.py` (SI anchors) |
-| 6 | `MODEL.md` §4–§5 · §5.1 fluid |
+| 1–3 | `model/00`–`02` (основания + аксиомы; genesis → `DEVLOG.md` §7) |
+| 4 | `model/03-evolution.md` · `mt_ca/update.py` |
+| 5 | `model/06-si-sm.md` §7 · `config.py` (SI anchors) |
+| 6 | `model/04`–`05` · fluid §5.1 |
 | 7 | `validate_mt.py` · `run_benchmark.py` |
-| 8 | `MODEL.md` §1.1 |
-| 9 | `MODEL.md` §9 — циклы, бесконечность, генезис T, наблюдатель (meta) |
+| 8 | `model/01-carrier.md` §1.1 |
+| 9 | `META.md` — циклы, бесконечность, генезис T, наблюдатель |
+

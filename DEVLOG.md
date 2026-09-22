@@ -2,7 +2,7 @@
 
 **Не SSOT физики.** Provenance сессий, impl status, open leaves, verify snapshots, backlog.
 
-Канон формул: [`MODEL.md`](MODEL.md) · meta: [`META.md`](META.md) · протокол: [`BUILD.md`](BUILD.md)
+Канон формул: [`MODEL.md`](MODEL.md) hub + [`model/`](model/) · meta: [`META.md`](META.md) · протокол: [`BUILD.md`](BUILD.md)
 
 ---
 
@@ -10,12 +10,13 @@
 
 | | **MODEL** | **DEVLOG** | **META** | **BUILD** |
 |---|-----------|------------|----------|-----------|
-| Роль | SSOT физики `g` | impl/verify/open | UI/космология | протокол сборки |
+| Роль | SSOT физики `g` — hub + `model/00`…`06` | impl/verify/open | UI/космология | протокол сборки |
 | Спор «что делает g?» | MODEL | — | — | — |
 | «догнали ли код?» | — | **DEVLOG** | — | BUILD |
 | «что видит мозг?» | — | — | META | — |
 
 **Правило:** provenance, ✅/⚠️, open leaves, GPU DoD, даты сессий — **только DEVLOG**. MODEL не датирует разработку.
+
 
 ---
 
@@ -243,3 +244,147 @@ python scripts/run_symmetry_probe.py
 ```
 
 **Последний полный M-verify (2026-09-22):** см. колонку **verify** в **§1**.
+---
+## §8. Вынесено из MODEL (split hub)
+
+**Не SSOT.** При разбиении монолита MODEL → hub + `model/` сюда ушли сессионные/инженерные куски.
+
+### Ночной канон (снимок, был в MODEL)
+
+### Ночной канон M (2026-09-22) — принято
+
+| # | Тезис | § |
+|---|--------|---|
+| 1 | Изотропное **`g`**, **`ζ=(Σz)·z*`**, phase wrap | §3.4 |
+| 2 | Лучи/sweeps → micro-aniso; default isotropic | §3.6 |
+| 3 | Smear → Гейзенберг Δφ≥½ + K_P триггер → anti-smear | §3.7 |
+| 4 | Слабые волны на каноне носителя; тяжёлый vortex → dogfood на гекс-срезе **если** тест | §3.8 · §1.6 |
+| 5 | **ДА:** голоморфная среда, **`g`** = удержание аналитичности | §3.9 |
+| 6 | Полюс **`hV`**, вычет **`2πn`**, заряд | §3.9 |
+| 7 | CR-единственность → **единое поле Λ**, запутанность **на том же Δt** | §3.9 |
+| 8 | GPU: **`DX, DT, K_P, ALPHA*`** | §10.4 |
+| 9 | 4 топокласса seeds | §9.7 |
+| 10 | **SU(2) спинор** `z∈ℂ²`, **720°** → identity; **Паули** + **`K_P` отталкивание** | §3.10 |
+| 11 | **system_quanta:** **`Δx, Δt`, `N_frame`, `I_max`**; мозг/UI → META §2 | §4.8 · META §2 |
+| 12 | **Любая система:** из **`M, τ, R`** → **`N_frame`**, fractal **`m_P/M`** | §4.8 |
+| 13 | **Газ:** macro-облако **`hV`**; **`PV=nRT`**; **`v_s ≪ c`**; **VdW `a,b` из `K_P,l_P`** | §5.3 |
+| 14 | **Плотность M бинарна:** **`ρ ∈ {0, ρ_P}`**; macro **`1000 kg/m³`** = T-иллюзия binomial readout | §5.0 |
+| 15 | **Масса M:** **`Arg(⟨z⟩/z)`**-зигзаг + **`K_P`**; **Higgs = T-пена**, не первопричина | §5.0.1 · §8.3 |
+| 16 | **Arg-квант:** **`s₀=ℏ/2`**, **`E₀=E_P/√2`**, **`m_arg=m_P/√2`**, **`v_arg=c₀`** | §5.0.2 |
+| 17 | **Дуализм = T-иллюзия:** M — чистая жидкость; «частица» = солитон; Young = CR-схлоп | §4.9 |
+| 18 | **Антиматерия = `n→−n`:** зеркало фазового вихря; annihilation = `n++n−→0` → 2γ | §5.0.3 · §9.2 |
+| 19 | **`U(1)_vac` + хиральная упаковка:** global phase на `z`; **`defect_axis` fallback = local Bloch**, не `(0,0,1)`; **`P_L/P_R`** + независимый STREAM | §3.11 |
+| 20 | **P / C / T legs (T-layer probes):** mirror, `z*`, chirality boost — **не** M `g⁻¹` | §3.11.3 · A14 |
+| 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
+| 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
+| 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; **`div j=0`** на **ε канона** (FCC N₁₂ / гекс-срез); **`L_z ∈ L₀·ℤ`** | §5.2.1 · §1.6 |
+| 24 | **`κ_link = 1/|N|`:** FCC **`1/12`** (канон 3+1); гекс-срез **`1/6`**; **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 · §1.6 |
+| 25 | **Gate M = `ω^Φ`:** **`exp(i·Θ·σ/2)`** — T-нотация; tick = **`R(Φ)`** / Rot_LUT на **`Z_N[i]`**, не matrix exp | §3.10.3 · §3.12.5 |
+| 26 | **Theorem 2.3:** ¬M heat death, ¬shutdown — Lemmas 2.3.1–2.3.8 | §2.3 |
+
+### Seeds · GPU · code slice (бывшие §9.7 · §10 · §11)
+
+### 9.7 Поиск зародышей: **не brute force**, ~**10–20** прогонов
+
+**Raw brute force** отсечён **до старта:** A9 (CR) + A4 (U(1)) → случайные поля = мусор на 1-м тике.
+
+**Три сжатия:** (1) моды Δ₄ / **(k, φ)** · 	_analysis.py · (2) только winding **n ∈ ℤ** · (3) inverse coarse-grain из T (опция).
+
+**4 топокласса на N₄:**
+
+| n | физика | SeedClass | test |
+|---|--------|-------------|------|
+| 0 | безмассовая garmonika | PLANE_WAVE | T1 |
+| +1 | pra-vortex 
+_p | VORTEX_P | T2, A11 |
+| −1 | antivortex | VORTEX_M | T2 collision · §5.0.3 |
+| +2 | двойной узел | VORTEX_N2 | persistence |
+
+**2 параметра на класс:** r = 1…5 ячеек; импульс/φ₀ → **~10–20 runs**. seeds.py · 
+alidate_mt.py.
+
+**ε = N₄** (Moore снят). Не наш BB; да — stable macro + **
+_геометрия(n,N₄)**.
+
+---
+
+## §10. GPU / численная реализация (инженерный контракт)
+
+Физика §0–§8 замкнута; ниже — **три предохранителя**, без которых GPU-код падает или «молчит».
+
+### 10.1 Границы: тор (periodic BC)
+
+Конечная сетка `N×N` (MVP 2D). На краях **`g` не обрывается** — **periodic wrap**:
+
+```
+x+N ≡ x ,   y+N ≡ y
+N₄ на краю сшивает правый↔левый, верхний↔нижний
+```
+
+**Код:** `laplacian.von_neumann_laplacian` — `torch.roll`; `linear_step_local_ca` — wrap в bond-sweeps.  
+**Зачем:** глобальная норма без стенки-поглощателя; унитарность на торе.
+
+### 10.2 Инициализация: «первичный бульон», не `z≡0` · Планковский пол
+
+При **`z=0`** gate даёт **`φ = 2π/(4π)`**, но **`z·exp(iΦ)=0`** — deadlock; кипение не стартует (A5).
+
+**Планковский пол (§0.5 · §3.12.6) — не knob, некуда устремлять:**
+
+```
+B_amp = ⌈log₂(N_ring / N_φ)⌉ = frac_bits = 6
+z_min = 2^{−B_amp} = 1/64          — smallest |z| on Q(frac_bits) lattice
+vacuum_amplitude = z_min             — MConfig default (derived)
+|z(x)| ≥ z_min  after encode        — enforce_planck_cell_floor; A5
+```
+
+**t=0:** комплексный фазовый шум **`~ z_min`**, не **`1e-6`**, не **`→0`**:
+
+```
+SeedClass.VACUUM → N(0, z_min) + i·N(0, z_min)   per spinor lane
+```
+
+**Encode (M-canonical):** **`gauge_fix=False`** — per-cell U(1) **убивает** **`ζ_imag`**; global gauge — только T/reporting (**`gauge_fix_u1_global`**), не tick path.
+
+**Код:** `fixed_point.vacuum_amplitude_quantum` · `seeds.make_seed(VACUUM)` · `simulator.reset()` · `encode_spinor(gauge_fix=False)`.
+
+### 10.3 Алгебра шага: `exp(iφ)` / `ω^Φ`, не Euler `z += iφz`
+
+Нелинейность **только** модуль-сохраняющий доворот (A3, A4). Linear — product локальных 2×2 unitaries, не raw add.
+
+**Canonical M (§3.12.5):** **`R(Φ)=ω^Φ`** на **`Z_N[i]`** — дискретный аналог **`exp(iφ)`**; float **`exp`** только decode/probe.
+
+```
+z* = local_ca(z; γ)
+z' = z* · exp(i·φ)          ← T-нотация; на M: R(Φ_disc) via Rot_LUT
+φ  = 2π · (α*/(|z*|²+ε)−1) · w(ρ)
+```
+
+**Код:** `update.micro_step` · `linear_step_local_ca`.  
+**Float drift:** bond-unitaries + `exp(iφ)`; контроль — `verify_principles` A3 (`norm_drift < 1e-4`).
+
+### 10.4 GPU literals (SI anchor · `si_constants.as_code_dict()`)
+
+В natural sim **`ε=1`**, `|z|²↔ρ_E/u_P`; ниже — **размерный якорь** для отчётов / будущих SI-kernels:
+
+```
+DX            = 1.616255e-35   # l_P  [m]
+DT            = 3.812187e-44   # hT = t_P/√2  [s]  (не textbook t_P)
+K_P           = 4.632947e+113 # bulk modulus [Pa = J/m³]
+ALPHA_FACTOR  = 1.07957747     # α* = 1 + 1/(4π)
+```
+
+**Код:** `python -c "from mt_ca.si_constants import as_code_dict; print(as_code_dict())"`.  
+Расхождение с округлёнными paste (~`KP 4.622584e+113`, `DT 3.811984e-44`) — **CODATA/округление**, не другая физика.
+
+**4 топокласса §9.7:** `VACUUM`, `PLANE_WAVE`, `VORTEX_P/M/N2` · `seeds.py` · 4070 MVP 512² — секунды на прогон.
+
+---
+
+## §11. Код (M-only slice)
+
+`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — GPU-контракт.
+
+
+### Layout MODEL после split
+
+`MODEL.md` = hub. Физика: `model/00`…`06`. Правило: не возвращать Impl/MVP/даты в hub или `model/`.
