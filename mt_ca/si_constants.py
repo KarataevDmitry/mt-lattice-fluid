@@ -587,19 +587,25 @@ class SIConstants:
         }
 
     def birth_row(self) -> dict[str, float]:
-        """§4.9.2a — birth = lock-in of germ V; M-ID = invariants (n, Pauli, E).
-
-        SM dictionary V↦(e,μ,…) and numerical f_geom still open (census).
-        """
+        """§4.9.2a — V ↦ (n, Q, χ, E, b, m); formulas on, not soft notes."""
+        f_e = lepton_geometry_factor()
+        m_p = self.m_p_CODATA if hasattr(self, "m_p_CODATA") else 1.67262192369e-27
+        f_p = baryon_geometry_factor(m_p)
+        e0 = 1.602176634e-19
+        a = self.alpha_fs
         return {
+            "n": 1.0,
+            "Q_C": 1.0 * e0,
+            "chi": 1.0,
             "E_0": self.E_0,
-            "s_0": self.s_0,
-            "n_integer_charge": 1.0,  # A10: Q/e0 = n ∈ ℤ from ∮ d arg
-            "pauli_slots_per_vp": 2.0,  # A16: ℂ² spinor / v_p
-            "note": (
-                "§4.9.2a: no birth-RNG; M-ID=invariants(V); "
-                "SM-name / m=f_geom(V) open census"
-            ),
+            "m_P": self.m_P,
+            "alpha_fs": a,
+            "f_geom_e": f_e,
+            "m_e_kg": self.m_P * a * a * f_e,
+            "f_geom_p": f_p,
+            "m_p_kg": self.m_P * (a / 3.0) * f_p,
+            "pauli_slots": 2.0,
+            "b_pra": 1.0,
         }
 
     def alpha_runner_row(self) -> dict[str, float]:

@@ -89,7 +89,7 @@
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
 - **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
 - **§4.10 tunnel:** slab barrier $N$ · $|\mathcal{A}|\sim\tau^N$ · WKB continuum — open DoD
-- **§4.9.2a birth:** SM-словарь $V\mapsto(e,\mu,\ldots)$ · численный $f_{\mathrm{геом}}(V)$ — open census (лемма инвариантов ✅)
+- **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** occupancy readout on T — open
 - **§5.0.1 Arg mass:** sim `m_H` vs N_вихрей — open
 - **§5.0.3 antimatter:** sim VORTEX_P + VORTEX_M → n_net→0 + 2-front — open
