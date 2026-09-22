@@ -76,7 +76,7 @@
 ## §3. Open leaves (индекс)
 
 - **§3.9 DA:** long-run exact `n` conservation on contour (T-readout шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
-- **§3.10 SU(2):** full SM electron-from-`hV` sim (anchor `m_e` via `electron_v_p_anchor` ✅ algebra only)
+- **§3.10 SU(2):** full SM electron-from-`hV` sim (algebra `m_e=α²·m_H/N_φ` ✅ · `Electron_mass`; sim census still open)
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
@@ -204,7 +204,7 @@
 
 ### §8 SM / Higgs
 
-- ✅ онтология M→T · **v / α_s / Weinberg / α(MZ) / m_W,m_Z / G_μν / CKM λ=3/13** ✅ · **`m_H=v/2`** ✅ (~123 GeV) · width open · не refute LHC — переинтерпретация слоя
+- ✅ онтология M→T · **v / α_s / Weinberg / α(MZ) / m_W,m_Z / G_μν / CKM λ=3/13** ✅ · **`m_H=v/2`** ✅ (~123 GeV; stack ~125.31) · **`m_p`** α·v/2·(1+κ²/N₁₂) ✅ · **`m_e`** α²·m_H/N_φ ✅ · width / μ,τ / m_n−m_p open · не refute LHC — переинтерпретация слоя
 
 ---
 
@@ -256,6 +256,7 @@
 | 2026-09-23 | §8.3.1 fix | снята фальш soft-wall «поля занятости»; `b`=бит, объём=`z` |
 | 2026-09-23 | §8.2 m_p | bare `m_p=α_fs·v/2≈0.8979 GeV` (−4.3% PDG) · тот же контур что `m_H=v/2` · edge `1+1/24` кандидат |
 | 2026-09-23 | §8.2 m_p pack | stack `1+κ²/N₁₂` (`κ=1/√2`, `N₁₂=12`) → m_p≈0.9353 GeV (0.32%); inscribed sphere, not soft |E| |
+| 2026-09-23 | §8.2 m_e | bare `α²·(v/2)/N_φ`≈0.504 MeV (1.37%); stack `α²·m_H/N_φ`≈0.513 MeV (0.45%); `N_φ=⌈4π⌉=13`; `f_геом` = следствие |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
