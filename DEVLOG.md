@@ -224,6 +224,7 @@
 | 2026-09-22 | §8.4.2-G | Diff hinge: фиксированная решётка ≠ Diff · DoD = 2 моды + PPN γ→1 · anti-BD |
 | 2026-09-22 | §8.4.2-G lemma | ответ: $g$=strain readout, не free $h$ · Diff не axiom на FCC · verify = спектр IR |
 | 2026-09-22 | §8.4.2-C′ | strain: $\varepsilon_e[\delta\rho]\to\ell_e\to\theta_f$; $h_{0i}[\Delta\varphi_e]$; не $\varepsilon\propto\Delta\varphi$ |
+| 2026-09-22 | §8.4.2-C′′ | физсмысл: $h_{00,ij}\leftarrow\varepsilon$ (strain≠Коши); $h_{0i}\leftarrow$ Madelung; Regge пассивен |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
