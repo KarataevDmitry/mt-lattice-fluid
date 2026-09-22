@@ -652,6 +652,26 @@ class SIConstants:
             "note": "§8.4.3-E: tree with α(MZ) from B_hV runner + bare 3/13",
         }
 
+    def leapfrog_eps_row(self) -> dict[str, float]:
+        """§3.12.5a — ε in Φ-kick; ℓ_e bound; m_loc ≤ m_P."""
+        from mt_ca.fixed_point import vacuum_amplitude_quantum
+
+        rho_star = 1.0  # A7: |Z|² ≤ 1 ↔ ρ_E ≤ u_P
+        vac_amp = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
+        rho_vac = vac_amp * vac_amp  # A5 numerical floor → ρ_vac
+        eps_star = (rho_star - rho_vac) / rho_vac
+        return {
+            "rho_star": rho_star,
+            "rho_vac": rho_vac,
+            "eps_star": eps_star,
+            "ell_e_over_ell_P_max": 1.0 + eps_star,
+            "m_loc_max_kg": self.m_P,
+            "m_loc_max_over_m_P": 1.0,
+            "d_tau_dt_formula_inv_1plus_eps": 1.0,
+            "K_P": self.K_P,
+            "l_P": self.l_P,
+        }
+
     def einstein_strain_row(self) -> dict[str, float]:
         """§8.4.2-D/C′ — G_μν from Regge deficit; strain from ρ-edges + Δφ."""
         g_model = 1.0  # G/ℓ_P² in MODEL units

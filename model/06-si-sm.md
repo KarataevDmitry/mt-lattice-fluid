@@ -882,7 +882,7 @@ $$
 
 $h_{ij}$ собирается как $\sum\varepsilon_e\,\hat{e}_i\hat{e}_j$ — **дискретный тензор деформации** (strain) среды. Не путать с тензором напряжений Коши: stress $=K_P\cdot\varepsilon$ (ответ среды, A7/gate); в метрический readout входит именно $\varepsilon$.
 
-$h_{00}\leftarrow-\varepsilon_e$ — ньютоновский канал: выше плотность дефектов → для macro-наблюдателя замедление временного шага считывания ($h_{00}\approx-2\Phi$).
+$h_{00}\leftarrow-\varepsilon_e$ — ньютоновский канал: выше плотность дефектов → для macro-наблюдателя замедление временного шага считывания ($h_{00}\approx-2\Phi$). На M та же $\varepsilon$ входит в leapfrog-kick: $\Phi[\varepsilon]$ · $Z^{+}=2Z+\lfloor\mathcal{N}[\varepsilon]\rfloor-Z^{-}$ (§3.12.5a).
 
 **2 · $h_{0i}$ — гравидинамика / увлечение**
 

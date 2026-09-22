@@ -544,6 +544,101 @@ R(\Phi) = \omega^{\Phi}\ \text{on each }(U,V)\ \text{lane via Rot\_LUT}
 Z(x,t+\Delta t) + Z(x,t-\Delta t) = 2Z(x,t) + \lfloor \mathcal{N} \rfloor \pmod N
 \]
 
+#### 3.12.5a $\varepsilon$-задержка в leapfrog и предел массы ячейки
+
+Связь с strain §8.4.2-C′ (те же $\rho$, без второго knob).
+
+**1 · $\varepsilon$ на ячейке / ребре**
+
+$$
+\rho(x)=|Z(x)|^2,
+\qquad
+\varepsilon_x=\frac{\rho(x)-\rho_{\mathrm{vac}}}{\rho_{\mathrm{vac}}},
+\qquad
+\rho_e=\tfrac12\bigl(\rho(x)+\rho(y)\bigr),
+\qquad
+\varepsilon_e=\frac{\rho_e-\rho_{\mathrm{vac}}}{\rho_{\mathrm{vac}}}.
+$$
+
+$$
+\ell_e=\ell_P\,(1+\varepsilon_e),
+\qquad
+\ell_P=\mathrm{const}\ \text{(не резиновый)}.
+$$
+
+**2 · Информационная задержка → kick**
+
+Macro-время (согласовано с $h_{00}\sim-\varepsilon$, §8.4.2-C′′):
+
+$$
+\frac{\mathrm{d}\tau}{\mathrm{d}t}\Big|_{x}
+=
+(1+\varepsilon_x)^{-1}.
+$$
+
+На M комбинаторный тик всё ещё $hT$; задержка входит **в затвор**, не в длину ребра графа. Тождество плотности:
+
+$$
+|Z|^2=\rho_{\mathrm{vac}}(1+\varepsilon_x).
+$$
+
+Подстановка в saturating kick (§3.12.5):
+
+$$
+\Phi[\varepsilon]
+=
+\left\lfloor
+\frac{K_P\,\zeta_{\mathrm{imag}}}
+{\zeta_{\mathrm{real}}+\rho_{\mathrm{vac}}(1+\varepsilon_x)+K_P}
+\right\rfloor
+\in\mathbb{Z}_N.
+$$
+
+$$\lfloor\mathcal{N}[\varepsilon]\rfloor=R\bigl(\Phi[\varepsilon]\bigr)-Z.$$
+
+**3 · Следующий спинор**
+
+$$
+Z^{+}
+=
+2Z
++
+\lfloor\mathcal{N}[\varepsilon]\rfloor
+-
+Z^{-}
+\pmod{N}.
+$$
+
+$Z^{-}$ — регистр задержки на один тик (A13); $\varepsilon$ модулирует только $\lfloor\mathcal{N}\rfloor$. При $\varepsilon\uparrow$ знаменатель $\uparrow$ $\Rightarrow$ $\Phi\downarrow$ $\Rightarrow$ пинок слабеет (насыщение).
+
+**4 · $\ell_e$ и планковский предел массы дефекта**
+
+A7: $\rho\le\rho_\star$ (natural $\rho_\star=1\Leftrightarrow\rho_E\le u_P=K_P$). Тогда
+
+$$
+\varepsilon\le\varepsilon_\star
+=
+\frac{\rho_\star-\rho_{\mathrm{vac}}}{\rho_{\mathrm{vac}}}
+\quad\Rightarrow\quad
+\ell_e\le\ell_P\,(1+\varepsilon_\star).
+$$
+
+Объём ячейки несжимаем ($v_p=\ell_P^{3}$), значит локальная масса дефекта:
+
+$$
+m_{\mathrm{loc}}
+\le
+\rho_P\,v_p
+=
+m_P,
+\qquad
+\rho_P=\frac{m_P}{\ell_P^{3}}=\mu_P.
+$$
+
+Pra-occupancy (§5.0): $b\in\{0,1\}\Rightarrow m_{\mathrm{cell}}=b\,m_P\le m_P$. При $\rho\to\rho_\star$ — $\Phi[\varepsilon]\to$ насыщению, дальше масса в одном $v_p$ не растёт.
+
+Код: `SI.leapfrog_eps_row()` · kick: `saturating_phi_kick` (`|Z|²≡ρ_vac(1+ε)`).
+
 #### 3.12.6 Bit budget of `hV` — вывод из Planck (дна ниже нет)
 
 **Элементарный кирпич** — одна ячейка **`hV = l_P³`**. Её информационная ёмкость **не knob** и **не ширина CUDA-регистра**:
