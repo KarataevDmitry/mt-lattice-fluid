@@ -66,7 +66,7 @@
 | 17 | **Дуализм = T-иллюзия:** M — чистая жидкость; «частица» = солитон; Young = CR-схлоп | §4.9 |
 | 18 | **Антиматерия = `n→−n`:** зеркало фазового вихря; annihilation = `n++n−→0` → 2γ | §5.0.3 · §9.2 |
 | 19 | **`U(1)_vac` + хиральная упаковка:** global phase на `z`; **`defect_axis` fallback = local Bloch**, не `(0,0,1)`; **`P_L/P_R`** + независимый STREAM | §3.11 |
-| 20 | **Полное CPT = P·C·T:** T = SU(2) chirality flip; **`g⁻¹≈ΘgΘ`** → отмотка к impulse-биту | §3.11.3 · A14 |
+| 20 | **P / C / T legs (T-layer probes):** mirror, `z*`, chirality boost — **не** M `g⁻¹` | §3.11.3 · A14 |
 | 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
 | 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; **`div j=0`** на **`N₄`**; **`L_z ∈ L₀·ℤ`** | §5.2.1 |
@@ -293,7 +293,7 @@ v_T ≈ (c₀ / c_T) · c_T  = √2 · c_T        (относительно macr
 | A11 | **Устойчивость солитона / anti-smear** | размазанное **не голоморфно**; **`K_P`+`Δφ` затвор** → самофокусировка | ✅ **§3.7–§3.9** · A11 PASS · T-readout binomial |
 | A12 | **Изотропия / Lorentz (T)** | micro: **isotropic streaming** (§3.6); macro-круг — **(1-2-1)** readout + **`κ=1/√2`** | ✅ T1 PASS (512² CUDA) |
 | A13 | **Обратимость шага (микро)** | **2-й порядок** **`z⁺=−z⁻+2z+⌊𝒩⌋`** на **ℤ** (§3.12); **`g⁻¹`** = algebra / swap | ✅ **§3.12** · **`Leapfrog`** bit-exact |
-| A14 | **CPT / P / T** | **`Θ=P·C·T`**, **`g⁻¹≈ΘgΘ`**, impulse bit unwind | ⚠️ **§3.11.3** · **`CPT_unwind`** ✅ · long **`g·P`** open |
+| A14 | **P / C / T / U(1)_vac** | discrete symmetry probes on `g`; long **`g·P`** open | ✅ **`U1_vac`** · **`Chiral_SU2`** · P/C seeds · ⚠️ long **`g·P`** |
 | A15 | **Принцип наименьшего действия** | **`κ=1/√2`**, **`γ=κ_link=1/4`**, **`α*=1+1/(4π)`** из геометрии N₄ + gate (§5.2.2, §7.1) | ✅ **`κ_link`** · **`α*`** · ⚠️ **`sync_strength`** still float |
 | A16 | **Фермион / запрет Паули** | спин **`1/2`**: **`2π` → −1**, **`4π` → +1**; два совпадающих спинора в **`v_p`** запрещены | ✅ **§3.10** · SU(2) + **`pauli_phi`** + verify |
 
@@ -755,13 +755,13 @@ P_L z = (z₁, 0)ᵀ     P_R z = (0, z₂)ᵀ     z = P_L z + P_R z
 
 **`|z_L|² − |z_R|²`** — U(1)-инвариантный chirality readout; **не** закон «+1 preferred» (§9.2 bubble).
 
-#### 3.11.3 Полное CPT и отмотка к одному биту (A14)
+#### 3.11.3 P, C, T и optional CPT (T-layer — не M `g⁻¹`)
 
-**Канон M (2026-09-22):** детерминированная жидкость **обратима** (A13), но **T ≠ `z→z*`** alone. Полное **CPT-сопряжение** — произведение **трёх** дискретных операторов на **`z`**:
+**Канон M (2026-09-22):** обратимость шага — **A13 / §3.12** (`g⁻¹` = leapfrog algebra + kick ledger). **Не** через CPT-product и **не** через `z→z*` alone.
+
+На **T-слое** / continuous limit — anti-unitary партнёр **`Θ = P ∘ C ∘ T`** (диагностика, не DoD sim):
 
 ```
-Θ = P ∘ C ∘ T
-
 P : (x,y) ↦ (−x,−y)           — инверсия пространственных осей (torus flip)
 C : z ↦ z*                    — комплексное сопряжение компонент спинора
 T : z ↦ U_boost z             — смена знака киральности, U = exp(i·π·σ_x/2) = i·σ_x
@@ -769,22 +769,23 @@ T : z ↦ U_boost z             — смена знака киральности
 
 **Смысл T:** flip **`|z_L|² − |z_R|²`** (SU(2)-буст по **`σ_x`**), не заряд **`n`** alone и не голая conjugation.
 
-**Связь с A13 / §2.2:**
+**Не путать с A13:**
 
 ```
-g⁻ᴺ(z) ≈ Θ · gᴺ( Θ(z) )        (anti-unitary conjugation of step)
+M reverse:  z(t−1) = 2z(t) + ⌊𝒩⌋ − z(t+1)     — verify Leapfrog (§3.12)
+T probe:    g⁻ᴺ(z) ≈ Θ · gᴺ( Θ(z) )            — optional; scripts/run_symmetry_probe.py
 ```
 
-На **IMPULSE** (один **`v_p`** = «единый бит»): **`gᴺ(z_bit)` → `Θ` unwind → `z_bit`**. Без **полного** CPT (особенно без **T**-буста) отмотка **не** замыкается — это impl-gap, не «M refuted».
+Product **`Θ`** на projected **`Z_N[i]` g** после gauge-fix encode **не** замыкается bit-exact — **не** sim-gap, **не** refutation M.
 
-| leg | seed probe | unwind |
-|-----|------------|--------|
-| **P** | **`mirror`**: **`n→−n`** | spatial partner |
-| **C** | **`z*``**: **`n→−n`** | antimatter partner §5.0.3 |
-| **T** | **`σ_x` boost**: **χ→−χ** | time-reverse chirality |
-| **CPT** | product | **`CPT_unwind`** verify |
+| leg | seed probe | M verify |
+|-----|------------|----------|
+| **P** | **`mirror`**: **`n→−n`** | parity seeds + 1-step **`g·P`** |
+| **C** | **`z*``**: **`n→−n`** | charge seed |
+| **T** | **`σ_x` boost**: **χ→−χ** | chirality flip proxy |
+| **CPT** | product **`Θ`** | optional diagnostic only |
 
-**Open:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2); vortex CPT-unwind looser than impulse bit.
+**Open:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2).
 
 #### 3.11.4 A14 на решётке (impl probes)
 
@@ -794,7 +795,7 @@ g⁻ᴺ(z) ≈ Θ · gᴺ( Θ(z) )        (anti-unitary conjugation of step)
 | **C** | **`z→z*`**: **`n→−n`** ✅ | partner evolution — T readout |
 | **T** | **`i·σ_x`**: **χ→−χ** ✅ | not **`z*`** alone |
 | **`U(1)_vac`** | **`g(z e^{iθ})≈g(z)e^{iθ}`** ✅ | verify **`U1_vac`** |
-| **CPT** | **`CPT_unwind`** on IMPULSE ✅ | vortex: approximate |
+| **CPT product** | optional **`Θ g Θ`** diagnostic | not M verify DoD |
 
 **Не путать:** отсутствие long-run **`P·g`** commute ≠ «Вселенная right-handed» — это **contingent seed + chirality dance**, не аксиома M (§9.2).
 
@@ -805,8 +806,8 @@ g⁻ᴺ(z) ≈ Θ · gᴺ( Θ(z) )        (anti-unitary conjugation of step)
 | **`U(1)_vac` equivariance** | ✅ **`defect_axis` fix** · verify **`U1_vac`** |
 | **`P_L/P_R` projectors** | ✅ **`chiral.py`** · verify **`Chiral_SU2`** |
 | **projected 𝒩 on Z_N[i]** | ✅ **`projected_collision.py`** |
-| **CPT unwind (`Θ g Θ`)** | ✅ **`cpt_conjugate` / `cpt_unwind`** · verify **`CPT_unwind`** |
-| **A14 bundle** | ⚠️ **`symmetry_report`**: CPT bit + U(1) PASS; long **`g_P_steps`** logged |
+| **CPT product (`Θ g Θ`)** | optional · **`cpt_unwind`** in `symmetry.py` · **`run_symmetry_probe.py`** |
+| **A14 bundle** | ✅ **`verify_principles`**: P/C/U1/chiral · long **`g_P_steps`** logged |
 
 ### 3.12 Эволюция M: обратимый КА 2-го порядка на планковском базисе (канон)
 

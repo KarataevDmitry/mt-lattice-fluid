@@ -125,7 +125,7 @@ python run_benchmark.py --json
 | A9 | ⚠️ метрика + optional soft; не жёсткая CR-аксиома |
 | A10 | ❌ post-process vortex charge |
 | A12 | ❌ T-гипотеза |
-| A14 | ❌ CPT |
+| A14 | ✅ P/C/T/U1 probes · long **`g·P`** open · CPT product = optional T-layer (not M **`g⁻¹**) |
 | A15 | ⚠️ γ dispersion (T); **α*, α_fs, Planck — §7–§8 fixed** |
 
 ---
