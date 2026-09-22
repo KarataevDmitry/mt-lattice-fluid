@@ -79,6 +79,7 @@
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
+- **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim leaf
 - **§5.0.4:** запрещёнка пра-частицы (уровни/`E₀`/Паули/оболочки ε; не орбиталь внутри `l_P`) — sim spectrum open
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
