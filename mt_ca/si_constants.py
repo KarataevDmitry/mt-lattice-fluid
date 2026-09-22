@@ -590,14 +590,17 @@ class SIConstants:
         }
 
     def decay_row(self) -> dict[str, float | bool | str]:
-        """§8.2 decay — topo frame; no stamped ΔB≠0; Γ/τ/BR still open (T-stats)."""
+        """§8.2 decay — topo frame; ΔB≠0 banned; weak ΔB=0 class allowed; Γ open."""
         return {
             "E_0": self.E_0,
             "s_0": self.s_0,
             "hbar": self.hbar,
             "delta_B_move_stamped": False,
             "proton_to_e_pi0_forbidden": True,
-            "note": "§8.2·5 ask-model: no ΔB≠0 in g; p↛e⁺π⁰; free γ stable; Γ=ℏ/τ open",
+            "weak_delta_B0_class_allowed": True,
+            "neutron_beta_channel_schema": True,
+            "neutron_mass_split_closed": False,
+            "note": "§8.2·5–6: no ΔB≠0; weak n→peν class OK; m_n−m_p/Γ open",
         }
 
     def birth_row(self) -> dict[str, float]:
