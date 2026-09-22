@@ -81,6 +81,7 @@
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
 - **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim leaf
 - **§5.0.4:** запрещёнка пра-частицы (уровни/`E₀`/Паули/оболочки ε; не орбиталь внутри `l_P`) — sim spectrum open
+- **§1.6.5:** один КА-схема; `|N|` только от упаковки размерности — не «гекс↔FCC переключатель»
 - **§1.6.4:** Minkowski `(3+1)FCC ↔ (2+1)hex` — погружение слоя `{111}`; якорь `c` на 4D — open bulk-coupling
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
