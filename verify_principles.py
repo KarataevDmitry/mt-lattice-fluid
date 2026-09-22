@@ -791,6 +791,22 @@ def check_spinor_360_sign(size: int = 64, device: str = "cpu") -> dict:
     return {"id": "SU2_360", "overlap_after_2pi": dot, "ok": ok, "note": "360° → −1 on z=(1,0)"}
 
 
+def check_no_m_heat_death(device: str = "cpu") -> dict:
+    """§2.3 theorem: M has no heat death / no shutdown — A3 + A5 + A13."""
+    a3 = check_a3_unitarity(device=device)
+    a5 = check_a5_vacuum_floor(device=device)
+    a13 = check_leapfrog_bit_exact(device=device)
+    ok = a3["ok"] and a5["ok"] and a13["ok"]
+    return {
+        "id": "NoMHeatDeath",
+        "ok": ok,
+        "a3_norm_drift": a3.get("norm_drift"),
+        "a5_ok": a5["ok"],
+        "a13_ok": a13["ok"],
+        "note": "§2.3: heat death is T-only; M ticks forever (A3,A5,A13)",
+    }
+
+
 def run_all(device: str) -> list[dict]:
     return [
         check_a3_unitarity(device=device),
@@ -823,6 +839,7 @@ def run_all(device: str) -> list[dict]:
         check_u1_vac(device=device),
         check_chiral_su2(device=device),
         check_leapfrog_bit_exact(device=device),
+        check_no_m_heat_death(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_vortex_hex_contour(device=device),
