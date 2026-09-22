@@ -1,0 +1,907 @@
+"""SI bridge for M-layer g — computed from CODATA, not fitted.
+
+
+
+Natural-unit simulation (|z|² = ρ_E/u_P, hL=hT=1) uses the collapsed form in
+
+``update.vacuum_phase``.  This module is the dimensional derivation anchor.
+
+
+
+Notation (§5.1.1 MODEL.md):
+
+  μ_P  — Planck mass density [kg/m³]
+
+  u_P  — Planck energy density [J/m³]  (gate floor; |z|²=1 ↔ ρ_E=u_P)
+
+  K_P  — bulk modulus [Pa]             K_P = μ_P·c² = u_P
+
+"""
+
+
+
+from __future__ import annotations
+
+
+
+import math
+
+from dataclasses import dataclass
+
+
+
+# CODATA 2018 (exact c; ℏ, G conventional)
+
+HBAR = 1.054571817e-34  # J·s
+
+H = 2.0 * math.pi * HBAR  # J·s
+
+G = 6.67430e-11  # m³/(kg·s²)
+
+C = 299_792_458.0  # m/s
+
+LN2 = math.log(2.0)
+
+
+
+# N₄ isotropic macro readout: c = κ·c₀ (§1.1 MODEL.md)
+
+KAPPA = 1.0 / math.sqrt(2.0)
+
+
+
+# §3.7.2 / §5.0.2 — Heisenberg geometric floor on holonomy Δφ [rad]
+
+DELTA_PHI_MIN = 0.5
+
+
+
+# Elementary charge scale for eV reporting
+
+EV_J = 1.602176634e-19
+
+
+
+# Higgs mass scale (T-layer anchor, CODATA-ish)
+
+M_HIGGS_GEV = 125.0
+
+
+
+
+
+@dataclass(frozen=True)
+
+class HvBitBudget:
+
+    """§3.12.6 — information budget of one Planck brick hV (no free parameters)."""
+
+
+
+    B_hV: float
+
+    """Bekenstein bit capacity: 2π E_P l_P / (ℏ c ln 2) = 2π/ln 2."""
+
+
+
+    N_phi: int
+
+    """Heisenberg phase bins ⌈2π/Δφ_min⌉ = ⌈4π⌉."""
+
+
+
+    mod_bits: int
+
+    """Ring exponent: N_ring = 2^mod_bits = 2^⌊B_hV⌋."""
+
+
+
+    N_ring: int
+
+    phase_bits: int
+
+    frac_bits: int
+
+    n_states: float
+
+    B_phase: float
+
+    B_amp: float
+
+
+
+
+
+def hv_bit_budget(*, delta_phi_min: float = DELTA_PHI_MIN) -> HvBitBudget:
+    """Derive M-layer register widths from Planck brick only (§3.12.6).
+
+    Chain:
+      B_hV = 2π/ln2  →  N_ring = 2^⌊B_hV⌋
+      Δφ_min = s₀/ℏ = ½ rad  →  N_φ = ⌈2π/Δφ_min⌉ = ⌈4π⌉
+      frac_bits = ⌈log₂(N_ring / N_φ)⌉  — amplitude resolution inside phase topology
+    """
+    b_hv = 2.0 * math.pi / LN2
+    n_phi = int(math.ceil(2.0 * math.pi / delta_phi_min))
+    mod_bits = int(math.floor(b_hv))
+    n_ring = 1 << mod_bits
+    frac_bits = max(4, int(math.ceil(math.log2(n_ring / n_phi))))
+    b_phase = math.log2(n_phi)
+    return HvBitBudget(
+        B_hV=b_hv,
+        N_phi=n_phi,
+        mod_bits=mod_bits,
+        N_ring=n_ring,
+        phase_bits=mod_bits,
+        frac_bits=frac_bits,
+        n_states=2.0**b_hv,
+        B_phase=b_phase,
+        B_amp=float(frac_bits),
+    )
+
+
+def bekenshtein_fractional_part() -> float:
+    """{B_hV} = B_hV − ⌊B_hV⌋ — unused Bekenstein fraction of one hV brick (§3.12.6)."""
+    b_hv = 2.0 * math.pi / LN2
+    return b_hv - math.floor(b_hv)
+
+
+def nu_CA_natural() -> float:
+    """ν_CA in natural units (c₀ = l_P = 1): ¼·c₀·l_P = ¼ (§4.1.2)."""
+    return 0.25
+
+
+def cr_seed_ceiling() -> float:
+    """A9 pre-burn-in ceiling for smooth envelope seeds: ν_CA·{B_hV}² (§3.9.6)."""
+    frac = bekenshtein_fractional_part()
+    return nu_CA_natural() * frac * frac
+
+
+def cr_dispersion_ceiling() -> float:
+    """A9 stationary CR ceiling after N₄ dispersion + ν_CA: ν_CA·(1+{B_hV}) (§3.9.6)."""
+    return nu_CA_natural() * (1.0 + bekenshtein_fractional_part())
+
+
+def heisenberg_phi_min_physical(*, delta_phi_min: float = DELTA_PHI_MIN) -> float:
+    """Physical Heisenberg floor Δφ_min = s₀/ℏ = ½ rad (Planck / Arg, §5.0.2)."""
+    return delta_phi_min
+
+
+def heisenberg_phi_min_rad(*, delta_phi_min: float = DELTA_PHI_MIN) -> float:
+    """Alias — same physical constant, not 1/2^frac_bits."""
+    return heisenberg_phi_min_physical(delta_phi_min=delta_phi_min)
+
+
+def heisenberg_phi_min_disc(*, phase_bits: int, delta_phi_min: float = DELTA_PHI_MIN) -> int:
+    """Δφ_min [rad] → integer phase ticks mod N_ring (strict Z_512 verify)."""
+    n_ring = 1 << phase_bits
+    return max(1, int(round(delta_phi_min * n_ring / (2.0 * math.pi))))
+
+
+def phase_disc_to_rad(phi_disc: int, *, phase_bits: int) -> float:
+    n_ring = 1 << phase_bits
+    tick = int(phi_disc) % n_ring
+    return tick * (2.0 * math.pi / n_ring)
+
+
+@dataclass(frozen=True)
+class SIConstants:
+
+    """Planck lattice steps and gate parameters in SI."""
+
+
+
+    hbar: float = HBAR
+
+    G: float = G
+
+    c: float = C
+
+
+
+    @property
+
+    def l_P(self) -> float:
+
+        """DX — spatial step hL [m]."""
+
+        return math.sqrt(self.hbar * self.G / self.c**3)
+
+
+
+    @property
+
+    def t_P(self) -> float:
+
+        """Conventional Planck time l_P/c [s] — textbook, **not** M tick (§7.1)."""
+
+        return self.l_P / self.c
+
+
+
+    @property
+
+    def hT(self) -> float:
+
+        """DT — true M-layer tick [s]. hT = t_P·κ = t_P/√2; c₀ = l_P/hT = √2·c."""
+
+        return self.t_P * KAPPA
+
+
+
+    @property
+
+    def c0(self) -> float:
+
+        """Tactical CA link speed on N₄ axes [m/s]. c₀ = l_P/hT = √2·c."""
+
+        return self.l_P / self.hT
+
+
+
+    @property
+
+    def c_macro(self) -> float:
+
+        """Macro vacuum light speed [m/s]. κ·c₀ = c (CODATA)."""
+
+        return KAPPA * self.c0
+
+
+
+    @property
+
+    def nu_CA(self) -> float:
+
+        """Kinematic lattice viscosity ν_CA = ¼·c₀·l_P [m²/s] — N₄ causal cross (§4.1.2)."""
+
+        return 0.25 * self.c0 * self.l_P
+
+
+
+    @property
+
+    def mu_P(self) -> float:
+
+        """Planck mass density μ_P = ρ_P [kg/m³]. c⁵/(ℏG²)."""
+
+        return self.c**5 / (self.hbar * self.G**2)
+
+
+
+    @property
+
+    def rho_P(self) -> float:
+
+        """Fundamental matter density ρ₀ = m_P/l_P³ = μ_P (§5.0 binary M)."""
+
+        return self.mu_P
+
+
+
+    @property
+
+    def u_P(self) -> float:
+
+        """Planck energy density u_P [J/m³]. Gate β; |z|²=1 ↔ ρ_E=u_P. Same as K_P."""
+
+        return self.c**7 / (self.hbar * self.G**2)
+
+
+
+    @property
+
+    def K_P(self) -> float:
+
+        """Bulk modulus of vacuum fluid [Pa = J/m³]. K_P = μ_P·c² = u_P (§5.1.1)."""
+
+        return self.mu_P * self.c**2
+
+
+
+    @property
+
+    def omega(self) -> float:
+
+        """OMEGA — one full vacuum phase cycle per M tick [rad/s].  ω = 2π/hT."""
+
+        return 2.0 * math.pi / self.hT
+
+
+
+    @property
+
+    def phase_scale(self) -> float:
+
+        """hT·ω = 2π — dimensionless tick phase budget."""
+
+        return self.hT * self.omega
+
+
+
+    @property
+
+    def alpha_star(self) -> float:
+
+        """ALPHA* — dimensionless gate numerator after |z|² = ρ_E/u_P."""
+
+        return 1.0 + 1.0 / (4.0 * math.pi)
+
+
+
+    @property
+
+    def alpha_SI(self) -> float:
+
+        """α in SI [J/m³] before density normalization: (2π + ½)·u_P."""
+
+        return (2.0 * math.pi + 0.5) * self.u_P
+
+
+
+    @property
+
+    def epsilon(self) -> float:
+
+        """Dimensionless density floor in |z|² units (= 1 ↔ u_P in SI)."""
+
+        return 1.0
+
+
+
+    @property
+
+    def alpha_fs_inv(self) -> float:
+
+        """Inverse fine-structure constant from gate phase geometry (§8.2)."""
+
+        pi = math.pi
+
+        return 4.0 * pi**3 + pi**2 + pi
+
+
+
+    @property
+
+    def alpha_fs(self) -> float:
+
+        """Fine-structure constant α — computed, not fitted."""
+
+        return 1.0 / self.alpha_fs_inv
+
+
+
+    @property
+
+    def m_P(self) -> float:
+
+        """Planck mass [kg]."""
+
+        return math.sqrt(self.hbar * self.c / self.G)
+
+
+
+    @property
+
+    def E_P(self) -> float:
+
+        """Conventional Planck energy ℏ/t_P [J] — textbook tick, not M (§7.1)."""
+
+        return self.hbar / self.t_P
+
+
+
+    @property
+
+    def bekenstein_bits_hv(self) -> float:
+
+        """I_hV = 2π E_P l_P / (ℏ c ln 2) = 2π/ln 2 — §3.12.6."""
+
+        return 2.0 * math.pi * self.E_P * self.l_P / (self.hbar * self.c * LN2)
+
+
+
+    @property
+
+    def delta_phi_min(self) -> float:
+
+        """Heisenberg holonomy floor Δφ_min [rad] — §3.7.2, §5.0.2."""
+
+        return DELTA_PHI_MIN
+
+
+
+    @property
+
+    def s_0(self) -> float:
+
+        """Fundamental Arg action quantum s₀ = ℏ·Δφ_min = ℏ/2 [J·s] (§5.0.2)."""
+
+        return self.hbar * self.delta_phi_min
+
+
+
+    @property
+
+    def E_0(self) -> float:
+
+        """Arg-carrier energy per M tick E₀ = s₀/hT = E_P/√2 [J] (§5.0.2)."""
+
+        return self.s_0 / self.hT
+
+
+
+    @property
+
+    def m_arg(self) -> float:
+
+        """Local E₀/c² on one hV — m_P/√2 [kg]; not a rest-mass particle (§5.0.2)."""
+
+        return self.E_0 / self.c**2
+
+
+
+    @property
+
+    def v_arg(self) -> float:
+
+        """Arg-carrier propagation speed on N₄ axes — equals c₀ [m/s] (§5.0.2)."""
+
+        return self.c0
+
+
+
+    @property
+
+    def m_e_CODATA(self) -> float:
+
+        """Electron mass [kg] — external anchor for M→T check (§4.0.1)."""
+
+        return 9.1093837015e-31
+
+
+
+
+
+# CODATA 2018 (exact)
+
+N_AVOGADRO = 6.02214076e23
+
+
+
+
+
+SI = SIConstants()
+
+HV = hv_bit_budget()
+
+
+
+
+
+def planck_density_from_cell(*, m_P: float | None = None, l_P: float | None = None) -> float:
+
+    """ρ₀ = m_P/l_P³ — must equal μ_P (§5.0)."""
+
+    m = SI.m_P if m_P is None else m_P
+
+    lp = SI.l_P if l_P is None else l_P
+
+    return m / lp**3
+
+
+
+
+
+def macro_density_illusion(*, occupied_fraction: float) -> float:
+
+    """T-readout: ρ_macro ≈ f_occ · ρ_P (§5.0)."""
+
+    return occupied_fraction * SI.rho_P
+
+
+
+
+
+def hV_volume(*, l_P: float | None = None) -> float:
+
+    """Elementary cell volume hV = l_P³ [m³]."""
+
+    lp = SI.l_P if l_P is None else l_P
+
+    return lp**3
+
+
+
+
+
+def vdw_core_volume(*, l_P: float | None = None) -> float:
+
+    """Excluded causal core per macro node: b₀ ≈ 4·hV (§5.3.3, N₄ Heisenberg shell)."""
+
+    return 4.0 * hV_volume(l_P=l_P)
+
+
+
+
+
+def vdw_b(
+
+    n_moles: float,
+
+    *,
+
+    n_vortices_per_molecule: float,
+
+    N_A: float = N_AVOGADRO,
+
+) -> float:
+
+    """Van der Waals excluded volume b [m³] — §5.3.3."""
+
+    return n_moles * N_A * n_vortices_per_molecule * vdw_core_volume()
+
+
+
+
+
+def vdw_a(
+
+    *,
+
+    n_vortices_per_molecule: float,
+
+    N_A: float = N_AVOGADRO,
+
+) -> float:
+
+    """Van der Waals attraction coefficient a [Pa·m⁶/mol²] — §5.3.3."""
+
+    nv = n_vortices_per_molecule
+
+    lp = SI.l_P
+
+    return N_A**2 * nv**2 * SI.K_P * lp**6 * SI.alpha_fs
+
+
+
+
+
+def vdw_pressure(
+
+    n_moles: float,
+
+    volume_m3: float,
+
+    temperature_k: float,
+
+    *,
+
+    n_vortices_per_molecule: float,
+
+    R: float = 8.314462618,
+
+) -> float:
+
+    """Real-gas pressure from Da-derived Van der Waals (§5.3.3)."""
+
+    a = vdw_a(n_vortices_per_molecule=n_vortices_per_molecule)
+
+    b = vdw_b(n_moles, n_vortices_per_molecule=n_vortices_per_molecule)
+
+    return n_moles * R * temperature_k / (volume_m3 - b) - a * n_moles**2 / volume_m3**2
+
+
+
+
+
+@dataclass(frozen=True)
+
+class SystemQuanta:
+
+    """Individual fractal quanta for a macro system (MODEL.md §4.7.5)."""
+
+
+
+    mass_kg: float
+
+    tau_frame_s: float
+
+    radius_m: float | None
+
+
+
+    dx: float          # λ̄_C = ℏ/(Mc) — reduced Compton wavelength
+
+    dt: float          # dx/c0
+
+    n_frame: float     # tau_frame/dt
+
+    dx_over_l_P: float
+
+    dt_over_hT: float
+
+    lambda_compton: float  # λ_C = h/(Mc) = 2π·dx
+
+    i_max_bits: float | None = None
+
+
+
+
+
+def reduced_compton_wavelength(mass_kg: float) -> float:
+
+    """λ̄_C = ℏ/(Mc) — same as Δx_sys in §4.7.5."""
+
+    return HBAR / (mass_kg * C)
+
+
+
+
+
+def compton_wavelength(mass_kg: float) -> float:
+
+    """λ_C = h/(Mc) = 2π λ̄_C."""
+
+    return H / (mass_kg * C)
+
+
+
+
+
+def compton_scattering_shift(mass_kg: float, theta_rad: float) -> float:
+
+    """Δλ = λ_C (1 − cos θ) — textbook Compton shift on mass scale M."""
+
+    return compton_wavelength(mass_kg) * (1.0 - math.cos(theta_rad))
+
+
+
+
+
+def system_quanta(
+
+    mass_kg: float,
+
+    tau_frame_s: float,
+
+    *,
+
+    radius_m: float | None = None,
+
+) -> SystemQuanta:
+
+    """Compute Δx, Δt, N_frame for a coherent macro system (§4.7.5)."""
+
+    dx = reduced_compton_wavelength(mass_kg)
+
+    dt = dx / SI.c0
+
+    n_frame = tau_frame_s / dt
+
+    i_max = None
+
+    if radius_m is not None:
+
+        e = mass_kg * C**2
+
+        i_max = 2.0 * math.pi * e * radius_m / (HBAR * LN2)
+
+    return SystemQuanta(
+
+        mass_kg=mass_kg,
+
+        tau_frame_s=tau_frame_s,
+
+        radius_m=radius_m,
+
+        dx=dx,
+
+        dt=dt,
+
+        n_frame=n_frame,
+
+        dx_over_l_P=dx / SI.l_P,
+
+        dt_over_hT=dt / SI.hT,
+
+        lambda_compton=compton_wavelength(mass_kg),
+
+        i_max_bits=i_max,
+
+    )
+
+
+
+
+
+def lepton_geometry_factor(m_e: float | None = None) -> float:
+
+    """f_геометрия(e): m_e = m_P · α_fs² · f (§8.2, §1.3)."""
+
+    m_e = m_e if m_e is not None else SI.m_e_CODATA
+
+    return m_e / (SI.m_P * SI.alpha_fs**2)
+
+
+
+
+
+def arg_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str, float]:
+
+    """§5.0.2 Arg-carrier SI row — algebra from ℏ, G, c + Heisenberg floor."""
+
+    s0 = SI.hbar * delta_phi_min
+
+    e0 = s0 / SI.hT
+
+    e_p = SI.hbar / SI.t_P
+
+    m_arg = e0 / SI.c**2
+
+    e0_ev = e0 / EV_J
+
+    e_higgs_ev = M_HIGGS_GEV * 1e9
+
+    return {
+
+        "delta_phi_min_rad": delta_phi_min,
+
+        "s_0_J_s": s0,
+
+        "E_P_J": e_p,
+
+        "E_0_J": e0,
+
+        "E_0_eV": e0_ev,
+
+        "m_arg_kg": m_arg,
+
+        "m_P_kg": SI.m_P,
+
+        "v_arg_m_s": SI.c0,
+
+        "c_macro_m_s": SI.c_macro,
+
+        "E_0_over_E_Higgs": e0_ev / e_higgs_ev,
+
+    }
+
+
+
+
+
+def baryon_geometry_factor(m_p: float, *, alpha_fs: float | None = None) -> float:
+
+    """f_геометрия(p): m_p = m_P · (α_fs/3) · f (§8.2)."""
+
+    a = alpha_fs if alpha_fs is not None else SI.alpha_fs
+
+    return m_p / (SI.m_P * (a / 3.0))
+
+
+
+
+
+def hv_bit_budget_row() -> dict[str, float | int]:
+
+    """§3.12.6 — Planck-derived hV bit budget for verify / configs."""
+
+    row = hv_bit_budget()
+
+    rel = abs(row.B_hV - SI.bekenstein_bits_hv) / row.B_hV
+
+    return {
+
+        "B_hV_bits": row.B_hV,
+
+        "bekenstein_SI_bits": SI.bekenstein_bits_hv,
+
+        "rel_err": rel,
+
+        "N_phi": row.N_phi,
+
+        "mod_bits": row.mod_bits,
+
+        "N_ring": row.N_ring,
+
+        "phase_bits": row.phase_bits,
+
+        "frac_bits": row.frac_bits,
+
+        "n_states": row.n_states,
+
+        "B_phase_bits": row.B_phase,
+
+        "B_amp_bits": row.B_amp,
+
+        "alpha_fs_inv": SI.alpha_fs_inv,
+        "heisenberg_phi_min_rad": heisenberg_phi_min_physical(),
+        "heisenberg_phi_min_disc": heisenberg_phi_min_disc(phase_bits=row.phase_bits),
+        "frac_bits_formula": f"ceil(log2({row.N_ring}/{row.N_phi}))",
+    }
+
+
+
+
+
+# aliases
+
+lepton_mass_factor = lepton_geometry_factor
+
+baryon_mass_factor = baryon_geometry_factor
+
+
+
+
+
+def as_code_dict() -> dict[str, float]:
+
+    """Drop-in literals for configs / GPU kernels (SI + natural gate)."""
+
+    hv = hv_bit_budget()
+
+    return {
+
+        "DX": SI.l_P,
+
+        "DT": SI.hT,
+
+        "T_P_CONV": SI.t_P,
+
+        "KAPPA": KAPPA,
+
+        "C0_m_s": SI.c0,
+
+        "C_MACRO_m_s": SI.c_macro,
+
+        "MU_P_kg_m3": SI.mu_P,
+
+        "U_P_J_m3": SI.u_P,
+
+        "K_P_J_m3": SI.K_P,
+
+        "OMEGA_rad_s": SI.omega,
+
+        "ALPHA_STAR": SI.alpha_star,
+
+        "ALPHA_SI_J_m3": SI.alpha_SI,
+
+        "EPSILON": SI.epsilon,
+
+        "PHASE_SCALE": SI.phase_scale,
+
+        "ALPHA_FS": SI.alpha_fs,
+
+        "ALPHA_FS_INV": SI.alpha_fs_inv,
+
+        "M_P_kg": SI.m_P,
+
+        "E_P_J": SI.E_P,
+
+        "S_0_J_s": SI.s_0,
+
+        "E_0_J": SI.E_0,
+
+        "M_ARG_kg": SI.m_arg,
+
+        "V_ARG_m_s": SI.v_arg,
+
+        "DELTA_PHI_MIN_rad": SI.delta_phi_min,
+
+        "B_HV_bits": hv.B_hV,
+
+        "N_PHI": hv.N_phi,
+
+        "MOD_BITS": hv.mod_bits,
+
+        "N_RING": hv.N_ring,
+
+        "PHASE_BITS": hv.phase_bits,
+
+        "FRAC_BITS": hv.frac_bits,
+
+        "GAMMA": 0.25,  # kinetic dispersion — calibrated vs T DFT, not SI-fixed
+
+    }
+
+
