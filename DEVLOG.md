@@ -62,8 +62,8 @@
 | leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
-| **`b` из **`n_∂`**, не **`\|z\|²`** | §5.0 · §5.2.3 | sim | **`MatterOccupancyB`** PASS | T occupancy — open |
-| **4 силы** · ansatz `α_s=3/(8π)` · `v=α_fs^8 E_P√(2π)` → `G_F` · metric=Λ-strain | §8.4–§8.4.1 | model | EM✅ · ansatz hit CODATA | вывести 8 и √(2π) / снять |
+| **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
+| **4 силы** · v from floor(B_hV)-1=8 and sqrt(2pi) Gaussian readout · alpha_s seed 3/(8pi) | §8.4.1 | model | v/G_F hit · derive soft lemmas | harden vacuum-bit lemma |
 | **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
 **Приоритет sim-gap:** **A14 + A9** (equivariant canonical step) → затем A10 evolution, A3 full continuity.

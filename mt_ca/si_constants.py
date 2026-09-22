@@ -449,7 +449,8 @@ class SIConstants:
             "G_F_GeV_m2": g_f,
             "G_F_CODATA": 1.1663787e-5,
             "G_F_rel_err": abs(g_f - 1.1663787e-5) / 1.1663787e-5,
-            "note": "ansatz §8.4.1 — derive or drop",
+            "N_hier": float(int(math.floor(2.0 * math.pi / LN2)) - 1),
+            "note": "§8.4.1: 8=floor(B_hV)-1; sqrt(2pi)=Gaussian §4.1",
         }
 
 
