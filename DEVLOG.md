@@ -219,6 +219,7 @@
 | 2026-09-22 | §8.2 излучение | $h\nu_0=4\pi E_0$ · $n=0$ · Debye $\omega_D$ · Bose $u(\omega)$ open · `SI.radiation_row` |
 | 2026-09-22 | §8.2 ask-model | занятость $\langle n\rangle$/дискр.RJ = T-стат (§2.1), не закон M · M✅ квант+$n=0$ Bose-capable+BZ · Planck open |
 | 2026-09-22 | §8.2 radiation hinges | $\mu=0$✅ схема · open: $T_\gamma$, $\omega(k)$, $g_{\mathrm{pol}}=2$, A6→мера, осциллятор |
+| 2026-09-22 | §8.2 распад | аннигиляция≠распад · free $\gamma$ / одиночный $n\pm1$ стабильны · $\Gamma,\tau$ open · `SI.decay_row` |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
