@@ -240,7 +240,8 @@
 | 2026-09-22 | §3.12.5a | $\varepsilon$ in $\Phi$-kick · $Z^{+}=2Z+\lfloor\mathcal{N}[\varepsilon]\rfloor-Z^{-}$ · $m_{\mathrm{loc}}\le m_P$ |
 | 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · **не сшивка**: $|h_{\mathrm{near}}/h_{\mathrm{Newton}}|\sim 2\times 10^{3}$ · dual $\rho_{\mathrm{vac}}$ hinge |
 | 2026-09-22 | SatBC sim | `strain_metric` · verify `SatBC_Cppp` PASS · near/N=2047.5 · far $h=0$ · vortex 32t: $h(R)$ flat ≠$1/R$ |
-| 2026-09-22 | FCC N₁₂ | default stencil cuboctahedral ℤ³ · κ=1/12 · `FCC_N12` 1-tick PASS · multi-tick fill open |
+| 2026-09-23 | FCC+HF | объёмная FCC (12 соседей) с полом: vacuum/impulse/wave/vortex multi-tick ✅ · verify HF ON |
+| 2026-09-22 | FCC N₁₂ | default stencil cuboctahedral · κ=1/12 · `FCC_N12` multi-tick **HF ON** PASS |
 | 2026-09-23 | FCC+HF | объёмный куб с полом: vacuum/impulse/wave/vortex multi-tick ✅ · verify HF ON |
 | 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
