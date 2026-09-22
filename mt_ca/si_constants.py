@@ -546,6 +546,36 @@ class SIConstants:
             "note": "§8.4.3-E: tree with α(MZ) from B_hV runner + bare 3/13",
         }
 
+    def einstein_strain_row(self) -> dict[str, float]:
+        """§8.4.2-D — G_μν from Regge deficit of strain; 8π ℓ_P² from Newton."""
+        g_model = 1.0  # G/ℓ_P² in MODEL units
+        eight_pi_g = 8.0 * math.pi * g_model
+        return {
+            "G_over_l_P2": g_model,
+            "field_eq_coeff_8pi_G": eight_pi_g,
+            "flat_deficit": 0.0,  # strain=0 ⇒ δ=0
+            "girth_plaquette": 3.0,  # FCC triangle = d
+            "d_spatial": 3.0,
+            "note": "§8.4.2-D: G_μν=ℰ(δ[strain])=8π ℓ_P² T_μν; stencil soft",
+        }
+
+    def ckm_row(self) -> dict[str, float]:
+        """§8.4.4 — N_gen=d; λ=sin θ_12=d/(|N12|+1)=3/13."""
+        d_spatial = 3
+        n12 = 12
+        lam = d_spatial / (n12 + 1)
+        v_us_pdg = 0.2243
+        return {
+            "N_gen": float(d_spatial),
+            "lambda_bare": lam,
+            "sin_theta_12": lam,
+            "V_us_bare": lam,
+            "V_us_PDG": v_us_pdg,
+            "V_us_rel_err": abs(lam - v_us_pdg) / v_us_pdg,
+            "lambda_sq_neighbor": lam * lam,  # soft |V_cb| neighbor, not SSOT
+            "note": "§8.4.4: N_gen=d; λ=3/13 same cluster weight as Weinberg; A,ρ,η soft",
+        }
+
     @property
     def m_P(self) -> float:
         """Planck mass [kg]."""
