@@ -21,29 +21,36 @@
 
 ## §1. Реестр аксиом A1–A16 (verify)
 
-Живой статус `verify_principles.py` / `validate_mt.py`. Физика условий — MODEL §2.
+**Зачем эта таблица:** открыла **A1** — видишь **что это**, **где в MODEL**, **чем проверяем**, **PASS/FAIL**. Не дублирует §2.1 (там — полный реестр наложений + «как уложить»).
 
-| # | Verify / impl |
-|---|---------------|
-| A1 | ✅ структура M |
-| A2 | ✅ структура M |
-| A3 | ✅ `local_ca` (M) · **`Leapfrog`** bit-exact on Z_N[i] |
-| A4 | ✅ **§3.10** · impl SU(2) |
-| A5 | ✅ gate в §3.4 |
-| A6 | ⚠️ мотив linear step; **не доказано для полного `g`** |
-| A7 | ✅ **`rho_max` clamp** · `clamp_density` |
-| A8 | ✅ gate asymptotics + `w(ρ)` |
-| A9 | ⚠️ **§3.9** · impl shipped · verify **`A9` FAIL** (2026-09-22) — §2.1 |
-| A10 | ⚠️ seeds **`n∈{±1,±2}`** · evolution contour **FAIL** — §2.1 |
-| A11 | ✅ **§3.7–§3.9** · A11 PASS · T-readout binomial |
-| A12 | ✅ T1 PASS (512² CUDA) |
-| A13 | ✅ **§3.12** · **`Leapfrog`** bit-exact |
-| **§2.3** | ✅ **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** · proof 2.3.1–2.3.8 |
-| A14 | ⚠️ P/C seeds · **`U1_vac` FAIL** · **`SO2_C4` FAIL** · **`Chiral_SU2` PASS** — §2.1 |
-| A15 | ✅ **`κ_link`** · **`α*`** · **`sync=κ_link·Δφ_min`** (§5.2.3) |
-| A16 | ✅ **§3.10** · SU(2) + **`pauli_phi`** + verify |
+**Команда:** `python verify_principles.py --device cpu` · T: `validate_mt.py`
 
-**Легенда:** ✅ слой M · ⚠️ impl/sim · ❌ не разбирали.
+| # | Условие (суть) | Что требует от **`g`** | MODEL | verify · статус | impl (`mt_ca`) |
+|---|----------------|------------------------|-------|-----------------|----------------|
+| **A1** | **Каузальность** — за **`hT`** сигнал не дальше **`l_P`** по оси | только **`N₄`**, Moore за один tick **запрещён** | §2 · §1.3–§1.4 | — · **структура** (отдельного probe нет) | `laplacian.py` stencil **`N₄`** |
+| **A2** | **Локальность** | **`g(x)`** только из ε-окрестности **`x`** | §2 · §0.3 | — · **структура** | `projected_collision.py` · local ζ, Φ |
+| **A3** | **Унитарность / сохранение информации** | **`Σ|z|²`** invariant; gate = rotation, не damping | §2 · §5.2.1 | **`Leapfrog`** PASS · **`A3`** (bit-exact) · **`LocalContinuity`** (bond layer) | `reversible.py` · `z_ring.py` |
+| **A4** | **U(1) / SU(2) спинор** | **`z∈ℂ²`**, gate **`R(Φ)`** unitary на спиноре | §2 · §3.10 | **`A4`** PASS · **`SU2_360`** · **`SU2_720`** | `spinor` · `su2_apply` · Rot_LUT |
+| **A5** | **3-й закон: абс. ноль недостижим** | вакуум **кипит**; **`z≡0`** excluded; floor амплитуды | §2 · §0.5 | **`A5`** PASS · **`PlanckVacuumFloor`** PASS · **`I2_zero`** (anti) | `seeds.VACUUM` · `heisenberg_floor` |
+| **A6** | **2-й закон (локально)** | mixing ↑ entropy при фикс. norm | §2 | **`A3_diffusive`** FAIL by design (anti-check) · full **`g`** — **не доказано** | legacy `linear_step` only |
+| **A7** | **Планковский потолок **`ρ≤ρ_P`** | **`K_P`** в знаменателе Φ; clamp после step | §2 · §3.12.5 | **`A7`** PASS | `bekenstein_scale_spinor` · `clamp_density` |
+| **A8** | **Macro-линейность** | нелинейность **`w(ρ)`** затухает при больших **`ρ`** | §2 · §3.4 | **`A8`** PASS | gate **`w(ρ)`** |
+| **A9** | **Дискретная аналитичность (CR)** | **`g`** удерживает голоморфность; CR → поле Λ | §2 · §3.9 | **`A9`** **FAIL** | `cr_strength` · `holomorphy_sync_step` |
+| **A10** | **Топологический заряд **`n∈ℤ`** | winding на **`∂(hV)`**; полюс **`v_p`** | §2 · §5.0 | seeds PASS · evolution **`A10`** **FAIL** | `topology.py` · seeds §9.7 |
+| **A11** | **Soliton / anti-smear** | размазанное не голоморфно; **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | **`A11`** PASS | saturating Φ · vortex seeds |
+| **A12** | **Изотропия / Lorentz (T)** | micro isotropic; macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | **`validate_mt` T1** PASS (512² CUDA) | `macro.py` binomial · §3.6 |
+| **A13** | **Обратимость шага** | **`Z⁺+Z⁻=2Z+⌊𝒩⌋`** на **`ℤ`**; **`g⁻¹`** algebra | §2 · §3.12 | **`Leapfrog`** PASS | `projected_step_fixed` |
+| **A14** | **P / C / T / U(1)_vac** | симметрии discrete на **`g`** | §2 · §3.11 | **`A14`** **FAIL** · **`U1_vac`** **FAIL** · **`SO2_C4`** **FAIL** · **`Chiral_SU2`** PASS | `symmetry.py` · `chiral.py` |
+| **A15** | **Наименьшее действие / геометрия N₄** | **`κ=1/√2`**, **`γ=κ_link=¼`**, **`α*`** | §2 · §5.2.2 · §7.1 | **`QuarterQuantum`** PASS · `check_kappa.py` | `MConfig.gamma` · `si_constants` |
+| **A16** | **Fermi / Pauli** | **`2π→−1`**, **`4π→+1`**; параллельные spinors repel | §2 · §3.10.4 | **`A16`** PASS · **`Pauli`** PASS | `pauli_phi` · SU(2) double cover |
+
+**Связанное (не отдельная аксиома):**
+
+| блок | суть | MODEL | verify · статус |
+|------|------|-------|-----------------|
+| **§2.3** | ¬M heat death; fixed points; Planck floor | §2.3 · §0.5 | **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** PASS |
+
+**Легенда verify:** **PASS** / **FAIL** = последний `verify_principles.py` (2026-09-22). **—** = нет отдельного probe, только структура кода/MODEL. Детали gap и «как уложить» → **§2.1**.
 
 ---
 
