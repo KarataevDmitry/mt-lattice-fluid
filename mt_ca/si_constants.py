@@ -919,6 +919,119 @@ def energy_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str, flo
     }
 
 
+def amplitude_quantum(*, frac_bits: int | None = None) -> float:
+    """a_Q = 2^{−frac_bits} — smallest nonzero |z| on Q lattice (§5.2.3)."""
+    fb = HV.frac_bits if frac_bits is None else frac_bits
+    return 1.0 / float(1 << fb)
+
+
+def rho_field_quantum(*, frac_bits: int | None = None) -> float:
+    """ρ_Q = a_Q² — one field-density quanta in natural |z|² units (§5.2.3)."""
+    a = amplitude_quantum(frac_bits=frac_bits)
+    return a * a
+
+
+def sync_strength_rad(*, delta_phi_min: float = DELTA_PHI_MIN) -> float:
+    """Holomorphy sync: κ_link share of Heisenberg step [rad] (§5.2.3)."""
+    return kappa_link() * delta_phi_min
+
+
+def sync_strength_disc(
+    *,
+    phase_bits: int | None = None,
+    delta_phi_min: float = DELTA_PHI_MIN,
+) -> int:
+    """Integer sync coupling: ⌊Δφ_disc·κ_link⌋ ticks per unit CR pull (§5.2.3)."""
+    pb = HV.phase_bits if phase_bits is None else phase_bits
+    phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
+    return max(1, int(phi_disc * kappa_link()))
+
+
+def pauli_kick_rad() -> float:
+    """SU(2) exchange antisymmetry phase = π rad (§3.10.4 · §5.2.3)."""
+    return math.pi
+
+
+def pauli_kick_disc(*, phase_bits: int | None = None) -> int:
+    """π rad on Z_{N_ring}: N_ring/2 ticks (§5.2.3)."""
+    pb = HV.phase_bits if phase_bits is None else phase_bits
+    return (1 << pb) // 2
+
+
+def pauli_rho_min_natural(*, rho_max: float = 1.0) -> float:
+    """Dense-component threshold: ρ_max/2 — two fermions share one v_p ceiling (§5.2.3)."""
+    return 0.5 * rho_max
+
+
+def pauli_rho_min_si(*, rho_max_natural: float = 1.0) -> float:
+    """SI field-density floor for Pauli probe: κ_link·ρ_max·u_P [J/m³]."""
+    return pauli_rho_min_natural(rho_max=rho_max_natural) * SI.u_P
+
+
+def pauli_overlap_cos(*, delta_phi_min: float = DELTA_PHI_MIN) -> float:
+    """Parallel spinors within Heisenberg cone: cos(Δφ_min) (§5.2.3)."""
+    return math.cos(delta_phi_min)
+
+
+def energy_ledger_ticks_per_E0(
+    *,
+    phase_bits: int | None = None,
+    delta_phi_min: float = DELTA_PHI_MIN,
+) -> int:
+    """Collision Φ ticks equivalent to one E₀ quantum (§5.2.3)."""
+    pb = HV.phase_bits if phase_bits is None else phase_bits
+    return max(1, heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min))
+
+
+def n_E_from_phi_ticks(phi_ticks: int, *, phase_bits: int | None = None) -> int:
+    """Map saturating collision phase [ticks] → integer E₀ ledger units."""
+    unit = energy_ledger_ticks_per_E0(phase_bits=phase_bits)
+    return abs(int(phi_ticks)) // unit
+
+
+def elementary_quanta_row(
+    *,
+    frac_bits: int | None = None,
+    phase_bits: int | None = None,
+    delta_phi_min: float = DELTA_PHI_MIN,
+    rho_max: float = 1.0,
+) -> dict[str, float | int]:
+    """§5.2.3 — full closure table for verify / MConfig defaults."""
+    fb = HV.frac_bits if frac_bits is None else frac_bits
+    pb = HV.phase_bits if phase_bits is None else phase_bits
+    phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
+    sync_rad = sync_strength_rad(delta_phi_min=delta_phi_min)
+    sync_disc = sync_strength_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
+    pauli_rad = pauli_kick_rad()
+    pauli_disc = pauli_kick_disc(phase_bits=pb)
+    return {
+        "frac_bits": fb,
+        "phase_bits": pb,
+        "N_ring": 1 << pb,
+        "a_Q": amplitude_quantum(frac_bits=fb),
+        "rho_Q": rho_field_quantum(frac_bits=fb),
+        "delta_phi_min_rad": delta_phi_min,
+        "delta_phi_min_disc": phi_disc,
+        "sync_strength_rad": sync_rad,
+        "sync_strength_disc": sync_disc,
+        "sync_equals_kappa_times_delta_phi": sync_rad / (kappa_link() * delta_phi_min),
+        "pauli_kick_rad": pauli_rad,
+        "pauli_kick_disc": pauli_disc,
+        "pauli_kick_disc_equals_half_ring": pauli_disc == ((1 << pb) // 2),
+        "pauli_rho_min_natural": pauli_rho_min_natural(rho_max=rho_max),
+        "pauli_rho_min_si_J_m3": pauli_rho_min_si(rho_max_natural=rho_max),
+        "pauli_overlap_cos": pauli_overlap_cos(delta_phi_min=delta_phi_min),
+        "energy_ticks_per_E0": energy_ledger_ticks_per_E0(
+            phase_bits=pb, delta_phi_min=delta_phi_min
+        ),
+        "E_0_J": SI.E_0,
+        "e_0_CODATA_C": 1.602176634e-19,
+        "macro_rho_natural": rho_max,
+        "macro_rho_si_J_m3": rho_max * SI.u_P,
+        "kappa_link": kappa_link(),
+    }
+
+
 
 
 def baryon_geometry_factor(m_p: float, *, alpha_fs: float | None = None) -> float:
@@ -1059,7 +1172,13 @@ def as_code_dict() -> dict[str, float]:
 
         "FRAC_BITS": hv.frac_bits,
 
-        "GAMMA": 0.25,  # kinetic dispersion — calibrated vs T DFT, not SI-fixed
+        "SYNC_STRENGTH_RAD": sync_strength_rad(),
+
+        "PAULI_KICK_RAD": pauli_kick_rad(),
+
+        "PAULI_RHO_MIN": pauli_rho_min_natural(),
+
+        "PAULI_OVERLAP_COS": pauli_overlap_cos(),
 
     }
 

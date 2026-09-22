@@ -3,7 +3,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 import math
 
-from mt_ca.si_constants import DELTA_PHI_MIN, HV, SI, kappa_link
+from mt_ca.si_constants import (
+    DELTA_PHI_MIN,
+    HV,
+    SI,
+    elementary_quanta_row,
+    kappa_link,
+    pauli_kick_rad,
+    pauli_overlap_cos,
+    pauli_rho_min_natural,
+    sync_strength_rad,
+)
 from mt_ca.fixed_point import vacuum_amplitude_quantum
 
 
@@ -35,15 +45,15 @@ class MConfig:
     # A9: discrete CR coupling — cr_strength = κ_link (§5.2.2)
     cr_strength: float = kappa_link()
 
-    # §3.9 global holomorphy sync on same Δt
+    # §3.9 global holomorphy sync on same Δt — κ_link·Δφ_min (§5.2.3)
     holomorphy_sync: bool = True
-    sync_strength: float = 0.12
+    sync_strength: float = sync_strength_rad()
 
-    # §3.10.4 Pauli pressure on same v_p
+    # §3.10.4 Pauli pressure on same v_p — π kick, κ_link·ρ_max thresholds (§5.2.3)
     pauli_exclusion: bool = True
-    pauli_kick: float = 3.0
-    pauli_rho_min: float = 0.35
-    pauli_overlap_cos: float = 0.92
+    pauli_kick: float = pauli_kick_rad()
+    pauli_rho_min: float = pauli_rho_min_natural()
+    pauli_overlap_cos: float = pauli_overlap_cos()
 
     # A7 hard Planck density ceiling (|z|² in natural units)
     rho_max: float = 1.0
