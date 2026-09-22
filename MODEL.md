@@ -70,7 +70,7 @@
 | 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
 | 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; **`div j=0`** на **`N₄`**; **`L_z ∈ L₀·ℤ`** | §5.2.1 |
-| 24 | **`κ_link = 1/4`:** **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`** | §5.2.2 |
+| 24 | **`κ_link = 1/4`:** **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 |
 
 ---
 
@@ -294,7 +294,7 @@ v_T ≈ (c₀ / c_T) · c_T  = √2 · c_T        (относительно macr
 | A12 | **Изотропия / Lorentz (T)** | micro: **isotropic streaming** (§3.6); macro-круг — **(1-2-1)** readout + **`κ=1/√2`** | ✅ T1 PASS (512² CUDA) |
 | A13 | **Обратимость шага (микро)** | **2-й порядок** **`z⁺=−z⁻+2z+⌊𝒩⌋`** на **ℤ** (§3.12); **`g⁻¹`** = algebra / swap | ✅ **§3.12** · **`Leapfrog`** bit-exact |
 | A14 | **P / C / T / U(1)_vac** | discrete symmetry probes on `g`; long **`g·P`** open | ✅ **`U1_vac`** · **`Chiral_SU2`** · P/C seeds · ⚠️ long **`g·P`** |
-| A15 | **Принцип наименьшего действия** | **`κ=1/√2`**, **`γ=κ_link=1/4`**, **`α*=1+1/(4π)`** из геометрии N₄ + gate (§5.2.2, §7.1) | ✅ **`κ_link`** · **`α*`** · ⚠️ **`sync_strength`** still float |
+| A15 | **Принцип наименьшего действия** | **`κ=1/√2`**, **`γ=κ_link=1/4`**, **`α*=1+1/(4π)`** из геометрии N₄ + gate (§5.2.2, §7.1) | ✅ **`κ_link`** · **`α*`** · **`sync=κ_link·Δφ_min`** (§5.2.3) |
 | A16 | **Фермион / запрет Паули** | спин **`1/2`**: **`2π` → −1**, **`4π` → +1**; два совпадающих спинора в **`v_p`** запрещены | ✅ **§3.10** · SU(2) + **`pauli_phi`** + verify |
 
 **Легенда:** ✅ слой M · ⚠️ impl/sim · ❌ не разбирали.
@@ -1721,34 +1721,37 @@ Q = n · e₀     ,   e₀ = e (CODATA)     ,   n ∈ ℤ
 
 **Смысл:** **`e₀`** — **якорь T** (измерен); **`α_fs`** — **число M** из gate geometry. Не наоборот.
 
-##### IV · **(x)** — вывод из **ρ_matter**, **m_P**, **
-_∂** (не notation)
+##### IV · **b(x)** — вывод из **ρ_matter**, **m_P**, **n_∂** (не notation)
 
-§5.0 уже задаёт **ρ_matter ∈ {0, ρ_P}**. **** — **определение**:
+§5.0 уже задаёт **ρ_matter ∈ {0, ρ_P}**. **b** — **определение**:
 
-\b(x) = ρ_matter(x) / ρ_P = m_cell(x) / m_P     ∈ {0, 1}
-\
+```
+b(x) = ρ_matter(x) / ρ_P = m_cell(x) / m_P     ∈ {0, 1}
+```
+
 **Три эквивалентных readout из одного z** (без нового поля):
 
-\b(x) = m_cell(x) / m_P                           — §8.1, m₀ = m_P
+```
+b(x) = m_cell(x) / m_P                           — §8.1, m₀ = m_P
 b(x) = min(1, |n_∂(x)|)                          — A10, ∂(hV) вокруг x
 b(x) = 1  ⟺  |Δφ_N₄(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
-\
-**|z|² — не :**
+```
+
+**|z|² — не b:**
 
 | | **ρ_field ∝ |z|²** | **ρ_matter = ρ_P·b** |
 |--|----------------------|-------------------------|
 | вакуум A5 | **> 0** (фон) | **0** |
 | pra-vortex | **≤ ρ_P** (A7) | **ρ_P** на ядре |
-| impl (sim-gap) | clamp **
-ho_max** | **не** primary — отсюда A7 FAIL |
+| impl | clamp **ρ_max** | **primary = n_∂**, не \|z\|² |
 
 **Macro (T):**
 
-\ρ_macro ≈ ⟨b⟩ · ρ_P     ,   ⟨b⟩ ≪ 1   ⇒   «1000 kg/m³» (§5.0)
-\
-**Verify:** **Rho_P_binary** — **ρ_P = m_P/l_P³**, **ρ_macro = ⟨b⟩·ρ_P**; ** from 
-_∂** — sim leaf.
+```
+ρ_macro ≈ ⟨b⟩ · ρ_P     ,   ⟨b⟩ ≪ 1   ⇒   «1000 kg/m³» (§5.0)
+```
+
+**Verify:** **Rho_P_binary** — **ρ_P = m_P/l_P³**; **MatterOccupancy** — **b from n_∂**.
 
 ##### V · **`α* = 1 + 1/(4π)`** — dimensionless, из tick budget
 
@@ -1760,18 +1763,44 @@ _∂** — sim leaf.
 
 **Не** ширина **`N_ring`** (512) — это **информационный** бюджет (§3.12.6). **`α*`** — **фазовый объём** gate numerator после **`ρ→u_P`**.
 
-##### VI · Audit: что ещё **не** на M-лестнице (честно)
+##### VI · Замыкание лестницы — все оставшиеся кванты (§5.2.3)
+
+**Постулат:** на M **нет** mechanical float-knobs. Всё ниже — **следствие** **`s₀`**, **`l_P`**, **`hT`**, **`|N₄|`**, **`N_ring`**, **`N_φ`**, **`frac_bits`**, **`ρ_max`**. CODATA — **только** там, где T якорит измерение (**`e₀`**, **`m_e`**, **`c`**).
+
+| символ | natural / disc | формула | SI (если нужен) |
+|--------|----------------|---------|-----------------|
+| **`a_Q`** | **`2^{−F}`** | **`a_Q = 2^{−frac_bits}`** | min \|z\| на Q-сетке |
+| **`ρ_Q`** | **`2^{−2F}`** | **`ρ_Q = a_Q²`** | min **ρ_field** quanta |
+| **`δφ_ring`** | **1 tick** | **`2π/N_ring`** | — |
+| **`Δφ_min`** | **41 ticks** | **`⌊N_ring·s₀/(2πℏ)⌋`**, **`s₀=ℏ/2`** | **0.5 rad** |
+| **`sync_strength`** | **10 ticks / unit pull** | **`⌊Δφ_disc/4⌋ = ⌊Δφ_disc·κ_link⌋`** | **`κ_link·Δφ_min = 1/8 rad`** |
+| **`pauli_kick`** | **256 ticks** | **`N_ring/2 = π rad`** | SU(2) exchange **π** |
+| **`pauli_ρ_min`** | **½** | **`ρ_max/2`** | **`u_P/2`** [J/m³] per component |
+| **`pauli_cos∥`** | **cos(½)** | **`cos(Δφ_min)`** | Heisenberg parallel cone |
+| **`n_E`** | **ℤ** | **`|Φ_kick| / Δφ_disc`** | **`n_E·E₀`**, **`E₀=E_P/√2`** |
+| **`b`** | **{0,1}** | **`min(1,|n_∂|)`** | **`m_cell = b·m_P`** |
+| **`Q`** | **n·e₀** | **`n∈ℤ`**, **`e₀=e` CODATA** | **`α_fs`** из gate §8.2 |
+| **`macro_ρ`** | **1** | **`ρ_max`** | **`u_P`** для **`w(ρ)`** A8 |
+
+**Holomorphy sync (§3.9):** **`φ_sync = sync_strength · wrapped(ζ)`** — та же **κ_link**-доля Heisenberg-шага, что и **`cr_strength`**, но на **глобальную** CR-сшивку tick.
+
+**Pauli (§3.10.4):** parallel **`z₁ ∥ z₂`** при **`ρ_i ≥ ρ_max/2`** (два fermion на **`v_p`** делят потолок A7) и **`|cos θ| > cos(Δφ_min)`** → extra **`Φ += pauli_kick`** (**π** = **`N_ring/2`** ticks).
+
+**Energy ledger (§3.12):** saturating **`Φ`** [ticks] → **`n_E = ⌊|Φ|/Δφ_disc⌋`**; локально **`Σ_{N₄} n_E·E₀ ≡ 0 (mod E₀)`**.
+
+**Impl:** **`si_constants.elementary_quanta_row()`** · verify **`ElementaryQuanta`**. **`MConfig`** defaults — **только** из этой таблицы.
+
+##### VII · Audit (2026-09-22)
 
 | величина | статус | gap |
 |----------|--------|-----|
 | **`κ_link`, `γ`, `cr_strength`, `ν_CA`** | ✅ **`¼`** | — |
 | **`s₀`, `p₀`, `L₀`, `E₀`, `F₀`, `g_M`** | ✅ §5.2.1 | — |
-| **`b ∈ {0,1}`** | ✅ §5.0 = **`ρ_matter/ρ_P`**, **`n_∂`**, **`m_P`** | sim: **`b` from `z`**, not **`|z|²`** — open |
-| **`E` ledger mod `E₀`** | ✅ канон | sim verify on canonical step — open |
-| **`sync_strength`, `pauli_kick`** | float в impl | **sim-gap** — вывести из **`K_P`/`N_ring`** |
+| **`sync`, Pauli, `ρ_Q`, `n_E` map** | ✅ §5.2.3 | sim verify **EnergyLedger** open |
+| **`b ∈ {0,1}`** | ✅ §5.0 / §5.2.3 | sim primary readout — open |
 | **`α_s`, G_F, динамическая метрика** | ❌ | **model-gap** SM/GR |
 
-**Статус:** ✅ §5.2.2 · **`si_constants.kappa_link`**, **`energy_quantum_row`** · verify **`QuarterQuantum`**, **`EnergyQuantum`**, **`Rho_P_binary`**.
+**Статус:** ✅ §5.2.2–§5.2.3 · **`elementary_quanta_row`** · verify **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rho_P_binary`**.
 
 ### 5.3 Макро-газ: нет «пустого пространства»
 
