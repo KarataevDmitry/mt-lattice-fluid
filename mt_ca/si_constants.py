@@ -463,6 +463,24 @@ class SIConstants:
             "note": "§8.4.1: runner 1/(d π) ln(v/MZ); π=α_fs foot",
         }
 
+    def gr_passport_row(self) -> dict[str, float]:
+        """§8.4.2 — G from ℓ_P; F₀=m_arg·g_M; no fifth coupling."""
+        g_from_lp = self.l_P**2 * self.c**3 / self.hbar
+        f0 = self.F_0
+        return {
+            "G_SI": self.G,
+            "G_from_l_P": g_from_lp,
+            "G_rel_err": abs(self.G - g_from_lp) / self.G,
+            "G_over_l_P2_model": 1.0,  # c=ℏ=1
+            "F0_N": f0,
+            "F0_from_m_g": self.m_arg * self.g_M,
+            "F0_rel_err": abs(f0 - self.m_arg * self.g_M) / f0,
+            "m_arg_kg": self.m_arg,
+            "g_M": self.g_M,
+            "s_0": self.s_0,
+            "note": "§8.4.2: G≡ℓ_P² c³/ℏ; F₀=m_arg g_M; g_μν=T-strain",
+        }
+
     @property
     def m_P(self) -> float:
         """Planck mass [kg]."""
