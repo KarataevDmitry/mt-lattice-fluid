@@ -307,6 +307,81 @@ $$
 | binomial → макро-круг (T1) | ✅ §4.2 |
 | количественный LIV/MDR budget (MAGIC/Fermi) | ⚠️ open |
 
+#### Теория излучения (из носителя, не гостевой Planck-1900)
+
+**Не** отдельный Lagrangian. Излучение = **сектор $n=0$** той же жидкости + readout на T.
+
+**1 · Квант** (уже §5.0.2 / планк. ЭМ):
+
+$$
+s_0 = \hbar/2,
+\qquad
+E_0 = s_0/hT,
+\qquad
+\nu_0 = 1/hT,
+\qquad
+h\nu_0 = 4\pi\, E_0.
+$$
+
+Мода с частотой $\omega$ (фазовый ход T-dispersion):
+
+$$
+E(\omega) = \hbar\,\omega.
+$$
+
+**2 · Носитель фотона**
+
+$$
+\text{фотон} = \text{голономия }n=0\ (\Phi_\square\text{-фронт}),
+\qquad
+v_{\mathrm{link}}=c_0,
+\qquad
+v_{\mathrm{macro}}=c=\kappa\,c_0.
+$$
+
+**3 · UV-срез (не catastrophe continuum)** — 1-я зона Бриллюэна + «Дебай вакуума» (§5.2.4):
+
+$$
+|k| \lesssim \pi/\ell_P,
+\qquad
+\omega_D \sim 1/hT.
+$$
+
+Вне зоны мод нет — Rayleigh–Jeans на бесконечном $\omega$ **не** живёт на M.
+
+**4 · Излучение как процесс** (уже §5 аннигиляция):
+
+$$
+n=+1\ +\ n=-1 \;\rightarrow\; n_{\mathrm{net}}=0
+\;+\;
+\text{два macro-фронта давления со скоростью }c.
+$$
+
+Энергия не уничтожается (A3) — уходит волнами $n=0$.
+
+**5 · Спектр / чёрное тело — open DoD**
+
+Есть моды $\omega(k)$ и кинетическая $T$ macro-газа (§5.3.1). **Нет** ещё stamped занятость Бозе → закон Планка:
+
+$$
+\langle n\rangle = \frac{1}{e^{\hbar\omega/k_B T}-1},
+\qquad
+u(\omega)\,d\omega
+\quad\text{(T-readout; ⚠️)}.
+$$
+
+Стефан / Wien — след того же, когда занятость закрыта; не вписывать как ✅.
+
+| кусок | статус |
+|-------|--------|
+| $s_0,E_0,h\nu_0=4\pi E_0$; $E=\hbar\omega$ | ✅ |
+| фотон $=n=0$; $c$ vs $c_0$ | ✅ |
+| BZ + $\omega_D\sim 1/hT$ (анти-catastrophe) | ✅ схема |
+| аннигиляция → 2γ (два фронта) | ✅ схема · ⚠️ sim |
+| Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open |
+
+**Код:** `SI.radiation_row()`.
+
 #### Массы lepton / baryon (структура + топология узла)
 
 ```
@@ -369,7 +444,7 @@ SM  125 GeV Higgs boson — macro wave packet, not micro root
 
 | канал (T/SM имя) | носитель на M (рабочая гипотеза) | квант / заряд | статус |
 |------------------|-----------------------------------|---------------|--------|
-| **электромагнетизм** | фазы на рёбрах + $\Phi_\square$; макро Maxwell; $c^2=K_P/\mu_P$ → изотропия (§8.2) | `e₀`, $n$ | **ЭМ-блок ✅**; LIV budget ⚠️; sim soft |
+| **электромагнетизм** | фазы на рёбрах + $\Phi_\square$; макро Maxwell; $c^2=K_P/\mu_P$ → изотропия; излучение $n=0$ (§8.2) | `e₀`, $n$ | **ЭМ-блок ✅**; Bose/Planck spectrum ⚠️; LIV budget ⚠️; sim soft |
 | **слабое** | хиральность **`P_L/P_R`**, SU(2) flip (§3.11); смена оболочки/`n` | $v$; $G_F$; $\sin^2\theta_W=3/13$; $\alpha(M_Z)$ из $B_{hV}$; $m_W,m_Z$; $N_{\mathrm{gen}}=d$; $\lambda=3/13$ | **EW+CKM-скелет ✅**; $A,\rho,\eta$ — open |
 | **сильное** | составные узлы (§6); `f_геометрия`; Паули+`K_P` | $\alpha_s(v)=d/(N_{\mathrm{hier}}\pi)$; бегунок $1/(d\pi)\ln(v/\mu)$ | **seed+runner ✅**; census sim open |
 | **гравитация** | конус/`κ`/упаковка Λ; инерция = Arg-зигзаг (§5.0.1); **$g_{\mu\nu}$ = T-strain**; **$G_{\mu\nu}=\mathcal{E}(\delta)=8\pi\ell_P^{2}T_{\mu\nu}$** (§8.4.2) | `E₀`,`p₀`,`F₀`; $G$ в $l_P$ | **паспорт+Эйнштейн ✅**; stencil/GW/Λ — open |
