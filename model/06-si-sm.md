@@ -787,6 +787,87 @@ h_{\mu\nu} = \mathrm{strain}_{\mu\nu}(T).
 $$
 
 Слабое поле → Ньютон §B; сильное → нужна полная нелинейная карта strain→метрика (soft).
+
+##### C′ · Точный вид $\mathrm{strain}[T(z)]$ на рёбрах FCC
+
+**Жёсткое разделение каналов** (не путать): $\Delta\varphi_e$ — дискретная скорость Madelung; **длины** рёбер Regge — из отклонения плотности. Оба входят в один readout $h_{\mu\nu}$.
+
+**1 · Данные ребра** $e=(x\to y)$, $|y-x|=\ell_P$, $y\in N_{12}(x)$:
+
+$$
+\Delta\varphi_e
+:=
+\mathrm{Arg}\bigl(z(x)^\dagger z(y)\bigr)
+\in(-\pi,\pi],
+\qquad
+\rho_e
+:=
+\tfrac12\bigl(|z(x)|^2+|z(y)|^2\bigr).
+$$
+
+(U(1)-срез / относительная фаза спиноров; SU(2)-голономия ребра — soft, не в линейном $h_{ij}$.)
+
+Вакуум: $\rho_{\mathrm{vac}}$ (A5-фон, natural $|z|^2\sim 1$), $\langle\Delta\varphi_e\rangle_{\mathrm{vac}}=0$.
+
+**2 · Растяжение ребра (геометрия Regge):**
+
+$$
+\varepsilon_e
+:=
+\frac{\rho_e-\rho_{\mathrm{vac}}}{\rho_{\mathrm{vac}}},
+\qquad
+\ell_e
+:=
+\ell_P\,(1+\varepsilon_e)
+\quad\text{(линейно; сильное — soft)}.
+$$
+
+Плоский вакуум: $\varepsilon_e=0\Rightarrow\ell_e=\ell_P\Rightarrow\delta_e=0$.
+
+**3 · Углы грани и дефицит** (из длин, не из $\Delta\varphi$ напрямую):
+
+На треугольной plaquette $f=\triangle(e_1e_2e_3)$ — закон косинусов:
+
+$$
+\theta_f^{(v)}
+=
+\arccos\!
+\left(
+\frac{\ell_a^2+\ell_b^2-\ell_c^2}{2\ell_a\ell_b}
+\right),
+\qquad
+\delta_e=2\pi-\sum_{f\ni e}\theta_f.
+$$
+
+**4 · Линейный метрический readout** в ортонормированном T-базисе ($\hat{e}$ — единичный вектор ребра):
+
+$$
+\begin{aligned}
+h_{ij}(x)
+&=
+\frac{2}{|N|}
+\sum_{e\ni x}\varepsilon_e\,(\hat{e})_i(\hat{e})_j,
+\qquad |N|=12,\\
+h_{0i}(x)
+&=
+\frac{2}{|N|}
+\sum_{e\ni x}
+\Delta\varphi_e\,(\hat{e})_i,
+\qquad
+h_{00}(x)
+=
+-\frac{2}{|N|}\sum_{e\ni x}\varepsilon_e.
+\end{aligned}
+$$
+
+Тогда $g_{\mu\nu}=\eta_{\mu\nu}+h_{\mu\nu}$, $\mathrm{strain}_{\mu\nu}:=h_{\mu\nu}$.
+
+**Нормировка без knob:** коэффициент «2» + Ньютонов мост §B фиксируют $h_{00}\approx-2\Phi$ при $\nabla^2\Phi=4\pi G\delta\rho$; если после живого stencil не совпадает — ломается паспорт $G=\ell_P^{\,2}$, не крутим α.
+
+**Следствие для Diff-hinge §G:** продольные куски $h_{ij}$ не свободны — они = функции $\{\varepsilon_e[z]\}$; $h_{0i}$ = функции $\{\Delta\varphi_e\}$. Отдельного «поля $h$» нет.
+
+**Антипаттерн:** объявить $\varepsilon_e\propto\Delta\varphi_e$ (путает длину и скорость); fitted α рядом с живым Ньютоном.
+
 ##### D · Тензор Эйнштейна из strain (не пятое поле)
 
 Кривизна **не** отдельный слот. На FCC (§1.6 · §8.4.1-D3) элементарная plaquette — треугольник (girth $=d$). Кривизна сидит на **рёбрах-шарнирах** (Regge): сумма углов вокруг ребра $e$ даёт дефицит
@@ -875,6 +956,7 @@ $$
 | $G=\ell_P^{\,2}$ (MODEL) / SI-тождество | ✅ |
 | $F_0=m_{\mathrm{arg}}g_M$ из арены $s_0$ | ✅ паспорт |
 | $g_{\mu\nu}=\eta+\mathrm{strain}[T]$ | ✅ определение |
+| $\mathrm{strain}$: $\varepsilon_e[\delta\rho]$, $h_{0i}[\Delta\varphi_e]$, $\theta_f$ из $\ell_e$ | ✅ §C′ линейно · ⚠️ сильное soft |
 | $G_{\mu\nu}=\mathcal{E}(\delta[\mathrm{strain}])=8\pi\ell_P^{\,2}T_{\mu\nu}$ | ✅ определение+Ньютон |
 | stencil $\theta_f$ · GW · $\Lambda$ | ⚠️ open sim |
 | Diff / 2 поляризации / PPN anti-BD | ⚠️ lemma framing ✅ · verify DoD open · §G |
