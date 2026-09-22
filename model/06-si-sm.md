@@ -339,15 +339,22 @@ v_{\mathrm{link}}=c_0,
 v_{\mathrm{macro}}=c=\kappa\,c_0.
 $$
 
-**3 · UV-срез (не catastrophe continuum)** — 1-я зона Бриллюэна + «Дебай вакуума» (§5.2.4):
+**3 · UV-срез и два Rayleigh–Jeans** — 1-я зона Бриллюэна + «Дебай вакуума» (§5.2.4):
 
 $$
 |k| \lesssim \pi/\ell_P,
 \qquad
-\omega_D \sim 1/hT.
+\omega_D \sim 1/hT,
+\qquad
+N_{\mathrm{modes}} = \#\{k\in\mathrm{BZ}\} < \infty.
 $$
 
-Вне зоны мод нет — Rayleigh–Jeans на бесконечном $\omega$ **не** живёт на M.
+| | формула | на M |
+|--|---------|------|
+| **continuum RJ** | $u(\omega)\propto\omega^{2} k_B T$, $\omega\to\infty$ | **нет** — мод вне BZ нет |
+| **дискретный RJ** | на каждой моде $\langle E\rangle = k_B T$ (классика), $U=N_{\mathrm{modes}} k_B T$ | **да, как предел** $\hbar\omega\ll k_B T$; catastrophe нет |
+
+Дискретный RJ — не отдельный закон, а **классический угол** ещё open Bose-занятости (§5 ниже). Квант моды по-прежнему $E=\hbar\omega$; при $\hbar\omega\gtrsim k_B T$ равнораспределение ломается.
 
 **4 · Излучение как процесс** (уже §5 аннигиляция):
 
@@ -376,7 +383,7 @@ $$
 |-------|--------|
 | $s_0,E_0,h\nu_0=4\pi E_0$; $E=\hbar\omega$ | ✅ |
 | фотон $=n=0$; $c$ vs $c_0$ | ✅ |
-| BZ + $\omega_D\sim 1/hT$ (анти-catastrophe) | ✅ схема |
+| BZ + $\omega_D\sim 1/hT$; discrete RJ $=k_BT$ на моде (классика) | ✅ схема |
 | аннигиляция → 2γ (два фронта) | ✅ схема · ⚠️ sim |
 | Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open |
 
