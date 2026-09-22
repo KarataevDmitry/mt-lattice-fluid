@@ -656,7 +656,7 @@ class SIConstants:
         }
 
     def higgs_mass_row(self) -> dict[str, float]:
-        """§8.3 — m_H = v/2 = m_P c² · α_fs^8 · √(π/2); λ=1/N_hier."""
+        """§8.3.1 — m_H = v/2 = m_P c² · α_fs^8 · √(π/2); λ=1/8 SM-readout of half-vev."""
         row = self.force_ansatz_row()
         v = float(row["v_GeV"])
         n_hier = float(row["N_hier"])
@@ -673,7 +673,7 @@ class SIConstants:
             "m_H_PDG_GeV": M_HIGGS_GEV_PDG,
             "m_H_rel_err": abs(m_h - M_HIGGS_GEV_PDG) / M_HIGGS_GEV_PDG,
             "m_H_over_v": m_h / v,
-            "note": "§8.3.1: m_H=v/2 if λ=1/N_hier ansatz; = α_fs^8 E_P √(π/2)",
+            "note": "§8.3.1: m_H=v/2 = v_peak·√(π/2); λ=1/8 SM-readout",
         }
 
     def saturation_bc_row(self) -> dict[str, float]:
