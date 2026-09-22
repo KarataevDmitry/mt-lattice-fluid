@@ -1,13 +1,12 @@
-"""M-layer SU(2) spinor CA — leapfrog g (§3.12) + first-order gate oracle for verify."""
+"""M-layer SU(2) spinor field — gate formulas; evolution is reversible.evolve_canonical (§3.12)."""
 
 from __future__ import annotations
 
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.holomorphy import clamp_density, cr_phase_drive, holomorphy_sync_step
+from mt_ca.holomorphy import cr_phase_drive, holomorphy_sync_step
 from mt_ca.laplacian import neighbor_sum
-from mt_ca.linear import linear_step
 from mt_ca.topology import pauli_phi
 from mt_ca.update import apply_heisenberg_floor, macro_suppression, wrapped_phase_diff
 
@@ -86,14 +85,8 @@ def gate_phase(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     return phi
 
 
-def _linear_step_spinor(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    c0 = linear_step(z[..., 0], cfg.gamma, cfg.linear_mode, stencil=cfg.stencil)
-    c1 = linear_step(z[..., 1], cfg.gamma, cfg.linear_mode, stencil=cfg.stencil)
-    return torch.stack([c0, c1], dim=-1)
-
-
-def _collision_couple(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """COLLISION: Arg/K_P gate + SU(2) mix of chiral components (§3.11)."""
+def apply_gate_collision(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """One collision map on ℂ² (gate formula probe — not a tick of g; §3.12.5 is Z_N[i])."""
     phi = gate_phase(z, cfg)
     sum_n = spinor_neighbor_sum(z, cfg)
     axis = defect_axis(z, sum_n)
@@ -105,16 +98,3 @@ def _collision_couple(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
         defect_axis=defect_axis,
         spinor_neighbor_sum=spinor_neighbor_sum,
     )
-
-
-def micro_step(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """First-order float gate oracle (T/debug). M-canonical evolution: reversible.leapfrog_* (§3.12)."""
-    if z.ndim != 3 or z.shape[-1] != 2:
-        raise ValueError(f"expected spinor field (ny, nx, 2), got {tuple(z.shape)}")
-
-    # STREAM: z_L and z_R on N₄ independently (component-wise linear sweep).
-    if cfg.linear_mode != "isotropic":
-        z = _linear_step_spinor(z, cfg)
-
-    z = _collision_couple(z, cfg)
-    return clamp_density(z, cfg)

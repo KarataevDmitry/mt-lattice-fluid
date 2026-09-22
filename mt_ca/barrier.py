@@ -7,7 +7,7 @@ import math
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.spinor import micro_step
+from mt_ca.reversible import evolve_canonical
 
 
 def make_directed_wave_packet(
@@ -73,7 +73,7 @@ def micro_steps_with_barrier(
     wall = wall_field(barrier, cfg)
     b = barrier.unsqueeze(-1)
     for _ in range(steps):
-        z = micro_step(z, cfg)
+        z = evolve_canonical(z, cfg)
         z = torch.where(b, wall, z)
     return z
 

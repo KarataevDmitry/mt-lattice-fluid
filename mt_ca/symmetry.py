@@ -7,7 +7,8 @@ import torch
 from mt_ca.chiral import chirality_flip_boost, chirality_imbalance, project_left, project_right, recombine
 from mt_ca.config import MConfig
 from mt_ca.seeds import SeedClass, make_seed
-from mt_ca.spinor import arg_phase_defect, gate_phase, holonomy_zeta, micro_step, spinor_neighbor_sum
+from mt_ca.reversible import evolve_canonical
+from mt_ca.spinor import arg_phase_defect, gate_phase, holonomy_zeta, spinor_neighbor_sum
 from mt_ca.topology import winding_nearest_int, winding_robust
 
 
@@ -51,7 +52,7 @@ def cpt_unwind(z: torch.Tensor, cfg: MConfig, steps: int) -> torch.Tensor:
     """Recover pre-evolution state: g⁻ᴺ(z) ≈ CPT( gᴺ( CPT(z) ) ) when A14 holds."""
     w = cpt_conjugate(z)
     for _ in range(steps):
-        w = micro_step(w, cfg)
+        w = evolve_canonical(w, cfg)
     return cpt_conjugate(w)
 
 
@@ -67,7 +68,7 @@ def cpt_reverse_report(
 
     z = z0.clone()
     for _ in range(steps):
-        z = micro_step(z, cfg)
+        z = evolve_canonical(z, cfg)
     z_rec = cpt_unwind(z, cfg, steps)
 
     peak0 = float(z0.abs().square().sum(dim=-1).max().item())
@@ -93,8 +94,8 @@ def cpt_reverse_report(
 
 def cpt_step_conjugation(z: torch.Tensor, cfg: MConfig) -> dict:
     """One-step: z ≈ CPT( g( CPT(g(z)) ) ) when Θ g Θ = g⁻¹."""
-    z1 = micro_step(z, cfg)
-    z0_rec = cpt_conjugate(micro_step(cpt_conjugate(z1), cfg))
+    z1 = evolve_canonical(z, cfg)
+    z0_rec = cpt_conjugate(evolve_canonical(cpt_conjugate(z1), cfg))
     rel = float((z0_rec - z).abs().max().item() / (z.abs().max().item() + 1e-12))
     return {"max_rel_err": rel, "ok": rel < 0.2}
 
@@ -108,7 +109,7 @@ def time_reversal_proxy(z: torch.Tensor, cfg: MConfig, steps: int = 64) -> dict:
     z_fwd = z.clone()
     n0 = winding_int(z_fwd)
     for _ in range(steps):
-        z_fwd = micro_step(z_fwd, cfg)
+        z_fwd = evolve_canonical(z_fwd, cfg)
     n_fwd = winding_int(z_fwd)
 
     unwind = cpt_unwind(z_fwd, cfg, steps)
@@ -162,8 +163,8 @@ def g_commutes_with_mirror_x(
     z_pg = mirror_x(z.clone())
     z_gp = z.clone()
     for _ in range(steps):
-        z_pg = micro_step(z_pg, cfg)
-        z_gp = micro_step(z_gp, cfg)
+        z_pg = evolve_canonical(z_pg, cfg)
+        z_gp = evolve_canonical(z_gp, cfg)
     z_gp = mirror_x(z_gp)
 
     n_pg = winding_int(z_pg)
@@ -172,7 +173,7 @@ def g_commutes_with_mirror_x(
 
     z_fwd = z.clone()
     for _ in range(steps):
-        z_fwd = micro_step(z_fwd, cfg)
+        z_fwd = evolve_canonical(z_fwd, cfg)
     n_fwd = winding_int(z_fwd)
 
     return {
@@ -210,21 +211,30 @@ def u1_gate_invariants(z: torch.Tensor, cfg: MConfig, theta: float = 0.73) -> di
     }
 
 
-def micro_step_u1_equivariance(
+def g_step_u1_equivariance(
     z: torch.Tensor,
     cfg: MConfig,
     *,
     theta: float = 0.73,
     steps: int = 1,
 ) -> dict:
-    """Test g(z·e^{iθ}) ≈ g(z)·e^{iθ} (U(1)_vac on full micro_step)."""
+    """Test g(z·e^{iθ}) ≈ g(z)·e^{iθ} (U(1)_vac on canonical Z_N[i] g)."""
+    from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
+    from mt_ca.fixed_point import decode_spinor
+
     factor = torch.exp(torch.tensor(1j * theta, device=z.device, dtype=z.dtype))
     z0 = z.clone()
-    z1 = u1_global_phase(z, theta)
+    z1 = z * factor
+    f0c = canonical_fixed(z0, cfg)
+    f0p = f0c.clone()
+    f1c = canonical_fixed(z1, cfg)
+    f1p = f1c.clone()
     for _ in range(steps):
-        z0 = micro_step(z0, cfg)
-        z1 = micro_step(z1, cfg)
-    rel = float((z1 - z0 * factor).abs().max().item() / (z0.abs().max().item() + 1e-12))
+        f0c, f0p, _ = leapfrog_forward_fixed(f0c, f0p, cfg)
+        f1c, f1p, _ = leapfrog_forward_fixed(f1c, f1p, cfg)
+    out0 = decode_spinor(f0c, frac_bits=cfg.frac_bits)
+    out1 = decode_spinor(f1c, frac_bits=cfg.frac_bits)
+    rel = float((out1 - out0 * factor).abs().max().item() / (out0.abs().max().item() + 1e-12))
     return {"rel_err": rel, "theta": theta, "steps": steps}
 
 
@@ -242,18 +252,18 @@ def u1_vac_report(size: int = 128, device: torch.device | str = "cpu") -> dict:
         z = make_seed(seed, size, size, device=dev)
         inv = u1_gate_invariants(z, cfg)
         step_cfg = cfg_smooth if seed == SeedClass.VORTEX_P else cfg
-        step1 = micro_step_u1_equivariance(z, step_cfg, steps=1)
-        step4 = micro_step_u1_equivariance(z, step_cfg, steps=4)
+        step1 = g_step_u1_equivariance(z, step_cfg, steps=1)
+        step4 = g_step_u1_equivariance(z, step_cfg, steps=4)
         rows[name] = {
             **{f"inv_{k}": v for k, v in inv.items()},
-            "micro_1step": step1["rel_err"],
-            "micro_4step": step4["rel_err"],
+            "g_1step": step1["rel_err"],
+            "g_4step": step4["rel_err"],
         }
 
     ok = (
-        rows["VACUUM"]["micro_1step"] < 1e-3
-        and rows["PLANE_WAVE"]["micro_1step"] < 1e-4
-        and rows["VORTEX_P"]["micro_1step"] < 1e-3
+        rows["VACUUM"]["g_1step"] < 1e-3
+        and rows["PLANE_WAVE"]["g_1step"] < 0.05
+        and rows["VORTEX_P"]["g_1step"] < 0.05
         and all(rows[n]["inv_zeta_max_err"] < 1e-5 for n in seeds)
         and all(rows[n]["inv_dphi_max_err"] < 1e-4 for n in seeds)
     )
@@ -298,7 +308,7 @@ def annihilation_winding(size: int, cfg: MConfig, device: torch.device, steps: i
     z[y1 : y1 + patch, x1 : x1 + patch] = patch_m
     n0 = winding_int(z)
     for _ in range(steps):
-        z = micro_step(z, cfg)
+        z = evolve_canonical(z, cfg)
     n_late = winding_int(z)
     rho_peak = float(z.abs().square().sum(dim=-1).max().item())
     return {

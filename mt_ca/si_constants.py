@@ -452,6 +452,46 @@ class SIConstants:
 
     @property
 
+    def p_0(self) -> float:
+
+        """Mechanical momentum quantum p₀ = s₀/l_P = ℏ/(2l_P) [kg·m/s] (§5.2.1)."""
+
+        return self.s_0 / self.l_P
+
+
+
+    @property
+
+    def L_0(self) -> float:
+
+        """Mechanical angular-momentum quantum L₀ = p₀·l_P = s₀ [J·s] (§5.2.1)."""
+
+        return self.s_0
+
+
+
+    @property
+
+    def F_0(self) -> float:
+
+        """Mechanical force quantum F₀ = p₀/hT = E₀/(c₀·hT) = m_arg·g_M [N] (§5.2.1)."""
+
+        return self.p_0 / self.hT
+
+
+
+    @property
+
+    def g_M(self) -> float:
+
+        """M-tick acceleration quantum g_M = c₀/(2hT); F₀ = m_arg·g_M, p₀ = m_arg·c₀/2 (§5.2.1)."""
+
+        return self.c0 / (2.0 * self.hT)
+
+
+
+    @property
+
     def m_e_CODATA(self) -> float:
 
         """Electron mass [kg] — external anchor for M→T check (§4.0.1)."""
@@ -763,6 +803,50 @@ def arg_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str, float]
         "c_macro_m_s": SI.c_macro,
 
         "E_0_over_E_Higgs": e0_ev / e_higgs_ev,
+
+    }
+
+
+
+
+
+def mechanical_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str, float]:
+
+    """§5.2.1 — p₀, L₀, F₀ ladder from s₀ = ℏ·Δφ_min (no free parameters)."""
+
+    arg = arg_quantum_row(delta_phi_min=delta_phi_min)
+
+    s0 = arg["s_0_J_s"]
+
+    p0 = s0 / SI.l_P
+
+    l0 = s0
+
+    f0 = p0 / SI.hT
+
+    g_m = SI.c0 / (2.0 * SI.hT)
+
+    return {
+
+        "p_0_kg_m_s": p0,
+
+        "L_0_J_s": l0,
+
+        "F_0_N": f0,
+
+        "g_M_m_s2": g_m,
+
+        "p_0_over_half_mP_c": p0 / (0.5 * SI.m_P * SI.c),
+
+        "F_0_over_planck_force": f0 / (SI.c**4 / SI.G),
+
+        "L_0_over_hbar": l0 / SI.hbar,
+
+        "p_0_equals_m_arg_c0_over_2": p0 / (arg["m_arg_kg"] * SI.c0 / 2.0),
+
+        "F_0_equals_m_arg_g_M": f0 / (arg["m_arg_kg"] * g_m),
+
+        "F_0_equals_p_0_over_hT": f0 / (p0 / SI.hT),
 
     }
 

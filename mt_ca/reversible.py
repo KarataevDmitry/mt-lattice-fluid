@@ -5,24 +5,13 @@ from __future__ import annotations
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.fixed_point import decode_spinor, encode_spinor, leapfrog_invert, quantize_kick
+from mt_ca.fixed_point import decode_spinor, encode_spinor, leapfrog_invert
 from mt_ca.projected_collision import projected_step_fixed
-from mt_ca.spinor import micro_step
 
 
 def canonicalize(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     return decode_spinor(
         encode_spinor(z, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits),
-        frac_bits=cfg.frac_bits,
-        mod_bits=cfg.mod_bits,
-    )
-
-
-def kick_oracle_micro(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """Float gate-oracle kick (debug / first_order only)."""
-    zq = canonicalize(z, cfg)
-    return quantize_kick(
-        micro_step(zq, cfg) - zq,
         frac_bits=cfg.frac_bits,
         mod_bits=cfg.mod_bits,
     )
@@ -37,15 +26,23 @@ def leapfrog_forward_fixed(
     f_past: torch.Tensor,
     cfg: MConfig,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    if cfg.use_projected_collision:
-        return projected_step_fixed(f_curr, f_past, cfg)
-    z = decode_spinor(f_curr, frac_bits=cfg.frac_bits)
-    f_kick = kick_oracle_micro(z, cfg)
-    f_next = canonical_fixed(micro_step(z, cfg), cfg)
-    f_kick_adj = (
-        f_next.to(torch.int64) + f_past.to(torch.int64) - 2 * f_curr.to(torch.int64)
-    ).to(torch.int32)
-    return f_next, f_curr, f_kick_adj
+    """M-canonical tick: projected collision on Z_N[i] only (§3.12.5)."""
+    return projected_step_fixed(f_curr, f_past, cfg)
+
+
+def evolve_canonical(
+    z: torch.Tensor,
+    cfg: MConfig,
+    steps: int = 1,
+    *,
+    z_past: torch.Tensor | None = None,
+) -> torch.Tensor:
+    """Apply g^steps on Z_N[i]; decode to ℂ² for readout only."""
+    f_curr = canonical_fixed(z, cfg)
+    f_past = canonical_fixed(z_past if z_past is not None else z, cfg)
+    for _ in range(steps):
+        f_curr, f_past, _ = leapfrog_forward_fixed(f_curr, f_past, cfg)
+    return decode_spinor(f_curr, frac_bits=cfg.frac_bits)
 
 
 def leapfrog_reverse_fixed(
