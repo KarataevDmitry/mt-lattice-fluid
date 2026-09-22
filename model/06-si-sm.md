@@ -352,9 +352,9 @@ $$
 | | формула | на M |
 |--|---------|------|
 | **continuum RJ** | $u(\omega)\propto\omega^{2} k_B T$, $\omega\to\infty$ | **нет** — мод вне BZ нет |
-| **дискретный RJ** | на каждой моде $\langle E\rangle = k_B T$ (классика), $U=N_{\mathrm{modes}} k_B T$ | **да, как предел** $\hbar\omega\ll k_B T$; catastrophe нет |
+| **дискретный RJ** | на каждой моде $\langle E\rangle = k_B T$ (классика), $U=N_{\mathrm{modes}} k_B T$ | **геометрия допускает** (конечный $N_{\mathrm{modes}}$); **занятость не выведена** |
 
-Дискретный RJ — не отдельный закон, а **классический угол** ещё open Bose-занятости (§5 ниже). Квант моды по-прежнему $E=\hbar\omega$; при $\hbar\omega\gtrsim k_B T$ равнораспределение ломается.
+Дискретный RJ — **не закрыт**. Это только: BZ режет continuum-catastrophe. Сама формула $\langle E\rangle=k_BT$ на моде — классический угол **ещё open** Bose-занятости (§5). Квант моды $E=\hbar\omega$; при $\hbar\omega\gtrsim k_B T$ равнораспределение ломается — но мост $T\to\langle n\rangle$ в MODEL пока **не stamped**.
 
 **4 · Излучение как процесс** (уже §5 аннигиляция):
 
@@ -383,7 +383,8 @@ $$
 |-------|--------|
 | $s_0,E_0,h\nu_0=4\pi E_0$; $E=\hbar\omega$ | ✅ |
 | фотон $=n=0$; $c$ vs $c_0$ | ✅ |
-| BZ + $\omega_D\sim 1/hT$; discrete RJ $=k_BT$ на моде (классика) | ✅ схема |
+| BZ + $\omega_D\sim 1/hT$ режет continuum-catastrophe | ✅ геометрия |
+| дискретный RJ ($\langle E\rangle=k_BT$ на моде) | ⚠️ не закрыт — угол open Bose |
 | аннигиляция → 2γ (два фронта) | ✅ схема · ⚠️ sim |
 | Bose $\langle n\rangle$ · $u(\omega)$ · Stefan/Wien | ⚠️ open |
 
