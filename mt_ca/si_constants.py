@@ -434,7 +434,7 @@ class SIConstants:
 
 
     def force_ansatz_row(self) -> dict[str, float]:
-        """§8.4.1 risky seeds — not theorems; for audit vs CODATA."""
+        """§8.4.1 — N_hier=floor(B_hV)-1_occupancy; v from α_fs ladder + Gaussian T."""
         pi = math.pi
         e_p_gev = self.E_P / EV_J / 1.0e9
         alpha_s0 = 3.0 / (8.0 * pi)
@@ -450,7 +450,7 @@ class SIConstants:
             "G_F_CODATA": 1.1663787e-5,
             "G_F_rel_err": abs(g_f - 1.1663787e-5) / 1.1663787e-5,
             "N_hier": float(int(math.floor(2.0 * math.pi / LN2)) - 1),
-            "note": "§8.4.1: 8=floor(B_hV)-1; sqrt(2pi)=Gaussian §4.1",
+            "note": "§8.4.1: 8=floor(B_hV)-1_occ; sqrt(2pi)=Gaussian §4.1",
         }
 
 
