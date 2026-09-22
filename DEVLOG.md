@@ -185,6 +185,7 @@
 | раздел | статус |
 |--------|--------|
 | §4.1.2 **`ν_CA`** | ✅ algebraic · verify **`Nu_CA`** · **`T3_macro_viscosity`** · fit **`ν_eff`** open |
+| §4.1.0 **(1-2-1) derive** | ✅ lemma: `[1,1]/2→[1,2,1]/4→⊗2D`; FCC-3D hinge open |
 | §4.3 Madelung continuity | ✅ **T** · **`T_MadelungContinuity`** (диагностика; не M hard) |
 | §4.9 Young | ✅ онтология · GPU slit leaf open · partial T2, A11 |
 | §4.2 validate | **`validate_mt.py`** T1/T2/T3/T_dispersion · T2 aligned §4.9 (vortex soliton · dual Gaussian · 1-2-1 fringes OK) |
@@ -247,6 +248,7 @@
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
 | 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete ledgers; **`T_MadelungContinuity`** |
 | 2026-09-23 | §4.9 T2 | probes: soliton=vortex; wave=dual Gaussian; 1-2-1 = T readout (не M); fringes≠fail |
+| 2026-09-23 | §4.1.0 | вывод `(1-2-1)`: атом `[1,1]/2` → `w∗w`; 2D `⊗`; FCC 3D multinomial — hinge |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
