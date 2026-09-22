@@ -19,156 +19,54 @@
 
 ---
 
-## §1. Реестр аксиом A1–A16 (verify)
+## §1. Реестр ограничений (единый указатель)
 
-**Зачем эта таблица:** открыла **A1** — видишь **что это**, **где в MODEL**, **чем проверяем**, **PASS/FAIL**. Не дублирует §2.1 (там — полный реестр наложений + «как уложить»).
+**Один экран.** Строка = известное ограничение → что требует от **`g`** → где в **MODEL** → **gap** → **verify** → **impl** → **следующий шаг**.
 
-**Команда:** `python verify_principles.py --device cpu` · T: `validate_mt.py`
+**Метод:** ansatz **`g`** → наложить известное. **`l_P = √(ℏG/c³)`** — естественная длина; **`L = f·l_P`**. Нет **`hL→0`** на M — T-readout вверх (MODEL §0.4).
 
-| # | Условие (суть) | Что требует от **`g`** | MODEL | verify · статус | impl (`mt_ca`) |
-|---|----------------|------------------------|-------|-----------------|----------------|
-| **A1** | **Каузальность** — за **`hT`** сигнал не дальше **`l_P`** по оси | только **`N₄`**, Moore за один tick **запрещён** | §2 · §1.3–§1.4 | — · **структура** (отдельного probe нет) | `laplacian.py` stencil **`N₄`** |
-| **A2** | **Локальность** | **`g(x)`** только из ε-окрестности **`x`** | §2 · §0.3 | — · **структура** | `projected_collision.py` · local ζ, Φ |
-| **A3** | **Унитарность / сохранение информации** | **`Σ|z|²`** invariant; gate = rotation, не damping | §2 · §5.2.1 | **`Leapfrog`** PASS · **`A3`** (bit-exact) · **`LocalContinuity`** (bond layer) | `reversible.py` · `z_ring.py` |
-| **A4** | **U(1) / SU(2) спинор** | **`z∈ℂ²`**, gate **`R(Φ)`** unitary на спиноре | §2 · §3.10 | **`A4`** PASS · **`SU2_360`** · **`SU2_720`** | `spinor` · `su2_apply` · Rot_LUT |
-| **A5** | **3-й закон: абс. ноль недостижим** | вакуум **кипит**; **`z≡0`** excluded; floor амплитуды | §2 · §0.5 | **`A5`** PASS · **`PlanckVacuumFloor`** PASS · **`I2_zero`** (anti) | `seeds.VACUUM` · `heisenberg_floor` |
-| **A6** | **2-й закон (локально)** | mixing ↑ entropy при фикс. norm | §2 | **`A3_diffusive`** FAIL by design (anti-check) · full **`g`** — **не доказано** | legacy `linear_step` only |
-| **A7** | **Планковский потолок **`ρ≤ρ_P`** | **`K_P`** в знаменателе Φ; clamp после step | §2 · §3.12.5 | **`A7`** PASS | `bekenstein_scale_spinor` · `clamp_density` |
-| **A8** | **Macro-линейность** | нелинейность **`w(ρ)`** затухает при больших **`ρ`** | §2 · §3.4 | **`A8`** PASS | gate **`w(ρ)`** |
-| **A9** | **Дискретная аналитичность (CR)** | **`g`** удерживает голоморфность; CR → поле Λ | §2 · §3.9 | **`A9`** **FAIL** | `cr_strength` · `holomorphy_sync_step` |
-| **A10** | **Топологический заряд **`n∈ℤ`** | winding на **`∂(hV)`**; полюс **`v_p`** | §2 · §5.0 | seeds PASS · evolution **`A10`** **FAIL** | `topology.py` · seeds §9.7 |
-| **A11** | **Soliton / anti-smear** | размазанное не голоморфно; **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | **`A11`** PASS | saturating Φ · vortex seeds |
-| **A12** | **Изотропия / Lorentz (T)** | micro isotropic; macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | **`validate_mt` T1** PASS (512² CUDA) | `macro.py` binomial · §3.6 |
-| **A13** | **Обратимость шага** | **`Z⁺+Z⁻=2Z+⌊𝒩⌋`** на **`ℤ`**; **`g⁻¹`** algebra | §2 · §3.12 | **`Leapfrog`** PASS | `projected_step_fixed` |
-| **A14** | **P / C / T / U(1)_vac** | симметрии discrete на **`g`** | §2 · §3.11 | **`A14`** **FAIL** · **`U1_vac`** **FAIL** · **`SO2_C4`** **FAIL** · **`Chiral_SU2`** PASS | `symmetry.py` · `chiral.py` |
-| **A15** | **Наименьшее действие / геометрия N₄** | **`κ=1/√2`**, **`γ=κ_link=¼`**, **`α*`** | §2 · §5.2.2 · §7.1 | **`QuarterQuantum`** PASS · `check_kappa.py` | `MConfig.gamma` · `si_constants` |
-| **A16** | **Fermi / Pauli** | **`2π→−1`**, **`4π→+1`**; параллельные spinors repel | §2 · §3.10.4 | **`A16`** PASS · **`Pauli`** PASS | `pauli_phi` · SU(2) double cover |
+**Gap:** **—** закрыто · **sim** MODEL есть, код нет · **model** ещё не выведено в MODEL · **T** readout/metric.
 
-**Связанное (не отдельная аксиома):**
+**Verify:** `python verify_principles.py --device cpu` · T: `validate_mt.py` · snapshot **2026-09-22**.
 
-| блок | суть | MODEL | verify · статус |
-|------|------|-------|-----------------|
-| **§2.3** | ¬M heat death; fixed points; Planck floor | §2.3 · §0.5 | **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** PASS |
+### A1–A16
 
-**Легенда verify:** **PASS** / **FAIL** = последний `verify_principles.py` (2026-09-22). **—** = нет отдельного probe, только структура кода/MODEL. Детали gap и «как уложить» → **§2.1**.
+| # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
+|---|----------------|------------------------|-------|-----|--------|------|---------------|
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** по оси | только **`N₄`**, Moore **запрещён** | §2 · §1.3–§1.4 | — | — (структура) | `laplacian` **`N₄`** | — |
+| **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
+| **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | sim | **`Leapfrog`** PASS · **`A3`** · **`LocalContinuity`** (bond) | `reversible` · `z_ring` | **`div j=0`** на full **`projected_step`** |
+| **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
+| **A5** | **Абс. ноль недостижим** | boiling vac; **`z≡0`** excluded | §2 · §0.5 | sim | **`A5`** · **`PlanckVacuumFloor`** PASS | `heisenberg_floor` · seeds | ≠ D5 при floor — MODEL §2.3.8 |
+| **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
+| **A7** | **`ρ ≤ ρ_P`** | **`K_P`** в Φ; clamp | §2 · §3.12.5 | sim | **`A7`** PASS | `bekenstein_scale_spinor` | — |
+| **A8** | **Macro-линейность** | **`w(ρ)`** затухает | §2 · §3.4 | T | **`A8`** PASS | gate **`w(ρ)`** | T-readout probes |
+| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | **sim** | **`A9` FAIL** | `cr_strength` · holomorphy sync | CR на **`Φ(ζ)`**, не stationarity seed |
+| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | **sim** | seeds OK · **`A10`** evolution **FAIL** | `topology` · seeds | long-run **`n`** — §3 open |
+| **A11** | **Soliton / anti-smear** | **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | sim | **`A11`** PASS | saturating Φ | — |
+| **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
+| **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
+| **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | **sim** | **`A14`** · **`U1_vac`** · **`SO2_C4` FAIL** · **`Chiral_SU2` PASS** | `symmetry` · `chiral` | **equivariant encode + step** (одна ось с A9) |
+| **A15** | **Геометрия N₄** | **`κ=1/√2`**, **`γ=¼`**, **`α*`** | §2 · §5.2.2 | — | **`QuarterQuantum`** PASS | `si_constants` | — |
+| **A16** | **Pauli / 720°** | **`2π→−1`**, repulsion | §2 · §3.10.4 | sim | **`A16`** · **`Pauli`** PASS | `pauli_phi` | — |
 
----
+**§2.3 (блок):** ¬heat death · fixed points · Planck floor — MODEL §2.3 · **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** PASS.
 
-## §2. Audit · gap tracker
+### Линейка · форма **`g`** · §5.2 (не отдельные A#)
 
-Полный реестр «известное → MODEL → как уложить в `g`» — **§2.1**. Ниже — краткий индекс quanta.
+| ограничение | MODEL | gap | verify | следующий шаг |
+|-------------|-------|-----|--------|---------------|
+| **`hL=l_P`**, **`hT=t_P/√2`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
+| leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
+| **`s₀→p₀,L₀,E₀`**, **`κ_link=¼`** | §5.2.1–§5.2.2 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | — |
+| **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
+| **`b` из **`n_∂`**, не **`\|z\|²`** | §5.0 · §5.2.3 | sim | **`MatterOccupancyB`** PASS | T occupancy — open |
+| **`α_s`, G_F, GR метрика** | — | **model** | — | сознательно вне M |
+| **Higgs = T-пена** | §5.0.1 · §8 | T | — | sim **`m_H`** leaf |
 
-| величина | статус | gap |
-|----------|--------|-----|
-| **`κ_link`, `γ`, `cr_strength`, `ν_CA`** | ✅ **`¼`** | — |
-| **`s₀`, `p₀`, `L₀`, `E₀`, `F₀`, `g_M`** | ✅ §5.2.1 | — |
-| **`sync`, Pauli, `ρ_Q`, `n_E` map** | ✅ §5.2.3 | **`LadderLedger`** (E/p/L + Heisenberg every tick) |
-| **`R(Φ)=ω^Φ` vs `exp(i·Θ·σ/2)`** | ✅ §3.10.3 · §3.12.5 | verify **`DiscreteRotExp`** |
-| **`b ∈ {0,1}`** | ✅ §5.0 / §5.2.3 | **`MatterOccupancyB`** (n_∂ + ρ gate, not \|z\|²) |
-| **`α_s`, G_F, динамическая метрика** | ❌ | **model-gap** SM/GR |
+**Приоритет sim-gap:** **A14 + A9** (equivariant canonical step) → затем A10 evolution, A3 full continuity.
 
-Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rho_P_binary`**, **`LadderLedger`**, **`MatterOccupancyB`**. Живой PASS/FAIL по строкам — **§2.1** (не дублировать здесь).
-
----
-
-## §2.1 Реестр фундаментальных ограничений
-
-**Метод (как теормех):** предположение → **общий вид** локального перехода **`g`** → **наложение** уже известных ограничений. Не «предел **`hL→0`**» (как **`c→∞`**, **`ℏ→0`** в другую сторону), а **T-readout вверх** с **фиксированного** шага; **`l_P = √(ℏG/c³)`** — **естественная единица длины**, любая **`L = f·l_P`**. Ниже **`dl = hL = l_P`** на M **нет координаты** (MODEL §0.4, §1.4).
-
-**Три gap’а (MODEL шапка):**
-
-| gap | смысл | долг |
-|-----|--------|------|
-| **model-gap** | ограничение **известно**, в MODEL **ещё не выведено / не режет форму `g`** | дописать § MODEL |
-| **sim-gap** | в MODEL **уже сказано**, **`mt_ca`** не догнал | код · verify |
-| **T-metric** | грубый readout / fit на T | `validate_mt`, macro — **не refute M** |
-
-**Колонки реестра:**
-
-| колонка | смысл |
-|---------|--------|
-| **MODEL** | где уже записано |
-| **режет `g`?** | **да** — сужает **`Φ` / ⌊𝒩⌋ / encode / leapfrog** · **частично** · **следствие** · **T-only** |
-| **gap** | — · model · sim · T |
-| **verify** | probe · PASS/FAIL · — (ещё нет) |
-| **уложить** | следующий шаг наложения (не «ещё один knob») |
-
-*Verify snapshot: `python verify_principles.py --device cpu` (2026-09-22 после **`LadderLedger`** ship).*
-
-### I · Линейка и кирпич (из CODATA, не knobs)
-
-| ограничение | источник | MODEL | режет `g`? | gap | verify | уложить |
-|-------------|----------|-------|------------|-----|--------|---------|
-| **`l_P`**, **`hL = l_P`** | **`√(ℏG/c³)`** | §0.2 · §1 · §7 | **да** — шаг решётки, **`dV=l_P³`** | — | **`HvBitBudget`** algebra | — |
-| **`hT = t_P/√2`**, **`c₀ = √2·c`** | N₄ + CODATA **`c`** | §0.2 · §1.1 | **да** — один M-тик, конус | — | **`MechanicalQuantum`** | — |
-| **`κ = 1/√2`** | геометрия ромба N₄ | §1.1 · A15 | **да** — macro readout, не fitted | — | `scripts/check_kappa.py` | T1 radial — **T-metric** open |
-| **`B_hV = 2π/ln2`**, **`N_ring=512`**, **`frac_bits=6`** | Planck **`E_P l_P = ℏc`** | §3.12.6 | **да** — **`Z_N[i]`**, Rot_LUT | — | **`HvBitBudget`** PASS | — |
-| **`Δφ_min = ½`**, **`N_φ=13`** | Heisenberg · **`s₀=ℏ/2`** | §5.0.2 · §3.12.6 | **да** — floor на **`Φ`** | sim | **`A16`** · **`LadderLedger`** PASS | полный star ledger на **реальном** kick — **model→sim** |
-| **нет `hL→0` на M** | дискретность | §0.4 · §1.4 | **структура** | — | — | не путать с T continuum |
-| **`z_min`**, **`vacuum_amplitude`** | **`2^{−B_amp}`** · A5 | §0.5 · §10.2 | **да** — пол амплитуды | sim | **`PlanckVacuumFloor`** PASS | — |
-
-### II · Форма перехода (ansatz `g`)
-
-| ограничение | MODEL | режет `g`? | gap | verify | уложить |
-|-------------|-------|------------|-----|--------|---------|
-| **локальность **`N₄`**** | §0.3 · A2 | **да** | — | структура | Moore запрещён §1.3 |
-| **leapfrog **`Z⁺+Z⁻=2Z+⌊𝒩⌋`**** | §3.12 | **да** — 2,−1 из конуса | — | **`Leapfrog`** PASS | — |
-| **holonomy **`ζ`**** | §3.12.5 | **да** — вход **`Φ`** | — | **`Arg_mass_carrier`** PASS | — |
-| **`Φ = ⌊K_P ζ_imag / (ζ_real+|Z|²+K_P)⌋`** | §3.12.5 · A7 | **да** — saturating + Bekenstein | sim | **`A7`** · **`DiscreteRotExp`** | ledger-neutral распределение kick — **model** |
-| **`R(Φ)=ω^Φ`**, не matrix exp | §3.10.3 · §3.12.5 | **да** | — | **`DiscreteRotExp`** PASS | — |
-| **decode float ≠ tick** | §0.3 · §3.12.4 | **да** | sim | **`Leapfrog`** | — |
-
-### III · A1–A16 (абсолютные условия → класс допустимых `g`)
-
-| # | суть | MODEL | режет `g`? | gap | verify (2026-09-22) | уложить |
-|---|------|-------|------------|-----|---------------------|---------|
-| A1 | каузальность, **`c₀`**, N₄ | §2 | **да** | — | структура | — |
-| A2 | локальность | §2 | **да** | — | структура | — |
-| A3 | **`Σ|z|²`**, unitary gate | §2 · §5.2.1 | **да** | sim | **`Leapfrog`** · **`LocalContinuity`** (bond) | **`div j=0`** на full **`projected_step`** — **sim** |
-| A4 | **`ℂ²`**, SU(2)/U(1) gate | §2 · §3.10 | **да** | — | **`SU2_360/720`** | — |
-| A5 | нет абс. нуля · boiling vac | §2 · §0.5 | **да** | sim | **`A5`** · **`PlanckVacuumFloor`** | ≠ D5 динамика при floor — **§2.3.8** |
-| A6 | локальная энтропия | §2 | **частично** | model | **`A3_diffusive`** (anti) | для full **`g`** — **model-gap** |
-| A7 | **`ρ ≤ ρ_P`**, **`u_P`** | §2 · §3.12.5 | **да** | sim | **`A7`** PASS | — |
-| A8 | macro-линейность | §2 | **T + gate** | T | **`A8`** | T-readout |
-| A9 | CR / голоморфность | §2 · §3.9 | **да** — класс **`g`** | **sim** | **`A9` FAIL** | CR как **ограничение на `Φ(ζ)`**, не stationarity seed — **model→sim** |
-| A10 | **`n ∈ ℤ`**, winding | §2 · §5.0 | **да** | **sim** | seeds PASS · **evolution FAIL** | long-run **`n`** — §3 open |
-| A11 | anti-smear, soliton | §2 · §3.7 | **да** | sim | **`A11`** PASS | — |
-| A12 | Lorentz / isotropy T | §2 | **T** | T | **`validate_mt` T1** | macro radial — open |
-| A13 | обратимость шага | §2 · §3.12 | **да** | — | **`Leapfrog`** PASS | — |
-| A14 | P/C/T/U1 on **`g`** | §2 · §3.11 | **да** | **sim** | **`U1_vac` FAIL** · **`SO2_C4` FAIL** · **`A14` FAIL** | equivariant **encode + step** — **sim-gap**, не ослаблять MODEL |
-| A15 | **`κ_link=¼`**, **`α*`** | §2 · §5.2.2 | **да** | — | **`QuarterQuantum`** PASS | — |
-| A16 | Pauli · **`2π→−1`** | §2 · §3.10.4 | **да** | sim | **`Pauli`** · **`A16`** PASS | — |
-
-### IV · Лестница §5.2 (механика без float-knobs)
-
-| ограничение | MODEL | режет `g`? | gap | verify | уложить |
-|-------------|-------|------------|-----|--------|---------|
-| **`s₀ → p₀, L₀, E₀, F₀, g_M`** | §5.0.2 · §5.2.1 | **да** — integer ledger | — | **`MechanicalQuantum`** · **`EnergyQuantum`** · **`Arg_quantum`** | — |
-| **`κ_link = γ = cr = ν_CA_nat = ¼`** | §5.2.2 | **да** | — | **`QuarterQuantum`** · **`Nu_CA`** | ballistic **`c`** sim — T |
-| **`div j=0`**, **`Σ_{N₄}Δπ≡0 (mod p₀)`**, **`L_z∈L₀·ℤ`** | §5.2.1 | **да** | **sim** | **`LadderLedger`** PASS (proxy floor + mod **p₀**) | **полное** star closure на step — **model→sim** |
-| **`n_E = ⌊|Φ|/Δφ_disc⌋`**, energy ledger | §5.2.3 | **да** | **sim** | **`ElementaryQuanta`** · **`LadderLedger`** | boiling vac star — **model derive** |
-| **`b = min(1,|n_∂|)`**, **`ρ_matter=ρ_P·b`** | §5.0 · §5.2.3 | readout | sim | **`MatterOccupancyB`** PASS | T occupancy §5.0 — open |
-| **`Q = n·e₀`**, **`α_fs`** geometry | §5.2.3 · §8.2 | **T anchor** | model | **`Compton_e`** algebra | dynamical EM — model-gap |
-
-### V · Известно · сознательно не в M (model-gap SM/GR)
-
-| ограничение | статус | уложить |
-|-------------|--------|---------|
-| **`α_s`, G_F, running couplings** | ❌ model-gap | не подменять §8 якорями |
-| **динамическая метрика GR** | ❌ model-gap | §8 / META |
-| **Higgs как M-первопричина** | ❌ — **T-пена** §5.0.1 | sim **`m_H`** leaf |
-
-### §2.1.1 Цикл работы (SSOT процесс)
-
-1. **Строка реестра** — ограничение из «уже знаем» (CODATA · симметрия · термо · топология).
-2. **MODEL** — есть § / нет → **model-gap**: вывести, как сужается **`Φ`**, **`⌊𝒩⌋`**, encode, **`hT`**.
-3. **Режет форму?** — если да в MODEL, impl отстаёт → **sim-gap** (`mt_ca`, probe).
-4. **T-only** — **`validate_mt`**, GPU; **не** ослаблять M под sim (MODEL шапка).
-5. **Несовместимость** — правим **ansatz** или **одно ограничение** в MODEL; не «зелёный порог» verify.
-
-**Приоритет sim-gap (блокирует Noether-таблицу §5.2.1):** **`U1_vac`** · **`SO2_C4`** · **`A9`** · **`A14`** — одна ось: **equivariant canonical step**.
-
-**Provenance (2026-09-22):** «список ограничений → что в MODEL → как уложить»; **`l_P`** = natural unit, не postulate.
+**Цикл:** (1) строка реестра → (2) есть в MODEL? иначе **model-gap** → (3) режет **`g`**? impl отстаёт → **sim-gap** → (4) T-only → **`validate_mt`** → (5) несовместимость → правим MODEL/ansatz, не порог verify.
 
 ---
 
@@ -219,7 +117,7 @@ Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rh
 
 | пункт | статус |
 |-------|--------|
-| CR + **`cr_strength`** | ✅ shipped · verify **`A9` FAIL** — §2.1 |
+| CR + **`cr_strength`** | ✅ shipped · verify **`A9` FAIL** — §1 |
 | **`Δφ ≥ 1/2`** Heisenberg floor | ✅ **`heisenberg_floor`** · A16 |
 | winding **`n`** seeds + T readout | ✅ A10 · `topology.winding_robust` |
 | holomorphy sync on tick | ✅ **`holomorphy_sync_step`** |
@@ -248,7 +146,7 @@ Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rh
 
 | слой M | impl |
 |--------|------|
-| **`U(1)_vac`** | ⚠️ verify **`U1_vac` FAIL** — §2.1 |
+| **`U(1)_vac`** | ⚠️ verify **`U1_vac` FAIL** — §1 |
 | **`P_L/P_R`** | ✅ **`chiral.py`** · **`Chiral_SU2`** |
 | **projected 𝒩 on Z_N[i]** | ✅ **`projected_collision.py`** |
 | **CPT product** | optional · `run_symmetry_probe.py` |
@@ -301,7 +199,7 @@ Verify: **`QuarterQuantum`**, **`EnergyQuantum`**, **`ElementaryQuanta`**, **`Rh
 | 2026-09-22 | §3.12 | float32 1st order на 4070 → chirality dance `n` |
 | 2026-09-22 | night canon | split MODEL/META; canonical Z_N[i]; quantization ladder |
 | 2026-09-22 | §3.10.3 | `exp(i·Θ·σ/2)` → discrete `R(Φ)=ω^Φ` on Z_N[i] |
-| 2026-09-22 | §2.1 | реестр фундаментальных ограничений · цикл наложения · honest verify |
+| 2026-09-22 | §1 | единый реестр ограничений · honest verify |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
@@ -334,4 +232,4 @@ python validate_mt.py          # T1/T2/T3 — CUDA
 python scripts/run_symmetry_probe.py
 ```
 
-**Последний полный M-verify (2026-09-22):** **`LadderLedger`**, **`MatterOccupancyB`**, **`PlanckVacuumFloor`**, **`Theorem_2_3_8`** PASS · **`A9`**, **`SO2_C4`**, **`U1_vac`**, **`A14`**, **`A10`** (evolution) FAIL — детали **§2.1**.
+**Последний полный M-verify (2026-09-22):** см. колонку **verify** в **§1**.
