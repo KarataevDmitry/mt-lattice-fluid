@@ -145,9 +145,18 @@ def bekenshtein_fractional_part() -> float:
     return b_hv - math.floor(b_hv)
 
 
+# von Neumann causal star on d=2 lattice (§3.6, §5.2.2)
+N4_CAUSAL_LINKS = 4
+
+
+def kappa_link(*, n_links: int = N4_CAUSAL_LINKS) -> float:
+    """Isotropic per-link fraction 1/|N₄| — unifies γ, cr_strength, ν_CA_natural (§5.2.2)."""
+    return 1.0 / float(n_links)
+
+
 def nu_CA_natural() -> float:
-    """ν_CA in natural units (c₀ = l_P = 1): ¼·c₀·l_P = ¼ (§4.1.2)."""
-    return 0.25
+    """ν_CA in natural units (c₀ = l_P = 1): κ_link·c₀·l_P = ¼ (§4.1.2, §5.2.2)."""
+    return kappa_link()
 
 
 def cr_seed_ceiling() -> float:
@@ -853,6 +862,46 @@ def mechanical_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str,
 
 
 
+def quarter_quantum_row(*, n_links: int = N4_CAUSAL_LINKS) -> dict[str, float | int]:
+    """§5.2.2 — κ_link = 1/|N₄| unifies γ, cr_strength, ν_CA_natural."""
+    k = kappa_link(n_links=n_links)
+    nu = nu_CA_natural()
+    return {
+        "N4_links": n_links,
+        "kappa_link": k,
+        "gamma": k,
+        "cr_strength": k,
+        "nu_CA_natural": nu,
+        "gamma_equals_cr": k / k,
+        "gamma_equals_nu_CA": k / nu if nu else float("inf"),
+        "cr_seed_ceiling": cr_seed_ceiling(),
+        "cr_dispersion_ceiling": cr_dispersion_ceiling(),
+    }
+
+
+
+
+def energy_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str, float]:
+    """§5.2.2 — E₀ ladder: E₀ = p₀·c₀ = F₀·l_P = L₀/hT = s₀/hT."""
+    s0 = SI.hbar * delta_phi_min
+    e0 = s0 / SI.hT
+    p0 = s0 / SI.l_P
+    f0 = p0 / SI.hT
+    l0 = s0
+    return {
+        "E_0_J": e0,
+        "E_0_from_p0_c0": p0 * SI.c0,
+        "E_0_from_F0_lP": f0 * SI.l_P,
+        "E_0_from_L0_over_hT": l0 / SI.hT,
+        "E_0_equals_s0_over_hT": e0,
+        "rel_p0_c0": abs(p0 * SI.c0 - e0) / e0,
+        "rel_F0_lP": abs(f0 * SI.l_P - e0) / e0,
+        "rel_L0_hT": abs(l0 / SI.hT - e0) / e0,
+        "alpha_fs_from_gate": SI.alpha_fs,
+    }
+
+
+
 
 def baryon_geometry_factor(m_p: float, *, alpha_fs: float | None = None) -> float:
 
@@ -933,6 +982,14 @@ def as_code_dict() -> dict[str, float]:
         "T_P_CONV": SI.t_P,
 
         "KAPPA": KAPPA,
+
+        "KAPPA_LINK": kappa_link(),
+
+        "GAMMA": kappa_link(),
+
+        "CR_STRENGTH": kappa_link(),
+
+        "NU_CA_NATURAL": nu_CA_natural(),
 
         "C0_m_s": SI.c0,
 

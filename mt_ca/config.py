@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import math
 
-from mt_ca.si_constants import DELTA_PHI_MIN, HV, SI
+from mt_ca.si_constants import DELTA_PHI_MIN, HV, SI, kappa_link
 from mt_ca.fixed_point import vacuum_amplitude_quantum
 
 
@@ -18,8 +18,8 @@ class MConfig:
     # linear_mode: isotropic (§3.6 default) | local_ca (§3.6 bond-sweeps) | diffusive (A3↔A6 anti-pattern)
     linear_mode: str = "isotropic"
 
-    # Kinetic coupling: dispersion ω(k)≈γ|k|² at small k (A15 calibration)
-    gamma: float = 0.25
+    # Kinetic coupling: γ = κ_link = 1/|N₄| (§5.2.2)
+    gamma: float = kappa_link()
 
     # Vacuum gate (§7.1): ε=1 ↔ u_P; α*=1+1/(4π) from ω·hT=2π + zero-point ½ℏω
     epsilon: float = SI.epsilon
@@ -32,8 +32,8 @@ class MConfig:
     # t=0 «первичный бульон»: one Q(frac_bits) quanta (§3.12.6)
     vacuum_amplitude: float = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
 
-    # A9: discrete CR coupling in gate (§3.9)
-    cr_strength: float = 0.25
+    # A9: discrete CR coupling — cr_strength = κ_link (§5.2.2)
+    cr_strength: float = kappa_link()
 
     # §3.9 global holomorphy sync on same Δt
     holomorphy_sync: bool = True

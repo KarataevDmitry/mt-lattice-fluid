@@ -489,6 +489,52 @@ def check_mechanical_quantum(device: str = "cpu") -> dict:
     }
 
 
+def check_quarter_quantum(device: str = "cpu") -> dict:
+    from mt_ca.config import MConfig
+    from mt_ca.si_constants import N4_CAUSAL_LINKS, quarter_quantum_row
+
+    row = quarter_quantum_row()
+    cfg = MConfig()
+    ok = (
+        row["N4_links"] == N4_CAUSAL_LINKS
+        and abs(row["kappa_link"] - 0.25) < 1e-12
+        and abs(row["gamma"] - row["cr_strength"]) < 1e-12
+        and abs(row["gamma"] - row["nu_CA_natural"]) < 1e-12
+        and abs(cfg.gamma - row["kappa_link"]) < 1e-12
+        and abs(cfg.cr_strength - row["kappa_link"]) < 1e-12
+    )
+    return {
+        "id": "QuarterQuantum",
+        "kappa_link": row["kappa_link"],
+        "gamma": row["gamma"],
+        "cr_strength": row["cr_strength"],
+        "nu_CA_natural": row["nu_CA_natural"],
+        "ok": ok,
+        "note": "γ=cr_strength=ν_CA_natural=1/|N₄|=¼ (§5.2.2)",
+    }
+
+
+def check_energy_quantum(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import SI, energy_quantum_row
+
+    row = energy_quantum_row()
+    ok = (
+        row["rel_p0_c0"] < 1e-12
+        and row["rel_F0_lP"] < 1e-12
+        and row["rel_L0_hT"] < 1e-12
+        and abs(row["E_0_J"] - SI.E_0) / SI.E_0 < 1e-12
+    )
+    return {
+        "id": "EnergyQuantum",
+        "E_0_J": row["E_0_J"],
+        "rel_p0_c0": row["rel_p0_c0"],
+        "rel_F0_lP": row["rel_F0_lP"],
+        "rel_L0_hT": row["rel_L0_hT"],
+        "ok": ok,
+        "note": "E₀=p₀·c₀=F₀·l_P=L₀/hT=s₀/hT (§5.2.2)",
+    }
+
+
 def check_local_continuity(size: int = 64, device: str = "cpu") -> dict:
     from mt_ca.conservation import local_conservation_report
 
@@ -695,6 +741,8 @@ def run_all(device: str) -> list[dict]:
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),
         check_mechanical_quantum(device=device),
+        check_quarter_quantum(device=device),
+        check_energy_quantum(device=device),
         check_local_continuity(device=device),
         check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),
