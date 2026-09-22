@@ -2,7 +2,7 @@
 
 **SSOT-часть MODEL.** Hub: [`MODEL.md`](../MODEL.md) · соседи: [`model/`](.)
 
-**Не сюда:** impl / verify / даты / MVP / provenance → [`DEVLOG.md`](../DEVLOG.md).
+**Не сюда:** impl / verify / даты / sim-gap / provenance → [`DEVLOG.md`](../DEVLOG.md).
 
 ---
 
@@ -44,5 +44,4 @@ vacuum_amplitude = z_min                    — derived, не fitted
 **§2** — полный реестр **абсолютных условий A1–A16**, ограничивающих допустимый **`g`**.
 
 ---
-
 

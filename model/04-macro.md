@@ -2,7 +2,7 @@
 
 **SSOT-часть MODEL.** Hub: [`MODEL.md`](../MODEL.md) · соседи: [`model/`](.)
 
-**Не сюда:** impl / verify / даты / MVP / provenance → [`DEVLOG.md`](../DEVLOG.md).
+**Не сюда:** impl / verify / даты / sim-gap / provenance → [`DEVLOG.md`](../DEVLOG.md).
 
 ---
 
@@ -61,9 +61,7 @@ Coarse / T1 / dispersion — **механизм** слоя T. **Электрон
 Φ(X,t) = (1-2-1)^{⊗2·R} z(x,t)     — separable von Neumann isotropic readout
 ```
 
-Эквивалентно одному проходу **3×3** с весами **`[1,2,1; 2,4,2; 1,2,1]/16`**. **Σ W = 1**. Идеальная **изотропия на N₄** — без float **`exp(−r²/σ²)`**.
-
-**Impl:** `mt_ca/macro.py` — `binomial121_smooth`, `macro_average_spinor`, `macro_amplitude`; `t_validation.coarse_grain(block)` → **R≈block** passes, stride **= block**.
+Эквивалентно одному проходу **3×3** с весами **`[1,2,1; 2,4,2; 1,2,1]/16`**. **Σ W = 1**. Идеальная **изотропия на ε** — без float **`exp(−r²/σ²)`**.
 
 **Legacy v0** (block-mean, debug only):
 
@@ -80,7 +78,7 @@ exp(i·2π·[K_P·(1+1/4π)/(ρ_E+K_P)·Θ_flow − 1])
   ≈ 1 + i·2π·Θ_flow − i·2π·ρ_E/K_P + …
 ```
 
-Оператор **Σ(…·W)** к обеим частям; дискретные фазовые разности **Θ_flow** по **N₄** → макро-**∇²**; шаг **Δt = hT**:
+Оператор **Σ(…·W)** к обеим частям; дискретные фазовые разности **Θ_flow** по **N** → макро-**∇²**; шаг **Δt = hT**:
 
 ```
 Φ(X,t+Δt) − Φ(X,t) ≈ l_P² · ∇²Φ(X,t) − i·Δt · (ρ_P c²/K_P) · |Φ|² Φ(X,t)
@@ -121,7 +119,7 @@ A5 ⇒ перманентное **micro-кипение**. Столкновени
 
 **`ν_CA = ¼ · c₀ · l_P`**
 
-Множитель **`¼`** — число **ортогональных** направлений переноса в **N₄**-окрестности (von Neumann causal cross, §2).
+Множитель **`¼`** — число **ортогональных** направлений переноса в **N**-окрестности (von Neumann causal cross, §2).
 
 **SI (из `ℏ, G, c`, без подгонки):**
 
@@ -283,9 +281,7 @@ I_max   = 2π · M c² · R / (ℏ ln 2)      — Bekenstein [bit/кадр]
 | человек | 70 kg | 15 ms | **5.03×10⁻⁴⁵ m** | **1.19×10⁻⁵³ s** | **1.27×10⁵¹** | ~3.1×10⁻¹⁰ |
 | **дрозофила** | **1 mg** | **4 ms** | **3.52×10⁻³⁷ m** | **8.30×10⁻⁴⁶ s** | **4.82×10⁴²** | **~0.022** |
 
-**Impl:** `mt_ca.si_constants.system_quanta(M_kg, tau_frame_s, *, R_m=None)` → `SystemQuanta`;  
 `reduced_compton_wavelength`, `compton_wavelength`, `compton_scattering_shift`.
 
 **Meta (мозг как macro-узел, кадр ~15 ms, UI, «наблюдаемая Вселенная»):** → **[`META.md` §2](META.md#§2-наблюдатель-и-ui-t-над-t)** — **не SSOT**; не добавляет параметров в `g`.
-
 
