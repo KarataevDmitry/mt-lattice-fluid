@@ -36,7 +36,7 @@ def check_a3_unitarity(size: int = 128, steps: int = 256, device: str = "cpu") -
 
 
 def check_a3_local_ca(size: int = 128, steps: int = 256, device: str = "cpu") -> dict:
-    cfg = MConfig(linear_mode="local_ca")
+    cfg = MConfig.for_stencil('hex', linear_mode="local_ca")
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device))
     norm0 = total_norm_squared(z)
     for _ in range(steps):
@@ -57,7 +57,7 @@ def check_a3_local_ca(size: int = 128, steps: int = 256, device: str = "cpu") ->
 def check_a3_spectral_reference(size: int = 128, device: str = "cpu") -> dict:
     from mt_ca.t_analysis import spectral_unitary_reference
 
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device))[..., 0]
     z_ref = spectral_unitary_reference(z, cfg.gamma)
     z_ca = linear_step_local_ca(z, cfg.gamma)
@@ -71,7 +71,7 @@ def check_a3_spectral_reference(size: int = 128, device: str = "cpu") -> dict:
 
 
 def check_a3_diffusive_fails(size: int = 128, steps: int = 256, device: str = "cpu") -> dict:
-    cfg = MConfig(linear_mode="diffusive", macro_weight=False, cr_strength=0.0)
+    cfg = MConfig.for_stencil('hex', linear_mode="diffusive", macro_weight=False, cr_strength=0.0)
     z = make_seed(SeedClass.PLANE_WAVE, size, size, device=torch.device(device))
     norm0 = total_norm_squared(z)
     for _ in range(steps):
@@ -89,7 +89,7 @@ def check_a3_diffusive_fails(size: int = 128, steps: int = 256, device: str = "c
 
 
 def check_a4_phase_preserves_modulus(device: str = "cpu") -> dict:
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     z = torch.tensor([0.3 + 0.4j, 0.1 - 0.2j], device=device, dtype=torch.complex64)
     rho = z.abs().square()
     phi = vacuum_phase(rho, cfg)
@@ -99,7 +99,7 @@ def check_a4_phase_preserves_modulus(device: str = "cpu") -> dict:
 
 
 def check_impl_zero_frozen(size: int = 32, device: str = "cpu") -> dict:
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     z = torch.zeros(size, size, 2, device=device, dtype=torch.complex64)
     z1 = apply_gate_collision(z, cfg)
     frozen = float(field_amplitude(z1).max().item()) == 0.0
@@ -112,7 +112,7 @@ def check_impl_zero_frozen(size: int = 32, device: str = "cpu") -> dict:
 
 
 def check_a5_vacuum_floor(size: int = 64, steps: int = 64, device: str = "cpu") -> dict:
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.VACUUM)
     amp0 = float(sim.snapshot_amplitude().mean().item())
     sim.step(steps)
@@ -122,7 +122,7 @@ def check_a5_vacuum_floor(size: int = 64, steps: int = 64, device: str = "cpu") 
 
 
 def check_a8_macro_suppression(device: str = "cpu") -> dict:
-    cfg = MConfig(macro_weight=True, macro_rho=1.0)
+    cfg = MConfig.for_stencil('hex', macro_weight=True, macro_rho=1.0)
     rho_low = torch.tensor([0.01, 0.05], device=device)
     rho_high = torch.tensor([32.0, 128.0], device=device)
     phi_low = vacuum_phase(rho_low, cfg)
@@ -147,7 +147,7 @@ def check_a9_cr_smooth_modes(
         nu_CA_natural,
     )
 
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.PLANE_WAVE)
     e0 = cauchy_riemann_energy(sim.z[..., 0])
     sim.step(burn_in)
@@ -177,7 +177,7 @@ def check_a9_cr_smooth_modes(
 
 
 def check_a11_vortex_persistence(size: int = 128, steps: int = 128, device: str = "cpu") -> dict:
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.VORTEX_P)
     amp0 = float(sim.snapshot_amplitude().max().item())
     sim.step(steps)
@@ -196,7 +196,7 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
     from mt_ca.reversible import canonical_fixed
     from mt_ca.si_constants import DELTA_PHI_MIN, heisenberg_phi_min_disc, heisenberg_phi_min_physical
 
-    cfg = MConfig(heisenberg_floor=True)
+    cfg = MConfig.for_stencil('hex', heisenberg_floor=True)
     phi_min_rad = heisenberg_phi_min_physical()
     phi_min_disc = heisenberg_phi_min_disc(phase_bits=cfg.phase_bits)
     n_ring = 1 << cfg.phase_bits
@@ -276,7 +276,7 @@ def check_vortex_hex_contour(
     """§3.8: hex stencil + contour axis ratio on micro |z| (§3.7.3)."""
     from mt_ca.metrics import contour_axis_ratio, contour_radius_anisotropy, field_amplitude
 
-    sim = LatticeFluidSimulator(size, size, MConfig(stencil="hex"), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.VORTEX_P)
     sim.step(steps)
     micro = field_amplitude(sim.z)
@@ -293,7 +293,7 @@ def check_vortex_hex_contour(
 
 
 def check_a7_density_clamp(device: str = "cpu") -> dict:
-    cfg = MConfig(rho_max=1.0)
+    cfg = MConfig.for_stencil('hex', rho_max=1.0)
     sim = LatticeFluidSimulator(4, 4, cfg, device=device)
     z = torch.zeros(4, 4, 2, device=device, dtype=torch.complex64)
     z[..., 0] = 2.0 + 0j
@@ -322,7 +322,7 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
         read[seed.value] = n
     seeds_ok = all(read[k.value] == v for k, v in seed_charges.items())
 
-    sim = LatticeFluidSimulator(size, size, MConfig(), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
     sim.reset(SeedClass.VORTEX_P)
     sim.step(steps)
     w_late = abs(winding_robust(sim.z))
@@ -342,7 +342,7 @@ def check_elementary_quanta(device: str = "cpu") -> dict:
     from mt_ca.si_constants import elementary_quanta_row
 
     row = elementary_quanta_row()
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     ok = (
         abs(cfg.sync_strength - row["sync_strength_rad"]) < 1e-12
         and abs(cfg.pauli_kick - row["pauli_kick_rad"]) < 1e-12
@@ -363,7 +363,7 @@ def check_elementary_quanta(device: str = "cpu") -> dict:
 
 
 def check_pauli_repel(device: str = "cpu") -> dict:
-    cfg = MConfig(pauli_exclusion=True)
+    cfg = MConfig.for_stencil('hex', pauli_exclusion=True)
     sim = LatticeFluidSimulator(1, 1, cfg, device=device)
     z = torch.zeros(1, 1, 2, device=device, dtype=torch.complex64)
     z[..., 0] = 0.8 + 0j
@@ -398,7 +398,7 @@ def check_discrete_rot_exp(device: str = "cpu") -> dict:
     from mt_ca.si_constants import heisenberg_phi_min_disc, phase_disc_to_rad
     from mt_ca.z_ring import mod_lane
 
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     dev = torch.device(device)
     n_ring = 1 << cfg.phase_bits
 
@@ -473,7 +473,7 @@ def check_hv_bit_budget(device: str = "cpu") -> dict:
     from mt_ca.si_constants import HV, hv_bit_budget_row
 
     row = hv_bit_budget_row()
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     ok = (
         row["rel_err"] < 1e-12
         and row["N_phi"] == 13
@@ -572,6 +572,40 @@ def check_saturation_bc(device: str = "cpu") -> dict:
     }
 
 
+def check_fcc_n12(device: str = "cpu") -> dict:
+    """§1.6 — default stencil FCC N₁₂; κ_link=1/12; 3D sim smoke (1 tick)."""
+    from mt_ca.config import MConfig
+    from mt_ca.laplacian import _FCC_OFFSETS, fcc_neighbor_sum, stencil_n_links
+    from mt_ca.seeds import SeedClass
+    from mt_ca.simulator import LatticeFluidSimulator
+
+    cfg = MConfig()  # canon default
+    n = stencil_n_links(cfg.stencil)
+    ok_geom = cfg.stencil == "fcc" and n == 12 and len(_FCC_OFFSETS) == 12
+    ok_kappa = abs(cfg.gamma - 1.0 / 12.0) < 1e-15
+    sim = LatticeFluidSimulator(8, 8, cfg, device=device)
+    sim.reset(SeedClass.IMPULSE)
+    n0 = sim.norm()
+    sim.step(1)
+    n1 = sim.norm()
+    # 1-tick bounded; multi-tick FCC fill still open gap (DEVLOG)
+    ok_step = n1 < 10.0 * max(n0, 1e-6) and sim.z.ndim == 4 and sim.z.shape[-1] == 2
+    s = fcc_neighbor_sum(sim.z[..., 0])
+    ok_sum = s.shape == sim.z.shape[:-1]
+    ok = ok_geom and ok_kappa and ok_step and ok_sum
+    return {
+        "id": "FCC_N12",
+        "stencil": cfg.stencil,
+        "n_links": n,
+        "gamma": cfg.gamma,
+        "shape": list(sim.z.shape),
+        "norm0": n0,
+        "norm1": n1,
+        "ok": ok,
+        "note": "§1.6 cuboctahedral ε on ℤ³; multi-tick stability open",
+    }
+
+
 def check_mechanical_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import SI, mechanical_quantum_row
 
@@ -603,7 +637,7 @@ def check_quarter_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import N4_CAUSAL_LINKS, quarter_quantum_row
 
     row = quarter_quantum_row()
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     ok = (
         row["N4_links"] == N4_CAUSAL_LINKS
         and abs(row["kappa_link"] - 0.25) < 1e-12
@@ -687,7 +721,7 @@ def check_arg_quantum(device: str = "cpu") -> dict:
 def check_arg_mass_carrier(size: int = 64, device: str = "cpu") -> dict:
     """§5.0.1: Arg(⟨z⟩·z*) carrier ≡ holonomy_zeta + wrapped_phase_diff; wrap fixes naive bug."""
     dev = torch.device(device)
-    cfg = MConfig(heisenberg_floor=False)
+    cfg = MConfig.for_stencil('hex', heisenberg_floor=False)
     ny = nx = size
     z = make_seed(SeedClass.VORTEX_P, ny, nx, device=dev)
     for _ in range(16):
@@ -715,7 +749,7 @@ def check_arg_mass_carrier(size: int = 64, device: str = "cpu") -> dict:
     naive_scalar = (naive_scalar + torch.pi) % (2.0 * torch.pi) - torch.pi
     wrap_beats_naive = float((wrapped_scalar - naive_scalar).abs().item()) > 0.5
 
-    phi = gate_phase(z, MConfig(heisenberg_floor=True))
+    phi = gate_phase(z, MConfig.for_stencil('hex', heisenberg_floor=True))
     dphi = arg_phase_defect(z, cfg, apply_floor=False)
     active_mean = float(dphi.abs().mean().item())
     active_max = float(dphi.abs().max().item())
@@ -838,13 +872,13 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     from mt_ca.simulator import LatticeFluidSimulator
     from mt_ca.z_ring import mod_lane
 
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     dev = torch.device(device)
     z_min = vacuum_amplitude_quantum(frac_bits=cfg.frac_bits)
 
     amp = z_min
     z_const = torch.full((size, size, 2), amp, device=dev, dtype=torch.complex64)
-    cfg_d5 = MConfig(heisenberg_floor=False)
+    cfg_d5 = MConfig.for_stencil('hex', heisenberg_floor=False)
     f_const = canonical_fixed(z_const, cfg_d5)
     kick_const = projected_collision_kick(f_const, cfg_d5)
     f_next, _, _ = leapfrog_forward_fixed(f_const, f_const, cfg_d5)
@@ -881,7 +915,7 @@ def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
     from mt_ca.projected_collision import projected_collision_kick
     from mt_ca.simulator import LatticeFluidSimulator
 
-    cfg = MConfig()
+    cfg = MConfig.for_stencil('hex')
     dev = torch.device(device)
     z_min = vacuum_amplitude_quantum(frac_bits=cfg.frac_bits)
     amp_match = abs(cfg.vacuum_amplitude - z_min) < 1e-12
@@ -992,6 +1026,7 @@ def run_all(device: str) -> list[dict]:
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_saturation_bc(device=device),
+        check_fcc_n12(device=device),
         check_vortex_hex_contour(device=device),
         check_spinor_360_sign(device=device),
         check_su2_720_sign(device=device),

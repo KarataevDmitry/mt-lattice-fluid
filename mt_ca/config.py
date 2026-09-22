@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import math
 
 from mt_ca.si_constants import (
     DELTA_PHI_MIN,
     HV,
+    N12_FCC_CAUSAL_LINKS,
     SI,
     elementary_quanta_row,
     kappa_link,
@@ -15,6 +16,7 @@ from mt_ca.si_constants import (
     sync_strength_rad,
 )
 from mt_ca.fixed_point import vacuum_amplitude_quantum
+from mt_ca.laplacian import stencil_n_links
 
 
 @dataclass(frozen=True)
@@ -28,8 +30,8 @@ class MConfig:
     # linear_mode: isotropic (§3.6 default) | local_ca (§3.6 bond-sweeps) | diffusive (A3↔A6 anti-pattern)
     linear_mode: str = "isotropic"
 
-    # Kinetic coupling: γ = κ_link = 1/|N₄| (§5.2.2)
-    gamma: float = kappa_link()
+    # Kinetic coupling: γ = κ_link = 1/|N| (§5.2.2 · §1.6 canon |N|=12)
+    gamma: float = kappa_link(n_links=N12_FCC_CAUSAL_LINKS)
 
     # Vacuum gate (§7.1): ε=1 ↔ u_P; α*=1+1/(4π) from ω·hT=2π + zero-point ½ℏω
     epsilon: float = SI.epsilon
@@ -43,7 +45,7 @@ class MConfig:
     vacuum_amplitude: float = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
 
     # A9: discrete CR coupling — cr_strength = κ_link (§5.2.2)
-    cr_strength: float = kappa_link()
+    cr_strength: float = kappa_link(n_links=N12_FCC_CAUSAL_LINKS)
 
     # §3.9 global holomorphy sync on same Δt — κ_link·Δφ_min (§5.2.3)
     holomorphy_sync: bool = True
@@ -62,8 +64,8 @@ class MConfig:
     heisenberg_floor: bool = True
     heisenberg_phi_min: float = DELTA_PHI_MIN
 
-    # §3.8: n4 (weak waves) | hex (vortex contour — ladder step 1 after deformation test)
-    stencil: str = "hex"
+    # §1.6 canon fcc N₁₂ · hex = (2+1) slice · n4 = MVP archive
+    stencil: str = "fcc"
 
     # §3.12 M-canonical evolution: leapfrog + projected collision on Z_N[i] (§3.12.6)
     evolution: str = "leapfrog"
@@ -89,3 +91,11 @@ class MConfig:
     def phase_scale(self) -> float:
         """hT·ω = 2π — dimensionless tick phase (λ absorbed into hT)."""
         return self.hT * self.omega
+
+    @classmethod
+    def for_stencil(cls, stencil: str = "fcc", **kw: object) -> "MConfig":
+        """Canon κ_link = 1/|N| tied to stencil (§1.6 · §5.2.2)."""
+        n = stencil_n_links(stencil)
+        k = kappa_link(n_links=n)
+        base = cls(stencil=stencil, gamma=k, cr_strength=k)
+        return replace(base, **kw) if kw else base  # type: ignore[arg-type]

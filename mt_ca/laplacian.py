@@ -55,12 +55,50 @@ def hex_laplacian(z: torch.Tensor) -> torch.Tensor:
     return hex_neighbor_sum(z) - 6.0 * z
 
 
+# FCC / cuboctahedron 1-tick shell (§1.6.2): 12 face-diagonal offsets on ℤ³.
+_FCC_OFFSETS: tuple[tuple[int, int, int], ...] = (
+    (1, 1, 0),
+    (1, -1, 0),
+    (-1, 1, 0),
+    (-1, -1, 0),
+    (1, 0, 1),
+    (1, 0, -1),
+    (-1, 0, 1),
+    (-1, 0, -1),
+    (0, 1, 1),
+    (0, 1, -1),
+    (0, -1, 1),
+    (0, -1, -1),
+)
+
+
+def fcc_neighbor_sum(z: torch.Tensor) -> torch.Tensor:
+    """Σ_{N₁₂} on 3D torus — cuboctahedral ε, |N|=12 (§1.6)."""
+    if z.ndim < 3:
+        raise ValueError("fcc stencil needs spatial rank ≥3 (nz, ny, nx)")
+    # spatial dims = last three before optional batch; we treat (-3,-2,-1) as z,y,x
+    acc = torch.zeros_like(z)
+    for dz, dy, dx in _FCC_OFFSETS:
+        acc = acc + torch.roll(torch.roll(torch.roll(z, shifts=dz, dims=-3), shifts=dy, dims=-2), shifts=dx, dims=-1)
+    return acc
+
+
+def fcc_neighbor_mean(z: torch.Tensor) -> torch.Tensor:
+    return fcc_neighbor_sum(z) / 12.0
+
+
+def fcc_laplacian(z: torch.Tensor) -> torch.Tensor:
+    return fcc_neighbor_sum(z) - 12.0 * z
+
+
 def neighbor_sum(z: torch.Tensor, stencil: str) -> torch.Tensor:
     if stencil == "n4":
         return von_neumann_neighbor_sum(z)
     if stencil == "hex":
         return hex_neighbor_sum(z)
-    raise ValueError(f"Unknown stencil: {stencil!r}. Use 'n4' or 'hex'.")
+    if stencil == "fcc":
+        return fcc_neighbor_sum(z)
+    raise ValueError(f"Unknown stencil: {stencil!r}. Use 'n4', 'hex', or 'fcc'.")
 
 
 def neighbor_laplacian(z: torch.Tensor, stencil: str) -> torch.Tensor:
@@ -68,4 +106,16 @@ def neighbor_laplacian(z: torch.Tensor, stencil: str) -> torch.Tensor:
         return von_neumann_laplacian(z)
     if stencil == "hex":
         return hex_laplacian(z)
-    raise ValueError(f"Unknown stencil: {stencil!r}. Use 'n4' or 'hex'.")
+    if stencil == "fcc":
+        return fcc_laplacian(z)
+    raise ValueError(f"Unknown stencil: {stencil!r}. Use 'n4', 'hex', or 'fcc'.")
+
+
+def stencil_n_links(stencil: str) -> int:
+    if stencil == "n4":
+        return 4
+    if stencil == "hex":
+        return 6
+    if stencil == "fcc":
+        return 12
+    raise ValueError(f"Unknown stencil: {stencil!r}")

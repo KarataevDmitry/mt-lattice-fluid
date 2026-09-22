@@ -51,7 +51,7 @@ def heisenberg_phi_min_int(cfg: MConfig) -> int:
 
 
 def int_neighbor_sum(f: torch.Tensor, stencil: str) -> torch.Tensor:
-    """Σ_{N₄} on each fixed lane."""
+    """Σ_N on each fixed lane (N₄ / N₆ / N₁₂)."""
     out = torch.zeros_like(f, dtype=torch.int64)
     for lane_i in range(f.shape[-1]):
         out[..., lane_i] = neighbor_sum(f[..., lane_i].to(torch.float32), stencil).to(torch.int64)
@@ -86,10 +86,17 @@ def saturating_phi_kick(
 
     if cfg.heisenberg_floor:
         phi_min = heisenberg_phi_min_int(cfg)
-        ny, nx = zeta_i.shape[-2], zeta_i.shape[-1]
-        ys = torch.arange(ny, device=zeta_i.device, dtype=torch.int64).view(-1, 1)
-        xs = torch.arange(nx, device=zeta_i.device, dtype=torch.int64).view(1, -1)
-        stagger = torch.where((ys + xs) % 2 == 0, torch.ones_like(zeta_i), -torch.ones_like(zeta_i))
+        # stagger on spatial lattice (2D or 3D)
+        shape = zeta_i.shape
+        coords = []
+        for dim, size in enumerate(shape):
+            view = [1] * len(shape)
+            view[dim] = size
+            coords.append(torch.arange(size, device=zeta_i.device, dtype=torch.int64).view(*view))
+        parity = coords[0]
+        for c in coords[1:]:
+            parity = parity + c
+        stagger = torch.where(parity % 2 == 0, torch.ones_like(zeta_i), -torch.ones_like(zeta_i))
         below = phi.abs() < phi_min
         sign = torch.sign(phi)
         sign = torch.where(sign == 0, stagger, sign)
