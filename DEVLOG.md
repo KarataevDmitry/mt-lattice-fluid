@@ -221,6 +221,7 @@
 | 2026-09-22 | §8.2 radiation hinges | $\mu=0$✅ схема · open: $T_\gamma$, $\omega(k)$, $g_{\mathrm{pol}}=2$, A6→мера, осциллятор |
 | 2026-09-22 | §8.2 распад | аннигиляция≠распад · free $\gamma$ / одиночный $n\pm1$ стабильны · $\Gamma,\tau$ open · `SI.decay_row` |
 | 2026-09-22 | §8.2 lemma | $m\ll m_P\not\Rightarrow$ must decay · масса≠стабильность · кирпич≠свободная $m_P$ |
+| 2026-09-22 | §8.4.2-G | Diff hinge: фиксированная решётка ≠ Diff · DoD = 2 моды + PPN γ→1 · anti-BD |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
