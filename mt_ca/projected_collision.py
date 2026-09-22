@@ -7,6 +7,7 @@ import math
 import torch
 
 from mt_ca.config import MConfig
+from mt_ca.fixed_point import decode_spinor
 from mt_ca.si_constants import heisenberg_phi_min_disc
 from mt_ca.laplacian import neighbor_sum
 from mt_ca.z_ring import bekenstein_scale_spinor, leapfrog_next, mod_lane
@@ -114,6 +115,19 @@ def rho2_int(u: torch.Tensor, v: torch.Tensor, *, frac_bits: int) -> torch.Tenso
     return (u * u + v * v) >> frac_bits
 
 
+def pauli_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """§3.10.4: parallel spinors on v_p → extra Φ ticks (decode probe → ℤ)."""
+    if not cfg.pauli_exclusion:
+        return torch.zeros(f.shape[:-1], device=f.device, dtype=torch.int64)
+    from mt_ca.topology import pauli_phi
+
+    z = decode_spinor(f, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits)
+    extra = pauli_phi(z, cfg)
+    n_ring = 1 << cfg.phase_bits
+    ticks = torch.round(extra * n_ring / (2.0 * math.pi)).to(torch.int64)
+    return mod_lane(ticks, cfg.mod_bits)
+
+
 def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     """⌊𝒩⌋: integer saturating Φ + LUT rot kick on both spinor components (§3.12.5)."""
     fb = cfg.frac_bits
@@ -128,6 +142,7 @@ def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
     rho2 = rho2_int(u0, v0, frac_bits=fb)
     phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
+    phi = mod_lane(phi + pauli_phi_int(f, cfg), cfg.mod_bits)
 
     du0, dv0 = rot_kick_uv(u0, v0, phi, phase_bits=cfg.phase_bits)
     du1, dv1 = rot_kick_uv(u1, v1, phi, phase_bits=cfg.phase_bits)
