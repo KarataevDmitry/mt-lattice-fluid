@@ -88,6 +88,7 @@
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
 - **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
+- **§4.10 tunnel:** slab barrier $N$ · $|\mathcal{A}|\sim\tau^N$ · WKB continuum — open DoD
 - **§5.0 binary ρ:** occupancy readout on T — open
 - **§5.0.1 Arg mass:** sim `m_H` vs N_вихрей — open
 - **§5.0.3 antimatter:** sim VORTEX_P + VORTEX_M → n_net→0 + 2-front — open
@@ -226,6 +227,7 @@
 | 2026-09-22 | §8.4.2-C′ | strain: $\varepsilon_e[\delta\rho]\to\ell_e\to\theta_f$; $h_{0i}[\Delta\varphi_e]$; не $\varepsilon\propto\Delta\varphi$ |
 | 2026-09-22 | §8.4.2-C′′ | физсмысл: $h_{00,ij}\leftarrow\varepsilon$ (strain≠Коши); $h_{0i}\leftarrow$ Madelung; Regge пассивен |
 | 2026-09-22 | §8.4.2-C′ | $\ell_P=\mathrm{const}$; $\ell_e$ = эффективная Regge-длина, не деформация шага |
+| 2026-09-22 | §4.10 | tunnel M→T: leak$\to\tau^N=e^{-\kappa L/\ell_P}$ · sim slab DoD open |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
