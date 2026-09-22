@@ -517,6 +517,25 @@ class SIConstants:
             "note": "§8.2: F=α_fs F_P n1 n2/N²; N=1,|n|=1 → |F|/F_P=α_fs",
         }
 
+    def maxwell_row(self) -> dict[str, float]:
+        """§8.2 Maxwell — light = K_P/μ_P pressure wave; same c (no new knob)."""
+        mu_p = self.mu_P
+        k_p = self.K_P
+        u_p = self.u_P
+        c = self.c
+        c_from_fluid = math.sqrt(k_p / mu_p)
+        return {
+            "mu_P": mu_p,
+            "K_P": k_p,
+            "u_P": u_p,
+            "c": c,
+            "c_from_K_over_mu": c_from_fluid,
+            "rel_c_fluid": abs(c_from_fluid - c) / c,
+            "rel_K_eq_u": abs(k_p - u_p) / u_p,
+            "kappa": KAPPA,
+            "note": "§8.2: c²=K_P/μ_P; K_P=u_P; Maxwell=Madelung/U(1) T-names",
+        }
+
     def alpha_runner_row(self) -> dict[str, float]:
         """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
         b_hv = self.bekenstein_bits_hv

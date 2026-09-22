@@ -212,6 +212,7 @@
 | 2026-09-22 | §8.4.2-D · §8.4.4 | $G_{\mu\nu}$ из strain+$8\pi\ell_P^{2}$ · CKM $N_{gen}=d$, $\lambda=3/13$ |
 | 2026-09-22 | §8.4.3-D/E | бегунок α: $1/\alpha(M_Z)=1/\alpha_{fs}-B_{hV}$ · дерево $m_W,m_Z$ |
 | 2026-09-22 | §8.2 Кулон | $F=\alpha_{fs} F_P n_1 n_2/N^{2}$ из носителя · `SI.coulomb_row` |
+| 2026-09-22 | §8.2 Максвелл | Arg/j/Madelung/$K_P$ → E,B,J,c · `SI.maxwell_row` · sim ≠ model-gap |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
 
 ---
