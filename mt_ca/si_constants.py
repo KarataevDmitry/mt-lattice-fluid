@@ -147,18 +147,20 @@ def bekenshtein_fractional_part() -> float:
 
 # von Neumann causal star on d=2 square MVP (§3.6, §5.2.2)
 N4_CAUSAL_LINKS = 4
-# Hex candidate from packing (§1.4): triangular centers → 6 equal light-like links
+# Hex / FCC candidates from packing (§1.4 · §1.6)
 N6_CAUSAL_LINKS = 6
-KAPPA_HEX = math.sqrt(3.0) / 2.0  # inscribed circle in causal hexagon
+N12_FCC_CAUSAL_LINKS = 12
+KAPPA_HEX = math.sqrt(3.0) / 2.0  # inscribed circle in 2D causal hexagon
+KAPPA_FCC_1TICK = 1.0 / math.sqrt(2.0)  # inscribed sphere in cuboctahedron (12 NN)
 
 
 def kappa_link(*, n_links: int = N4_CAUSAL_LINKS) -> float:
-    """Isotropic per-link fraction 1/|N| — unifies γ, cr_strength, ν_CA_natural (§5.2.2 · §1.4)."""
+    """Isotropic per-link fraction 1/|N| — unifies γ, cr_strength, ν_CA_natural (§5.2.2 · §1.4 · §1.6)."""
     return 1.0 / float(n_links)
 
 
 def hex_bridge_row() -> dict[str, float]:
-    """SI bridge if canon = hex (§1.4.2). Defaults remain square KAPPA; α_fs unchanged."""
+    """SI bridge if canon = 2D hex (§1.4.2). Defaults remain square KAPPA; α_fs unchanged."""
     t_P = math.sqrt(HBAR * G / C**5)  # l_P/c
     l_P = math.sqrt(HBAR * G / C**3)
     hT = KAPPA_HEX * t_P
@@ -178,6 +180,31 @@ def hex_bridge_row() -> dict[str, float]:
         "alpha_star": 1.0 + 1.0 / (4.0 * math.pi),
         "alpha_fs_inv": 4.0 * math.pi**3 + math.pi**2 + math.pi,
         "cell_area_over_lP2": math.sqrt(3.0) / 2.0,
+    }
+
+
+def fcc_bridge_row() -> dict[str, float]:
+    """SI bridge if canon = 3D FCC (§1.6). κ from 1-tick cuboctahedron; α_fs unchanged."""
+    t_P = math.sqrt(HBAR * G / C**5)
+    l_P = math.sqrt(HBAR * G / C**3)
+    hT = KAPPA_FCC_1TICK * t_P
+    c0 = l_P / hT
+    e_P = math.sqrt(HBAR * C**5 / G)
+    e0 = (HBAR / 2.0) / hT
+    return {
+        "kappa_1tick": KAPPA_FCC_1TICK,
+        "hT_over_t_P": KAPPA_FCC_1TICK,
+        "hT_s": hT,
+        "c0_m_s": c0,
+        "c0_over_c": c0 / C,
+        "c_macro_rel_err": abs(KAPPA_FCC_1TICK * c0 - C) / C,
+        "E0_over_E_P": e0 / e_P,
+        "kappa_link": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
+        "nu_CA_natural": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
+        "v_hV_over_lP3": 1.0 / math.sqrt(2.0),
+        "alpha_star": 1.0 + 1.0 / (4.0 * math.pi),
+        "alpha_fs_inv": 4.0 * math.pi**3 + math.pi**2 + math.pi,
+        "note": "asymptotic FCC graph-ball κ — open leaf",
     }
 
 
