@@ -278,7 +278,7 @@ $$
 
 $$
 c = \kappa\, c_0 = c_0/\sqrt{2}
-\qquad(\kappa=1/\sqrt{2}\ \text{из FCC},\ c_0=\ell_P/hT),
+\qquad(\kappa=\kappa_{\mathrm{FCC}}=1/\sqrt{2}\ \text{канон 3+1},\ c_0=\ell_P/hT),
 $$
 
 $$
@@ -287,6 +287,8 @@ K_P := \mu_P\, c^2
 c^2 = K_P/\mu_P
 \quad\text{(тождество гидродинамики, §5.1.1)}.
 $$
+
+**Гекс-срез (2+1):** то же $c=\kappa\,c_0$, но $\kappa_{\mathrm{hex}}=\sqrt{3}/2$, $c_0=(2/\sqrt{3})\,c$, $hT=(\sqrt{3}/2)\,t_P$ (§1.4.2) — не подставлять $\kappa_{\mathrm{FCC}}$ в dogfood на $N_6$.
 
 Фотон на M = безмассовая мода бегущей фазовой голономии ($n=0$, $\Phi_\square$-фронт). Macro-readout — binomial $(1{-}2{-}1)$ по многим плакеткам (§4.1 · T1):
 
@@ -300,7 +302,7 @@ $$
 
 | кусок | статус |
 |-------|--------|
-| $c=\kappa c_0$; $K_P:=\mu_P c^2$ (тождество) | ✅ |
+| $c=\kappa_{\mathrm{FCC}} c_0$; hex $\kappa_{\mathrm{hex}}=\sqrt{3}/2$; $K_P:=\mu_P c^2$ | ✅ |
 | фотон = holonomy $n=0$ | ✅ схема |
 | binomial → макро-круг (T1) | ✅ §4.2 |
 | количественный LIV/MDR budget (MAGIC/Fermi) | ⚠️ open |
