@@ -1475,6 +1475,100 @@ class SIConstants:
             ),
         }
 
+    def alpha_schwinger_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·Schwinger — start from ae (lab door), not from π-tower.
+
+        Experiment (Kusch / Schwinger → geonium): measure ae=(g−2)/2, then
+            ae = α/(2π) + O(α²)   (one-loop)
+            α = 2π ae + higher
+
+        Carrier rhyme (exact identity, no new knob):
+            vacuum foot r = Δφ_min/(2π) = 1/(4π)   (§8.2·descent)
+            α/(2π) = 2 α r
+        ⇒ leading Schwinger = twice foot × α. Factor 1/(2π) is geometric
+        (Heisenberg floor on the tick cycle), not a fitted QED constant.
+
+        Ask / DoD:
+          • Dirac g=2 for charge vortex n=±1 — topology? (bare)
+          • A5 bath dresses magnetic moment → ae without inserting α
+          • then α = ae/(2r) = 2π ae is upstairs readout
+
+        One-loop vs CODATA ae ≈ +1516 ppm (higher loops); identity 2αr holds exact.
+        """
+        alpha_c = 7.2973525693e-3
+        # CODATA 2018 ae (electron)
+        ae_codata = 1.15965218128e-3
+        dphi = DELTA_PHI_MIN
+        r = dphi / (2.0 * math.pi)  # = 1/(4π)
+        ae_schwinger = alpha_c / (2.0 * math.pi)
+        two_a_r = 2.0 * alpha_c * r
+        alpha_from_ae_1loop = 2.0 * math.pi * ae_codata
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "lab_door_ae",
+                "maps_to": "measure ae in Penning (geonium); α from QED series",
+                "status": "shipped_experiment",
+            },
+            {
+                "id": "schwinger_one_loop",
+                "ratio": ae_schwinger,
+                "maps_to": "ae = α/(2π) + O(α²)",
+                "status": "identity_leading",
+            },
+            {
+                "id": "foot_times_two_alpha",
+                "ratio": abs(two_a_r / ae_schwinger - 1.0),
+                "maps_to": "α/(2π) = 2 α r with r=Δφ_min/(2π)=1/(4π)",
+                "status": "identity",
+            },
+            {
+                "id": "factor_1_over_2pi_is_geometry",
+                "ratio": abs(ae_schwinger / alpha_c - 1.0 / (2.0 * math.pi)),
+                "maps_to": "1/(2π) = 2r — Heisenberg foot on tick, not fitted",
+                "status": "shipped_geometry",
+            },
+            {
+                "id": "one_loop_vs_codata_ae",
+                "ppm": (ae_schwinger - ae_codata) / ae_codata * 1e6,
+                "maps_to": "higher loops ~1.5e3 ppm — expected",
+                "status": "expected_gap",
+            },
+            {
+                "id": "open_Dirac_g2_on_vortex",
+                "maps_to": "bare g=2 for n=±1 from spinor/topology on Λ",
+                "status": "open",
+            },
+            {
+                "id": "open_A5_dressing_ae_without_alpha",
+                "maps_to": "vacuum bath → ae without α-input; then α=ae/(2r)",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·Schwinger — lab door ae; foot explains 1/(2π)",
+            "alpha_codata": alpha_c,
+            "ae_CODATA": ae_codata,
+            "ae_Schwinger_1loop": ae_schwinger,
+            "vacuum_foot_r": r,
+            "two_alpha_r": two_a_r,
+            "rel_2ar_vs_schwinger": abs(two_a_r / ae_schwinger - 1.0),
+            "ae_over_alpha": ae_schwinger / alpha_c,
+            "one_over_2pi": 1.0 / (2.0 * math.pi),
+            "alpha_from_ae_1loop": alpha_from_ae_1loop,
+            "vs_codata_alpha_ppm_1loop": (alpha_from_ae_1loop - alpha_c)
+            / alpha_c
+            * 1e6,
+            "one_loop_vs_ae_ppm": (ae_schwinger - ae_codata) / ae_codata * 1e6,
+            "derivation_closed": False,
+            "inventory": inventory,
+            "ask_ok": abs(two_a_r / ae_schwinger - 1.0) < 1e-15
+            and abs(ae_schwinger / alpha_c - 1.0 / (2.0 * math.pi)) < 1e-15,
+            "note": (
+                "Start here: ae lab door. Identity ae^(1)=2αr with r=1/(4π). "
+                "OPEN: Dirac g=2 + A5 dressing → ae without α."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

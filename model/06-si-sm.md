@@ -252,6 +252,19 @@ $$
 | $m_e N_\varphi/(2 m_H)$ | ~0 | **reject** — circular ($m_e$ уже с α) |
 **Итог try:** identity unifies F/H/QM; **вывод не закрыт** — нужны $M$ и/или $N_{a0}$ из $g$/shell без α.
 **Код:** `SI.alpha_arg_binding_try_row()` · verify **`Alpha_arg_binding_try`**.
+#### §8.2·α·Schwinger · Старт с лаборатории: $a_e=(g-2)/2$
+**Дверь (Куш / Швингер → геоний):** меряют $a_e$, не α напрямую:
+$$
+a_e=\frac{\alpha}{2\pi}+O(\alpha^{2})\qquad\Rightarrow\qquad\alpha=2\pi\,a_e+\cdots
+$$
+**Рифма носителя (тождество):** нога вакуума $r=\Delta\varphi_{\min}/(2\pi)=1/(4\pi)$ (§8.2·descent) ⇒
+$$
+\frac{\alpha}{2\pi}=2\alpha\,r.
+$$
+Фактор $1/(2\pi)$ — геометрия тика (Heisenberg-пол), не fitted константа QED.
+**DoD:** bare $g=2$ для вихря $n=\pm1$ (топология) + A5-dressing → $a_e$ **без** вставки α; тогда α сверху = $a_e/(2r)$.
+Однопетлевой Швингер vs CODATA $a_e$ ~+1516 ppm — ожидаемый зазор высших петель.
+**Код:** `SI.alpha_schwinger_ask_row()` · verify **`Alpha_schwinger_ask`**.
 **π-guardrail (§8.2·geo):** непрерывный **`4π`** — **T-readout** (телесный угол), **не** метрика одной **`v_h`**. На **1-tick** теле **кубооктаэдра** живут **6□ + 8△**, **`V=(16/3)v_hV`**, **`κ=1/√2`** — см. **`SI.cuboctahedron_geometry_row()`**.
 **Exploratory (π-free, cuboctahedron combinatorics — не ):**
 ```

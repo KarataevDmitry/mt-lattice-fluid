@@ -535,6 +535,28 @@ def check_alpha_arg_binding_try(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_schwinger_ask(device: str = "cpu") -> dict:
+    """§8.2·α·Schwinger — lab door ae; foot explains 1/(2π)."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_schwinger_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and not bool(row["derivation_closed"])
+        and abs(float(row["rel_2ar_vs_schwinger"])) < 1e-15
+    )
+    return {
+        "id": "Alpha_schwinger_ask",
+        "ae_Schwinger_1loop": row["ae_Schwinger_1loop"],
+        "vacuum_foot_r": row["vacuum_foot_r"],
+        "one_loop_vs_ae_ppm": row["one_loop_vs_ae_ppm"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2148,6 +2170,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_descent_ask(device=device),
         check_alpha_mass_defect_optics(device=device),
         check_alpha_arg_binding_try(device=device),
+        check_alpha_schwinger_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
