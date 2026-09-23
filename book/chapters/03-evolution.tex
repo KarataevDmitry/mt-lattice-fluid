@@ -94,16 +94,30 @@ $K_P$ --- отталкивание при $d\le\hl$.
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}[Идея доказательства]
-Каждый пункт --- прямое следствие строк таблицы A1--A16 (\cref{ch:axioms}):
-A3+A13 $\Rightarrow$ leapfrog на $\mathbb{Z}$;
-A9 $\Rightarrow$ holonomy $\zeta$;
-A5+A7 $\Rightarrow$ saturating знаменатель;
-A4+A16 $\Rightarrow$ $R(\Phi)$ на $\mathbb{C}^2$.
-Congruence ladder CL-1--CL-8 (\cref{sec:congruence}) проверяет согласованность mod $N_{\mathrm{ring}}=512$.
+\begin{proof}
+\paragraph{(1) Leapfrog.}
+A3 (\cref{ax:A3}) запрещает рост $\sum_x|z(x)|^2$ при unitary шаге; дискретная волновая форма
+с сохранением энергии на bond --- leapfrog $Z^{t+1}+Z^{t-1}=2Z^t+\mathcal{N}$.
+A13 (\cref{ax:A13}) требует обратимости $\Rightarrow$ явный $T^{-1}$ через ту же формулу.
+Округление $\lfloor\cdot\rfloor$ --- работа на $Z_{N_{\mathrm{ring}}}[i]$, не нарушение A3 mod $N_{\mathrm{ring}}$.
+
+\paragraph{(2) Holonomy.}
+A9 (\cref{ax:A9}): фазовый kick из holonomy соседей, не из $\atan2$ отдельных $z(y)/z(x)$.
+$\zeta_{\mathrm{real}},\zeta_{\mathrm{imag}}$ --- действительная/мнимая части $\zeta=(\sum_N z)\cdot z^*$ без скачка $2\pi$.
+
+\paragraph{(3) Saturating kick.}
+A5 (\cref{ax:A5}): $|z|<z_{\min}$ $\Rightarrow$ kick $\to\infty$ (vacuum floor).
+A7 (\cref{ax:A7}): насыщение при $|z|\to\infty$ через знаменатель $|Z|^2+K_P$.
+Дискретный порог $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ --- A16 (\cref{ax:A16}).
+
+\paragraph{(4) Rotation и обратимость.}
+A4 (\cref{ax:A4}): нелинейность только $e^{i\Phi}$, реализована как $R(\Phi)$ на $\mathbb{C}^2$.
+$\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ замыкает leapfrog; CL-1 (\cref{sec:congruence}) $\Leftrightarrow$ $T^{-1}$.
+Congruence ladder CL-1--CL-8 проверяет согласованность mod $N_{\mathrm{ring}}=512$.
 \end{proof}
 
 \subsection{Bit budget \texorpdfstring{$\hv$}{hV}}
+\label{sec:bit-budget}
 
 \[
   B_{\hv}=\frac{2\pi}{\ln 2}\approx 9.065\ \text{bit},\quad

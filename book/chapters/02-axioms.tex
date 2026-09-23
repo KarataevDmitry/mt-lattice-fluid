@@ -1,134 +1,206 @@
 \chapter{Абсолютные условия \texorpdfstring{$A_1$--$A_{16}$}{A1-A16}}
 \label{ch:axioms}
 
-\section{Реестр условий}
+\section{Введение}
 
-Условия $A_1$--$A_{16}$ ограничивают допустимый локальный закон $g$ (\cref{ch:evolution}).
-Ниже --- формулировки; следствия для $g$ выводятся в \cref{ch:evolution,ch:matter}.
+Ниже --- \emph{абсолютные условия} модели $\Mlayer$: ограничения на допустимый локальный закон $g$.
+Они не «настройки симулятора'' --- физические требования к каузальности, сохранению информации,
+термодинамике, топологии и симметриям. Закон $g$ (\cref{ch:evolution}) --- их замыкание.
+
+\begin{definition}[Поле и норма]
+\label{def:field-a3}
+На каждом $\PlanckCell$ спинор $z(x,t)=(z_1,z_2)^\top\in\mathbb{C}^2$.
+Глобальное состояние $\Psi^t=\{z(x,t)\}_{x\in\Lambda}$.
+\[
+  N(t):=\sum_{x\in\Lambda} z^\dagger(x,t)\,z(x,t)=\sum_x\bigl(|z_1|^2+|z_2|^2\bigr).
+\]
+\end{definition}
+
+\section{Каузальность, локальность, унитарность}
 
 \begin{axiom}[A1 · Каузальность]
-Один тик $\le \hl$. $\varepsilon$ --- равные light-like NN; Moore и вторая оболочка запрещены.
-$(3{+}1)$: $N_{12}$ FCC (\cref{ch:carrier}). $\ell_P:=\hl$.
+\label{ax:A1}
+За один M-тик $\htick$ информация распространяется не дальше одного шага $\hl$ по решётке.
+Окрестность $\varepsilon$ --- только \emph{равные} light-like рёбра:
+\[
+  N(x)=\Bigl\{y:\ |y-x|=\hl,\ \ c_0^2\htick^2-|y-x|^2\ge 0\Bigr\}.
+\]
+Вторая координационная оболочка (Moore, «диагональ за тик'') запрещена.
+В $(3{+}1)$: $|N(x)|=12$, носитель FCC (\cref{ch:carrier}). Идентификация $\ell_P:=\hl$ --- \cref{ch:si-sm}.
 \end{axiom}
 
 \begin{axiom}[A2 · Локальность]
-$g(x)$ зависит только от $\varepsilon$-окрестности сайта $x$.
+\label{ax:A2}
+Закон $g$ локален: новое значение $z(x,t+1)$ зависит только от поля в $\varepsilon$-окрестности $x$:
+\[
+  z(x,t+1)=g\bigl(\{z(y,t)\}_{y\in N(x)}\bigr).
+\]
 \end{axiom}
 
-\begin{axiom}[A3 · Унитарность]
-$\sum_x |z(x,t)|^2$ invariant. Линейная часть --- product локальных unitaries;
-нелинейность --- только $e^{i\Phi}$ на спиноре.
+\begin{axiom}[A3 · Унитарность / сохранение информации]
+\label{ax:A3}
+Норма $N(t)$ --- инвариант эволюции: $N(t+1)=N(t)$ для всех $t$.
+Линейная часть $g_{\mathrm{lin}}$ --- product локальных unitary-операторов на рёбрах $N(x)$.
+Нелинейная часть --- только unitary-фаза $z\mapsto z\,e^{i\Phi(z)}$ на $\mathbb{C}^2$; модуль $|z|$ не диссипирует.
 \end{axiom}
 
-\begin{axiom}[A4 · U(1) / SU(2)]
-Спинор $z\in\mathbb{C}^2$; gate collision --- SU(2) (\cref{ch:evolution}).
+\begin{axiom}[A4 · U(1) заряд и SU(2) спин]
+\label{ax:A4}
+Состояние --- спинор $z\in\mathbb{C}^2$, не скаляр $z\in\mathbb{C}$.
+Глобальная U(1)-фаза $z\to z\,e^{i\theta}$ --- симметрия вакуума.
+Локальное столкновение реализуется SU(2)-gate $R(\Phi)$ на обеих компонентах (\cref{sec:g-law}).
 \end{axiom}
+
+\section{Термодинамика на ячейке}
 
 \begin{axiom}[A5 · Третий закон]
-Абсолютный ноль $|z|=0$ недостижим; вакуум --- осциллирующий фон с $\rho_{\mathrm{field}}>0$.
+\label{ax:A5}
+Абсолютный ноль $|z|=0$ недостижим. Минимум «потенциала'' --- не в $z=0$;
+при $|z|\to 0$ фазовый gate $\Phi$ возрастает --- вакуум --- \emph{осциллирующий} фон
+с $\rho_{\mathrm{field}}>0$, не статический ноль.
 \end{axiom}
 
 \begin{axiom}[A6 · Второй закон (локально)]
-Локальная фазовая энтропия на $\varepsilon$ не убывает при фиксированной норме $\Rightarrow$ mixing.
+\label{ax:A6}
+На каждой $\varepsilon$-окрестности локальная фазовая энтропия (при фиксированной норме $N$)
+не убывает: разрешено mixing / перераспределение фаз, запрещена «заморозка'' всех фаз в rest.
+Рост энтропии не отменяет A3 --- не implies $N\to 0$.
 \end{axiom}
 
-\begin{axiom}[A7 · Планковский потолок]
-$|z|^2\le u_P$ (через $\rho_E/u_P\le 1$, знаменатель $+\varepsilon$).
+\begin{axiom}[A7 · Планковский потолок плотности]
+\label{ax:A7}
+Энергетическая плотность ограничена планковским потолком $u_P$:
+\[
+  \rho_E(x,t)=\mu_P c^2 |z(x,t)|^2 \le u_P
+  \quad\Leftrightarrow\quad
+  |z|^2 \le 1 \ \text{(natural)}.
+\]
+Saturating gate использует знаменатель $+\varepsilon$, $\varepsilon\leftrightarrow u_P$.
 \end{axiom}
 
 \begin{axiom}[A8 · Макро-линейность]
-При больших $|z|$ нелинейность затухает (гладкость на $\Tlayer$).
+\label{ax:A8}
+При больших $|z|$ нелинейность gate затухает --- на $\Tlayer$ поле становится близким к линейному
+(гладкость macro-readout).
 \end{axiom}
 
-\begin{axiom}[A9 · Дискретная аналитичность]
-$g$ удерживает дискретную голоморфность; CR-единственность $\Rightarrow$ глобальное поле на $\Lambda$.
+\section{Аналитичность и топология}
+
+\begin{axiom}[A9 · Дискретная аналитичность (Коши--Риман)]
+\label{ax:A9}
+$g$ --- оператор удержания дискретной голоморфности: holonomy $\zeta=(\sum_N z)\cdot z^*$
+вместо ложных скачков $\Arg(\sum z)-\Arg z$.
+CR-единственность на связном $\Lambda$ задаёт глобальное поле (риманова поверхность $\Lambda\times S^1$).
 \end{axiom}
 
-\begin{axiom}[A10 · Топологический заряд]
-Полюс на $\partial(\hv)$; $\oint d\arg=2\pi n$, $n\in\mathbb{Z}$.
+\begin{axiom}[A10 · Топологическая квантованность заряда]
+\label{ax:A10}
+Устойчивый дефект --- полюс на $\partial(\hv)$. Топологический заряд
+\[
+  n=\frac{1}{2\pi}\oint_{\partial(\hv)} d\arg z \in \mathbb{Z}.
+\]
 \end{axiom}
 
 \begin{axiom}[A11 · Устойчивость солитона]
-Размазанное состояние не голоморфно; $K_P$ и $\Delta\phi$ --- затвор самофокусировки.
+\label{ax:A11}
+Размазанное (не голоморфное) состояние не устойчиво: gate с $K_P$ и $\Delta\phi_{\min}$
+выталкивает полюс --- самофокусировка vortex, не smear.
 \end{axiom}
 
-\begin{axiom}[A12 · Изотропия / Lorentz на $\Tlayer$]
-Micro: isotropic streaming; macro-круг --- binomial readout + $\kgeom=1/\sqrt{2}$.
+\section{Изотропия, обратимость, симметрии}
+
+\begin{axiom}[A12 · Изотropия / Lorentz на $\Tlayer$]
+\label{ax:A12}
+Micro-шаг изотропен (равные веса на $N$). Macro-изотropный «свет'' ---
+readout $\kgeom=1/\sqrt{2}$ на FCC (\cref{ch:carrier}) плюс binomial-усреднение (\cref{ch:macro}).
 \end{axiom}
 
-\begin{axiom}[A13 · Обратимость micro]
-Leapfrog второго порядка на $\mathbb{Z}$; $\exists g^{-1}$ алгебраически.
+\begin{axiom}[A13 · Обратимость micro-шага]
+\label{ax:A13}
+$g$ обратим на дискретном алфавите: $\exists g^{-1}$, $g^{-1}(g(\Psi))=\Psi$.
+Leapfrog второго порядка на $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$:
+\[
+  Z^+(x,t)+Z^-(x,t)=2Z(x,t)+\lfloor\mathcal{N}(x,t)\rfloor.
+\]
 \end{axiom}
 
-\begin{axiom}[A14 · P / C / T / U(1)$_{\mathrm{vac}}$]
-Дискретные симметрии на $g$ (\cref{ch:evolution}).
+\begin{axiom}[A14 · Дискретные симметрии P, C, T, U(1)$_{\mathrm{vac}}$]
+\label{ax:A14}
+$g$ уважает дискретные симметрии: пространственная инверсия $P$, charge conjugation $C$ ($z\to z^*$),
+time reversal $T$ (с swap истории leapfrog), глобальная U(1)-фаза вакуума.
 \end{axiom}
 
-\begin{axiom}[A15 · Наименьшее действие]
-$\kgeom$ из многогранника; $\gamma=\kappa_{\mathrm{link}}=1/|N|$; $\alpha^*=1+1/(4\pi)$.
+\begin{axiom}[A15 · Принцип наименьшего действия / геометрия]
+\label{ax:A15}
+Безразмерные coupling'и --- следствия геометрии носителя, не fitted knobs:
+\[
+  \kgeom=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}},\quad
+  \gamma=\kappa_{\mathrm{link}}=\frac{1}{|N|},\quad
+  \alpha^*=1+\frac{1}{4\pi}.
+\]
 \end{axiom}
 
-\begin{axiom}[A16 · Паули]
-Spin $1/2$: $2\pi\to -1$, $4\pi\to +1$; два совпадающих спинора в одном $\PlanckCell$ запрещены.
+\begin{axiom}[A16 · Фермион / запрет Паули]
+\label{ax:A16}
+Spin-$1/2$: $R(N_{\mathrm{ring}}/2)\mapsto -z$ (оборот $2\pi$ меняет знак; $4\pi$ --- тождство).
+Два \emph{совпадающих} спинора в одном $\PlanckCell$ запрещены (Pauli exclusion на решётке).
+Минимальное фазовое действие $\Delta\phi_{\min}=\tfrac12$ задаёт $s_0=\hbar/2$.
 \end{axiom}
-
-\begin{definition}[Глобальное состояние]
-$z(x,t)\in\mathbb{C}^2$ на каждом $\PlanckCell$; $\Psi^t=\{z(x,t)\}_{x\in\Lambda}$;
-$\sum_x z^\dagger z=\mathrm{const}$ (A3).
-\end{definition}
 
 \section{Детерминизм и «квантовая случайность''}
 
 \begin{proposition}[Детерминизм $\Mlayer$]
 \label{prop:determinism}
-$g$ строго детерминирована: $z(x,t+1)=g(\{z(y,t)\}_{y\in N(x)})$ --- функция прошлого (A2).
-RNG в фундаментальном шаге отсутствует.
+При \cref{ax:A2} закон $g$ строго детерминирован: нет RNG в фундаментальном шаге.
 \end{proposition}
 
-Вероятность на $\Tlayer$ возникает из (i) динамического хаоса A5/A6 и (ii) грубого прибора:
-binomial readout по $\gg 1$ ячейкам (\cref{ch:macro}).
-$|\Psi|^2$ и Born --- статистика macro-фильтра, не кости в $g$.
+\begin{proof}
+A2: $z(x,t+1)$ --- функция $\{z(y,t)\}_{y\in N(x)}$ и истории leapfrog, без внешнего случайного входа.
+\end{proof}
+
+Вероятность и Born на $\Tlayer$ --- следствие динамического хаоса (A5, A6) и грубого прибора
+(\cref{ch:macro}), не «кости'' в $g$.
 
 \section{Теорема о невозможности тепловой смерти \texorpdfstring{$\Mlayer$}{M}}
 \label{sec:theorem-23}
 
+\begin{definition}[M-эволюция]
+\label{def:state-evolution}
+$\Psi^{t+1}=g(\Psi^t)$ на счётном $\Lambda$; один $\htick$ на тик; $g$ постоянен.
+\end{definition}
+
 \begin{definition}[Shutdown · D1]
+\label{def:D1}
 Существует $t$ без шага $g$, или $\htick\to\infty$, или $g$ меняется / обнуляется.
 \end{definition}
 
 \begin{definition}[M heat death · D2]
+\label{def:D2}
 $\sum_x|z|^2\to 0$, или глобально $z\equiv 0$ устойчиво, или $g(\Psi^*)=\Psi^*$ с «мёртвым'' вакуумом без A5-кипения.
 \end{definition}
 
 \begin{definition}[$\Tlayer$ heat death · D3]
-Macro-readout $\Phi=\mathcal{B}z$ теряет структуру ($\mathrm{Var}(\Phi)\to 0$) при $\sum|z|^2\approx\mathrm{const}$ на $\Mlayer$.
+\label{def:D3}
+Macro-readout $\Phi=\mathcal{B}z$ теряет структуру ($\mathrm{Var}(\Phi)\to 0$) при $N\approx\mathrm{const}$ на $\Mlayer$.
 \end{definition}
-
-\begin{remark}
-$\mathcal{B}$ --- binomial readout $(1{:}2{:}1)^{\otimes 2R}$ (\cref{ch:macro}).
-При $R\ge 1$ ядро $\mathcal{B}$ не инъективно.
-\end{remark}
 
 \begin{lemma}[Нет shutdown]
 \label{lem:231}
-При постулате 0.3 (\cref{ch:foundations}) для всех $t\in\mathbb{Z}$:
-$\Psi^{t+1}=g(\Psi^t)$, $\htick$ и $g$ постоянны.
+При \cref{def:state-evolution} для всех $t\in\mathbb{Z}$: $\Psi^{t+1}=g(\Psi^t)$, $\htick$ и $g$ постоянны.
 \end{lemma}
 
 \begin{proof}
-Постулат 0.3 определяет $\Mlayer$ как КА с одним $\htick$ на тик.
-«Выключить'' --- нарушить постулат 0.3.
+Определение M-эволюции (\cref{def:state-evolution}): один $\htick$ на тик, один $g$.
+«Выключить'' --- изменить определение модели, не следствие из $g$.
 \end{proof}
 
 \begin{lemma}[Сохранение информации]
 \label{lem:232}
-$N(t):=\sum_x z^\dagger z(x,t)$ --- инвариант: $N(t+1)=N(t)$ для всех $t$.
+$N(t+1)=N(t)$ для всех $t$.
 \end{lemma}
 
 \begin{proof}
-A3: $g=g_{\mathrm{nl}}\circ g_{\mathrm{lin}}$; $g_{\mathrm{lin}}$ --- product локальных unitaries на $N$;
-$g_{\mathrm{nl}}$ --- $R(\Phi)=\exp(i\Phi)$ на $\mathbb{C}^2$, не меняет модуль.
-Product unitaries сохраняют $N$ на каждом шаге. Индукция по $t$.
+Непосредственно из \cref{ax:A3}: product unitaries и $e^{i\Phi}$ сохраняют $|z|$.
 \end{proof}
 
 \begin{corollary}
@@ -142,48 +214,44 @@ A6 не влечёт $N\to 0$.
 \end{lemma}
 
 \begin{proof}
-A6 --- перераспределение фазы при фиксированной норме; A3 фиксирует $N$.
+\cref{ax:A6,ax:A3}: mixing при фиксированной норме.
 \end{proof}
 
 \begin{lemma}[Нет устойчивого $z\equiv 0$]
 \label{lem:234}
-$z(x,t)\equiv 0$ не устойчивое термодинамическое состояние $g$.
+$z(x,t)\equiv 0$ не устойчивое состояние $g$.
 \end{lemma}
 
 \begin{proof}
-A5: минимум $V(|z|^2)$ не в $z=0$; при $|z|\to 0$ gate $\Phi\to\mathrm{large}$.
-При $z=0$ локальный deadlock ($z e^{i\Phi}=0$); A5 запрещает трактовать это как физический вакуум.
-A5-согласованное начальное условие порождает permanent micro-кипение; $z\equiv 0$ недостижим
-как глобальный attractor. Вместе с \cref{cor:232a}: D2 через $N\to 0$ или $z\equiv 0$ невозможен.
+\cref{ax:A5}: при $z=0$ deadlock $z e^{i\Phi}=0$; физический вакуум --- кипящий фон.
+Вместе с \cref{cor:232a} --- D2 через $N\to 0$ или $z\equiv 0$ невозможен.
 \end{proof}
 
 \begin{lemma}[Micro-обратимость]
 \label{lem:235}
-$g$ на $Z_N[i]$ обратима: $\exists g^{-1}$, $g^{-1}(g(\Psi))=\Psi$.
+$g$ обратима на $Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-A13: leapfrog $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor$;
-reverse $Z^-=2Z+\lfloor\mathcal{N}\rfloor-Z^+$. Kick-ledger + swap $(Z_t,Z_{t-1})$.
+\cref{ax:A13}: алгебра leapfrog + kick-ledger.
 \end{proof}
 
 \begin{lemma}[$\mathcal{B}$ необратима]
 \label{lem:236}
-При $R\ge 1$ существуют $z_1\ne z_2$ с $\mathcal{B}z_1=\mathcal{B}z_2$.
+При $R\ge 1$ readout $\mathcal{B}$ не инъективен.
 \end{lemma}
 
 \begin{proof}
-$\mathcal{B}$ --- свёртка с ядром $[1,2,1]/4$; у конечного $\Lambda$ ядро имеет нетривиальное ядро.
+Ядро свёртки $[1,2,1]/4$ нетривиально на конечном $\Lambda$.
 \end{proof}
 
 \begin{proposition}[D3 не нарушает $\Mlayer$]
 \label{prop:237}
-$\nu_{\mathrm{CA}}$-затухание $\Phi$ на $\Tlayer$ --- не член $g$; $N$ на $\Mlayer$ invariant (\cref{lem:232}).
+$\nu_{\mathrm{CA}}$-затухание на $\Tlayer$ --- не член $g$; $N$ invariant (\cref{lem:232}).
 \end{proposition}
 
 \begin{proof}
-$\nu_{\mathrm{CA}}\nabla^2\Phi$ добавляется только в $\Tlayer$-уравнение после $\mathcal{B}$.
-Macro drain --- перекачка в micro-кипение A5 при фиксированном $N$ (\cref{lem:233}).
+Viscosity добавляется только после $\mathcal{B}$ на $\Tlayer$; drain --- в A5-кипение при фиксированном $N$.
 \end{proof}
 
 \begin{definition}[Frozen tick · D4]
@@ -191,49 +259,44 @@ $\lfloor\mathcal{N}(\Psi)\rfloor\equiv 0$ на всём $\Lambda$.
 \end{definition}
 
 \begin{definition}[Global fixed point · D5]
-$g(\Psi^*)=\Psi^*$ при симметричной истории $(Z_t,Z_{t-1})=(Z^*,Z^*)$ $\Leftrightarrow$ D4 на $\Psi^*$.
+$g(\Psi^*)=\Psi^*$ при $(Z_t,Z_{t-1})=(Z^*,Z^*)$ $\Leftrightarrow$ D4.
 \end{definition}
 
 \begin{lemma}[Классификация D5]
 \label{lem:238a}
-D5 $\Leftrightarrow$ $z(x,t)\equiv c$ на всём торе $\Lambda$, $c\in Z_N[i]$ (включая $c=0$).
+D5 $\Leftrightarrow$ $z(x,t)\equiv c$ на торе $\Lambda$, $c\in Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-($\Rightarrow$) Symmetric leapfrog при $Z^+=Z^-=Z^*$ $\Rightarrow$ $\lfloor\mathcal{N}\rfloor=0$
-$\Rightarrow$ $\Phi=0$ $\Rightarrow$ $\zeta_{\mathrm{imag}}=0$. Discrete CR на каждой ячейке;
-$\Delta_{\mathrm{disc}} z=0$ $\Leftrightarrow$ $z(x)=\langle z\rangle_N$.
-Maximum principle на связном графе $\Rightarrow$ $z(x)\equiv c$.
-
-($\Leftarrow$) $z\equiv c$ $\Rightarrow$ $\Phi=0$, $\lfloor\mathcal{N}\rfloor=0$, тождество leapfrog.
+Symmetric leapfrog $\Rightarrow$ $\lfloor\mathcal{N}\rfloor=0$ $\Rightarrow$ $\Phi=0$ $\Rightarrow$ discrete CR
+$\Rightarrow$ $z(x)=\langle z\rangle_N$ $\Rightarrow$ $z\equiv c$ на связном графе.
+Обратно: $z\equiv c$ --- fixed point leapfrog.
 \end{proof}
 
 \begin{lemma}[A5/A6 исключают физические D5]
 \label{lem:238b}
-Ни одна конфигурация из \cref{lem:238a} не входит в A5-физическое состояние.
+Ни одна конфигурация из \cref{lem:238a} не A5-физична.
 \end{lemma}
 
 \begin{proof}
-$c=0$: deadlock; A5 --- $z\equiv 0$ не вакуум.
-$c\ne 0$ static: A5 требует кипящий фон; A6 запрещает «замёрзшие'' фазы.
+$c=0$: \cref{ax:A5}. $c\ne 0$ static: A5 требует кипение; A6 запрещает frozen holomorphy.
 \end{proof}
 
-\begin{theorem}[Нет A5-физических fixed points без кипения]
+\begin{theorem}[Нет физических fixed points без кипения]
 \label{thm:238}
-При §0.3, A3, A5, A6, A9, A13 и $g$ §3.12 полный класс A5-физических global fixed points
-$g(\Psi^*)=\Psi^*$ без micro-кипения --- пуст.
+Класс A5-физических global fixed points $g(\Psi^*)=\Psi^*$ без micro-кипения --- пуст.
 \end{theorem}
 
 \begin{proof}
 \cref{lem:238a,lem:238b}.
 \end{proof}
 
-\begin{theorem}[Главная теорема §2.3]
+\begin{theorem}[Тепловая смерть $\Mlayer$ невозможна]
 \label{thm:main-23}
-При §0.3, A3, A5, A6, A13 и $g$ §3.12:
+При \cref{ax:A3,ax:A5,ax:A6,ax:A13} и $g$ \cref{sec:g-law}:
 \begin{enumerate}[label=(\roman*)]
-\item $\neg$D1 (нет shutdown) --- \cref{lem:231};
-\item $\neg$D2 (нет M heat death) --- \cref{cor:232a,lem:234,thm:238};
+\item $\neg$D1 --- \cref{lem:231};
+\item $\neg$D2 --- \cref{cor:232a,lem:234,thm:238};
 \item A6 и A3 согласованы --- \cref{lem:233};
 \item micro обратим, macro необратим --- \cref{lem:235,lem:236,prop:237};
 \item нет A5-физических D5 --- \cref{thm:238}.
@@ -241,11 +304,5 @@ $g(\Psi^*)=\Psi^*$ без micro-кипения --- пуст.
 \end{theorem}
 
 \begin{proof}
-Прямо из перечисленных лемм и теорем.
+Сборка лемм выше.
 \end{proof}
-
-\begin{remark}
-Модельная вселенная не «выключается'' и не «умирает'' в смысле D2;
-«тепловая смерть'' наблюдателя --- D3 на $\Tlayer$.
-Космологическое начало наблюдаемой вселенной --- meta-слой, не первый тик $\Mlayer$.
-\end{remark}
