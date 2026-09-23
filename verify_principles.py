@@ -631,6 +631,31 @@ def check_alpha_rydberg_hall_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_em_face_weight_ask(device: str = "cpu") -> dict:
+    """§8.2·α·EM·faces — area/dihedral ≠ α; Φ_□ still open."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_em_face_weight_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and not bool(row["face_weight_is_alpha"])
+        and not bool(row["derivation_closed"])
+        and not bool(row["bypasses_coupling_open"])
+        and abs(float(row["best_ppm"])) > 1e3
+    )
+    return {
+        "id": "Alpha_em_face_weight_ask",
+        "w_square": row["w_square"],
+        "best_try": row["best_try"],
+        "best_ppm": row["best_ppm"],
+        "face_weight_is_alpha": row["face_weight_is_alpha"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2248,6 +2273,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_dirac_g2_ask(device=device),
         check_alpha_ae_cloud_ask(device=device),
         check_alpha_rydberg_hall_ask(device=device),
+        check_alpha_em_face_weight_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

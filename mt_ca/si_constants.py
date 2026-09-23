@@ -2007,6 +2007,145 @@ class SIConstants:
             ),
         }
 
+    def alpha_em_face_weight_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·EM·faces — asked carrier: A_□/A_tot, dihedral, V/S → α?
+
+        Method (geo·ask leaf 1): dimensional areas/angles at a=l_P first;
+        ask which ratio can be EM coupling; score vs α only AFTER.
+
+        Carrier answers (2026-09-24):
+          • Shipped body facts: w_□=A_□/A_tot, w_△, dihedral=135°=3/4·π rad/
+            (wait: 135/180=3/4), V/(S a) compactness.
+          • Precedent κ=R_in/R_out works because it couples to c,hT,λ₀.
+          • Raw weights O(0.1–1) — wrong scale vs α~1/137 (~10⁷ ppm).
+          • Scaled tries (w/N₁₂, w·r, V/(Sa)·r, …) still |ppm|≫10³ — reject.
+          • α_geom⁻¹=137 uses face *counts* (6□+8△), not area weights —
+            different object; already exploratory (~263 ppm), not this leaf.
+          • REJECT equating area weight or dihedral fraction with α.
+          • Channel that remains: Φ_□ on □ (Stokes) — weight ≠ holonomy.
+          • Same OPEN: coupling fraction / live Φ_□ — not face-area α.
+        """
+        geo = self.cuboctahedron_geometry_row()
+        alpha_c = 7.2973525693e-3
+        w_sq = float(geo["A_square_over_A_total"])
+        w_tri = float(geo["A_triangle_over_A_total"])
+        v_sa = float(geo["V_over_S_over_l_P"])
+        dihedral_over_180 = float(geo["dihedral_square_triangle_deg"]) / 180.0
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        r = DELTA_PHI_MIN / (2.0 * math.pi)
+        kappa = KAPPA_FCC_1TICK
+        tries: dict[str, float] = {
+            "w_square": w_sq,
+            "w_triangle": w_tri,
+            "dihedral/180": dihedral_over_180,
+            "V/(S a)": v_sa,
+            "w_square/N12": w_sq / n12,
+            "w_triangle/N12": w_tri / n12,
+            "w_square/N12²": w_sq / (n12 * n12),
+            "w_square·r": w_sq * r,
+            "w_triangle·r": w_tri * r,
+            "V/(Sa)·r": v_sa * r,
+            "dihedral/180/N12": dihedral_over_180 / n12,
+            "κ²·w_tri/N12": (kappa * kappa) * w_tri / n12,
+        }
+
+        def ppm(v: float) -> float:
+            return (v - alpha_c) / alpha_c * 1e6
+
+        best_name = min(tries, key=lambda k: abs(ppm(tries[k])))
+        best_ppm = ppm(tries[best_name])
+        alpha_geom_inv = float(geo["alpha_fs_inv_geom"])
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "body_w_square",
+                "ratio": w_sq,
+                "maps_to": "A_□ tot / A_tot at a=l_P — dimensional→ratio",
+                "status": "shipped_body",
+                "mechanism": "6a² vs 6a²+8·(√3/4)a²",
+            },
+            {
+                "id": "body_w_triangle",
+                "ratio": w_tri,
+                "maps_to": "A_△ tot / A_tot",
+                "status": "shipped_body",
+            },
+            {
+                "id": "body_dihedral",
+                "ratio": dihedral_over_180,
+                "maps_to": "135°/180° = 3/4 — □–△ ridge",
+                "status": "shipped_body",
+            },
+            {
+                "id": "body_compactness",
+                "ratio": v_sa,
+                "maps_to": "V/(S a) at a=l_P",
+                "status": "shipped_body",
+            },
+            {
+                "id": "precedent_kappa_not_face_weight",
+                "ratio": kappa,
+                "maps_to": "κ=R_in/R_out couples c,hT — face weight does not",
+                "status": "shipped_precedent",
+                "mechanism": "geo·ask: only κ closed as coupling so far",
+            },
+            {
+                "id": "reject_raw_weights_as_alpha",
+                "ppm": ppm(w_sq),
+                "maps_to": "w_□,w_△,dihedral,V/(Sa) O(0.1–1) ≠ α",
+                "status": "rejected",
+                "mechanism": "wrong scale ~10⁷ ppm",
+            },
+            {
+                "id": "reject_scaled_face_tries",
+                "ppm": best_ppm,
+                "maps_to": f"best try {best_name} still wrong scale",
+                "status": "rejected",
+                "mechanism": "|ppm|≫10³; cooking N₁₂/r does not save",
+            },
+            {
+                "id": "distinct_alpha_geom_counts",
+                "ratio": alpha_geom_inv,
+                "maps_to": "α_geom⁻¹=137 from face *counts* — not area weight",
+                "status": "distinct_exploratory",
+                "mechanism": "descent ask; ~263 ppm; not this leaf",
+            },
+            {
+                "id": "open_Phi_square_not_weight",
+                "maps_to": "Φ_□ Stokes on □ — channel open; weight ≠ holonomy",
+                "status": "open",
+                "mechanism": "geo·ask Phi_square; alpha_match_open",
+            },
+            {
+                "id": "open_coupling_fraction",
+                "maps_to": "same mountain — discrete coupling / live Φ_□",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·EM·faces — area/dihedral ≠ α; Φ_□ still open",
+            "method": "ask-model: body areas → try ratios → reject scale",
+            "w_square": w_sq,
+            "w_triangle": w_tri,
+            "dihedral_over_180": dihedral_over_180,
+            "V_over_S_over_l_P": v_sa,
+            "best_try": best_name,
+            "best_ppm": best_ppm,
+            "try_ppm": {k: ppm(v) for k, v in tries.items()},
+            "alpha_geom_inv": alpha_geom_inv,
+            "face_weight_is_alpha": False,
+            "derivation_closed": False,
+            "bypasses_coupling_open": False,
+            "inventory": inventory,
+            "ask_ok": abs(w_sq + w_tri - 1.0) < 1e-12
+            and abs(best_ppm) > 1e3
+            and abs(ppm(w_sq)) > 1e6,
+            "note": (
+                "Asked carrier: EM face weights/dihedral/V/S are body facts "
+                "but wrong scale for α. α_geom=137 is counts≠areas. "
+                "OPEN: Φ_□ holonomy, not area weight."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

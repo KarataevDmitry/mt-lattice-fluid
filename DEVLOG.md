@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-24 | §8.2·α·EM·faces | w_□/w_△/dihedral/V/S body ok but ≠α (wrong scale); α_geom=counts≠areas; OPEN Φ_□ · Alpha_em_face_weight_ask PASS |
 | 2026-09-24 | §8.2·α·Rydberg·Hall | R_∞=α²·r/λ̄_C (same foot); R_K exact SI-2019 ≠ α source; same coupling OPEN · Alpha_rydberg_hall_ask PASS |
 | 2026-09-24 | §8.2·α·ae·ask | ae=α·2r factors (2r closed, α open); pure-geo ae reject; door ≠ bypass coupling OPEN · Alpha_ae_cloud_ask PASS |
 | 2026-09-24 | §8.2·α·g2·ask | bare g=2 from A16×g_orb; ae_bare=0; reject r/2r/z_vac/α-input; OPEN A5 holonomy→ae · Alpha_dirac_g2_ask PASS |

@@ -643,10 +643,19 @@ $$
 | per-link | 12 рёбер длины **`a`** | **`1/12`** | **`γ,ν_CA`** | выведено |
 | узел | **`v_hV=a³/√2`** | **`1/√2`** vs **`a³`** | **`dV`** | выведено |
 | hull | **`V=(8/3)√2·a³`** | **`V/v_hV=16/3`** | bulk budget | inventory |
-| compactness | **`V/S`** [m] | **`V/(Sa)`** | surface/bulk | открыто |
-| площади □ vs △ | **`6a²`, `8·(√3/4)a²`** | **`A_□/A_tot`** | EM weight | открыто |
-| dihedral | **135°** | **3/4×180°** | ridge phase | открыто |
+| compactness | **`V/S`** [m] | **`V/(Sa)`** | surface/bulk | тело ✅; ≠α |
+| площади □ vs △ | **`6a²`, `8·(√3/4)a²`** | **`A_□/A_tot`** | EM weight | тело ✅; ≠α (scale) |
+| dihedral | **135°** | **3/4×180°** | ridge phase | тело ✅; ≠α |
 | **`α_fs`** | — | π-ansatz | T-readout | ограничение |
+#### §8.2·α·EM·faces · Спросили носитель: вес граней / dihedral → α?
+**Метод:** geo·ask лист 1 — площади/углы при `a=l_P` → какая доля = сопряжение?
+**Ответы:**
+1. Тело: $w_\square\approx 0.634$, $w_\triangle\approx 0.366$, dihedral $3/4$, $V/(Sa)\approx 0.398$ — **shipped**.
+2. Прецедент κ работает (c,hT); сырые веса **O(0.1–1)** vs $\alpha\sim 1/137$ — неверный масштаб (~$10^7$ ppm).
+3. Scaled tries ($w/N_{12}$, $w\cdot r$, …) — всё ещё $|\mathrm{ppm}|\gg 10^3$ → **reject**.
+4. $\alpha_{\mathrm{geom}}^{-1}=137$ — из *счёта* граней, не из площадей; другой объект (descent).
+5. Канал, который остаётся: $\Phi_\square$ на □ (Stokes) — **вес ≠ голономия**.
+**Код:** `SI.alpha_em_face_weight_ask_row()` · verify **`Alpha_em_face_weight_ask`**.
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
 **Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
 | при `a=l_P` | формула | SI |
