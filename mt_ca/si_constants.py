@@ -27,6 +27,7 @@ from __future__ import annotations
 import math
 
 from dataclasses import dataclass
+from decimal import Decimal, ROUND_HALF_UP, getcontext
 
 
 
@@ -81,7 +82,46 @@ M_NEUTRON_GEV_PDG = 0.93956542052
 # Neutrino atmospheric scale √|Δm²₃₁| [eV] — PDG-ish; prediction = α⁵·2m_H/(N_hier N_φ) (§8.2)
 M_NU_ATM_EV_PDG = 0.05
 
+# ΛCDM anchors — T-layer observations for **our bubble** (not knobs in g). Planck 2018 central.
+SECOND_PER_YEAR = 365.25 * 86400.0
+SECOND_PER_KYR = SECOND_PER_YEAR * 1e3
+SECOND_PER_GYR = SECOND_PER_YEAR * 1e9
+COSMO_BUBBLE_AGE_GYR = 13.787  # ±0.020 Gyr
+COSMO_RECOMB_KYR = 380.0  # last scattering ~380 kyr after local BB (N=0)
 
+
+def _hT_decimal() -> Decimal:
+    """M tick [s] in high precision for N~10⁷⁰ bubble algebra (§0.2)."""
+    getcontext().prec = 100
+    hbar = Decimal("1.054571817e-34")
+    g = Decimal("6.67430e-11")
+    c = Decimal("299792458")
+    l_p = (hbar * g / (c**3)).sqrt()
+    t_p = l_p / c
+    return t_p / Decimal(2).sqrt()
+
+
+def m_tick_to_si_seconds(n_ticks: int | float, *, hT: float | None = None) -> float:
+    """META §3.0.1 — exact SI elapsed time since bubble tick N=0: t = N·hT."""
+    ht = SI.hT if hT is None else hT
+    return float(n_ticks) * ht
+
+
+def si_seconds_to_m_tick(t_s: float, *, hT: Decimal | float | None = None) -> int:
+    """Map SI duration since bubble N=0 to nearest integer M tick (Decimal for N~10⁷⁰)."""
+    getcontext().prec = 100
+    ht = _hT_decimal() if hT is None else (hT if isinstance(hT, Decimal) else Decimal(str(hT)))
+    n = (Decimal(str(t_s)) / ht).to_integral_value(rounding=ROUND_HALF_UP)
+    return int(n)
+
+
+def m_tick_count_to_str(n_ticks: int) -> str:
+    """Scientific string for tick counts beyond float integer precision."""
+    if n_ticks == 0:
+        return "0"
+    exp = int(math.floor(math.log10(abs(n_ticks))))
+    mant = n_ticks / 10**exp
+    return f"{mant:.6g}e{exp}"
 
 
 
@@ -628,6 +668,45 @@ class SIConstants:
             "m_p_kg": self.m_P * (a / 3.0) * f_p,
             "pauli_slots": 2.0,
             "b_pra": 1.0,
+        }
+
+    def bubble_tick_row(self) -> dict[str, float | int | str | bool]:
+        """META §3.0.1 — our bubble: exact N↔SI via stamped hT (no readout).
+
+        Convention: N=0 = local BB of phase I; t_SI(0)=0. ΛCDM age/recombination are
+        T-layer inputs (not g knobs) used to infer integer tick labels.
+        """
+        hT = self.hT
+        hT_dec = _hT_decimal()
+        t_age_obs_s = COSMO_BUBBLE_AGE_GYR * SECOND_PER_GYR
+        t_recomb_obs_s = COSMO_RECOMB_KYR * SECOND_PER_KYR
+        n_today = si_seconds_to_m_tick(t_age_obs_s, hT=hT_dec)
+        n_cmb = si_seconds_to_m_tick(t_recomb_obs_s, hT=hT_dec)
+        t_age_exact_s = float(Decimal(n_today) * hT_dec)
+        t_recomb_exact_s = float(Decimal(n_cmb) * hT_dec)
+        return {
+            "hT_s": hT,
+            "anchor_N0": "bubble_phase_I_BB",
+            "t_start_s": 0.0,
+            "cosmo_age_Gyr": COSMO_BUBBLE_AGE_GYR,
+            "cosmo_recomb_kyr": COSMO_RECOMB_KYR,
+            "t_age_obs_s": t_age_obs_s,
+            "t_recomb_obs_s": t_recomb_obs_s,
+            "N_today": n_today,
+            "N_CMB": n_cmb,
+            "N_today_sci": m_tick_count_to_str(n_today),
+            "N_CMB_sci": m_tick_count_to_str(n_cmb),
+            "N_since_CMB": n_today - n_cmb,
+            "N_since_CMB_sci": m_tick_count_to_str(n_today - n_cmb),
+            "log10_N_today": math.log10(n_today),
+            "log10_N_CMB": math.log10(n_cmb),
+            "t_age_exact_s": t_age_exact_s,
+            "t_recomb_exact_s": t_recomb_exact_s,
+            "t_age_exact_Gyr": t_age_exact_s / SECOND_PER_GYR,
+            "t_recomb_exact_kyr": t_recomb_exact_s / SECOND_PER_KYR,
+            "roundtrip_age_rel_err": abs(t_age_exact_s - float(Decimal(n_today) * hT_dec)) / t_age_exact_s,
+            "roundtrip_recomb_rel_err": abs(t_recomb_exact_s - float(Decimal(n_cmb) * hT_dec)) / t_recomb_exact_s,
+            "note": "§3.0.1: t_SI(N)=N·hT exact; ΛCDM inputs infer N only",
         }
 
     def alpha_runner_row(self) -> dict[str, float]:

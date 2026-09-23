@@ -286,6 +286,35 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 
+def check_bubble_tick(device: str = "cpu") -> dict:
+    """META §3.0.1 — exact bubble age t = N·hT from stamped hT (no readout)."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.bubble_tick_row()
+    ok = (
+        row["t_start_s"] == 0.0
+        and row["roundtrip_age_rel_err"] == 0.0
+        and row["roundtrip_recomb_rel_err"] == 0.0
+        and row["N_CMB"] < row["N_today"]
+        and 60.9 < row["log10_N_today"] < 61.2
+        and 55.5 < row["log10_N_CMB"] < 56.5
+        and abs(row["t_age_exact_Gyr"] - row["cosmo_age_Gyr"]) < 1e-12
+        and abs(row["t_recomb_exact_kyr"] - row["cosmo_recomb_kyr"]) < 1e-12
+    )
+    return {
+        "id": "Bubble_tick",
+        "N_today_sci": row["N_today_sci"],
+        "N_CMB_sci": row["N_CMB_sci"],
+        "log10_N_today": row["log10_N_today"],
+        "t_age_exact_Gyr": row["t_age_exact_Gyr"],
+        "t_recomb_exact_kyr": row["t_recomb_exact_kyr"],
+        "hT_s": row["hT_s"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_vortex_hex_contour(
     size: int = 512,
     steps: int = 256,
@@ -1370,6 +1399,7 @@ def run_all(device: str) -> list[dict]:
         check_a10_winding(device=device),
         check_pauli_repel(device=device),
         check_compton_electron(device=device),
+        check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
         check_rho_P_binary(device=device),
