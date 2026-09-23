@@ -84,6 +84,54 @@
 осреднение~$\mathcal{B}$ на фазовых разностях даёт дискретный аналог $\nabla^2$.
 На~$T$ возникает нелинейное уравнение Шрёдингера типа Ginzburg--Landau
 с коэффициентом $\hbar/(2m)$ --- эффективная теория, а не новый оператор на~$M$.
+Разложение вращателя по малой плотности $\rho_E\ll K_P$ (гл.~\ref{ch:evolution}, \ref{ch:matter})
+даёт на медленном поле~$\Phi$ после~$\mathcal{B}$:
+\begin{equation}
+\label{eq:nlse-gl}
+  \frac{\partial\Phi}{\partial t}
+  = \frac{i\hbar}{2m}\,\nabla^2\Phi
+  - i\,\omega_{\mathrm{macro}}\,|\Phi|^2\Phi
+  + \nu_{\mathrm{CA}}\,\nabla^2\Phi,
+\end{equation}
+где $\omega_{\mathrm{macro}}$ --- частотный масштаб нелинейного замка gate,
+$\nu_{\mathrm{CA}}$ --- остаток дискретного осреднения (гл.~\ref{sec:t-cr}).
+
+\section{Свободная энергия Ginzburg--Landau}
+\label{sec:gl-free-energy}
+
+Уравнение~\eqref{eq:nlse-gl} не вводится как постулат макроуровня:
+оно следует из вариационного принципа для \emph{эффективной} свободной энергии
+на объёме прибора~$V\subset T$, где $\Phi$ --- медленная компонента readout'а.
+В бездиссипативном пределе ($\nu_{\mathrm{CA}}\to 0$) задаём функционал
+\begin{equation}
+\label{eq:gl-free-energy}
+  \mathcal{F}_{\mathrm{GL}}[\Phi]
+  = \int_V \Bigl(
+      \frac{\hbar^2}{2m}\,|\nabla\Phi|^2
+      + \frac{\omega_{\mathrm{macro}}}{2}\,|\Phi|^4
+    \Bigr)\,\mathrm{d}^3x.
+\end{equation}
+Первый член --- кинетическая (градиентная) энергия фазового поля после осреднения~$\mathcal{B}$;
+второй --- насыщение вращателя при $\rho_E\to K_P$ (см.~\cref{def:kp}).
+Вариация по $\Phi^*$ при фиксированных граничных данных даёт
+\begin{equation}
+\label{eq:gl-variation}
+  \frac{\delta\mathcal{F}_{\mathrm{GL}}}{\delta\Phi^*}
+  = -\frac{\hbar^2}{2m}\,\nabla^2\Phi + \omega_{\mathrm{macro}}\,|\Phi|^2\Phi,
+\end{equation}
+а динамика $\Phi(t)$ на~$T$ --- градиентный спуск по~$\mathcal{F}_{\mathrm{GL}}$ в классе
+унитарных преобразований:
+\begin{equation}
+\label{eq:gl-dynamics}
+  i\hbar\,\frac{\partial\Phi}{\partial t}
+  = \frac{\delta\mathcal{F}_{\mathrm{GL}}}{\delta\Phi^*}.
+\end{equation}
+Подстановка~\eqref{eq:gl-variation} воспроизводит~\eqref{eq:nlse-gl} без члена~$\nu_{\mathrm{CA}}$;
+вязкость~$\nu_{\mathrm{CA}}$ не выводится из~\eqref{eq:gl-free-energy} --- это остаток
+coarse-graining (необратимость на~$T$, \cref{ch:axioms}~$A_6$).
+Таким образом, \emph{поле}~$\Phi$ несёт ту же роль, что порядок в теории Ginzburg--Landau,
+а $\mathcal{F}_{\mathrm{GL}}$ --- не микроскопический гамильтониан на~$M$, а эффективный
+потенциал прибора после~\cref{def:soft-readout}.
 
 \section{Туннелирование и правило Бorn}
 

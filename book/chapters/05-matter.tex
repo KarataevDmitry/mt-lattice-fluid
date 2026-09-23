@@ -74,6 +74,81 @@ $E_0=p_0 c_0=F_0\hl=L_0/\htick$, $E=n_E E_0$, $n_E\in\mathbb{Z}$.
 $p_0=m_{\arg}(c_0/2)$, $F_0=m_{\arg} g_M$, $\Delta F=\Delta m\cdot g$ при $\Delta m\in m_{\arg}\mathbb{Z}$.
 \end{corollary}
 
+\section{Термодинамические потенциалы на \texorpdfstring{$T$}{T}}
+\label{sec:thermo-potentials}
+
+Классические потенциалы относятся к макроуровню~$T$: на~$M$ нет температуры прибора
+и нет гиббсовского ансамбля по~$g$ (\cref{prop:determinism}).
+Их можно задать однозначно, если зафиксировать абсолютную энтропию по Планку
+(\cref{ch:axiom-rationale}) и связать макроскопические $U$, $P$, $V$ с лестницей
+\cref{thm:51} после осреднения~\cref{def:soft-readout}.
+
+\paragraph{Внутренняя энергия.}
+По \cref{lem:51e} энергия на~$M$ дискретна: $E=\sum_x n_E(x)\,E_0$,
+$n_E\in\mathbb{Z}_{\ge 0}$.
+На~$T$ в объёме~$V$ прибор видит гладкую плотность возбуждений
+$\mathscr{n}_E(X)=\mathcal{B}*n_E$ и определяет
+\begin{equation}
+\label{eq:internal-energy}
+  U(V)=\int_V \mathscr{n}_E(X)\,E_0\,\mathrm{d}^3X
+  = \int_V u(X)\,\mathrm{d}^3X,
+  \qquad u=\mathscr{n}_E E_0.
+\end{equation}
+Вакуум ($n_E=0$ везде) даёт $U=0$; это согласуется с $S\to 0$ при $T\to 0$,
+если основное состояние невырождено ($W=1$ в формулировке Планка).
+
+\paragraph{Давление и модуль.}
+Модуль~$K_P=u_P$ (\cref{def:kp}) --- планковское давление несжимаемой решёточной жидкости:
+вращатель насыщается при $\rho_E\to K_P$.
+В термодинамике объём~$V$ --- макрообъём прибора; давление~$P$ --- сопряжённая
+к~$V$ величина при медленных деформациях фона.
+В натуральных единицах ($c_0=\hl/\htick=1$) равновесный вакуум ($\rho_E=0$)
+лежит у нижней границы насыщения; для малых отклонений $\delta\rho=\rho_E\ll K_P$
+\begin{equation}
+\label{eq:pressure-linear}
+  P \;\approx\; K_P\,\frac{\delta\rho}{K_P} = \delta\rho,
+  \qquad
+  \left.\frac{\partial P}{\partial V}\right|_{T}
+  \sim -\frac{K_P}{V}\quad\text{при фиксированной массе.}
+\end{equation}
+Полная нелинейная связь $P(\rho_E)$ задаётся тем же saturating gate,
+из которого в \cref{sec:gl-free-energy} получен член $\omega_{\mathrm{macro}}|\Phi|^4$;
+$\mathcal{F}_{\mathrm{GL}}$ описывает \emph{поле}~$\Phi$, а $P$ и~$U$ --- скаляры
+субъекта наблюдения на~$T$.
+
+\paragraph{Энтропия.}
+На~$M$ энтропия фазы (\cref{ch:axioms}~$A_6$) --- мера смешения аргументов~$z$
+в пределах одной ячейки~$\hv$ при фиксированном~$Q$.
+После~$\mathcal{B}$ прибор не различает микрофазу внутри вокселя:
+макроэнтропия~$S$ --- функция $T$ и макропараметров, согласованная с
+\[
+  S = k_{\mathrm{B}}\ln W
+\]
+(Планк), где $W$ --- число равновесных \emph{макро}состояний, неразличимых readout'ом.
+Условие $S\xrightarrow[T\to 0]{}0$ задаёт нулевую точку шкалы и делает
+абсолютными потенциалы ниже.
+
+\paragraph{Функции Гельмгольца и Гиббса.}
+При фиксированных $T$ и~$V$ (канонический ансамбль на~$T$) определяют
+\begin{equation}
+\label{eq:helmholtz}
+  F = U - TS.
+\end{equation}
+При фиксированных $T$ и~$P$ вводят энтальпию $H=U+PV$ и
+\begin{equation}
+\label{eq:gibbs}
+  G = H - TS = U + PV - TS = F + PV.
+\end{equation}
+Связи $S=-(\partial F/\partial T)_V$, $P=-(\partial F/\partial V)_T$ --- стандартные
+тождества при гладкости $U(T,V)$; модель не подменяет их новыми аксиомами,
+а фиксирует \emph{микроскопические} якоря $E_0$ и~$K_P$, из которых $U$ и~$P$
+следуют после~\eqref{eq:internal-energy} и насыщения gate.
+Полевая свободная энергия~\eqref{eq:gl-free-energy} --- другой уровень описания:
+$\mathcal{F}_{\mathrm{GL}}[\Phi]$ для неоднородного $\Phi(X)$, тогда как $F$ в~\eqref{eq:helmholtz}
+--- скаляр равновесного объёма~$V$.
+Химический потенциал $\mu=(\partial F/\partial N)_T$ и связь с калибровочными зарядами
+разбираются в \cref{ch:si-sm}.
+
 \section{Симметрии и дискретные заряды}
 
 \begin{proposition}[Теорема Нётер на решётке]
