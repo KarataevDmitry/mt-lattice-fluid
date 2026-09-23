@@ -1,50 +1,52 @@
-\chapter{Шкала, SI и Стандартная модель}
+\chapter{Система SI и Стандартная модель}
 \label{ch:si-sm}
 
-\section{Иерархия \texorpdfstring{$\Mlayer\to\mathrm{SM}$}{M→SM}}
+\section{Иерархия масштабов}
 
-Лестница масштабов: $\hv$ $\to$ pra-дефект $\to$ составные узлы $\to$ $\Tlayer$-частицы $\to$ SM.
-Каждый уровень --- readout предыдущего без новых knobs в $g$.
+От ячейки~$\hv$ к первичному дефекту, составным узлам, макроскопическим частицам
+и, наконец, полям Стандартной модели --- каждый уровень есть осреднение предыдущего
+без новых свободных параметров в~$g$.
 
-\section{SI-мост}
+\section{Мост к системе SI}
 
-\begin{definition}[Planck-идентификация]
-$\ell_P:=\hl$, $a=\hl$, $\kgeom$ из 1-tick hull (\cref{ch:carrier}):
+\begin{definition}[Планковская идентификация]
+\label{def:si-bridge}
+$\ell_P:=\hl$, $a=\hl$, $\kgeom$ из однотактового тела (гл.~\ref{ch:carrier}):
 \[
   \htick=\kgeom\, t_P,\quad E_0=\kgeom E_P,\quad c=\kgeom c_0.
 \]
 \end{definition}
 
-\begin{remark}
-Planck $t_P=\ell_P/c$ уже несёт macro-$c$; $\kgeom$ не определяется как $c/c_0$,
-а выводится из геометрии, затем $c=\kgeom c_0$ --- проверка.
-\end{remark}
+Планковское время $t_P=\ell_P/c$ уже содержит макроскопическую скорость~$c$;
+$\kgeom$ выводится из геометрии, после чего $c=\kgeom c_0$ --- проверка согласованности,
+а не определение $\kgeom$ задним числом.
 
-\section{Тонкая структура}
+\section{Постоянная тонкой структуры}
 
-\begin{theorem}[$\alpha_{\mathrm{fs}}$ из gate]
+\begin{theorem}[Константа $\alpha_{\mathrm{fs}}$]
 \label{thm:alpha}
 \[
-  \alpha_{\mathrm{fs}}^{-1}=4\pi^3+\pi^2+\pi\approx 137.036,
+  \alpha_{\mathrm{fs}}^{-1}=4\pi^3+\pi^2+\pi\approx 137.036.
 \]
-не combinatorics $|N|\pi^3+\cdots$.
+Формула не сводится к комбinatorics вида $|N|\pi^3+\cdots$.
 \end{theorem}
 
-\begin{proof}[Идея]
-$\alpha^*-1=\Delta\phi_{\min}/(2\pi)=1/(4\pi)$ из вакуумного gate.
-$\alpha_{\mathrm{fs}}$ --- безразмерное сопряжение фазовых каналов на $\Tlayer$;
-полный вывод через holonomy $\Phi_\square$ и readout Maxwell (\cref{ch:carrier}).
+\begin{proof}
+Из вакуумного вращателя: $\alpha^*-1=\Delta\phi_{\min}/(2\pi)=1/(4\pi)$.
+Константа $\alpha_{\mathrm{fs}}$ --- безразмерное сопряжение фазовых каналов на~$T$;
+полный вывод через holonomy $\Phi_\square$ и макроскопические уравнения Максвелла
+дан в гл.~\ref{ch:carrier} и техническом приложении к монографии.
 \end{proof}
 
 \section{Электрослабый сектор}
 
-Пиковая плотностная шкала (\cref{sec:theorem-51}, bit budget):
+Пиковая плотностная шкала (\cref{sec:theorem-51}, \cref{sec:bit-budget}):
 \[
   N_{\mathrm{hier}}=\lfloor B_{\hv}\rfloor-1=8,\qquad
   v_{\mathrm{peak}}=\alpha_{\mathrm{fs}}^{8} E_P.
 \]
 
-\begin{theorem}[VEV из readout]
+\begin{theorem}[Вакуумное среднее значение]
 \label{thm:vev}
 \[
   v=v_{\mathrm{peak}}\sqrt{2\pi}=\alpha_{\mathrm{fs}}^{8} E_P\sqrt{2\pi}\approx 246\ \mathrm{GeV}.
@@ -52,12 +54,12 @@ $\alpha_{\mathrm{fs}}$ --- безразмерное сопряжение фаз�
 \end{theorem}
 
 \begin{proof}
-$N_{\mathrm{hier}}$ --- бит иерархии минус бит занятости ячейки.
-Множитель $\sqrt{2\pi}$ --- Gaussian-мера binomial readout (\cref{thm:t-cr}):
-пик плотности vs интегральный порядковый параметр на $\Tlayer$.
+$N_{\mathrm{hier}}$ --- число бит иерархии минус бит занятости ячейки.
+Множитель $\sqrt{2\pi}$ --- гауссова мера биномиального осреднения (\cref{thm:t-cr}):
+отношение пиковой плотности к интегральному порядку параметра на~$T$.
 \end{proof}
 
-\section{Массы}
+\section{Массы частиц}
 
 \begin{proposition}[Лептоны и барионы]
 \begin{align*}
@@ -68,17 +70,18 @@ $N_{\mathrm{hier}}$ --- бит иерархии минус бит занятос
 \end{align*}
 \end{proposition}
 
-Численное сравнение с PDG --- таблица в технической спецификации \texttt{model/06-si-sm.md};
-здесь зафиксированы \emph{формулы}, не статус verify.
+Численное сравнение с данными PDG приведено в приложении; здесь зафиксированы формулы вывода.
 
 \section{Четыре взаимодействия}
 
-\begin{proposition}[Один $g$ --- четыре канала readout]
-Электромагнетизм: фазы на рёбрах, $\Phi_\square$, $n=0$ излучение.
-Слабое: $P_L/P_R$, SU(2) flip; $\sin^2\theta_W=3/13$ из геометрии кластера $12+1$.
+\begin{proposition}[Один закон --- четыре макроскопических канала]
+Электромагнетизм: фазы на рёбрах, $\Phi_\square$, излучение с $n=0$.
+Слабое: лево- и право-спиновые проекторы, переворот $SU(2)$; $\sin^2\theta_W=3/13$
+из геометрии кластера $12+1$.
 Сильное: составные узлы, $\alpha_s(v)=d/(N_{\mathrm{hier}}\pi)$.
-Гравитация: $\Tlayer$-strain, $G_{\mu\nu}=\mathcal{E}(\delta[\mathrm{strain}])=8\pi\ell_P^2 T_{\mu\nu}$.
+Гравитация: деформация метрики на~$T$,
+$G_{\mu\nu}=\mathcal{E}(\delta[\mathrm{strain}])=8\pi\ell_P^2 T_{\mu\nu}$.
 \end{proposition}
 
-Открытые выводы (stencil GW, полный census барионов, CKM-углы) --- в \texttt{DEVLOG.md};
-они не ослабляют формулировки теорем выше.
+Полный вывод гравитационных волн, полного спектра барионов и матрицы CKM
+оставлен для дальнейшей работы и не ослабляет формулировок теорем выше.

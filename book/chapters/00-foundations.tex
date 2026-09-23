@@ -1,79 +1,81 @@
-\chapter{Основания \texorpdfstring{$\Mlayer$}{M}}
+\chapter{Дискретность микроуровня}
 \label{ch:foundations}
 
 \section{От постулата к теореме}
 
-\begin{remark}[Постулат 0.1]
 Ранний постулат «решётка существует'' снят.
-При абсолютных условиях \cref{ch:axioms} и геометрии носителя \cref{ch:carrier}
-дискретность $\Lambda$, шаг $\hl$ и тик $\htick$ \emph{выводятся} (\cref{thm:discreteness}),
-а не вводятся отдельной аксиомой «CA exists''.
-\end{remark}
+При абсолютных условиях (гл.~\ref{ch:axioms}) и геометрии носителя (гл.~\ref{ch:carrier})
+дискретность~$\Lambda$, шаг~$\hl$ и такт~$\htick$ \emph{выводятся},
+а не вводятся отдельной аксиомой о клеточном автомате.
 
 \begin{theorem}[Дискретность и минимальная ячейка $\hv$]
 \label{thm:discreteness}
-Пусть $g$ --- допустимый локальный закон, согласованный с \cref{ch:axioms,ch:carrier,sec:g-law}.
+Пусть $g$ --- допустимый локальный закон, согласованный с гл.~\ref{ch:axioms,ch:carrier,sec:g-law}.
 Тогда:
 \begin{enumerate}[label=(\roman*)]
 \item $g$ не есть поле на континууме $x\in\mathbb{R}^3$;
-\item существует счётный FCC-носитель $\Lambda$, ячейка $\hv$, шаг $\hl$, тик $\htick$;
-\item под-решётка «ниже $\hl$'' не состояние $\Mlayer$ --- запрет дробления регистра.
+\item существует счётный FCC-носитель $\Lambda$, ячейка $\hv$, шаг $\hl$, такт $\htick$;
+\item под-решётка «ниже $\hl$'' не состояние~$M$ --- запрет дробления регистра.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-\paragraph{Шаг 1.}
-\cref{ax:A3,ax:A13}: алфавит $Z_N[i]$ на сайте конечен; при счётном $\Lambda$ конфигурации счётны;
-$g$ --- перестановка, не континуумный поток. Пункт (i).
+\paragraph{Шаг~1.}
+Из~$A_3$ и~$A_{13}$: алфавит $Z_N[i]$ на узле конечен; при счётном~$\Lambda$
+пространство конфигураций счётно; $g$ --- перестановка состояний, а не поток в континууме.
+Пункт~(i).
 
-\paragraph{Шаг 2.}
-\cref{ax:A1,ax:A2} и \cref{thm:fcc-choice}: $\Lambda=\mathrm{FCC}$, $|N|=12$, $\hl$ и $\htick$ из 1-tick hull
-(\cref{ch:carrier}). Пункт (ii).
+\paragraph{Шаг~2.}
+Из~$A_1$, $A_2$ и \cref{thm:fcc-choice}: $\Lambda=\mathrm{FCC}$, $|N|=12$,
+$\hl$ и $\htick$ определяются однотактовым телом (гл.~\ref{ch:carrier}). Пункт~(ii).
 
-\paragraph{Шаг 3.}
-\cref{ax:A10,ax:A11}: заряд $n\in\mathbb{Z}$ на $\partial(\hv)$; soliton не дробит $\hv$. Пункт (ii), атомность.
+\paragraph{Шаг~3.}
+Из~$A_{10}$, $A_{11}$: заряд $n\in\mathbb{Z}$ на $\partial(\hv)$;
+устойчивый солитон не дробит~$\hv$. Пункт~(ii), атомность ячейки.
 
-\paragraph{Шаг 4.}
-\cref{ax:A5,ax:A7}: $z_{\min}>0$, $B_{\hv}=2\pi/\ln 2$ (\cref{sec:bit-budget}).
-Дробление $\hv$ --- новый алфавит, не тот же $g$. Пункт (iii).
+\paragraph{Шаг~4.}
+Из~$A_5$, $A_7$: $z_{\min}>0$, $B_{\hv}=2\pi/\ln 2$ (\cref{sec:bit-budget}).
+Дробление~$\hv$ означало бы новый алфавит, а не тот же~$g$. Пункт~(iii).
 
-\paragraph{Шаг 5.}
-\cref{ax:A16}: $s_0=\hbar/2$ $\Rightarrow$ $p_0=\hbar/(2\hl)$ фиксирует $\hl$ при данном $\hbar$.
+\paragraph{Шаг~5.}
+Из~$A_{16}$: $s_0=\hbar/2$ $\Rightarrow$ $p_0=\hbar/(2\hl)$ фиксирует~$\hl$ при данном~$\hbar$.
 \end{proof}
 
-\begin{corollary}[Дискретность --- следствие]
+\begin{corollary}[Дискретность как следствие]
 \label{cor:discreteness}
-Дискретность --- следствие \cref{ax:A1,ax:A2,ax:A3,ax:A5,ax:A7,ax:A10,ax:A11,ax:A13,ax:A16},
-не отдельный postulate.
+Дискретность следует из~$A_1$, $A_2$, $A_3$, $A_5$, $A_7$, $A_{10}$, $A_{11}$, $A_{13}$, $A_{16}$,
+а не постулируется отдельно.
 \end{corollary}
 
 \section{Состояние, континуум, вакуум}
 
-\begin{corollary}[Континуум на $\Mlayer$ отсутствует]
+\begin{corollary}[Континуум на~$M$ отсутствует]
 \label{cor:no-continuum}
-Непрерывные поля и $\hl\to 0$ --- только $\Tlayer$ (\cref{sec:no-continuum-carrier}).
+Непрерывные поля и предел $\hl\to 0$ --- свойство макроуровня~$T$
+(гл.~\ref{sec:no-continuum-carrier}).
 \end{corollary}
 
-\begin{corollary}[Планковский пол амплитуды]
+\begin{corollary}[Нижняя граница амплитуды]
 \label{cor:vacuum-floor}
-$|z(x)|\ge z_{\min}>0$ на $\Mlayer$; A5 (\cref{ax:A5}).
+$|z(x)|\ge z_{\min}>0$ на~$M$ (условие~$A_5$, \cref{ax:A5}).
 \end{corollary}
 
-\section{Замыкание $g$, механика, кванты}
+\section{Замыкание закона, механика, кванты}
 
 \begin{corollary}[Замыкание $g$]
 \label{cor:g-closure}
-$g$ --- замыкание A1--A16 (\cref{thm:g-law}).
+Допустимый закон~$g$ --- замыкание условий~$A_1$--$A_{16}$ (\cref{thm:g-law}).
 \end{corollary}
 
-\begin{corollary}[Landau-лестница]
+\begin{corollary}[Лестница Ландау]
 \label{cor:landau}
-$s_0$, $p_0$, $E_0$, $F_0=m_{\arg}g_M$ --- \cref{sec:theorem-51}; Madelung --- $\Tlayer$.
+Величины $s_0$, $p_0$, $E_0$, $F_0=m_{\arg}g_M$ выводятся в \cref{sec:theorem-51};
+представление Madelung --- язык~$T$.
 \end{corollary}
 
-\begin{corollary}[Полное квантование]
+\begin{corollary}[Дискретные возбуждения]
 \label{cor:full-quantization}
-На $\Mlayer$ --- занятость мод $n_k\in\mathbb{Z}$; «волны'' --- $\Tlayer$-readout.
+На~$M$ --- занятость мод $n_k\in\mathbb{Z}$; «волны'' --- макроскопическое осреднение на~$T$.
 \end{corollary}
 
-Закон $g$ --- \cref{ch:evolution}. Носитель --- \cref{ch:carrier}.
+Явный вид~$g$ --- гл.~\ref{ch:evolution}; геометрия носителя --- гл.~\ref{ch:carrier}.

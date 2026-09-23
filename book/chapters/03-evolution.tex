@@ -1,143 +1,150 @@
-\chapter{Функция перехода \texorpdfstring{$g$}{g}}
+\chapter{Закон эволюции}
 \label{ch:evolution}
 
-\section{Каркас}
+\section{Общая структура}
 
-\begin{definition}[Локальный CA]
-Дискретность $\Lambda$, $(\hl,\htick)$ --- \cref{thm:discreteness,ch:carrier}.
+Дискретность~$\Lambda$ и пара $(\hl,\htick)$ установлены теоремой~\ref{thm:discreteness}
+и гл.~\ref{ch:carrier}.
+Глобальное состояние $\Psi^t=\{z(x,t)\}_{x\in\Lambda}$ эволюционирует по закону
 \[
   \Psi^{t+1}=g(\Psi^t),\qquad g=g_{\mathrm{nl}}\circ g_{\mathrm{lin}},
 \]
-где $g_{\mathrm{lin}}$ --- линейное смешивание по $N(x)$, $g_{\mathrm{nl}}:z\mapsto z\cdot e^{i\Phi(z)}$.
-\end{definition}
+где $g_{\mathrm{lin}}$ --- линейное смешивание по соседям~$N(x)$,
+$g_{\mathrm{nl}}$ --- умножение на фазу $e^{i\Phi(z)}$.
 
 \begin{definition}[Дискретный лапласиан]
 $(\Delta_4 z)(x)=\sum_{y\in N(x)}(z(y)-z(x))$.
 \end{definition}
 
-На каркасе не фиксируются $\gamma$, форма $\Phi$, режим $L$ (unitary vs diffusive), $\alpha^*$, $\varepsilon$ ---
-они закрываются в \cref{sec:g-law} и \cref{ch:si-sm}.
+На этом каркасе ещё не фиксированы $\gamma$, форма~$\Phi$, режим~$L$,
+$\alpha^*$, $\varepsilon$ --- они определяются замыканием в \cref{sec:g-law}
+и гл.~\ref{ch:si-sm}.
 
-\section{Ограничения \texorpdfstring{$A_1$--$A_{16}$}{A1-A16}}
+\section{Следствия абсолютных условий}
 
-\begin{proposition}[Следствия для $g$]
-A3 запрещает рост $\sum|z|^2$ --- только bond-unitaries и $\Phi\in\mathbb{R}$.
-A4 --- нелинейность только $e^{i\Phi}$.
-A5 --- при $|z|\to 0$ gate $\Phi\to\mathrm{large}$.
-A6 --- mixing при фиксированной норме.
-A7 --- saturating $\Phi$ с $+\varepsilon$.
-A8 --- затухание нелинейности при больших $|z|$.
-A9 --- CR-метрика holonomy $\zeta$.
-\end{proposition}
+Условие~$A_3$ запрещает рост $\sum|z|^2$: допустимы лишь локальные унитарные преобразования
+на связях и действительная фаза~$\Phi$.
+$A_4$ ограничивает нелинейность множителем $e^{i\Phi}$.
+$A_5$: при $|z|\to 0$ фазовый отклик~$\Phi$ неограниченно возрастает.
+$A_6$ --- перемешивание при фиксированной норме.
+$A_7$ --- насыщающий знаменатель с~$+\varepsilon$.
+$A_8$ --- затухание нелинейности при больших $|z|$.
+$A_9$ --- метрика holonomy через инвариант~$\zeta$.
 
-Линейное $z+\gamma\Delta_4 z$ не унитарно; допустим product локальных unitaries (\cref{sec:g-law}).
+Линейное выражение $z+\gamma\Delta_4 z$ не унитарно;
+допустимо произведение локальных унитарных преобразований (\cref{sec:g-law}).
 
-\section{Фазовый carrier \texorpdfstring{$\zeta$}{zeta}}
+\section{Фазовый инвариант \texorpdfstring{$\zeta$}{zeta}}
 
-\begin{proposition}
-$\Arg(\sum z/z)$ и разность $\atan2$ дают ложный скачок $2\pi$.
-Holonomy
+Разность $\Arg(\sum z/z)$ и функция $\atan2$ дают на решётке ложный скачок $2\pi$.
+Физически значим величина
 \[
-  \zeta=(\textstyle\sum_N z)\cdot z^*,\qquad \Delta\phi=\wrap(\Arg\zeta)
+  \zeta=(\textstyle\sum_N z)\cdot z^*,\qquad \Delta\phi=\wrap(\Arg\zeta),
 \]
---- вход saturating kick (\cref{sec:g-law}).
-\end{proposition}
+служащая входом насыщающего фазового импульса (\cref{sec:g-law}).
 
-\section{Спин \texorpdfstring{$\mathrm{SU}(2)$}{SU(2)}}
+\section{Спин и группа \texorpdfstring{$SU(2)$}{SU(2)}}
 
-\begin{definition}[Спинор]
+\begin{definition}[Спинорное поле]
 $z(x,t)=(z_1,z_2)^\top\in\mathbb{C}^2$, $|z|^2=z^\dagger z$.
 \end{definition}
 
-U(1)-фаза $z\to z e^{i\Phi}$ недостаточна для фермионов: $2\pi\to +1$ на $\mathbb{C}$,
-но spin-$1/2$ требует $2\pi\to -1$, $4\pi\to +1$.
+Глобальная $U(1)$-фаза $z\to z e^{i\Phi}$ описывает сохранение заряда,
+но недостаточна для фермиона: оборот на $2\pi$ должен менять знак состояния,
+на $4\pi$ --- возвращать его.
 
-\begin{definition}[Дискретная rotation gate]
+\begin{definition}[Дискретный вращатель]
+\label{def:rotation-gate}
 $N_{\mathrm{ring}}=512$, $\omega=e^{i2\pi/N_{\mathrm{ring}}}$, $\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$:
 \[
   R(\Phi):\ (U,V)\mapsto (U c_\Phi - V s_\Phi,\ U s_\Phi + V c_\Phi)\pmod N,
 \]
-где $(c_\Phi,s_\Phi)$ --- cos/sin дискретного угла mod $N_{\mathrm{ring}}$.
+где $(c_\Phi,s_\Phi)$ --- дискретные cos/sin угла по модулю~$N_{\mathrm{ring}}$.
 \end{definition}
 
-\begin{corollary}[Spin-$1/2$]
-$R(N_{\mathrm{ring}}/2)\to -z$ на pra-vortex $\hv$ $\Rightarrow$ $U(2\pi)=-\mathbb{1}$, $U(4\pi)=+\mathbb{1}$.
+\begin{corollary}[Спин $1/2$]
+$R(N_{\mathrm{ring}}/2)\mapsto -z$ на первичном вихре $\Rightarrow$
+$U(2\pi)=-\mathbb{1}$, $U(4\pi)=+\mathbb{1}$.
 \end{corollary}
 
-Паули: два параллельных спинора в одном $\PlanckCell$ $\Rightarrow$ $z_A+z_B\to 0$;
-$K_P$ --- отталкивание при $d\le\hl$.
+Запрет Паули: два параллельных спинора в одной ячейке~$\PlanckCell$
+приводят к $z_A+z_B\to 0$; коэффициент~$K_P$ задаёт отталкивание при $d\le\hl$.
 
-\section{U(1)$_{\mathrm{vac}}$ и хиральность}
+\section{$U(1)_{\mathrm{vac}}$ и хиральность}
 
-Глобальная фаза $z\to z e^{i\theta}$; holonomy $\zeta$ и Bloch-ось $n=z^\dagger\sigma z/|z|^2$ --- инварианты.
-Проекторы $P_L z=(z_1,0)^\top$, $P_R z=(0,z_2)^\top$; в фазе STREAM независимы,
-в COLLISION --- смешиваются через $K_P$ и Arg.
+Глобальная фаза $z\to z e^{i\theta}$; инварианты --- holonomy~$\zeta$
+и ось Бloch $n=z^\dagger\sigma z/|z|^2$.
+Проекторы $P_L z=(z_1,0)^\top$, $P_R z=(0,z_2)^\top$
+независимы в фазе свободного течения и смешиваются при столкновении
+через~$K_P$ и аргумент~$\Arg$.
 
-\section{Закон \texorpdfstring{$g$}{g} на \texorpdfstring{$\mathbb{Z}_N[i]$}{Z\_N[i]}}
+\section{Замыкание \texorpdfstring{$g$}{g} на \texorpdfstring{$\mathbb{Z}_N[i]$}{Z\_N[i]}}
 \label{sec:g-law}
 
-\begin{theorem}[Замыкание $g$]
+\begin{theorem}[Замыкание закона эволюции]
 \label{thm:g-law}
-Закон $g$ на $Z_{N_{\mathrm{ring}}}[i]$:
+Закон~$g$ на $Z_{N_{\mathrm{ring}}}[i]$:
 \begin{enumerate}
-\item leapfrog второго порядка
+\item схема «лягушка'' второго порядка
 \[
   Z(x,t+\Delta t)+Z(x,t-\Delta t)=2Z(x,t)+\lfloor\mathcal{N}\rfloor;
 \]
-\item holonomy $\zeta_{\mathrm{real}},\zeta_{\mathrm{imag}}$ из соседней суммы без $\atan2$;
-\item saturating kick
+\item действительная и мнимая части holonomy из суммы соседей без $\atan2$;
+\item насыщающий фазовый импульс
 \[
   \Phi=\Bigl\lfloor\frac{K_P\zeta_{\mathrm{imag}}}{\zeta_{\mathrm{real}}+|Z|^2+K_P}\Bigr\rfloor,\quad
   |\Phi|\ge\Delta\phi_{\mathrm{disc}}\ \text{или}\ \Phi=0;
 \]
-\item $\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ на обеих компонентах; обратимость A13.
+\item $\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ на обеих компонентах; обратимость~$A_{13}$.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-\paragraph{(1) Leapfrog.}
-A3 (\cref{ax:A3}) запрещает рост $\sum_x|z(x)|^2$ при unitary шаге; дискретная волновая форма
-с сохранением энергии на bond --- leapfrog $Z^{t+1}+Z^{t-1}=2Z^t+\mathcal{N}$.
-A13 (\cref{ax:A13}) требует обратимости $\Rightarrow$ явный $T^{-1}$ через ту же формулу.
-Округление $\lfloor\cdot\rfloor$ --- работа на $Z_{N_{\mathrm{ring}}}[i]$, не нарушение A3 mod $N_{\mathrm{ring}}$.
+\paragraph{(1) Схема «лягушка''.}
+$A_3$ (\cref{ax:A3}) запрещает рост $\sum_x|z(x)|^2$;
+дискретная волновая форма с сохранением энергии на связи --- уравнение «лягушки''.
+$A_{13}$ (\cref{ax:A13}) требует обратимости $\Rightarrow$ явное $g^{-1}$ через ту же формулу.
+Округление $\lfloor\cdot\rfloor$ --- работа на $Z_{N_{\mathrm{ring}}}[i]$ mod~$N_{\mathrm{ring}}$.
 
 \paragraph{(2) Holonomy.}
-A9 (\cref{ax:A9}): фазовый kick из holonomy соседей, не из $\atan2$ отдельных $z(y)/z(x)$.
-$\zeta_{\mathrm{real}},\zeta_{\mathrm{imag}}$ --- действительная/мнимая части $\zeta=(\sum_N z)\cdot z^*$ без скачка $2\pi$.
+$A_9$ (\cref{ax:A9}): фазовый импульс из holonomy соседей,
+не из $\atan2$ отдельных отношений $z(y)/z(x)$.
+$\zeta_{\mathrm{real}}$, $\zeta_{\mathrm{imag}}$ --- части $\zeta=(\sum_N z)\cdot z^*$ без скачка~$2\pi$.
 
-\paragraph{(3) Saturating kick.}
-A5 (\cref{ax:A5}): $|z|<z_{\min}$ $\Rightarrow$ kick $\to\infty$ (vacuum floor).
-A7 (\cref{ax:A7}): насыщение при $|z|\to\infty$ через знаменатель $|Z|^2+K_P$.
-Дискретный порог $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ --- A16 (\cref{ax:A16}).
+\paragraph{(3) Насыщение.}
+$A_5$ (\cref{ax:A5}): $|z|<z_{\min}$ $\Rightarrow$ отклик $\to\infty$ (нижняя граница вакуума).
+$A_7$ (\cref{ax:A7}): насыщение при $|z|\to\infty$ через $|Z|^2+K_P$.
+Порог $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ --- $A_{16}$ (\cref{ax:A16}).
 
-\paragraph{(4) Rotation и обратимость.}
-A4 (\cref{ax:A4}): нелинейность только $e^{i\Phi}$, реализована как $R(\Phi)$ на $\mathbb{C}^2$.
-$\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ замыкает leapfrog; CL-1 (\cref{sec:congruence}) $\Leftrightarrow$ $T^{-1}$.
-Congruence ladder CL-1--CL-8 проверяет согласованность mod $N_{\mathrm{ring}}=512$.
+\paragraph{(4) Вращатель и обратимость.}
+$A_4$ (\cref{ax:A4}): нелинейность только $e^{i\Phi}$, реализована как $R(\Phi)$ на~$\mathbb{C}^2$.
+$\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ замыкает «лягушку''; CL-1 (\cref{sec:congruence}) $\Leftrightarrow$ $g^{-1}$.
+Лестница CL-1--CL-8 проверяет согласованность mod $N_{\mathrm{ring}}=512$.
 \end{proof}
 
-\subsection{Bit budget \texorpdfstring{$\hv$}{hV}}
+\subsection{Информационный бюджет ячейки}
 \label{sec:bit-budget}
 
 \[
-  B_{\hv}=\frac{2\pi}{\ln 2}\approx 9.065\ \text{bit},\quad
+  B_{\hv}=\frac{2\pi}{\ln 2}\approx 9{,}065\ \text{бит},\quad
   N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512,\quad
   N_\phi=\lceil 4\pi\rceil=13,\quad
   \Delta\phi_{\mathrm{disc}}=41.
 \]
 
-\subsection{Congruence ladder}
+\subsection{Лестница согласованности}
 \label{sec:congruence}
 
 \begin{proposition}[CL-1 -- CL-8]
-Mod $N_{\mathrm{ring}}$:
+По модулю~$N_{\mathrm{ring}}$:
 \begin{itemize}
-\item CL-1: $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor$ $\Leftrightarrow$ $T^{-1}$ (A13);
-\item CL-2: $R(N/2)\to -z$ (spin-$1/2$);
-\item CL-3: $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ (A16);
+\item CL-1: $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor$ $\Leftrightarrow$ $g^{-1}$ ($A_{13}$);
+\item CL-2: $R(N/2)\mapsto -z$ (спин~$1/2$);
+\item CL-3: $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ ($A_{16}$);
 \item CL-4: $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$, $E=n_E E_0$;
-\item CL-5--CL-8: gcd-условия для генератора $\mathbb{Z}_N$, секторов $N_\phi$, ledgers энергии и импульса.
+\item CL-5--CL-8: условия на greatest common divisor для генератора~$\mathbb{Z}_N$,
+  секторов~$N_\phi$, учёта энергии и импульса.
 \end{itemize}
 \end{proposition}
 
-Заряд $n\in\mathbb{Z}$ (A10) --- не mod $N_{\mathrm{ring}}$.
+Топологический заряд $n\in\mathbb{Z}$ ($A_{10}$) не сводится к mod~$N_{\mathrm{ring}}$.

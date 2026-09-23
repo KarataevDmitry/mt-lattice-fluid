@@ -3,9 +3,10 @@
 
 \section{Введение}
 
-Ниже --- \emph{абсолютные условия} модели $\Mlayer$: ограничения на допустимый локальный закон $g$.
-Физическое обоснование каждой группы --- \cref{ch:axiom-rationale}; здесь --- формальный реестр с уравнениями.
-Закон $g$ (\cref{ch:evolution}) --- их замыкание.
+В этой главе формулируются шестнадцать абсолютных условий на допустимый локальный закон~$g$.
+Физическое обоснование каждой группы дано в гл.~\ref{ch:axiom-rationale};
+здесь --- строгий реестр с определениями и уравнениями.
+Явный вид закона~$g$ выводится в гл.~\ref{ch:evolution} как замыкание этих условий.
 
 \begin{definition}[Поле и норма]
 \label{def:field-a3}
@@ -20,8 +21,8 @@
 
 \begin{axiom}[A1 · Каузальность]
 \label{ax:A1}
-За один M-тик $\htick$ информация распространяется не дальше одного шага $\hl$ по решётке.
-Окрестность $\varepsilon$ --- только \emph{равные} light-like рёбра:
+За один такт $\htick$ информация распространяется не дальше одного шага $\hl$ по решётке.
+Окрестность $\varepsilon$ --- только \emph{равные} светоподобные рёбра:
 \[
   N(x)=\Bigl\{y:\ |y-x|=\hl,\ \ c_0^2\htick^2-|y-x|^2\ge 0\Bigr\}.
 \]
@@ -40,15 +41,15 @@
 \begin{axiom}[A3 · Унитарность / сохранение информации]
 \label{ax:A3}
 Норма $N(t)$ --- инвариант эволюции: $N(t+1)=N(t)$ для всех $t$.
-Линейная часть $g_{\mathrm{lin}}$ --- product локальных unitary-операторов на рёбрах $N(x)$.
-Нелинейная часть --- только unitary-фаза $z\mapsto z\,e^{i\Phi(z)}$ на $\mathbb{C}^2$; модуль $|z|$ не диссипирует.
+Линейная часть $g_{\mathrm{lin}}$ --- произведение локальных унитарных операторов на рёбрах $N(x)$.
+Нелинейная часть --- только унитарная фаза $z\mapsto z\,e^{i\Phi(z)}$ на $\mathbb{C}^2$; модуль $|z|$ не диссипирует.
 \end{axiom}
 
 \begin{axiom}[A4 · U(1) заряд и SU(2) спин]
 \label{ax:A4}
 Состояние --- спинор $z\in\mathbb{C}^2$, не скаляр $z\in\mathbb{C}$.
 Глобальная U(1)-фаза $z\to z\,e^{i\theta}$ --- симметрия вакуума.
-Локальное столкновение реализуется SU(2)-gate $R(\Phi)$ на обеих компонентах (\cref{sec:g-law}).
+Локальное столкновение реализуется SU(2)-вращатель $R(\Phi)$ на обеих компонентах (\cref{sec:g-law}).
 \end{axiom}
 
 \section{Термодинамика на ячейке}
@@ -56,7 +57,7 @@
 \begin{axiom}[A5 · Третий закон]
 \label{ax:A5}
 Абсолютный ноль $|z|=0$ недостижим. Минимум «потенциала'' --- не в $z=0$;
-при $|z|\to 0$ фазовый gate $\Phi$ возрастает --- вакуум --- \emph{осциллирующий} фон
+при $|z|\to 0$ фазовый вращатель $\Phi$ возрастает --- вакуум --- \emph{осциллирующий} фон
 с $\rho_{\mathrm{field}}>0$, не статический ноль.
 \end{axiom}
 
@@ -75,13 +76,13 @@
   \quad\Leftrightarrow\quad
   |z|^2 \le 1 \ \text{(natural)}.
 \]
-Saturating gate использует знаменатель $+\varepsilon$, $\varepsilon\leftrightarrow u_P$.
+Насыщающий вращатель использует знаменатель $+\varepsilon$, $\varepsilon\leftrightarrow u_P$.
 \end{axiom}
 
 \begin{axiom}[A8 · Макро-линейность]
 \label{ax:A8}
-При больших $|z|$ нелинейность gate затухает --- на $\Tlayer$ поле становится близким к линейному
-(гладкость macro-readout).
+При больших $|z|$ нелинейность вращателя затухает --- на $\Tlayer$ поле становится близким к линейному
+(гладкость макроосреднение).
 \end{axiom}
 
 \section{Аналитичность и топология}
@@ -103,7 +104,7 @@ CR-единственность на связном $\Lambda$ задаёт гл�
 
 \begin{axiom}[A11 · Устойчивость солитона]
 \label{ax:A11}
-Размазанное (не голоморфное) состояние не устойчиво: gate с $K_P$ и $\Delta\phi_{\min}$
+Размазанное (не голоморфное) состояние не устойчиво: вращатель с $K_P$ и $\Delta\phi_{\min}$
 выталкивает полюс --- самофокусировка vortex, не smear.
 \end{axiom}
 
@@ -111,14 +112,14 @@ CR-единственность на связном $\Lambda$ задаёт гл�
 
 \begin{axiom}[A12 · Изотropия / Lorentz на $\Tlayer$]
 \label{ax:A12}
-Micro-шаг изотропен (равные веса на $N$). Macro-изотropный «свет'' ---
-readout $\kgeom=1/\sqrt{2}$ на FCC (\cref{ch:carrier}) плюс binomial-усреднение (\cref{ch:macro}).
+Микрошаг изотропен (равные веса на $N$). Macro-изотropный «свет'' ---
+осреднение $\kgeom=1/\sqrt{2}$ на FCC (\cref{ch:carrier}) плюс биномиальное осреднение (\cref{ch:macro}).
 \end{axiom}
 
-\begin{axiom}[A13 · Обратимость micro-шага]
+\begin{axiom}[A13 · Обратимость микрошага]
 \label{ax:A13}
 $g$ обратим на дискретном алфавите: $\exists g^{-1}$, $g^{-1}(g(\Psi))=\Psi$.
-Leapfrog второго порядка на $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$:
+Схема «лягушка'' второго порядка на $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$:
 \[
   Z^+(x,t)+Z^-(x,t)=2Z(x,t)+\lfloor\mathcal{N}(x,t)\rfloor.
 \]
@@ -127,12 +128,12 @@ Leapfrog второго порядка на $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$:
 \begin{axiom}[A14 · Дискретные симметрии P, C, T, U(1)$_{\mathrm{vac}}$]
 \label{ax:A14}
 $g$ уважает дискретные симметрии: пространственная инверсия $P$, charge conjugation $C$ ($z\to z^*$),
-time reversal $T$ (с swap истории leapfrog), глобальная U(1)-фаза вакуума.
+обратимое движение по времени $T$ (с перестановка истории «лягушка''), глобальная U(1)-фаза вакуума.
 \end{axiom}
 
 \begin{axiom}[A15 · Принцип наименьшего действия / геометрия]
 \label{ax:A15}
-Безразмерные coupling'и --- следствия геометрии носителя, не fitted knobs:
+Безразмерные константы связи --- следствия геометрии носителя, не подгоняемых параметров:
 \[
   \kgeom=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}},\quad
   \gamma=\kappa_{\mathrm{link}}=\frac{1}{|N|},\quad
@@ -151,11 +152,11 @@ Spin-$1/2$: $R(N_{\mathrm{ring}}/2)\mapsto -z$ (оборот $2\pi$ меняет
 
 \begin{proposition}[Детерминизм $\Mlayer$]
 \label{prop:determinism}
-При \cref{ax:A2} закон $g$ строго детерминирован: нет RNG в фундаментальном шаге.
+При \cref{ax:A2} закон $g$ строго детерминирован: нет генератора случайных чисел в фундаментальном шаге.
 \end{proposition}
 
 \begin{proof}
-A2: $z(x,t+1)$ --- функция $\{z(y,t)\}_{y\in N(x)}$ и истории leapfrog, без внешнего случайного входа.
+A2: $z(x,t+1)$ --- функция $\{z(y,t)\}_{y\in N(x)}$ и истории «лягушка'', без внешнего случайного входа.
 \end{proof}
 
 Вероятность и Born на $\Tlayer$ --- следствие динамического хаоса (A5, A6) и грубого прибора
@@ -169,7 +170,7 @@ A2: $z(x,t+1)$ --- функция $\{z(y,t)\}_{y\in N(x)}$ и истории lea
 $\Psi^{t+1}=g(\Psi^t)$ на счётном $\Lambda$; один $\htick$ на тик; $g$ постоянен.
 \end{definition}
 
-\begin{definition}[Shutdown · D1]
+\begin{definition}[Останов · D1]
 \label{def:D1}
 Существует $t$ без шага $g$, или $\htick\to\infty$, или $g$ меняется / обнуляется.
 \end{definition}
@@ -181,10 +182,10 @@ $\sum_x|z|^2\to 0$, или глобально $z\equiv 0$ устойчиво, и
 
 \begin{definition}[$\Tlayer$ heat death · D3]
 \label{def:D3}
-Macro-readout $\Phi=\mathcal{B}z$ теряет структуру ($\mathrm{Var}(\Phi)\to 0$) при $N\approx\mathrm{const}$ на $\Mlayer$.
+Макроосреднение $\Phi=\mathcal{B}z$ теряет структуру ($\mathrm{Var}(\Phi)\to 0$) при $N\approx\mathrm{const}$ на $\Mlayer$.
 \end{definition}
 
-\begin{lemma}[Нет shutdown]
+\begin{lemma}[Нет останов]
 \label{lem:231}
 При \cref{def:state-evolution} для всех $t\in\mathbb{Z}$: $\Psi^{t+1}=g(\Psi^t)$, $\htick$ и $g$ постоянны.
 \end{lemma}
@@ -200,7 +201,7 @@ $N(t+1)=N(t)$ для всех $t$.
 \end{lemma}
 
 \begin{proof}
-Непосредственно из \cref{ax:A3}: product unitaries и $e^{i\Phi}$ сохраняют $|z|$.
+Непосредственно из \cref{ax:A3}: произведение унитарных операторов и $e^{i\Phi}$ сохраняют $|z|$.
 \end{proof}
 
 \begin{corollary}
@@ -227,18 +228,18 @@ $z(x,t)\equiv 0$ не устойчивое состояние $g$.
 Вместе с \cref{cor:232a} --- D2 через $N\to 0$ или $z\equiv 0$ невозможен.
 \end{proof}
 
-\begin{lemma}[Micro-обратимость]
+\begin{lemma}[Микрообратимость]
 \label{lem:235}
 $g$ обратима на $Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-\cref{ax:A13}: алгебра leapfrog + kick-ledger.
+\cref{ax:A13}: алгебра «лягушка'' + учёт фазовых импульсов.
 \end{proof}
 
 \begin{lemma}[$\mathcal{B}$ необратима]
 \label{lem:236}
-При $R\ge 1$ readout $\mathcal{B}$ не инъективен.
+При $R\ge 1$ осреднение $\mathcal{B}$ не инъективен.
 \end{lemma}
 
 \begin{proof}
@@ -258,7 +259,7 @@ Viscosity добавляется только после $\mathcal{B}$ на $\Tl
 $\lfloor\mathcal{N}(\Psi)\rfloor\equiv 0$ на всём $\Lambda$.
 \end{definition}
 
-\begin{definition}[Global fixed point · D5]
+\begin{definition}[Глобальная неподвижная точка · D5]
 $g(\Psi^*)=\Psi^*$ при $(Z_t,Z_{t-1})=(Z^*,Z^*)$ $\Leftrightarrow$ D4.
 \end{definition}
 
@@ -268,9 +269,9 @@ D5 $\Leftrightarrow$ $z(x,t)\equiv c$ на торе $\Lambda$, $c\in Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-Symmetric leapfrog $\Rightarrow$ $\lfloor\mathcal{N}\rfloor=0$ $\Rightarrow$ $\Phi=0$ $\Rightarrow$ discrete CR
+Symmetric «лягушка'' $\Rightarrow$ $\lfloor\mathcal{N}\rfloor=0$ $\Rightarrow$ $\Phi=0$ $\Rightarrow$ discrete CR
 $\Rightarrow$ $z(x)=\langle z\rangle_N$ $\Rightarrow$ $z\equiv c$ на связном графе.
-Обратно: $z\equiv c$ --- fixed point leapfrog.
+Обратно: $z\equiv c$ --- неподвижная точка «лягушка''.
 \end{proof}
 
 \begin{lemma}[A5/A6 исключают физические D5]
@@ -282,9 +283,9 @@ $\Rightarrow$ $z(x)=\langle z\rangle_N$ $\Rightarrow$ $z\equiv c$ на связ�
 $c=0$: \cref{ax:A5}. $c\ne 0$ static: A5 требует кипение; A6 запрещает frozen holomorphy.
 \end{proof}
 
-\begin{theorem}[Нет физических fixed points без кипения]
+\begin{theorem}[Нет физических неподвижная точкаs без кипения]
 \label{thm:238}
-Класс A5-физических global fixed points $g(\Psi^*)=\Psi^*$ без micro-кипения --- пуст.
+Класс A5-физических глобальные неподвижные точки $g(\Psi^*)=\Psi^*$ без микрокипения --- пуст.
 \end{theorem}
 
 \begin{proof}
