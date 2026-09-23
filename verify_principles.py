@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
+from pathlib import Path
 
 import torch
 
@@ -1806,6 +1808,45 @@ def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
     }
 
 
+def check_model_purity() -> dict:
+    """MODEL must not contain DEVLOG/impl pollution (hard gate)."""
+    root = Path(__file__).resolve().parent
+    model_dir = root / "model"
+    patterns: list[tuple[re.Pattern[str], str]] = [
+        (re.compile(r"\*\*Код:\*\*"), "**Код:**"),
+        (re.compile(r"(?<!\*)\bКод:\s*`"), "Код:`"),
+        (re.compile(r"verify\s+\*\*"), "verify **"),
+        (re.compile(r"✅"), "✅"),
+        (re.compile(r"mt_ca/"), "mt_ca/"),
+        (re.compile(r"`[^`]+\.py`"), ".py backtick"),
+        (re.compile(r"\*\*Impl:\*\*"), "**Impl:**"),
+        (re.compile(r"\*\*GPU DoD:\*\*"), "**GPU DoD:**"),
+    ]
+    allow_fragments = (
+        "запрещено",
+        "Не SSOT",
+        "→ **DEVLOG**",
+        "→ [`DEVLOG",
+        "GPU-вкусовщина",
+    )
+    hits: list[str] = []
+    for path in sorted(model_dir.glob("*.md")):
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            if any(frag in line for frag in allow_fragments):
+                continue
+            for rx, label in patterns:
+                if rx.search(line):
+                    hits.append(f"{path.name}:{i}: {label}")
+                    break
+    return {
+        "id": "Model_purity",
+        "count": len(hits),
+        "violations": hits[:12],
+        "ok": len(hits) == 0,
+        "note": "MODEL=physics only; impl/verify → DEVLOG.md",
+    }
+
+
 def run_all(device: str) -> list[dict]:
     return [
         check_a3_unitarity(device=device),
@@ -1875,6 +1916,7 @@ def run_all(device: str) -> list[dict]:
         check_spinor_360_sign(device=device),
         check_su2_720_sign(device=device),
         check_discrete_rot_exp(device=device),
+        check_model_purity(),
     ]
 
 
