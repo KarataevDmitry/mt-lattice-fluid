@@ -10,6 +10,7 @@
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{listings}
+\usepackage{xstring}
 
 \usepackage{fontspec}
 \usepackage{polyglossia}
@@ -37,16 +38,11 @@
 \newtheorem{axiom}{Условие}[chapter]
 \newtheorem{remark}{Замечание}[chapter]
 
-% cleveref: тип axiom не стандартный → без этого \cref{ax:A*} даёт ??
-\crefname{axiom}{условию}{условиям}
-\Crefname{axiom}{Условию}{Условиям}
-\crefformat{axiom}{#2условию~#1#3}
-\Crefformat{axiom}{#2Условию~#1#3}
-\crefrangeformat{axiom}{#3условиям~#1#4--#5#2#6}
-\crefmultiformat{axiom}{#2условиям~#1#3}{ и~#2#1#3}{, #2#1#3}{ и~#2#1#3}
-
-% Надёжная ссылка на A_i: cleveref+amsthm для axiom даёт ?? в этой сборке
-\newcommand{\Axref}[1]{условию~\ref{#1}}
+% Ссылка на абсолютное условие: $A_5$, не «условiu 2.5» и не ??
+\newcommand{\Axref}[1]{%
+  \StrBehind{#1}{ax:A}[\axidx]%
+  \hyperref[#1]{$A_{\axidx}$}%
+}
 
 \renewcommand{\proofname}{Доказательство}
 
