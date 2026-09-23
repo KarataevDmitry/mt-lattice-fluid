@@ -2903,6 +2903,139 @@ class SIConstants:
             ),
         }
 
+    def floor1_dressing_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·dressing·ask — what is the near-zone of lightest Q=±1?
+
+        Ask to carrier (§5.0.5), not invention:
+
+          What is ρ_Θ? What fixes its support radius?
+
+        CLOSED from stamped pieces:
+          · dressing = ρ_Θ cloud around b=1 core (§5.0.5)
+            — NOT a second particle; NOT Compton/a0 cloud
+          · ρ_Θ(x) ∝ f(|Δφ_N(x)|, |ζ(x)|) with floor Δφ_min
+          · min spatial support ⊇ ε-neighborhood (neighbors of Λ)
+            ⇒ R_min = 1·dl; N_star = N12 = 12
+          · anti-smear K_P holds core; Heisenberg holds irreducible halo
+          · shells = coordination spheres of Λ (modes of ρ_Θ)
+
+        OPEN:
+          · outer radius R_dress (shell count k until |Δφ| < Δφ_min)
+          · whether R_dress reaches N12^3…N12^4 (NOT forced by B0 census)
+          · exact shape of f
+
+        REJECT:
+          · R_dress ≡ Compton / a0
+          · α-input into dressing (circular for upstairs α=ae/(2r))
+          · R_dress ≡ N12^{3…4} without derivation (overclaim)
+          · dressing = second particle / separate pra
+
+        TRY (next, not closed):
+          · shell-walk: k = min{k: max_|Δφ| on shell k < Δφ_min}
+          · combinatorial candidates from N_phi, B_hV, N_ring
+        """
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        dphi = float(DELTA_PHI_MIN)
+        n_phi = int(hv_bit_budget().N_phi)
+        r_min = 1.0  # ·dl — ε-star
+        r_floor1_lo = float(n12**3)
+        r_floor1_hi = float(n12**4)
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_rho_Theta_is_dressing",
+                "maps_to": "§5.0.5 ρ_Θ cloud around b=1 core — not second particle",
+                "status": "closed",
+                "mechanism": "Heisenberg + anti-smear: core vs halo",
+            },
+            {
+                "id": "closed_R_min_epsilon_star",
+                "ratio": r_min,
+                "maps_to": "R_min≥1·dl — ε-neighborhood of Λ (N12 neighbors)",
+                "status": "closed",
+                "mechanism": "cannot have ρ_Θ=δ on one v_p and zero phase uncertainty",
+            },
+            {
+                "id": "closed_cutoff_concept_dphi_min",
+                "ratio": dphi,
+                "maps_to": "outer cutoff concept: |Δφ|,|ζ| fall below Δφ_min",
+                "status": "closed_concept",
+                "mechanism": "ρ_Θ floor = Heisenberg pole",
+            },
+            {
+                "id": "open_R_dress_outer",
+                "maps_to": "integer shell count k until signal < Δφ_min — not derived",
+                "status": "open",
+            },
+            {
+                "id": "reject_R_equals_floor1_band",
+                "ratio": r_floor1_lo,
+                "maps_to": "N12^3…N12^4 is floor1 window, not forced R_dress",
+                "status": "rejected_as_forced_radius",
+            },
+            {
+                "id": "reject_Compton_as_dressing",
+                "maps_to": "Compton/a0 = IR readout, not near-zone ρ_Θ",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_alpha_input_dressing",
+                "maps_to": "α into dressing circular for α=ae/(2r) upstairs",
+                "status": "rejected",
+            },
+            {
+                "id": "try_shell_walk_dphi",
+                "maps_to": "k = min shell with max_|Δφ| < Δφ_min",
+                "status": "try",
+            },
+            {
+                "id": "try_combinatorial_Nphi_BhV",
+                "ratio": float(n_phi),
+                "maps_to": "N_phi / B_hV / N_ring as candidate cutoffs — unproven",
+                "status": "try",
+            },
+        ]
+
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        open_ids = [i["id"] for i in inventory if i["status"] == "open"]
+        reject_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("rejected")
+        ]
+
+        ask_ok = (
+            n12 == 12
+            and abs(dphi - 0.5) < 1e-12
+            and r_min == 1.0
+            and "closed_rho_Theta_is_dressing" in closed_ids
+            and "closed_R_min_epsilon_star" in closed_ids
+            and "open_R_dress_outer" in open_ids
+            and "reject_R_equals_floor1_band" in reject_ids
+        )
+
+        return {
+            "theorem": "§6·floor1·dressing·ask — near-zone ρ_Θ of lightest Q=±1",
+            "N12": n12,
+            "N_phi": n_phi,
+            "Delta_phi_min": dphi,
+            "R_min_dl": r_min,
+            "R_floor1_lo_dl": r_floor1_lo,
+            "R_floor1_hi_dl": r_floor1_hi,
+            "derivation_closed": False,  # outer R open
+            "min_support_closed": True,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "open_ids": open_ids,
+            "reject_ids": reject_ids,
+            "ask_ok": ask_ok,
+            "note": (
+                "Dressing = ρ_Θ halo (§5.0.5): min ⊇ ε-star (1·dl, N12). "
+                "Outer R_dress OPEN (shell-walk / combinatorial). "
+                "NOT forced to N12^3…^4; NOT Compton; NOT α-input."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

@@ -802,6 +802,34 @@ def check_floor1_B0_census_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_dressing_ask(device: str = "cpu") -> dict:
+    """§6·floor1·dressing·ask — near-zone ρ_Θ of lightest Q=±1; outer R open."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_dressing_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["min_support_closed"])
+        and not bool(row["derivation_closed"])
+        and int(row["N12"]) == 12
+        and abs(float(row["R_min_dl"]) - 1.0) < 1e-12
+        and abs(float(row["Delta_phi_min"]) - 0.5) < 1e-12
+        and "closed_rho_Theta_is_dressing" in row["closed_ids"]
+        and "open_R_dress_outer" in row["open_ids"]
+        and "reject_R_equals_floor1_band" in row["reject_ids"]
+    )
+    return {
+        "id": "Floor1_dressing_ask",
+        "R_min_dl": row["R_min_dl"],
+        "R_floor1_lo_dl": row["R_floor1_lo_dl"],
+        "derivation_closed": row["derivation_closed"],
+        "min_support_closed": row["min_support_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2426,6 +2454,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_nF_kick_census(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
+        check_floor1_dressing_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
