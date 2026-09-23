@@ -2643,6 +2643,136 @@ class SIConstants:
             ),
         }
 
+    def floor1_leptonic_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·ask — what can live at 10³…10⁵·dl (pre-resonances / leptonic).
+
+        Walk (carrier, no α-fit):
+          Floor 0 = one-cell pra-defect (electron core). Floor 2+ = confining
+          (girth d, B-class). Floor 1 sits in the desert BETWEEN them.
+
+        Scale window (stamped integers, not CODATA):
+          N₁₂³ = 1728 ≈ 10³
+          N₁₂⁴ = 20736 ≈ 2·10⁴
+          N₁₂⁵ = 248832 ≈ 2.5·10⁵ (slightly above table hi)
+          Table §6 band 10³…10⁵·dl ≈ causal-star powers N₁₂^{3…4}.
+
+        What it is NOT (reject as floor-1 size):
+          • Compton e / a₀ — IR, ~10²²…10²⁴·dl (far above)
+          • μ/τ Compton — still ~10²⁰·dl class; model explicitly
+            does not claim m_μ/m_e here (§8.2 electron)
+          • Confining quark foci — floor 2 (~10¹⁵·dl)
+          • N_gen=d — count of stacks, not a length floor (§8.4.4)
+
+        What it MAY be (open):
+          Multi-cell leptonic (B=0) dressings / pre-resonances on the
+          FCC star iterated 3–4 times: Q=±1 or neutral metastable
+          blobs that decay to floor-0 pra + radiation. Not a new gauge
+          group — topology/assembly theory on the same g.
+
+        Status: scale window motivated; content census OPEN.
+        """
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        n_phi = int(hv_bit_budget().N_phi)
+        n_hier = int(math.floor(hv_bit_budget().B_hV)) - 1
+        l_p = self.l_P
+        # linear scales in ·dl
+        lo = float(n12**3)
+        mid = float(n12**4)
+        hi_table = 1.0e5
+        hi_star = float(n12**5)
+        # IR landmarks in ·dl (CODATA lengths / l_P — score after, not definition)
+        hbar = HBAR
+        c = C
+        m_e = 9.1093837015e-31
+        lam_c = hbar / (m_e * c)
+        a0 = hbar / (m_e * c * 7.2973525693e-3)
+        compton_over_dl = lam_c / l_p
+        a0_over_dl = a0 / l_p
+
+        window_ok = lo >= 1.0e3 and lo <= 3.0e3 and mid >= 1.0e4 and mid <= 3.0e4
+        ir_far = compton_over_dl > 1.0e20 and a0_over_dl > 1.0e22
+        floor2_above = 1.0e15 > hi_table
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "scale_N12_cubed",
+                "ratio": lo,
+                "maps_to": "N₁₂³·dl — low edge of §6 floor 1",
+                "status": "motivated",
+            },
+            {
+                "id": "scale_N12_fourth",
+                "ratio": mid,
+                "maps_to": "N₁₂⁴·dl — mid band",
+                "status": "motivated",
+            },
+            {
+                "id": "scale_N12_fifth",
+                "ratio": hi_star,
+                "maps_to": "N₁₂⁵·dl — slightly above table 10⁵",
+                "status": "report",
+            },
+            {
+                "id": "reject_Compton_as_floor1",
+                "ratio": compton_over_dl,
+                "maps_to": "λ̄_C/l_P ≫ 10⁵ — IR lepton cloud, not floor 1",
+                "status": "rejected_as_floor1_size",
+            },
+            {
+                "id": "reject_a0_as_floor1",
+                "ratio": a0_over_dl,
+                "maps_to": "a₀/l_P ≫ 10⁵ — atomic, not floor 1",
+                "status": "rejected_as_floor1_size",
+            },
+            {
+                "id": "reject_confining_floor2",
+                "ratio": 1.0e15,
+                "maps_to": "§6 level 2 quark foci — different class (B≠0)",
+                "status": "rejected_as_floor1_class",
+            },
+            {
+                "id": "reject_Ngen_as_length",
+                "ratio": 3.0,
+                "maps_to": "N_gen=d — stack count, not ·dl floor",
+                "status": "rejected_as_length_floor",
+            },
+            {
+                "id": "open_multicell_leptonic_census",
+                "maps_to": "stable/metastable B=0 multi-cell at N₁₂^{3…4}",
+                "status": "open",
+                "mechanism": "pre-resonance / leptonic dressing on iterated star",
+            },
+            {
+                "id": "open_muon_tau_not_here",
+                "maps_to": "m_μ/m_e still OPEN — not assigned to floor-1 size",
+                "status": "open",
+            },
+        ]
+
+        return {
+            "theorem": "§6·floor1·ask — leptonic pre-resonance band on N₁₂^{3…4}",
+            "N12": n12,
+            "N_phi": n_phi,
+            "N_hier": n_hier,
+            "L_lo_dl": lo,
+            "L_mid_dl": mid,
+            "L_hi_table_dl": hi_table,
+            "L_hi_star_dl": hi_star,
+            "Compton_e_over_dl": compton_over_dl,
+            "a0_over_dl": a0_over_dl,
+            "window_ok": window_ok,
+            "ir_landmarks_far_above": ir_far,
+            "floor2_scale_above_floor1": floor2_above,
+            "derivation_closed": False,
+            "inventory": inventory,
+            "ask_ok": window_ok and ir_far and floor2_above and n12 == 12,
+            "note": (
+                "Floor 1: linear band ~N₁₂³…N₁₂⁴·dl (pre-resonances / leptonic). "
+                "Not Compton/a₀, not confining floor 2, not N_gen. "
+                "OPEN: multi-cell B=0 census; μ/τ mass not claimed here."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

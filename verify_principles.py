@@ -752,6 +752,31 @@ def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_leptonic_ask(device: str = "cpu") -> dict:
+    """§6·floor1·ask — pre-resonance band; content census open."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_leptonic_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["window_ok"])
+        and bool(row["ir_landmarks_far_above"])
+        and not bool(row["derivation_closed"])
+        and int(row["N12"]) == 12
+        and abs(float(row["L_lo_dl"]) - 1728.0) < 1e-9
+        and abs(float(row["L_mid_dl"]) - 20736.0) < 1e-9
+    )
+    return {
+        "id": "Floor1_leptonic_ask",
+        "L_lo_dl": row["L_lo_dl"],
+        "L_mid_dl": row["L_mid_dl"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2374,6 +2399,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_sqrt2_descent_ask(device=device),
         check_alpha_M_from_g_try(device=device),
         check_alpha_nF_kick_census(device=device),
+        check_floor1_leptonic_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
