@@ -1,6 +1,7 @@
 % Shared preamble — compile via main.tex (xelatex)
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[scr=dutchcal]{mathalpha}
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -66,3 +67,6 @@
 \newcommand{\kgeom}{\kappa}
 
 \DeclareMathOperator{\Arg}{Arg}
+% \atan2: цифра не входит в имя команды, поэтому 2 — обязательный следующий знак.
+\def\atan2{\operatorname{atan2}}
+\DeclareMathOperator{\wrap}{wrap}
