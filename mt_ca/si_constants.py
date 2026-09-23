@@ -1092,6 +1092,98 @@ class SIConstants:
             ),
         }
 
+    def alpha_meaning_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·meaning — restart from physical meaning of α (not F-lattice / N_a0).
+
+        Meaning (already stamped §8.2 / §7.1 / §8.4.1):
+          α = dimensionless **phase coupling** of unit charge to vacuum
+              (EM channel; solid-angle / phase-volume of emergent 3D),
+          NOT the definition of force, NOT a hop count by itself.
+
+        Foot (empty cell, b=0):
+          α*−1 = Δφ_min/(2π) = 1/(4π)  — vacuum residue per tick.
+
+        Readouts (consequences, not meanings):
+          F = α F_P / N² ;  α = N_c/N_a0 ;  α = κ/M  — expressions of the same coupling.
+
+        Number today: α = 1/(4π³+π²+π) from continuum solid-angle tower.
+        OPEN: discrete M-native coupling fraction (FCC phase/holonomy) without π.
+        """
+        alpha_star = self.alpha_star
+        residue = alpha_star - 1.0
+        alpha = self.alpha_fs
+        alpha_c = 7.2973525693e-3
+        four_pi = 4.0 * math.pi
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "meaning_phase_coupling",
+                "maps_to": "α = EM phase↔vacuum coupling (solid angle / phase volume)",
+                "status": "shipped_meaning",
+                "mechanism": "§8.2; not |N| tile; not Newton force primary",
+            },
+            {
+                "id": "foot_vacuum_residue",
+                "ratio": residue,
+                "maps_to": "α*−1 = Δφ_min/(2π) = 1/(4π)",
+                "status": "shipped",
+                "mechanism": "empty cell gate §7.1; occupancy bit separate (§8.4.1)",
+            },
+            {
+                "id": "tower_solid_angle",
+                "ratio": self.alpha_fs_inv,
+                "maps_to": "α⁻¹ = 4π³+π²+π — continuum T-readout tower on foot 4π",
+                "status": "shipped_number",
+                "mechanism": "~2 ppm CODATA; π-guardrail: 4π≠|N|",
+            },
+            {
+                "id": "identity_4pi_alpha_eq_alpha_over_residue",
+                "ratio": four_pi * alpha,
+                "maps_to": "4π·α = α/(α*−1) — tower sits on residue foot",
+                "status": "identity",
+            },
+            {
+                "id": "readout_force_not_meaning",
+                "maps_to": "F=α F_P/N² — consequence of coupling, not definition",
+                "status": "readout",
+            },
+            {
+                "id": "readout_hops_not_meaning",
+                "maps_to": "α=N_c/N_a0 — length expression of same coupling",
+                "status": "readout",
+            },
+            {
+                "id": "readout_force_lattice_not_meaning",
+                "maps_to": "α=κ/M — F₀ landing; M still open (§8.2·F·ask)",
+                "status": "readout_open",
+            },
+            {
+                "id": "open_discrete_coupling_fraction",
+                "maps_to": "FCC holonomy / discrete solid angle → α without continuum π",
+                "status": "open",
+                "mechanism": "α_geom=137 exploratory; Φ_□ alpha_match_open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·meaning — α is phase↔vacuum coupling",
+            "alpha_star": alpha_star,
+            "vacuum_residue": residue,
+            "residue_equals_1_over_4pi": abs(residue - 1.0 / four_pi) < 1e-15,
+            "alpha_fs": alpha,
+            "alpha_fs_inv": self.alpha_fs_inv,
+            "four_pi_times_alpha": four_pi * alpha,
+            "alpha_over_residue": alpha / residue,
+            "vs_codata_ppm_pi": (alpha - alpha_c) / alpha_c * 1e6,
+            "inventory": inventory,
+            "replaces_pi_ansatz": False,
+            "discrete_coupling_open": True,
+            "ask_ok": abs(residue - 1.0 / four_pi) < 1e-15
+            and abs(four_pi * alpha - alpha / residue) < 1e-12,
+            "note": (
+                "Meaning: α=phase↔vacuum coupling; foot α*−1=1/(4π); number=π-tower. "
+                "F/hops/κ/M are readouts. OPEN: discrete coupling fraction on FCC."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

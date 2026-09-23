@@ -437,6 +437,30 @@ def check_alpha_force_lattice_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_meaning_ask(device: str = "cpu") -> dict:
+    """§8.2·α·meaning — α is phase↔vacuum coupling; discrete fraction OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_meaning_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["residue_equals_1_over_4pi"])
+        and bool(row["discrete_coupling_open"])
+        and not bool(row["replaces_pi_ansatz"])
+        and abs(float(row["vs_codata_ppm_pi"]) + 2.223) < 0.01
+    )
+    return {
+        "id": "Alpha_meaning_ask",
+        "vacuum_residue": row["vacuum_residue"],
+        "four_pi_times_alpha": row["four_pi_times_alpha"],
+        "alpha_fs_inv": row["alpha_fs_inv"],
+        "discrete_coupling_open": row["discrete_coupling_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2046,6 +2070,7 @@ def run_all(device: str) -> list[dict]:
         check_na0_from_carrier(device=device),
         check_na0_h_carrier_ask(device=device),
         check_alpha_force_lattice_ask(device=device),
+        check_alpha_meaning_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
