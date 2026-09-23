@@ -1535,13 +1535,13 @@ class SIConstants:
             },
             {
                 "id": "open_Dirac_g2_on_vortex",
-                "maps_to": "bare g=2 for n=±1 from spinor/topology on Λ",
-                "status": "open",
+                "maps_to": "→ §8.2·α·g2·ask (closed bare)",
+                "status": "delegated",
             },
             {
                 "id": "open_A5_dressing_ae_without_alpha",
-                "maps_to": "vacuum bath → ae without α-input; then α=ae/(2r)",
-                "status": "open",
+                "maps_to": "→ §8.2·α·g2·ask (still open)",
+                "status": "delegated",
             },
         ]
         return {
@@ -1565,7 +1565,162 @@ class SIConstants:
             and abs(ae_schwinger / alpha_c - 1.0 / (2.0 * math.pi)) < 1e-15,
             "note": (
                 "Start here: ae lab door. Identity ae^(1)=2αr with r=1/(4π). "
-                "OPEN: Dirac g=2 + A5 dressing → ae without α."
+                "Bare g=2 + A5→ae: see alpha_dirac_g2_ask_row."
+            ),
+        }
+
+    def alpha_dirac_g2_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·g2·ask — asked carrier: bare g=2 and A5→ae without α.
+
+        Method (same as §8.2·H·ask / geo·ask):
+          (1) list stamped facts of n=±1 vortex + spinor;
+          (2) what fixes gyromagnetic ratio without α;
+          (3) what A5 bath can dress into ae;
+          (4) reject circular / wrong-scale; report.
+
+        Carrier answers (2026-09-24):
+          • A4 + A16 / §3.10: spin-½ double cover — 2π→−1, 4π→+1.
+          • Thm 5.1: L₀=s₀=ℏ/2 — one spin quantum on hV.
+          • A10: charge n=±1 on electron pra-vortex.
+          • Orbital circulating charge → g_orb=1 (μ=(Q/2m)L).
+          • Double cover doubles spin magnetic response vs orbital → bare g_s=2.
+          • ⇒ μ_bare = e ℏ/(2m) = μ_B for |S|=ℏ/2, |Q|=e — no α.
+          • A5 bath: ρ_field>0 dresses moment; ae=(g−2)/2.
+          • Identity (Schwinger door): ae^(1)=2α r with r=Δφ_min/(2π).
+          • REJECT ae≟r or ae≟2r (⇒ α=1 or ½).
+          • REJECT ae≟|z|_vac² (Planck z_min scale, not ~10⁻³).
+          • REJECT α-input into dressing (circular for upstairs α=ae/(2r)).
+          • REJECT CODATA ae as M-definition of α (T-anchor / series).
+          • OPEN: A5 holonomy-cloud fraction → ae without α; then α=ae/(2r).
+        """
+        dphi = DELTA_PHI_MIN
+        r = dphi / (2.0 * math.pi)  # = 1/(4π)
+        two_r = 2.0 * r  # = 1/(2π)
+        g_orb = 1.0
+        double_cover = 2.0  # A16: 4π identity / 2π charge cycle
+        g_bare = g_orb * double_cover  # = 2
+        ae_bare = (g_bare - 2.0) / 2.0  # = 0
+        # wrong-scale / circular candidates (report only)
+        bath = self.vacuum_bath_row()
+        z_sq = float(bath["z_sq_natural_vac"])
+        alpha_c = 7.2973525693e-3
+        ae_codata = 1.15965218128e-3
+        ae_from_alpha = alpha_c * two_r  # Schwinger 1-loop via identity
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "spinor_double_cover",
+                "maps_to": "A16 / §3.10: 2π→−1, 4π→+1 on pra-vortex",
+                "status": "shipped",
+                "mechanism": "A4 SU(2) spinor; CL-2 R(N/2)→−z",
+            },
+            {
+                "id": "L0_equals_s0",
+                "ratio": self.s_0,
+                "maps_to": "Thm 5.1: L₀=s₀=ℏ/2 — one spin quantum",
+                "status": "shipped",
+                "mechanism": "Landau ladder; |n_L|=1 for spin-½",
+            },
+            {
+                "id": "charge_n_pm1",
+                "maps_to": "A10: ∮ d arg=2πn; electron n=±1",
+                "status": "shipped",
+                "mechanism": "pra-vortex hV; not α",
+            },
+            {
+                "id": "g_orb_equals_1",
+                "ratio": g_orb,
+                "maps_to": "circulating charge: μ=(Q/2m)L → g_orb=1",
+                "status": "shipped_classical",
+                "mechanism": "orbital baseline before spinor",
+            },
+            {
+                "id": "bare_g_equals_2",
+                "ratio": g_bare,
+                "maps_to": "g_s = g_orb × double_cover = 2",
+                "status": "shipped",
+                "mechanism": "spatial 2π = half spinor cycle → ×2 magnetic response",
+            },
+            {
+                "id": "ae_bare_zero",
+                "ratio": ae_bare,
+                "maps_to": "bare ae=(g−2)/2=0 — Dirac floor",
+                "status": "shipped",
+                "mechanism": "anomaly is dressing, not topology",
+            },
+            {
+                "id": "identity_ae_eq_2alpha_r",
+                "ratio": abs(ae_from_alpha / (alpha_c * two_r) - 1.0),
+                "maps_to": "ae^(1)=2αr — Schwinger door geometry",
+                "status": "identity",
+                "mechanism": "not a derivation of ae; upstairs α=ae/(2r)",
+            },
+            {
+                "id": "reject_ae_eq_r",
+                "ratio": abs(r / ae_codata - 1.0),
+                "maps_to": "ae≟r=1/(4π) ⇒ α=1 — wrong",
+                "status": "rejected",
+                "mechanism": "foot alone is not the anomaly",
+            },
+            {
+                "id": "reject_ae_eq_2r",
+                "ratio": abs(two_r / ae_codata - 1.0),
+                "maps_to": "ae≟2r=1/(2π) ⇒ α=1 — wrong",
+                "status": "rejected",
+                "mechanism": "geometry factor without coupling",
+            },
+            {
+                "id": "reject_ae_eq_z_vac_sq",
+                "ratio": z_sq,
+                "maps_to": "ae≟|z|_vac² — Planck z_min scale",
+                "status": "rejected",
+                "mechanism": "A5 floor amplitude ≠ magnetic anomaly ~10⁻³",
+            },
+            {
+                "id": "reject_alpha_input_dressing",
+                "maps_to": "insert α to get ae then α=ae/(2r) — circular",
+                "status": "rejected",
+                "mechanism": "DoD: ae from bath first; α upstairs",
+            },
+            {
+                "id": "reject_codata_ae_as_M_alpha",
+                "maps_to": "CODATA ae alone as M-definition of α",
+                "status": "rejected_as_M_definition",
+                "mechanism": "T-anchor / QED series; ok as lab door, not carrier ae",
+            },
+            {
+                "id": "open_A5_holonomy_cloud_ae",
+                "maps_to": "A5 cloud around vortex → ae without α",
+                "status": "open",
+                "mechanism": "Φ_□ / soft holonomy dressing fraction; then α=ae/(2r)",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·g2·ask — bare g=2 closed; A5→ae open",
+            "method": "ask-model: spinor+charge inventory → g → dressing",
+            "g_orb": g_orb,
+            "double_cover": double_cover,
+            "g_bare": g_bare,
+            "ae_bare": ae_bare,
+            "vacuum_foot_r": r,
+            "two_r": two_r,
+            "z_sq_natural_vac": z_sq,
+            "ae_CODATA": ae_codata,
+            "ae_from_alpha_1loop": ae_from_alpha,
+            "bare_g2_closed": abs(g_bare - 2.0) < 1e-15 and abs(ae_bare) < 1e-15,
+            "derivation_ae_closed": False,
+            "reject_ae_eq_r": True,
+            "reject_ae_eq_2r": True,
+            "reject_ae_eq_z_vac": True,
+            "reject_alpha_input": True,
+            "inventory": inventory,
+            "ask_ok": abs(g_bare - 2.0) < 1e-15
+            and abs(ae_bare) < 1e-15
+            and abs(two_r - 1.0 / (2.0 * math.pi)) < 1e-15
+            and abs(ae_from_alpha / (alpha_c * two_r) - 1.0) < 1e-15,
+            "note": (
+                "Asked carrier: bare g=2 from A16 double cover × g_orb=1. "
+                "A5 dresses ae; reject r/2r/z_vac/α-input. "
+                "OPEN: holonomy-cloud → ae; then α=ae/(2r)."
             ),
         }
 

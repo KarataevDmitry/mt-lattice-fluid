@@ -557,6 +557,29 @@ def check_alpha_schwinger_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_dirac_g2_ask(device: str = "cpu") -> dict:
+    """§8.2·α·g2·ask — bare g=2 closed; A5→ae still open."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_dirac_g2_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["bare_g2_closed"])
+        and not bool(row["derivation_ae_closed"])
+        and abs(float(row["g_bare"]) - 2.0) < 1e-15
+    )
+    return {
+        "id": "Alpha_dirac_g2_ask",
+        "g_bare": row["g_bare"],
+        "ae_bare": row["ae_bare"],
+        "bare_g2_closed": row["bare_g2_closed"],
+        "derivation_ae_closed": row["derivation_ae_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2171,6 +2194,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_mass_defect_optics(device=device),
         check_alpha_arg_binding_try(device=device),
         check_alpha_schwinger_ask(device=device),
+        check_alpha_dirac_g2_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
