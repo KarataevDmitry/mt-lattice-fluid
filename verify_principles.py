@@ -931,6 +931,35 @@ def check_neutrino_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_neutron_mass(device: str = "cpu") -> dict:
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.neutron_mass_row()
+    ok = (
+        row["k"] == 2
+        and abs(row["delta_GeV"] - 2.0 * row["m_e_GeV"]) < 1e-18
+        and abs(row["m_n_GeV"] - (row["m_p_GeV"] + row["delta_GeV"])) < 1e-18
+        and row["beta_downhill"] is True
+        and row["m_n_GeV"] > row["threshold_m_p_plus_m_e_GeV"]
+        and abs(row["m_n_GeV"] - (row["m_p_GeV"] + 2.0 * row["m_e_GeV"])) < 1e-18
+        and row["m_n_rel_err"] < 0.01
+    )
+    return {
+        "id": "Neutron_mass",
+        "m_n_GeV": row["m_n_GeV"],
+        "m_p_GeV": row["m_p_GeV"],
+        "m_e_GeV": row["m_e_GeV"],
+        "k": row["k"],
+        "delta_GeV": row["delta_GeV"],
+        "beta_downhill": row["beta_downhill"],
+        "m_n_rel_err": row["m_n_rel_err"],
+        "delta_rel_err": row["delta_rel_err"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_arg_quantum(device: str = "cpu") -> dict:
     from mt_ca.si_constants import M_HIGGS_GEV, SI, arg_quantum_row
 
@@ -1271,6 +1300,7 @@ def run_all(device: str) -> list[dict]:
         check_higgs_mass(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),
+        check_neutron_mass(device=device),
         check_neutrino_mass(device=device),
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),

@@ -75,6 +75,9 @@ M_PROTON_GEV_PDG = 0.93827208816
 # Electron mass — PDG reference for rel_err only; prediction = α_fs²·m_H/N_φ (§8.2)
 M_ELECTRON_GEV_PDG = 0.00051099895
 
+# Neutron mass — PDG reference for rel_err only; prediction = m_p + 2·m_e (§8.2·7)
+M_NEUTRON_GEV_PDG = 0.93956542052
+
 # Neutrino atmospheric scale √|Δm²₃₁| [eV] — PDG-ish; prediction = α⁵·2m_H/(N_hier N_φ) (§8.2)
 M_NU_ATM_EV_PDG = 0.05
 
@@ -599,8 +602,10 @@ class SIConstants:
             "proton_to_e_pi0_forbidden": True,
             "weak_delta_B0_class_allowed": True,
             "neutron_beta_channel_schema": True,
-            "neutron_mass_split_closed": False,
-            "note": "§8.2·5–6: no ΔB≠0; weak n→peν class OK; m_n−m_p/Γ open",
+            "neutron_mass_split_closed": True,
+            "neutron_mass_quantum": "m_e",
+            "neutron_mass_k": 2,
+            "note": "§8.2·5–7: no ΔB≠0; weak n→peν OK; m_n=m_p+2m_e (mass ledger); Γ open",
         }
 
     def birth_row(self) -> dict[str, float]:
@@ -752,6 +757,32 @@ class SIConstants:
             "m_e_rel_err": abs(m_e - M_ELECTRON_GEV_PDG) / M_ELECTRON_GEV_PDG,
             "f_geom": f_geom,
             "note": "§8.2: bare α²·(v/2)/N_φ; stack α²·m_H/N_φ (same empty-cell as Higgs)",
+        }
+
+    def neutron_mass_row(self) -> dict[str, float | int | bool | str]:
+        """§8.2·7 — m_n = m_p + 2·m_e (channel step on §5 m_arg/ρ_Q ledger)."""
+        prot = self.proton_mass_row()
+        elec = self.electron_mass_row()
+        m_p = float(prot["m_p_GeV"])
+        m_e = float(elec["m_e_GeV"])
+        k = 2  # minimal integer rung with m_n > m_p + m_e
+        delta = float(k) * m_e
+        m_n = m_p + delta
+        threshold = m_p + m_e
+        return {
+            "m_p_GeV": m_p,
+            "m_e_GeV": m_e,
+            "k": k,
+            "delta_GeV": delta,
+            "m_n_GeV": m_n,
+            "threshold_m_p_plus_m_e_GeV": threshold,
+            "beta_downhill": m_n > threshold,
+            "m_n_PDG_GeV": M_NEUTRON_GEV_PDG,
+            "delta_PDG_GeV": M_NEUTRON_GEV_PDG - M_PROTON_GEV_PDG,
+            "m_n_rel_err": abs(m_n - M_NEUTRON_GEV_PDG) / M_NEUTRON_GEV_PDG,
+            "delta_rel_err": abs(delta - (M_NEUTRON_GEV_PDG - M_PROTON_GEV_PDG))
+            / (M_NEUTRON_GEV_PDG - M_PROTON_GEV_PDG),
+            "note": "§8.2·7: m_n=m_p+2m_e; ladder=m_arg/ρ_Q; channel=m_e; k=2 min β",
         }
 
     def neutrino_mass_row(self) -> dict[str, float]:
