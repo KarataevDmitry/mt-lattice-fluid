@@ -95,57 +95,89 @@ Separable накопление $W^{\otimes 2R}$ переносит одноме�
 \section{Свободная энергия Ginzburg--Landau}
 \label{sec:gl-free-energy}
 
-Вне плотных вихрей вращатель раскладывается по Тейлору;
-осреднение~$\mathcal{B}$ на фазовых разностях даёт дискретный аналог $\nabla^2$
-(разложение по малой плотности $\rho_E\ll K_P$, гл.~\ref{ch:evolution}, \ref{ch:matter}).
-На объёме прибора~$V\subset T$ медленная компонента readout'а~$\Phi=\mathcal{B}z$
-описывается \emph{эффективной} свободной энергией после~\cref{def:soft-readout},
-а не микроскопическим гамильтонианом на~$M$.
-В бездиссипативном пределе задаём функционал Ginzburg--Landau:
+\paragraph{Объект.}
+На~$\Tlayer$ прибор не видит микроскопическое $z(x,t)$ поштучно: после осреднения~\cref{def:soft-readout}
+остаётся медленное поле $\Phi=\mathcal{B}z$ на объёме~$V$.
+Его эволюцию на макрошкалах ($\lambda\gg\sigma_R\ell_P$, \cref{thm:t-cr}) описывают
+\emph{эффективной} свободной энергией --- как параметр порядка в теории Ландау
+(ср.~Landau--Lifshitz, т.~IX, \S45--47; здесь роль $\psi$ играет~$\Phi$).
+
+\paragraph{Разложение.}
+Вне плотных вихрей вращатель $R(\Phi)$ разложим по малой плотности $\rho_E\ll K_P$
+(\cref{def:kp}, гл.~\ref{ch:evolution}): saturating gate даёт $\sim|\Phi|^4$,
+осреднение фазовых градиентов --- $\sim|\nabla\Phi|^2$
+(гл.~\ref{ch:evolution}, \ref{ch:matter}).
+По схеме Ландау для второго рода:
 \begin{equation}
 \label{eq:gl-free-energy}
   \mathcal{F}_{\mathrm{GL}}[\Phi]
-  = \int_V \Bigl(
-      \frac{\hbar^2}{2m}\,|\nabla\Phi|^2
-      + \frac{\omega_{\mathrm{macro}}}{2}\,|\Phi|^4
+  = \mathcal{F}_0
+  + \int_V \Bigl(
+      \alpha\,|\Phi|^2
+      + \frac{\beta}{2}\,|\Phi|^4
+      + \frac{\hbar^2}{2m}\,|\nabla\Phi|^2
     \Bigr)\,\mathrm{d}^3x.
 \end{equation}
-Первый член --- кинетическая (градиентная) энергия фазового поля после осреднения~$\mathcal{B}$;
-второй --- насыщение вращателя при $\rho_E\to K_P$ (см.~\cref{def:kp}).
-Вариация по $\Phi^*$ при фиксированных граничных данных:
+$\mathcal{F}_0$ --- энергия однородного фона; $\alpha\,|\Phi|^2$ --- квадратичный член;
+$\beta>0$ --- насыщение при $\rho_E\to K_P$; в замыкании $\beta\equiv\omega_{\mathrm{macro}}$.
+
+\paragraph{Вариация.}
+При фиксированных граничных данных на $\partial V$:
 \begin{equation}
 \label{eq:gl-variation}
   \frac{\delta\mathcal{F}_{\mathrm{GL}}}{\delta\Phi^*}
-  = -\frac{\hbar^2}{2m}\,\nabla^2\Phi + \omega_{\mathrm{macro}}\,|\Phi|^2\Phi.
+  = \alpha\,\Phi
+  - \frac{\hbar^2}{2m}\,\nabla^2\Phi
+  + \beta\,|\Phi|^2\Phi.
 \end{equation}
-Динамика~$\Phi(t)$ на~$T$ --- градиентный спуск по~$\mathcal{F}_{\mathrm{GL}}$ в классе
-унитарных преобразований:
+Условие $\delta\mathcal{F}_{\mathrm{GL}}=0$ --- статика поля на~$\Tlayer$.
+
+\paragraph{Динамика.}
+Для \emph{медленной} эволюции $\Phi(t)$ вводим уравнение типа time-dependent Ginzburg--Landau
+(аналогично связи гамильтониана и уравнения Шрёдингера: Фейнман, лекции, т.~III, гл.~5--6):
 \begin{equation}
 \label{eq:gl-dynamics}
   i\hbar\,\frac{\partial\Phi}{\partial t}
   = \frac{\delta\mathcal{F}_{\mathrm{GL}}}{\delta\Phi^*}.
 \end{equation}
-Поле~$\Phi$ --- параметр порядка readout'а; $\mathcal{F}_{\mathrm{GL}}$ ---
-потенциал \emph{прибора} на~$T$.
+Это не новый постулат на~$M$: на микроуровне по-прежнему действует только $g$;
+\eqref{eq:gl-dynamics} --- сжатое описание того, как прибор видит медленную компоненту после~$\mathcal{B}$.
 
 \section{Нелинейное уравнение Шрёдингера и гидродинамика}
 \label{sec:nlse-hydro}
 
-Подстановка~\eqref{eq:gl-variation} в~\eqref{eq:gl-dynamics} даёт нелинейное уравнение
-Шрёдингера типа Ginzburg--Landau для медленного поля~$\Phi$:
+\paragraph{Вывод.}
+Подставляем~\eqref{eq:gl-variation} в~\eqref{eq:gl-dynamics}:
 \begin{equation}
 \label{eq:nlse-gl}
+  i\hbar\,\frac{\partial\Phi}{\partial t}
+  = \alpha\,\Phi
+  - \frac{\hbar^2}{2m}\,\nabla^2\Phi
+  + \beta\,|\Phi|^2\Phi.
+\end{equation}
+Это нелинейное уравнение Шрёдингера типа Ginzburg--Landau.
+В координатах плотности $|\Phi|^2$, при $\alpha=0$ на выбранном фоне, оно эквивалентно записи
+\begin{equation}
+\label{eq:nlse-gl-real}
   \frac{\partial\Phi}{\partial t}
   = \frac{i\hbar}{2m}\,\nabla^2\Phi
-  - i\,\omega_{\mathrm{macro}}\,|\Phi|^2\Phi
-  + \nu_{\mathrm{CA}}\,\nabla^2\Phi,
+  - i\,\beta\,|\Phi|^2\Phi.
 \end{equation}
-где $\omega_{\mathrm{macro}}$ --- частотный масштаб saturating gate (гл.~\ref{ch:evolution}).
+
+\paragraph{Диссипация readout'а.}
 Член $\nu_{\mathrm{CA}}\nabla^2\Phi$ \emph{не} следует из~\eqref{eq:gl-free-energy}:
-это остаток дискретного coarse-graining и необратимости readout'а на~$T$
-($\Axref{ax:A6}$; см.~\cref{prop:237}, \cref{sec:t-cr}).
-Уравнение~\eqref{eq:nlse-gl} --- эффективная гидродинамика на~$T$ с коэффициентом $\hbar/(2m)$;
-новый оператор на~$M$ не postulируется.
+он появляется только после учёта необратимости~$\mathcal{B}$ на~$\Tlayer$
+($\Axref{ax:A6}$, \cref{lem:236}, \cref{prop:237}) и дискретного coarse-graining (\cref{sec:t-cr}).
+$\mathcal{F}_{\mathrm{GL}}$ задаёт \emph{обратимую} часть; $\nu_{\mathrm{CA}}$ --- кинематическая вязкость
+макроуровня (ср.~диффузионное дополнение к волновому уравнению в курсе полей).
+Полное уравнение на~$\Tlayer$:
+\[
+  \frac{\partial\Phi}{\partial t}
+  = \frac{i\hbar}{2m}\,\nabla^2\Phi
+  - i\,\beta\,|\Phi|^2\Phi
+  + \nu_{\mathrm{CA}}\,\nabla^2\Phi,
+\]
+новый оператор на~$M$ при этом не вводится.
 
 \section{Туннелирование и правило Бorn}
 
