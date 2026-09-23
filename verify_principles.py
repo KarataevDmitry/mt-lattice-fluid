@@ -350,6 +350,65 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_rhombic_dodecahedron_geometry(device: str = "cpu") -> dict:
+    """§8.2·geo·voronoi — FCC Voronoy cell; dual to cuboctahedron; V=v_hV."""
+    from mt_ca.si_constants import KAPPA_FCC_1TICK, SI
+
+    del device
+    row = SI.rhombic_dodecahedron_geometry_row()
+    ok = (
+        abs(row["V_over_v_hV"] - 1.0) < 1e-12
+        and abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
+        and abs(row["R_in_over_a"] - 0.5) < 1e-12
+        and abs(row["V_cuboctahedron_over_V_voronoi"] - 16.0 / 3.0) < 1e-12
+        and abs(row["R_in_Voronoi_over_R_in_cuboctahedron_1tick"] - KAPPA_FCC_1TICK) < 1e-12
+        and row["R_in_Voronoi_eq_kappa_times_R_in_cuboctahedron"] is True
+        and abs(row["V_over_S_over_a"] - 1.0 / 16.0) < 1e-12
+        and abs(row["R_vertex_axis_over_a"] - KAPPA_FCC_1TICK) < 1e-12
+        and row["n_faces_rhomb"] == 12
+        and row["n_vertices"] == 14
+        and row["n_edges"] == 24
+        and abs(row["rhombus_acute_cos"] - 1.0 / 3.0) < 1e-12
+    )
+    return {
+        "id": "Rhombic_dodecahedron_geo",
+        "edge_a_m": row["edge_a_m"],
+        "V_over_v_hV": row["V_over_v_hV"],
+        "R_in_Voronoi_m": row["R_in_Voronoi_m"],
+        "V_cuboctahedron_over_V_voronoi": row["V_cuboctahedron_over_V_voronoi"],
+        "V_over_S_over_a": row["V_over_S_over_a"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_rhombic_dodecahedron_carrier_ask(device: str = "cpu") -> dict:
+    """§8.2·geo·voronoi·ask — Voronoy vs hull inventory."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.rhombic_dodecahedron_carrier_ask_row()
+    inv = row["ratio_inventory"]
+    by_id = {str(r["id"]): r for r in inv}
+    ok = (
+        abs(row["V_over_v_hV"] - 1.0) < 1e-12
+        and abs(row["V_cuboctahedron_over_V_voronoi"] - 16.0 / 3.0) < 1e-12
+        and abs(float(by_id["R_in_Voronoi"]["ratio"]) - 0.5) < 1e-12
+        and by_id["V_over_v_hV"]["status"] == "shipped"
+        and by_id["R_in_Voronoi"]["status"] == "shipped"
+        and len(row["ratio_inventory"]) >= 6
+    )
+    return {
+        "id": "Rhombic_dodecahedron_ask",
+        "V_over_v_hV": row["V_over_v_hV"],
+        "R_in_Voronoi_m": row["R_in_Voronoi_m"],
+        "V_cuboctahedron_over_V_voronoi": row["V_cuboctahedron_over_V_voronoi"],
+        "ratio_shipped_count": row["ratio_shipped_count"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
     """§8.2·geo — cuboctahedron V=(16/3)v_hV; discrete α candidate vs stamped π."""
     from mt_ca.si_constants import SI
@@ -1533,6 +1592,8 @@ def run_all(device: str) -> list[dict]:
         check_vacuum_bath(device=device),
         check_cuboctahedron_geometry(device=device),
         check_cuboctahedron_carrier_ask(device=device),
+        check_rhombic_dodecahedron_geometry(device=device),
+        check_rhombic_dodecahedron_carrier_ask(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),

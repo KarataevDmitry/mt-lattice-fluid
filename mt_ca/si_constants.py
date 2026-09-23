@@ -739,6 +739,143 @@ class SIConstants:
             "note": "§8.2·geo: dimensional chain at a=l_P; ratios → carrier_ask_row",
         }
 
+    def rhombic_dodecahedron_geometry_row(self) -> dict[str, float | int | str | bool]:
+        """§8.2·geo·voronoi / §1.6.1 — FCC Voronoy cell (rhombic dodecahedron) at a=l_P."""
+        n12 = N12_FCC_CAUSAL_LINKS
+        n_rhomb = 12
+        n_vert_axis = 6
+        n_vert_cubic = 8
+        n_vertices = n_vert_axis + n_vert_cubic
+        n_edges = 24
+        kappa = KAPPA_FCC_1TICK
+        lp = self.l_P
+        edge_a = lp  # A1: NN at l_P; rhombus edge = a on Voronoy cell
+        v_hv = edge_a**3 / math.sqrt(2.0)
+        vol_voronoi = v_hv
+        vol_cubo = (8.0 / 3.0) * math.sqrt(2.0) * edge_a**3
+        cubo_over_voronoi = vol_cubo / vol_voronoi
+        rhomb_acute_cos = 1.0 / 3.0
+        rhomb_acute_sin = math.sqrt(8.0 / 9.0)  # 2√2/3
+        a_rhomb_one = edge_a**2 * rhomb_acute_sin
+        s_total = n_rhomb * a_rhomb_one
+        r_in = edge_a / 2.0  # perpendicular bisector to NN ⇒ |ON|/2
+        r_vertex_axis = kappa * edge_a  # ±(a/√2,0,0) family
+        r_vertex_cubic = edge_a * math.sqrt(3.0 / 2.0)
+        r_in_cubo_1tick = kappa * edge_a
+        return {
+            "anchor": "edge_a = l_P (A1); v_hV = Voronoy volume; hull cuboctahedron is dual partner",
+            "edge_a_m": edge_a,
+            "edge_a_over_l_P": edge_a / lp,
+            "l_P_m": lp,
+            "n_nn": n12,
+            "n_faces_rhomb": n_rhomb,
+            "n_vertices": n_vertices,
+            "n_vertices_axis": n_vert_axis,
+            "n_vertices_cubic": n_vert_cubic,
+            "n_edges": n_edges,
+            "rhombus_edge_m": edge_a,
+            "rhombus_acute_cos": rhomb_acute_cos,
+            "rhombus_acute_deg": math.degrees(math.acos(rhomb_acute_cos)),
+            "A_rhomb_one_m2": a_rhomb_one,
+            "S_total_m2": s_total,
+            "V_voronoi_m3": vol_voronoi,
+            "v_hV_m3": v_hv,
+            "V_cuboctahedron_m3": vol_cubo,
+            "V_over_v_hV": vol_voronoi / v_hv,
+            "V_over_v_hV_exact": "1",
+            "V_cuboctahedron_over_V_voronoi": cubo_over_voronoi,
+            "V_cuboctahedron_over_V_voronoi_exact": "16/3",
+            "V_over_S_m": vol_voronoi / s_total,
+            "V_over_S_over_a": (vol_voronoi / s_total) / edge_a,
+            "R_in_Voronoi_m": r_in,
+            "R_in_over_a": r_in / edge_a,
+            "R_vertex_axis_m": r_vertex_axis,
+            "R_vertex_cubic_m": r_vertex_cubic,
+            "R_in_cuboctahedron_1tick_m": r_in_cubo_1tick,
+            "R_in_Voronoi_over_R_in_cuboctahedron_1tick": r_in / r_in_cubo_1tick,
+            "R_in_Voronoi_eq_kappa_times_R_in_cuboctahedron": abs(r_in - kappa * r_in_cubo_1tick) < 1e-15 * edge_a,
+            "R_vertex_axis_over_a": kappa,
+            "dihedral_deg": 120.0,
+            "dual_cuboctahedron": "12V↔12F rhomb; 14F cubo↔14V; 24E shared",
+            "note": "§8.2·geo·voronoi: WS cell; R_in=a/2 wall; axis vertex=a/√2=cubo R_in",
+        }
+
+    def rhombic_dodecahedron_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·geo·voronoi·ask — Voronoy body vs 1-tick hull; dual to cuboctahedron."""
+        geo = self.rhombic_dodecahedron_geometry_row()
+        cubo = self.cuboctahedron_geometry_row()
+        kappa = KAPPA_FCC_1TICK
+        n12 = int(geo["n_nn"])
+        edge_a = float(geo["edge_a_m"])
+        ratio_inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "V_over_v_hV",
+                "ratio": float(geo["V_over_v_hV"]),
+                "maps_to": "dV = v_hV on FCC node (§1.6.2)",
+                "status": "shipped",
+                "mechanism": "Voronoy volume = a³/√2 by packing; identity not fit",
+            },
+            {
+                "id": "R_in_Voronoi",
+                "ratio": float(geo["R_in_over_a"]),
+                "at_a_eq_lP": float(geo["R_in_Voronoi_m"]),
+                "unit": "m",
+                "maps_to": "cell wall at NN bisector |ON|/2",
+                "status": "shipped",
+                "mechanism": "R_in=a/2; not cuboctahedron square-face R_in=κa",
+            },
+            {
+                "id": "R_in_Voronoi_over_R_in_cuboctahedron",
+                "ratio": float(geo["R_in_Voronoi_over_R_in_cuboctahedron_1tick"]),
+                "maps_to": "Voronoy wall vs 1-tick hull inradius",
+                "status": "inventory",
+                "mechanism": "R_in(V)=κ·R_in(hull); κ same macro constant",
+            },
+            {
+                "id": "V_cuboctahedron_over_V_voronoi",
+                "ratio": float(geo["V_cuboctahedron_over_V_voronoi"]),
+                "maps_to": "hull bulk / node volume",
+                "status": "inventory",
+                "mechanism": "16/3 = same ratio as cubo V/v_hV from hull side",
+            },
+            {
+                "id": "V_over_S",
+                "ratio": float(geo["V_over_S_over_a"]),
+                "at_a_eq_lP": float(geo["V_over_S_m"]),
+                "unit": "m",
+                "maps_to": "open — Voronoy compactness vs hull",
+                "status": "open",
+                "mechanism": "V/(Sa)=1/16 at a=l_P",
+            },
+            {
+                "id": "dual_cuboctahedron",
+                "ratio": float(n12),
+                "maps_to": "12 NN centers hull ↔ 12 rhomb faces",
+                "status": "inventory",
+                "mechanism": "14↔14 vertices/faces swap; 24 edges",
+            },
+        ]
+        shipped = sum(1 for r in ratio_inventory if r["status"] == "shipped")
+        open_ = sum(1 for r in ratio_inventory if r["status"] in ("open", "inventory"))
+        return {
+            **{k: geo[k] for k in (
+                "edge_a_m",
+                "V_over_v_hV",
+                "V_over_S_m",
+                "V_over_S_over_a",
+                "R_in_Voronoi_m",
+                "V_cuboctahedron_over_V_voronoi",
+            )},
+            "R_in_cuboctahedron_1tick_m": float(cubo["R_in_1tick_m"]),
+            "kappa_FCC": kappa,
+            "dual_cuboctahedron": geo["dual_cuboctahedron"],
+            "ratio_inventory": ratio_inventory,
+            "ratio_shipped_count": shipped,
+            "ratio_open_count": open_,
+            "precedent": "Voronoy R_in=a/2; hull R_in=κa; axis vertex of RD = hull R_in distance",
+            "note": "§8.2·geo·voronoi·ask: WS cell body; do not confuse with 1-tick hull",
+        }
+
     def cuboctahedron_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·geo·ask — from edge a=l_P: dimensional body → ratio → coupling (κ precedent)."""
         geo = self.cuboctahedron_geometry_row()
