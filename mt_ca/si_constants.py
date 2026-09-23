@@ -1354,6 +1354,127 @@ class SIConstants:
             ),
         }
 
+    def alpha_arg_binding_try_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·Arg-try — try Δm from Arg ledger without α-input.
+
+        Exact bridge (no new knob; α=κ/M, U=E₀/(M N_a0), BE=U/2):
+            Δm / m_arg = BE/E₀ = 1/(2 M N_a0)
+            Δm / m_e   = κ²/(2 M²) = α²/2
+
+        Try without inserting α:
+          • int M∈{96,97} → Δm/m_e (same score as F-ask; ~±2e3 ppm at 97)
+          • reject 1/(2·137²) — injects α_geom
+          • reject m_e² N_φ/(2 m_H) as derivation — m_e cascade already has α
+          • reject fraction=1/11 on foot r=1/(4π) — ~8.6e3 ppm, worse than M=97
+
+        Still OPEN: M and/or N_a0 from g/shell without α. Identity unifies
+        F-ask, H-ask, and QM mass-defect into one Arg ledger.
+        """
+        alpha_c = 7.2973525693e-3
+        kappa = KAPPA_FCC_1TICK
+        hop = self.alpha_hop_ladder_row()
+        n_a0 = float(hop["N_a0_Bohr"])
+        n_c = float(hop["N_c_macro"])
+        m_e = self.m_e_CODATA
+        m_target = alpha_c**2 / 2.0
+        m_star = kappa / alpha_c  # ≈96.899
+        be = 0.5 * alpha_c**2 * m_e * self.c**2
+        dm = be / self.c**2
+        # exact Arg identity at continuous M*
+        arg_ratio = 1.0 / (2.0 * m_star * n_a0)
+        dm_from_arg = self.m_arg * arg_ratio
+
+        def ppm_dm(frac: float) -> float:
+            return (frac - m_target) / m_target * 1e6
+
+        cand_96 = (kappa / 96.0) ** 2 / 2.0
+        cand_97 = (kappa / 97.0) ** 2 / 2.0
+        cand_137 = 1.0 / (2.0 * 137.0**2)
+        cand_11 = (1.0 / (4.0 * math.pi * 11.0)) ** 2 / 2.0
+        # circular mass route (score only)
+        elec = self.electron_mass_row()
+        higgs = self.higgs_mass_row()
+        cand_mass = float(elec["m_e_GeV"]) * 13.0 / (2.0 * float(higgs["m_H_GeV"]))
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "arg_ledger_identity",
+                "ratio": abs(dm_from_arg / dm - 1.0),
+                "maps_to": "Δm = m_arg/(2 M N_a0) — Arg ticks of H binding",
+                "status": "identity",
+            },
+            {
+                "id": "be_over_e0_is_arg_count",
+                "ratio": abs(be / self.E_0 - arg_ratio),
+                "maps_to": "BE/E₀ = 1/(2 M N_a0)",
+                "status": "identity",
+            },
+            {
+                "id": "try_M97",
+                "ratio": cand_97,
+                "ppm": ppm_dm(cand_97),
+                "maps_to": "Δm/m_e = κ²/(2·97²) — best int M from F-ask",
+                "status": "probe_best_int",
+            },
+            {
+                "id": "try_M96",
+                "ratio": cand_96,
+                "ppm": ppm_dm(cand_96),
+                "maps_to": "Δm/m_e = κ²/(2·96²) — N₁₂·N_hier",
+                "status": "probe",
+            },
+            {
+                "id": "reject_137_square",
+                "ratio": cand_137,
+                "ppm": ppm_dm(cand_137),
+                "maps_to": "1/(2·137²) injects α_geom",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_foot_times_1_over_11",
+                "ratio": cand_11,
+                "ppm": ppm_dm(cand_11),
+                "maps_to": "α≟1/(4π·11); 11=FP exp — wrong scale",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_mass_cascade_as_derivation",
+                "ratio": cand_mass,
+                "ppm": ppm_dm(cand_mass),
+                "maps_to": "m_e N_φ/(2 m_H) — m_e already α-built",
+                "status": "rejected_circular",
+            },
+            {
+                "id": "open_M_or_Na0_from_g",
+                "maps_to": "need M and/or N_a0 from shell/holonomy without α",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·Arg-try — Arg ledger of H binding; derivation still open",
+            "M_star": m_star,
+            "N_a0": n_a0,
+            "N_c": n_c,
+            "delta_m_over_m_arg": arg_ratio,
+            "delta_m_over_m_e_target": m_target,
+            "BE_over_E0": be / self.E_0,
+            "rel_arg_identity": abs(dm_from_arg / dm - 1.0),
+            "try_M97_dm_over_me": cand_97,
+            "try_M97_ppm": ppm_dm(cand_97),
+            "try_M96_ppm": ppm_dm(cand_96),
+            "reject_137_ppm": ppm_dm(cand_137),
+            "reject_1_over_11_ppm": ppm_dm(cand_11),
+            "derivation_closed": False,
+            "inventory": inventory,
+            "ask_ok": abs(dm_from_arg / dm - 1.0) < 1e-12
+            and abs(be / self.E_0 - arg_ratio) < 1e-12
+            and abs(ppm_dm(cand_97) + 2079.655) < 1.0,
+            "note": (
+                "Arg identity Δm=m_arg/(2MN_a0) closed. Best α-free int try: M=97 "
+                "(~−2080 ppm). Derivation OPEN — need M or N_a0 from g."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

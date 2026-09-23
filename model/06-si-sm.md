@@ -235,6 +235,23 @@ $$
 **Оптика:** coupling phase↔vacuum, посадка на $F_0$, hop-лестница и QM-дефект массы — **одно** α. Вывел любое без α — вывел все.
 **DoD:** Arg-binding композита H на Λ должен coarse-grain к $\Delta m$. **Открыто:** $\Delta m$ из Arg-связи p–e **без** вставки α.
 **Код:** `SI.alpha_mass_defect_optics_row()` · verify **`Alpha_mass_defect_optics`**.
+#### §8.2·α·Arg-try · Попытка: Δm из Arg-ledger без α
+**Тождество (мостик закрыт):** при $\alpha=\kappa/M$, $U=E_0/(M N_{a0})$, $BE=U/2$
+$$
+\frac{\Delta m}{m_{\mathrm{arg}}}=\frac{BE}{E_0}=\frac{1}{2 M N_{a0}},\qquad
+\frac{\Delta m}{m_e}=\frac{\kappa^{2}}{2 M^{2}}=\frac{\alpha^{2}}{2}.
+$$
+Связь H — **один Arg-тик**, размазанный на $2 M N_{a0}$ (soft ledger).
+**Try без вставки α:**
+| кандидат | ppm на $\Delta m/m_e$ | вердикт |
+|----------|----------------------|--------|
+| $M=97$ → $\kappa^{2}/(2\cdot97^{2})$ | ~−2080 | лучший int (тот же F-ask) |
+| $M=96=N_{12}N_{\mathrm{hier}}$ | ~+1.9e4 | хуже |
+| $1/(2\cdot137^{2})$ | ~+526 | **reject** — inject α_geom |
+| $1/(4\pi\cdot11)^{2}/2$ | ~−1.7e4 | **reject** — FP-exp не fraction |
+| $m_e N_\varphi/(2 m_H)$ | ~0 | **reject** — circular ($m_e$ уже с α) |
+**Итог try:** identity unifies F/H/QM; **вывод не закрыт** — нужны $M$ и/или $N_{a0}$ из $g$/shell без α.
+**Код:** `SI.alpha_arg_binding_try_row()` · verify **`Alpha_arg_binding_try`**.
 **π-guardrail (§8.2·geo):** непрерывный **`4π`** — **T-readout** (телесный угол), **не** метрика одной **`v_h`**. На **1-tick** теле **кубооктаэдра** живут **6□ + 8△**, **`V=(16/3)v_hV`**, **`κ=1/√2`** — см. **`SI.cuboctahedron_geometry_row()`**.
 **Exploratory (π-free, cuboctahedron combinatorics — не ):**
 ```

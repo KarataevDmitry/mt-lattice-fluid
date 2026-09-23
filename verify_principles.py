@@ -513,6 +513,28 @@ def check_alpha_mass_defect_optics(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_arg_binding_try(device: str = "cpu") -> dict:
+    """§8.2·α·Arg-try — Arg ledger identity; derivation still open."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_arg_binding_try_row()
+    ok = (
+        bool(row["ask_ok"])
+        and not bool(row["derivation_closed"])
+        and abs(float(row["rel_arg_identity"])) < 1e-12
+    )
+    return {
+        "id": "Alpha_arg_binding_try",
+        "M_star": row["M_star"],
+        "delta_m_over_m_arg": row["delta_m_over_m_arg"],
+        "try_M97_ppm": row["try_M97_ppm"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2125,6 +2147,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_meaning_ask(device=device),
         check_alpha_descent_ask(device=device),
         check_alpha_mass_defect_optics(device=device),
+        check_alpha_arg_binding_try(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

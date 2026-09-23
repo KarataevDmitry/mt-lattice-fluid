@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-23 | §8.2·α·Arg-try | Arg identity Δm=m_arg/(2MN_a0) closed; best int M=97 ~−2080ppm; reject 137² / 1/(4π·11) / mass-cascade; derivation OPEN · Alpha_arg_binding_try PASS |
 | 2026-09-23 | §8.2·α·mass-defect | QM floor: α=√(2Δm/m_e); U/BE=2; E_coul_NN/E₀=α/κ; BE/E₀~1.58e-27 soft Arg; DoD Arg→Δm OPEN · Alpha_mass_defect_optics PASS |
 | 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; foot≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent_ask` PASS |
 | 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; нога α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning_ask` PASS |
