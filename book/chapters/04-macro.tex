@@ -59,23 +59,37 @@
 \end{theorem}
 
 \begin{proof}
-\textbf{(A1)} В одном измерении: $\widehat W(k)=\tfrac12+\tfrac12\cos k=\cos^2(k/2)$.
+По \cref{def:soft-readout} ядро осреднения~$\mathcal{B}$ --- $R$-кратная свёртка
+с $W=\tfrac14[1,2,1]^{\otimes 2R}$ на ортогональном срезе (условия C0--C4:
+локальность, нормировка $\sum W=1$, чётность моментов, separable на product-срезе).
 
-\textbf{(A2)} После $R$ проходов: $\widehat W_R(k)=\cos^{2R}(k/2)$, дисперсия $\sigma_R^2=R/2$.
-
-\textbf{(A3)} Разложение $\log\cos(k/2)$ даёт
+\smallskip
+\emph{Одномерная цепь.}
+Для одного прохода $W=[1,2,1]/4$ символ Фурье
+$\widehat W(k)=\tfrac12+\tfrac12\cos k=\cos^2(k/2)$.
+После $R$ проходов $\widehat W_R(k)=\cos^{2R}(k/2)$, дисперсия $\sigma_R^2=R/2$.
+Разложение $\ln\cos(k/2)=-k^2/8-k^4/96+O(k^6)$ даёт
 \[
   \frac{\widehat W_R(k)}{G_R(k)}=\exp\Big(-\frac{Rk^4}{96}+O(Rk^6)\Big),
   \quad G_R(k)=\exp(-Rk^2/4).
 \]
-При $k\sigma_R\ll 1$ относительная ошибка $O((k\sigma_R)^4)$.
+При $k\sigma_R\ll 1$ относительная ошибка замены $W_R$ гауссовым ядром --- $O((k\sigma_R)^4)$.
+Физическая длина волны $\lambda=2\pi/k$ при $\ell_P=\hl$ даёт
+$O((\sigma_R\ell_P/\lambda)^4)$ --- формулировка теоремы.
 
-\textbf{(A4)} В УФ-области при $k\sim 1$ (единицы $1/\ell_P$) $\widehat W_R\le e^{-cR}$.
-В ИК-области при $\lambda\gg\sigma_R\ell_P$ осреднение $\approx$ гауссово ядро ширины $\sigma_R$
-\emph{без} предела $\hl\to 0$.
+\smallskip
+\emph{Ультрафиолет и отсутствие $\hl\to 0$.}
+При $k\sim 1$ (масштаб $\ell_P$) имеем $\widehat W_R(k)\le e^{-cR}$: осреднение подавляет
+УФ-моды без предела $\hl\to 0$; континуум --- свойство readout'а на~$T$, не аксиома~$M$.
 
-\textbf{(B)} На FCC для путей длины~2: $w(0)=1/12$, изотropный второй момент $M_{ij}=\tfrac43\delta_{ij}$
---- полное перечисление двухшаговых путей на~$N_{12}$.
+\smallskip
+\emph{FCC в $(3{+}1)$.}
+На FCC ядро depth-2 path-Green (\cref{def:soft-readout}, гл.~\ref{ch:macro})
+даёт $w(0)=1/12$ и изотropный второй момент $M_{ij}=\tfrac43\delta_{ij}$
+(полное перечисление двухшаговых путей на~$N_{12}$).
+Separable накопление $W^{\otimes 2R}$ переносит одномерную оценку $O(k^4)$
+на каждую ось product-среза; изотropия $M$ обеспечивает одну шкалу $\sigma_R$ во всех
+направлениях readout'а.
 \end{proof}
 
 \section{Нелинейное уравнение Шрёдингера и гидродинамика}
