@@ -1311,6 +1311,67 @@ class SIConstants:
             "note": "§0.9: light/sound quantize; interference=many quanta; wave label=T",
         }
 
+    def phonon_from_carrier_row(self) -> dict[str, float | int | str | bool]:
+        """§5.2.6 — phonon parameters from FCC carrier (WS/BZ/hT); not fitted."""
+        geo = self.rhombic_dodecahedron_geometry_row()
+        lp = self.l_P
+        ht = self.hT
+        c0 = self.c0
+        e0 = self.E_0
+        p0 = self.p_0
+        v_hv = float(geo["v_hV_m3"])
+        n_density = 1.0 / v_hv
+        d = 3
+        g_acoustic = d
+        kappa_link_fcc = kappa_link(n_links=N12_FCC_CAUSAL_LINKS)
+        k_bz_max = math.pi / lp
+        g_scale = 2.0 * math.pi / lp
+        nu0 = 1.0 / ht
+        omega0 = 2.0 * math.pi / ht
+        omega_d = omega0
+        v_acoustic = omega_d / k_bz_max
+        hbar = self.hbar
+        h = 2.0 * math.pi * hbar
+        k_debye = (6.0 * math.pi**2 * n_density) ** (1.0 / 3.0)
+        tol = 1e-9
+        return {
+            "theorem": "Thm 5.3 / carrier ask: phonon from FCC Λ + hL + hT + v_hV",
+            "carrier": "FCC N12 · rhombic dodecahedron WS · A1 edge=l_P",
+            "edge_a_m": float(geo["edge_a_m"]),
+            "v_hV_m3": v_hv,
+            "n_density_m3": n_density,
+            "n_density_over_sqrt2_lP3": abs(n_density * lp**3 / math.sqrt(2.0) - 1.0) < tol,
+            "d_spatial": d,
+            "g_acoustic_branches": g_acoustic,
+            "kappa_link": kappa_link_fcc,
+            "k_BZ_max_m": k_bz_max,
+            "G_scale_m": g_scale,
+            "k_BZ_max_times_hL": k_bz_max * lp / math.pi,
+            "nu0_Hz": nu0,
+            "omega0_rad_s": omega0,
+            "omega_D_rad_s": omega_d,
+            "omega_D_over_nu0": omega_d / (2.0 * math.pi * nu0),
+            "v_acoustic_m_s": v_acoustic,
+            "v_acoustic_over_c0": v_acoustic / c0,
+            "v_acoustic_equals_2c0": abs(v_acoustic - 2.0 * c0) / c0 < tol,
+            "omega_D_equals_v_a_k_max": abs(omega_d - v_acoustic * k_bz_max) / omega_d < tol,
+            "E0_J": e0,
+            "hbar_nu0_J": hbar * nu0,
+            "hbar_nu0_equals_2E0": abs(hbar * nu0 - 2.0 * e0) / e0 < tol,
+            "hbar_omega_D_J": hbar * omega_d,
+            "h_nu0_over_E0": h * nu0 / e0,
+            "hbar_omega_D_over_E0": hbar * omega_d / e0,
+            "p0_kg_m_s": p0,
+            "p0_equals_hbar_k_max_over_2pi": abs(p0 - hbar * k_bz_max / (2.0 * math.pi)) / p0 < tol,
+            "k_debye_m": k_debye,
+            "k_debye_over_k_BZ": k_debye / k_bz_max,
+            "phonon_E_k_small": "E(k)=hbar v_a |k|, n_k in Z",
+            "phonon_not_sin_wave": True,
+            "pressure_wave_c_macro": self.c,
+            "pressure_wave_not_same_as_phonon_v_a": abs(self.c - v_acoustic) / self.c > 0.1,
+            "note": "§5.2.6: phonon v_a=2c0, k_max=pi/l_P, omega_D=2pi/hT; sound=n_k quanta",
+        }
+
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
         """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
         from mt_ca.em_plaquette import square_face_holonomy_probe

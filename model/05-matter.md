@@ -683,6 +683,38 @@ b(x) = 1  ⟺  |Δφ_N(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
 
 **Код:** `SI.excitations_full_quantization_row()` · verify **`Excitations_full_quantization`**.
 
+#### 5.2.6 Спросили носитель про **фонон** (параметры без fit)
+
+**Метод:** тот же, что **`cuboctahedron_carrier_ask_row`** / **`radiation_row`** — только геометрия FCC + **`hL`**, **`hT`**, **`v_hV`**.
+
+**Claim:** фонон вакуума — **не** sine-волна; **occupancy **`n_k\in\mathbb{Z}`** на дискретной моде BZ. Параметры спектра **вынуждены** носителем.
+
+| параметр | откуда (носитель) | значение |
+|----------|-------------------|----------|
+| **`a`, `v_hV`** | A1 + Voronoy WS (§8.2·geo·voronoi) | **`a=hL`**, **`v_hV=a³/√2`** |
+| **`n`** | **`1/v_hV`** | **`√2/a³`** |
+| **`g`** (акустика) | **`d=3`** | **3** ветви (не **`g_{\mathrm{pol}}=2`** фотона) |
+| **`k_{\max}`** | 1-я BZ (§5.2.4) | **`π/a`** |
+| **`G`** | обратная решётка FCC | **`∼ 2π/a`** |
+| **`ν₀`, `ω_D`** | один M-тик | **`ν₀=1/hT`**, **`ω_D=ω₀=2π/hT`** |
+| **`v_a`** | **`ω_D/k_{\max}`** (замыкание) | **`v_a=2c₀`** |
+| **`E(k)`** | Thm 5.1 + Thm 5.2 | **`E=\hbar\omega`**, **`n_k\in\mathbb{Z}`**; IR **`ω=v_a|k|`** |
+| **`p`** | umklapp (§5.2.4) | **`p=n p₀+\hbar k`**, **`p₀=\hbar k_{\max}/(2π)`** |
+
+**Не путать:**
+
+| | **фонон (решётка **`Λ`**) | **давление **`K_P`** (macro)** |
+|--|---------------------------|--------------------------------|
+| скорость IR | **`v_a=2c₀`** | **`c=\kappa c₀`** |
+| квант | **`n_k`**, **`E=\hbar\omega(k)`** | **`n=0`**, **`E=n_E E₀`** (§8.2) |
+| «звук» T | coarse **`n_k`** | Maxwell / **`v_s`** газа **`≪ c`** |
+
+**Следствие (замыкание):** **`ℏν₀=2E₀`**, **`ℏω_D=4π E₀`**, **`p₀=\hbar k_{\max}/(2π)`** — одна лестница, не отдельный phonon-knob.
+
+**Open:** явный **`ω(k)`** sim на BZ (§5.2.4); Bose **`u(\omega)`**; macro **`v_s`** газа.
+
+**Код:** `SI.phonon_from_carrier_row()` · verify **`Phonon_from_carrier`**.
+
 ### 5.3 Макро-газ: нет «пустого пространства»
 
 **Онтология (не billiard balls):**
@@ -788,4 +820,7 @@ a = N_A² · N_вихрей² · K_P · l_P⁶ · α_fs
 
 **«Сингулярность» ЧД на M:** не **`ρ → ∞`**, а macro-область, где **каждый пиксель = 1** (вещество). BH = **упакованный монолит **`ρ_P`**, не математический pole плотности.
 
-**Код / verify:** `si_constants.vdw_*` · **`VdW_algebra`** — [`DEVLOG.md` §4](DEVLOG.md#§5-matter--quantization--gas) · T compression — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индек�
+**Код / verify:** `si_constants.vdw_*` · **`VdW_algebra`** — [`DEVLOG.md` §4](DEVLOG.md#§5-matter--quantization--gas) · T compression — [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
+
+---
+

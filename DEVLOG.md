@@ -274,6 +274,7 @@
 | 2026-09-23 | §0 Thm 0.1 | `discreteness_from_axioms_row` · **`Discreteness_from_axioms` PASS** — Postulate 0.1 → theorem from A1–A16+bit budget |
 | 2026-09-23 | §0.7–0.8 · Thm 5.1 | `mechanics_from_axioms_row` · **`Mechanics_from_axioms` PASS** — g from A1–A16 (Cor 0.7); Landau ladder s₀→F₀ (Cor 0.8) |
 | 2026-09-23 | §0.9 · Thm 5.2 | `excitations_full_quantization_row` · **`Excitations_full_quantization` PASS** — no wave on M; sound/light=quanta |
+| 2026-09-23 | §5.2.6 phonon | `phonon_from_carrier_row` · **`Phonon_from_carrier` PASS** — v_a=2c0, k_max=pi/l_P, omega_D=2pi/hT from FCC WS |
 | 2026-09-23 | §7.3 Planck←cell | `planck_from_cell_conditions_row` · **`Planck_from_cell` PASS** — ρ_cell=μ_P, u_P=μ_Pc², t_P/E_P derived via κ |
 | 2026-09-23 | §7.2·κ bottom-up | Planck ladder embeds **c**; **κ_geom** from hull not **c/c₀**; **`Kappa_bottom_up` PASS** — **`hT=κt_P`**, **`c=κc₀`** check |
 | 2026-09-23 | §8.2·geo·voronoi | rhombic dodecahedron WS: **`V=v_hV`**, **`R_in=a/2`**, **`V_hull/V=16/3`**, dual cuboctahedron · **`Rhombic_dodecahedron_geo`**, **`Rhombic_dodecahedron_ask` PASS** |

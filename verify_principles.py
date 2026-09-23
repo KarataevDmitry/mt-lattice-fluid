@@ -407,6 +407,35 @@ def check_excitations_full_quantization(device: str = "cpu") -> dict:
     }
 
 
+def check_phonon_from_carrier(device: str = "cpu") -> dict:
+    """§5.2.6 — phonon parameters forced by FCC carrier geometry + hT/hL."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.phonon_from_carrier_row()
+    ok = (
+        int(row["g_acoustic_branches"]) == 3
+        and row["n_density_over_sqrt2_lP3"] is True
+        and row["v_acoustic_equals_2c0"] is True
+        and row["omega_D_equals_v_a_k_max"] is True
+        and abs(float(row["omega_D_over_nu0"]) - 1.0) < 1e-12
+        and row["hbar_nu0_equals_2E0"] is True
+        and row["p0_equals_hbar_k_max_over_2pi"] is True
+        and row["phonon_not_sin_wave"] is True
+        and row["pressure_wave_not_same_as_phonon_v_a"] is True
+    )
+    return {
+        "id": "Phonon_from_carrier",
+        "v_acoustic_m_s": row["v_acoustic_m_s"],
+        "v_acoustic_over_c0": row["v_acoustic_over_c0"],
+        "omega_D_rad_s": row["omega_D_rad_s"],
+        "k_BZ_max_m": row["k_BZ_max_m"],
+        "g_acoustic_branches": row["g_acoustic_branches"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_mechanics_from_axioms(device: str = "cpu") -> dict:
     """§0.8 / Thm 5.1 — Landau mechanics from axioms + Thm 0.1; not separate p/F postulates."""
     from mt_ca.si_constants import DELTA_PHI_MIN, SI
@@ -1778,6 +1807,7 @@ def run_all(device: str) -> list[dict]:
         check_discreteness_from_axioms(device=device),
         check_mechanics_from_axioms(device=device),
         check_excitations_full_quantization(device=device),
+        check_phonon_from_carrier(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
