@@ -575,7 +575,9 @@ $$
 
 **DoD leaf (честный путь к α):** sim на FCC при **`a=l_P`**: holonomy **`Φ_□`** на **одной □-грани** (периметр **`4a`**) → **`|F|/F_P`** vs **`α_fs`**. Не combinatorics **`12·13−8−12+1`**.
 
-**Код:** `SI.cuboctahedron_geometry_row()` · `SI.cuboctahedron_carrier_ask_row()` · verify **`Cuboctahedron_geo`**, **`Cuboctahedron_ask`**.
+**Probe (v1):** `mt_ca/em_plaquette.py` — lattice path вокруг hull □ (`SQUARE_FACE_CORNERS` + NN bridges); **`SI.square_face_holonomy_probe_row()`** · verify **`Phi_square_probe`**. Статус: **`alpha_match_open`** — измеряем **`Φ_□`**, **`B_□=Φ/a²`**, **`Δφ`** на NN; **не** совпадает с **`α_fs`** без вывода **`g`** (ожидаемо).
+
+**Код:** `SI.cuboctahedron_geometry_row()` · `SI.cuboctahedron_carrier_ask_row()` · verify **`Cuboctahedron_geo`**, **`Cuboctahedron_ask`**, **`Phi_square_probe`**.
 
 **Exploratory (anti-pattern):** **`α_fs⁻¹_geom=137`** — см. **`Cuboctahedron_geo`**; пропуск **`a→Φ_□`**.
 

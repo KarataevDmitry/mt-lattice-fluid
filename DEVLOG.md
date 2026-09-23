@@ -273,6 +273,7 @@
 | 2026-09-23 | §8.2·geo | cuboctahedron 1-tick: **`V_cubo=(16/3)v_hV`** at `a=l_P` · `cuboctahedron_geometry_row` · **`Cuboctahedron_geo` PASS** · α_geom=137 (~260 ppm) exploratory; stamped π ~2 ppm |
 | 2026-09-23 | §8.2·geo·ask | `cuboctahedron_carrier_ask_row` · **`Cuboctahedron_ask` PASS** — ratio inventory (κ shipped; V/S, 6/8, 135°, Φ_□ open) |
 | 2026-09-23 | §8.2·geo anchor | dimensional chain **`a=l_P` first** — `edge_a_m`, `V/S`, `A_□=a²`; ratios derived (κ=R_in/R_out after lengths) |
+| 2026-09-23 | §8.2·Φ_□ probe | `em_plaquette.py` · **`Phi_square_probe` PASS** — hull lattice path; vortex Δφ_NN~1.48; α link readout ok; **alpha_match_open** (1/r≠α yet) |
 | 2026-09-23 | §8.2 ask-model ΔB | stamped $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
 | 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |
