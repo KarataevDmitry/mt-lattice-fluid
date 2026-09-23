@@ -24,7 +24,7 @@
 
 ### Запрещено в MODEL
 
-Даты сессий · «ночные snapshot-таблицы»-таблицы · **`Impl:`** · MVP/Genese-повествование · «была здесь» · provenance · sim notes — **только [`DEVLOG.md`](DEVLOG.md)**.
+Даты сессий · snapshot-таблицы · **`Impl:`** · MVP/Genese-повествование · «была здесь» · provenance · sim notes — **только [`DEVLOG.md`](DEVLOG.md)**.
 MODEL = физика `g` **сейчас**, не дневник разработки.
 
 ### M vs Meta / Devlog
@@ -61,4 +61,4 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 
 ### Инженерный хвост (не SSOT физики)
 
-Seeds / GPU-контракт / code slice — [`DEVLOG.md`](DEVLOG.md) (§ eng / night canon).
+Seeds / GPU-контракт / code slice — [`DEVLOG.md`](DEVLOG.md) (§ eng).
