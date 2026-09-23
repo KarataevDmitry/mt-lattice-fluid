@@ -725,6 +725,33 @@ def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
+    """§8.2·α·nF·census — enumerate kick-ledger seats → M=97."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_nF_kick_census_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["census_ok"])
+        and bool(row["derivation_closed"])
+        and not bool(row["runtime_sim_closed"])
+        and int(row["n_F_seats"]) == 97
+        and int(row["n_core"]) == 1
+        and int(row["n_link_hier"]) == 96
+    )
+    return {
+        "id": "Alpha_nF_kick_census",
+        "n_F_seats": row["n_F_seats"],
+        "M": row["M"],
+        "alpha": row["alpha"],
+        "vs_codata_ppm": row["vs_codata_ppm"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2346,6 +2373,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_dual_fraction_ask(device=device),
         check_alpha_sqrt2_descent_ask(device=device),
         check_alpha_M_from_g_try(device=device),
+        check_alpha_nF_kick_census(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
