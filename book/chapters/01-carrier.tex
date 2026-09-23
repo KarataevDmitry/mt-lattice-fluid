@@ -1,0 +1,184 @@
+\chapter{Носитель: Planck lattice и FCC}
+\label{ch:carrier}
+
+\section{Дискретное пространство-время}
+
+\begin{definition}[Planck lattice]
+Носитель $\Lambda$ --- FCC-подрешётка в $\mathbb{R}^3$ (слой $(3{+}1)$, \cref{sec:fcc-choice}).
+Срез $\{111\}$ даёт гексагональный слой $(2{+}1)$ (\cref{sec:hex-slice}).
+Время дискретно: $t\in\mathbb{Z}$.
+Пространственный шаг $\hl=\ell_P$ фиксирован (\cref{ch:foundations}).
+M-тик $\htick=t_P/\sqrt{2}$; учебниковая метка $t_P=\ell_P/c$ не совпадает с M-тиком.
+Объём узла $v_{\hv}=\ell_P^3/\sqrt{2}$.
+\end{definition}
+
+\paragraph{Две скорости.}
+На $\Mlayer$ тактовая скорость
+\[
+  \czero = \frac{\hl}{\htick} = \sqrt{2}\,c \approx 4.24\times 10^8\,\mathrm{m/s},
+\]
+где $c$ --- CODATA-скорость света (слой $\Tlayer$).
+Сшивка не костыль: continuum-определение $t_P=\ell_P/c$ предполагает $\czero=c$;
+на FCC 1-tick $\kgeom=1/\sqrt{2}$ вынуждает $\htick=t_P/\sqrt{2}$, $\czero=\sqrt{2}\,c$,
+$c=\kgeom\czero$.
+
+\begin{remark}[Natural units в коде]
+В симуляторе часто $\hl=\htick=1$; размерный конус на $\Mlayer$ --- $\Delta x=\ell_P$,
+$\Delta t=\htick$, $\czero=\ell_P/\htick$, а не macro-$c$ за один тик.
+\end{remark}
+
+\section{Континуум-гипотеза на \texorpdfstring{$\Mlayer$}{M}}
+\label{sec:no-continuum-carrier}
+
+Учебниковая рамка $(x,t)\in\mathbb{R}^4$ с пределом $\hl,\htick\to 0$ \emph{не описывает} $\Mlayer$,
+как только зафиксированы FCC, $\kgeom=1/\sqrt{2}$ и CODATA-$c$:
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Continuum-рамка & $\Mlayer$ \\
+\midrule
+один тик $t_P$ & $\htick=t_P/\sqrt{2}$ \\
+link-speed $=c$ & $\czero=\sqrt{2}\,c$ \\
+macro $c$ = link-speed & $c=\kgeom\czero$ (readout) \\
+предел $\hl\to 0$ & \textbf{нет}: $\hl=\ell_P$ const \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Непрерывные поля и дифференциальные уравнения --- слой $\Tlayer$ на \emph{фиксированной} решётке,
+не предел сетки. Ниже $\hl$ нет смысла: минимальный квант пространства $\Mlayer$.
+
+\begin{definition}[Light-cone neighborhood]
+\label{def:epsilon}
+Для сайта $x\in\Lambda$
+\[
+  N(x)=\bigl\{y:\ |y-x|=\hl,\ \ c_0^2\htick^2-|y-x|^2\ge 0\bigr\}.
+\]
+За один $\htick$ в $\varepsilon$ входят только равные light-like рёбра длины $\hl$.
+Moore / вторая оболочка запрещены (условие A1).
+\end{definition}
+
+\section{Две скорости и мост \texorpdfstring{$c=\kgeom\czero$}{c=kappa c0}}
+\label{sec:two-c}
+
+Macro-скорость света $c_{\Tlayer}=\kgeom\czero$ при $\htick=t_P/\sqrt{2}$.
+На гекс-срезе $\kgeom_{\mathrm{hex}}=\sqrt{3}/2$ (\cref{sec:hex-slice}); на FCC
+$\kgeom_{\mathrm{FCC}}=1/\sqrt{2}$ (\cref{sec:fcc-kappa}).
+
+\begin{remark}
+$\kgeom$ не подгоняется как $c/\czero$: это отношение inradius/circumradius 1-tick тела
+(глава~8). Тождество $c=\kgeom\czero$ --- проверка readout после фиксации $\htick=\kgeom t_P$.
+\end{remark}
+
+\section{«Сверхсвет» относительно \texorpdfstring{$\Tlayer$}{T}}
+
+Micro-каузальность (A1): не быстрее $\czero$ по решётке.
+Macro-наблюдатель видит $c_{\Tlayer}\approx\czero/\sqrt{2}$.
+Локализованная структура размера $\sim\hl$ в одном $\PlanckCell$ может нести micro-конус $\czero$;
+составная структура $\gg\hl$ усредняется на $\Tlayer$ $\Rightarrow$ снова macro-$c$.
+Это следствие геометрии $\Mlayer\to\Tlayer$, не макро-FTL: сигнал не выходит за micro-конус $\czero$.
+
+\section{Гексагональный срез \texorpdfstring{$(2{+}1)$}{(2+1)}}
+\label{sec:hex-slice}
+
+\subsection{Три регулярных замощения плоскости}
+
+Клеточный автомат требует замощения без дыр.
+В 2D ровно три регулярных тайла: треугольник (3 соседа), квадрат (4), шестиугольник (6).
+A1 с равным $\hl$ на рёбрах отсекает Moore-диагональ квадрата.
+Наиплотнейшая изотропная упаковка центров $\Rightarrow$ Voronoi = гекс, $|N|=6$.
+Квадрат $N_4$ --- не носитель $\Mlayer$.
+
+\subsection{Кванты на гексе}
+
+Graph-ball за $R$ тиков --- правильный шестиугольник.
+Вписанная окружность (macro-изотропный свет):
+\[
+  \kgeom_{\mathrm{hex}}=\frac{\sqrt{3}}{2},\qquad
+  \htick=\kgeom_{\mathrm{hex}}\,t_P,\qquad
+  \czero=\frac{2}{\sqrt{3}}\,c,\qquad
+  \kappa_{\mathrm{link}}=\frac{1}{6}.
+\]
+CODATA-$c$ сходится на гексе и FCC; меняется только разбиение $c=\kgeom\czero$.
+Константы $\alpha_{\mathrm{fs}}$, $\alpha^*$ от $4\pi$ и $\Delta\phi_{\min}$, не от $|N|$.
+
+\section{Обратный ход из физики твёрдого тела}
+
+Классическая ФТТ: атомы на решётке Браве, ячейка Вигнера--Зейтца, фононы, зоны Блоха.
+Спуск на масштаб ниже: если под атомами --- среда элементарных носителей масштаба $\hl$,
+тот же жёсткий словарь повторяется:
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Слой & центры & ячейка & «частица» \\
+\midrule
+$\Mlayer$ & $\hv$ @ $\ell_P$ & Voronoy вакуума & pra-вихрь / мода $z$ \\
+$\Tlayer$ / ФТТ & атомы @ \AA{} & WS вещества & фонон, электрон \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Материя --- дефекты и составные узлы на вакуумной решётке, не шарики в пустоте.
+Фононы вещества --- второй кристалл над кипящим первым.
+
+\section{Выбор носителя FCC \texorpdfstring{$N_{12}$}{N12}}
+\label{sec:fcc-choice}
+
+\begin{theorem}[Выбор $(3{+}1)$: упаковка и конус]
+\label{thm:fcc-choice}
+Дано: замощение без дыр; единственный $\ell_P$; A1 (только light-like рёбра за один $\htick$);
+изотропия вакуума; один носитель на узел; физическое пространство 3D в $(3{+}1)$.
+
+\smallskip\noindent
+\textbf{Шаг A (упаковка).}
+Равные сферы радиуса $\sim\ell_P/2$ $\Rightarrow$ наиплотнейшая упаковка в 3D: FCC или HCP ($12$ NN).
+SC и BCC отсечены плотностью. Для «один $\hv$ = один узел Браве'' предпочтителен FCC.
+
+\smallskip\noindent
+\textbf{Шаг B (конус).}
+$\varepsilon$ --- первая координационная сфера: все рёбра $\ell_P$, $\Delta s^2=0$.
+Следующие оболочки за один $\htick$ space-like $\Rightarrow$ запрещены.
+
+\smallskip\noindent
+\textbf{Следствие:}
+\[
+  \Lambda=\mathrm{FCC},\quad N(x)=N_{12}(x),\quad |N|=12,\quad \kappa_{\mathrm{link}}=\frac{1}{12}.
+\]
+\end{theorem}
+
+\begin{proof}
+Шаг A --- классическая теорема о плотнейшей упаковке сфер.
+Шаг B --- непосредственно из \cref{def:epsilon} и A1.
+Объединение: единственная первая оболочка на FCC --- двенадцать равных NN на $\ell_P$.
+\end{proof}
+
+\subsection{Кванты на FCC}
+\label{sec:fcc-kappa}
+
+Якорь: $a=\ell_P$ --- ребро 1-tick кубооктаэдра.
+\[
+  v_{\hv}=\frac{a^3}{\sqrt{2}},\quad
+  R_{\mathrm{out}}=a,\quad
+  R_{\mathrm{in}}=\kgeom a=\frac{a}{\sqrt{2}},\quad
+  V_{\mathrm{hull}}=\frac{8\sqrt{2}}{3}\,a^3,\quad
+  \frac{V_{\mathrm{hull}}}{v_{\hv}}=\frac{16}{3}.
+\]
+Macro-свет: $\kgeom_{\mathrm{FCC}}=R_{\mathrm{in}}/R_{\mathrm{out}}=1/\sqrt{2}$ $\Rightarrow$
+$\htick=t_P/\sqrt{2}$, $\czero=\sqrt{2}\,c$.
+
+\begin{remark}
+Voronoy-ячейка FCC --- ромбический додекаэдр; при $a=\ell_P$: $V=v_{\hv}$, стена $R_{\mathrm{in}}=a/2$.
+Dual к 1-tick hull: $12$ NN $\leftrightarrow$ $12$ ромбов.
+\end{remark}
+
+\section{Связка \texorpdfstring{$(3{+}1)\leftrightarrow(2{+}1)$}{(3+1)↔(2+1)}}
+
+$(2{+}1)+$гекс --- Minkowski-срез $(3{+}1)+$FCC, не другой закон природы.
+SI-мост $c=\kgeom\czero$ с $\kgeom=1/\sqrt{2}$ якорится на $(3{+}1)$;
+чистый $(2{+}1)$ без bulk несёт свой $\kgeom=\sqrt{3}/2$.
+
+\section{Один закон \texorpdfstring{$g$}{g}, разная геометрия \texorpdfstring{$N$}{N}}
+
+Запрещено: $g$, который «знает'' 2D vs 3D и меняет вид.
+Инвариант --- схема (leapfrog, $\zeta=(\sum_N z)\cdot z^*$, saturating $\Phi$, $R(\Phi)$);
+меняется только $|N(x)|$ от упаковки: $6$ (гекс), $12$ (FCC), $6+$bulk (срез).

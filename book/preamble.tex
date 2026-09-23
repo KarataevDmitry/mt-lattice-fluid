@@ -1,0 +1,57 @@
+% Shared preamble — compile via main.tex (xelatex)
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{listings}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}[Scale=0.92]
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  pdftitle={Дискретная информационная термодинамика},
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}[chapter]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}[chapter]
+\newtheorem{axiom}{Условие}[chapter]
+\newtheorem{remark}{Замечание}[chapter]
+
+\renewcommand{\proofname}{Доказательство}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!8},
+}
+
+\newcommand{\Mlayer}{M}
+\newcommand{\Tlayer}{T}
+\newcommand{\hl}{hL}
+\newcommand{\htick}{hT}
+\newcommand{\hv}{hV}
+\newcommand{\PlanckCell}{v_p}
+\newcommand{\czero}{c_0}
+\newcommand{\kgeom}{\kappa}
+
+\DeclareMathOperator{\Arg}{Arg}

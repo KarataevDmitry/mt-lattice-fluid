@@ -1,0 +1,129 @@
+\chapter{Функция перехода \texorpdfstring{$g$}{g}}
+\label{ch:evolution}
+
+\section{Каркас}
+
+\begin{definition}[Локальный CA]
+Дискретность $\Lambda$, $(\hl,\htick)$ --- \cref{thm:discreteness,ch:carrier}.
+\[
+  \Psi^{t+1}=g(\Psi^t),\qquad g=g_{\mathrm{nl}}\circ g_{\mathrm{lin}},
+\]
+где $g_{\mathrm{lin}}$ --- линейное смешивание по $N(x)$, $g_{\mathrm{nl}}:z\mapsto z\cdot e^{i\Phi(z)}$.
+\end{definition}
+
+\begin{definition}[Дискретный лапласиан]
+$(\Delta_4 z)(x)=\sum_{y\in N(x)}(z(y)-z(x))$.
+\end{definition}
+
+На каркасе не фиксируются $\gamma$, форма $\Phi$, режим $L$ (unitary vs diffusive), $\alpha^*$, $\varepsilon$ ---
+они закрываются в \cref{sec:g-law} и \cref{ch:si-sm}.
+
+\section{Ограничения \texorpdfstring{$A_1$--$A_{16}$}{A1-A16}}
+
+\begin{proposition}[Следствия для $g$]
+A3 запрещает рост $\sum|z|^2$ --- только bond-unitaries и $\Phi\in\mathbb{R}$.
+A4 --- нелинейность только $e^{i\Phi}$.
+A5 --- при $|z|\to 0$ gate $\Phi\to\mathrm{large}$.
+A6 --- mixing при фиксированной норме.
+A7 --- saturating $\Phi$ с $+\varepsilon$.
+A8 --- затухание нелинейности при больших $|z|$.
+A9 --- CR-метрика holonomy $\zeta$.
+\end{proposition}
+
+Линейное $z+\gamma\Delta_4 z$ не унитарно; допустим product локальных unitaries (\cref{sec:g-law}).
+
+\section{Фазовый carrier \texorpdfstring{$\zeta$}{zeta}}
+
+\begin{proposition}
+$\Arg(\sum z/z)$ и разность $\atan2$ дают ложный скачок $2\pi$.
+Holonomy
+\[
+  \zeta=(\textstyle\sum_N z)\cdot z^*,\qquad \Delta\phi=\wrap(\Arg\zeta)
+\]
+--- вход saturating kick (\cref{sec:g-law}).
+\end{proposition}
+
+\section{Спин \texorpdfstring{$\mathrm{SU}(2)$}{SU(2)}}
+
+\begin{definition}[Спинор]
+$z(x,t)=(z_1,z_2)^\top\in\mathbb{C}^2$, $|z|^2=z^\dagger z$.
+\end{definition}
+
+U(1)-фаза $z\to z e^{i\Phi}$ недостаточна для фермионов: $2\pi\to +1$ на $\mathbb{C}$,
+но spin-$1/2$ требует $2\pi\to -1$, $4\pi\to +1$.
+
+\begin{definition}[Дискретная rotation gate]
+$N_{\mathrm{ring}}=512$, $\omega=e^{i2\pi/N_{\mathrm{ring}}}$, $\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$:
+\[
+  R(\Phi):\ (U,V)\mapsto (U c_\Phi - V s_\Phi,\ U s_\Phi + V c_\Phi)\pmod N,
+\]
+где $(c_\Phi,s_\Phi)$ --- cos/sin дискретного угла mod $N_{\mathrm{ring}}$.
+\end{definition}
+
+\begin{corollary}[Spin-$1/2$]
+$R(N_{\mathrm{ring}}/2)\to -z$ на pra-vortex $\hv$ $\Rightarrow$ $U(2\pi)=-\mathbb{1}$, $U(4\pi)=+\mathbb{1}$.
+\end{corollary}
+
+Паули: два параллельных спинора в одном $\PlanckCell$ $\Rightarrow$ $z_A+z_B\to 0$;
+$K_P$ --- отталкивание при $d\le\hl$.
+
+\section{U(1)$_{\mathrm{vac}}$ и хиральность}
+
+Глобальная фаза $z\to z e^{i\theta}$; holonomy $\zeta$ и Bloch-ось $n=z^\dagger\sigma z/|z|^2$ --- инварианты.
+Проекторы $P_L z=(z_1,0)^\top$, $P_R z=(0,z_2)^\top$; в фазе STREAM независимы,
+в COLLISION --- смешиваются через $K_P$ и Arg.
+
+\section{Закон \texorpdfstring{$g$}{g} на \texorpdfstring{$\mathbb{Z}_N[i]$}{Z\_N[i]}}
+\label{sec:g-law}
+
+\begin{theorem}[Замыкание $g$]
+\label{thm:g-law}
+Закон $g$ на $Z_{N_{\mathrm{ring}}}[i]$:
+\begin{enumerate}
+\item leapfrog второго порядка
+\[
+  Z(x,t+\Delta t)+Z(x,t-\Delta t)=2Z(x,t)+\lfloor\mathcal{N}\rfloor;
+\]
+\item holonomy $\zeta_{\mathrm{real}},\zeta_{\mathrm{imag}}$ из соседней суммы без $\atan2$;
+\item saturating kick
+\[
+  \Phi=\Bigl\lfloor\frac{K_P\zeta_{\mathrm{imag}}}{\zeta_{\mathrm{real}}+|Z|^2+K_P}\Bigr\rfloor,\quad
+  |\Phi|\ge\Delta\phi_{\mathrm{disc}}\ \text{или}\ \Phi=0;
+\]
+\item $\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ на обеих компонентах; обратимость A13.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Идея доказательства]
+Каждый пункт --- прямое следствие строк таблицы A1--A16 (\cref{ch:axioms}):
+A3+A13 $\Rightarrow$ leapfrog на $\mathbb{Z}$;
+A9 $\Rightarrow$ holonomy $\zeta$;
+A5+A7 $\Rightarrow$ saturating знаменатель;
+A4+A16 $\Rightarrow$ $R(\Phi)$ на $\mathbb{C}^2$.
+Congruence ladder CL-1--CL-8 (\cref{sec:congruence}) проверяет согласованность mod $N_{\mathrm{ring}}=512$.
+\end{proof}
+
+\subsection{Bit budget \texorpdfstring{$\hv$}{hV}}
+
+\[
+  B_{\hv}=\frac{2\pi}{\ln 2}\approx 9.065\ \text{bit},\quad
+  N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512,\quad
+  N_\phi=\lceil 4\pi\rceil=13,\quad
+  \Delta\phi_{\mathrm{disc}}=41.
+\]
+
+\subsection{Congruence ladder}
+\label{sec:congruence}
+
+\begin{proposition}[CL-1 -- CL-8]
+Mod $N_{\mathrm{ring}}$:
+\begin{itemize}
+\item CL-1: $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor$ $\Leftrightarrow$ $T^{-1}$ (A13);
+\item CL-2: $R(N/2)\to -z$ (spin-$1/2$);
+\item CL-3: $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ (A16);
+\item CL-4: $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$, $E=n_E E_0$;
+\item CL-5--CL-8: gcd-условия для генератора $\mathbb{Z}_N$, секторов $N_\phi$, ledgers энергии и импульса.
+\end{itemize}
+\end{proposition}
+
+Заряд $n\in\mathbb{Z}$ (A10) --- не mod $N_{\mathrm{ring}}$.

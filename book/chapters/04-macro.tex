@@ -1,0 +1,80 @@
+\chapter{Переход \texorpdfstring{$\Mlayer\to\Tlayer$}{M→T}}
+\label{ch:macro}
+
+\section{Зачем переход принципиален}
+
+Планковские $\hl$ и $\PlanckCell$ определены из $\hbar,G,c$, но \emph{принципиально} недоступны прибору:
+слишком малы масштаб и объём. Классика берёт предел $c\to\infty$ / $\hl\to 0$;
+на $\Mlayer$ continuum-гипотеза отвергнута (\cref{sec:no-continuum-carrier}).
+
+\begin{proposition}
+Макромир $\Tlayer$ --- единственный слой прямого доступа.
+Из $\Mlayer$ \emph{обязан} следовать $\Tlayer$: binomial readout, дискретный анализ, статистика.
+\end{proposition}
+
+Проверка модели --- на $\Tlayer$ (dispersion, массы, SM).
+$\Mlayer$ верифицируется косвенно: если $\Tlayer$-инварианты сходятся, каркас не опровергнут.
+
+\section{Якорь: известный электрон}
+
+Вопрос M$\to$T: из чего на $\Mlayer$ состоит $\Tlayer$-электрон с известными $m_e$, $e$?
+Предел --- $\PlanckCell$, не кварк. Проверка = комбинации $\PlanckCell$ и $g$ дают электрон без новой подгонки.
+
+\section{Оператор readout \texorpdfstring{$\mathcal{B}$}{B}}
+\label{sec:readout}
+
+\begin{definition}[Soft readout]
+На ортогональном product-срезе:
+\[
+  \Phi(X,t)=\bigl(\tfrac14[1,2,1]\bigr)^{\otimes 2R} * z(x,t).
+\]
+Эквивалентно одному проходу $3\times 3$ с ядром $[1,2,1;2,4,2;1,2,1]/16$.
+\end{definition}
+
+\begin{remark}[Откуда $(1{:}2{:}1)$]
+За один $\htick$ центр не в light-like оболочке (A1).
+Минимальная чётная глубина Green-конуса --- 2 (туда--обратно):
+на цепи $\mathbb{Z}$ это $[1,1]/2*[1,1]/2=[1,2,1]/4$.
+На FCC нативный soft-readout --- path-Green графа $N_{12}$, не separable $(1{:}2{:}1)^{\otimes 3}$.
+\end{remark}
+
+\section{Теорема T-CR: continuum как вынужденный readout}
+\label{sec:t-cr}
+
+\begin{theorem}[T-CR]
+\label{thm:t-cr}
+Continuum не аксиома $\Mlayer$. При фиксированном $\ell_P$ и soft-радиусе $R\ge 1$
+любой прибор с ядром $\mathcal{B}$ (C0--C4) видит поле, неотличимое от континуального
+на шкалах $\lambda\gg\sigma_R\ell_P$, с относительной ошибкой $O((\sigma_R\ell_P/\lambda)^4)$.
+\end{theorem}
+
+\begin{proof}
+\textbf{(A1)} Одномерная свёртка: $\widehat W(k)=\tfrac12+\tfrac12\cos k=\cos^2(k/2)$.
+
+\textbf{(A2)} $R$ проходов: $\widehat W_R(k)=\cos^{2R}(k/2)$, дисперсия $\sigma_R^2=R/2$.
+
+\textbf{(A3)} Разложение $\log\cos(k/2)$ даёт
+\[
+  \frac{\widehat W_R(k)}{G_R(k)}=\exp\Big(-\frac{Rk^4}{96}+O(Rk^6)\Big),
+  \quad G_R(k)=\exp(-Rk^2/4).
+\]
+При $k\sigma_R\ll 1$ относительная ошибка $O((k\sigma_R)^4)$.
+
+\textbf{(A4)} UV: при $k\sim 1$ (единицы $1/\ell_P$) $\widehat W_R\le e^{-cR}$.
+IR: при $\lambda\gg\sigma_R\ell_P$ readout $\approx$ гауссово ядро ширины $\sigma_R$
+\emph{без} $\hl\to 0$.
+
+\textbf{(B)} На FCC depth-2 path-Green: $w(0)=1/12$, изотропный второй момент $M_{ij}=\tfrac43\delta_{ij}$
+--- полное перечисление walks длины 2 на $N_{12}$.
+\end{proof}
+
+\section{NLSE и гидродинамический предел}
+
+Вне плотных вихрей gate раскладывается по Тейлору; $\mathcal{B}$ на фазовых разностях
+даёт дискретный $\nabla^2$. Получается NLSE/Ginzburg--Landau на $\Tlayer$ с коэффициентом
+$\hbar/(2m)$ --- эффективная теория, не новый $\Mlayer$-оператор.
+
+\section{Туннелирование и Born}
+
+Туннель на $\Tlayer$ --- coarse(leak through barrier), не RNG в $g$.
+Born $|\Psi|^2$ --- статистика macro-фильтра (\cref{prop:determinism}).

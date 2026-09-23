@@ -1,0 +1,95 @@
+\chapter{Элементарный объём и материя}
+\label{ch:matter}
+
+\section{Бинарная плотность и pra-дефект}
+
+На каждом $\PlanckCell$ бинарная занятость $b(x)\in\{0,1\}$: вакуумное кипение ($b=0$)
+или локализованный узел ($b=1$). Плотность $\rho_{\mathrm{matter}}\in\{0,\rho_P\}$.
+Pra-дефект --- один $\PlanckCell$, не «облако внутри $\hl$''.
+
+\section{Несжимаемая lattice fluid}
+
+\begin{definition}[Модуль $K_P$]
+$K_P=u_P$ --- планковское давление жидкости; gate $\Phi$ saturating при $\rho\to u_P$.
+\end{definition}
+
+Отклонение $\rho$ от фона $\Rightarrow$ упругий фазовый ответ; избыток уходит волной ($n=0$)
+или vortex. Euler/Navier--Stokes на $\Tlayer$ --- coarse-grain, не буквальный дискретный NS.
+
+\section{Теорема 5.1: механика из аксиом}
+\label{sec:theorem-51}
+
+\begin{theorem}[Landau-лестница]
+\label{thm:51}
+После \cref{thm:discreteness,thm:g-law} локальные механические величины на $\hv$ ---
+единственная лестница $s_0\to p_0\to L_0\to F_0\to E_0$. Не три fitted knob.
+\end{theorem}
+
+\begin{lemma}[5.1a]
+\label{lem:51a}
+A5 и $\Delta\phi_{\min}=\tfrac12$ $\Rightarrow$ $s_0=\hbar/2$.
+\end{lemma}
+
+\begin{proof}
+Минимальное действие одного Arg-события на $\hv$ за $\htick$.
+\end{proof}
+
+\begin{lemma}[5.1b]
+\label{lem:51b}
+$s_0$ и $\hl$ $\Rightarrow$ $p_0=s_0/\hl=\hbar/(2\hl)$, $E_0=s_0/\htick$, $m_{\arg}=E_0/c_0^2$.
+\end{lemma}
+
+\begin{lemma}[5.1c]
+\label{lem:51c}
+$L_0=p_0\hl=s_0$, $g_M=c_0/(2\htick)$, $F_0=p_0/\htick=m_{\arg} g_M$ --- \textbf{F=mg} на одном $\hv$.
+\end{lemma}
+
+\begin{proof}
+Арифметика $(\hl,\htick)$ без дополнительных параметров.
+\end{proof}
+
+\begin{lemma}[5.1d]
+\label{lem:51d}
+$\lfloor\mathcal{N}\rfloor$ на $\mathbb{Z}$ $\Rightarrow$ $\Delta p\in p_0\cdot\mathbb{Z}$;
+float $\int\Im(z^*\nabla z)$ --- только $\Tlayer$.
+\end{lemma}
+
+\begin{lemma}[5.1e]
+\label{lem:51e}
+$E_0=p_0 c_0=F_0\hl=L_0/\htick$, $E=n_E E_0$, $n_E\in\mathbb{Z}$.
+\end{lemma}
+
+\begin{proof}[Доказательство теоремы 5.1]
+\cref{lem:51a,lem:51b,lem:51c,lem:51d,lem:51e}.
+\end{proof}
+
+\begin{corollary}[Ньютон на $\hv$]
+$p_0=m_{\arg}(c_0/2)$, $F_0=m_{\arg} g_M$, $\Delta F=\Delta m\cdot g$ при $\Delta m\in m_{\arg}\mathbb{Z}$.
+\end{corollary}
+
+\section{Симметрии и дискретные заряды}
+
+\begin{proposition}[Noether на решётке]
+\begin{itemize}
+\item U(1): $Q=\sum|z|^2$ invariant;
+\item трансляция: $\mathrm{div}\,\pi=0$ mod $p_0$;
+\item SO(2) изотропного $N$: $L_z\in L_0\cdot\mathbb{Z}$;
+\item время: $E\in E_0\cdot\mathbb{Z}$;
+\item топология: $n\in\mathbb{Z}$ (A10).
+\end{itemize}
+\end{proposition}
+
+\section{Геометрический квант \texorpdfstring{$\kappa_{\mathrm{link}}=1/|N|$}{kappa=1/|N|}}
+
+\begin{proposition}
+На FCC $|N|=12$ $\Rightarrow$ $\kappa_{\mathrm{link}}=1/12=\gamma=\nu_{\mathrm{CA}}/(c_0\hl)$ (natural).
+На гексе $|N|=6$ $\Rightarrow$ $1/6$.
+\end{proposition}
+
+DFT/spectral калибрует $\Tlayer$, не задаёт $\Mlayer$.
+
+\section{Фононы и спектр}
+
+Период $\Lambda$ $\Rightarrow$ первая зона БZ; $p=n p_0+\hbar k$, $k$ дискретен.
+Фонон вакуума: $\omega(k)\approx v_a|k|$, $v_a=2c_0$.
+Фонон вещества --- второй кристалл над $\Mlayer$ (\cref{ch:carrier}).
