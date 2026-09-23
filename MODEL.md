@@ -1,14 +1,14 @@
 # M → T → SM lattice fluid
 
-**Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».  
-**Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.  
-**Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.  
+**Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».
+**Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.
+**Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.
 **SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md), часть **MODEL**, не meta.
 
 ### Иерархия слоёв (SSOT)
 
 ```
-физика (известное)  →  M   model/*.md + этот hub   — канон: g, аксиомы, ДА, M→T→SM
+физика (известное)  →  M   model/*.md + этот hub   — утверждения: g, аксиомы, ДА, M→T→SM
                            ↓  следует
                       impl mt_ca/            — реализация; **может отставать** от M
                            ↓  проверяет (impl ↔ M)
@@ -24,7 +24,7 @@
 
 ### Запрещено в MODEL
 
-Даты сессий · «ночной канон»-таблицы · **`Impl:`** · MVP/Genese-повествование · «была здесь» · provenance · sim notes — **только [`DEVLOG.md`](DEVLOG.md)**.  
+Даты сессий · «ночные snapshot-таблицы»-таблицы · **`Impl:`** · MVP/Genese-повествование · «была здесь» · provenance · sim notes — **только [`DEVLOG.md`](DEVLOG.md)**.
 MODEL = физика `g` **сейчас**, не дневник разработки.
 
 ### M vs Meta / Devlog
@@ -57,7 +57,7 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 | [`model/05-matter.md`](model/05-matter.md) | §5 dV, occupancy, гидро |
 | [`model/06-si-sm.md`](model/06-si-sm.md) | §6–§8 лестница · SI · SM |
 
-**Канон носителя (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆** = {111} FCC. Квадрат N₄ — не физика M (см. DEVLOG).
+**Носитель (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆** = {111} FCC. Квадрат N₄ — не физика M (см. DEVLOG).
 
 ### Инженерный хвост (не SSOT физики)
 

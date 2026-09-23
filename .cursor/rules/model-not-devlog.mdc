@@ -18,8 +18,8 @@ alwaysApply: true
 - `verify **`…`**` / PASS / FAIL / ✅ / ⚠️ как статус impl
 - колонки `impl` / `verify` / GPU DoD / module map
 - provenance, даты сессий, narrative «мы догнали»
-- мета-шапки, ярлыки «канон / legacy / OPEN / слой M»
-- editorial «итог», «claim», «замыкание g = §…» в каждом абзаце
+- мета-шапки, ярлыки «legacy / OPEN / слой M»
+- слово **«канон»** — в физике его нет; есть посылки, утверждения, теоремы, следствия, опыт
 
 **Граница живёт один раз:** [`MODEL.md`](MODEL.md) hub · [`DEVLOG.md`](DEVLOG.md) §0 · это rule · verify **`Model_purity`**.
 

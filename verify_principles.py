@@ -1825,6 +1825,7 @@ def check_model_purity() -> dict:
         (re.compile(r"`[^`]+\.py`"), ".py backtick"),
         (re.compile(r"\*\*Impl:\*\*"), "**Impl:**"),
         (re.compile(r"не канон", re.I), "не канон"),
+        (re.compile(r"\b[Кк]анон\b"), "канон"),
         (re.compile(r"legacy\s*[··]", re.I), "legacy label"),
         (re.compile(r"\(legacy", re.I), "(legacy"),
         (re.compile(r"\bsim-gap\b", re.I), "sim-gap"),
