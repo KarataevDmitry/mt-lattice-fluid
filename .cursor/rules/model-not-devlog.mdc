@@ -8,17 +8,18 @@ alwaysApply: true
 
 Канон границы: `DEVLOG.md` §0 · verify **`Model_purity`**.
 
-## MODEL (`model/00`…`06`, `MODEL.md`)
+## MODEL (`model/00`…`06`)
 
-**Только:** физика, аксиомы, формулы, OPEN/closed на уровне M, ссылки на другие § MODEL.
+**Только:** определения, аксиомы, теоремы, формулы, следствия, открытые вопросы — **один голос**, как в статье.
 
-**Запрещено в теле `model/00`…`06`:**
+**Не писать в section-файлах:**
 
 - `**Код:**` / `Код:` / пути `mt_ca/…` / `*.py`
 - `verify **`…`**` / PASS / FAIL / ✅ / ⚠️ как статус impl
 - колонки `impl` / `verify` / GPU DoD / module map
 - provenance, даты сессий, narrative «мы догнали»
-- **мета-шапки** («SSOT-часть», «Не сюда», «запрещено в теле») — **не писать** в section-файлы
+- мета-шапки, ярлыки «канон / legacy / OPEN / слой M»
+- editorial «итог», «claim», «замыкание g = §…» в каждом абзаце
 
 **Граница живёт один раз:** [`MODEL.md`](MODEL.md) hub · [`DEVLOG.md`](DEVLOG.md) §0 · это rule · verify **`Model_purity`**.
 
