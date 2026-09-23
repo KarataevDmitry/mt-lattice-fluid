@@ -322,6 +322,34 @@ def check_alpha_hop_ladder(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_fixed_point(device: str = "cpu") -> dict:
+    """First FP: α*=N_c(m_e(α*))/N_a0 (optical Bohr); seed-invariant; π-poly not input."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_fixed_point_row()
+    ok = (
+        bool(row["fixed_point_ok"])
+        and bool(row["seed_invariant"])
+        and float(row["residual_stack"]) < 1e-12
+        and float(row["residual_bare"]) < 1e-12
+        and abs(float(row["alpha_star_stack_inv"]) - 137.09186727) < 1e-4
+        and bool(row["derivation_open"])
+    )
+    return {
+        "id": "Alpha_fixed_point",
+        "alpha_star_stack": row["alpha_star_stack"],
+        "alpha_star_stack_inv": row["alpha_star_stack_inv"],
+        "alpha_star_bare_inv": row["alpha_star_bare_inv"],
+        "vs_codata_ppm_stack": row["vs_codata_ppm_stack"],
+        "vs_pi_ppm_stack": row["vs_pi_ppm_stack"],
+        "seed_invariant": row["seed_invariant"],
+        "derivation_open": row["derivation_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -1927,6 +1955,7 @@ def run_all(device: str) -> list[dict]:
         check_pauli_repel(device=device),
         check_compton_electron(device=device),
         check_alpha_hop_ladder(device=device),
+        check_alpha_fixed_point(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

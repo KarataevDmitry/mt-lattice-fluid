@@ -651,7 +651,101 @@ class SIConstants:
                 "§7.4+§4.8+H: α=κ·N_re/N_c0=N_★/N_c0=N_c/N_a0; "
                 "α²=N_re/N_a0 (rhymes m_e=α² m_H/N_φ); v_Bohr/c₀=ακ. "
                 "Identity rewrite; one hop from g without α still OPEN. "
-                "π-ansatz not replaced."
+                "π-ansatz not replaced. See also alpha_fixed_point_row."
+            ),
+        }
+
+    def alpha_fixed_point_row(self) -> dict[str, float | int | str | bool]:
+        """First fixed-point for α: cascade m_e(α) + fixed optical N_a0.
+
+        Map (macro Compton hops):
+            m_e(α) = α² · m_H(α) / N_φ     (§8.2; m_H from α⁸·E_P·√(2π) + λ-stack)
+            N_c(α) = m_P / m_e(α)
+            α'     = N_c(α) / N_a0
+        with N_a0 = a₀/hL from CODATA Bohr radius (α-independent optical length).
+
+        Fixed point α* = map(α*). Replaces π-polynomial as *definition* of α;
+        π still enters cascade via √(2π), δλ=α/(4π). N_a0 from carrier still OPEN.
+
+        First use of fixed-point closure in this model (2026-09-23).
+        """
+        n_phi = 13.0
+        n_hier = 8.0
+        a0_m = 5.29177210903e-11
+        n_a0 = a0_m / self.l_P
+        alpha_codata = 7.2973525693e-3
+        m_p_gev = self.E_P / EV_J / 1e9
+
+        def cascade(alpha: float) -> tuple[float, float, float, float]:
+            v = (alpha**n_hier) * m_p_gev * math.sqrt(2.0 * math.pi)
+            m_h_bare = v / 2.0
+            delta_lam = alpha / (4.0 * math.pi)
+            lam = 1.0 / n_hier + n_hier * delta_lam
+            m_h = math.sqrt(2.0 * lam) * v
+            m_e = (alpha**2) * m_h / n_phi
+            m_e_bare = (alpha**2) * m_h_bare / n_phi
+            return m_e, m_e_bare, m_h, v
+
+        def mapped(alpha: float, *, bare: bool) -> float:
+            m_e, m_e_bare, _, _ = cascade(alpha)
+            m = m_e_bare if bare else m_e
+            return (m_p_gev / m) / n_a0
+
+        def solve(*, bare: bool) -> float:
+            lo, hi = 1e-4, 0.05
+            flo = mapped(lo, bare=bare) - lo
+            fhi = mapped(hi, bare=bare) - hi
+            for _ in range(100):
+                mid = 0.5 * (lo + hi)
+                fm = mapped(mid, bare=bare) - mid
+                if flo * fm <= 0:
+                    hi, fhi = mid, fm
+                else:
+                    lo, flo = mid, fm
+            return 0.5 * (lo + hi)
+
+        a_stack = solve(bare=False)
+        a_bare = solve(bare=True)
+        m_e_s, _, m_h_s, v_s = cascade(a_stack)
+        m_e_b, m_e_bare_b, m_h_b, v_b = cascade(a_bare)
+        # seed invariance: damped iterate from far seeds → same a_stack
+        seeds_ok = True
+        for seed in (1e-3, 1e-2, 2e-2, alpha_codata, self.alpha_fs):
+            a = seed
+            for _ in range(400):
+                a = 0.85 * a + 0.15 * mapped(a, bare=False)
+            if abs(a - a_stack) / a_stack > 1e-10:
+                seeds_ok = False
+                break
+        return {
+            "N_a0_optical": n_a0,
+            "a0_m": a0_m,
+            "alpha_star_stack": a_stack,
+            "alpha_star_stack_inv": 1.0 / a_stack,
+            "alpha_star_bare": a_bare,
+            "alpha_star_bare_inv": 1.0 / a_bare,
+            "map_stack_at_star": mapped(a_stack, bare=False),
+            "map_bare_at_star": mapped(a_bare, bare=True),
+            "residual_stack": abs(mapped(a_stack, bare=False) - a_stack) / a_stack,
+            "residual_bare": abs(mapped(a_bare, bare=True) - a_bare) / a_bare,
+            "vs_codata_ppm_stack": (a_stack - alpha_codata) / alpha_codata * 1e6,
+            "vs_codata_ppm_bare": (a_bare - alpha_codata) / alpha_codata * 1e6,
+            "vs_pi_ppm_stack": (a_stack - self.alpha_fs) / self.alpha_fs * 1e6,
+            "m_e_star_stack_GeV": m_e_s,
+            "m_e_star_bare_GeV": m_e_bare_b,
+            "m_H_star_stack_GeV": m_h_s,
+            "v_star_stack_GeV": v_s,
+            "alpha_codata": alpha_codata,
+            "alpha_pi_ansatz": self.alpha_fs,
+            "seed_invariant": seeds_ok,
+            "fixed_point_ok": seeds_ok
+            and abs(mapped(a_stack, bare=False) - a_stack) / a_stack < 1e-12
+            and abs(mapped(a_bare, bare=True) - a_bare) / a_bare < 1e-12,
+            "derivation_open": True,
+            "note": (
+                "First FP in model: α*=N_c(m_e(α*))/N_a0 with optical a₀. "
+                "Stack ~−408 ppm vs CODATA; replaces π-poly as α definition. "
+                "N_a0 from carrier OPEN; √(2π), δλ still in cascade."
             ),
         }
 
