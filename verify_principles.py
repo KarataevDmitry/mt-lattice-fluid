@@ -787,9 +787,12 @@ def check_floor1_B0_census_ask(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["census_ok"])
         and bool(row["derivation_closed"])
-        and bool(row["sim_metastable_maps_open"])
+        and not bool(row["sim_metastable_maps_open"])
+        and bool(row["soft_Gamma_open"])
         and row["stable_matter_ids"] == ["C2_lightest_Q_pm1_dressed"]
         and row["pre_resonance_ids"] == ["C4_Q0_multicell_blob"]
+        and row["classes"][3]["status"] == "unstable_channel_closed"
+        and row["classes"][6]["status"] == "stable_off_band"
     )
     return {
         "id": "Floor1_B0_census_ask",
@@ -873,6 +876,31 @@ def check_floor1_dressing_f_close(device: str = "cpu") -> dict:
     return {
         "id": "Floor1_dressing_f_close",
         "f_form": row["f_form"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_floor1_leftovers_close(device: str = "cpu") -> dict:
+    """§6·floor1·leftovers·close — C3 channel existence + ν off-band."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_leftovers_close_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["C3_channel_existence_closed"])
+        and bool(row["C3_Gamma_soft_open"])
+        and bool(row["nu_floor1_size_rejected"])
+        and "closed_C3_channel_existence" in row["closed_ids"]
+        and "soft_open_C3_Gamma" in row["soft_open_ids"]
+    )
+    return {
+        "id": "Floor1_leftovers_close",
+        "C3_channel_existence_closed": row["C3_channel_existence_closed"],
+        "nu_floor1_size_rejected": row["nu_floor1_size_rejected"],
         "derivation_closed": row["derivation_closed"],
         "ok": ok,
         "note": row["note"],
@@ -2506,6 +2534,7 @@ def run_all(device: str) -> list[dict]:
         check_floor1_dressing_ask(device=device),
         check_floor1_dressing_close(device=device),
         check_floor1_dressing_f_close(device=device),
+        check_floor1_leftovers_close(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

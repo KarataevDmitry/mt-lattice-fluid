@@ -2797,8 +2797,10 @@ class SIConstants:
               may extend into floor1 radii without being a second particle.
 
           C3 excited / composite leptonic (μ-scheme, same Q, higher E)
-            — NOT stable if any downhill to e+γ… exists. Model already:
-              composite/excited «may have channel down». Metastable OPEN.
+            — UNSTABLE at class level: products C2 + γ (n=0) conserve Q,
+              A3 energy downhill by definition of higher E, radiation
+              sector exists (C1). Multi-shell excitation already downhill
+              (dressing·close). Existence of channel CLOSED; Γ soft-OPEN.
 
           C4 Q=0 multi-cell blob without ± pair (pure excitation)
             — NO topo charge to protect; A5 returns to vacuum.
@@ -2810,12 +2812,12 @@ class SIConstants:
 
           C6 neutral with stamped L (ν-scheme)
             — may be stable if lightest in its L sector; spatial size
-              not fixed to N₁₂^{3…4}. Size assignment OPEN.
+              NOT in floor1 band (reject R≡N₁₂^{3…4}). Off-band object.
 
         Sharp claim: at this radius the only stable B=0 *matter* class
         is C2 (dressed lightest Q=±1). Floor1's own name «pre-resonance»
-        = C4 (+ maybe C3) — unstable by construction. Content census
-        of metastable maps still OPEN (sim).
+        = C4 — unstable by construction. C3 channel existence closed;
+        Γ/lifetime still soft.
         """
         n12 = int(N12_FCC_CAUSAL_LINKS)
         r_lo = n12**3
@@ -2844,8 +2846,9 @@ class SIConstants:
             {
                 "id": "C3_excited_leptonic_same_Q",
                 "stable": False,
-                "status": "metastable_open",
-                "maps_to": "μ-scheme / higher E same Q — downhill if channel exists",
+                "status": "unstable_channel_closed",
+                "maps_to": "C3→C2+γ: Q+A3; multi-shell↓ε; Γ soft-OPEN",
+                "mechanism": "products exist; higher E by def; dressing·close",
             },
             {
                 "id": "C4_Q0_multicell_blob",
@@ -2862,8 +2865,9 @@ class SIConstants:
             {
                 "id": "C6_neutral_L_sector",
                 "stable": True,  # conditional: if lightest in L
-                "status": "stable_maybe_size_open",
-                "maps_to": "ν-scheme may be stable; R≠forced to N₁₂^{3…4}",
+                "status": "stable_off_band",
+                "maps_to": "ν may be stable in L; reject R≡N₁₂^{3…4} as floor1 size",
+                "mechanism": "L-sector lightest ≠ floor1 length window",
             },
         ]
 
@@ -2892,14 +2896,15 @@ class SIConstants:
                 "Pre-resonances (C4) unstable by construction."
             ),
             "census_ok": census_ok,
-            "derivation_closed": census_ok,  # class census closed; sim maps open
-            "sim_metastable_maps_open": True,
+            "derivation_closed": census_ok,
+            "sim_metastable_maps_open": False,  # C3 existence closed; Γ soft
+            "soft_Gamma_open": True,
             "ask_ok": census_ok,
             "note": (
                 "B=0 census @ N₁₂³…N₁₂⁴: C2 dressed e± STABLE; "
                 "C4 Q=0 blobs = pre-resonances UNSTABLE; "
-                "C5 ± pairs annihilate; C3 metastable OPEN. "
-                "Sim channel maps still open."
+                "C5 ± annihilate; C3 channel existence CLOSED (Γ soft); "
+                "C6 ν off-band (R≠floor1)."
             ),
         }
 
@@ -3216,6 +3221,92 @@ class SIConstants:
                 "f closed as Heisenberg indicator: ρ_Θ=𝟙[|Δφ_N|≥Δφ_min]. "
                 "No float knobs; ∫∈ℤ; T-smooth=binomial not M-f. "
                 "Reject continuum/α ansatze."
+            ),
+        }
+
+    def floor1_leftovers_close_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·leftovers·close — C3 channel existence + ν off-band.
+
+        Closes remaining floor1 OPEN from B0 census (not Γ rates).
+
+        C3 (same Q, E > E_C2):
+          Products: C2 (lightest Q) + γ (n=0, C1). Q conserved (A10).
+          A3: ΣE ≤ E(C3) by definition of higher E.
+          Multi-shell excitation already downhill (dressing·close).
+          §8.2: composite/excited «may have channel down».
+          ⇒ channel *existence* CLOSED; object UNSTABLE.
+          Soft-OPEN: Γ / lifetime / BR (not needed to leave floor1).
+
+        C6 / ν:
+          May be stable if lightest in L sector — off this length window.
+          Reject R_ν ≡ N12^{3…4} as floor1 size assignment.
+          ⇒ not floor1-band content; size OPEN elsewhere, not here.
+
+        m_μ/m_e: still not claimed as floor1 length (unchanged reject).
+        """
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        r_lo = float(n12**3)
+        r_hi = float(n12**4)
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_C3_channel_existence",
+                "maps_to": "C3→C2+γ: Q+A3+products exist; unstable class",
+                "status": "closed",
+                "mechanism": "§8.2 decay + dressing·close multi-shell",
+            },
+            {
+                "id": "soft_open_C3_Gamma",
+                "maps_to": "Γ/τ/BR for C3 — rate, not existence",
+                "status": "open_soft",
+            },
+            {
+                "id": "closed_nu_reject_floor1_size",
+                "ratio": r_lo,
+                "maps_to": "reject R_ν≡N12^{3…4}; ν off-band vs floor1 window",
+                "status": "closed",
+            },
+            {
+                "id": "closed_C6_not_floor1_matter",
+                "maps_to": "C6 may be L-stable elsewhere — not band object",
+                "status": "closed",
+            },
+            {
+                "id": "reject_mmu_as_floor1_length",
+                "maps_to": "m_μ/m_e not a floor1 ·dl assignment",
+                "status": "rejected",
+            },
+        ]
+
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        soft_open = [i["id"] for i in inventory if i["status"] == "open_soft"]
+        ok = (
+            n12 == 12
+            and r_lo == 1728.0
+            and r_hi == 20736.0
+            and "closed_C3_channel_existence" in closed_ids
+            and "closed_nu_reject_floor1_size" in closed_ids
+            and "soft_open_C3_Gamma" in soft_open
+        )
+
+        return {
+            "theorem": "§6·floor1·leftovers·close — C3 existence + ν off-band",
+            "N12": n12,
+            "R_lo_dl": r_lo,
+            "R_hi_dl": r_hi,
+            "C3_channel_existence_closed": True,
+            "C3_Gamma_soft_open": True,
+            "nu_floor1_size_rejected": True,
+            "derivation_closed": ok,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "soft_open_ids": soft_open,
+            "ask_ok": ok,
+            "note": (
+                "Floor1 leftovers: C3→C2+γ existence CLOSED (Γ soft); "
+                "ν size ≠ N12^{3…4} (off-band). Band content done."
             ),
         }
 
