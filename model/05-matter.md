@@ -636,7 +636,9 @@ b(x) = 1  ⟺  |Δφ_N(x)| ≥ Δφ_min  AND  pole locked (A11)  — §5.0.1
 
 **Energy ledger (§3.12):** saturating **`Φ`** [ticks] → **`n_E = ⌊|Φ|/Δφ_disc⌋`**; локально **`Σ_N n_E·E₀ ≡ 0 (mod E₀)`** (checkerboard floor + **`LadderLedger`**).
 
-**Audit / verify:** [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-ограничений-единый-указатель) · **`elementary_quanta_row()`** · **`MConfig`** defaults · **`LadderLedger`** · **`MatterOccupancyB`**.
+**Congruence ladder (§3.12.7):** таблица **CL-1…CL-8** — что уже следует из **`ℤ_{N_ring}`** до геометрии hull; склейка со **`N_{12}`** — §3.12.7-C.
+
+**Audit / verify:** [`DEVLOG.md` §1](DEVLOG.md#§1-реестр-ограничений-единый-указатель) · **`elementary_quanta_row()`** · **`congruence_ladder_row()`** · **`MConfig`** defaults · **`LadderLedger`** · **`Congruence_ladder`** · **`MatterOccupancyB`**.
 
 #### 5.2.4 Лестница из ФТТ · решётка↔k · вложенные этажи (дополнение к §5.2.1–3)
 

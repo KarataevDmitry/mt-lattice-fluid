@@ -689,3 +689,61 @@ N_\phi = \left\lceil \frac{2\pi}{\Delta\phi_{\min}} \right\rceil
 
 **Код:** `si_constants.HV` · `hv_bit_budget()` · verify **`HvBitBudget`** · `MConfig.mod_bits/frac_bits/phase_bits` defaults.
 
+#### 3.12.7 Congruence ladder — **`Z_{512}` → вычеты → `g` × `N_{12}`**
+
+**Claim:** после §3.12.6 (**физика → `N_ring=512`**) следующий слой — **не** новая аксиома, а **законы congruence** на кольце и их склейка со **звездой** **`N_{12}`**.
+
+##### A · Лестница (4 этажа)
+
+```
+0  физика     Bekenstein B_hV + Heisenberg Δφ_min + A7/A5
+1  Z_{512}[i] N=2^9, ω=exp(2πi/N), 4 lane, wrap mod N
+2  вычеты     floor/div/gcd на Z_N; ledger mod E₀,p₀; involution N/2
+3  × N_{12}   holonomy Σ_N → Φ ∈ Z_N → ⌊𝒩⌋ → leapfrog
+4  open       спектр Φ, umklapp mod ℏG, орбиты g (§5.2.4)
+```
+
+**512** задаёт **вертикаль** (бюджет **`hV`**). **12** — **горизонталь** (stencil). **13** = **`N_φ = |N_{12}|+1`** — склейка (**`frac_bits=⌈log₂(512/13)⌉`**).
+
+##### B · Законы из **`ℤ_{N_ring}`** (shipped)
+
+| id | congruence / identity | M-смысл |
+|----|------------------------|---------|
+| **CL-1** | **`Z⁺+Z⁻ = 2Z+⌊𝒩⌋ (mod N)`** | exact **T⁻¹** (A13); не float drift |
+| **CL-2** | **`R(N/2) → −z`** | spin-½: **π** = половина кольца |
+| **CL-3** | **`|Φ| ≥ Δφ_disc` или `Φ=0`** | A16 Heisenberg floor в тиках |
+| **CL-4** | **`n_E = ⌊|Φ|/Δφ_disc⌋`** | **E = n_E·E₀** (ledger) |
+| **CL-5** | **`gcd(Δφ_disc, N)=1`** | Heisenberg-шаг — **адд. генератор** **`ℤ_N`** |
+| **CL-6** | **`gcd(N_φ, N)=1`** | 13 фазовых секторов — **перестановка** кольца |
+| **CL-7** | **`Σ_{y∈N} ΔE ≡ 0 (mod E₀)`** | локальный energy ledger (§5.2.3) |
+| **CL-8** | **`Σ_{y∈N} Δπ ≡ 0 (mod p₀)`** | импульс mod **`p₀`** (§5.2.1) |
+
+**Числа при каноне:** **`N=512`**, **`Δφ_disc=41`**, **`N_φ=13`**, **`pauli_kick=N/2=256`**, **`a_Q=2^{−6}`**, **`sync_disc=⌊41·κ_link⌋=3`** (FCC).
+
+##### C · Склейка **`Z_{512} × N_{12}`**
+
+Holonomy и projected collision **не** живут только в кольце:
+
+\[
+\zeta = f\!\Bigl(Z(x),\ \sum_{y\in N_{12}(x)} Z(y)\Bigr)
+\quad\Rightarrow\quad
+\Phi\in\mathbb{Z}_N
+\quad\Rightarrow\quad
+\lfloor\mathcal{N}\rfloor,\ \text{leapfrog}.
+\]
+
+**`γ=κ_link=1/|N_{12}|`** — доля звезды **до** проекции в **`ℤ_N`**. Без **`N_{12}`** — abstract mod **`N`**, не канон **`g`**.
+
+##### D · Open (следующий leaf)
+
+| leaf | вопрос | статус |
+|------|--------|--------|
+| **CL-O1** | образ **`N_{12}×Z_N[i] → Z_N`** (допустимый спектр **`Φ`**) | open |
+| **CL-O2** | umklapp **`Σ Δp ≡ 0 (mod ℏG)`** на обратной решётке (§5.2.4) | open |
+| **CL-O3** | орбиты **`g`** на конечном алфавите; modular bounce | open |
+| **CL-O4** | факторизация **`N = 2^9`** vs **`N_φ=13`**, **`2^{frac_bits}`** | partial (inventory) |
+
+**Не путать:** **`n∈ℤ`** (A10 заряд) — **не** mod **`N`**; winding над кольцом.
+
+**Код:** `congruence_ladder_row()` · verify **`Congruence_ladder`** · ledger **`LadderLedger`**.
+
