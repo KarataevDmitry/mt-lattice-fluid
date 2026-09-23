@@ -107,6 +107,28 @@
 
 ## §4. Impl status по разделам
 
+
+### §3.3–3.4 float prototype (historical · not M tick)
+
+Ранний float U(1) scalar path — **не** §3.12. Оставлено здесь, не в MODEL.
+
+**§3.3 split-step δS:**
+```
+S = Σ_{links} Re[ conj(z_x)(z_y - z_x) ] + Σ_x V(|z|²)
+z* = local_ca(z; γ)
+φ  = 2π · ( α* / (|z*|² + ε) - 1 ) · w(ρ)
+z' = z* · exp(i φ)
+```
+
+**§3.4 isotropic scalar gate:**
+```
+ζ = (Σ_N z) · z*
+φ = 2π · ( α*/(|z|²+ε) · Δφ − 1 ) · w(ρ)
+z' = z · exp(iφ)
+```
+
+Физика phase wrap **`ζ=(Σz)·z*`** перенесена в MODEL **§3.4** (holonomy carrier only).
+
 ### §3.6 Isotropic streaming
 
 - ✅ shipped · T1 **micro≈1.0**
