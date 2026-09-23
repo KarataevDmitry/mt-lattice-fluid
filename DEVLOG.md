@@ -265,6 +265,7 @@
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
 | 2026-09-23 | §8.2 α bridges | verify **`Alpha_bridges`**: δλ=α_fs(α*−1), B_hV runner, N_φ=|N₁₂|+1, Coulomb carrier PASS; (α*)³ cascade OPEN (~4%); e₀/sim OPEN |
 | 2026-09-23 | META §3.0 | карточка «два времени»: A5-пена M (нет начала/конца) vs наблюдаемая UI (генезис есть); §0.6 · §2.3 · MODEL hub |
+| 2026-09-23 | META §3.0.1 | наш пузырь: CMB→`N_tick` ✅; full `Ψ` via `g⁻¹` ✕ (ℬ); realistic = seed §3.6 + constraints |
 | 2026-09-23 | §8.2 ask-model ΔB | stamped $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
 | 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |
