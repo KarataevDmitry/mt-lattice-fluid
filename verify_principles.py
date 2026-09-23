@@ -350,6 +350,37 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_planck_from_cell_conditions(device: str = "cpu") -> dict:
+    """§7.3 — cell physics + geometry closes μ_P; conventional Planck derived via κ."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.planck_from_cell_conditions_row()
+    ok = (
+        row["closure_rho_cell_equals_mu_P"] is True
+        and row["closure_mP_over_lP3_equals_mu_P"] is True
+        and row["fluid_u_P_equals_mu_P_c2"] is True
+        and row["fluid_c2_equals_K_P_over_mu_P"] is True
+        and row["cell_m_arg_equals_mP_over_sqrt2"] is True
+        and row["cell_E0_equals_s0_over_hT"] is True
+        and row["bekenstein_algebraic"] is True
+        and abs(float(row["geometry_v_hV_over_lP3"]) - 1.0 / math.sqrt(2.0)) < 1e-12
+        and float(row["conventional_t_P_rel_err"]) < 1e-12
+        and float(row["conventional_E_P_rel_err"]) < 1e-12
+        and int(row["register_N_phi"]) == 13
+        and int(row["register_N_hier"]) == 8
+    )
+    return {
+        "id": "Planck_from_cell",
+        "closure_rho_cell_equals_mu_P": row["closure_rho_cell_equals_mu_P"],
+        "geometry_v_hV_over_lP3": row["geometry_v_hV_over_lP3"],
+        "conventional_t_P_rel_err": row["conventional_t_P_rel_err"],
+        "bekenstein_B_hV": row["bekenstein_B_hV"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_kappa_bottom_up(device: str = "cpu") -> dict:
     """§7.2 — Planck units embed c; κ_geom from hull; c=κc₀ is identity check."""
     from mt_ca.si_constants import KAPPA_FCC_1TICK, SI
@@ -1627,6 +1658,7 @@ def run_all(device: str) -> list[dict]:
         check_rhombic_dodecahedron_geometry(device=device),
         check_rhombic_dodecahedron_carrier_ask(device=device),
         check_kappa_bottom_up(device=device),
+        check_planck_from_cell_conditions(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),

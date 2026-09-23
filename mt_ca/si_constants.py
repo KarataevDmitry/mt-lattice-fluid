@@ -1093,6 +1093,73 @@ class SIConstants:
             "note": "§7.2: Planck ladder uses CODATA c; κ from §8.2·geo body — c/c₀ follows, not defines κ",
         }
 
+    def planck_from_cell_conditions_row(self) -> dict[str, float | int | str | bool]:
+        """§7.3 — Planck ladder from cell physics + geometry; (ℏ,G,c) consistency check."""
+        geo = self.cuboctahedron_geometry_row()
+        rd = self.rhombic_dodecahedron_geometry_row()
+        kappa = float(geo["kappa_inscribed_1tick"])
+        lp = self.l_P
+        ht = self.hT
+        t_p = self.t_P
+        s0 = self.s_0
+        e0 = self.E_0
+        e_p = self.E_P
+        c = self.c
+        c0 = self.c0
+        v_hv = float(rd["V_voronoi_m3"])
+        m_arg = self.m_arg
+        m_p = self.m_P
+        mu_p = self.mu_P
+        u_p = self.u_P
+        k_p = self.K_P
+        tol = 1e-11
+        rho_cell = m_arg / v_hv
+        e_brick_sat = u_p * v_hv
+        b_hv = 2.0 * math.pi / LN2
+        bekenstein_bits = 2.0 * math.pi * e_p * lp / (self.hbar * c * LN2)
+        hv = hv_bit_budget()
+        return {
+            "derivation_order": (
+                "geometry(v_hV,κ) → cell(s₀,E₀,m_arg) → ρ_cell=μ_P → fluid(u_P=μ_Pc²) "
+                "→ conventional t_P=hT/κ, E_P=E₀/κ"
+            ),
+            "geometry_v_hV_m3": v_hv,
+            "geometry_v_hV_over_lP3": v_hv / lp**3,
+            "geometry_kappa": kappa,
+            "cell_s0_J_s": s0,
+            "cell_s0_equals_hbar_half": abs(s0 - self.hbar / 2.0) / s0 < tol,
+            "cell_hT_s": ht,
+            "cell_E0_J": e0,
+            "cell_E0_equals_s0_over_hT": abs(e0 - s0 / ht) / e0 < tol,
+            "cell_m_arg_kg": m_arg,
+            "cell_m_arg_equals_E0_over_c2": abs(m_arg - e0 / c**2) / m_arg < tol,
+            "cell_m_arg_equals_mP_over_sqrt2": abs(m_arg - m_p / math.sqrt(2.0)) / m_arg < tol,
+            "closure_rho_cell_kg_m3": rho_cell,
+            "closure_mu_P_kg_m3": mu_p,
+            "closure_rho_cell_equals_mu_P": abs(rho_cell - mu_p) / mu_p < tol,
+            "closure_mP_over_lP3_equals_mu_P": abs(m_p / lp**3 - mu_p) / mu_p < tol,
+            "fluid_u_P_J_m3": u_p,
+            "fluid_u_P_equals_mu_P_c2": abs(u_p - mu_p * c**2) / u_p < tol,
+            "fluid_c2_equals_K_P_over_mu_P": abs(c**2 - k_p / mu_p) / c**2 < tol,
+            "fluid_K_P_equals_u_P": abs(k_p - u_p) / u_p < tol,
+            "brick_saturation_energy_J": e_brick_sat,
+            "conventional_t_P_derived_s": ht / kappa,
+            "conventional_t_P_conv_s": t_p,
+            "conventional_t_P_rel_err": abs(ht / kappa - t_p) / t_p,
+            "conventional_E_P_derived_J": e0 / kappa,
+            "conventional_E_P_conv_J": e_p,
+            "conventional_E_P_rel_err": abs(e0 / kappa - e_p) / e_p,
+            "conventional_l_P_from_cell_a_m": lp,
+            "conventional_l_P_from_sqrt_hbar_G_c": math.sqrt(self.hbar * self.G / c**3),
+            "bekenstein_B_hV": b_hv,
+            "bekenstein_algebraic": abs(bekenstein_bits - b_hv) / b_hv < tol,
+            "register_N_phi": hv.N_phi,
+            "register_N_hier": int(math.floor(b_hv)) - 1,
+            "absolute_inputs": "ℏ (s₀), G, c — measured; geometry+cell fix ratios and M-first tick",
+            "planck_not_primary": "t_P, E_P are derived from hT, E₀ via κ — not cell axioms",
+            "note": "§7.3: physics on hV closes μ_P; Planck-with-c is consistency layer, not κ definition",
+        }
+
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
         """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
         from mt_ca.em_plaquette import square_face_holonomy_probe
