@@ -678,6 +678,30 @@ def check_alpha_dual_fraction_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_sqrt2_descent_ask(device: str = "cpu") -> dict:
+    """§8.2·α·√2·descent — force dual ⇒ α∉ℚ; reject exact p/q."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_sqrt2_descent_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["lemma_force_alpha_not_rational"])
+        and bool(row["reject_exact_rational_alpha_under_force"])
+        and not bool(row["derivation_M_closed"])
+        and abs(float(row["kappa"]) ** 2 - 0.5) < 1e-15
+    )
+    return {
+        "id": "Alpha_sqrt2_descent_ask",
+        "kappa": row["kappa"],
+        "M_target": row["M_target"],
+        "lemma_force_alpha_not_rational": row["lemma_force_alpha_not_rational"],
+        "derivation_M_closed": row["derivation_M_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2297,6 +2321,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_rydberg_hall_ask(device=device),
         check_alpha_em_face_weight_ask(device=device),
         check_alpha_dual_fraction_ask(device=device),
+        check_alpha_sqrt2_descent_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

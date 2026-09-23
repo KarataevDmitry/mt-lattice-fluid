@@ -666,6 +666,15 @@ $$
 **Отвергнуто:** одна нога на оба ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
 **Сильнейшая живая dual сейчас:** $\alpha=\kappa/M$ — закрыть $M$ из $g$.
 **Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
+#### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
+**Лемма (force dual).** Пусть $\alpha=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
+Если $\alpha=p/q\in\mathbb{Q}$, то $\sqrt{2}=q/(pM)\in\mathbb{Q}$ — противоречие. Значит $\alpha\notin\mathbb{Q}$.
+**Следствия:**
+1. Точные $1/137$, $M/512$ и любой $p/q$ как *определение* α — **несовместимы** с dual $\kappa/M$.
+2. «Дробь $m/n$» на носителе ≠ $\alpha\in\mathbb{Q}$; это отношение двух величин носителя ($\kappa/M$ — иррациональное / целое).
+3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
+**Не закрывает** $M$ — только выкидывает рациональные самозванцы. Живой кандидат формы: $\alpha=\kappa/97$ (~−1040 ppm); $M$ из $g$ OPEN.
+**Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
 **Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
 | при `a=l_P` | формула | SI |

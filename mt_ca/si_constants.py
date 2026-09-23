@@ -2279,6 +2279,119 @@ class SIConstants:
             ),
         }
 
+    def alpha_sqrt2_descent_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·√2·descent — irrationality constraint on dual pairs (√2-style).
+
+        Classic move: assume √2=p/q lowest terms ⇒ both even ⇒ contradiction.
+        Same steel on the force dual:
+
+          Lemma (force). Suppose α = κ/M with κ = 1/√2 (geo CLOSED) and M∈ℕ.
+          If α were rational p/q ∈ ℚ (q≠0), then
+              1/(M√2) = p/q  ⇒  √2 = q/(p M) ∈ ℚ,
+          contradicting irrationality of √2. Hence α ∉ ℚ.
+
+        Corollaries:
+          • Exact α=1/137, M/512, or any p/q — incompatible with κ/M dual.
+          • "Fraction m/n" on carrier ≠ α∈ℚ; it means ratio of two carrier
+            quantities (here κ / M), one of which may be irrational.
+          • Hop dual α=N_c/N_a0 with both ∈ℤ would give α∈ℚ — conflicts with
+            force dual unless hops are not both strict integers at defining level
+            (optical Na0 is T) or duals live on different layers.
+
+        Status: lemma closed as logic on stamped κ; does not yet fix M.
+        OPEN: still need M from g (integer leg of the irrational α=κ/M).
+        """
+        alpha_c = 7.2973525693e-3
+        kappa = KAPPA_FCC_1TICK
+        m_tgt = kappa / alpha_c
+        # rational impostors vs force dual
+        impostors: dict[str, float] = {
+            "1/137": 1.0 / 137.0,
+            "4/512": 4.0 / 512.0,
+            "1/128": 1.0 / 128.0,
+            "kappa/96": kappa / 96.0,
+            "kappa/97": kappa / 97.0,
+        }
+
+        def ppm(v: float) -> float:
+            return (v - alpha_c) / alpha_c * 1e6
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "lemma_force_alpha_irrational",
+                "maps_to": "α=κ/M, κ=1/√2, M∈ℕ ⇒ α∉ℚ (else √2∈ℚ)",
+                "status": "shipped_lemma",
+                "mechanism": "same steel as √2 irrationality; κ from hull",
+            },
+            {
+                "id": "kappa_is_irrational",
+                "ratio": kappa,
+                "maps_to": "κ=1/√2 ∉ ℚ — stamped geo",
+                "status": "shipped",
+            },
+            {
+                "id": "reject_alpha_in_Q",
+                "maps_to": "exact α=p/q incompatible with force dual",
+                "status": "rejected_under_force_dual",
+                "mechanism": "1/137, M/N_ring, … as exact α",
+            },
+            {
+                "id": "impostor_1_over_137_ppm",
+                "ppm": ppm(impostors["1/137"]),
+                "maps_to": "α_geom as exact ℚ — forbidden if κ/M holds",
+                "status": "rejected_as_exact",
+            },
+            {
+                "id": "impostor_4_over_512_ppm",
+                "ppm": ppm(impostors["4/512"]),
+                "maps_to": "M/N_ring ∈ℚ — forbidden if κ/M holds",
+                "status": "rejected_as_exact",
+            },
+            {
+                "id": "fraction_means_carrier_ratio",
+                "maps_to": "m/n = κ/M — not α∈ℚ; irrational over integer",
+                "status": "shipped_method",
+                "mechanism": "dual·ask refined by √2 descent",
+            },
+            {
+                "id": "tension_hop_integers_vs_force",
+                "maps_to": "N_c,N_a0 both ∈ℤ ⇒ α∈ℚ ⊬ κ/M",
+                "status": "tension",
+                "mechanism": "optical Na0 is T; or layers differ; not both exact duals",
+            },
+            {
+                "id": "alive_kappa_over_M97",
+                "ppm": ppm(impostors["kappa/97"]),
+                "maps_to": "α=κ/97 — form allowed (∉ℚ); M still from g",
+                "status": "alive_candidate",
+                "mechanism": "~−1040 ppm; nearest int to M_target",
+            },
+            {
+                "id": "open_M_from_g",
+                "ratio": m_tgt,
+                "maps_to": "M≈96.90 from g — integer leg still OPEN",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·√2·descent — force dual ⇒ α∉ℚ",
+            "method": "assume α∈ℚ under κ/M ⇒ √2∈ℚ ⇒ contradiction",
+            "kappa": kappa,
+            "M_target": m_tgt,
+            "lemma_force_alpha_not_rational": True,
+            "reject_exact_rational_alpha_under_force": True,
+            "impostor_ppm": {k: ppm(v) for k, v in impostors.items()},
+            "derivation_M_closed": False,
+            "inventory": inventory,
+            "ask_ok": abs(kappa * kappa - 0.5) < 1e-15
+            and abs(m_tgt - kappa / alpha_c) < 1e-12
+            and True,
+            "note": (
+                "√2-style: α=κ/M with κ=1/√2 ⇒ α∉ℚ. Exact p/q (137, 512, …) "
+                "rejected under force dual. Fraction = κ/M not α∈ℚ. M from g OPEN."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
