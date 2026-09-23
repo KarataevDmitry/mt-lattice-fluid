@@ -286,6 +286,32 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 
+def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
+    """§8.2·geo — cuboctahedron V=(16/3)v_hV; discrete α candidate vs stamped π."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.cuboctahedron_geometry_row()
+    ok = (
+        abs(row["V_over_v_hV"] - 16.0 / 3.0) < 1e-12
+        and abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
+        and row["n_faces_square"] == 6
+        and row["n_faces_triangle"] == 8
+        and row["alpha_fs_inv_geom"] == 137.0
+        and row["alpha_inv_geom_rel_err"] < 0.001
+        and row["alpha_inv_stamped_rel_err"] < 1e-5
+    )
+    return {
+        "id": "Cuboctahedron_geo",
+        "V_over_v_hV": row["V_over_v_hV"],
+        "alpha_fs_inv_geom": row["alpha_fs_inv_geom"],
+        "alpha_inv_geom_rel_err": row["alpha_inv_geom_rel_err"],
+        "alpha_inv_stamped_rel_err": row["alpha_inv_stamped_rel_err"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_vacuum_bath(device: str = "cpu") -> dict:
     """§8.2·vac — A5 boiling bath algebra vs CMB reference (not same object)."""
     from mt_ca.si_constants import SI
@@ -1437,6 +1463,7 @@ def run_all(device: str) -> list[dict]:
         check_arg_quantum(device=device),
         check_higgs_mass(device=device),
         check_vacuum_bath(device=device),
+        check_cuboctahedron_geometry(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),
@@ -1493,4 +1520,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-                                                                                        

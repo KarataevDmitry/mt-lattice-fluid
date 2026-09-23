@@ -671,6 +671,56 @@ class SIConstants:
             "note": "§8.2·vac: A5 ocean bath; Bose u(ω) open; CMB = bubble T-layer only",
         }
 
+    def cuboctahedron_geometry_row(self) -> dict[str, float | int | str | bool]:
+        """§8.2·geo / §1.6.2 — 1-tick cuboctahedron (12 NN hull) intrinsic ratios; V=(16/3)v_hV."""
+        n12 = N12_FCC_CAUSAL_LINKS
+        n_tri = 8
+        n_sq = 6
+        n_edges = 24
+        girth = 3
+        d_spatial = 3
+        kappa = KAPPA_FCC_1TICK
+        lp = self.l_P
+        v_hv = lp**3 / math.sqrt(2.0)
+        edge_a = lp
+        vol_cubo = (8.0 / 3.0) * math.sqrt(2.0) * edge_a**3
+        v_over_v_hv = vol_cubo / v_hv
+        a_sq = n_sq * edge_a**2
+        a_tri = n_tri * (math.sqrt(3.0) / 4.0) * edge_a**2
+        a_total = a_sq + a_tri
+        r_out = edge_a
+        r_in_classical = edge_a * math.sqrt(6.0) / 6.0
+        alpha_inv_stamped = 4.0 * math.pi**3 + math.pi**2 + math.pi
+        alpha_inv_geom = float(n12 * (n12 + 1) - n_tri - 2 * n_sq + girth // d_spatial)
+        alpha_inv_geom_alt = float(
+            n12 * (n12 + 1) - n_tri - 2 * n_sq + v_over_v_hv / (n_sq * kappa**2)
+        )
+        codata_inv = self.alpha_fs_inv
+        return {
+            "n_nn": n12,
+            "n_edges": n_edges,
+            "n_faces_square": n_sq,
+            "n_faces_triangle": n_tri,
+            "edge_a_over_l_P": edge_a / lp,
+            "v_hV_m3": v_hv,
+            "V_cuboctahedron_m3": vol_cubo,
+            "V_over_v_hV": v_over_v_hv,
+            "V_over_v_hV_exact": "16/3",
+            "kappa_inscribed_1tick": kappa,
+            "R_in_over_R_out_classical": r_in_classical / r_out,
+            "A_square_over_A_total": a_sq / a_total,
+            "A_triangle_over_A_total": a_tri / a_total,
+            "dihedral_square_triangle_deg": 135.0,
+            "alpha_fs_inv_stamped": alpha_inv_stamped,
+            "alpha_fs_inv_geom": alpha_inv_geom,
+            "alpha_fs_inv_geom_alt": alpha_inv_geom_alt,
+            "alpha_fs_inv_CODATA": codata_inv,
+            "alpha_inv_geom_rel_err": abs(alpha_inv_geom - codata_inv) / codata_inv,
+            "alpha_inv_geom_alt_rel_err": abs(alpha_inv_geom_alt - codata_inv) / codata_inv,
+            "alpha_inv_stamped_rel_err": abs(alpha_inv_stamped - codata_inv) / codata_inv,
+            "note": "§8.2·geo: V_cubo=(16/3)v_hV at a=l_P; α_geom exploratory, stamped α still π-ansatz",
+        }
+
     def decay_row(self) -> dict[str, float | bool | str]:
         """§8.2 decay — topo frame; ΔB≠0 banned; weak ΔB=0 class allowed; Γ open."""
         return {
