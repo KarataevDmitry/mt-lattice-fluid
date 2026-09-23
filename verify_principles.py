@@ -286,6 +286,35 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 
+def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
+    """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
+    from mt_ca.si_constants import SI
+
+    row = SI.square_face_holonomy_probe_row(grid=16, device=device)
+    ok = (
+        abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
+        and abs(row["phi_square_vac_rad"]) < 0.2
+        and abs(row["delta_phi_nn_vortex"]) > 0.5
+        and row["readout_ok"]
+        and row["alpha_match_open"]
+        and row["V_over_v_hV"] == 16.0 / 3.0
+    )
+    return {
+        "id": "Phi_square_probe",
+        "phi_square_vortex_rad": row["phi_square_vortex_rad"],
+        "delta_phi_nn_vortex": row["delta_phi_nn_vortex"],
+        "delta_phi_nn_alpha_link": row["delta_phi_nn_alpha_link"],
+        "alpha_link_readout_rel_err": row["alpha_link_readout_rel_err"],
+        "B_square_vortex_T": row["B_square_vortex_T"],
+        "alpha_fs": row["alpha_fs"],
+        "alpha_from_E_rel_err": row["alpha_from_E_rel_err"],
+        "alpha_match_open": row["alpha_match_open"],
+        "readout_ok": row["readout_ok"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     """§8.2·geo·ask — body ratio inventory; shipped κ/κ_link/V identity; holonomy/α open."""
     from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI, kappa_link
@@ -1504,6 +1533,7 @@ def run_all(device: str) -> list[dict]:
         check_vacuum_bath(device=device),
         check_cuboctahedron_geometry(device=device),
         check_cuboctahedron_carrier_ask(device=device),
+        check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),

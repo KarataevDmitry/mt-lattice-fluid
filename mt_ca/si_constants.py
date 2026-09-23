@@ -903,6 +903,14 @@ class SIConstants:
             "note": "§8.2·geo·ask: dimensional body at a=l_P first; ratios derived",
         }
 
+    def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
+        """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
+        from mt_ca.em_plaquette import square_face_holonomy_probe
+
+        row = square_face_holonomy_probe(grid=grid, device=device)
+        row["edge_a_over_l_P"] = row["edge_a_m"] / self.l_P
+        return row
+
     def decay_row(self) -> dict[str, float | bool | str]:
         """§8.2 decay — topo frame; ΔB≠0 banned; weak ΔB=0 class allowed; Γ open."""
         return {
