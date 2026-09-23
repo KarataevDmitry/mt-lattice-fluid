@@ -1198,7 +1198,9 @@ class SIConstants:
             "m_arg_mech_equals_em": abs(m_arg_mech - m_arg_em) / m_arg_em < tol,
             "p0_equals_hbar_over_2lP": abs(p0 - self.hbar / (2.0 * lp)) / p0 < tol,
             "absolute_SI_still_needs": "ℏ, G (+ c or mechanical anchor) for meters — not for M ruler",
-            "note": "§7.4: a=l_P forced; textbook Planck with c is overdetermined check, not ruler definition",
+            "postulate_0_1_scope": "hL,hT symbols + no sub-dl only — not l_P, not sqrt(hbar G/c^3)",
+            "identification_is_theorem_not_postulate": True,
+            "note": "§7.4: a=l_P forced; Postulate 0.1 must not presuppose Planck name",
         }
 
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
