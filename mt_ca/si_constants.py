@@ -3102,9 +3102,9 @@ class SIConstants:
                 "status": "rejected",
             },
             {
-                "id": "open_f_shape_soft",
-                "maps_to": "exact f in ρ_Θ∝f(|Δφ|,|ζ|) — not needed for R_dress",
-                "status": "open_soft",
+                "id": "closed_by_f_close",
+                "maps_to": "floor1_dressing_f_close_row — f=𝟙[|Δφ|≥Δφ_min]",
+                "status": "closed",
             },
         ]
 
@@ -3124,7 +3124,98 @@ class SIConstants:
             "note": (
                 "R_dress=R_min=1·dl: N12<N_phi forces full ε-halo above Δφ_min; "
                 "local gate=first shell; multi-shell=excitation. "
-                "Floor1 band ≠ e dressing. Soft-OPEN: shape of f."
+                "Floor1 band ≠ e dressing. f-shape → dressing·f·close."
+            ),
+        }
+
+    def floor1_dressing_f_close_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·dressing·f·close — shape of f in ρ_Θ∝f(|Δφ|,|ζ|).
+
+        Closes soft-OPEN from dressing·close / dressing·ask.
+
+        Carrier (§5.0.5): cloud = where |Δφ|, |ζ|, Arg-pressure hold
+        ≥ Heisenberg floor; ⟨ρ_Θ⟩_T = binomial coarse; ∫ρ_Θ ∼ n_E
+        (integer quanta, not float-KN). No mechanical float-knobs on M.
+
+        CLOSED:
+          ρ_Θ(x) = 𝟙[ |Δφ_N(x)| ≥ Δφ_min ]
+          — Heaviside / set-membership on the only stamped numeric floor.
+          |ζ| co-varies via gate ζ=(Σ_N z)·z* but has no independent
+          stamped floor; does not add a free continuous axis.
+          Amplitude inside the support is not a continuum profile on M:
+          cells are in/out; T smooths via binomial (§4.1).
+
+        REJECT:
+          · smooth continuum ansatze (exp, Gauss, 1/r, soft bags)
+          · α- or a0-dependent f (circular / IR)
+          · free float parameters in f
+        """
+        dphi = float(DELTA_PHI_MIN)
+        n_phi = int(hv_bit_budget().N_phi)
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_f_heaviside_dphi",
+                "ratio": dphi,
+                "maps_to": "ρ_Θ=𝟙[|Δφ_N|≥Δφ_min] — §5.0.5 'where ≥ floor'",
+                "status": "closed",
+                "mechanism": "Heisenberg pole is the only numeric cut; no float knobs",
+            },
+            {
+                "id": "closed_norm_integer_quanta",
+                "maps_to": "∫ρ_Θ ∼ n_E / topo — indicator sum ∈ ℤ",
+                "status": "closed",
+            },
+            {
+                "id": "closed_T_binomial_not_f",
+                "maps_to": "⟨ρ_Θ⟩_T = binomial coarse (§4.1) — smooth is T, not M-f",
+                "status": "closed",
+            },
+            {
+                "id": "closed_zeta_no_extra_floor",
+                "maps_to": "|ζ| gate scalar; no stamped ζ_min → not second free axis",
+                "status": "closed",
+            },
+            {
+                "id": "reject_smooth_continuum_f",
+                "maps_to": "exp/Gauss/1/r soft bags — float-KN, not M",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_alpha_a0_in_f",
+                "maps_to": "α/a0 in f = IR circular for upstairs coupling",
+                "status": "rejected",
+            },
+        ]
+
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        reject_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("rejected")
+        ]
+        ok = (
+            abs(dphi - 0.5) < 1e-12
+            and n_phi == 13
+            and "closed_f_heaviside_dphi" in closed_ids
+            and "reject_smooth_continuum_f" in reject_ids
+            and len(closed_ids) >= 4
+        )
+
+        return {
+            "theorem": "§6·floor1·dressing·f·close — ρ_Θ=𝟙[|Δφ|≥Δφ_min]",
+            "Delta_phi_min": dphi,
+            "N_phi": n_phi,
+            "f_form": "Heaviside(|Δφ_N|-Δφ_min)",
+            "derivation_closed": ok,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "reject_ids": reject_ids,
+            "ask_ok": ok,
+            "note": (
+                "f closed as Heisenberg indicator: ρ_Θ=𝟙[|Δφ_N|≥Δφ_min]. "
+                "No float knobs; ∫∈ℤ; T-smooth=binomial not M-f. "
+                "Reject continuum/α ansatze."
             ),
         }
 

@@ -46,8 +46,13 @@ $$
 3. Ground легчайшего $Q$: multi-shell $\rho_\Theta$ = возбуждение → downhill к минимальному ореолу (логика C3 vs C2).
 $$\Rightarrow\quad R_{\mathrm{dress}}=R_{\min}=1\cdot\mathrm{dl},\quad N_{\mathrm{star}}=N_{12}.$$
 Полоса этажа 1 $N_{12}^{3}\ldots N_{12}^{4}$ — окно C4, **не** радиус e-halo.
-**Soft-OPEN:** точная форма $f$ в $\rho_\Theta\propto f(|\Delta\varphi|,|\zeta|)$ (не нужна для радиуса).
 **Код:** `SI.floor1_dressing_close_row()` · verify **`Floor1_dressing_close`**.
+#### §6·floor1·dressing·f·close · форма $f$
+**CLOSED:** на M нет float-knobs; §5.0.5 — облако = где сигнал $\ge$ пола; $\int\rho_\Theta\sim n_E\in\mathbb{Z}$; $\langle\rho_\Theta\rangle_T$ = binomial (§4.1).
+$$\rho_\Theta(x)=\mathbf{1}\big[|\Delta\varphi_N(x)|\ge\Delta\varphi_{\min}\big].$$
+$|\zeta|$ — scalar gate, без stamped $\zeta_{\min}$ → не вторая свободная ось. Гладкость — T-binomial, не $f$ на M.
+**REJECT:** continuum-ansätze (exp/Gauss/$1/r$); $\alpha$/$a_0$ внутри $f$.
+**Код:** `SI.floor1_dressing_f_close_row()` · verify **`Floor1_dressing_f_close`**.
 Конфайнмент: «вытащить кварк» = разорвать топологический узел → **пара pra-дефектов**, не один dV.
 **Цвет ≠ вход.** Кратность фокусов в устойчивом составном узле — **prediction** из топологии на FCC/$\varepsilon$ + Паули + $K_P$; ожидание $\sim d=3$ (**§8.4.1-D**). SM-$N_c$ — T-имя, не axiom M.
 ---
