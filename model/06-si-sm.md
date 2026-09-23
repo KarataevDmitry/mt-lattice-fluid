@@ -28,7 +28,12 @@ $$
 | C5 пара $\pm$ на этом R | нет | аннигиляция §5.0.3 |
 | C6 нейтральный $L$-сектор | возможно (off-band) | $R_\nu\not\equiv N_{12}^{3\ldots4}$ — не объект полосы |
 **Острый вывод:** единственная устойчивая *материя* B=0 на этом радиусе — **C2** (одетый легчайший $Q=\pm1$). Имя этажа «пре-резонанс» = **C4** — неустойчиво по построению.
-**Код (leftovers):** `SI.floor1_leftovers_close_row()` · verify **`Floor1_leftovers_close`** — существование C3-канала CLOSED; $\nu$ off-band; soft-OPEN только $\Gamma$.
+**Код (leftovers):** `SI.floor1_leftovers_close_row()` · verify **`Floor1_leftovers_close`** — существование C3-канала CLOSED; $\nu$ off-band.
+#### §6·floor1·C3·gamma·close · что с «скоростью» распада
+**Не закон M:** $N(t)=N_0 e^{-t/\tau}$, $\Gamma=\hbar/\tau$ — это T-статистика многих систем (§8.2 · §2.1), не онтология тика.
+**CLOSED на M:** часы = $n_{\mathrm{ticks}}\in\mathbb{N}\cdot hT$. Для *локального* C3 (лишняя оболочка / возбуждённый ореол того же $Q$): downhill локальный (A1 · dressing·close) $\Rightarrow$ $n_{\mathrm{ticks}}=1$, $\tau_M=1\cdot hT$.
+**Не здесь:** PDG-время жизни $\mu$ (нужен лист массы/композита).
+**Код:** `SI.floor1_C3_gamma_close_row()` · verify **`Floor1_C3_gamma_close`**.
 **Код:** `SI.floor1_B0_census_ask_row()` · verify **`Floor1_B0_census_ask`**.
 #### §6·floor1·dressing·ask · Что за обёртка электрона
 **Вопрос носителю (§5.0.5), не выдумка:** что такое near-zone легчайшего $Q=\pm1$, и что фиксирует её радиус?

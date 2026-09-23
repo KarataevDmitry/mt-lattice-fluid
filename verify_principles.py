@@ -788,7 +788,7 @@ def check_floor1_B0_census_ask(device: str = "cpu") -> dict:
         and bool(row["census_ok"])
         and bool(row["derivation_closed"])
         and not bool(row["sim_metastable_maps_open"])
-        and bool(row["soft_Gamma_open"])
+        and not bool(row["soft_Gamma_open"])
         and row["stable_matter_ids"] == ["C2_lightest_Q_pm1_dressed"]
         and row["pre_resonance_ids"] == ["C4_Q0_multicell_blob"]
         and row["classes"][3]["status"] == "unstable_channel_closed"
@@ -892,15 +892,40 @@ def check_floor1_leftovers_close(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["derivation_closed"])
         and bool(row["C3_channel_existence_closed"])
-        and bool(row["C3_Gamma_soft_open"])
+        and not bool(row["C3_Gamma_soft_open"])
         and bool(row["nu_floor1_size_rejected"])
         and "closed_C3_channel_existence" in row["closed_ids"]
-        and "soft_open_C3_Gamma" in row["soft_open_ids"]
+        and "closed_by_C3_gamma" in row["closed_ids"]
+        and row["soft_open_ids"] == []
     )
     return {
         "id": "Floor1_leftovers_close",
         "C3_channel_existence_closed": row["C3_channel_existence_closed"],
         "nu_floor1_size_rejected": row["nu_floor1_size_rejected"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_floor1_C3_gamma_close(device: str = "cpu") -> dict:
+    """§6·floor1·C3·gamma·close — local C3 clock = 1·hT; reject continuum Γ."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_C3_gamma_close_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and int(row["n_ticks_local"]) == 1
+        and abs(float(row["tau_M_local_s"]) - float(row["hT_s"])) < 1e-30
+        and "closed_local_C3_one_tick" in row["closed_ids"]
+        and "reject_continuum_Gamma_as_M_law" in row["reject_ids"]
+    )
+    return {
+        "id": "Floor1_C3_gamma_close",
+        "n_ticks_local": row["n_ticks_local"],
+        "tau_M_local_s": row["tau_M_local_s"],
         "derivation_closed": row["derivation_closed"],
         "ok": ok,
         "note": row["note"],
@@ -2535,6 +2560,7 @@ def run_all(device: str) -> list[dict]:
         check_floor1_dressing_close(device=device),
         check_floor1_dressing_f_close(device=device),
         check_floor1_leftovers_close(device=device),
+        check_floor1_C3_gamma_close(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

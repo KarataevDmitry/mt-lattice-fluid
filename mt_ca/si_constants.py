@@ -2897,13 +2897,13 @@ class SIConstants:
             ),
             "census_ok": census_ok,
             "derivation_closed": census_ok,
-            "sim_metastable_maps_open": False,  # C3 existence closed; Γ soft
-            "soft_Gamma_open": True,
+            "sim_metastable_maps_open": False,
+            "soft_Gamma_open": False,  # → C3·gamma·close
             "ask_ok": census_ok,
             "note": (
                 "B=0 census @ N₁₂³…N₁₂⁴: C2 dressed e± STABLE; "
                 "C4 Q=0 blobs = pre-resonances UNSTABLE; "
-                "C5 ± annihilate; C3 channel existence CLOSED (Γ soft); "
+                "C5 ± annihilate; C3 channel CLOSED; Γ → C3·gamma·close (τ_M=1·hT); "
                 "C6 ν off-band (R≠floor1)."
             ),
         }
@@ -3235,7 +3235,7 @@ class SIConstants:
           Multi-shell excitation already downhill (dressing·close).
           §8.2: composite/excited «may have channel down».
           ⇒ channel *existence* CLOSED; object UNSTABLE.
-          Soft-OPEN: Γ / lifetime / BR (not needed to leave floor1).
+          Γ soft → floor1_C3_gamma_close_row (not continuum ℏ/τ on M).
 
         C6 / ν:
           May be stable if lightest in L sector — off this length window.
@@ -3256,9 +3256,9 @@ class SIConstants:
                 "mechanism": "§8.2 decay + dressing·close multi-shell",
             },
             {
-                "id": "soft_open_C3_Gamma",
-                "maps_to": "Γ/τ/BR for C3 — rate, not existence",
-                "status": "open_soft",
+                "id": "closed_by_C3_gamma",
+                "maps_to": "floor1_C3_gamma_close_row — M clock=n_ticks·hT",
+                "status": "closed",
             },
             {
                 "id": "closed_nu_reject_floor1_size",
@@ -3281,14 +3281,13 @@ class SIConstants:
         closed_ids = [
             i["id"] for i in inventory if str(i["status"]).startswith("closed")
         ]
-        soft_open = [i["id"] for i in inventory if i["status"] == "open_soft"]
         ok = (
             n12 == 12
             and r_lo == 1728.0
             and r_hi == 20736.0
             and "closed_C3_channel_existence" in closed_ids
             and "closed_nu_reject_floor1_size" in closed_ids
-            and "soft_open_C3_Gamma" in soft_open
+            and "closed_by_C3_gamma" in closed_ids
         )
 
         return {
@@ -3297,16 +3296,94 @@ class SIConstants:
             "R_lo_dl": r_lo,
             "R_hi_dl": r_hi,
             "C3_channel_existence_closed": True,
-            "C3_Gamma_soft_open": True,
+            "C3_Gamma_soft_open": False,
             "nu_floor1_size_rejected": True,
             "derivation_closed": ok,
             "inventory": inventory,
             "closed_ids": closed_ids,
-            "soft_open_ids": soft_open,
+            "soft_open_ids": [],
             "ask_ok": ok,
             "note": (
-                "Floor1 leftovers: C3→C2+γ existence CLOSED (Γ soft); "
-                "ν size ≠ N12^{3…4} (off-band). Band content done."
+                "Floor1 leftovers: C3→C2+γ existence CLOSED; "
+                "Γ → C3·gamma·close; ν off-band. Band content done."
+            ),
+        }
+
+    def floor1_C3_gamma_close_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·C3·gamma·close — dissolve soft Γ into M tick clock.
+
+        Soft was «find Γ=ℏ/τ». Carrier (§8.2 decay):
+
+          Continuum N(t)=N0 e^{-t/τ}, Γ=ℏ/τ, BR — NOT laws of M.
+          That is T-statistics of many systems (§2.1). g is deterministic.
+
+        CLOSED on M:
+          · Clock = n_ticks ∈ ℕ · hT (ledger time), not float Γ.
+          · Local C3 (multi-shell / excess halo same Q): downhill is
+            local gate (A1 · dressing·close) ⇒ n_ticks = 1.
+          · Reject treating soft as free continuum rate knob on M.
+
+        NOT claimed here:
+          · PDG μ lifetime (composite organ + m_μ — other leaf).
+          · Ensemble T-exponential fit numbers.
+        """
+        n_ticks_local = 1
+        h_t = float(self.hT)
+        tau_m = float(n_ticks_local) * h_t
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "reject_continuum_Gamma_as_M_law",
+                "maps_to": "§8.2: N(t)=e^{-t/τ}, Γ=ℏ/τ — T-stat, not M",
+                "status": "rejected",
+            },
+            {
+                "id": "closed_M_clock_n_ticks",
+                "ratio": float(n_ticks_local),
+                "maps_to": "τ_M = n_ticks·hT, n_ticks∈ℕ — deterministic g",
+                "status": "closed",
+            },
+            {
+                "id": "closed_local_C3_one_tick",
+                "ratio": tau_m,
+                "maps_to": "local multi-shell C3: n_ticks=1 (A1+local downhill)",
+                "status": "closed",
+                "mechanism": "dressing·close: excitation sheds in one hT",
+            },
+            {
+                "id": "reject_PDG_mu_lifetime_here",
+                "maps_to": "μ τ_PDG needs m_μ/composite leaf — not floor1 soft",
+                "status": "rejected_as_this_leaf",
+            },
+        ]
+
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        reject_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("rejected")
+        ]
+        ok = (
+            n_ticks_local == 1
+            and tau_m == h_t
+            and "closed_M_clock_n_ticks" in closed_ids
+            and "closed_local_C3_one_tick" in closed_ids
+            and "reject_continuum_Gamma_as_M_law" in reject_ids
+        )
+
+        return {
+            "theorem": "§6·floor1·C3·gamma·close — τ_M=1·hT for local C3",
+            "n_ticks_local": n_ticks_local,
+            "hT_s": h_t,
+            "tau_M_local_s": tau_m,
+            "derivation_closed": ok,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "reject_ids": reject_ids,
+            "ask_ok": ok,
+            "note": (
+                "Soft Γ dissolved: continuum ℏ/τ ≠ M. Local C3 clock = 1·hT. "
+                "μ PDG lifetime is another leaf, not this soft."
             ),
         }
 
