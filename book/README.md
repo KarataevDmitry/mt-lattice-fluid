@@ -10,6 +10,7 @@ cd book
 ```
 
 PDF: `book/pdf/main.pdf` (XeLaTeX, Times New Roman).
+Если PDF открыт в просмотрщике, `build.ps1` пишет в `pdf/main-latest.pdf` — закрой вкладку и пересобери, или открой `-latest`.
 
 ## Структура
 
