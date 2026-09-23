@@ -702,6 +702,29 @@ def check_alpha_sqrt2_descent_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
+    """§8.2·α·M·g·try — M=1+N12·N_hier story; not full census close."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_M_from_g_try_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["story_ok"])
+        and not bool(row["derivation_closed"])
+        and int(row["M_try"]) == 97
+    )
+    return {
+        "id": "Alpha_M_from_g_try",
+        "M_try": row["M_try"],
+        "alpha_try": row["alpha_try"],
+        "vs_codata_ppm": row["vs_codata_ppm"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2322,6 +2345,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_em_face_weight_ask(device=device),
         check_alpha_dual_fraction_ask(device=device),
         check_alpha_sqrt2_descent_ask(device=device),
+        check_alpha_M_from_g_try(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

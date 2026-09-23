@@ -2392,6 +2392,121 @@ class SIConstants:
             ),
         }
 
+    def alpha_M_from_g_try_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·M·g·try — try close integer M from stamped g/Bekenstein bits.
+
+        Dual: α=κ/M. κ CLOSED. Need M∈ℕ without α.
+
+        Already stamped (not new knobs):
+          N₁₂ = 12 (FCC links)
+          ⌊B_hV⌋ = 9
+          N_hier = ⌊B_hV⌋ − 1 = 8  — hierarchy channels after removing
+            occupancy bit b (§8.4.1-A / T1)
+          b∈{0,1} on pra-core (A11)
+
+        Try (force accounting):
+          Hierarchy forbids counting b inside N_hier (−1).
+          Coulomb NN force still sits on a charged core (b=1) plus the
+          link×hierarchy budget that carries the kick ledger outward:
+            M = 1 + N₁₂ · N_hier
+              = 1 + N₁₂ · (⌊B_hV⌋ − 1)
+              = 97
+          Reading: one F₀ seat on the occupied hV + N₁₂·N_hier seats on
+          the causal star × hierarchy depth. Same −1/+1 bookkeeping as T1,
+          inverted for EM force quanta (Thm 5.1 n_F).
+
+        Score AFTER: α=κ/97 ~ −1040 ppm vs CODATA (higher structure / soft).
+        M=96 = N₁₂·N_hier alone — misses core seat (~+9366 ppm).
+
+        Status: motivated try from stamped integers — NOT full g-sim proof.
+        OPEN: ledger census that n_F for NN Coulomb equals 97 exactly.
+        """
+        hv = hv_bit_budget()
+        kappa = KAPPA_FCC_1TICK
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        floor_b = int(math.floor(hv.B_hV))
+        n_hier = floor_b - 1
+        alpha_c = 7.2973525693e-3
+        m_96 = n12 * n_hier
+        m_try = 1 + n12 * n_hier
+        m_alt = n12 * floor_b - n12 + 1  # algebraically = m_try
+        a_try = kappa / m_try
+        a_96 = kappa / m_96
+        m_target = kappa / alpha_c
+
+        def ppm(a: float) -> float:
+            return (a - alpha_c) / alpha_c * 1e6
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "N_hier_minus_b_bit",
+                "ratio": n_hier,
+                "maps_to": "N_hier=⌊B_hV⌋−1 — stamped T1",
+                "status": "shipped",
+                "mechanism": "hierarchy channels exclude occupancy bit b",
+            },
+            {
+                "id": "try_M_one_plus_N12_Nhier",
+                "ratio": m_try,
+                "maps_to": "M=1+N₁₂·N_hier — core seat + link×hier",
+                "status": "try",
+                "mechanism": "invert T1 bookkeeping for EM n_F count",
+            },
+            {
+                "id": "algebra_same_as_N12_floorB_minus_N12_plus_1",
+                "ratio": m_alt,
+                "maps_to": "M=N₁₂⌊B_hV⌋−N₁₂+1 ≡ 1+N₁₂ N_hier",
+                "status": "identity",
+            },
+            {
+                "id": "reject_M96_missing_core",
+                "ppm": ppm(a_96),
+                "maps_to": "M=N₁₂ N_hier alone — no b=1 force seat",
+                "status": "rejected_as_complete_count",
+                "mechanism": "cleaner combo, worse ppm; misses charged core",
+            },
+            {
+                "id": "score_kappa_over_97",
+                "ppm": ppm(a_try),
+                "maps_to": "α=κ/97 after try",
+                "status": "scored_after",
+                "mechanism": "~−1040 ppm — soft/higher structure, not α-input",
+            },
+            {
+                "id": "open_g_ledger_census",
+                "maps_to": "prove n_F(NN Coulomb)=97 from kick ledger / sim",
+                "status": "open",
+                "mechanism": "story≠theorem until census",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·M·g·try — M=1+N₁₂ N_hier from b-bit bookkeeping",
+            "floor_B_hV": floor_b,
+            "N_hier": n_hier,
+            "N12": n12,
+            "M_try": m_try,
+            "M_96": m_96,
+            "M_target_CODATA": m_target,
+            "M_algebra_check": m_alt,
+            "kappa": kappa,
+            "alpha_try": a_try,
+            "alpha_try_inv": 1.0 / a_try,
+            "vs_codata_ppm": ppm(a_try),
+            "vs_codata_ppm_M96": ppm(a_96),
+            "story_ok": m_try == 97 and m_alt == m_try and n_hier == 8,
+            "derivation_closed": False,
+            "inventory": inventory,
+            "ask_ok": m_try == 97
+            and abs(m_alt - m_try) < 1e-15
+            and n_hier == floor_b - 1
+            and abs(ppm(a_try) + 1040.3688788164525) < 1.0,
+            "note": (
+                "Try: M=1+N₁₂·N_hier=97 from core b=1 + link×hier "
+                "(same −1 as N_hier). α=κ/97 ~−1040 ppm. "
+                "OPEN: g-ledger census. Not full close."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

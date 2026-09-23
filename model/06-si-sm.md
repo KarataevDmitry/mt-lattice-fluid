@@ -675,6 +675,19 @@ $$
 3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
 **Не закрывает** $M$ — только выкидывает рациональные самозванцы. Живой кандидат формы: $\alpha=\kappa/97$ (~−1040 ppm); $M$ из $g$ OPEN.
 **Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
+#### §8.2·α·M·g·try · Попытка: $M$ из stamped бит-бюджета
+**Dual:** $\alpha=\kappa/M$. $\kappa$ закрыт. Нужен $M\in\mathbb{N}$ без α.
+**Уже stamped:** $N_{12}=12$; $\lfloor B_{hV}\rfloor=9$; $N_{\mathrm{hier}}=\lfloor B_{hV}\rfloor-1=8$ (T1: минус бит занятости $b$); $b\in\{0,1\}$ на ядре.
+**Try (бухгалтерия силы):** иерархия **не** считает $b$ внутри $N_{\mathrm{hier}}$. Кулон на NN всё же сидит на **заряженном ядре** ($b=1$) плюс канал link×hier наружу:
+$$
+M = 1 + N_{12}\cdot N_{\mathrm{hier}}
+= 1 + N_{12}\cdot(\lfloor B_{hV}\rfloor - 1)
+= 97.
+$$
+Чтение: одно место $F_0$ на занятом $hV$ + $N_{12}\cdot N_{\mathrm{hier}}$ мест на звезде × глубина иерархии. Тот же $-1/+1$, что T1, **инвертированный** для EM $n_F$.
+**После:** $\alpha=\kappa/97$ ~−1040 ppm. $M=96$ без ядра — ~+9366 ppm, неполный счёт.
+**Статус:** мотивированный try из stamped целых — **не** полный proof из sim ledger. OPEN: census $n_F(\mathrm{NN\ Coulomb})=97$.
+**Код:** `SI.alpha_M_from_g_try_row()` · verify **`Alpha_M_from_g_try`**.
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
 **Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
 | при `a=l_P` | формула | SI |

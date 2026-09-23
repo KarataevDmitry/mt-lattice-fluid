@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-24 | §8.2·α·M·g·try | M=1+N₁₂·N_hier=97 (core b + link×hier); α=κ/97 ~−1040ppm; census OPEN · Alpha_M_from_g_try PASS |
 | 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent_ask PASS |
 | 2026-09-24 | §8.2·α·dual | method α=m/n two paths; alive: κ/M (M open), ae/(2r); reject M/512 single-path · Alpha_dual_fraction_ask PASS |
 | 2026-09-24 | §8.2·α·EM·faces | w_□/w_△/dihedral/V/S body ok but ≠α (wrong scale); α_geom=counts≠areas; OPEN Φ_□ · Alpha_em_face_weight_ask PASS |
