@@ -1,0 +1,279 @@
+\chapter{Физическое обоснование абсолютных условий}
+\label{ch:axiom-rationale}
+
+\section{Зачем аксиомы, если есть закон \texorpdfstring{$g$}{g}}
+
+Модель строится в два слоя.
+На \emph{микро}уровне $\Mlayer$ --- счётный носитель состояний и локальный, обратимый шаг $g$.
+На \emph{macro}уровне $\Tlayer$ --- грубый readout (усреднение, binomial blur, Madelung-представление),
+из которого восстанавливаются поля, волновые уравнения и константы SI.
+
+Закон $g$ не выбирается «из головы'' как ansatz cellular automaton.
+Он --- \emph{замыкание} системы ограничений, которые уже заданы известной физикой:
+каузальность и локальность (СТО), сохранение информации (унитарность QM),
+термодинамика (второй и третий законы), квантование заряда и спина,
+дискретная аналитичность (голоморфность комплексного поля),
+симметрии PCT и U(1)$_{\mathrm{vac}}$, геометрический принцип наименьшего действия.
+
+\paragraph{Абсолютные условия A1--A16.}
+Это не «настройки симулятора'' и не fitted parameters.
+Каждое условие --- формализация физического требования к \emph{допустимому} локальному закону.
+Если условие нарушено, модель теряет соответствующий класс явлений на $\Tlayer$
+(скорость света, унитарность, необратимость entropy, заряд $e$, spin-$1/2$, и т.д.).
+
+\paragraph{Порядок изложения.}
+Настоящая глава --- \emph{мотивация}: откуда в физике берётся каждая группа условий.
+Следующая глава (\cref{ch:axioms}) --- формальный реестр A1--A16 с уравнениями.
+Геометрия носителя, теорема дискретности и явный вид $g$ --- в главах~\ref{ch:carrier}--\ref{ch:evolution}.
+
+\section{Дискретный субстрат вместо континуума на \texorpdfstring{$\Mlayer$}{M}}
+
+\begin{remark}[Информационный предел]
+Комбинация каузальности, конечной энергии в объёме и квантовой неопределённости
+накладывает верхнюю границу плотности информации (Bekenstein bound, holographic scaling).
+На планковских масштабах трактовать состояние как непрерывное поле $z(x)\in\mathbb{C}$ на $x\in\mathbb{R}^3$
+--- значит postulate бесконечный объём фазового пространства на точку,
+несовместимый с конечным числом distinguishable конфигураций в causally connected объёме.
+\end{remark}
+
+На $\Mlayer$ состояние --- \emph{конечный} регистр на ячейке $\PlanckCell$ (алфавит $Z_N[i]$),
+эволюция --- перестановка счётного множества конфигураций, не поток в континууме.
+Непрерывные поля, дифференциальные уравнения и «предел $\hl\to 0$'' --- только readout $\Tlayer$
+на \emph{фиксированной} решётке; см. \cref{cor:no-continuum} в гл.~\ref{ch:foundations}.
+
+\paragraph{Следствие для выбора условий.}
+Любой допустимый $g$ должен:
+\begin{itemize}
+\item быть \textbf{локальным} и \textbf{каузальным} (информация не опережает light-cone);
+\item \textbf{сохранять} норму состояния (нет dissipation информации на micro-шаге);
+\item иметь \textbf{конечный} алфавит и \textbf{обратимый} шаг (нет необратимого стирания bit);
+\item уважать \textbf{термодинамические} запреты (нет абсолютного нуля, есть потолок плотности);
+\item воспроизводить \textbf{топологию} заряда и \textbf{спин} $1/2$ на одной ячейке.
+\end{itemize}
+Именно эти требования группируются в A1--A16.
+
+\section{Каузальность, локальность, изотropия}
+\label{sec:rat-causality}
+
+\paragraph{Специальная теория относительности.}
+Скорость распространения сигнала ограничена $c$.
+На дискретном носителе это означает: за один такт $\htick$ возмущение не может пройти
+дальше одного шага $\hl$ по решётке; вторая координационная оболочка за тик запрещена
+(иначе «диагональ за тик'' --- superluminal stencil).
+
+\paragraph{Локальность поля.}
+Continuum-уравнения (Klein--Gordon, Dirac, гидродинамика) в пределе $\Tlayer$
+восстанавливаются из \emph{локальных} stencils: новое значение в точке $x$ зависит
+только от окрестности $N(x)$, не от всего пространства.
+
+\paragraph{Изотropия macro-света.}
+Micro-шаг может быть анизотропным на решётке; macro-readout усредняет направления
+до изотropного «света'' с $\kgeom=1/\sqrt{2}$ на FCC (см. \cref{ch:carrier,ch:macro}).
+
+\begin{table}[ht]
+\centering
+\caption{Каузальность и геометрия $\Rightarrow$ условия}
+\label{tab:causality-axioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Физическое требование & Условие \\
+\midrule
+Light-cone: один тик $\le$ один hop $\hl$; $|N|=12$ в $(3{+}1)$ & A1 \\
+Локальный stencil, не global oracle & A2 \\
+Macro-Lorentz / изотropный readout & A12 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Квантовая механика как сохранение информации}
+\label{sec:rat-qm}
+
+\paragraph{Унитарность.}
+В QM эволюция сохраняет $\braket{\psi|\psi}$.
+На $\Mlayer$ это не postulate «волновой функции'', а \emph{инвариант} $N(t)=\sum_x z^\dagger z$:
+линейная часть $g$ --- product локальных unitaries; нелинейность --- только фаза $e^{i\Phi(z)}$,
+не damping $|z|$.
+
+\paragraph{Спинор $\mathbb{C}^2$, не скаляр.}
+Одна комплексная фаза $z\in\mathbb{C}$ не различает оборот $2\pi$ и тождество для fermion:
+нужен спинор $z\in\mathbb{C}^2$ и SU(2)-gate $R(\Phi)$ (A4, A16).
+U(1)$_{\mathrm{charge}}$ --- глобальная фаза; локальное столкновение --- SU(2).
+
+\paragraph{Обратимость micro-шага.}
+Унитарность на конечном алфавите требует явного $g^{-1}$.
+Leapfrog второго порядка на $\mathbb{Z}$ с kick-ledger --- минимальная форма,
+совместимая с A3 и дискретным временем (A13).
+
+\paragraph{Детерминизм и «квантовая случайность''.}
+На $\Mlayer$ нет RNG: $g$ --- детерминированная функция (следствие A2).
+Born и интерференция на $\Tlayer$ --- статистика грубого прибора и хаотической фазовой динамики (A5, A6),
+не фундаментальные кости в $g$ (\cref{prop:determinism}).
+
+\begin{table}[ht]
+\centering
+\caption{QM $\Rightarrow$ условия}
+\label{tab:qm-axioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Физическое требование & Условие \\
+\midrule
+Сохранение $N=\sum|z|^2$; unitary linear + phase nonlinear & A3 \\
+Спинор, U(1)$_{\mathrm{charge}}$, SU(2) collision & A4 \\
+Обратимый шаг; leapfrog 2-го порядка & A13 \\
+Spin-$1/2$: $2\pi\to -1$, Pauli на $\PlanckCell$; $s_0=\hbar/2$ & A16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Термодинамика на ячейке}
+\label{sec:rat-thermo}
+
+\paragraph{Третий закон.}
+Абсолютный ноль $|z|=0$ недостижим: иначе фазовый gate $\Phi$ теряет смысл ($z e^{i\Phi}=0$ --- deadlock),
+и «вакуум'' становится статическим нулём, а не физическим фоном с $\rho_{\mathrm{field}}>0$.
+A5 формализует: минимум «потенциала'' не в $z=0$; при $|z|\to 0$ kick $\Phi\to\infty$ --- вечное micro-кипение.
+
+\paragraph{Второй закон (локально).}
+Энтропия не убывает на $\varepsilon$-окрестности при \emph{фиксированной} норме $N$.
+На $\Mlayer$ это mixing фаз, не dissipation $|z|$ --- иначе A3 нарушен (A6).
+
+\paragraph{Планковский потолок плотности.}
+Энергия на ячейку ограничена $u_P$; saturating gate с знаменателем $+\varepsilon$ (A7).
+При больших $|z|$ нелинейность затухает --- macro-поле линейно (A8), как в классическом пределе QM.
+
+\begin{table}[ht]
+\centering
+\caption{Термодинамика $\Rightarrow$ условия}
+\label{tab:thermo-axioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Физическое требование & Условие \\
+\midrule
+3-й закон; вакуум = кипящий фон, не $z\equiv 0$ & A5 \\
+2-й закон локально; mixing без $N\to 0$ & A6 \\
+Потолок $\rho_E\le u_P$; saturating & A7 \\
+Macro-линейность при больших $|z|$ & A8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Тепловая смерть $\Mlayer$.}
+Комбинация A3, A5, A6, A13 влечёт: $N(t)=\mathrm{const}$, нет shutdown, нет устойчивого $z\equiv 0$
+(\cref{sec:theorem-23}). «Тепловая смерть'' наблюдаемого --- phenomena $\Tlayer$ (D3), не смерть micro-субстрата.
+
+\section{Аналитичность, заряд, солитоны}
+\label{sec:rat-analytic}
+
+\paragraph{Дискретная голоморфность.}
+В continuum holomorphic branch выбирается условиями Коши--Римана.
+На решётке $\Arg(\sum z)-\Arg z$ даёт ложные скачки $2\pi$; физически значима holonomy
+$\zeta=(\sum_N z)\cdot z^*$ (A9).
+CR-единственность на связном $\Lambda$ задаёт глобальное поле --- риманова поверхность $\Lambda\times S^1$.
+
+\paragraph{Квантование заряда.}
+Устойчивый vortex --- полюс на $\partial(\hv)$; winding
+$n=\frac{1}{2\pi}\oint d\arg z\in\mathbb{Z}$ (A10).
+Дробный заряд --- не устойчивое состояние того же $g$ без изменения топологии.
+
+\paragraph{Anti-smear / устойчивость солитона.}
+Размазанное (не голоморфное) состояние не устойчиво: gate с $K_P$ и $\Delta\phi_{\min}$
+выталкивает полюс --- самофокусировка, не бесконечный smear (A11).
+
+\begin{table}[ht]
+\centering
+\caption{Аналитичность и топология $\Rightarrow$ условия}
+\label{tab:analytic-axioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Физическое требование & Условие \\
+\midrule
+Holonomy $\zeta$; дискретная CR; глобальное поле & A9 \\
+Заряд $n\in\mathbb{Z}$ на $\partial(\hv)$ & A10 \\
+Устойчивость vortex; запрет smear & A11 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Симметрии и геометрия coupling'ов}
+\label{sec:rat-sym}
+
+\paragraph{P, C, T, U(1)$_{\mathrm{vac}}$.}
+Стандартные дискретные симметрии должны быть symmetries \emph{закона} $g$,
+не только Lagrangian $\Tlayer$-readout (A14).
+
+\paragraph{Принцип наименьшего действия / без fitted knobs.}
+Безразмерные константы ($\kgeom$, $\gamma$, $\alpha^*$) --- следствия геометрии FCC-носителя
+и bit-budget ячейки $B_{\hv}=2\pi/\ln 2$, не свободные параметры fit (A15).
+Подробный вывод $\alpha$, масс и SI --- \cref{ch:si-sm}.
+
+\begin{table}[ht]
+\centering
+\caption{Симметрии и действие $\Rightarrow$ условия}
+\label{tab:sym-axioms}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Физическое требование & Условие \\
+\midrule
+P, C, T, U(1)$_{\mathrm{vac}}$ на $g$ & A14 \\
+$\kgeom$, $\gamma=1/|N|$, $\alpha^*=1+1/(4\pi)$ из геометрии & A15 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Сводная карта: физика $\to$ реестр}
+
+\begin{table}[ht]
+\centering
+\caption{Полная карта мотивации (формулировки --- \cref{ch:axioms})}
+\label{tab:full-map}
+\small
+\begin{tabular}{@{}clp{7.2cm}@{}}
+\toprule
+ & Условие & Физический корень \\
+\midrule
+A1 & Каузальность & Light-cone; один $\htick$ --- один hop \\
+A2 & Локальность & Local stencil; нет action-at-a-distance \\
+A3 & Унитарность & Сохранение информации; $N=\mathrm{const}$ \\
+A4 & U(1)/SU(2) & Заряд и спин на $\mathbb{C}^2$ \\
+A5 & 3-й закон & Нет $|z|=0$; вакуумное кипение \\
+A6 & 2-й закон & Mixing энтропии при fixed $N$ \\
+A7 & Потолок $u_P$ & Planck density bound \\
+A8 & Macro-линейность & Классический предел \\
+A9 & CR / holonomy & Голоморфность; $\zeta$ вместо $\atan2$ \\
+A10 & Заряд $n\in\mathbb{Z}$ & Winding на $\partial(\hv)$ \\
+A11 & Солитон & Anti-smear; $K_P$ \\
+A12 & Изотropия & Macro-Lorentz readout \\
+A13 & Обратимость & $g^{-1}$; leapfrog \\
+A14 & PCT, U(1)$_{\mathrm{vac}}$ & Дискретные symmetries \\
+A15 & Действие & Геометрия $\Rightarrow$ couplings \\
+A16 & Fermion & $2\pi\to -1$; Pauli; $s_0=\hbar/2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Что условия \emph{не} делают}
+
+\begin{remark}[Замыкание vs ansatz]
+A1--A16 \emph{не} задают явную таблицу lookup для $g$.
+Они задают \emph{класс} допустимых $g$.
+Единственный закон, удовлетворяющий всем условиям на $Z_{512}[i]$, --- замыкание
+leapfrog + holonomy kick + $R(\Phi)$ (\cref{thm:g-law}).
+\end{remark}
+
+\begin{remark}[Носитель и шкала]
+Выбор FCC, $|N|=12$, bit-budget $B_{\hv}$ и идентификация $\hl$ с $\ell_P$ ---
+геометрия (\cref{ch:carrier}) и слой SI (\cref{ch:si-sm}), не отдельные «аксиомы произвола''.
+Теорема дискретности (\cref{thm:discreteness}) показывает согласованность
+носителя с A1, A2, A10, A16.
+\end{remark}
+
+\begin{remark}[Meta vs model]
+Вопросы «замка наблюдателя'', UI-кадра, космологического «первого тика'' наблюдаемой Вселенной
+--- epistemic/meta-слой; они \emph{не} добавляют параметров в $g$
+и не входят в A1--A16.
+Micro-пена A5 (вечные тики) $\neq$ начало наблюдаемой космологии.
+\end{remark}
+
+\paragraph{Дальше.}
+Формальные определения, уравнения и доказательства теоремы о невозможности тепловой смерти $\Mlayer$
+--- \cref{ch:axioms}.
