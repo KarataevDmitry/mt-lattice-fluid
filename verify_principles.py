@@ -288,6 +288,34 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_hop_ladder(device: str = "cpu") -> dict:
+    """§7.4+§4.8 probe — α = κ·N_re/N_c0 = N_★/N_c0 after ℓ_P⊄c; derivation OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_hop_ladder_row()
+    ok = (
+        bool(row["identity_ok"])
+        and float(row["rel_kappa_form"]) < 1e-12
+        and float(row["rel_star_form"]) < 1e-12
+        and bool(row["derivation_open"])
+        and abs(float(row["N12_times_N12p1"]) - 156.0) < 1e-12
+    )
+    return {
+        "id": "Alpha_hop_ladder",
+        "alpha_from_kappa_Nre_over_Nc0": row["alpha_from_kappa_Nre_over_Nc0"],
+        "alpha_from_Nstar_over_Nc0": row["alpha_from_Nstar_over_Nc0"],
+        "alpha_codata": row["alpha_codata"],
+        "N_c0_link": row["N_c0_link"],
+        "N_re": row["N_re"],
+        "N_star_m_c_c0": row["N_star_m_c_c0"],
+        "N12_times_N12p1": row["N12_times_N12p1"],
+        "derivation_open": row["derivation_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -1892,6 +1920,7 @@ def run_all(device: str) -> list[dict]:
         check_a10_winding(device=device),
         check_pauli_repel(device=device),
         check_compton_electron(device=device),
+        check_alpha_hop_ladder(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

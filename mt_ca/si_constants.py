@@ -575,6 +575,64 @@ class SIConstants:
             "note": "§8.2: F=α_fs F_P n1 n2/N²; N=1,|n|=1 → |F|/F_P=α_fs",
         }
 
+    def alpha_hop_ladder_row(self) -> dict[str, float | int | str | bool]:
+        """Probe: α from hop ladder after ℓ_P⊄c (§7.2–7.4).
+
+        M-native Compton uses link speed c₀:
+            N_c0 = ℏ/(m_e c₀ hL) = κ·(m_P/m_e)
+        Classical radius with textbook m c²:
+            N_re = r_e/hL = α·(m_P/m_e)
+        Detached rewrite (identity, not derivation):
+            α = κ · N_re / N_c0
+        Equivalent mixed-energy form (one macro-c, one link-c₀):
+            U(r_★)=e²/(4πϵ₀ r_★)=m_e c c₀  ⇒  α = N_★ / N_c0
+
+        Status: structural rewrite of CODATA α into hL-hops + κ.
+        Does **not** replace π-ansatz until N_★ (or N_re) comes from carrier
+        without ϵ₀/α. Geom near-miss: N₁₂(N₁₂+1)=156 vs α⁻¹≈137.
+        """
+        kappa = KAPPA_FCC_1TICK
+        m_e = self.m_e_CODATA
+        hL = self.l_P
+        # CODATA α (measured); π-ansatz kept separate for ppm compare
+        alpha_codata = 7.2973525693e-3
+        alpha_codata_inv = 1.0 / alpha_codata
+        N_c = self.hbar / (m_e * self.c * hL)
+        N_c0 = self.hbar / (m_e * self.c0 * hL)
+        # r_e via α·λ̄_C (SI-consistent; ϵ₀ route is the same identity)
+        N_re = alpha_codata * N_c
+        # classical balance against m·c·c₀ (detachment-native)
+        N_star = alpha_codata * N_c0  # ≡ r_★/hL with U=m c c₀
+        alpha_from_kappa_hops = kappa * N_re / N_c0
+        alpha_from_star = N_star / N_c0
+        n12 = N12_FCC_CAUSAL_LINKS
+        geom_156 = float(n12 * (n12 + 1))
+        return {
+            "kappa": kappa,
+            "N_c_macro": N_c,
+            "N_c0_link": N_c0,
+            "N_re": N_re,
+            "N_star_m_c_c0": N_star,
+            "alpha_codata": alpha_codata,
+            "alpha_from_kappa_Nre_over_Nc0": alpha_from_kappa_hops,
+            "alpha_from_Nstar_over_Nc0": alpha_from_star,
+            "rel_kappa_form": abs(alpha_from_kappa_hops - alpha_codata) / alpha_codata,
+            "rel_star_form": abs(alpha_from_star - alpha_codata) / alpha_codata,
+            "alpha_pi_ansatz": self.alpha_fs,
+            "alpha_pi_inv": self.alpha_fs_inv,
+            "alpha_codata_inv": alpha_codata_inv,
+            "N12_times_N12p1": geom_156,
+            "geom_156_over_codata_inv": geom_156 / alpha_codata_inv,
+            "identity_ok": abs(alpha_from_kappa_hops - alpha_codata) / alpha_codata < 1e-12
+            and abs(alpha_from_star - alpha_codata) / alpha_codata < 1e-12,
+            "derivation_open": True,
+            "note": (
+                "§7.4+§4.8 probe: α=κ·N_re/N_c0 = N_★/N_c0 (N_c0 on c₀). "
+                "Identity rewrite; N_★ from g without α still OPEN. "
+                "π-ansatz not replaced."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
