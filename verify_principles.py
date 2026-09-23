@@ -777,6 +777,40 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
     }
 
 
+def check_congruence_ladder(device: str = "cpu") -> dict:
+    """§3.12.7 — Z_512 congruence ladder: gcd, half-ring Pauli, n_E ledger."""
+    from mt_ca.si_constants import congruence_ladder_row, n_E_from_phi_ticks
+
+    row = congruence_ladder_row()
+    ok = (
+        row["N_ring"] == 512
+        and row["N_phi"] == 13
+        and row["N_cluster_eq_N_phi"]
+        and row["delta_phi_disc"] == 41
+        and row["gcd_delta_phi_N_ring"] == 1
+        and row["delta_phi_generates_Z_N"]
+        and row["additive_order_delta_phi"] == 512
+        and row["gcd_N_phi_N_ring"] == 1
+        and row["pauli_equals_half_ring"]
+        and row["pauli_kick_disc"] == 256
+        and row["energy_ticks_eq_delta_phi_disc"]
+        and row["n_E_sample"] == row["n_E_sample_expected"]
+        and row["n_E_sample"] == n_E_from_phi_ticks(int(row["n_E_sample_phi_ticks"]))
+        and row["ladder_shipped_count"] == len(row["ladder_rows"])
+        and row["frac_bits"] == 6
+        and abs(row["kappa_link_fcc"] - 1.0 / 12.0) < 1e-15
+        and row["sync_strength_disc_fcc"] == 3
+    )
+    return {
+        "id": "Congruence_ladder",
+        "ok": ok,
+        **{k: v for k, v in row.items() if k not in ("ladder_rows", "open_leaves")},
+        "ladder_ids": [r["id"] for r in row["ladder_rows"]],
+        "open_ids": [r["id"] for r in row["open_leaves"]],
+        "note": "§3.12.7: physics->Z_512->congruence; x N_12 in holonomy",
+    }
+
+
 def check_elementary_quanta(device: str = "cpu") -> dict:
     from mt_ca.config import MConfig
     from mt_ca.si_constants import elementary_quanta_row
@@ -1792,6 +1826,7 @@ def run_all(device: str) -> list[dict]:
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
+        check_congruence_ladder(device=device),
         check_rho_P_binary(device=device),
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),

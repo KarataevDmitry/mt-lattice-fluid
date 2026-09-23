@@ -2346,6 +2346,91 @@ def n_E_from_phi_ticks(phi_ticks: int, *, phase_bits: int | None = None) -> int:
     return abs(int(phi_ticks)) // unit
 
 
+def _additive_order_mod(a: int, n: int) -> int:
+    """Order of a in (Z/nZ, +); n // gcd(a, n)."""
+    a = int(a) % n
+    if a == 0:
+        return 0
+    g = math.gcd(a, n)
+    return n // g
+
+
+def congruence_ladder_row(
+    *,
+    frac_bits: int | None = None,
+    phase_bits: int | None = None,
+    delta_phi_min: float = DELTA_PHI_MIN,
+) -> dict[str, float | int | str | bool | list]:
+    """§3.12.7 — Z_N ring arithmetic → quanta table; glue to N_12 open."""
+    hv = hv_bit_budget(delta_phi_min=delta_phi_min)
+    fb = HV.frac_bits if frac_bits is None else frac_bits
+    pb = HV.phase_bits if phase_bits is None else phase_bits
+    n_ring = 1 << pb
+    phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
+    n_phi = hv.N_phi
+    n12 = N12_FCC_CAUSAL_LINKS
+    g_phi = math.gcd(phi_disc, n_ring)
+    g_nphi = math.gcd(n_phi, n_ring)
+    pauli_disc = pauli_kick_disc(phase_bits=pb)
+    k_fcc = kappa_link(n_links=n12)
+    sync_disc_fcc = max(1, int(phi_disc * k_fcc))
+    sync_disc_default = sync_strength_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
+    e_ticks = energy_ledger_ticks_per_E0(phase_bits=pb, delta_phi_min=delta_phi_min)
+    phi_sample = 3 * phi_disc + 7
+    n_e_sample = n_E_from_phi_ticks(phi_sample, phase_bits=pb)
+    ladder: list[dict[str, str | bool]] = [
+        {"id": "CL-1", "law": "Z+ + Z- = 2Z + floor(N) (mod N_ring)", "shipped": True},
+        {"id": "CL-2", "law": "R(N_ring/2) -> -z (spin-1/2)", "shipped": True},
+        {"id": "CL-3", "law": "|Phi| >= delta_phi_disc or Phi=0", "shipped": True},
+        {"id": "CL-4", "law": "n_E = floor(|Phi|/delta_phi_disc)", "shipped": True},
+        {"id": "CL-5", "law": "gcd(delta_phi_disc, N_ring)=1", "shipped": g_phi == 1},
+        {"id": "CL-6", "law": "gcd(N_phi, N_ring)=1", "shipped": g_nphi == 1},
+        {"id": "CL-7", "law": "sum_N dE == 0 (mod E0)", "shipped": True},
+        {"id": "CL-8", "law": "sum_N dpi == 0 (mod p0)", "shipped": True},
+    ]
+    open_leaves: list[dict[str, str]] = [
+        {"id": "CL-O1", "topic": "image N_12 x Z_N[i] -> Z_N (Phi spectrum)"},
+        {"id": "CL-O2", "topic": "umklapp sum dp == 0 (mod hbar G)"},
+        {"id": "CL-O3", "topic": "orbits of g on finite alphabet"},
+        {"id": "CL-O4", "topic": "factor N=2^9 vs N_phi=13, 2^frac_bits"},
+    ]
+    return {
+        "theorem": "§3.12.7: physics -> Z_512 -> congruence laws -> x N_12",
+        "N_ring": n_ring,
+        "mod_bits": pb,
+        "N_phi": n_phi,
+        "N_cluster": n12 + 1,
+        "N_cluster_eq_N_phi": n_phi == n12 + 1,
+        "frac_bits": fb,
+        "delta_phi_min_rad": delta_phi_min,
+        "delta_phi_disc": phi_disc,
+        "gcd_delta_phi_N_ring": g_phi,
+        "delta_phi_generates_Z_N": g_phi == 1,
+        "additive_order_delta_phi": _additive_order_mod(phi_disc, n_ring),
+        "gcd_N_phi_N_ring": g_nphi,
+        "N_phi_unit_in_Z_N": g_nphi == 1,
+        "pauli_kick_disc": pauli_disc,
+        "pauli_equals_half_ring": pauli_disc == n_ring // 2,
+        "sync_strength_disc_fcc": sync_disc_fcc,
+        "sync_strength_disc_sim_default": sync_disc_default,
+        "sync_fcc_eq_floor_phi_times_kappa_link": sync_disc_fcc == max(
+            1, int(phi_disc * k_fcc)
+        ),
+        "energy_ticks_per_E0": e_ticks,
+        "energy_ticks_eq_delta_phi_disc": e_ticks == phi_disc,
+        "n_E_sample_phi_ticks": phi_sample,
+        "n_E_sample": n_e_sample,
+        "n_E_sample_expected": phi_sample // phi_disc,
+        "a_Q": amplitude_quantum(frac_bits=fb),
+        "rho_Q": rho_field_quantum(frac_bits=fb),
+        "kappa_link_fcc": kappa_link(n_links=n12),
+        "ladder_shipped_count": sum(1 for r in ladder if r["shipped"]),
+        "ladder_rows": ladder,
+        "open_leaves": open_leaves,
+        "note": "§3.12.7: verify Congruence_ladder; ledger LadderLedger for CL-7/8",
+    }
+
+
 def elementary_quanta_row(
     *,
     frac_bits: int | None = None,
