@@ -173,6 +173,17 @@
 | **CPT product** | optional · `run_symmetry_probe.py` |
 | **A14 bundle** | ✅ P/C/U1/chiral · long **`g_P_steps`** logged |
 
+### §3.12.4 Module map (was MODEL §3.12.4)
+
+| слой | модуль |
+|------|--------|
+| **`Z_N[i]`** ring ops | **`z_ring.py`** · **`N_ring = 512 = 2^9`**, mod from §3.12.6 |
+| Planck **`⌊·⌋`** encode | **`fixed_point.py`** · **`frac_bits=6`**, **`mod_bits=9`** |
+| **projected 𝒩** | **`projected_collision.py`** · default **`use_projected_collision=True`** |
+| **`g` 2-го порядка** | **`reversible.evolve_canonical`** · **`projected_collision.py`** |
+| `(Z, Z_past)` + ledger | **`simulator.py`** |
+| decode/readout | **`fixed_point.decode_spinor`** — T/UI, not tick |
+
 ### §3.12 Leapfrog Z_N[i]
 
 **Provenance (2026-09-22):** float32 1-го порядка на 4070 → киральная «пляска» `n`; leapfrog на ℤ — единственный закон счёта.

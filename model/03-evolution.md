@@ -2,35 +2,26 @@
 
 **SSOT-часть MODEL.** Hub: [`MODEL.md`](../MODEL.md) · соседи: [`model/`](.)
 
-**Не сюда:** impl / verify / даты / sim-gap / provenance → [`DEVLOG.md`](../DEVLOG.md).
+**Не SSOT здесь:** impl · verify · sim-gap · provenance · narrative → [`DEVLOG.md`](../DEVLOG.md) **§1** (реестр).
 
+**В теле §3 запрещено:** `Код:` · `verify` · ✅ · `.py` · GPU · PASS · колонки impl/verify.
 ---
-
 ## §3. Функция перехода `g`
-
-**Канон `g` (закрытый закон M):** **§3.12** (`projected_step_fixed`, **`Z_N[i]`**, leapfrog).  
-**§3.1–3.2** — только **каркас + ограничения**. **§3.3–3.4** — **legacy float**, не канон. **§3.5+** — impl / T / анализ → [`DEVLOG.md`](../DEVLOG.md).
-
+**Канон `g`:** **§3.12** only. **§3.1–3.2** — каркас + ограничения. **§3.3–3.4** — legacy float (не канon).
 ### 3.1 Каркас (до абсolutных условий)
-
 Дискретность **`Λ`**, **`(hL, hT)`** — **Thm 0.1** (§0). Локальность + каузальность:
-
 ```
 Ψ^{t+1} = g(Ψ^t)
 g     = g_nonlin ∘ g_lin
 g_lin :  z ↦  L(z)      — линейное смешивание по N(x)
 g_nonlin: z ↦  z · exp(i·Φ(z))   — локальная фаза
 ```
-
 ```
 N(x) = { x ± ê_i }          — первая координационная оболочка (A1)
 (Δ₄ z)(x) = Σ_{y∈N(x)} ( z(y) - z(x) )
 ```
-
 **Moore нет** — следствие **A1** (вторая оболочка за один **`hT`** запрещена), не отдельный выбор neighborhood.
-
 **OPEN на этом этапе (не фиксировать в §3.1–3.2):**
-
 | параметр | статус |
 |----------|--------|
 | **`γ`** | OPEN |
@@ -38,9 +29,7 @@ N(x) = { x ± ê_i }          — первая координационная о
 | **`L`**: unitary vs diffusive | OPEN |
 | **`α*`** | OPEN (закрытие — §7.1 / gate, не каркас) |
 | **`ε`** | OPEN (связь **`ε ↔ u_P`** — A7, число — позже) |
-
 ### 3.2 Абсолютные условия → ограничения на каркас
-
 | Условие | Что запрещает | Что остаётся |
 |---------|---------------|--------------|
 | **A3** унитарность | рост/падение **`Σ\|z\|²`**; **\|z\|**-dissipation | локальные bond-unitaries на **`N`**; **`Φ`** real |
@@ -50,32 +39,21 @@ N(x) = { x ± ê_i }          — первая координационная о
 | **A7** **`ρ_E ≤ u_P`** | бесконечная плотность в **`dV`** | **`Φ`** с **`+ε`**, **`ε ↔ u_P`** |
 | **A8** макро-линейность | сильная нелинейность при больших **\|z\|** | **`w(ρ)`** + gate asymptotics |
 | **A9** Коши–Риман | изолированный покой ячейки | метрика CR; vortex core = defect |
-
 **A3 vs A6 (legacy impl):** **`z+γΔ₄z`** не унитарна → **`local_ca`** bond-sweeps. DFT-спектр — **T-калибровка** **`ω(k)`**, не micro_step.
-
 **Замыкание `g`:** §3.12 (не §3.3–3.4).
-
 ### 3.3 Split-step δS — **legacy · не канон**
-
 Рабочий черновик (float, scalar **`z∈ℂ`**). Параметры **`γ`**, **`α*`**, **`ε`**, **`w`** — **не SSOT** каркаса.
-
 ```
 S = Σ_{links} Re[ conj(z_x)(z_y - z_x) ] + Σ_x V(|z|²)
 V(|z|²): минимум не в z=0  →  фазовый член (A4, A5)
-
 z* = local_ca(z; γ)
 φ  = 2π · ( α* / (|z*|² + ε) - 1 ) · w(ρ)
 z' = z* · exp(i φ)
 ```
-
-**Impl:** `linear_step_local_ca` · legacy gate. **Канон forward-tick:** §3.12 **`projected_step_fixed`**.
-
+**Legacy float gate** — DEVLOG §4. **Канон forward-tick:** §3.12.
 ### 3.4 Isotropic scalar gate — **legacy float · не канон**
-
 Одна ячейка **`v_p`**, scalar **`z∈ℂ`**, один **`exp(iφ)`** за **`hT`**. **Не** закрывает OPEN §3.1. **Не** канон **`g`**.
-
-**Форма (impl `update.isotropic_phase`, T/probe):**
-
+**Форма (legacy scalar gate, T/probe):**
 ```
 |z|² = ρ_E/u_P
 ζ = (Σ_N z) · z*
@@ -83,7 +61,6 @@ z' = z* · exp(i φ)
 φ = 2π · ( α*/(|z|²+ε) · Δφ − 1 ) · w(ρ)
 z' = z · exp(iφ)
 ```
-
 | символ | роль | статус на каркасе |
 |--------|------|-------------------|
 | **`N(x)`** | каузальный крест (§1.3); **не Moore** | A1 |
@@ -91,116 +68,51 @@ z' = z · exp(iφ)
 | **`ζ = (Σ z)·z*`** | phase diff без **`Arg(Σz/z)`** | §3.4.1 |
 | **`ρ_E`**, **`K_P`**, **`u_P`** | SI/T names (§5, §7) | не вход §3.1 |
 | **`α*`**, **`ε`**, **`w(ρ)`** | gate numerator | **OPEN** здесь; числа — §7.1 / §3.12.5 |
-
-#### 3.4.1 Phase wrap (impl)
-
-**`Arg(Σz/z)`** / **`atan2−atan2`** → ложный скачок **2π**.  
-**Fix:** **`ζ=(Σ_N z)·z*`**, **`Δφ=wrap(Arg ζ)`**. Код: `wrapped_phase_diff`.
-
-**Код legacy path:** `update.wrapped_phase_diff` · `isotropic_phase` · `linear_mode=isotropic`.
-
-### 3.5 Impl-слои M / T (не каркас §3.1–3.2)
-
-| | M micro | T readout |
-|---|---------|-----------|
-| шаг | локальный **`g`**, **`hT`** | coarse / DFT / dispersion |
-| FFT | **не** в forward tick | `t_analysis.py`, §4.1 |
-| legacy | §3.3–3.4 float | калибровка **`ω(k)`** |
-
-**v2 ошибка:** DFT внутри `micro_step`. **Канон tick:** §3.12.
-
-**Verify:** `verify_principles.py` · [`DEVLOG.md`](../DEVLOG.md).
-
-### 3.6 Micro-изотропия (legacy `local_ca` vs isotropic gate)
-
-| подход | micro aniso | forward tick |
-|--------|-------------|--------------|
-| **`⟨z⟩_N` + phase** (§3.4 legacy) | ~1.0 | float probe |
-| bond-sweeps **`local_ca`** | ~1.25 | §3.3 legacy |
-| **`projected_step_fixed`** | FCC **`N₁₂`** | **§3.12 канон** |
-
-**`N` ε** — каузальный конус (A1), не LBM-streaming. **A12** macro **`κ`**: §1.1 · §4.1.
-
-**Impl:** `linear.py` · `update.py` · §3.12.
-
-### 3.7 Heisenberg / anti-smear / `K_P`
-
-**DoD / GPU backlog:** [`DEVLOG.md` §4](DEVLOG.md#§37-heisenberg--anti-smear).
-
-| A | следствие |
-|---|-----------|
-| A16 | **`Δφ_min = ½` rad** → **`s₀=ℏ/2`** |
-| A11 | anti-smear → **`K_P`** saturating kick |
-| A5 | **`ρ→0`** ⇒ gate blow-up (не **`z≡0`**) |
-
-**Канон tick:** §3.12.5 saturating **`Φ`**, не §3.4 **`φ`**.
-
-| # | следствие |
-|---|-----------|
-| 1 | **`K_P`** saturating kick (A5 floor, A7 ceiling) |
-| 2 | **`Δφ ≥ Δφ_min`** (A16) |
-| 3 | anti-smear (A11) |
-| 4 | GPU DoD — [`DEVLOG.md` §3–§4](../DEVLOG.md) |
-
+#### 3.4.1 Phase wrap
+**\Arg(Σz/z)\** / **\tan2−atan2\** → ложный скачок **2π**.
+**Fix:** **\ζ=(Σ_N z)·z*\**, **\Δφ=wrap(Arg ζ)\**.
+### 3.5 Legacy stubs (micro-aniso · Heisenberg DoD)
+→ **DEVLOG** §1 · §3 · §4. **Не MODEL.**
 ### 3.8 Слабые волны и вихрь на каноне носителя
-
 **Канон (3+1):** FCC **N₁₂** (§1.6). **Срез (2+1):** гекс **N₆** (§1.4).
-
 **Канон `g`:** §3.12 · ДА: §3.9.
-
 ### 3.9 Дискретный анализ (канон)
-
 #### 3.9.1 Пространство как дискретная голоморфная среда
-
 Решётка: **FCC N₁₂** (§1.6) / срез **гекс N₆** (§1.4); **`z ∈ ℂ²`** (§3.10).
-
 **Вакуум (линейный предел ДА):**
-
 ```
 Δ_disc z = 0   ⟺   z(x) = (1/|N|) Σ_{y∈N(x)} z(y) = ⟨z⟩_N
 ```
-
 **Эволюция M:** отклонение **`Arg(⟨z⟩/z)`**; **`g`** — оператор удержания голоморфности. **Канон tick:** §3.12 (**`R(Φ)`**, saturating **`Φ`**). Float gate §3.4 — legacy readout only.
-
 | ДА | слой M |
 |----|--------|
 | `Δ_disc z=0` (идеал) | **`Δφ→0`**, holomorphic class |
 | CR на рёбрах | **A9** |
 | риманова поверхность | **`Λ×S¹`**, torus §10.1 |
 | глобальная сшивка | **`holomorphy_sync`** on tick |
-
 #### 3.9.2 Дискретно-аналитическое уравнение (канон §3.12 · legacy §3.4)
-
 **Канон M (§3.12.5):** holonomy **`ζ`** → saturating **`Φ ∈ ℤ_{N_ring}`** → **`R(Φ)`** → leapfrog **`Z⁺+Z⁻=2Z+⌊𝒩⌋`**.
-
 **Legacy float (§3.4, probe/T):**
-
 ```
 Δφ_N = wrap(Arg (Σ_N z · z*))
 z' = z · exp(iφ)     ,   φ from saturating gate (§3.4 shape; α*, ε — §7.1)
 ```
-
-| член | ДА | канон | legacy impl |
+| член | ДА | M (§3.12) |
 |------|-----|-------|-------------|
-| **`Arg(⟨z⟩/z)`** | defect holomorphy | **`ζ` int** §3.12.5 | `wrapped_phase_diff` |
-| saturating kick | метрика у полюса | **`Φ_sat`**, **`K_P`** | `isotropic_phase` |
-| unitary step | U(1) | **`R(Φ)`** | **`exp(iφ)`** |
-
+| **`Arg(⟨z⟩/z)`** | defect holomorphy | **`ζ` int** §3.12.5 |
+| saturating kick | метрика у полюса | **`Φ_sat`**, **`K_P`** |
+| unitary step | U(1) | **`R(Φ)`** |
 **Связь с `Δ_disc z=0`:** линейный предел **`φ→0`** ⇔ **`z≈⟨z⟩`**; нелинейный **`g`** — **конечная** коррекция дефекта, не противоречие ДА.
-
 #### 3.9.3 Феномены как теоремы ДА (слой M)
-
-| феномен | формулировка M | impl / T-readout |
-|---------|----------------|------------------|
-| **Частица `v_p`** | изолированный **полюс**; **`∮ d arg = 2πn`**, **`n∈ℤ`** | ✅ seeds **`n∈{±1,±2}`** · A10 |
-| **Заряд** | дискретный **вычет** | T readout |
-| **Гейзенберг** | **`Δφ ≥ 1/2` рад**; нарушение → кипение **`K_P`** → самофокусировка | ✅ **`heisenberg_floor`** · A16 |
-| **Anti-smear** | размазанное **не голоморфно** → gate выталкивает полюс | ✅ A11 · GPU readout |
-| **Нелокальность / запутанность** | **единая** дискретная аналитическая функция Λ: локальный полюс меняет **ГУ всей** функции **на том же `Δt`** — не FTL-сигнал, а **перестройка единого поля** (CR-единственность) | ✅ **`holomorphy_sync_step`** |
-
+| феномен | формулировка M |
+|---------|----------------|
+| **Частица `v_p`** | изолированный **полюс**; **`∮ d arg = 2πn`**, **`n∈ℤ`** (A10) |
+| **Заряд** | дискретный **вычет** |
+| **Гейзенберг** | **`Δφ ≥ Δφ_min`**; нарушение → **`K_P`** (A16) |
+| **Anti-smear** | размазанное **не голоморфно** → gate выталкивает полюс (A11) |
+| **Нелокальность** | единая аналитическая функция Λ; CR-единственность (A9) |
 #### 3.9.4 Словарь (ДА ↔ M ↔ T)
-
-| ДА | M (`mt_ca`) | T (readout) |
+| ДА | M | T (readout) |
 |----|-------------|-------------|
 | дискретная голоморфная функция `z` | `z ∈ ℂ²` на `v_p` | `\|Φ\|²` binomial macro (§4.1) |
 | `Δ_disc z=0` | **идеальный вакуум** (не generic tick) | плоский фон |
@@ -209,15 +121,8 @@ z' = z · exp(iφ)     ,   φ from saturating gate (§3.4 shape; α*, ε — §7
 | вычет **`2πn`** | winding **`n`** | заряд **`Q∝n`** |
 | метрика **`K_P`** | saturating **`Φ`** (§3.12.5) | legacy **`α*/(ρ+ε)`** (§3.4) |
 | риманова поверхность на графе | **`Λ×S¹`** (фаза) | — |
-
-#### 3.9.5 Impl
-
-→ [`DEVLOG.md` §4.9](DEVLOG.md#§39-da--cr)
-
 #### 3.9.6 A9 — порог дисперсионной CR-энергии (не legacy `0.05`)
-
 На **von Neumann `N`** forward-diff CR-метрика на **гладкой** плоской волне **не** остаётся ≈0: после burn-in поле выходит на **стационарный** уровень от **дискретной дисперсии** + **планковской вязкости** решётки (§4.1.2), а не «ломается».
-
 | величина | формула | значение |
 |----------|---------|----------|
 | **`ν_CA`** (natural) | **`¼·c₀·l_P`**, **`c₀=l_P=1`** | **0.25** |
@@ -225,283 +130,155 @@ z' = z · exp(iφ)     ,   φ from saturating gate (§3.4 shape; α*, ε — §7
 | **`E_CR,seed`** | **`ν_CA·{B_hV}²`** — до burn-in | **≈ 0.00105** |
 | **`E_CR,stab`** | **`ν_CA·(1+{B_hV})`** — потолок после burn-in | **≈ 0.266** |
 | **`|ΔE_CR|`** (stationarity) | **`≤ {B_hV}·E_CR`** между двумя поздними окнами | **≈ 6.5%** |
-
 **Verify `A9`:** `PLANE_WAVE` · burn-in **32** + settle **32** · **`e₀ ≤ E_CR,seed`**, **`e₁ ≤ E_CR,stab`**, стационарность.
-
-**Код:** `si_constants.cr_seed_ceiling` · `cr_dispersion_ceiling` · `cauchy_riemann.cr_stationarity_tolerance`.
-
 **Итог §3.9:** ДА = **строгий язык M**. **`g`** = **SU(2) spinor gate** (§3.10); §3.4 — **бозонный предел** `|z|²` invariant.
-
 ### 3.10 Спин SU(2): фермионы, знак при 360°, запрет Паули (канон M)
-
 #### 3.10.1 Проблема U(1)-only
-
-| | **U(1) scalar `z∈ℂ` (§3.4 impl)** | **физика T (e, q, …)** |
+| | **U(1) scalar `z∈ℂ` (§3.4 legacy)** | **T (e, q, …)** |
 |--|-------------------------------------|-------------------------|
 | оборот **`2π`** | **`z → z`** (identity) | **fermion: `ψ → −ψ`** |
 | полный возврат | **`360°`** | **`720°`** (spin **`1/2`**) |
 | слепок | бозоны / фотон OK | **нет Паули** → вихри **налезают** → condensate, нет химии/твёрдости |
-
 **Без SU(2)** цифровая жидкость остаётся «плоской» — **corpuscular** на U(1) недостаточно для **matter**.
-
 #### 3.10.2 Состояние ячейки — дискретный спинор
-
 ```
 z(x,t) = ( z₁(x,t) , z₂(x,t) )ᵀ  ∈  ℂ²
 |z|² = z†z = |z₁|² + |z₂|²
 ```
-
 **ДА-носитель:** не одна фаза на **`S¹`**, а **спинорное** поле на **`ℂ²`**; голоморфность + gate — в **SU(2)**, не только U(1).
-
 #### 3.10.3 Эволюция: от `exp(iφ)` к SU(2) — и **дискретный M-канон**
-
 **Scalar §3.4 (бозонный предел / T-нотация):**
-
 ```
 z' = z · exp(iΦ)     ,   Φ ∈ ℝ        — U(1)
 ```
-
 **SU(2) на T / continuous limit (смысл gate, не M-tick):**
-
 ```
 z'(x) = U(x,t) · z(x)     ,   U ∈ SU(2)
 U = exp( i · Θ_a · σ_a / 2 )     — Lie-алгебра; **не** matrix `expm` на M
 ```
-
 **Канон M (§3.12.5): дискретная «экспонента» на кольце**
-
 ```
 ω = exp(i · 2π / N_ring)     ,   N_ring = 512 (§3.12.6)
 Φ ∈ Z_{N_ring}                 — целые ticks mod N_ring, не float rad
-
 R(Φ) : (U,V) ↦ ( U·c_Φ − V·s_Φ , U·s_Φ + V·c_Φ )   (mod N)
   c_Φ = cos(2π·Φ/N_ring) , s_Φ = sin(2π·Φ/N_ring)   — Rot_LUT Q30, без float trig
-
 δZ(Φ) = R(Φ) − Z     — kick ⌊𝒩⌋ на каждой lane спинора
 ```
-
 **Эквивалентность слоёв (не смешивать запись и реализацию):**
-
 | режим | discrete M | continuum alias |
 |-------|------------|-----------------|
 | **canonical tick `g`** | один **`Φ`** → **`R(Φ)`** на **`z₁`** и **`z₂`** lanes | **`exp(i·Φ·σ_z/2)`** как общая фаза (подгруппа **`U(1)_vac`**) |
 | **SU(2) mix** | **`U(n,φ)`** — half-angle LUT + Pauli (`su2_apply`) | **`exp(i·φ·n·σ/2)`** — holomorphy sync, chiral; **не** один leapfrog-tick |
-| **spin-½ sign** | **`R(N_ring/2)`** → **`−z`** на компоненте; **`U(n,4π)=+1`** | verify **`SU2_360`**, **`SU2_720`** |
-
-**Правило:** на M **`g`** = **`ω^Φ`** / **`Rot_LUT`**, не **`scipy.linalg.expm`**. Float **`su2_apply`** — probe/readout; единственный forward-tick — **`projected_step_fixed`** (§3.12.3).
-
+| **spin-½ sign** | **`R(N_ring/2)`** → **`−z`**; **`2π→−1`**, **`4π→+1`** |
 **Следствие spin-½ (T-смысл, проверяется probe):**
-
 ```
 U(2π) = −𝟙     (один оборот вихря hV → знак минус)
 U(4π) = +𝟙     (два оборота → возврат)
 ```
-
 Топологический pra-vortex **`hV`**: при обходе **сопряжённых** соседей — **«половинчатый»** оборот в **спинорном** пространстве (не только **`Δ arg = π`** на U(1)).
-
 #### 3.10.4 Запрет Паули и `K_P`-отталкивание
-
 **Правило M:** два вихря с **одинаковой спинорной ориентацией** **не могут** занять **один** **`v_p`**:
-
 ```
 z_A ∥ z_B  ⇒  z_A + z_B → 0   (аннигиляция / выталкивание)
 ```
-
 **`K_P`** + gate → **бесконечное отталкивание** на сверхмалых **`d ≤ l_P`**: упругость жидкости = **Pauli pressure** на решётке.
-
 **Цепочка масштабов замкнута:** **`hV`** (топология) + **SU(2)** (спин) + **Паули** (matter) + **`K_P`** (упругость).
-
-#### 3.10.5 Impl
-
-→ [`DEVLOG.md` §4.10](DEVLOG.md#§310-su2--pauli)
-
 ### 3.11 U(1)_vac gauge + хиральная упаковка SU(2)_L × SU(2)_R (канон M)
-
 #### 3.11.1 U(1)_vac на спиноре
-
 ```
 z → z · e^{iθ}     (одна global phase на обе компоненты)
 ```
-
 **Инварианты gate (до SU(2) mix):**
-
 | объект | формула | U(1) |
 |--------|---------|------|
-| holonomy | **`ζ = (Σ z)·z*`** | ✅ |
-| Bloch | **`n = z†σ z / |z|²`** | ✅ |
-| axis | **`n_z × n_s`**, fallback **`n_z`** | ✅ (не фикс. **`(0,0,1)`**) |
-| Arg carrier | **`Δφ = wrap(Arg ζ)`** | ✅ |
-
+| holonomy | **`ζ = (Σ z)·z*`** | invariant |
+| Bloch | **`n = z†σ z / |z|²`** | invariant |
+| axis | **`n_z × n_s`**, fallback **`n_z`** | invariant (не фикс. **`(0,0,1)`**) |
+| Arg carrier | **`Δφ = wrap(Arg ζ)`** | invariant |
 **`defect_axis`:** local Bloch fallback when **`‖n_z×n_s‖→0`**.
-
 #### 3.11.2 Хиральность без второго поля
-
 ```
 P_L z = (z₁, 0)ᵀ     P_R z = (0, z₂)ᵀ     z = P_L z + P_R z
 ```
-
-| фаза tick | M-смысл | impl |
+| фаза tick | M-смысл |
 |-----------|---------|------|
-| **STREAM** | **`P_L`**, **`P_R`** независимо на **`N`** | component-wise **`linear_step`** / neighbor sum |
-| **COLLISION** | **`K_P` + Arg** смешивают компоненты | **`su2_apply` + holomorphy sync** |
-
+| **STREAM** | **`P_L`**, **`P_R`** независимо на **`N`** |
+| **COLLISION** | **`K_P` + Arg** смешивают компоненты |
 **`|z_L|² − |z_R|²`** — U(1)-инвариантный chirality readout; **не** закон «+1 preferred» (§9.2 bubble).
-
 #### 3.11.3 P, C, T и optional CPT (T-layer — не M `g⁻¹`)
-
-**Канон M (2026-09-22):** обратимость шага — **A13 / §3.12** (`g⁻¹` = leapfrog algebra + kick ledger). **Не** через CPT-product и **не** через `z→z*` alone.
-
+**M:** обратимость шага — **A13 / §3.12** (`g⁻¹` = leapfrog algebra + kick ledger). **Не** через CPT-product и **не** через `z→z*` alone.
 На **T-слое** / continuous limit — anti-unitary партнёр **`Θ = P ∘ C ∘ T`** (диагностика, не DoD sim):
-
 ```
 P : (x,y) ↦ (−x,−y)           — инверсия пространственных осей (torus flip)
 C : z ↦ z*                    — комплексное сопряжение компонент спинора
 T : z ↦ U_boost z             — смена знака киральности, U = exp(i·π·σ_x/2) = i·σ_x
 ```
-
 **Смысл T:** flip **`|z_L|² − |z_R|²`** (SU(2)-буст по **`σ_x`**), не заряд **`n`** alone и не голая conjugation.
-
 **Не путать с A13:**
-
 ```
-M reverse:  z(t−1) = 2z(t) + ⌊𝒩⌋ − z(t+1)     — verify Leapfrog (§3.12)
-T probe:    g⁻ᴺ(z) ≈ Θ · gᴺ( Θ(z) )            — optional; scripts/run_symmetry_probe.py
+M reverse:  z(t−1) = 2z(t) + ⌊𝒩⌋ − z(t+1)     — §3.12
+T probe:    g⁻ᴺ(z) ≈ Θ · gᴺ( Θ(z) )            — optional T-layer diagnostic
 ```
-
 Product **`Θ`** на projected **`Z_N[i]` g** после gauge-fix encode **не** замыкается bit-exact — **не** sim-gap, **не** refutation M.
-
-| leg | seed probe | M verify |
-|-----|------------|----------|
-| **P** | **`mirror`**: **`n→−n`** | parity seeds + 1-step **`g·P`** |
-| **C** | **`z*``**: **`n→−n`** | charge seed |
-| **T** | **`σ_x` boost**: **χ→−χ** | chirality flip proxy |
-| **CPT** | product **`Θ`** | optional diagnostic only |
-
-**Open (long-run P·g):** [`DEVLOG.md` §3](DEVLOG.md#§3-open-leaves-индекс).
-
-#### 3.11.4 A14 на решётке (impl probes)
-
-| симметрия | seed / 1-step | long-run |
-|-----------|---------------|----------|
-| **P** | **`mirror_x`**: **`n→−n`** ✅ | **`g·P vs P·g`**: winding drift ⚠️ |
-| **C** | **`z→z*`**: **`n→−n`** ✅ | partner evolution — T readout |
-| **T** | **`i·σ_x`**: **χ→−χ** ✅ | not **`z*`** alone |
-| **`U(1)_vac`** | **`g(z e^{iθ})≈g(z)e^{iθ}`** ✅ | verify **`U1_vac`** |
-| **CPT product** | optional **`Θ g Θ`** diagnostic | not M verify DoD |
-
-**Не путать:** отсутствие long-run **`P·g`** commute ≠ «Вселенная right-handed» — это **contingent seed + chirality dance**, не аксиома M (§9.2).
-
-#### 3.11.5 Impl
-
-→ [`DEVLOG.md` §4.11](DEVLOG.md#§311-symmetries)
-
 ### 3.12 Эволюция M: обратимый КА 2-го порядка на планковском базисе (канон · Следствие 0.7)
-
 **Статус:** не ansatz — **замыкание A1–A16** (§3.2) в одну формулу **`g`**. Дискретность носителя — **Thm 0.1**; механика **`p,L,F`** — **Следствие 0.8** / **Thm 5.1**.
-
 #### 3.12.0 Из первых принципов (Planck natural units)
-
 В **истинном M-базисе** **`hL=l_P=1`**, **`hT=t_P/√2=1`**, **`m_P=1`**, **`ρ_P=1`** (§1, §7):
-
-| continuum / GPU habit | M |
+| continuum habit | M |
 |----------------------|---|
 | `z ∈ ℂ` float32, mantissa ∞ | **один `v_p` = конечный информационный бюджет** (Bekenstein) |
 | `z_{next}=f(z)` + round каждый такт | **дискретный спинорный инвариант**; фаза — **целые сдвиги**, кратные **`Δφ≥½`** (§3.7) |
 | обратимость «если биекция» | **2-й порядок обязателен**: 1-й порядок + **`𝒩`** + округление → необратимый хаос |
 | T⁻¹ через CPT / `z*` | **T⁻¹ на M**: **`z(t−1)` из algebra**; память **`(z_t, z_{t−1})`** симметрична |
-
 **Вывод:** Вселенная на M — **строго обратимый целочисленный (fixed-point) КА 2-го порядка** на **`Z_N[i]`**. Float32 — **только decode/readout** для T; **не** альтернативный `g`.
-
 #### 3.12.1 Закон `g` (Fredkin / leapfrog) — модульное пространство Z_N[i]
-
-**Состояние ячейки** — не пара «произвольных регистров», а элемент **фактор-кольца** по модулю **`N = 2^{32}`** (или `[2^{64}]`):
-
+**Состояние ячейки** — элемент **фактор-кольца** **`ℤ_{N_ring}[i]`**, **`N_ring = 2^{⌊B_{hV}⌋}`** (§3.12.6):
 \[
 Z(x,t) \in \mathbb{Z}_{N}[i]
 \]
-
-Все сложение / вычитание / умножение **неявно mod N**; на GPU (4070, `uint32_t`) — **аппаратное переполнение**, без побитовых масок.
-
+Все операции **mod `N_ring`**; **`int32`** lanes — транспорт (§3.12.6).
 **Алгебраическое уравнение 2-го порядка** (одна строка):
-
 \[
 Z(x,t+\Delta t) + Z(x,t-\Delta t) = 2Z(x,t) + \lfloor \mathcal{N} \rfloor
 \]
-
 Эквивалентно **`Z⁺ = 2Z + ⌊𝒩⌋ − Z⁻`**. **`⌊𝒩⌋`** — projected collision (§3.12.5); округление **только** в **`𝒩`**.
-
 **Коэффициенты `2` и `−1`** — не подгонка: топология **каузального конуса** von Neumann на **`N`** (discrete d'Alembert / leapfrog).
-
 **Память:** **`(Z_t, Z_{t−1})`** — среда **помнит** такт **`t−1`** наравне с **`t`**. T-reverse: **`Z_{t−1} = 2Z_t + ⌊𝒩(Z_t)⌋ − Z_{t+1}`** (mod N).
-
 #### 3.12.2 T⁻¹ и CPT
-
 ```
 z(t−1) = 2z(t) + ⌊𝒩(z(t))⌋ − z(t+1)        — exact на ℤ / fixed lattice
 ```
-
 **CPT (§3.11.3):** anti-unitary партнёр на **T-слое** / continuous limit. **Leapfrog:** дискретный **`g⁻¹`** без **`z*`**. Оба согласованы; **A13 закрывает leapfrog**, не float 1-st order.
-
-#### 3.12.3 Projected collision + kick ledger (impl)
-
+#### 3.12.3 Projected collision + kick ledger
 | направление | правило |
 |-------------|---------|
-| **forward** | **`projected_step_fixed`**: §3.12.5 ζ → Φ_sat → Rot_LUT → **`Z⁺+Z⁻=2Z+⌊𝒩⌋`** в **`Z_N[i]`** |
+| **forward** | §3.12.5 ζ → Φ_sat → **`R(Φ)`** → **`Z⁺+Z⁻=2Z+⌊𝒩⌋`** |
 | **reverse** | **`Z⁻ = 2Z + ⌊𝒩⌋ − Z⁺`**; ledger хранит **`⌊𝒩⌋`** (bit-exact; можно пересчитать из **`Z_t`**) |
-
-**Единственный forward:** **`projected_step_fixed`** — нет float-пути, нет `first_order`.
-
-#### 3.12.4 Impl (`mt_ca`)
-
-| слой | модуль |
-|------|--------|
-| **`Z_N[i]`** ring ops | **`z_ring.py`** · **`N_ring = 512 = 2^9`**, mod from §3.12.6 |
-| Planck **`⌊·⌋`** encode | **`fixed_point.py`** · **`frac_bits=6`**, **`mod_bits=9`** |
-| **projected 𝒩** | **`projected_collision.py`** · default **`use_projected_collision=True`** |
-| **`g` 2-го порядка** | **`reversible.evolve_canonical`** · **`projected_collision.py`** |
-| `(Z, Z_past)` + ledger | **`simulator.py`** |
-| decode/readout | **`fixed_point.decode_spinor`** — T/UI, не tick |
-
+**Forward tick:** §3.12 only; §3.3–3.4 float — legacy.
 #### 3.12.5 Projected collision — аксиомы ДА + Bekenstein (mod Z_N[i])
-
-**Модульное пространство:** \(Z = U + iV \in \mathbb{Z}_{N}[i]\), **`N_ring = 2^{⌊B_{hV}⌋} = 512`**, **`2\pi_{\mathrm{disc}} = N_ring`**. Wrap — **`mod N_ring`**, не произвол GPU.
-
+**Модульное пространство:** \(Z = U + iV \in \mathbb{Z}_{N}[i]\), **`N_ring = 2^{⌊B_{hV}⌋} = 512`**, **`2\pi_{\mathrm{disc}} = N_ring`**. Wrap — **`mod N_ring`**.
 **Дискретная экспонента (§3.10.3):**
-
 \[
 \omega = e^{i\cdot 2\pi/N_{\mathrm{ring}}},\qquad
 R(\Phi) = \omega^{\Phi}\ \text{on each }(U,V)\ \text{lane via Rot\_LUT}
 \]
-
 **Шаг 1 — holonomy (без `atan2`):**
-
 \[
 \zeta_{\mathrm{real}} = \left\lfloor \frac{\langle U\rangle U + \langle V\rangle V}{2^{F}} \right\rfloor,\quad
 \zeta_{\mathrm{imag}} = \left\lfloor \frac{\langle V\rangle U - \langle U\rangle V}{2^{F}} \right\rfloor
 \]
-
 **Шаг 2 — saturating kick (Bekenstein в знаменателе, не post-project):**
-
 \[
 \Phi_{\mathrm{kick}} = \left\lfloor \frac{K_P\,\zeta_{\mathrm{imag}}}{\zeta_{\mathrm{real}} + |Z|^2 + K_P} \right\rfloor \in \mathbb{Z}_{N}
 \]
-
 + Heisenberg floor \(|\Phi|\ge \Delta\Phi_{\min}^{\mathrm{disc}}\). **`⌊𝒩⌋`** = **`δZ(Φ) = R(Φ)−Z`** on both spinor components (same **`Φ`** → **`U(1)_vac`** on tick; full **`U(n,φ)`** — §3.10.3 probe path).
-
-**`Rot_LUT`:** 4096-entry cos/sin Q30; **без float trig** on GPU hot path. Verify **`DiscreteRotExp`** — **`R(Φ)=ω^Φ`**, not matrix **`exp(i·Θ·σ/2)`**.
-
 **Шаг 3 — 2-й порядок (symmetric, one line):**
-
 \[
 Z(x,t+\Delta t) + Z(x,t-\Delta t) = 2Z(x,t) + \lfloor \mathcal{N} \rfloor \pmod N
 \]
-
 #### 3.12.5a $\varepsilon$-задержка в leapfrog и предел массы ячейки
-
 Связь с strain §8.4.2-C′ (те же $\rho$, без второго knob).
-
 **1 · $\varepsilon$ на ячейке / ребре**
-
 $$
 \rho(x)=|Z(x)|^2,
 \qquad
@@ -511,31 +288,23 @@ $$
 \qquad
 \varepsilon_e=\frac{\rho_e-\rho_{\mathrm{vac}}}{\rho_{\mathrm{vac}}}.
 $$
-
 $$
 \ell_e=\ell_P\,(1+\varepsilon_e),
 \qquad
 \ell_P=\mathrm{const}\ \text{(не резиновый)}.
 $$
-
 **2 · Информационная задержка → kick**
-
 Macro-время (согласовано с $h_{00}\sim-\varepsilon$, §8.4.2-C′′):
-
 $$
 \frac{\mathrm{d}\tau}{\mathrm{d}t}\Big|_{x}
 =
 (1+\varepsilon_x)^{-1}.
 $$
-
 На M комбинаторный тик всё ещё $hT$; задержка входит **в затвор**, не в длину ребра графа. Тождество плотности:
-
 $$
 |Z|^2=\rho_{\mathrm{vac}}(1+\varepsilon_x).
 $$
-
 Подстановка в saturating kick (§3.12.5):
-
 $$
 \Phi[\varepsilon]
 =
@@ -545,11 +314,8 @@ $$
 \right\rfloor
 \in\mathbb{Z}_N.
 $$
-
 $$\lfloor\mathcal{N}[\varepsilon]\rfloor=R\bigl(\Phi[\varepsilon]\bigr)-Z.$$
-
 **3 · Следующий спинор**
-
 $$
 Z^{+}
 =
@@ -560,13 +326,9 @@ Z^{+}
 Z^{-}
 \pmod{N}.
 $$
-
 $Z^{-}$ — регистр задержки на один тик (A13); $\varepsilon$ модулирует только $\lfloor\mathcal{N}\rfloor$. При $\varepsilon\uparrow$ знаменатель $\uparrow$ $\Rightarrow$ $\Phi\downarrow$ $\Rightarrow$ пинок слабеет (насыщение).
-
 **4 · $\ell_e$ и планковский предел массы дефекта**
-
 A7: $\rho\le\rho_\star$ (natural $\rho_\star=1\Leftrightarrow\rho_E\le u_P=K_P$). Тогда
-
 $$
 \varepsilon\le\varepsilon_\star
 =
@@ -574,9 +336,7 @@ $$
 \quad\Rightarrow\quad
 \ell_e\le\ell_P\,(1+\varepsilon_\star).
 $$
-
 Объём ячейки несжимаем ($v_p=\ell_P^{3}$), значит локальная масса дефекта:
-
 $$
 m_{\mathrm{loc}}
 \le
@@ -586,34 +346,22 @@ m_P,
 \qquad
 \rho_P=\frac{m_P}{\ell_P^{3}}=\mu_P.
 $$
-
 Pra-occupancy (§5.0): $b\in\{0,1\}\Rightarrow m_{\mathrm{cell}}=b\,m_P\le m_P$. При $\rho\to\rho_\star$ — $\Phi[\varepsilon]\to$ насыщению, дальше масса в одном $v_p$ не растёт.
-
-BC домена $D_\star=\{\rho=\rho_\star\}$ и профиль $h_{00}$ (near $\varepsilon$ / far $1/R$) — §8.4.2-C′′′ · `SI.saturation_bc_row()`.
-
-Код: `SI.leapfrog_eps_row()` · kick: `saturating_phi_kick` (`|Z|²≡ρ_vac(1+ε)`).
-
+BC домена $D_\star=\{\rho=\rho_\star\}$ и профиль $h_{00}$ (near $\varepsilon$ / far $1/R$) — §8.4.2-C′′′.
 #### 3.12.6 Bit budget of `hV` — вывод из Planck (дна ниже нет)
-
 **Элементарный кирпич** — одна ячейка **`hV = l_P³`**. Её информационная ёмкость **не knob** и **не ширина CUDA-регистра**:
-
 \[
 B_{hV} = \frac{2\pi E_P l_P}{\hbar c \ln 2}
        = \frac{2\pi}{\ln 2}
        \approx 9{,}0647 \text{ bit}
 \]
-
 (последний шаг: **`E_P l_P = \hbar c`** из Planck-определений.)
-
 **Heisenberg floor** (§5.0.2, **`s₀ = ℏ/2`**) задаёт минимальную фазовую сетку:
-
 \[
 N_\phi = \left\lceil \frac{2\pi}{\Delta\phi_{\min}} \right\rceil
        = \lceil 4\pi \rceil = 13
 \]
-
 **Разбиение бюджета** на spinor **`z ∈ ℂ²`**:
-
 | величина | формула | значение |
 |----------|---------|----------|
 | **`B_{hV}`** | **`2π/ln 2`** | **≈ 9.065 bit** |
@@ -624,27 +372,10 @@ N_\phi = \left\lceil \frac{2\pi}{\Delta\phi_{\min}} \right\rceil
 | **`B_amp`** | **`⌈log₂(N_ring/N_φ)⌉`** | **6** → **`frac_bits = 6`** |
 | **`Δφ_disc`** | **`round(N_ring·Δφ_min/2π)`** | **41 ticks mod 512** |
 | **`𝒩_states`** | **`2^{B_{hV}}`** | **≈ 520** |
-
-**Не путать:** **`frac_bits`** — не «удобная двойка для GPU», а **`⌈log₂(512/13)⌉`**: сколько амплитудных уровней помещается в кирпич при **13** фазовых делениях на **`N_ring`**. **`Δφ_min = 1/32`** — отвергнуто как инженерный костыль.
-
-**`α_fs⁻¹ = 4π³ + π² + π ≈ 137`** (§8.2) — **не** ширина кольца: это **число каналов фазового сопряжения** на T-readout; verify **`Compton_e`**, **`VdW_algebra`**, gate row — PASS.
-
-**Impl vs M:**
-
-| слой | смысл |
-|------|--------|
-| **`N_ring = 512`** | **M-физика** — modular bounce видим |
-| **`int32` storage** | транспорт; редукция **`mod 512`** на каждом tick |
-| **`W_sim ≫ B_{hV}`** (legacy 32-bit lane) | **запрещён** как default — padding ≠ аксиома |
-
-**Код:** `si_constants.HV` · `hv_bit_budget()` · verify **`HvBitBudget`** · `MConfig.mod_bits/frac_bits/phase_bits` defaults.
-
+**Не путать:** **`frac_bits`** — не произвол ширины, а **`⌈log₂(512/13)⌉`**: сколько амплитудных уровней помещается в кирпич при **13** фазовых делениях на **`N_ring`**. **`Δφ_min = 1/32`** — отвергнуто как инженерный костыль.
 #### 3.12.7 Congruence ladder — **`Z_{512}` → вычеты → `g` × `N_{12}`**
-
 **Claim:** после §3.12.6 (**физика → `N_ring=512`**) следующий слой — **не** новая аксиома, а **законы congruence** на кольце и их склейка со **звездой** **`N_{12}`**.
-
 ##### A · Лестница (4 этажа)
-
 ```
 0  физика     Bekenstein B_hV + Heisenberg Δφ_min + A7/A5
 1  Z_{512}[i] N=2^9, ω=exp(2πi/N), 4 lane, wrap mod N
@@ -652,11 +383,8 @@ N_\phi = \left\lceil \frac{2\pi}{\Delta\phi_{\min}} \right\rceil
 3  × N_{12}   holonomy Σ_N → Φ ∈ Z_N → ⌊𝒩⌋ → leapfrog
 4  open       спектр Φ, umklapp mod ℏG, орбиты g (§5.2.4)
 ```
-
 **512** задаёт **вертикаль** (бюджет **`hV`**). **12** — **горизонталь** (stencil). **13** = **`N_φ = |N_{12}|+1`** — склейка (**`frac_bits=⌈log₂(512/13)⌉`**).
-
-##### B · Законы из **`ℤ_{N_ring}`** (shipped)
-
+##### B · Законы из **`ℤ_{N_ring}`** (closed in MODEL)
 | id | congruence / identity | M-смысл |
 |----|------------------------|---------|
 | **CL-1** | **`Z⁺+Z⁻ = 2Z+⌊𝒩⌋ (mod N)`** | exact **T⁻¹** (A13); не float drift |
@@ -667,13 +395,9 @@ N_\phi = \left\lceil \frac{2\pi}{\Delta\phi_{\min}} \right\rceil
 | **CL-6** | **`gcd(N_φ, N)=1`** | 13 фазовых секторов — **перестановка** кольца |
 | **CL-7** | **`Σ_{y∈N} ΔE ≡ 0 (mod E₀)`** | локальный energy ledger (§5.2.3) |
 | **CL-8** | **`Σ_{y∈N} Δπ ≡ 0 (mod p₀)`** | импульс mod **`p₀`** (§5.2.1) |
-
 **Числа при каноне:** **`N=512`**, **`Δφ_disc=41`**, **`N_φ=13`**, **`pauli_kick=N/2=256`**, **`a_Q=2^{−6}`**, **`sync_disc=⌊41·κ_link⌋=3`** (FCC).
-
 ##### C · Склейка **`Z_{512} × N_{12}`**
-
 Holonomy и projected collision **не** живут только в кольце:
-
 \[
 \zeta = f\!\Bigl(Z(x),\ \sum_{y\in N_{12}(x)} Z(y)\Bigr)
 \quad\Rightarrow\quad
@@ -681,19 +405,12 @@ Holonomy и projected collision **не** живут только в кольце
 \quad\Rightarrow\quad
 \lfloor\mathcal{N}\rfloor,\ \text{leapfrog}.
 \]
-
 **`γ=κ_link=1/|N_{12}|`** — доля звезды **до** проекции в **`ℤ_N`**. Без **`N_{12}`** — abstract mod **`N`**, не канон **`g`**.
-
 ##### D · Open (следующий leaf)
-
 | leaf | вопрос | статус |
 |------|--------|--------|
 | **CL-O1** | образ **`N_{12}×Z_N[i] → Z_N`** (допустимый спектр **`Φ`**) | open |
 | **CL-O2** | umklapp **`Σ Δp ≡ 0 (mod ℏG)`** на обратной решётке (§5.2.4) | open |
 | **CL-O3** | орбиты **`g`** на конечном алфавите; modular bounce | open |
 | **CL-O4** | факторизация **`N = 2^9`** vs **`N_φ=13`**, **`2^{frac_bits}`** | partial (inventory) |
-
 **Не путать:** **`n∈ℤ`** (A10 заряд) — **не** mod **`N`**; winding над кольцом.
-
-**Код:** `congruence_ladder_row()` · verify **`Congruence_ladder`** · ledger **`LadderLedger`**.
-
