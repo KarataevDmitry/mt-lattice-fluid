@@ -1724,6 +1724,145 @@ class SIConstants:
             ),
         }
 
+    def alpha_ae_cloud_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·ae·ask — asked carrier: A5 holonomy-cloud → ae without α.
+
+        Method: (1) name the cloud on Λ; (2) what dimensionless excess of μ;
+        (3) try α-free fractions; (4) reject circular; report.
+
+        Carrier answers (2026-09-24):
+          • Cloud = ρ_Θ halo (Heisenberg §5.0.5) + Φ_□ Stokes channel + A5 bath.
+          • Factorization (Schwinger door = carrier reading):
+                ae^(1) = α · 2r ,  2r = Δφ_min/π = 1/(2π)
+            = coupling × tick-cycle geometry. Geometry CLOSED; coupling OPEN
+            (same OPEN as §8.2·α·meaning / descent).
+          • Pure-geo tries (no α / no 137) land wrong scale — reject as ae.
+          • REJECT ae≟2r/137 or α/(2π) as M-derivation (injects α or α_geom).
+          • Conclusion: Schwinger door does NOT bypass coupling OPEN;
+            it splits α=ae/(2r) with 2r known. ae without α ⇔ coupling fraction
+            (or lab ae). Same mountain, sharper factorization.
+        """
+        dphi = DELTA_PHI_MIN
+        r = dphi / (2.0 * math.pi)
+        two_r = 2.0 * r
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        n_phi = 13
+        n_hier = 8
+        n_ring = 1 << int(math.floor(2.0 * math.pi / math.log(2.0)))  # 512
+        kappa = KAPPA_FCC_1TICK
+        alpha_c = 7.2973525693e-3
+        ae_codata = 1.15965218128e-3
+        ae_1loop = alpha_c * two_r
+        # α-free geometric candidates (report ppm vs CODATA ae)
+        tries: dict[str, float] = {
+            "dphi/N_ring": dphi / n_ring,
+            "kappa/N_ring": kappa / n_ring,
+            "1/N_ring": 1.0 / n_ring,
+            "1/(4pi·N12·N_hier)": 1.0 / (4.0 * math.pi * n12 * n_hier),
+            "1/(N12·N_phi·N_hier)": 1.0 / (n12 * n_phi * n_hier),
+            "r/N12": r / n12,
+            "r/N_phi": r / n_phi,
+            "kappa²/N12": (kappa * kappa) / n12,
+            "r²": r * r,
+        }
+        # circular / α-injecting (same scale as one-loop — not a derivation)
+        circular = {
+            "2r/137": two_r / 137.0,
+            "alpha/(2pi)": ae_1loop,
+        }
+
+        def ppm(v: float) -> float:
+            return (v - ae_codata) / ae_codata * 1e6
+
+        best_geo_name = min(tries, key=lambda k: abs(ppm(tries[k])))
+        best_geo_ppm = ppm(tries[best_geo_name])
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "cloud_rho_Theta_halo",
+                "maps_to": "§5.0.5 ρ_Θ — Heisenberg halo around b=1 core",
+                "status": "shipped",
+                "mechanism": "|Δφ|,|ζ| ≥ Δφ_min; not δ on one v_p",
+            },
+            {
+                "id": "cloud_Phi_square_channel",
+                "maps_to": "Φ_□ Stokes — EM plaquette read of phase cloud",
+                "status": "shipped_channel",
+                "mechanism": "§8.2 Planck EM; alpha_match_open on probe",
+            },
+            {
+                "id": "cloud_A5_bath",
+                "maps_to": "A5 ocean dresses μ; bare ae=0 (g2 ask)",
+                "status": "shipped",
+                "mechanism": "anomaly = dressing, not topology",
+            },
+            {
+                "id": "factorization_ae_eq_alpha_times_2r",
+                "ratio": abs(ae_1loop / (alpha_c * two_r) - 1.0),
+                "maps_to": "ae^(1)=α·2r — coupling × geometry",
+                "status": "identity",
+                "mechanism": "2r closed (foot); α = coupling OPEN",
+            },
+            {
+                "id": "geometry_2r_closed",
+                "ratio": two_r,
+                "maps_to": "2r=Δφ_min/π=1/(2π)",
+                "status": "shipped_geometry",
+                "mechanism": "Heisenberg foot on tick cycle",
+            },
+            {
+                "id": "reject_pure_geo_ae",
+                "ppm": best_geo_ppm,
+                "maps_to": f"best α-free try {best_geo_name} — wrong scale",
+                "status": "rejected",
+                "mechanism": "|ppm|≫1e3; pure combinatorics ≠ anomaly",
+            },
+            {
+                "id": "reject_2r_over_137",
+                "ppm": ppm(circular["2r/137"]),
+                "maps_to": "ae≟2r/137 — injects α_geom",
+                "status": "rejected",
+                "mechanism": "then α=ae/(2r) returns 1/137; empty",
+            },
+            {
+                "id": "reject_alpha_over_2pi_as_M_ae",
+                "ppm": ppm(circular["alpha/(2pi)"]),
+                "maps_to": "ae≟α/(2π) as M-derivation — circular",
+                "status": "rejected",
+                "mechanism": "identity ok; not a source of ae without α",
+            },
+            {
+                "id": "open_same_coupling_fraction",
+                "maps_to": "ae without α ⇔ discrete coupling fraction",
+                "status": "open",
+                "mechanism": "same mountain as meaning/descent; door only factors",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·ae·ask — ae=α·2r factors; cloud ≠ new α path",
+            "method": "ask-model: name cloud → try fractions → reject → report",
+            "vacuum_foot_r": r,
+            "two_r": two_r,
+            "ae_CODATA": ae_codata,
+            "ae_1loop_from_alpha": ae_1loop,
+            "one_loop_vs_ae_ppm": ppm(ae_1loop),
+            "best_geo_try": best_geo_name,
+            "best_geo_ppm": best_geo_ppm,
+            "try_ppm": {k: ppm(v) for k, v in tries.items()},
+            "circular_ppm": {k: ppm(v) for k, v in circular.items()},
+            "factorization_closed": True,
+            "derivation_ae_closed": False,
+            "bypasses_coupling_open": False,
+            "inventory": inventory,
+            "ask_ok": abs(ae_1loop / (alpha_c * two_r) - 1.0) < 1e-15
+            and abs(best_geo_ppm) > 1e3
+            and abs(ppm(circular["2r/137"])) < 5e3,
+            "note": (
+                "Asked carrier: A5 cloud = ρ_Θ+Φ_□+bath. ae^(1)=α·2r factors "
+                "(2r closed, α open). Pure-geo ae rejects; 2r/137 and α/(2π) "
+                "circular. Schwinger door does not bypass coupling OPEN."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

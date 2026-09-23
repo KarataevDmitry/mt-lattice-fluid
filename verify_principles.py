@@ -580,6 +580,32 @@ def check_alpha_dirac_g2_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_ae_cloud_ask(device: str = "cpu") -> dict:
+    """§8.2·α·ae·ask — ae=α·2r factors; does not bypass coupling OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_ae_cloud_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["factorization_closed"])
+        and not bool(row["derivation_ae_closed"])
+        and not bool(row["bypasses_coupling_open"])
+        and abs(float(row["best_geo_ppm"])) > 1e3
+    )
+    return {
+        "id": "Alpha_ae_cloud_ask",
+        "two_r": row["two_r"],
+        "best_geo_try": row["best_geo_try"],
+        "best_geo_ppm": row["best_geo_ppm"],
+        "factorization_closed": row["factorization_closed"],
+        "derivation_ae_closed": row["derivation_ae_closed"],
+        "bypasses_coupling_open": row["bypasses_coupling_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2195,6 +2221,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_arg_binding_try(device=device),
         check_alpha_schwinger_ask(device=device),
         check_alpha_dirac_g2_ask(device=device),
+        check_alpha_ae_cloud_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
