@@ -581,6 +581,44 @@ $$
 
 **Exploratory (anti-pattern):** **`α_fs⁻¹_geom=137`** — см. **`Cuboctahedron_geo`**; пропуск **`a→Φ_□`**.
 
+#### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
+
+**Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
+
+| при `a=l_P` | формула | SI |
+|-------------|---------|-----|
+| **`V`** (Voronoy) | **`a³/√2 = v_hV`** | m³ |
+| **`R_in`** (до стены) | **`a/2`** | m — биссектриса **`|ON|/2`**, не **`κa`** hull |
+| **`R_axis`** (ось ±x…) | **`a/√2 = κa`** | m — совпадает с **`R_in(hull)`** кубоокtaэдра |
+| **`R_cubic`** (±,±,±) | **`a√(3/2)`** | m — дальняя вершина ячейки |
+| **`A_◇`** (один ромб) | **`(2√2/3)a²`**, **`cos θ=1/3`** | m² |
+| **`S`** | **`8√2·a²`** | m² |
+| **`V/S`** | **`a/16`** | m |
+
+**Dual к 1-tick hull:**
+
+$$
+12\ \text{NN} \leftrightarrow 12\ \text{ромбов},\quad
+14\ \text{граней hull} \leftrightarrow 14\ \text{вершин WS},\quad
+24\ \text{рёбер}.
+$$
+
+**Сшивка двух тел при том же `a`:**
+
+$$
+\frac{V_{\mathrm{cuboctahedron}}}{V_{\mathrm{Voronoy}}}
+= \frac{V_{\mathrm{hull}}}{v_{hV}}
+= \frac{16}{3},
+\qquad
+R_{\mathrm{in}}^{\mathrm{Voronoy}}
+= \kappa\, R_{\mathrm{in}}^{\mathrm{hull}}
+= \frac{a}{2}.
+$$
+
+**Не путать:** **`κ=1/√2`** — macro readout по **□-грани hull**; **стена Voronoy** ближе: **`a/2`**. Осевая вершина WS лежит на расстоянии **`κa`** — там же, где **inradius hull**.
+
+**Код:** `SI.rhombic_dodecahedron_geometry_row()` · `SI.rhombic_dodecahedron_carrier_ask_row()` · verify **`Rhombic_dodecahedron_geo`**, **`Rhombic_dodecahedron_ask`**.
+
 #### Теория распада (из носителя, не гостевой Γ=ℏ/τ)
 
 **Не** отдельный S-matrix. Распад / аннигиляция — **каналы $g$** на топологии + энергия (A3 · A10 · A11).
