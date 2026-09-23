@@ -1,0 +1,41 @@
+---
+description: MODEL vs DEVLOG boundary — physics SSOT vs impl/verify/narrative
+globs: model/**/*.md, MODEL.md, DEVLOG.md
+alwaysApply: true
+---
+
+# MODEL ≠ DEVLOG (hard gate)
+
+Канон границы: `DEVLOG.md` §0 · verify **`Model_purity`**.
+
+## MODEL (`model/00`…`06`, `MODEL.md`)
+
+**Только:** физика, аксиомы, формулы, OPEN/closed на уровне M, ссылки на другие § MODEL.
+
+**Запрещено в теле** (после шапки файла):
+
+- `**Код:**` / `Код:` / пути `mt_ca/…` / `*.py`
+- `verify **`…`**` / PASS / FAIL / ✅ / ⚠️ как статус impl
+- колонки `impl` / `verify` / GPU DoD / module map
+- provenance, даты сессий, narrative «мы догнали»
+
+**Шапка файла** может один раз указать: impl → DEVLOG.
+
+## DEVLOG (`DEVLOG.md`)
+
+**Только сюда:** реестр §1, open leaves §3, impl status §4, verify snapshots, GPU DoD, module map, даты, ✅/⚠️.
+
+## При правке §3
+
+- **Канон `g` = §3.12 only.** §3.1–3.2 OPEN для γ, Φ, L, α*, ε.
+- §3.3–3.4 = legacy float, не канон.
+- §3.4 ≠ «канон M». Moore = следствие A1, не выбор neighborhood.
+- Вырезанное из MODEL → перенести в DEVLOG §1/§3/§4, не выбрасывать.
+
+## Перед ship
+
+```bash
+python verify_principles.py --device cpu
+```
+
+**`Model_purity` must PASS.** Иначе правь MODEL, не ослабляй gate.
