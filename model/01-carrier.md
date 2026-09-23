@@ -1,10 +1,5 @@
 # §1 · Носитель (Planck lattice · FCC)
 
-**SSOT-часть MODEL.** Hub: [`MODEL.md`](../MODEL.md) · соседи: [`model/`](.)
-
-**Не сюда:** impl / verify / даты / sim-gap / provenance → [`DEVLOG.md`](../DEVLOG.md).
-
----
 ## §1. Дискретное пространство-время (Planck lattice)
 ```
 Λ = FCC ⊂ ℝ³     (канон пространства (3+1), §1.6)

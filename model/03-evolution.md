@@ -1,11 +1,5 @@
 # §3 · Функция перехода g
 
-**SSOT-часть MODEL.** Hub: [`MODEL.md`](../MODEL.md) · соседи: [`model/`](.)
-
-**Не SSOT здесь:** impl · verify · sim-gap · provenance · narrative → [`DEVLOG.md`](../DEVLOG.md) **§1** (реестр).
-
-**В теле §3 запрещено:** `Код:` · `verify` · ✅ · `.py` · GPU · PASS · колонки impl/verify.
----
 ## §3. Функция перехода `g`
 **Канон `g`:** **§3.12** only. **§3.1–3.2** — каркас + ограничения. **§3.3–3.4** — legacy float (не канon).
 ### 3.1 Каркас (до абсolutных условий)
@@ -50,7 +44,7 @@ z* = local_ca(z; γ)
 φ  = 2π · ( α* / (|z*|² + ε) - 1 ) · w(ρ)
 z' = z* · exp(i φ)
 ```
-**Legacy float gate** — DEVLOG §4. **Канон forward-tick:** §3.12.
+**Канон forward-tick:** §3.12.
 ### 3.4 Isotropic scalar gate — **legacy float · не канон**
 Одна ячейка **`v_p`**, scalar **`z∈ℂ`**, один **`exp(iφ)`** за **`hT`**. **Не** закрывает OPEN §3.1. **Не** канон **`g`**.
 **Форма (legacy scalar gate, T/probe):**
@@ -71,8 +65,6 @@ z' = z · exp(iφ)
 #### 3.4.1 Phase wrap
 **\Arg(Σz/z)\** / **\tan2−atan2\** → ложный скачок **2π**.
 **Fix:** **\ζ=(Σ_N z)·z*\**, **\Δφ=wrap(Arg ζ)\**.
-### 3.5 Legacy stubs (micro-aniso · Heisenberg DoD)
-→ **DEVLOG** §1 · §3 · §4. **Не MODEL.**
 ### 3.8 Слабые волны и вихрь на каноне носителя
 **Канон (3+1):** FCC **N₁₂** (§1.6). **Срез (2+1):** гекс **N₆** (§1.4).
 **Канон `g`:** §3.12 · ДА: §3.9.

@@ -1813,6 +1813,10 @@ def check_model_purity() -> dict:
     root = Path(__file__).resolve().parent
     model_dir = root / "model"
     patterns: list[tuple[re.Pattern[str], str]] = [
+        (re.compile(r"\*\*SSOT-часть MODEL"), "meta header SSOT"),
+        (re.compile(r"\*\*Не SSOT"), "meta header DEVLOG pointer"),
+        (re.compile(r"\*\*Не сюда:"), "meta header DEVLOG pointer"),
+        (re.compile(r"\*\*В теле §3 запрещено:"), "meta header forbidden list"),
         (re.compile(r"\*\*Код:\*\*"), "**Код:**"),
         (re.compile(r"(?<!\*)\bКод:\s*`"), "Код:`"),
         (re.compile(r"verify\s+\*\*"), "verify **"),
@@ -1822,13 +1826,7 @@ def check_model_purity() -> dict:
         (re.compile(r"\*\*Impl:\*\*"), "**Impl:**"),
         (re.compile(r"\*\*GPU DoD:\*\*"), "**GPU DoD:**"),
     ]
-    allow_fragments = (
-        "запрещено",
-        "Не SSOT",
-        "→ **DEVLOG**",
-        "→ [`DEVLOG",
-        "GPU-вкусовщина",
-    )
+    allow_fragments = ("GPU-вкусовщина",)
     hits: list[str] = []
     for path in sorted(model_dir.glob("*.md")):
         for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):

@@ -12,14 +12,15 @@ alwaysApply: true
 
 **Только:** физика, аксиомы, формулы, OPEN/closed на уровне M, ссылки на другие § MODEL.
 
-**Запрещено в теле** (после шапки файла):
+**Запрещено в теле `model/00`…`06`:**
 
 - `**Код:**` / `Код:` / пути `mt_ca/…` / `*.py`
 - `verify **`…`**` / PASS / FAIL / ✅ / ⚠️ как статус impl
 - колонки `impl` / `verify` / GPU DoD / module map
 - provenance, даты сессий, narrative «мы догнали»
+- **мета-шапки** («SSOT-часть», «Не сюда», «запрещено в теле») — **не писать** в section-файлы
 
-**Шапка файла** может один раз указать: impl → DEVLOG.
+**Граница живёт один раз:** [`MODEL.md`](MODEL.md) hub · [`DEVLOG.md`](DEVLOG.md) §0 · это rule · verify **`Model_purity`**.
 
 ## DEVLOG (`DEVLOG.md`)
 
