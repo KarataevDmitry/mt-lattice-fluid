@@ -976,6 +976,122 @@ class SIConstants:
             ),
         }
 
+    def alpha_force_lattice_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·F·ask — Coulomb lands on F₀ lattice ⇒ α = κ/M.
+
+        Thm 5.1: force transfers as n_F·F₀. Unit NN Coulomb F=α F_P.
+        F₀/F_P = κ (geometry). One EM quantum at N=1:
+            α F_P = F₀/M  ⇒  α = κ/M , M∈ℕ.
+
+        Probe (2026-09-23):
+          • target M = F₀/(α_c F_P) ≈ 96.899
+          • cleanest carrier M = N₁₂·N_hier = 96 (= n_△·N₁₂ = N_hier·(N_φ−1))
+            → α=κ/96, inv≈135.76, ~+9366 ppm vs CODATA
+          • nearest int M = 97 = N₁₂·N_hier+1 → α=κ/97, inv≈137.18, ~−1040 ppm
+          • M=137/√2 recovers α=1/137 — injects α_geom, empty for derivation
+          • π-ansatz still ~2 ppm; force path does **not** replace it yet
+        OPEN: which M from g (why 96 vs 97 / shell rule).
+        """
+        kappa = KAPPA_FCC_1TICK
+        n12 = float(N12_FCC_CAUSAL_LINKS)
+        n_hier = 8.0
+        n_phi = 13.0
+        n_tri = 8.0
+        alpha_c = 7.2973525693e-3
+        f0 = self.F_0
+        f_p = self.c**4 / self.G
+        m_target = f0 / (alpha_c * f_p)
+        m_96 = n12 * n_hier
+        m_97 = m_96 + 1.0
+        m_geom = 137.0 / math.sqrt(2.0)  # = 137·κ — not ℤ
+
+        def pack(m: float, name: str, status: str) -> dict[str, float | str]:
+            a = kappa / m
+            return {
+                "id": name,
+                "M": m,
+                "alpha": a,
+                "alpha_inv": 1.0 / a,
+                "vs_codata_ppm": (a - alpha_c) / alpha_c * 1e6,
+                "status": status,
+            }
+
+        cands = [
+            pack(m_96, "N12*N_hier", "cleanest_combinatorics"),
+            pack(m_97, "N12*N_hier+1", "nearest_int_ppm"),
+            pack(n_tri * n12, "n_tri*N12", "alias_of_96"),
+            pack(n_hier * (n_phi - 1.0), "N_hier*(N_phi-1)", "alias_of_96"),
+            pack(m_geom, "137/sqrt(2)=137*kappa", "rejects_injects_alpha_geom"),
+        ]
+        a96 = kappa / m_96
+        a97 = kappa / m_97
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "F0_over_FP_is_kappa",
+                "ratio": f0 / f_p,
+                "maps_to": "κ from hull; force ladder vs Planck force",
+                "status": "shipped",
+            },
+            {
+                "id": "Coulomb_NN_on_F0",
+                "maps_to": "α F_P = F₀/M ⇒ α=κ/M",
+                "status": "constraint",
+                "mechanism": "Thm5.1 force quanta + §8.2 Coulomb form",
+            },
+            {
+                "id": "M_target_CODATA",
+                "ratio": m_target,
+                "maps_to": "F₀/(α_c F_P) ≈ 96.899 — near 96|97",
+                "status": "report",
+            },
+            {
+                "id": "prefer_M96_story",
+                "maps_to": "N₁₂×N_hier — links × hierarchy budget",
+                "status": "candidate",
+                "mechanism": "ppm worse than 97; combinatorics cleaner",
+            },
+            {
+                "id": "prefer_M97_ppm",
+                "maps_to": "N₁₂×N_hier+1",
+                "status": "candidate",
+                "mechanism": "~−1040 ppm; +1 not yet from g",
+            },
+            {
+                "id": "reject_M_137_kappa",
+                "maps_to": "non-integer M; sneaks α_geom",
+                "status": "rejected",
+            },
+        ]
+        return {
+            "theorem": "§8.2·F·ask — α from F₀ lattice: α=κ/M",
+            "kappa": kappa,
+            "F0_N": f0,
+            "F_P_N": f_p,
+            "F0_over_FP": f0 / f_p,
+            "M_target_CODATA": m_target,
+            "M_N12_Nhier": m_96,
+            "M_N12_Nhier_plus1": m_97,
+            "alpha_M96": a96,
+            "alpha_M96_inv": 1.0 / a96,
+            "vs_codata_ppm_M96": (a96 - alpha_c) / alpha_c * 1e6,
+            "alpha_M97": a97,
+            "alpha_M97_inv": 1.0 / a97,
+            "vs_codata_ppm_M97": (a97 - alpha_c) / alpha_c * 1e6,
+            "alpha_pi_ansatz": self.alpha_fs,
+            "vs_codata_ppm_pi": (self.alpha_fs - alpha_c) / alpha_c * 1e6,
+            "candidates": cands,
+            "inventory": inventory,
+            "replaces_pi_ansatz": False,
+            "M_from_g_open": True,
+            "ask_ok": abs(f0 / f_p - kappa) / kappa < 1e-12
+            and abs(m_96 - 96.0) < 1e-12
+            and abs(m_target - 96.899) < 0.01,
+            "note": (
+                "Force lattice: α=κ/M. Best int M=97 (−1040 ppm); cleanest M=96 "
+                "(+9366 ppm). M=137κ rejects (α_geom). π-ansatz not replaced; M from g OPEN."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

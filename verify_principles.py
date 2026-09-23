@@ -410,6 +410,33 @@ def check_na0_h_carrier_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_force_lattice_ask(device: str = "cpu") -> dict:
+    """§8.2·F·ask — α=κ/M from F₀ lattice; M from g still OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_force_lattice_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["M_from_g_open"])
+        and not bool(row["replaces_pi_ansatz"])
+        and abs(float(row["M_N12_Nhier"]) - 96.0) < 1e-12
+        and abs(float(row["vs_codata_ppm_M97"]) + 1040.4) < 1.0
+        and abs(float(row["vs_codata_ppm_M96"]) - 9365.5) < 1.0
+    )
+    return {
+        "id": "Alpha_force_lattice_ask",
+        "M_target_CODATA": row["M_target_CODATA"],
+        "alpha_M96_inv": row["alpha_M96_inv"],
+        "alpha_M97_inv": row["alpha_M97_inv"],
+        "vs_codata_ppm_M96": row["vs_codata_ppm_M96"],
+        "vs_codata_ppm_M97": row["vs_codata_ppm_M97"],
+        "M_from_g_open": row["M_from_g_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2018,6 +2045,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_fixed_point(device=device),
         check_na0_from_carrier(device=device),
         check_na0_h_carrier_ask(device=device),
+        check_alpha_force_lattice_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

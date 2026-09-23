@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-23 | §8.2·F·ask | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice_ask` PASS |
 | 2026-09-23 | §8.2·H·ask | **спросили носитель** `N_a0`: Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); **reject** `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier_ask` PASS |
 | 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **ask later rejected as α-input** |
 | 2026-09-23 | α FP analytic | bare **closed form** `α*=[N_φ/(N_a0√(π/2))]^{1/11}`; stack poly `(2/π)α²³+(1/8)α²²=RHS²`; exponent **11=8+2+1** · **`Alpha_fixed_point` PASS** |
