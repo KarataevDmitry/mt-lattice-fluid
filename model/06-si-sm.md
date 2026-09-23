@@ -455,6 +455,63 @@ $$
 
 **Код:** `SI.radiation_row()`.
 
+#### §8.2·vac · A5-ванна: тепло и спектр (≠ CMB)
+
+**Не** отдельный Lagrangian. **A5-океан** (§0.5 · §5.3) = постоянно кипящий substrate; **CMB** (META §3.0) = last scattering **пузыря** на T — **другой объект**.
+
+**1 · Плотность кипящего вакуума**
+
+$$
+|z|^2 \leftrightarrow \frac{\rho_E}{u_P},
+\qquad
+|z|_{\mathrm{vac}} = z_{\min} = 2^{-B_{\mathrm{amp}}},
+\qquad
+|z|_{\mathrm{vac}}^2\Big|_{\mathrm{spinor}} = 2\,z_{\min}^2
+$$
+
+$$
+\rho_{E,\mathrm{vac}} = |z|_{\mathrm{vac}}^2\, u_P
+\quad\text{(оба компонента спинора на } z_{\min}\text{)}.
+$$
+
+**2 · Спектральные якоря** (то же §8.2 radiation, не дублируем knobs):
+
+$$
+\nu_0 = \frac{1}{hT},\quad
+\omega_0 = \frac{2\pi}{hT},\quad
+\lambda_0 = \frac{c}{\nu_0} = \kappa\,\ell_P = \frac{\ell_P}{\sqrt{2}},
+\quad
+\omega_D \sim \frac{1}{hT},\quad
+h\nu_0 = 4\pi E_0.
+$$
+
+**3 · Порядок «температуры» M-ванны** (если $\rho_E \equiv u=aT^4$, **оценка**, не Planck-1900):
+
+$$
+T_{\mathrm{M,bath}} \sim \left(\frac{\rho_{E,\mathrm{vac}}}{a}\right)^{1/4},
+\qquad
+T_{\mathrm{u_P,ceiling}} \sim \left(\frac{u_P}{a}\right)^{1/4}.
+$$
+
+**Не путать:**
+
+$$
+T_{\mathrm{CMB}} \approx 2.725\,\mathrm{K}
+\quad\text{— T-наблюдение пузыря; не } T_{\mathrm{M,bath}}.
+$$
+
+**4 · Ask-model итог**
+
+| кусок | статус |
+|-------|--------|
+| $\rho_{E,\mathrm{vac}}>0$, $z_{\min}$, $\nu_0$, $\omega_D$, BZ-cutoff | ✅ §8.2·vac |
+| $T_{\mathrm{M,bath}}$ order ($\sim 10^{31}\,\mathrm{K}$) | ✅ algebra |
+| $T_{\mathrm{M,bath}} \neq T_{\mathrm{CMB}}$ | ✅ по слоям |
+| Bose $\langle n(\omega)\rangle$, $u(\omega)$, Stefan | ⚠️ open (T + DOS) |
+| sim: $\omega(k)$ на BZ | ⚠️ §5.2.4 leaf |
+
+**Код:** `SI.vacuum_bath_row()` · verify **`Vacuum_bath`**.
+
 #### Теория распада (из носителя, не гостевой Γ=ℏ/τ)
 
 **Не** отдельный S-matrix. Распад / аннигиляция — **каналы $g$** на топологии + энергия (A3 · A10 · A11).
