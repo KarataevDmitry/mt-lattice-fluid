@@ -261,6 +261,7 @@
 | 2026-09-23 | §8.2 m_ν | atm `α⁵·2m_H/(N_hier N_φ)`≈0.04986 eV (0.21% vs √Δm²≈0.05); =`α³·m_e/(N_hier/2)`; sol/lightest lemmas |
 | 2026-09-23 | §8.2 ask-model β | слабый $\Delta B=0$ класс $n\to pe\bar\nu$ **разрешён** (SU(2)/$P_L$+оболочка); $\Gamma$ open ($m_n$ closed §8.2·7) |
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
+| 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 ask-model ΔB | stamped $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
 | 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |

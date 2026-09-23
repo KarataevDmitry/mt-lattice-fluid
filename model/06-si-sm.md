@@ -102,6 +102,39 @@ z' = z + l_P²·Δ_disc z + i·hT·( α_SI/(ρ_E + β) − ω )·z
 
 ### 8.2 SM-константы: **вычисляются** из `g` (не fitted)
 
+#### SM → Planck
+
+$$
+\begin{aligned}
+E_0 &= E_P/\sqrt{2}, &
+ m_{\mathrm{arg}} &= m_P/\sqrt{2}, &
+ \kappa &= 1/\sqrt{2}, \\
+\alpha_{\mathrm{fs}}^{-1}
+  &= 4\pi^{3}+\pi^{2}+\pi, &
+ N_\varphi &= \lceil 4\pi\rceil = 13, &
+ N_{\mathrm{hier}} &= 8, \\
+a_Q &= 2^{-F}, &
+ \rho_Q &= a_Q^{2}, &
+ N_{12} &= 12, \\
+v &= \alpha_{\mathrm{fs}}^{8}\,E_P\,\sqrt{2\pi}, &
+ m_H^{(\mathrm{bare})} &= v/2, \\
+\delta\lambda &= \alpha_{\mathrm{fs}}/(4\pi), &
+ \lambda &= \tfrac18 + N_{\mathrm{hier}}\,\delta\lambda, &
+ m_H &= \sqrt{2\lambda}\,v, \\
+m_p &= \alpha_{\mathrm{fs}}\cdot\frac{v}{2}\cdot\Bigl(1+\frac{\kappa^{2}}{N_{12}}\Bigr), \\
+m_e &= \alpha_{\mathrm{fs}}^{2}\cdot\frac{m_H}{N_\varphi}, \\
+m_\nu^{(\mathrm{atm})}
+  &= \alpha_{\mathrm{fs}}^{5}\cdot\frac{2m_H}{N_{\mathrm{hier}} N_\varphi}
+   = \alpha_{\mathrm{fs}}^{3}\cdot\frac{m_e}{N_{\mathrm{hier}}/2}, \\
+m_n &= m_p + 2 m_e, \\
+\alpha_s(v) &= \frac{3}{8\pi}, &
+ \frac{1}{\alpha(M_Z)}
+  &= \alpha_{\mathrm{fs}}^{-1}-\frac{2\pi}{\ln 2}, \\
+m_W &= \frac{e(M_Z)\,v}{2\sin\theta_W}, &
+ m_Z &= \frac{m_W}{\cos\theta_W}.
+\end{aligned}
+$$
+
 #### Постоянная тонкой структуры α
 
 Из gate (§7.1): `α* = 1 + 1/(4π)` — vacuum residue `(α*−1) = Δφ_min/(2π) = 1/(4π)` на тик.  
