@@ -297,7 +297,8 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
-| 2026-09-24 | §6·floor1·ask | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1; content census OPEN · Floor1_leptonic_ask PASS |
+| 2026-09-24 | §6·floor1·B0·census | only stable B=0 matter @N₁₂³…⁴ = dressed lightest Q=±1; Q=0 blobs=pre-resonance · Floor1_B0_census_ask PASS |
+| 2026-09-24 | §6·floor1·ask | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1 · Floor1_leptonic_ask PASS |
 | 2026-09-24 | §8.2·α·nF·census | seat table: 1 core + 12×8 hier = 97; F=F₀/97 ⇒ α=κ/97; combinatorial CLOSED · Alpha_nF_kick_census PASS |
 | 2026-09-24 | §8.2·α·M·g·try | M=1+N₁₂·N_hier=97 (core b + link×hier); α=κ/97 ~−1040ppm; → census · Alpha_M_from_g_try PASS |
 | 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent_ask PASS |

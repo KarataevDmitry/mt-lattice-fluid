@@ -2737,10 +2737,10 @@ class SIConstants:
                 "status": "rejected_as_length_floor",
             },
             {
-                "id": "open_multicell_leptonic_census",
-                "maps_to": "stable/metastable B=0 multi-cell at N₁₂^{3…4}",
-                "status": "open",
-                "mechanism": "pre-resonance / leptonic dressing on iterated star",
+                "id": "closed_by_B0_census",
+                "maps_to": "floor1_B0_census_ask_row — C2 stable; C4=pre-resonance",
+                "status": "closed",
+                "mechanism": "class census from §8.2 stability",
             },
             {
                 "id": "open_muon_tau_not_here",
@@ -2770,6 +2770,136 @@ class SIConstants:
                 "Floor 1: linear band ~N₁₂³…N₁₂⁴·dl (pre-resonances / leptonic). "
                 "Not Compton/a₀, not confining floor 2, not N_gen. "
                 "OPEN: multi-cell B=0 census; μ/τ mass not claimed here."
+            ),
+        }
+
+    def floor1_B0_census_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·B0·census — which B=0 configs at ~N₁₂³…N₁₂⁴ can be stable.
+
+        Stability (already stamped §8.2 decay): no downhill g with same
+        additive invariants (Q, and stamped B,L,…) and lower ledger energy.
+
+        B=0 here = not confining/baryon class (≠ floor 2/3). Radius band
+        from floor1 ask: N₁₂³…N₁₂⁴ · dl.
+
+        Class census (carrier, not sim histogram):
+
+          C0 vacuum / A5 boil only
+            — not an object; background. Reject as floor1 content.
+
+          C1 free γ (n=0 front)
+            — STABLE (already vacuum sector). Not a radius-N₁₂^k blob;
+              propagating front. Stable but not floor1-band object.
+
+          C2 lightest Q=±1 (e± scheme): 1-cell core + optional near dressing
+            — STABLE: topo-protection (alone ≠ collapse to n=0) + lightest
+              with that Q (§8.2). Core = floor0; near packing/A5 dressing
+              may extend into floor1 radii without being a second particle.
+
+          C3 excited / composite leptonic (μ-scheme, same Q, higher E)
+            — NOT stable if any downhill to e+γ… exists. Model already:
+              composite/excited «may have channel down». Metastable OPEN.
+
+          C4 Q=0 multi-cell blob without ± pair (pure excitation)
+            — NO topo charge to protect; A5 returns to vacuum.
+              = pre-resonance / transient. UNSTABLE.
+
+          C5 ± pair bound at floor1 radius (positronium-like)
+            — annihilation channel stamped when ± meet (§5.0.3).
+              UNSTABLE as bound B=0 object.
+
+          C6 neutral with stamped L (ν-scheme)
+            — may be stable if lightest in its L sector; spatial size
+              not fixed to N₁₂^{3…4}. Size assignment OPEN.
+
+        Sharp claim: at this radius the only stable B=0 *matter* class
+        is C2 (dressed lightest Q=±1). Floor1's own name «pre-resonance»
+        = C4 (+ maybe C3) — unstable by construction. Content census
+        of metastable maps still OPEN (sim).
+        """
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        r_lo = n12**3
+        r_hi = n12**4
+
+        classes: list[dict[str, str | float | bool]] = [
+            {
+                "id": "C0_vacuum_A5",
+                "stable": False,
+                "status": "rejected_as_object",
+                "maps_to": "background boil — not floor1 content",
+            },
+            {
+                "id": "C1_free_gamma",
+                "stable": True,
+                "status": "stable_wrong_object",
+                "maps_to": "n=0 front; not N₁₂^k blob",
+            },
+            {
+                "id": "C2_lightest_Q_pm1_dressed",
+                "stable": True,
+                "status": "stable_matter",
+                "maps_to": "e± core (floor0) + near dressing may reach floor1 R",
+                "mechanism": "topo lock + lightest Q; dressing ≠ second particle",
+            },
+            {
+                "id": "C3_excited_leptonic_same_Q",
+                "stable": False,
+                "status": "metastable_open",
+                "maps_to": "μ-scheme / higher E same Q — downhill if channel exists",
+            },
+            {
+                "id": "C4_Q0_multicell_blob",
+                "stable": False,
+                "status": "pre_resonance",
+                "maps_to": "no topo charge → A5 → vacuum; defines floor1 name",
+            },
+            {
+                "id": "C5_pm_pair_bound",
+                "stable": False,
+                "status": "unstable_annihilation",
+                "maps_to": "± meet → 2γ (§5.0.3)",
+            },
+            {
+                "id": "C6_neutral_L_sector",
+                "stable": True,  # conditional: if lightest in L
+                "status": "stable_maybe_size_open",
+                "maps_to": "ν-scheme may be stable; R≠forced to N₁₂^{3…4}",
+            },
+        ]
+
+        stable_matter = [c for c in classes if c["id"] == "C2_lightest_Q_pm1_dressed"]
+        pre_res = [c for c in classes if c["status"] == "pre_resonance"]
+        census_ok = (
+            len(stable_matter) == 1
+            and len(pre_res) == 1
+            and r_lo == 1728
+            and r_hi == 20736
+            and classes[2]["stable"] is True
+            and classes[4]["stable"] is False
+            and classes[5]["stable"] is False
+        )
+
+        return {
+            "theorem": "§6·floor1·B0·census — stable B=0 at N₁₂³…N₁₂⁴",
+            "R_lo_dl": float(r_lo),
+            "R_hi_dl": float(r_hi),
+            "N12": n12,
+            "stable_matter_ids": [c["id"] for c in classes if c["status"] == "stable_matter"],
+            "pre_resonance_ids": [c["id"] for c in pre_res],
+            "classes": classes,
+            "sharp_claim": (
+                "Only stable B=0 matter at this R: dressed lightest Q=±1 (C2). "
+                "Pre-resonances (C4) unstable by construction."
+            ),
+            "census_ok": census_ok,
+            "derivation_closed": census_ok,  # class census closed; sim maps open
+            "sim_metastable_maps_open": True,
+            "ask_ok": census_ok,
+            "note": (
+                "B=0 census @ N₁₂³…N₁₂⁴: C2 dressed e± STABLE; "
+                "C4 Q=0 blobs = pre-resonances UNSTABLE; "
+                "C5 ± pairs annihilate; C3 metastable OPEN. "
+                "Sim channel maps still open."
             ),
         }
 
