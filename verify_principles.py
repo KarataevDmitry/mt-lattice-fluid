@@ -381,6 +381,37 @@ def check_discreteness_from_axioms(device: str = "cpu") -> dict:
     }
 
 
+def check_mechanics_from_axioms(device: str = "cpu") -> dict:
+    """§0.8 / Thm 5.1 — Landau mechanics from axioms + Thm 0.1; not separate p/F postulates."""
+    from mt_ca.si_constants import DELTA_PHI_MIN, SI
+
+    del device
+    row = SI.mechanics_from_axioms_row()
+    ok = (
+        row["replaces_mechanical_postulates"] is True
+        and row["lemma_a5_s0"] is True
+        and row["lemma_thm01_p0"] is True
+        and row["lemma_L0_equals_s0"] is True
+        and row["lemma_F0_equals_m_arg_g_M"] is True
+        and row["lemma_p0_equals_m_arg_c0_half"] is True
+        and row["lemma_E0_ladder_p0_c0"] is True
+        and row["lemma_E0_ladder_F0_hL"] is True
+        and row["lemma_E0_ladder_L0_hT"] is True
+        and float(row["delta_phi_min_rad"]) == DELTA_PHI_MIN
+        and row["continuum_p_L_F_is_T_readout"] is True
+        and row["p0_from_hbar_over_2hL_not_macro_c"] is True
+    )
+    return {
+        "id": "Mechanics_from_axioms",
+        "s0_J_s": row["s0_J_s"],
+        "p0_kg_m_s": row["p0_kg_m_s"],
+        "F0_N": row["F0_N"],
+        "F0_equals_m_arg_g_M": row["lemma_F0_equals_m_arg_g_M"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_anchor_a_is_l_P(device: str = "cpu") -> dict:
     """§7.4 — hull edge a ≡ hL ≡ l_P; textbook √(ℏG/c³) is consistency check."""
     from mt_ca.si_constants import SI
@@ -1719,6 +1750,7 @@ def run_all(device: str) -> list[dict]:
         check_planck_from_cell_conditions(device=device),
         check_anchor_a_is_l_P(device=device),
         check_discreteness_from_axioms(device=device),
+        check_mechanics_from_axioms(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),

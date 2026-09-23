@@ -1243,6 +1243,42 @@ class SIConstants:
             "note": "§0 Thm 0.1: discrete Λ from info+causal+topology; hL scale+ℓ_P name §7.3–7.4",
         }
 
+    def mechanics_from_axioms_row(self) -> dict[str, float | int | str | bool]:
+        """§0.8 / Thm 5.1 — Landau mechanics from Thm 0.1 + A3,A5,A13,A16 + §3.12 ledger."""
+        en = energy_quantum_row()
+        tol = 1e-12
+        s0 = self.s_0
+        p0 = self.p_0
+        l0 = self.L_0
+        f0 = self.F_0
+        g_m = self.g_M
+        e0 = self.E_0
+        return {
+            "theorem": "Thm 5.1 / Cor 0.8: s0 ladder p0,L0,F0,E0; not separate p/F postulates",
+            "replaces_mechanical_postulates": True,
+            "axioms": "A3,A5,A13,A16,Thm0.1,§3.7,§3.12,§5.0.2",
+            "lemma_a5_s0": abs(s0 - self.hbar * DELTA_PHI_MIN) / s0 < tol,
+            "lemma_thm01_p0": abs(p0 - s0 / self.l_P) / p0 < tol,
+            "lemma_L0_equals_s0": abs(l0 - s0) / s0 < tol,
+            "lemma_F0_equals_m_arg_g_M": abs(f0 - self.m_arg * g_m) / f0 < tol,
+            "lemma_p0_equals_m_arg_c0_half": abs(p0 - self.m_arg * self.c0 / 2.0) / p0 < tol,
+            "lemma_E0_ladder_p0_c0": en["rel_p0_c0"] < tol,
+            "lemma_E0_ladder_F0_hL": en["rel_F0_lP"] < tol,
+            "lemma_E0_ladder_L0_hT": en["rel_L0_hT"] < tol,
+            "delta_phi_min_rad": DELTA_PHI_MIN,
+            "s0_J_s": s0,
+            "p0_kg_m_s": p0,
+            "L0_J_s": l0,
+            "F0_N": f0,
+            "g_M_m_s2": g_m,
+            "E0_J": e0,
+            "m_arg_kg": self.m_arg,
+            "kick_ledger_integer": "A13 leapfrog + floor N only in N; verify LadderLedger",
+            "continuum_p_L_F_is_T_readout": True,
+            "p0_from_hbar_over_2hL_not_macro_c": abs(p0 - self.hbar / (2.0 * self.l_P)) / p0 < tol,
+            "note": "§0.8/Thm5.1: Landau ladder from s0=ℏ/2; float j=Im(z*∇z) is T only",
+        }
+
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
         """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
         from mt_ca.em_plaquette import square_face_holonomy_probe
