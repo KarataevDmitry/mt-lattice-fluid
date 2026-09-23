@@ -323,7 +323,7 @@ def check_alpha_hop_ladder(device: str = "cpu") -> dict:
 
 
 def check_alpha_fixed_point(device: str = "cpu") -> dict:
-    """First FP: α*=N_c(m_e(α*))/N_a0 (optical Bohr); seed-invariant; π-poly not input."""
+    """First FP: analytic bare α*=[N_φ/(N_a0√(π/2))]^{1/11}; stack poly 23°; seed-invariant."""
     from mt_ca.si_constants import SI
 
     del device
@@ -331,18 +331,26 @@ def check_alpha_fixed_point(device: str = "cpu") -> dict:
     ok = (
         bool(row["fixed_point_ok"])
         and bool(row["seed_invariant"])
+        and bool(row["analytic_bare_ok"])
+        and bool(row["analytic_stack_poly_ok"])
+        and int(row["exponent"]) == 11
         and float(row["residual_stack"]) < 1e-12
         and float(row["residual_bare"]) < 1e-12
+        and abs(float(row["alpha_star_bare"]) - float(row["alpha_bare_analytic"])) < 1e-15
         and abs(float(row["alpha_star_stack_inv"]) - 137.09186727) < 1e-4
         and bool(row["derivation_open"])
     )
     return {
         "id": "Alpha_fixed_point",
+        "alpha_bare_analytic": row["alpha_bare_analytic"],
+        "alpha_bare_analytic_inv": row["alpha_bare_analytic_inv"],
         "alpha_star_stack": row["alpha_star_stack"],
         "alpha_star_stack_inv": row["alpha_star_stack_inv"],
-        "alpha_star_bare_inv": row["alpha_star_bare_inv"],
+        "exponent": row["exponent"],
         "vs_codata_ppm_stack": row["vs_codata_ppm_stack"],
-        "vs_pi_ppm_stack": row["vs_pi_ppm_stack"],
+        "vs_codata_ppm_bare": row["vs_codata_ppm_bare"],
+        "analytic_bare_ok": row["analytic_bare_ok"],
+        "analytic_stack_poly_ok": row["analytic_stack_poly_ok"],
         "seed_invariant": row["seed_invariant"],
         "derivation_open": row["derivation_open"],
         "ok": ok,

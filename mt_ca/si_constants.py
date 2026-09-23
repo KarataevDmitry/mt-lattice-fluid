@@ -664,8 +664,15 @@ class SIConstants:
             α'     = N_c(α) / N_a0
         with N_a0 = a₀/hL from CODATA Bohr radius (α-independent optical length).
 
-        Fixed point α* = map(α*). Replaces π-polynomial as *definition* of α;
-        π still enters cascade via √(2π), δλ=α/(4π). N_a0 from carrier still OPEN.
+        Analytic (bare, λ=1/8 ⇒ m_H=v/2):
+            m_e = α¹⁰ E_P √(π/2) / N_φ
+            α* = [ N_φ / (N_a0 √(π/2)) ]^{1/11}
+
+        Analytic (stack, λ=1/8 + 2α/π):
+            α¹¹ √λ(α) = N_φ / (2 N_a0 √π)
+            ⇔ (2/π) α²³ + (1/8) α²² − [N_φ/(2 N_a0 √π)]² = 0
+
+        Exponent 11 = N_hier(=8) + 2(from m_e∝α²) + 1(from α=N_c/N_a0).
 
         First use of fixed-point closure in this model (2026-09-23).
         """
@@ -675,6 +682,12 @@ class SIConstants:
         n_a0 = a0_m / self.l_P
         alpha_codata = 7.2973525693e-3
         m_p_gev = self.E_P / EV_J / 1e9
+        # closed-form bare
+        k_bare = n_phi / (n_a0 * math.sqrt(math.pi / 2.0))
+        a_bare_analytic = k_bare ** (1.0 / 11.0)
+        # stack polynomial RHS
+        rhs = n_phi / (2.0 * n_a0 * math.sqrt(math.pi))
+        rhs2 = rhs * rhs
 
         def cascade(alpha: float) -> tuple[float, float, float, float]:
             v = (alpha**n_hier) * m_p_gev * math.sqrt(2.0 * math.pi)
@@ -691,24 +704,26 @@ class SIConstants:
             m = m_e_bare if bare else m_e
             return (m_p_gev / m) / n_a0
 
-        def solve(*, bare: bool) -> float:
+        def solve_stack() -> float:
             lo, hi = 1e-4, 0.05
-            flo = mapped(lo, bare=bare) - lo
-            fhi = mapped(hi, bare=bare) - hi
+            flo = mapped(lo, bare=False) - lo
             for _ in range(100):
                 mid = 0.5 * (lo + hi)
-                fm = mapped(mid, bare=bare) - mid
+                fm = mapped(mid, bare=False) - mid
                 if flo * fm <= 0:
-                    hi, fhi = mid, fm
+                    hi = mid
                 else:
                     lo, flo = mid, fm
             return 0.5 * (lo + hi)
 
-        a_stack = solve(bare=False)
-        a_bare = solve(bare=True)
+        a_stack = solve_stack()
+        a_bare = a_bare_analytic  # closed form — no need to bisect
         m_e_s, _, m_h_s, v_s = cascade(a_stack)
-        m_e_b, m_e_bare_b, m_h_b, v_b = cascade(a_bare)
-        # seed invariance: damped iterate from far seeds → same a_stack
+        _, m_e_bare_b, _, _ = cascade(a_bare)
+        lam_s = 1.0 / n_hier + 2.0 * a_stack / math.pi
+        # poly identity at stack root
+        poly_stack = (a_stack**22) * ((2.0 / math.pi) * a_stack + 0.125)
+        # seed invariance on stack map
         seeds_ok = True
         for seed in (1e-3, 1e-2, 2e-2, alpha_codata, self.alpha_fs):
             a = seed
@@ -717,13 +732,25 @@ class SIConstants:
             if abs(a - a_stack) / a_stack > 1e-10:
                 seeds_ok = False
                 break
+        analytic_bare_ok = abs(mapped(a_bare, bare=True) - a_bare) / a_bare < 1e-12
+        analytic_stack_poly_ok = abs(poly_stack - rhs2) / rhs2 < 1e-12
         return {
             "N_a0_optical": n_a0,
             "a0_m": a0_m,
+            "N_phi": n_phi,
+            "N_hier": n_hier,
+            "exponent": 11,
+            "K_bare": k_bare,
+            "alpha_bare_analytic": a_bare_analytic,
+            "alpha_bare_analytic_inv": 1.0 / a_bare_analytic,
+            "stack_RHS": rhs,
+            "stack_poly_RHS2": rhs2,
             "alpha_star_stack": a_stack,
             "alpha_star_stack_inv": 1.0 / a_stack,
             "alpha_star_bare": a_bare,
             "alpha_star_bare_inv": 1.0 / a_bare,
+            "lambda_at_stack": lam_s,
+            "stack_poly_at_star": poly_stack,
             "map_stack_at_star": mapped(a_stack, bare=False),
             "map_bare_at_star": mapped(a_bare, bare=True),
             "residual_stack": abs(mapped(a_stack, bare=False) - a_stack) / a_stack,
@@ -738,14 +765,17 @@ class SIConstants:
             "alpha_codata": alpha_codata,
             "alpha_pi_ansatz": self.alpha_fs,
             "seed_invariant": seeds_ok,
+            "analytic_bare_ok": analytic_bare_ok,
+            "analytic_stack_poly_ok": analytic_stack_poly_ok,
             "fixed_point_ok": seeds_ok
-            and abs(mapped(a_stack, bare=False) - a_stack) / a_stack < 1e-12
-            and abs(mapped(a_bare, bare=True) - a_bare) / a_bare < 1e-12,
+            and analytic_bare_ok
+            and analytic_stack_poly_ok
+            and abs(mapped(a_stack, bare=False) - a_stack) / a_stack < 1e-12,
             "derivation_open": True,
             "note": (
-                "First FP in model: α*=N_c(m_e(α*))/N_a0 with optical a₀. "
-                "Stack ~−408 ppm vs CODATA; replaces π-poly as α definition. "
-                "N_a0 from carrier OPEN; √(2π), δλ still in cascade."
+                "Analytic bare: α*=[N_φ/(N_a0√(π/2))]^{1/11}. "
+                "Stack: (2/π)α²³+(1/8)α²²=[N_φ/(2 N_a0√π)]². "
+                "Exponent 11=8+2+1. Optical a₀; N_a0 from carrier OPEN."
             ),
         }
 
