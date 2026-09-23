@@ -37,8 +37,10 @@ $K_P=u_P$ --- планковское давление жидкости;
 \end{lemma}
 
 \begin{proof}
-Минимальный шаг аргумента на~$\hv$ за один~$\htick$ задаётся $\Delta\phi_{\min}=\tfrac12$
-(\cref{ax:A16}). Действие одного события $s_0=\hbar\,\Delta\phi_{\min}=\hbar/2$.
+Минимальный фазовый шаг $\Delta\phi_{\min}=\tfrac12$ зафиксирован $A_{16}$ (\cref{ax:A16}).
+$A_5$ (\cref{ax:A5}) требует ненулевого осциллирующего фона, так что минимальное
+событие изменения аргумента на~$\hv$ за такт~$\htick$ несёт действие
+$s_0=\hbar\,\Delta\phi_{\min}=\hbar/2$.
 \end{proof}
 
 \begin{lemma}[5.1b]
@@ -70,10 +72,32 @@ $L_0=p_0\hl=s_0$, $g_M=c_0/(2\htick)$, $F_0=p_0/\htick=m_{\arg} g_M$ ---
 интеграл $\int\Im(z^*\nabla z)$ --- только макроописание на~$T$.
 \end{lemma}
 
+\begin{proof}
+В замкнутом~$g$ (\cref{thm:g-law}) импульс на связи дискретен: $p_0=s_0/\hl$.
+Удар $\lfloor\mathcal{N}\rfloor$ --- целое число фазовых квантов $\Delta\phi_{\mathrm{disc}}$
+на такт (\cref{sec:congruence}, CL-4), поэтому приращение импульса
+$\Delta p=p_0\cdot n$ с $n\in\mathbb{Z}$.
+
+\smallskip
+Интеграл $\int\Im(z^*\nabla z)\,\mathrm{d}^3x$ предполагает гладкое поле и меру Лебега ---
+на~$M$ есть только суммы по узлам и разности по~$N(x)$.
+После осреднения~$\mathcal{B}$ (\cref{def:soft-readout}) дискретные потоки сходятся
+к маделунговому току на~$T$; на~$M$ интеграл не определён.
+\end{proof}
+
 \begin{lemma}[5.1e]
 \label{lem:51e}
 $E_0=p_0 c_0=F_0\hl=L_0/\htick$, $E=n_E E_0$, $n_E\in\mathbb{Z}$.
 \end{lemma}
+
+\begin{proof}
+Из \cref{lem:51b,lem:51c} подстановкой $c_0=\hl/\htick$:
+\[
+  E_0=\frac{s_0}{\htick}=\frac{p_0\hl}{\htick}=p_0 c_0=\frac{F_0\hl}{\htick}=\frac{L_0}{\htick}.
+\]
+Число событий $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor\in\mathbb{Z}_{\ge 0}$
+(CL-4, \cref{sec:congruence}), откуда $E=n_E E_0$.
+\end{proof}
 
 \begin{proof}[Доказательство теоремы]
 Лемма~\ref{lem:51a} задаёт $s_0$; \cref{lem:51b,lem:51c} --- импульс, энергию и силу
