@@ -270,6 +270,7 @@
 | 2026-09-23 | META §3.0.1 fix | `t_SI=N·hT` exact on M (no readout); open = infer N + anchor N=0; N_today~10⁶¹ |
 | 2026-09-23 | bubble_tick | `SI.bubble_tick_row()` + verify **`Bubble_tick`**: N_today≈1.141×10⁶¹, N_CMB≈3.146×10⁵⁶, t_start=0 |
 | 2026-09-23 | §8.2·vac | A5 bath: `vacuum_bath_row` · `T_M,bath~10³¹ K` · `λ₀~l_P` · **`Vacuum_bath` PASS** · ≠ CMB · Bose open |
+| 2026-09-23 | §8.2·geo | cuboctahedron 1-tick: **`V_cubo=(16/3)v_hV`** at `a=l_P` · `cuboctahedron_geometry_row` · **`Cuboctahedron_geo` PASS** · α_geom=137 (~260 ppm) exploratory; stamped π ~2 ppm |
 | 2026-09-23 | §8.2 ask-model ΔB | stamped $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
 | 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |
