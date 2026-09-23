@@ -289,7 +289,7 @@ def check_compton_electron(device: str = "cpu") -> dict:
 
 
 def check_alpha_hop_ladder(device: str = "cpu") -> dict:
-    """§7.4+§4.8 probe — α = κ·N_re/N_c0 = N_★/N_c0 after ℓ_P⊄c; derivation OPEN."""
+    """§7.4+§4.8+H probe — α = κ·N_re/N_c0 = N_★/N_c0 = N_c/N_a0; α²=N_re/N_a0; derivation OPEN."""
     from mt_ca.si_constants import SI
 
     del device
@@ -298,6 +298,8 @@ def check_alpha_hop_ladder(device: str = "cpu") -> dict:
         bool(row["identity_ok"])
         and float(row["rel_kappa_form"]) < 1e-12
         and float(row["rel_star_form"]) < 1e-12
+        and float(row["rel_bohr_form"]) < 1e-12
+        and float(row["rel_alpha2_ladder"]) < 1e-12
         and bool(row["derivation_open"])
         and abs(float(row["N12_times_N12p1"]) - 156.0) < 1e-12
     )
@@ -305,6 +307,10 @@ def check_alpha_hop_ladder(device: str = "cpu") -> dict:
         "id": "Alpha_hop_ladder",
         "alpha_from_kappa_Nre_over_Nc0": row["alpha_from_kappa_Nre_over_Nc0"],
         "alpha_from_Nstar_over_Nc0": row["alpha_from_Nstar_over_Nc0"],
+        "alpha_from_Nc_over_Na0": row["alpha_from_Nc_over_Na0"],
+        "alpha2_from_Nre_over_Na0": row["alpha2_from_Nre_over_Na0"],
+        "v_Bohr_over_c0": row["v_Bohr_over_c0"],
+        "N_a0_Bohr": row["N_a0_Bohr"],
         "alpha_codata": row["alpha_codata"],
         "N_c0_link": row["N_c0_link"],
         "N_re": row["N_re"],

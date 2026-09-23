@@ -576,7 +576,7 @@ class SIConstants:
         }
 
     def alpha_hop_ladder_row(self) -> dict[str, float | int | str | bool]:
-        """Probe: α from hop ladder after ℓ_P⊄c (§7.2–7.4).
+        """Probe: α from hop ladder after ℓ_P⊄c (§7.2–7.4) + H-atom rung.
 
         M-native Compton uses link speed c₀:
             N_c0 = ℏ/(m_e c₀ hL) = κ·(m_P/m_e)
@@ -587,9 +587,15 @@ class SIConstants:
         Equivalent mixed-energy form (one macro-c, one link-c₀):
             U(r_★)=e²/(4πϵ₀ r_★)=m_e c c₀  ⇒  α = N_★ / N_c0
 
+        Hydrogen (Bohr) — next rung on the same hL ladder:
+            N_a0 = a₀/hL = N_c/α
+            N_re --α-- N_c --α-- N_a0
+            α² = N_re/N_a0   (same power as m_e = α²·m_H/N_φ in §8.2)
+            v_Bohr/c₀ = α·κ
+
         Status: structural rewrite of CODATA α into hL-hops + κ.
-        Does **not** replace π-ansatz until N_★ (or N_re) comes from carrier
-        without ϵ₀/α. Geom near-miss: N₁₂(N₁₂+1)=156 vs α⁻¹≈137.
+        Does **not** replace π-ansatz until one of {N_★, N_re, N_a0}
+        comes from carrier without ϵ₀/α. Geom near-miss: N₁₂(N₁₂+1)=156 vs α⁻¹≈137.
         """
         kappa = KAPPA_FCC_1TICK
         m_e = self.m_e_CODATA
@@ -603,8 +609,14 @@ class SIConstants:
         N_re = alpha_codata * N_c
         # classical balance against m·c·c₀ (detachment-native)
         N_star = alpha_codata * N_c0  # ≡ r_★/hL with U=m c c₀
+        # Bohr radius rungs
+        N_a0 = N_c / alpha_codata
+        N_a0_c0 = N_c0 / alpha_codata
         alpha_from_kappa_hops = kappa * N_re / N_c0
         alpha_from_star = N_star / N_c0
+        alpha_from_bohr = N_c / N_a0
+        alpha2_from_ladder = N_re / N_a0
+        v_over_c0 = alpha_codata * kappa  # = v_Bohr/c₀ with v=α c
         n12 = N12_FCC_CAUSAL_LINKS
         geom_156 = float(n12 * (n12 + 1))
         return {
@@ -613,22 +625,32 @@ class SIConstants:
             "N_c0_link": N_c0,
             "N_re": N_re,
             "N_star_m_c_c0": N_star,
+            "N_a0_Bohr": N_a0,
+            "N_a0_c0": N_a0_c0,
             "alpha_codata": alpha_codata,
             "alpha_from_kappa_Nre_over_Nc0": alpha_from_kappa_hops,
             "alpha_from_Nstar_over_Nc0": alpha_from_star,
+            "alpha_from_Nc_over_Na0": alpha_from_bohr,
+            "alpha2_from_Nre_over_Na0": alpha2_from_ladder,
+            "v_Bohr_over_c0": v_over_c0,
             "rel_kappa_form": abs(alpha_from_kappa_hops - alpha_codata) / alpha_codata,
             "rel_star_form": abs(alpha_from_star - alpha_codata) / alpha_codata,
+            "rel_bohr_form": abs(alpha_from_bohr - alpha_codata) / alpha_codata,
+            "rel_alpha2_ladder": abs(alpha2_from_ladder - alpha_codata**2) / alpha_codata**2,
             "alpha_pi_ansatz": self.alpha_fs,
             "alpha_pi_inv": self.alpha_fs_inv,
             "alpha_codata_inv": alpha_codata_inv,
             "N12_times_N12p1": geom_156,
             "geom_156_over_codata_inv": geom_156 / alpha_codata_inv,
             "identity_ok": abs(alpha_from_kappa_hops - alpha_codata) / alpha_codata < 1e-12
-            and abs(alpha_from_star - alpha_codata) / alpha_codata < 1e-12,
+            and abs(alpha_from_star - alpha_codata) / alpha_codata < 1e-12
+            and abs(alpha_from_bohr - alpha_codata) / alpha_codata < 1e-12
+            and abs(alpha2_from_ladder - alpha_codata**2) / alpha_codata**2 < 1e-12,
             "derivation_open": True,
             "note": (
-                "§7.4+§4.8 probe: α=κ·N_re/N_c0 = N_★/N_c0 (N_c0 on c₀). "
-                "Identity rewrite; N_★ from g without α still OPEN. "
+                "§7.4+§4.8+H: α=κ·N_re/N_c0=N_★/N_c0=N_c/N_a0; "
+                "α²=N_re/N_a0 (rhymes m_e=α² m_H/N_φ); v_Bohr/c₀=ακ. "
+                "Identity rewrite; one hop from g without α still OPEN. "
                 "π-ansatz not replaced."
             ),
         }

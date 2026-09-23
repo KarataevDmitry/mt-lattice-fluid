@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-23 | α hop + H | `Alpha_hop_ladder` + Bohr rung: α=N_c/N_a0; α²=N_re/N_a0 (= power in m_e); v_Bohr/c₀=ακ; still identity, N_★/N_a0 from g OPEN |
 | 2026-09-23 | α hop ladder | `alpha_hop_ladder_row` · **`Alpha_hop_ladder` PASS** — α=κ·N_re/N_c0=N_★/N_c0 after ℓ_P⊄c; **identity rewrite**, N_★ from g OPEN; π-ansatz not replaced |
 | 2026-09-23 | §8.2 α bridges | verify **`Alpha_bridges`**: δλ=α_fs(α*−1), B_hV runner, N_φ=|N₁₂|+1, Coulomb carrier PASS; (α*)³ cascade OPEN (~4%); e₀/sim OPEN |
 | 2026-09-23 | META §3.0 | карточка «два времени»: A5-пена M (нет начала/конца) vs наблюдаемая UI (генезис есть); §0.6 · §2.3 · MODEL hub |
