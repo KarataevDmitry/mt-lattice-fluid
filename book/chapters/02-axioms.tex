@@ -172,8 +172,28 @@ $g$ обратим на дискретном алфавите: $\exists g^{-1}$,
 
 \begin{axiom}[A14 · Дискретные симметрии P, C, T, U(1)$_{\mathrm{vac}}$]
 \label{ax:A14}
-$g$ уважает дискретные симметрии: пространственная инверсия $P$, зарядовое сопряжение $C$ ($z\to z^*$),
-обратимое движение по времени $T$ (с перестановка истории «лягушка''), глобальная U(1)-фаза вакуума.
+На конфигурациях $\Psi=\{z(x)\}_{x\in\Lambda}$ и истории «лягушки'' $(Z_t,Z_{t-1})$
+заданы преобразования:
+\begin{itemize}[nosep]
+\item \textbf{$U(1)_{\mathrm{vac}}$:} $z(x)\mapsto e^{i\theta}z(x)$ для всех $x\in\Lambda$
+      ($\theta$ --- одна глобальная фаза);
+\item \textbf{$P$ (parity):} пространственная инверсия $x\mapsto Px$ на~$\Lambda$,
+      $(P\Psi)(x):=z(Px)$;
+\item \textbf{$C$ (charge conjugation):} комплексное сопряжение $z\mapsto z^*$
+      на~$\mathbb{Z}_{N_{\mathrm{ring}}}[i]$;
+\item \textbf{$T$ (time reversal):} обращение хода «лягушки'' и сопряжение истории,
+      $(TZ_t,TZ_{t-1}):=(Z_{t-1}^*,Z_t^*)$ (согласовано с \cref{sec:g-law}).
+\end{itemize}
+Локальный закон~$g$ \emph{согласован} с ними:
+\begin{align}
+  g(U(1)_\theta\Psi) &= U(1)_\theta\,g(\Psi), \label{eq:A14-U1}\\
+  g(P\Psi) &= P\,g(\Psi), \label{eq:A14-P}\\
+  g(C\Psi) &= C\,g(\Psi), \label{eq:A14-C}\\
+  g(T\Psi) &= T\,g^{-1}(\Psi) \label{eq:A14-T}
+\end{align}
+при том же $(Z_t,Z_{t-1})$, где $g^{-1}$ --- из \Axref{ax:A13}.
+Уравнения~\eqref{eq:A14-U1}--\eqref{eq:A14-T} --- точные условия симметрии~$g$,
+а не метафора; замыкание --- \cref{sec:g-law}.
 \end{axiom}
 
 \begin{axiom}[A15 · Принцип наименьшего действия / геометрия]
