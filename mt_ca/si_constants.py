@@ -1863,6 +1863,150 @@ class SIConstants:
             ),
         }
 
+    def alpha_rydberg_hall_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·Rydberg·Hall — lab doors next to Schwinger; same mountain?
+
+        Lab (spectroscopy / QHE):
+          R_∞ from H/D lines → α²·m_e (with QED theory).
+          R_K = h/e² (von Klitzing) → historically α=μ₀c/(2 R_K);
+          SI-2019: e,h exact ⇒ R_K exact; α no longer from Hall alone (μ₀ measured).
+
+        Carrier rhymes (identities, no new knob):
+          vacuum foot r = Δφ_min/(2π) = 1/(4π)
+          R_∞ = α² · r / λ̄_C = (α² m_e c / ℏ) · r
+            — Rydberg = α² × Compton⁻¹ × same foot as Schwinger.
+          Hop already: α² = N_re/N_a0 ; α = √(2Δm/m_e) — same α² power.
+          Hall: R_K = h/e₀² — conductance quantum; topological plateau.
+            Factor 2 in α=μ₀c/(2 R_K) is SI EM (≠ 2r).
+
+        Ask answers:
+          • Both doors read α (or α²) from outside — do NOT derive coupling on M.
+          • Rydberg factors α²·r — geometry r closed; α² still needs coupling or hops.
+          • Hall post-2019 is metrology of h/e², not an α source.
+          • REJECT optical a₀ / R_∞ alone as M-definition of α (T-anchors).
+          • REJECT inventing α from R_K without μ₀/ε₀ bridge (SI dress).
+          • Same OPEN: discrete coupling fraction (or lab α via any door).
+        """
+        alpha_c = 7.2973525693e-3
+        r = DELTA_PHI_MIN / (2.0 * math.pi)
+        # CODATA-ish anchors (SI exact e,h,c; R_∞ 2018/2022 class)
+        r_inf_codata = 10973731.568160  # m⁻¹
+        m_e = self.m_e_CODATA
+        hbar = self.hbar
+        c = self.c
+        e = 1.602176634e-19  # exact SI
+        h_pl = 6.62607015e-34  # exact SI
+        r_k = h_pl / (e * e)  # exact after 2019
+        mu0_legacy = 4.0e-7 * math.pi  # pre-2019 exact μ₀
+        # Rydberg identity with foot r
+        lambar_c = hbar / (m_e * c)
+        r_inf_from_foot = (alpha_c * alpha_c) * r / lambar_c
+        r_inf_classic = (alpha_c * alpha_c) * m_e * c / (4.0 * math.pi * hbar)
+        # Hall legacy readout (μ₀ exact era)
+        alpha_from_hall_legacy = mu0_legacy * c / (2.0 * r_k)
+        hop = self.alpha_hop_ladder_row()
+        alpha2_hop = float(hop["alpha2_from_Nre_over_Na0"])
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "lab_door_rydberg",
+                "maps_to": "measure R_∞ (H/D spectroscopy); α² from R_∞+m_e+QED",
+                "status": "shipped_experiment",
+            },
+            {
+                "id": "lab_door_hall",
+                "maps_to": "QHE plateau R_H=R_K/i; R_K=h/e²",
+                "status": "shipped_experiment",
+            },
+            {
+                "id": "rydberg_foot_identity",
+                "ratio": abs(r_inf_from_foot / r_inf_classic - 1.0),
+                "maps_to": "R_∞ = α²·r/λ̄_C — same foot r as Schwinger",
+                "status": "identity",
+                "mechanism": "1/(4π)=r; not a derivation of α",
+            },
+            {
+                "id": "rydberg_vs_codata",
+                "ppm": (r_inf_from_foot - r_inf_codata) / r_inf_codata * 1e6,
+                "maps_to": "identity vs R_∞ CODATA (α input)",
+                "status": "identity_check",
+            },
+            {
+                "id": "hop_alpha2_same_power",
+                "ratio": abs(alpha2_hop / (alpha_c * alpha_c) - 1.0),
+                "maps_to": "α²=N_re/N_a0 — Rydberg power already on ladder",
+                "status": "identity",
+                "mechanism": "§8.2 hop; N_a0 still open from g",
+            },
+            {
+                "id": "hall_RK_exact_SI2019",
+                "ratio": r_k,
+                "maps_to": "R_K=h/e² exact after SI-2019",
+                "status": "shipped_metrology",
+                "mechanism": "e,h fixed; Hall no longer independent α source",
+            },
+            {
+                "id": "hall_legacy_alpha_mu0",
+                "ppm": (alpha_from_hall_legacy - alpha_c) / alpha_c * 1e6,
+                "maps_to": "α=μ₀c/(2 R_K) — pre-2019 door",
+                "status": "legacy_identity",
+                "mechanism": "factor 2 is SI EM, not 2r",
+            },
+            {
+                "id": "reject_Rinf_as_M_alpha",
+                "maps_to": "R_∞ alone as M-definition of α",
+                "status": "rejected_as_M_definition",
+                "mechanism": "T-anchor + needs m_e; circular with α² in formula",
+            },
+            {
+                "id": "reject_optical_a0_as_M",
+                "maps_to": "a₀ from Rydberg chain as M N_a0",
+                "status": "rejected_as_M_definition",
+                "mechanism": "already H·ask; T optical length",
+            },
+            {
+                "id": "reject_RK_without_mu0_bridge",
+                "maps_to": "α from R_K alone without μ₀/ε₀ (post-2019)",
+                "status": "rejected",
+                "mechanism": "R_K exact ≠ α; need separate coupling or μ₀",
+            },
+            {
+                "id": "open_same_coupling_fraction",
+                "maps_to": "discrete coupling on FCC — same mountain",
+                "status": "open",
+                "mechanism": "Rydberg/Hall/Schwinger all factor geometry×α^n",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·Rydberg·Hall — lab doors; foot in R_∞; same OPEN",
+            "vacuum_foot_r": r,
+            "R_inf_CODATA": r_inf_codata,
+            "R_inf_from_alpha2_r_over_lambar": r_inf_from_foot,
+            "rel_Rinf_foot_vs_classic": abs(r_inf_from_foot / r_inf_classic - 1.0),
+            "Rinf_vs_codata_ppm": (r_inf_from_foot - r_inf_codata)
+            / r_inf_codata
+            * 1e6,
+            "R_K_ohm_exact": r_k,
+            "alpha_from_Hall_legacy_mu0": alpha_from_hall_legacy,
+            "Hall_legacy_vs_codata_ppm": (alpha_from_hall_legacy - alpha_c)
+            / alpha_c
+            * 1e6,
+            "alpha2_hop": alpha2_hop,
+            "alpha2_codata": alpha_c * alpha_c,
+            "factorization_rydberg_closed": True,
+            "hall_is_alpha_source_post2019": False,
+            "derivation_closed": False,
+            "bypasses_coupling_open": False,
+            "inventory": inventory,
+            "ask_ok": abs(r_inf_from_foot / r_inf_classic - 1.0) < 1e-15
+            and abs((r_inf_from_foot - r_inf_codata) / r_inf_codata) < 1e-8
+            and abs((alpha_from_hall_legacy - alpha_c) / alpha_c) < 1e-8
+            and abs(alpha2_hop / (alpha_c * alpha_c) - 1.0) < 1e-12,
+            "note": (
+                "Rydberg: R_∞=α²·r/λ̄_C (foot r). Hall: R_K exact SI-2019; "
+                "legacy α=μ₀c/(2R_K). Neither bypasses coupling OPEN."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
