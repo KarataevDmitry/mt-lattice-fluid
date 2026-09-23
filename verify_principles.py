@@ -358,6 +358,30 @@ def check_alpha_fixed_point(device: str = "cpu") -> dict:
     }
 
 
+def check_na0_from_carrier(device: str = "cpu") -> dict:
+    """N_a0 = N_c·137 (α_geom) + FP; monomial path still OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.na0_from_carrier_row()
+    ok = (
+        bool(row["carrier_na0_ok"])
+        and abs(float(row["N_a0_carrier_over_optical"]) - 1.0) < 5e-4
+        and abs(float(row["alpha_star_stack_inv"]) - 137.088598) < 1e-3
+        and bool(row["monomial_stack_open"])
+    )
+    return {
+        "id": "Na0_from_carrier",
+        "N_a0_carrier": row["N_a0_carrier"],
+        "N_a0_carrier_over_optical": row["N_a0_carrier_over_optical"],
+        "alpha_star_stack_inv": row["alpha_star_stack_inv"],
+        "vs_codata_ppm_stack": row["vs_codata_ppm_stack"],
+        "monomial_stack_open": row["monomial_stack_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -1964,6 +1988,7 @@ def run_all(device: str) -> list[dict]:
         check_compton_electron(device=device),
         check_alpha_hop_ladder(device=device),
         check_alpha_fixed_point(device=device),
+        check_na0_from_carrier(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

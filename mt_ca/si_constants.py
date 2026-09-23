@@ -775,7 +775,82 @@ class SIConstants:
             "note": (
                 "Analytic bare: α*=[N_φ/(N_a0√(π/2))]^{1/11}. "
                 "Stack: (2/π)α²³+(1/8)α²²=[N_φ/(2 N_a0√π)]². "
-                "Exponent 11=8+2+1. Optical a₀; N_a0 from carrier OPEN."
+                "Exponent 11=8+2+1. "
+                "N_a0 optical or carrier N_c·137 (α_geom); see na0_from_carrier_row."
+            ),
+        }
+
+    def na0_from_carrier_row(self) -> dict[str, float | int | str | bool]:
+        """N_a0 without optical a₀ — first carrier candidate.
+
+        Primary (shipped):
+            N_a0 = N_c · α_geom^{-1} = (m_P/m_e) · 137
+        where α_geom^{-1}=137 from cuboctahedron combinatorics (§8.2·geo),
+        m_e = CODATA T-anchor (same role as e₀).
+
+        Then α* from analytic/stack FP with this N_a0 (no optical Bohr).
+        Diff vs optical N_a0 ~ 0.026% (137 vs 137.036).
+
+        Pure monomials in {13,12,8,512,2} do **not** stabilize stack FP
+        near CODATA (map highly sensitive) — left OPEN.
+        """
+        n_phi = 13.0
+        n_hier = 8.0
+        alpha_geom_inv = 137.0
+        alpha_codata = 7.2973525693e-3
+        m_p_gev = self.E_P / EV_J / 1e9
+        n_c = self.m_P / self.m_e_CODATA
+        n_a0_opt = 5.29177210903e-11 / self.l_P
+        n_a0 = n_c * alpha_geom_inv
+        # FP with carrier N_a0 (reuse cascade algebra)
+        def cascade(alpha: float) -> tuple[float, float]:
+            v = (alpha**n_hier) * m_p_gev * math.sqrt(2.0 * math.pi)
+            m_h_bare = v / 2.0
+            lam = 1.0 / n_hier + n_hier * (alpha / (4.0 * math.pi))
+            m_h = math.sqrt(2.0 * lam) * v
+            return (alpha**2) * m_h / n_phi, (alpha**2) * m_h_bare / n_phi
+
+        def mapped(alpha: float, n_a0_local: float, *, bare: bool) -> float:
+            m_e, m_e_bare = cascade(alpha)
+            m = m_e_bare if bare else m_e
+            return (m_p_gev / m) / n_a0_local
+
+        def solve(n_a0_local: float, *, bare: bool) -> float:
+            lo, hi = 1e-4, 0.05
+            flo = mapped(lo, n_a0_local, bare=bare) - lo
+            for _ in range(100):
+                mid = 0.5 * (lo + hi)
+                fm = mapped(mid, n_a0_local, bare=bare) - mid
+                if flo * fm <= 0:
+                    hi = mid
+                else:
+                    lo, flo = mid, fm
+            return 0.5 * (lo + hi)
+
+        a_stack = solve(n_a0, bare=False)
+        a_bare = (n_phi / (n_a0 * math.sqrt(math.pi / 2.0))) ** (1.0 / 11.0)
+        a_stack_opt = solve(n_a0_opt, bare=False)
+        return {
+            "N_c_from_m_e_CODATA": n_c,
+            "alpha_geom_inv": alpha_geom_inv,
+            "N_a0_carrier": n_a0,
+            "N_a0_optical": n_a0_opt,
+            "N_a0_carrier_over_optical": n_a0 / n_a0_opt,
+            "alpha_star_stack": a_stack,
+            "alpha_star_stack_inv": 1.0 / a_stack,
+            "alpha_star_bare": a_bare,
+            "alpha_star_bare_inv": 1.0 / a_bare,
+            "alpha_star_stack_optical_inv": 1.0 / a_stack_opt,
+            "vs_codata_ppm_stack": (a_stack - alpha_codata) / alpha_codata * 1e6,
+            "vs_codata_ppm_bare": (a_bare - alpha_codata) / alpha_codata * 1e6,
+            "vs_optical_fp_ppm_stack": (a_stack - a_stack_opt) / a_stack_opt * 1e6,
+            "monomial_stack_open": True,
+            "carrier_na0_ok": abs(n_a0 / n_a0_opt - 1.0) < 5e-4
+            and abs(mapped(a_stack, n_a0, bare=False) - a_stack) / a_stack < 1e-12,
+            "note": (
+                "N_a0=(m_P/m_e)·137 from α_geom cuboctahedron + T-anchor m_e. "
+                "Stack FP inv≈137.089 (~−384 ppm CODATA). "
+                "Pure 13/12/8/512 monomials OPEN (stack unstable)."
             ),
         }
 
