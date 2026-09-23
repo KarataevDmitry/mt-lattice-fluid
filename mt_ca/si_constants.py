@@ -2146,6 +2146,139 @@ class SIConstants:
             ),
         }
 
+    def alpha_dual_fraction_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·dual — method: α=m/n with m,n from *two different* physics.
+
+        Not one magic formula. If coupling is a fraction, numerator and
+        denominator can (should) arrive on independent carrier paths.
+        DoD: close each leg without inserting α; then α=m/n upstairs.
+
+        Inventory of dual pairs already on the board:
+          A) hops:  α = N_c / N_a0
+             · N_c ~ Compton/macro length in hL — today from m_e (α² inside)
+             · N_a0 ~ H size in hops — OPEN from H structure (H·ask)
+          B) force: α = κ / M
+             · κ = R_in/R_out = 1/√2 — CLOSED (geo)
+             · M ∈ ℕ — OPEN from g (F·ask); 96=N12·N_hier, 97 nearest
+             · note: κ∉ℚ ⇒ α not pure ℤ/ℤ unless rewritten
+          C) Schwinger: α = a_e / (2r)
+             · 2r = 1/(2π) — CLOSED (foot)
+             · a_e — lab or A5 cloud OPEN (ae·ask)
+          D) reject single-path: M/N_ring, π-tower-as-definition, face-weight=α
+
+        Method rule: never solve both m and n from the same equation that
+        already contains α (circular). Two paths ⇒ two independent facts.
+        """
+        alpha_c = 7.2973525693e-3
+        hop = self.alpha_hop_ladder_row()
+        force = self.alpha_force_lattice_ask_row()
+        n_c = float(hop["N_c_macro"])
+        n_a0 = float(hop["N_a0_Bohr"])
+        kappa = float(force["kappa"])
+        m96 = float(force["M_N12_Nhier"])
+        m97 = float(force["M_N12_Nhier_plus1"])
+        m_tgt = float(force["M_target_CODATA"])
+        r = DELTA_PHI_MIN / (2.0 * math.pi)
+        two_r = 2.0 * r
+        ae_codata = 1.15965218128e-3
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "method_two_paths",
+                "maps_to": "α=m/n; m from physics A, n from physics B — independent",
+                "status": "shipped_method",
+                "mechanism": "reject one-formula magic; dual DoD",
+            },
+            {
+                "id": "pair_hops_Nc_over_Na0",
+                "ratio": n_c / n_a0,
+                "maps_to": "α=N_c/N_a0",
+                "status": "identity_pair",
+                "mechanism": "N_c today α-tied via m_e; N_a0 OPEN (H·ask)",
+            },
+            {
+                "id": "leg_Na0_open",
+                "maps_to": "n=N_a0 from ρ_Θ / N_pack / FCC shell — no α",
+                "status": "open_leg",
+                "mechanism": "H·ask; must not use optical a₀ as M-definition",
+            },
+            {
+                "id": "leg_Nc_needs_alpha_free",
+                "maps_to": "m=N_c without m_e(α) — or drop this pair",
+                "status": "open_leg_or_blocked",
+                "mechanism": "m_e=α² m_H/N_φ makes N_c circular today",
+            },
+            {
+                "id": "pair_force_kappa_over_M",
+                "ratio": kappa / m97,
+                "maps_to": "α=κ/M; κ closed, M open",
+                "status": "alive_pair",
+                "mechanism": "best live dual: geo κ × integer M from g",
+            },
+            {
+                "id": "leg_kappa_closed",
+                "ratio": kappa,
+                "maps_to": "κ=1/√2 from hull — path A done",
+                "status": "shipped_leg",
+            },
+            {
+                "id": "leg_M_open",
+                "ratio": m_tgt,
+                "maps_to": "M≈96.90; 96=N12·N_hier, 97=nearest — from g OPEN",
+                "status": "open_leg",
+                "mechanism": "F·ask; not inject 137",
+            },
+            {
+                "id": "pair_schwinger_ae_over_2r",
+                "ratio": ae_codata / two_r,
+                "maps_to": "α=ae/(2r); 2r closed, ae open/lab",
+                "status": "alive_pair_lab",
+                "mechanism": "geometry×anomaly; ae·ask = same coupling OPEN",
+            },
+            {
+                "id": "reject_single_path_Nring",
+                "maps_to": "α≟M/512 — one register as both legs",
+                "status": "rejected",
+                "mechanism": "α·512∉ℤ; N_ring≠coupling denominator",
+            },
+            {
+                "id": "reject_same_equation_both_legs",
+                "maps_to": "solve m and n from one α-containing identity",
+                "status": "rejected",
+                "mechanism": "circular; H·ask mass≡hop α² warning",
+            },
+            {
+                "id": "open_pick_pair_close_open_leg",
+                "maps_to": "next: close M from g OR N_a0 from H OR ae from cloud",
+                "status": "open",
+                "mechanism": "strongest alive dual today: κ/M (force)",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·dual — α=m/n via two independent paths",
+            "method": "dual-leg DoD; inventory pairs; reject single-path",
+            "N_c_macro": n_c,
+            "N_a0_Bohr_T": n_a0,
+            "kappa": kappa,
+            "M_target": m_tgt,
+            "M_96": m96,
+            "M_97": m97,
+            "two_r": two_r,
+            "alpha_from_Nc_Na0": n_c / n_a0,
+            "alpha_from_kappa_M97": kappa / m97,
+            "alpha_from_ae_over_2r": ae_codata / two_r,
+            "strongest_alive_pair": "force κ/M",
+            "derivation_closed": False,
+            "inventory": inventory,
+            "ask_ok": abs(n_c / n_a0 - alpha_c) / alpha_c < 1e-12
+            and abs(kappa / m_tgt - alpha_c) / alpha_c < 1e-9
+            and abs(ae_codata / two_r - alpha_c) / alpha_c < 2e-3,
+            "note": (
+                "Method: α=m/n with two independent physics. "
+                "Alive duals: κ/M (M open), ae/(2r) (ae open), "
+                "N_c/N_a0 (N_a0 open, N_c α-tied). Reject M/512 single-path."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

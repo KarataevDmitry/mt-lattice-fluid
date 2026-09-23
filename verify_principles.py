@@ -656,6 +656,28 @@ def check_alpha_em_face_weight_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_dual_fraction_ask(device: str = "cpu") -> dict:
+    """§8.2·α·dual — α=m/n via two independent paths; inventory pairs."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_dual_fraction_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and not bool(row["derivation_closed"])
+        and row["strongest_alive_pair"] == "force κ/M"
+    )
+    return {
+        "id": "Alpha_dual_fraction_ask",
+        "strongest_alive_pair": row["strongest_alive_pair"],
+        "M_target": row["M_target"],
+        "kappa": row["kappa"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2274,6 +2296,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_ae_cloud_ask(device=device),
         check_alpha_rydberg_hall_ask(device=device),
         check_alpha_em_face_weight_ask(device=device),
+        check_alpha_dual_fraction_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
