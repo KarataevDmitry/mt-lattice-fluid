@@ -1,7 +1,7 @@
 # M → T → SM lattice fluid
 
 **Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».  
-**Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`.  
+**Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.  
 **Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.  
 **SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md), часть **MODEL**, не meta.
 
