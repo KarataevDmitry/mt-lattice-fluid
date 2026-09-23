@@ -8,20 +8,23 @@ New-Item -ItemType Directory -Force -Path $PdfDir | Out-Null
 
 Push-Location $Book
 try {
-    $job = 'main'
+    $job = 'main-latest'
     foreach ($i in 1..3) {
-        $out = xelatex -interaction=nonstopmode -output-directory=pdf -jobname=$job main.tex 2>&1
-        if ($LASTEXITCODE -ne 0 -and $out -match 'Unable to open.*main\.pdf') {
-            Write-Warning 'main.pdf locked (close viewer); building main-latest.pdf'
-            $job = 'main-latest'
-        }
+        $null = xelatex -interaction=nonstopmode -output-directory=pdf -jobname=$job main.tex 2>&1
     }
-    $pdf = Join-Path $PdfDir "$job.pdf"
-    if (-not (Test-Path $pdf)) { throw "PDF not produced ($job)" }
-    if ($job -eq 'main-latest') {
-        Write-Warning 'Open pdf/main-latest.pdf — main.pdf was locked and not updated.'
+    $latest = Join-Path $PdfDir "$job.pdf"
+    if (-not (Test-Path $latest)) { throw "PDF not produced ($job)" }
+
+    $main = Join-Path $PdfDir 'main.pdf'
+    try {
+        Copy-Item -LiteralPath $latest -Destination $main -Force
+        Write-Host "Built: $main"
     }
-    Write-Host "Built: $pdf"
-} finally {
+    catch {
+        Write-Warning 'main.pdf locked (close viewer); open pdf/main-latest.pdf'
+        Write-Host "Built: $latest"
+    }
+}
+finally {
     Pop-Location
 }
