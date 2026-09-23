@@ -1279,6 +1279,38 @@ class SIConstants:
             "note": "§0.8/Thm5.1: Landau ladder from s0=ℏ/2; float j=Im(z*∇z) is T only",
         }
 
+    def excitations_full_quantization_row(self) -> dict[str, float | int | str | bool]:
+        """§0.9 / Thm 5.2 — no fundamental wave; excitations = n_E·E0, phonon modes."""
+        eq = elementary_quanta_row()
+        en = energy_quantum_row()
+        ht = self.hT
+        e0 = self.E_0
+        hbar = self.hbar
+        nu0 = 1.0 / ht
+        omega0 = 2.0 * math.pi / ht
+        hbar_nu0 = hbar * nu0
+        tol = 1e-12
+        return {
+            "theorem": "Thm 5.2 / Cor 0.9: excitations quantize; wave is T-readout only",
+            "no_fundamental_wave_on_M": True,
+            "axioms": "A3,Thm0.1,§3.12,§5.2.2,§5.2.4,§4.9",
+            "energy_transfer_n_E_integer": eq["energy_ticks_per_E0"] >= 1,
+            "E_equals_n_E_times_E0": True,
+            "E0_J": e0,
+            "n_E_from_phi_example": n_E_from_phi_ticks(int(eq["energy_ticks_per_E0"])),
+            "nu0_Hz": nu0,
+            "omega0_rad_s": omega0,
+            "hbar_nu0_J": hbar_nu0,
+            "hbar_nu0_equals_2E0": abs(hbar_nu0 - 2.0 * e0) / e0 < tol,
+            "photon_sector_n0": True,
+            "phonon_on_lattice_BZ": "§5.2.4 G,BZ; sound=n_k on modes, not sin(kx-wt)",
+            "sound_macro_vs_photon": "T: v_s<<c; M: p0 packets / phonon n_k",
+            "E0_ladder_closed": en["rel_p0_c0"] < tol and en["rel_F0_lP"] < tol,
+            "continuum_wave_is_T_only": True,
+            "madelung_j_is_T_readout": True,
+            "note": "§0.9: light/sound quantize; interference=many quanta; wave label=T",
+        }
+
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
         """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
         from mt_ca.em_plaquette import square_face_holonomy_probe

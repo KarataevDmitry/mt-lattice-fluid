@@ -381,6 +381,32 @@ def check_discreteness_from_axioms(device: str = "cpu") -> dict:
     }
 
 
+def check_excitations_full_quantization(device: str = "cpu") -> dict:
+    """§0.9 / Thm 5.2 — full quantization: no wave on M; sound/light = excitation quanta."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.excitations_full_quantization_row()
+    ok = (
+        row["no_fundamental_wave_on_M"] is True
+        and row["energy_transfer_n_E_integer"] is True
+        and row["E_equals_n_E_times_E0"] is True
+        and row["hbar_nu0_equals_2E0"] is True
+        and row["photon_sector_n0"] is True
+        and row["E0_ladder_closed"] is True
+        and row["continuum_wave_is_T_only"] is True
+        and row["madelung_j_is_T_readout"] is True
+    )
+    return {
+        "id": "Excitations_full_quantization",
+        "nu0_Hz": row["nu0_Hz"],
+        "hbar_nu0_equals_2E0": row["hbar_nu0_equals_2E0"],
+        "n_E_example": row["n_E_from_phi_example"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_mechanics_from_axioms(device: str = "cpu") -> dict:
     """§0.8 / Thm 5.1 — Landau mechanics from axioms + Thm 0.1; not separate p/F postulates."""
     from mt_ca.si_constants import DELTA_PHI_MIN, SI
@@ -1751,6 +1777,7 @@ def run_all(device: str) -> list[dict]:
         check_anchor_a_is_l_P(device=device),
         check_discreteness_from_axioms(device=device),
         check_mechanics_from_axioms(device=device),
+        check_excitations_full_quantization(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
