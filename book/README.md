@@ -24,7 +24,7 @@ PDF: `book/pdf/main.pdf` (XeLaTeX, Times New Roman).
 | 6 | `chapters/04-macro.tex` | Переход $M\to T$, теорема T-CR |
 | 7 | `chapters/05-matter.tex` | Механика ячейки, материя |
 | 8 | `chapters/06-si-sm.tex` | SI, $\alpha$, массы, SM |
-| Прил. A | `appendix/00-background.tex` | CA, Тоффоли/Фредkin, Маделунг |
+| Прил. A | `appendix/00-background.tex` | CA, Тоффоли/Фредкин, Маделунг |
 
 Текст написан **вручную** как монография: связная русская проза, теоремы с доказательствами.
 `model/` остаётся SSOT для реализации; расхождения с книгой --- баг книги.
