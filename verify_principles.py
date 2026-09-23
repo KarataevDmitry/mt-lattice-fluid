@@ -286,6 +286,36 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 
+def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
+    """§8.2·geo·ask — body ratio inventory; shipped κ/κ_link/V identity; holonomy/α open."""
+    from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI, kappa_link
+
+    del device
+    row = SI.cuboctahedron_carrier_ask_row()
+    inv = row["ratio_inventory"]
+    by_id = {str(r["id"]): r for r in inv}
+    ok = (
+        abs(row["V_over_v_hV"] - 16.0 / 3.0) < 1e-12
+        and abs(float(by_id["kappa_inscr_1tick"]["ratio"]) - KAPPA_FCC_1TICK) < 1e-12
+        and abs(float(by_id["kappa_link"]["ratio"]) - kappa_link(n_links=N12_FCC_CAUSAL_LINKS)) < 1e-12
+        and by_id["Phi_square_holonomy"]["status"] == "open"
+        and by_id["alpha_fs_stamped"]["status"] == "stamped_T"
+        and int(row["ratio_shipped_count"]) >= 3
+        and int(row["ratio_open_count"]) >= 4
+        and len(inv) >= 14
+    )
+    return {
+        "id": "Cuboctahedron_ask",
+        "V_over_v_hV": row["V_over_v_hV"],
+        "V_over_S_lP": row["V_over_S_lP"],
+        "n_square_over_n_triangle": row["n_square_over_n_triangle"],
+        "ratio_shipped_count": row["ratio_shipped_count"],
+        "ratio_open_count": row["ratio_open_count"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
     """§8.2·geo — cuboctahedron V=(16/3)v_hV; discrete α candidate vs stamped π."""
     from mt_ca.si_constants import SI
@@ -1464,6 +1494,7 @@ def run_all(device: str) -> list[dict]:
         check_higgs_mass(device=device),
         check_vacuum_bath(device=device),
         check_cuboctahedron_geometry(device=device),
+        check_cuboctahedron_carrier_ask(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),

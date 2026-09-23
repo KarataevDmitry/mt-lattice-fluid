@@ -718,7 +718,147 @@ class SIConstants:
             "alpha_inv_geom_rel_err": abs(alpha_inv_geom - codata_inv) / codata_inv,
             "alpha_inv_geom_alt_rel_err": abs(alpha_inv_geom_alt - codata_inv) / codata_inv,
             "alpha_inv_stamped_rel_err": abs(alpha_inv_stamped - codata_inv) / codata_inv,
-            "note": "§8.2·geo: V_cubo=(16/3)v_hV at a=l_P; α_geom exploratory, stamped α still π-ansatz",
+            "note": "§8.2·geo: V_cubo=(16/3)v_hV at a=l_P; ratio inventory → cuboctahedron_carrier_ask_row",
+        }
+
+    def cuboctahedron_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·geo·ask — which body ratios map to phase/force coupling (κ precedent); not fitted α."""
+        geo = self.cuboctahedron_geometry_row()
+        n12 = int(geo["n_nn"])
+        n_sq = int(geo["n_faces_square"])
+        n_tri = int(geo["n_faces_triangle"])
+        kappa = float(geo["kappa_inscribed_1tick"])
+        lp = self.l_P
+        edge_a = lp
+        s_total = (6.0 + 2.0 * math.sqrt(3.0)) * edge_a**2
+        vol_cubo = float(geo["V_cuboctahedron_m3"])
+        v_over_s_l_p = vol_cubo / (s_total * lp)
+        n_sq_over_n_tri = n_sq / n_tri
+        n_sq_over_faces = n_sq / (n_sq + n_tri)
+        dihedral_deg = float(geo["dihedral_square_triangle_deg"])
+        dihedral_over_180 = dihedral_deg / 180.0
+        pack_proton = 1.0 + kappa**2 / n12
+        n_phi = hv_bit_budget().N_phi
+        ckm_lambda = 3.0 / n_phi
+        ratio_inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "kappa_inscr_1tick",
+                "ratio": kappa,
+                "maps_to": "c=κc₀, hT=t_P·κ, macro isotropic light (§1.1)",
+                "status": "shipped",
+                "mechanism": "R_in/R_out cuboctahedron 1-tick hull; square faces limit",
+            },
+            {
+                "id": "kappa_link",
+                "ratio": 1.0 / n12,
+                "maps_to": "γ, ν_CA, CR/sync per-link fraction (§5.2.2)",
+                "status": "shipped",
+                "mechanism": "1/|N₁₂| from causal star, not face area",
+            },
+            {
+                "id": "v_hV_over_lP3",
+                "ratio": 1.0 / math.sqrt(2.0),
+                "maps_to": "dV=v_hV on FCC Voronoy node (§1.6.2)",
+                "status": "shipped",
+                "mechanism": "packing geometry of NN=l_P, not cuboctahedron volume",
+            },
+            {
+                "id": "V_over_v_hV",
+                "ratio": float(geo["V_over_v_hV"]),
+                "maps_to": "open — bulk vs node volume budget in g",
+                "status": "inventory",
+                "mechanism": "16/3 at a=l_P; algebra only until sim ties Φ or occupancy",
+            },
+            {
+                "id": "V_over_S_lP",
+                "ratio": v_over_s_l_p,
+                "maps_to": "open — compactness V/S vs localization / surface modes",
+                "status": "open",
+                "mechanism": "S=6a²+8·(√3/4)a²; ask whether surface/bulk split enters gate",
+            },
+            {
+                "id": "A_square_over_A_total",
+                "ratio": float(geo["A_square_over_A_total"]),
+                "maps_to": "open — square vs triangle face weight in EM holonomy",
+                "status": "open",
+                "mechanism": "2/(1+√3); Φ_□ lives on □ faces (§8.2 Stokes), not on △",
+            },
+            {
+                "id": "n_square_over_n_triangle",
+                "ratio": n_sq_over_n_tri,
+                "maps_to": "open — 6/8 face census vs sector weights",
+                "status": "open",
+                "mechanism": "3/4 count ratio; do not confuse with CKM 3/13 (uses d, N_φ)",
+            },
+            {
+                "id": "n_square_over_all_faces",
+                "ratio": n_sq_over_faces,
+                "maps_to": "open — square-face fraction of hull",
+                "status": "open",
+                "mechanism": "6/14; compare to A_□/A_tot (area ≠ count)",
+            },
+            {
+                "id": "dihedral_square_triangle",
+                "ratio": dihedral_over_180,
+                "maps_to": "open — phase offset at □–△ ridge",
+                "status": "open",
+                "mechanism": "135°=3π/4; ask g whether ridge holonomy adds fixed phase",
+            },
+            {
+                "id": "R_in_over_R_out_classical",
+                "ratio": float(geo["R_in_over_R_out_classical"]),
+                "maps_to": "not M κ — different embedding (§1.6.2 footnote)",
+                "status": "distinct",
+                "mechanism": "√6/6 ≠ 1/√2; canon κ from square-face-limited 1-tick hull",
+            },
+            {
+                "id": "proton_pack_kappa2_over_N12",
+                "ratio": pack_proton,
+                "maps_to": "m_p stack 1+κ²/N₁₂ (§8.2 inscribed-sphere ansatz)",
+                "status": "partial",
+                "mechanism": "uses shipped κ + |N|; geometry of empty cell, not pure face ratio",
+            },
+            {
+                "id": "N_phi_minus_N12",
+                "ratio": float(n_phi - n12),
+                "maps_to": "N_φ=⌈4π⌉=13≈|N|+1 — register/Heisenberg, not face holonomy",
+                "status": "partial",
+                "mechanism": "mixed ring topology + body echo; CKM λ=3/13 borrows N_φ",
+            },
+            {
+                "id": "Phi_square_holonomy",
+                "ratio": float("nan"),
+                "maps_to": "open DoD — sim Σ_{∂□}Δφ vs α_fs Coulomb F/F_P (§8.2)",
+                "status": "open",
+                "mechanism": "force coupling should come from plaquette cycle on □, not combinatorics alone",
+            },
+            {
+                "id": "alpha_star_ring",
+                "ratio": 1.0 + 1.0 / (4.0 * math.pi),
+                "maps_to": "δλ=α_fs/(4π); Δφ_min on Z_N ring (§1.4.3)",
+                "status": "partial",
+                "mechanism": "4π = emergent solid angle on T, not cuboctahedron face ratio",
+            },
+            {
+                "id": "alpha_fs_stamped",
+                "ratio": float(geo["alpha_fs_inv_stamped"]),
+                "maps_to": "T-readout π-postulate (§8.2); tighter than body combinatorics",
+                "status": "stamped_T",
+                "mechanism": "4π³+π²+π ~2 ppm; honest guardrail vs α_geom integer games",
+            },
+        ]
+        shipped = sum(1 for r in ratio_inventory if r["status"] == "shipped")
+        open_ = sum(1 for r in ratio_inventory if r["status"] in ("open", "inventory"))
+        return {
+            **{k: geo[k] for k in ("V_over_v_hV", "kappa_inscribed_1tick", "A_square_over_A_total")},
+            "V_over_S_lP": v_over_s_l_p,
+            "n_square_over_n_triangle": n_sq_over_n_tri,
+            "dihedral_square_triangle_deg": dihedral_deg,
+            "ratio_inventory": ratio_inventory,
+            "ratio_shipped_count": shipped,
+            "ratio_open_count": open_,
+            "precedent": "κ = R_in/R_out from 1-tick hull → c,hT without fit",
+            "note": "§8.2·geo·ask: inventory only; α from Φ_□ sim, not face arithmetic",
         }
 
     def decay_row(self) -> dict[str, float | bool | str]:
