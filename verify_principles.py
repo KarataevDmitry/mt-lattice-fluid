@@ -296,18 +296,23 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     by_id = {str(r["id"]): r for r in inv}
     ok = (
         abs(row["V_over_v_hV"] - 16.0 / 3.0) < 1e-12
+        and abs(float(by_id["edge_a_anchor"]["ratio"]) - 1.0) < 1e-12
+        and abs(row["edge_a_m"] - SI.l_P) / SI.l_P < 1e-12
         and abs(float(by_id["kappa_inscr_1tick"]["ratio"]) - KAPPA_FCC_1TICK) < 1e-12
         and abs(float(by_id["kappa_link"]["ratio"]) - kappa_link(n_links=N12_FCC_CAUSAL_LINKS)) < 1e-12
         and by_id["Phi_square_holonomy"]["status"] == "open"
         and by_id["alpha_fs_stamped"]["status"] == "stamped_T"
+        and len(row["anchor_chain"]) >= 8
         and int(row["ratio_shipped_count"]) >= 3
         and int(row["ratio_open_count"]) >= 4
         and len(inv) >= 14
     )
     return {
         "id": "Cuboctahedron_ask",
+        "edge_a_m": row["edge_a_m"],
         "V_over_v_hV": row["V_over_v_hV"],
-        "V_over_S_lP": row["V_over_S_lP"],
+        "V_over_S_m": row["V_over_S_m"],
+        "V_over_S_over_l_P": row["V_over_S_over_l_P"],
         "n_square_over_n_triangle": row["n_square_over_n_triangle"],
         "ratio_shipped_count": row["ratio_shipped_count"],
         "ratio_open_count": row["ratio_open_count"],
@@ -325,6 +330,8 @@ def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
     ok = (
         abs(row["V_over_v_hV"] - 16.0 / 3.0) < 1e-12
         and abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
+        and abs(row["R_in_over_R_out_1tick"] - 1.0 / math.sqrt(2.0)) < 1e-12
+        and abs(row["A_square_one_m2"] - row["edge_a_m"] ** 2) < 1e-24 * row["edge_a_m"] ** 2
         and row["n_faces_square"] == 6
         and row["n_faces_triangle"] == 8
         and row["alpha_fs_inv_geom"] == 137.0
@@ -333,7 +340,9 @@ def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
     )
     return {
         "id": "Cuboctahedron_geo",
+        "edge_a_m": row["edge_a_m"],
         "V_over_v_hV": row["V_over_v_hV"],
+        "V_over_S_m": row["V_over_S_m"],
         "alpha_fs_inv_geom": row["alpha_fs_inv_geom"],
         "alpha_inv_geom_rel_err": row["alpha_inv_geom_rel_err"],
         "alpha_inv_stamped_rel_err": row["alpha_inv_stamped_rel_err"],
