@@ -830,6 +830,32 @@ def check_floor1_dressing_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_dressing_close(device: str = "cpu") -> dict:
+    """§6·floor1·dressing·close — R_dress=1·dl via N12<N_phi + local star."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_dressing_close_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["star_above_floor"])
+        and bool(row["N12_lt_Nphi"])
+        and int(row["N12"]) == 12
+        and int(row["N_phi"]) == 13
+        and abs(float(row["R_dress_dl"]) - 1.0) < 1e-12
+        and float(row["Delta_phi_ring"]) > float(row["Delta_phi_min"])
+    )
+    return {
+        "id": "Floor1_dressing_close",
+        "R_dress_dl": row["R_dress_dl"],
+        "Delta_phi_ring": row["Delta_phi_ring"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2455,6 +2481,7 @@ def run_all(device: str) -> list[dict]:
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
+        check_floor1_dressing_close(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

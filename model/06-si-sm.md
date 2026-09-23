@@ -22,7 +22,7 @@ $$
 |-------|-----------|-------|
 | C0 вакуум/A5 | нет (не объект) | фон |
 | C1 свободный $\gamma$ | да | уже vacuum; не blob радиуса $N_{12}^{k}$ |
-| **C2** легчайший $Q=\pm1$ + near dressing | **да** | топо-защита + легчайший $Q$; ядро floor0, обёртка может достать до floor1 |
+| **C2** легчайший $Q=\pm1$ + ε-dressing | **да** | топо-защита + легчайший $Q$; ядро floor0, обёртка $R=1\cdot\mathrm{dl}$ (dressing·close) |
 | C3 возбуждённый/составной тот же $Q$ | нет / метастаб. | downhill в $e+\gamma\ldots$ если канал есть (OPEN map) |
 | **C4** $Q=0$ мультиклеточный blob | **нет** | нет топозаряда → A5 → вакуум = **пре-резонанс** |
 | C5 пара $\pm$ на этом R | нет | аннигиляция §5.0.3 |
@@ -38,10 +38,16 @@ $$
 - минимальный хвост $\supseteq$ $\varepsilon$-окрестность $\Lambda$ $\Rightarrow$ $R_{\min}=1\cdot\mathrm{dl}$, звезда $N_{12}$;
 - anti-smear $K_P$ держит ядро; Гейзенберг держит неустранимый ореол;
 - оболочки = моды $\rho_\Theta$ на координационных сферах.
-**OPEN:** внешний $R_{\mathrm{dress}}$ (число оболочек до падения сигнала ниже $\Delta\varphi_{\min}$); дотягивает ли до $N_{12}^{3}\ldots N_{12}^{4}$ — **не** форсируется census.
-**REJECT:** $R_{\mathrm{dress}}\equiv$ Compton/$a_0$; $\alpha$-input в dressing; $R_{\mathrm{dress}}\equiv N_{12}^{3\ldots4}$ без вывода.
-**TRY:** shell-walk по $|\Delta\varphi|$; комбинаторика $N_\varphi$ / $B_{hV}$ / $N_{\mathrm{ring}}$.
-**Код:** `SI.floor1_dressing_ask_row()` · verify **`Floor1_dressing_ask`**.
+**Код (ask):** `SI.floor1_dressing_ask_row()` · verify **`Floor1_dressing_ask`**.
+#### §6·floor1·dressing·close · $R_{\mathrm{dress}}=1\cdot\mathrm{dl}$
+**Лемма:**
+1. Winding-1 на звезде: $\Delta\varphi_{\mathrm{ring}}=2\pi/N_{12}$. Из $N_\varphi=\lceil 2\pi/\Delta\varphi_{\min}\rceil$ следует $N_{12}<N_\varphi\Leftrightarrow 2\pi/N_{12}>\Delta\varphi_{\min}$ — вся ε-звезда над полом.
+2. Локальный баланс/gate только на $N(x)$ (A1 · §5.2); вторая оболочка за один $hT$ запрещена.
+3. Ground легчайшего $Q$: multi-shell $\rho_\Theta$ = возбуждение → downhill к минимальному ореолу (логика C3 vs C2).
+$$\Rightarrow\quad R_{\mathrm{dress}}=R_{\min}=1\cdot\mathrm{dl},\quad N_{\mathrm{star}}=N_{12}.$$
+Полоса этажа 1 $N_{12}^{3}\ldots N_{12}^{4}$ — окно C4, **не** радиус e-halo.
+**Soft-OPEN:** точная форма $f$ в $\rho_\Theta\propto f(|\Delta\varphi|,|\zeta|)$ (не нужна для радиуса).
+**Код:** `SI.floor1_dressing_close_row()` · verify **`Floor1_dressing_close`**.
 Конфайнмент: «вытащить кварк» = разорвать топологический узел → **пара pra-дефектов**, не один dV.
 **Цвет ≠ вход.** Кратность фокусов в устойчивом составном узле — **prediction** из топологии на FCC/$\varepsilon$ + Паули + $K_P$; ожидание $\sim d=3$ (**§8.4.1-D**). SM-$N_c$ — T-имя, не axiom M.
 ---

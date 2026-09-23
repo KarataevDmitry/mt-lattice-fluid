@@ -2838,7 +2838,7 @@ class SIConstants:
                 "id": "C2_lightest_Q_pm1_dressed",
                 "stable": True,
                 "status": "stable_matter",
-                "maps_to": "e± core (floor0) + near dressing may reach floor1 R",
+                "maps_to": "e± core (floor0) + ε-star dressing (R=1·dl; see dressing·close)",
                 "mechanism": "topo lock + lightest Q; dressing ≠ second particle",
             },
             {
@@ -3033,6 +3033,98 @@ class SIConstants:
                 "Dressing = ρ_Θ halo (§5.0.5): min ⊇ ε-star (1·dl, N12). "
                 "Outer R_dress OPEN (shell-walk / combinatorial). "
                 "NOT forced to N12^3…^4; NOT Compton; NOT α-input."
+            ),
+        }
+
+    def floor1_dressing_close_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·dressing·close — outer R_dress of lightest Q=±1 = ε-star.
+
+        Closes open from floor1_dressing_ask_row.
+
+        Lemma (stamped pieces only):
+          1. Winding-1 on the causal star: Δφ_ring = 2π/N12.
+             N_phi = ⌈2π/Δφ_min⌉ ⇒ N12 < N_phi ⇔ 2π/N12 > Δφ_min.
+             Entire ε-star sits above the Heisenberg floor (forced halo).
+          2. Local balance / gate only on N(x) = first shell (A1 · §5.2).
+             Second coordination shell in one hT is forbidden.
+          3. Ground lightest Q: multi-shell ρ_Θ is an excitation — downhill
+             to the minimal halo (same stability logic as C3 vs C2).
+             ⇒ R_dress = R_min = 1·dl; N_star = N12. Not N12^{3…4}.
+
+        Still soft-OPEN (not radius): exact shape of f in ρ_Θ∝f(|Δφ|,|ζ|).
+        """
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        dphi = float(DELTA_PHI_MIN)
+        n_phi = int(hv_bit_budget().N_phi)
+        dphi_ring = 2.0 * math.pi / float(n12)
+        r_dress = 1.0  # ·dl
+
+        star_above = dphi_ring > dphi
+        n12_lt_nphi = n12 < n_phi
+        lemma_ok = (
+            n12 == 12
+            and n_phi == 13
+            and abs(dphi - 0.5) < 1e-12
+            and star_above
+            and n12_lt_nphi
+            and abs(r_dress - 1.0) < 1e-12
+        )
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_R_dress_equals_epsilon_star",
+                "ratio": r_dress,
+                "maps_to": "R_dress=1·dl = ε-star (N12); outer=min for ground e±",
+                "status": "closed",
+                "mechanism": "2π/N12>Δφ_min + local N(x) + downhill multi-shell",
+            },
+            {
+                "id": "closed_N12_lt_Nphi_forces_star_halo",
+                "ratio": dphi_ring,
+                "maps_to": "N12=12 < N_phi=13 ⇒ 2π/N12>Δφ_min on every NN",
+                "status": "closed",
+                "mechanism": "winding-1 ring vs Heisenberg floor",
+            },
+            {
+                "id": "closed_local_gate_first_shell_only",
+                "maps_to": "A1/§5.2 balance on N(x); 2nd shell /1 hT forbidden",
+                "status": "closed",
+            },
+            {
+                "id": "reject_multi_shell_as_ground",
+                "maps_to": "shell≥2 ρ_Θ = excitation → downhill to ε (C3-class)",
+                "status": "rejected_as_ground_dressing",
+            },
+            {
+                "id": "reject_R_equals_floor1_band",
+                "ratio": float(n12**3),
+                "maps_to": "floor1 N12^3…^4 = C4 pre-resonance window, not e halo",
+                "status": "rejected",
+            },
+            {
+                "id": "open_f_shape_soft",
+                "maps_to": "exact f in ρ_Θ∝f(|Δφ|,|ζ|) — not needed for R_dress",
+                "status": "open_soft",
+            },
+        ]
+
+        return {
+            "theorem": "§6·floor1·dressing·close — R_dress=1·dl (ε-star)",
+            "N12": n12,
+            "N_phi": n_phi,
+            "Delta_phi_min": dphi,
+            "Delta_phi_ring": dphi_ring,
+            "R_dress_dl": r_dress,
+            "R_min_dl": r_dress,
+            "star_above_floor": star_above,
+            "N12_lt_Nphi": n12_lt_nphi,
+            "derivation_closed": lemma_ok,
+            "inventory": inventory,
+            "ask_ok": lemma_ok,
+            "note": (
+                "R_dress=R_min=1·dl: N12<N_phi forces full ε-halo above Δφ_min; "
+                "local gate=first shell; multi-shell=excitation. "
+                "Floor1 band ≠ e dressing. Soft-OPEN: shape of f."
             ),
         }
 

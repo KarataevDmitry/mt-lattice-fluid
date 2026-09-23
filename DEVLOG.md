@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-24 | §6·floor1·dressing·close | R_dress=1·dl: N₁₂<N_φ ⇒ 2π/N₁₂>Δφ_min; local star; multi-shell=excitation · Floor1_dressing_close PASS |
 | 2026-09-24 | §6·floor1·dressing·ask | ρ_Θ halo: R_min=1·dl (ε-star) CLOSED; outer R_dress OPEN; reject Compton/α/forced N₁₂^{3…4} · Floor1_dressing_ask PASS |
 | 2026-09-24 | §6·floor1·B0·census | only stable B=0 matter @N₁₂³…⁴ = dressed lightest Q=±1; Q=0 blobs=pre-resonance · Floor1_B0_census_ask PASS |
 | 2026-09-24 | §6·floor1·ask | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1 · Floor1_leptonic_ask PASS |
