@@ -834,6 +834,84 @@ def check_higgs_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_bridges(device: str = "cpu") -> dict:
+    """§8.2 audit — α*↔α_fs partial links (missed-readings probe)."""
+    from mt_ca.si_constants import N12_FCC_CAUSAL_LINKS, SI
+
+    del device
+    pi = math.pi
+    a = SI.alpha_fs
+    a_star = SI.alpha_star
+    residue = a_star - 1.0
+
+    higgs = SI.higgs_mass_row()
+    runner = SI.alpha_runner_row()
+    wein = SI.weinberg_row()
+    coul = SI.coulomb_row()
+    ew = SI.electroweak_mass_row()
+
+    delta_lam = higgs["delta_lambda_quantum"]
+    gate_residue_ok = (
+        abs(residue - 1.0 / (4.0 * pi)) < 1e-15
+        and abs(residue - SI.delta_phi_min / (2.0 * pi)) < 1e-15
+    )
+    delta_lambda_link_ok = (
+        abs(delta_lam - a / (4.0 * pi)) < 1e-15
+        and abs(delta_lam - a * residue) < 1e-15
+    )
+    phase_tower_ok = abs(SI.alpha_fs_inv - pi * (4.0 * pi**2 + pi + 1.0)) < 1e-9
+    alpha_mz_runner_ok = runner["alpha_MZ_inv_rel_err"] < 2e-4
+    fcc_cluster_n_phi_ok = (
+        wein["N_cluster"] == 13.0
+        and wein["N_phi"] == 13.0
+        and wein["N12"] == float(N12_FCC_CAUSAL_LINKS)
+        and wein["N_cluster"] == wein["N_phi"]
+        and wein["sin2_theta_W_bare"] == 3.0 / 13.0
+    )
+    phase_ratio_over_pi = (4.0 * pi**2 + pi + 1.0) / pi
+    cascade_guess = residue**3 * 4.0 * pi * (4.0 * pi**2 + pi + 1.0) / (4.0 * pi**2)
+    cascade_rel_err = abs(cascade_guess - a) / a
+    alpha_star_cascade_open = cascade_rel_err > 0.03
+    coulomb_carrier_ok = coul["rel_F_over_FP_is_alpha"] < 1e-12
+    electroweak_tree_ok = (
+        abs(ew["mass_ratio_sin2"] - ew["sin2_theta_W"]) < 1e-12
+        and ew["m_W_rel_err"] < 0.005
+        and ew["m_Z_rel_err"] < 0.005
+    )
+
+    ok = (
+        gate_residue_ok
+        and delta_lambda_link_ok
+        and phase_tower_ok
+        and alpha_mz_runner_ok
+        and fcc_cluster_n_phi_ok
+        and alpha_star_cascade_open
+        and coulomb_carrier_ok
+        and electroweak_tree_ok
+    )
+    return {
+        "id": "Alpha_bridges",
+        "ok": ok,
+        "gate_residue_ok": gate_residue_ok,
+        "delta_lambda_alpha_star_ok": delta_lambda_link_ok,
+        "phase_tower_ok": phase_tower_ok,
+        "alpha_MZ_runner_ok": alpha_mz_runner_ok,
+        "alpha_MZ_inv_rel_err": runner["alpha_MZ_inv_rel_err"],
+        "fcc_cluster_N_phi_ok": fcc_cluster_n_phi_ok,
+        "phase_ratio_over_pi": phase_ratio_over_pi,
+        "phase_ratio_minus_N_phi": phase_ratio_over_pi - 13.0,
+        "alpha_star_cascade_open": alpha_star_cascade_open,
+        "cascade_rel_err": cascade_rel_err,
+        "coulomb_carrier_ok": coulomb_carrier_ok,
+        "electroweak_tree_ok": electroweak_tree_ok,
+        "alpha_fs_inv_ppm_vs_CODATA": abs(SI.alpha_fs_inv - 137.035999177) / 137.035999177 * 1e6,
+        "note": (
+            "§8.2 audit: δλ=α_fs/(4π)=α_fs(α*−1), B_hV runner, N_φ=|N12|+1 PASS; "
+            "α*→α_fs cascade + e₀ derivation + lattice Coulomb sim OPEN"
+        ),
+    }
+
+
 def check_proton_mass(device: str = "cpu") -> dict:
     from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI
 
@@ -1298,6 +1376,7 @@ def run_all(device: str) -> list[dict]:
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),
         check_higgs_mass(device=device),
+        check_alpha_bridges(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),
         check_neutron_mass(device=device),
