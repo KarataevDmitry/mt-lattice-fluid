@@ -489,6 +489,30 @@ def check_alpha_descent_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_mass_defect_optics(device: str = "cpu") -> dict:
+    """§8.2·α·mass-defect — QM Δm and α are one upstairs."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_mass_defect_optics_row()
+    ok = (
+        bool(row["ask_ok"])
+        and abs(float(row["rel_alpha_from_dm"])) < 1e-12
+        and abs(float(row["U_a0_over_BE"]) - 2.0) < 1e-12
+        and abs(float(row["E_coul_NN_over_E0"]) - float(row["alpha_over_kappa"])) < 1e-12
+    )
+    return {
+        "id": "Alpha_mass_defect_optics",
+        "delta_m_over_m_e": row["delta_m_over_m_e"],
+        "alpha_from_mass_defect": row["alpha_from_mass_defect"],
+        "U_a0_over_BE": row["U_a0_over_BE"],
+        "E_coul_NN_over_E0": row["E_coul_NN_over_E0"],
+        "BE_over_E0": row["BE_over_E0"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2100,6 +2124,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_force_lattice_ask(device=device),
         check_alpha_meaning_ask(device=device),
         check_alpha_descent_ask(device=device),
+        check_alpha_mass_defect_optics(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

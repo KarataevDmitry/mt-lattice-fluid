@@ -1271,6 +1271,89 @@ class SIConstants:
             ),
         }
 
+    def alpha_mass_defect_optics_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·mass-defect — QM-floor optics: H binding Δm is upstairs α.
+
+        QM (previous floor): BE = ½ α² m_e c², Δm = BE/c² ⇒ α = √(2 Δm/m_e).
+        DoD descent: Arg-binding of composite H must coarse-grain to this Δm.
+
+        Same α identities on M (no new knob):
+          U(a₀) = α E_P / N_a0 = α² m_e c² ; BE = U/2  (virial)
+          E_coul(N=1)/E₀ = α/κ = F_NN/F₀     (force lattice)
+          BE/E₀ = Δm/m_arg ≪ 1               (soft Arg ledger, not one E₀ click)
+
+        Optics: charge↔vacuum coupling, F₀ landing, hop ladder, and QM mass defect
+        are one α. Deriving any one without α derives all.
+        """
+        alpha_c = 7.2973525693e-3
+        hop = self.alpha_hop_ladder_row()
+        n_a0 = float(hop["N_a0_Bohr"])
+        kappa = KAPPA_FCC_1TICK
+        m_e = self.m_e_CODATA
+        be = 0.5 * alpha_c**2 * m_e * self.c**2
+        dm = be / self.c**2
+        f_p = self.c**4 / self.G
+        e_coul_nn = alpha_c * f_p * self.l_P
+        u_a0 = alpha_c * self.E_P / n_a0
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "qm_floor_alpha_from_mass_defect",
+                "ratio": math.sqrt(2.0 * dm / m_e),
+                "maps_to": "α = √(2 Δm/m_e) — H Rydberg mass defect",
+                "status": "qm_floor_DoD",
+            },
+            {
+                "id": "virial_U_a0",
+                "ratio": u_a0 / (alpha_c**2 * m_e * self.c**2),
+                "maps_to": "U(a₀)=α E_P/N_a0 = α² m_e c²",
+                "status": "identity",
+            },
+            {
+                "id": "virial_BE_half_U",
+                "ratio": u_a0 / be,
+                "maps_to": "BE = U/2",
+                "status": "identity",
+            },
+            {
+                "id": "force_lattice_same_alpha",
+                "ratio": e_coul_nn / self.E_0,
+                "maps_to": "E_coul(N=1)/E₀ = α/κ",
+                "status": "identity",
+            },
+            {
+                "id": "soft_Arg_ledger",
+                "ratio": be / self.E_0,
+                "maps_to": "BE ≪ E₀ — binding is coarse Arg, not one E₀ quantum",
+                "status": "shipped_scale",
+            },
+            {
+                "id": "open_Arg_binding_without_alpha",
+                "maps_to": "derive Δm from Arg p–e bond on Λ without inserting α",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·mass-defect — QM Δm and α are one upstairs",
+            "BE_J": be,
+            "delta_m_kg": dm,
+            "delta_m_over_m_e": dm / m_e,
+            "alpha_from_mass_defect": math.sqrt(2.0 * dm / m_e),
+            "alpha_codata": alpha_c,
+            "rel_alpha_from_dm": abs(math.sqrt(2.0 * dm / m_e) - alpha_c) / alpha_c,
+            "U_a0_over_BE": u_a0 / be,
+            "E_coul_NN_over_E0": e_coul_nn / self.E_0,
+            "alpha_over_kappa": alpha_c / kappa,
+            "BE_over_E0": be / self.E_0,
+            "inventory": inventory,
+            "ask_ok": abs(math.sqrt(2.0 * dm / m_e) - alpha_c) / alpha_c < 1e-12
+            and abs(u_a0 / be - 2.0) < 1e-12
+            and abs(e_coul_nn / self.E_0 - alpha_c / kappa) < 1e-12,
+            "note": (
+                "Optics: α=√(2Δm/m_e) on QM floor; same α in U(a₀), F₀ lattice. "
+                "DoD: Arg-binding → Δm. OPEN: Δm without α-input."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

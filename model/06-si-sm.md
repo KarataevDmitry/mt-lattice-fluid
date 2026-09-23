@@ -221,6 +221,20 @@ T-слой: EM-связность = **фазовый объём** emergent 3D re
 **Два завершения (score только AFTER):** continuum-башня на `Ω` → ~2 ppm; `α_geom=137` с граней → ~263 ppm. Сырые `r`, `r²`, `κ_link·r` — неверный масштаб.
 **Открыто:** доля сопряжения заряда сквозь `Ω` из `g`/holonomy — не ansatz.
 **Код:** `SI.alpha_descent_ask_row()` · verify **`Alpha_descent_ask`**.
+#### §8.2·α·mass-defect · Оптика: дефект массы H = этаж КМ (DoD)
+**КМ (предыдущий этаж):** $BE=\tfrac12\alpha^2 m_e c^2$, $\Delta m=BE/c^2$ ⇒
+$$
+\alpha=\sqrt{2\,\Delta m/m_e}.
+$$
+**На M (те же α, без новой ручки):**
+| тождество | смысл |
+|-----------|--------|
+| $U(a_0)=\alpha E_P/N_{a0}=\alpha^2 m_e c^2$, $BE=U/2$ | вириал |
+| $E_{\mathrm{coul}}(N{=}1)/E_0=\alpha/\kappa$ | сила на $F_0$ |
+| $BE/E_0=\Delta m/m_{\mathrm{arg}}\ll 1$ | мягкий Arg-ledger, не один клик $E_0$ |
+**Оптика:** coupling phase↔vacuum, посадка на $F_0$, hop-лестница и QM-дефект массы — **одно** α. Вывел любое без α — вывел все.
+**DoD:** Arg-binding композита H на Λ должен coarse-grain к $\Delta m$. **Открыто:** $\Delta m$ из Arg-связи p–e **без** вставки α.
+**Код:** `SI.alpha_mass_defect_optics_row()` · verify **`Alpha_mass_defect_optics`**.
 **π-guardrail (§8.2·geo):** непрерывный **`4π`** — **T-readout** (телесный угол), **не** метрика одной **`v_h`**. На **1-tick** теле **кубооктаэдра** живут **6□ + 8△**, **`V=(16/3)v_hV`**, **`κ=1/√2`** — см. **`SI.cuboctahedron_geometry_row()`**.
 **Exploratory (π-free, cuboctahedron combinatorics — не ):**
 ```
