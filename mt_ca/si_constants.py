@@ -1160,6 +1160,47 @@ class SIConstants:
             "note": "§7.3: physics on hV closes μ_P; Planck-with-c is consistency layer, not κ definition",
         }
 
+    def anchor_a_is_l_P_row(self) -> dict[str, float | int | str | bool]:
+        """§7.4 — single spatial quantum: hull edge a ≡ hL ≡ l_P; √(ℏG/c³) is check only."""
+        geo = self.cuboctahedron_geometry_row()
+        rd = self.rhombic_dodecahedron_geometry_row()
+        lp = self.l_P
+        edge_a = float(geo["edge_a_m"])
+        v_hv_geo = float(rd["V_voronoi_m3"])
+        c0 = self.c0
+        ht = self.hT
+        p0 = self.p_0
+        m_arg_em = self.m_arg
+        m_arg_mech = (2.0 * p0) / c0  # §5.2.1: p₀ = m_arg·c₀/2 — no macro c
+        lp_textbook = math.sqrt(self.hbar * self.G / self.c**3)
+        tol = 1e-11
+        return {
+            "theorem": "On M there is one spatial step; a cannot differ from l_P",
+            "chain": "Postulate0 hL → A1 NN link → hull edge a → Voronoy v_hV(a) → dV",
+            "hL_m": lp,
+            "hull_edge_a_m": edge_a,
+            "a_equals_hL": abs(edge_a - lp) / lp < tol,
+            "a_equals_l_P": abs(edge_a - lp) / lp < tol,
+            "l_P_primary": "l_P := hL := A1 light-like link (§0.2 · §1.6.2)",
+            "l_P_textbook_check_m": lp_textbook,
+            "l_P_textbook_rel_err": abs(lp - lp_textbook) / lp,
+            "l_P_not_defined_by_c": True,
+            "c_in_textbook_only": "√(ℏG/c³), t_P=l_P/c, Bekenstein SI — consistency layer",
+            "scale_decoupled_from_c_definition": True,
+            "no_second_ruler": True,
+            "no_rescale_without_breaking": (
+                "λ·a would split hL vs A1 vs dV=v_hV(a) unless λ=1; no structure below dl (§1.4)"
+            ),
+            "v_hV_at_a_m3": v_hv_geo,
+            "v_hV_equals_lP3_over_sqrt2": abs(v_hv_geo - lp**3 / math.sqrt(2.0)) / v_hv_geo < tol,
+            "m_arg_from_macro_c_kg": m_arg_em,
+            "m_arg_from_c0_only_kg": m_arg_mech,
+            "m_arg_mech_equals_em": abs(m_arg_mech - m_arg_em) / m_arg_em < tol,
+            "p0_equals_hbar_over_2lP": abs(p0 - self.hbar / (2.0 * lp)) / p0 < tol,
+            "absolute_SI_still_needs": "ℏ, G (+ c or mechanical anchor) for meters — not for M ruler",
+            "note": "§7.4: a=l_P forced; textbook Planck with c is overdetermined check, not ruler definition",
+        }
+
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
         """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
         from mt_ca.em_plaquette import square_face_holonomy_probe

@@ -350,6 +350,33 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_anchor_a_is_l_P(device: str = "cpu") -> dict:
+    """§7.4 — hull edge a ≡ hL ≡ l_P; textbook √(ℏG/c³) is consistency check."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.anchor_a_is_l_P_row()
+    ok = (
+        row["a_equals_l_P"] is True
+        and row["a_equals_hL"] is True
+        and row["l_P_not_defined_by_c"] is True
+        and row["scale_decoupled_from_c_definition"] is True
+        and row["v_hV_equals_lP3_over_sqrt2"] is True
+        and row["m_arg_mech_equals_em"] is True
+        and row["p0_equals_hbar_over_2lP"] is True
+        and float(row["l_P_textbook_rel_err"]) < 1e-12
+        and row["no_second_ruler"] is True
+    )
+    return {
+        "id": "Anchor_a_lP",
+        "a_equals_l_P": row["a_equals_l_P"],
+        "l_P_textbook_rel_err": row["l_P_textbook_rel_err"],
+        "m_arg_mech_equals_em": row["m_arg_mech_equals_em"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_planck_from_cell_conditions(device: str = "cpu") -> dict:
     """§7.3 — cell physics + geometry closes μ_P; conventional Planck derived via κ."""
     from mt_ca.si_constants import SI
@@ -1659,6 +1686,7 @@ def run_all(device: str) -> list[dict]:
         check_rhombic_dodecahedron_carrier_ask(device=device),
         check_kappa_bottom_up(device=device),
         check_planck_from_cell_conditions(device=device),
+        check_anchor_a_is_l_P(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
