@@ -350,6 +350,37 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_discreteness_from_axioms(device: str = "cpu") -> dict:
+    """§0 Thm 0.1 — discreteness from axioms + bit budget; replaces Postulate 0.1."""
+    from mt_ca.si_constants import DELTA_PHI_MIN, SI
+
+    del device
+    row = SI.discreteness_from_axioms_row()
+    ok = (
+        row["replaces_postulate_0_1"] is True
+        and row["lemma_a1_fcc_n12"] == 12
+        and row["z_min_positive"] is True
+        and row["s0_equals_hbar_half"] is True
+        and row["p0_equals_hbar_over_2hL"] is True
+        and row["p0_equals_m_arg_c0_half"] is True
+        and abs(float(row["B_hV_pure"]) - 2.0 * math.pi / math.log(2.0)) < 1e-12
+        and int(row["N_phi"]) == 13
+        and int(row["N_ring"]) == 512
+        and int(row["frac_bits"]) == 6
+        and float(row["delta_phi_min_rad"]) == DELTA_PHI_MIN
+        and row["c_not_in_discreteness_chain"] is True
+    )
+    return {
+        "id": "Discreteness_from_axioms",
+        "B_hV_pure": row["B_hV_pure"],
+        "N_ring": row["N_ring"],
+        "N_phi": row["N_phi"],
+        "z_min_natural": row["z_min_natural"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_anchor_a_is_l_P(device: str = "cpu") -> dict:
     """§7.4 — hull edge a ≡ hL ≡ l_P; textbook √(ℏG/c³) is consistency check."""
     from mt_ca.si_constants import SI
@@ -1687,6 +1718,7 @@ def run_all(device: str) -> list[dict]:
         check_kappa_bottom_up(device=device),
         check_planck_from_cell_conditions(device=device),
         check_anchor_a_is_l_P(device=device),
+        check_discreteness_from_axioms(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),

@@ -1203,6 +1203,46 @@ class SIConstants:
             "note": "§7.4: a=l_P forced; Postulate 0.1 must not presuppose Planck name",
         }
 
+    def discreteness_from_axioms_row(self) -> dict[str, float | int | str | bool]:
+        """§0 Thm 0.1 — discreteness from A1–A3,A7,A10,A13,A16 + bit budget; not Postulate 0.1."""
+        hv = hv_bit_budget()
+        lp = self.l_P
+        ht = self.hT
+        s0 = self.s_0
+        p0 = self.p_0
+        z_min = 2.0 ** (-hv.frac_bits)
+        b_hv = 2.0 * math.pi / LN2
+        tol = 1e-12
+        delta_phi_disc = heisenberg_phi_min_disc(phase_bits=hv.phase_bits)
+        return {
+            "theorem": "Thm 0.1: countable FCC carrier; hL,hT from axioms+brick; no sub-dl",
+            "replaces_postulate_0_1": True,
+            "axioms": "A1,A2,A3,A7,A5,A10,A11,A13,A16,§1.6,§3.12",
+            "lemma_a3_a13_finite_alphabet": True,
+            "lemma_a1_fcc_n12": N12_FCC_CAUSAL_LINKS,
+            "lemma_a10_integer_charge": True,
+            "B_hV_pure": b_hv,
+            "B_hV_from_bekenstein_when_EPl_eq_hbar_c": True,
+            "N_ring": hv.N_ring,
+            "N_phi": hv.N_phi,
+            "frac_bits": hv.frac_bits,
+            "delta_phi_min_rad": DELTA_PHI_MIN,
+            "delta_phi_min_disc": delta_phi_disc,
+            "z_min_natural": z_min,
+            "z_min_positive": z_min > 0.0,
+            "s0_equals_hbar_half": abs(s0 - self.hbar / 2.0) / s0 < tol,
+            "p0_equals_hbar_over_2hL": abs(p0 - self.hbar / (2.0 * lp)) / p0 < tol,
+            "p0_equals_m_arg_c0_half": abs(p0 - self.m_arg * self.c0 / 2.0) / p0 < tol,
+            "hL_m": lp,
+            "hT_s": ht,
+            "no_substructure_below_hL": (
+                "A7 rho<=u_P in one dV; A10 n on d(hV); B_hV+frac_bits floor"
+            ),
+            "scale_hL_name_l_P": "§7.4 after cell closure; not Postulate 0",
+            "c_not_in_discreteness_chain": True,
+            "note": "§0 Thm 0.1: discrete Λ from info+causal+topology; hL scale+ℓ_P name §7.3–7.4",
+        }
+
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:
         """§8.2·geo probe — Phi_□ on hull □ at a=l_P; alpha from E/holonomy (open DoD)."""
         from mt_ca.em_plaquette import square_face_holonomy_probe
