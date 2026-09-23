@@ -1036,8 +1036,61 @@ class SIConstants:
             "ratio_inventory": ratio_inventory,
             "ratio_shipped_count": shipped,
             "ratio_open_count": open_,
-            "precedent": "κ = R_in(a)/R_out(a) at a=l_P → c,hT; start from a not from bare ratios",
+            "precedent": "κ = R_in(a)/R_out(a) at a=l_P; c=κc₀ is readout check — see kappa_bottom_up_row",
             "note": "§8.2·geo·ask: dimensional body at a=l_P first; ratios derived",
+        }
+
+    def kappa_bottom_up_row(self) -> dict[str, float | int | str | bool]:
+        """§7.2 / §8.2·geo·κ — Planck units embed c; κ_geom from hull, not from c/c₀."""
+        geo = self.cuboctahedron_geometry_row()
+        kappa_geom = float(geo["kappa_inscribed_1tick"])
+        kappa_hex = KAPPA_HEX
+        lp = self.l_P
+        t_p = self.t_P
+        ht = self.hT
+        c0 = self.c0
+        c = self.c
+        e_p = self.E_P
+        e0 = self.E_0
+        tol = 1e-12
+        l_p_from_c = math.sqrt(self.hbar * self.G / self.c**3)
+        t_p_from_c = l_p_from_c / self.c
+        return {
+            "ontology_order": "A1+packing→κ_geom; (ℏ,G,c)→Planck; hT=κ·t_P; c=κc₀ is check",
+            "kappa_geom_FCC": kappa_geom,
+            "kappa_geom_hex": kappa_hex,
+            "kappa_geom_equals_R_in_over_R_out": abs(
+                kappa_geom - float(geo["R_in_over_R_out_1tick"])
+            )
+            < tol,
+            "kappa_not_defined_as_c_over_c0": True,
+            "l_P_m": lp,
+            "l_P_from_c_formula_m": l_p_from_c,
+            "l_P_rel_err": abs(lp - l_p_from_c) / lp,
+            "t_P_conv_s": t_p,
+            "t_P_equals_l_P_over_c": abs(t_p - lp / c) / t_p < tol,
+            "t_P_from_c_formula_s": t_p_from_c,
+            "planck_c_power_l_P": -1.5,
+            "planck_c_power_t_P": -2.5,
+            "planck_c_power_E_P": 2.5,
+            "planck_c_power_u_P": 7.0,
+            "hT_s": ht,
+            "hT_equals_kappa_geom_times_t_P": abs(ht - kappa_geom * t_p) / ht < tol,
+            "hT_over_t_P": ht / t_p,
+            "c0_m_s": c0,
+            "c0_equals_l_P_over_hT": abs(c0 - lp / ht) / c0 < tol,
+            "c0_over_c": c0 / c,
+            "c0_over_c_equals_inv_kappa": abs(c0 / c - 1.0 / kappa_geom) / (c0 / c) < tol,
+            "c_over_c0_equals_kappa_check": abs(c / c0 - kappa_geom) / kappa_geom < tol,
+            "c_equals_kappa_c0_check": abs(c - kappa_geom * c0) / c < tol,
+            "E_P_conv_J": e_p,
+            "E_0_J": e0,
+            "E_0_over_E_P": e0 / e_p,
+            "E_0_over_E_P_equals_kappa": abs(e0 / e_p - kappa_geom) / kappa_geom < tol,
+            "continuum_hidden_assumption": "t_P=l_P/c tacitly sets link speed = macro c (κ=1)",
+            "M_breaks_assumption_via": "κ_geom=1/√2 from cuboctahedron □-face inradius",
+            "hex_same_method": "κ_hex=√3/2 from hex causal polygon inradius",
+            "note": "§7.2: Planck ladder uses CODATA c; κ from §8.2·geo body — c/c₀ follows, not defines κ",
         }
 
     def square_face_holonomy_probe_row(self, *, grid: int = 16, device: str = "cpu") -> dict:

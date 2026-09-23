@@ -350,6 +350,38 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_kappa_bottom_up(device: str = "cpu") -> dict:
+    """§7.2 — Planck units embed c; κ_geom from hull; c=κc₀ is identity check."""
+    from mt_ca.si_constants import KAPPA_FCC_1TICK, SI
+
+    del device
+    row = SI.kappa_bottom_up_row()
+    kappa = KAPPA_FCC_1TICK
+    ok = (
+        row["kappa_not_defined_as_c_over_c0"] is True
+        and row["kappa_geom_equals_R_in_over_R_out"] is True
+        and abs(float(row["kappa_geom_FCC"]) - kappa) < 1e-12
+        and row["hT_equals_kappa_geom_times_t_P"] is True
+        and row["c0_equals_l_P_over_hT"] is True
+        and row["c_equals_kappa_c0_check"] is True
+        and row["c_over_c0_equals_kappa_check"] is True
+        and row["c0_over_c_equals_inv_kappa"] is True
+        and row["E_0_over_E_P_equals_kappa"] is True
+        and abs(float(row["hT_over_t_P"]) - kappa) < 1e-12
+        and float(row["l_P_rel_err"]) < 1e-12
+        and row["t_P_equals_l_P_over_c"] is True
+    )
+    return {
+        "id": "Kappa_bottom_up",
+        "kappa_geom_FCC": row["kappa_geom_FCC"],
+        "hT_over_t_P": row["hT_over_t_P"],
+        "c0_over_c": row["c0_over_c"],
+        "E_0_over_E_P": row["E_0_over_E_P"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_rhombic_dodecahedron_geometry(device: str = "cpu") -> dict:
     """§8.2·geo·voronoi — FCC Voronoy cell; dual to cuboctahedron; V=v_hV."""
     from mt_ca.si_constants import KAPPA_FCC_1TICK, SI
@@ -1594,6 +1626,7 @@ def run_all(device: str) -> list[dict]:
         check_cuboctahedron_carrier_ask(device=device),
         check_rhombic_dodecahedron_geometry(device=device),
         check_rhombic_dodecahedron_carrier_ask(device=device),
+        check_kappa_bottom_up(device=device),
         check_square_face_holonomy_probe(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
