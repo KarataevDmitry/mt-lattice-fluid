@@ -13,12 +13,14 @@ from mt_ca.z_ring import mod_lane
 class SeedClass(str, Enum):
     """Physical IC classes on the lattice (§0.5 · §5 · Seed taxonomy).
 
-    VACUUM — full ocean at z_min, Heisenberg phase class (N_φ bins).
-    IMPULSE / PLANE_WAVE — energy packets on that ocean.
+    VACUUM — full ocean at z_min, gauge-fixed Heisenberg class 0 (holomorphic Φ=0).
+    VACUUM_BOIL — full ocean, every cell a brick; NN phase step = Δφ_min (A5 boil).
+    IMPULSE / PLANE_WAVE — energy packets on gauge-fixed ocean.
     VORTEX_* — topological matter (n∈ℤ) on that ocean.
     """
 
     VACUUM = "vacuum"
+    VACUUM_BOIL = "vacuum_boil"
     IMPULSE = "impulse"
     PLANE_WAVE = "plane_wave"
     VORTEX_P = "vortex_p"
@@ -85,6 +87,42 @@ def vacuum_ocean_fixed(
     re1 = torch.where(dead1, torch.ones_like(re1), re1)
     re2 = torch.where(dead2, torch.ones_like(re2), re2)
     f = torch.stack([re1, im1, re2, im2], dim=-1)
+    return mod_lane(f, mod_bits).to(torch.int32)
+
+
+def vacuum_boil_fixed(
+    *spatial: int,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+) -> torch.Tensor:
+    """Whole-lattice A5 boil IC — every cell a brick; NN Δφ = Δφ_min (§0.5 · §3.12.6).
+
+    Gauge-fixed VACUUM (phase_class=0 everywhere) is holomorphic Φ=0 by design.
+    Dogfood: bath only moves when the *whole* lattice carries on-threshold phase
+    steps — not a lonely excitation on empty/flat vacuum.
+    Deterministic: tick(y,x) = (y+x)·Δφ_disc mod N_ring. No RNG.
+    """
+    if len(spatial) != 2:
+        raise ValueError("vacuum_boil_fixed currently 2D (ny, nx) only")
+    _ = frac_bits
+    ny, nx = spatial
+    n_ring = 1 << phase_bits
+    delta = heisenberg_phi_min_disc(phase_bits=phase_bits)
+    yy, xx = torch.meshgrid(
+        torch.arange(ny, device=device, dtype=torch.int64),
+        torch.arange(nx, device=device, dtype=torch.int64),
+        indexing="ij",
+    )
+    tick = ((yy + xx) * int(delta)) % n_ring
+    q = 1
+    ang = tick.to(torch.float64) * (2.0 * math.pi / n_ring)
+    re = torch.round(q * torch.cos(ang)).to(torch.int64)
+    im = torch.round(q * torch.sin(ang)).to(torch.int64)
+    dead = (re == 0) & (im == 0)
+    re = torch.where(dead, torch.ones_like(re), re)
+    f = torch.stack([re, im, re, im], dim=-1)
     return mod_lane(f, mod_bits).to(torch.int32)
 
 
@@ -260,6 +298,19 @@ def make_seed(
     )
     if seed_class is SeedClass.VACUUM:
         return ocean
+
+    if seed_class is SeedClass.VACUUM_BOIL:
+        if nz is not None:
+            raise ValueError("VACUUM_BOIL is 2D-only in this leaf")
+        f_boil = vacuum_boil_fixed(
+            ny,
+            nx,
+            device=device,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+        )
+        return decode_spinor(f_boil, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
 
     if nz is not None:
         exc = _excitation_3d(

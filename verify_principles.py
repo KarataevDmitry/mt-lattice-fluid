@@ -932,6 +932,30 @@ def check_floor1_C3_gamma_close(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
+    """§6·floor1·C3·bath·dogfood — VACUUM_BOIL moves; b matter still soft."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_C3_bath_dogfood_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["vacuum_frozen"])
+        and not bool(row["boil_emerged_b"])
+        and float(row["boil_contrast_final"]) > 10.0
+        and "closed_vacuum_boil_whole_lattice_moves" in row["closed_ids"]
+        and "soft_open_b_matter_not_yet" in row["soft_open_ids"]
+    )
+    return {
+        "id": "Floor1_C3_bath_dogfood",
+        "boil_contrast_final": row["boil_contrast_final"],
+        "boil_emerged_b": row["boil_emerged_b"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2561,6 +2585,7 @@ def run_all(device: str) -> list[dict]:
         check_floor1_dressing_f_close(device=device),
         check_floor1_leftovers_close(device=device),
         check_floor1_C3_gamma_close(device=device),
+        check_floor1_C3_bath_dogfood(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

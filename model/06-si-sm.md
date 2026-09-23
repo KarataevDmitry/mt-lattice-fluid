@@ -35,6 +35,9 @@ $$
 **SOFT (reopen):** гипотеза $n_{\mathrm{ticks}}=1$ для *одиночного* multi-shell C3 (A1+local downhill) может быть артефактом пустоты. Dogfood вакуума: кипение нормальное только когда задали *всю* решётку — пустоты нет. $n_{\mathrm{ticks}}$ для C3 в заполненной A5-ванне **не stamped**.
 **Не здесь:** PDG-время жизни $\mu$ (нужен лист массы/композита).
 **Код:** `SI.floor1_C3_gamma_close_row()` · verify **`Floor1_C3_gamma_close`** (continuum reject + soft bath clock).
+#### §6·floor1·C3·bath·dogfood · предыдущий этаж целиком
+**Не один C3.** Gauge-fixed `VACUUM` (class 0) — Φ=0, мёртвый. `VACUUM_BOIL` — вся решётка кирпичами, NN Δφ=Δφ_min: live, контраст сам ~1.5→773, ρ_max→1 за 1024 тика; **b-matter пока нет** (`emerged_b=False`).
+**Код:** `SeedClass.VACUUM_BOIL` · `scripts/run_filled_bath_emergence.py` · `SI.floor1_C3_bath_dogfood_row()` · verify **`Floor1_C3_bath_dogfood`**.
 **Код:** `SI.floor1_B0_census_ask_row()` · verify **`Floor1_B0_census_ask`**.
 #### §6·floor1·dressing·ask · Что за обёртка электрона
 **Вопрос носителю (§5.0.5), не выдумка:** что такое near-zone легчайшего $Q=\pm1$, и что фиксирует её радиус?

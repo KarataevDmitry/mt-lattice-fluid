@@ -3410,6 +3410,67 @@ class SIConstants:
             ),
         }
 
+    def floor1_C3_bath_dogfood_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·C3·bath·dogfood — previous floor = VACUUM_BOIL, no planted C3.
+
+        Live (cuda, size=256, steps=1024, scripts/run_filled_bath_emergence.py):
+          · VACUUM (gauge-fixed class 0): Φ=0, frozen — contrast=1 forever.
+          · VACUUM_BOIL (whole lattice, NN Δφ=Δφ_min): evolves; contrast
+            1.5 → ~773; ρ_max → 1; emerged_b=False (no |n_∂|≥¾ yet).
+        """
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_gauge_fixed_vacuum_frozen",
+                "maps_to": "VACUUM phase_class=0 ⇒ holomorphic Φ=0; no boil",
+                "status": "closed",
+            },
+            {
+                "id": "closed_vacuum_boil_whole_lattice_moves",
+                "ratio": 773.473,
+                "maps_to": "VACUUM_BOIL: contrast grows; ρ_max→1 without planted C3",
+                "status": "closed",
+                "mechanism": "NN tick step = Δφ_disc; every cell a brick",
+            },
+            {
+                "id": "soft_open_b_matter_not_yet",
+                "maps_to": "b_topk=b_argmax=0 at 1024 ticks — topology still open",
+                "status": "soft_open",
+            },
+            {
+                "id": "soft_open_C3_n_ticks_filled_bath",
+                "maps_to": "n_ticks for C3-in-bath still unstamped (needs b first)",
+                "status": "soft_open",
+            },
+        ]
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        soft_open_ids = [
+            i["id"] for i in inventory if str(i["status"]) == "soft_open"
+        ]
+        ok = (
+            "closed_vacuum_boil_whole_lattice_moves" in closed_ids
+            and "closed_gauge_fixed_vacuum_frozen" in closed_ids
+            and "soft_open_b_matter_not_yet" in soft_open_ids
+        )
+        return {
+            "theorem": "§6·floor1·C3·bath·dogfood — boil floor first; no lonely C3",
+            "size": 256,
+            "steps": 1024,
+            "boil_contrast_final": 773.473,
+            "boil_emerged_b": False,
+            "vacuum_frozen": True,
+            "derivation_closed": False,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "soft_open_ids": soft_open_ids,
+            "ask_ok": ok,
+            "note": (
+                "Previous floor VACUUM_BOIL runs and self-organizes contrast; "
+                "gauge-fixed VACUUM does not. Matter b / C3 clock still soft."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
