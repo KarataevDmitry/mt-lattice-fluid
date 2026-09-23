@@ -461,6 +461,34 @@ def check_alpha_meaning_ask(device: str = "cpu") -> dict:
     }
 
 
+def check_alpha_descent_ask(device: str = "cpu") -> dict:
+    """§8.2·α·descent — amnesia vacuum→coupling; fraction OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_descent_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["residue_is_not_alpha"])
+        and bool(row["coupling_fraction_open"])
+        and not bool(row["used_alpha_fs_as_input"])
+        and int(row["N_phi"]) == 13
+        and int(row["alpha_geom_inv"]) == 137
+        and abs(float(row["vs_codata_ppm_pi_AFTER"]) + 2.223) < 0.01
+    )
+    return {
+        "id": "Alpha_descent_ask",
+        "vacuum_residue": row["vacuum_residue"],
+        "N_phi": row["N_phi"],
+        "alpha_geom_inv": row["alpha_geom_inv"],
+        "vs_codata_ppm_pi_AFTER": row["vs_codata_ppm_pi_AFTER"],
+        "vs_codata_ppm_geom": row["vs_codata_ppm_geom"],
+        "coupling_fraction_open": row["coupling_fraction_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2071,6 +2099,7 @@ def run_all(device: str) -> list[dict]:
         check_na0_h_carrier_ask(device=device),
         check_alpha_force_lattice_ask(device=device),
         check_alpha_meaning_ask(device=device),
+        check_alpha_descent_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

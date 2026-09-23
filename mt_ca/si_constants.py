@@ -1184,6 +1184,93 @@ class SIConstants:
             ),
         }
 
+    def alpha_descent_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·descent — forget α; descend vacuum→residue→Ω→charge→coupling.
+
+        Amnesia construction (no α_fs / CODATA / π-poly as input):
+          1. A5 + Heisenberg: Δφ_min = 1/2
+          2. Tick cycle 2π ⇒ residue r = Δφ_min/(2π) = 1/(4π); α* = 1+r
+          3. Emergent d=3 ⇒ Ω = 1/r = 4π; discrete N_φ = ⌈Ω⌉ = 13
+          4. FCC body ⇒ κ, N₁₂, faces (6□+8△)
+          5. Charge n∈ℤ appears (A10)
+          6. Ask: what dimensionless EM coupling falls out?
+
+        Natural landings near table (scored only AFTER):
+          • continuum completion: 1/(4π³+π²+π) — T solid-angle tower on foot
+          • discrete body: α_geom⁻¹ = N₁₂(N₁₂+1)−n_△−2n_□+1 = 137
+        Raw residue / r² / κ_link·r — wrong scale.
+        OPEN: why tower or face-formula from g (holonomy), not ansatz.
+        """
+        dphi = 0.5
+        cycle = 2.0 * math.pi
+        residue = dphi / cycle
+        omega = 1.0 / residue
+        n_phi = int(math.ceil(omega))
+        n12 = int(N12_FCC_CAUSAL_LINKS)
+        n_hier = 8
+        n_sq, n_tri = 6, 8
+        kappa = KAPPA_FCC_1TICK
+        k_link = 1.0 / n12
+        alpha_geom_inv = n12 * (n12 + 1) - n_tri - 2 * n_sq + 1
+        alpha_c = 7.2973525693e-3  # score only
+        pi_tower_inv = 4.0 * math.pi**3 + math.pi**2 + math.pi
+
+        def scored(name: str, a: float, status: str) -> dict[str, float | str]:
+            return {
+                "id": name,
+                "alpha": a,
+                "alpha_inv": 1.0 / a,
+                "vs_codata_ppm": (a - alpha_c) / alpha_c * 1e6,
+                "status": status,
+            }
+
+        cands = [
+            scored("pi_tower_AFTER", 1.0 / pi_tower_inv, "continuum_completion"),
+            scored("alpha_geom", 1.0 / float(alpha_geom_inv), "discrete_body_completion"),
+            scored("kappa_over_97", kappa / (n12 * n_hier + 1), "force_lattice_side"),
+            scored("kappa_over_96", kappa / (n12 * n_hier), "force_lattice_side"),
+            scored("kappa_link_times_r", k_link * residue, "wrong_scale"),
+            scored("r_squared", residue * residue, "wrong_scale"),
+            scored("residue_alone", residue, "wrong_scale_foot_not_coupling"),
+        ]
+        steps: list[dict[str, str | float | int | bool]] = [
+            {"step": 1, "physics": "A5 vacuum + Δφ_min=1/2", "out": dphi},
+            {"step": 2, "physics": "tick cycle 2π → residue r=Δφ_min/(2π)", "out": residue},
+            {"step": 3, "physics": "d=3 → Ω=1/r; N_φ=⌈Ω⌉", "out_Omega": omega, "out_Nphi": n_phi},
+            {"step": 4, "physics": "FCC hull → κ, N12, faces", "kappa": kappa, "N12": n12},
+            {"step": 5, "physics": "A10 charge n∈ℤ", "status": "shipped"},
+            {
+                "step": 6,
+                "physics": "dimensionless EM coupling = ?",
+                "status": "open_completion",
+                "note": "foot+Ω known; fraction through Ω not yet from g",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·descent — amnesia path vacuum→coupling",
+            "delta_phi_min": dphi,
+            "vacuum_residue": residue,
+            "Omega": omega,
+            "N_phi": n_phi,
+            "alpha_geom_inv": alpha_geom_inv,
+            "kappa": kappa,
+            "steps": steps,
+            "candidates": cands,
+            "pi_tower_inv": pi_tower_inv,
+            "vs_codata_ppm_pi_AFTER": (1.0 / pi_tower_inv - alpha_c) / alpha_c * 1e6,
+            "vs_codata_ppm_geom": (1.0 / alpha_geom_inv - alpha_c) / alpha_c * 1e6,
+            "residue_is_not_alpha": True,
+            "coupling_fraction_open": True,
+            "used_alpha_fs_as_input": False,
+            "ask_ok": abs(residue - 1.0 / (4.0 * math.pi)) < 1e-15
+            and n_phi == 13
+            and alpha_geom_inv == 137,
+            "note": (
+                "Forgot α. Descent yields foot r=1/(4π) and Ω=4π/N_φ=13; coupling "
+                "fraction OPEN. AFTER-score: π-tower ~2ppm; α_geom=137 ~263ppm."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
