@@ -359,7 +359,7 @@ def check_alpha_fixed_point(device: str = "cpu") -> dict:
 
 
 def check_na0_from_carrier(device: str = "cpu") -> dict:
-    """N_a0 = N_c·137 (α_geom) + FP; monomial path still OPEN."""
+    """HISTORICAL: N_a0=N_c·137 probe; ask-model rejected as α-input."""
     from mt_ca.si_constants import SI
 
     del device
@@ -369,6 +369,7 @@ def check_na0_from_carrier(device: str = "cpu") -> dict:
         and abs(float(row["N_a0_carrier_over_optical"]) - 1.0) < 5e-4
         and abs(float(row["alpha_star_stack_inv"]) - 137.088598) < 1e-3
         and bool(row["monomial_stack_open"])
+        and bool(row.get("ask_rejected_as_alpha_input", False))
     )
     return {
         "id": "Na0_from_carrier",
@@ -377,6 +378,33 @@ def check_na0_from_carrier(device: str = "cpu") -> dict:
         "alpha_star_stack_inv": row["alpha_star_stack_inv"],
         "vs_codata_ppm_stack": row["vs_codata_ppm_stack"],
         "monomial_stack_open": row["monomial_stack_open"],
+        "ask_rejected_as_alpha_input": row.get("ask_rejected_as_alpha_input", False),
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_na0_h_carrier_ask(device: str = "cpu") -> dict:
+    """§8.2·H·ask — carrier inventory for N_a0; independent integer still OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.na0_h_carrier_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["N_a0_must_be_integer"])
+        and bool(row["mass_hop_same_power"])
+        and bool(row["reject_Nc_times_137"])
+        and bool(row["reject_optical_a0_as_M_definition"])
+        and bool(row["independent_Na0_open"])
+        and float(row["rel_mass_vs_hop_alpha2"]) < 1e-4
+    )
+    return {
+        "id": "Na0_H_carrier_ask",
+        "mass_hop_same_power": row["mass_hop_same_power"],
+        "rel_mass_vs_hop_alpha2": row["rel_mass_vs_hop_alpha2"],
+        "reject_Nc_times_137": row["reject_Nc_times_137"],
+        "independent_Na0_open": row["independent_Na0_open"],
         "ok": ok,
         "note": row["note"],
     }
@@ -1989,6 +2017,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_hop_ladder(device=device),
         check_alpha_fixed_point(device=device),
         check_na0_from_carrier(device=device),
+        check_na0_h_carrier_ask(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

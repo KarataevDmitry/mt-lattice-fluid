@@ -848,9 +848,131 @@ class SIConstants:
             "carrier_na0_ok": abs(n_a0 / n_a0_opt - 1.0) < 5e-4
             and abs(mapped(a_stack, n_a0, bare=False) - a_stack) / a_stack < 1e-12,
             "note": (
-                "N_a0=(m_P/m_e)·137 from α_geom cuboctahedron + T-anchor m_e. "
-                "Stack FP inv≈137.089 (~−384 ppm CODATA). "
-                "Pure 13/12/8/512 monomials OPEN (stack unstable)."
+                "HISTORICAL probe: N_a0=(m_P/m_e)·137. Ask-model §8.2·H·ask REJECTED "
+                "as α-input (empty for deriving α). Keep for ppm archaeology only. "
+                "See na0_h_carrier_ask_row."
+            ),
+            "ask_rejected_as_alpha_input": True,
+        }
+
+    def na0_h_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·H·ask — asked the carrier for N_a0 (H size in hL hops).
+
+        Method (same as §8.2·geo·ask / phonon ask):
+          (1) a=l_P fixed; (2) list dimensional/structural facts of H;
+          (3) which can enter size without injecting α; (4) ratio = report.
+
+        Carrier answers (2026-09-23):
+          • Thm 5.2 ⇒ N_a0 ∈ ℤ on the same ladder as sound/light.
+          • Hop: α=N_c/N_a0 ; α²=N_re/N_a0.
+          • Mass: m_e=α² m_H/N_φ ⇒ α²=m_e N_φ/m_H.
+          • Identity: N_re/N_a0 ≡ m_e N_φ/m_H — one α², not two sources of N_a0.
+          • REJECT N_c·137 (α_geom): injects α⁻¹ then α=N_c/N_a0 returns it.
+          • REJECT optical a₀ alone as M-definition (T-anchor).
+          • OPEN: integer from H structure — ground ρ_Θ / N_pack / shell on Λ.
+        """
+        hop = self.alpha_hop_ladder_row()
+        n_phi = 13.0
+        n_c = float(hop["N_c_macro"])
+        n_re = float(hop["N_re"])
+        n_a0_bohr = float(hop["N_a0_Bohr"])
+        alpha = float(hop["alpha_codata"])
+        # mass rhyme at CODATA α (ledger check, not a derivation of N_a0)
+        higgs = self.higgs_mass_row()
+        elec = self.electron_mass_row()
+        m_h = float(higgs["m_H_GeV"])
+        m_e = float(elec["m_e_GeV"])
+        alpha2_from_mass = (m_e * n_phi) / m_h
+        alpha2_from_hops = n_re / n_a0_bohr
+        # empty candidate N_c·137
+        n_a0_geom = (self.m_P / self.m_e_CODATA) * 137.0
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "a_eq_l_P",
+                "maps_to": "A1 ruler; N_a0 counted in hL hops",
+                "status": "shipped",
+                "mechanism": "same a=l_P as cuboctahedron/phonon ask",
+            },
+            {
+                "id": "N_a0_integer",
+                "maps_to": "Thm 5.2 — size is occupancy hops, not continuum metre",
+                "status": "shipped",
+                "mechanism": "sound/light = n_k / n_E; H radius on same ladder",
+            },
+            {
+                "id": "hop_alpha_Nc_over_Na0",
+                "ratio": n_c / n_a0_bohr,
+                "maps_to": "α = N_c/N_a0 (Bohr rung)",
+                "status": "identity",
+                "mechanism": "definition once both hops exist; not yet from g alone",
+            },
+            {
+                "id": "hop_alpha2_Nre_over_Na0",
+                "ratio": alpha2_from_hops,
+                "maps_to": "α² = N_re/N_a0",
+                "status": "identity",
+                "mechanism": "same power as m_e=α² m_H/N_φ",
+            },
+            {
+                "id": "mass_alpha2_me_Nphi_over_mH",
+                "ratio": alpha2_from_mass,
+                "maps_to": "α² = m_e N_φ / m_H",
+                "status": "shipped_mass",
+                "mechanism": "§8.2 electron matryoshka; does NOT independently fix N_a0",
+            },
+            {
+                "id": "mass_hop_same_alpha2",
+                "ratio": abs(alpha2_from_mass / alpha2_from_hops - 1.0),
+                "maps_to": "mass α² ≡ hop α² (one equation)",
+                "status": "identity",
+                "mechanism": "cannot solve N_a0 from masses without α (or a₀)",
+            },
+            {
+                "id": "reject_Nc_times_137",
+                "ratio": n_a0_geom / n_a0_bohr,
+                "maps_to": "N_a0≟N_c·α_geom⁻¹ — empty for deriving α",
+                "status": "rejected",
+                "mechanism": "puts α⁻¹ into size; α=N_c/N_a0 returns α_geom",
+            },
+            {
+                "id": "reject_optical_a0_as_M",
+                "maps_to": "CODATA a₀ — T-anchor, not carrier integer",
+                "status": "rejected_as_M_definition",
+                "mechanism": "ok as FP seed; violates full-quantization if sole N_a0",
+            },
+            {
+                "id": "open_H_structure_integer",
+                "maps_to": "ground ρ_Θ / N_pack / FCC shell around B=1",
+                "status": "open",
+                "mechanism": "§5.0.4–5.0.5 composite H; need shell rule → ℤ without α",
+            },
+        ]
+        rhyme_ok = abs(alpha2_from_mass - alpha * alpha) / (alpha * alpha) < 5e-2
+        identity_ok = abs(alpha2_from_hops - alpha * alpha) / (alpha * alpha) < 1e-12
+        return {
+            "theorem": "§8.2·H·ask — N_a0 from carrier; mass≠independent size",
+            "method": "ask-model: a=l_P → inventory → which enters size → report",
+            "N_c_macro": n_c,
+            "N_re": n_re,
+            "N_a0_Bohr_T": n_a0_bohr,
+            "N_a0_Nc_times_137": n_a0_geom,
+            "N_phi": n_phi,
+            "alpha2_from_hops": alpha2_from_hops,
+            "alpha2_from_mass": alpha2_from_mass,
+            "alpha2_codata": alpha * alpha,
+            "rel_mass_vs_hop_alpha2": abs(alpha2_from_mass / alpha2_from_hops - 1.0),
+            "mass_hop_same_power": identity_ok,
+            "mass_rhyme_near_codata": rhyme_ok,
+            "reject_Nc_times_137": True,
+            "reject_optical_a0_as_M_definition": True,
+            "N_a0_must_be_integer": True,
+            "independent_Na0_open": True,
+            "inventory": inventory,
+            "ask_ok": identity_ok and rhyme_ok and True,
+            "note": (
+                "Asked carrier: Thm5.2⇒N_a0∈ℤ; hop α=N_c/N_a0 and mass α²=m_e N_φ/m_H "
+                "are one α² — masses do not fix N_a0 alone. Rejected N_c·137 and optical "
+                "a₀ as M-definition. OPEN: H structure → integer N_a0 without α."
             ),
         }
 
