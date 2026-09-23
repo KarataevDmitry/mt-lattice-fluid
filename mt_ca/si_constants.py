@@ -89,6 +89,9 @@ SECOND_PER_GYR = SECOND_PER_YEAR * 1e9
 COSMO_BUBBLE_AGE_GYR = 13.787  # ±0.020 Gyr
 COSMO_RECOMB_KYR = 380.0  # last scattering ~380 kyr after local BB (N=0)
 
+# CMB monopole — T-layer reference for contrast in vacuum_bath_row (not a g knob)
+T_CMB_K_REF = 2.7255
+
 
 def _hT_decimal() -> Decimal:
     """M tick [s] in high precision for N~10⁷⁰ bubble algebra (§0.2)."""
@@ -630,6 +633,42 @@ class SIConstants:
             "kappa_FCC": KAPPA_FCC_1TICK,
             "omega_D_over_nu0": 1.0,
             "note": "§8.2 rad: h ν0=4π E0; ω_D∼1/hT; Bose u(ω) open",
+        }
+
+    def vacuum_bath_row(self) -> dict[str, float | int | str | bool]:
+        """§8.2·vac — A5 boiling bath: ρ_E(z_min), spectral anchors; ≠ CMB (META §3.0)."""
+        hv = hv_bit_budget()
+        z_min = 2.0 ** (-hv.frac_bits)
+        z_sq_natural = 2.0 * z_min * z_min
+        u_p = self.u_P
+        rho_vac = z_sq_natural * u_p
+        sigma = 5.670374419e-8
+        a_rad = 4.0 * sigma / self.c
+        t_bath = (rho_vac / a_rad) ** 0.25
+        t_ceiling = (u_p / a_rad) ** 0.25
+        rad = self.radiation_row()
+        nu0 = rad["nu_0_Hz"]
+        return {
+            "z_min": z_min,
+            "frac_bits": hv.frac_bits,
+            "B_hV": hv.B_hV,
+            "z_sq_natural_vac": z_sq_natural,
+            "rho_E_vac_J_m3": rho_vac,
+            "u_P_J_m3": u_p,
+            "rho_over_uP": z_sq_natural,
+            "T_M_bath_K": t_bath,
+            "T_uP_ceiling_K": t_ceiling,
+            "T_CMB_K_ref": T_CMB_K_REF,
+            "log10_T_M_bath": math.log10(t_bath),
+            "log10_T_M_bath_over_CMB": math.log10(t_bath / T_CMB_K_REF),
+            "nu_0_Hz": nu0,
+            "omega_0_rad_s": rad["omega_0_rad_s"],
+            "lambda_0_m": self.c / nu0,
+            "lambda_0_over_l_P": (self.c / nu0) / self.l_P,
+            "h_nu0_over_E0": rad["h_nu0_over_E0"],
+            "omega_D_over_nu0": rad["omega_D_over_nu0"],
+            "is_CMB": False,
+            "note": "§8.2·vac: A5 ocean bath; Bose u(ω) open; CMB = bubble T-layer only",
         }
 
     def decay_row(self) -> dict[str, float | bool | str]:

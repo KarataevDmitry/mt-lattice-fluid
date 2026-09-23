@@ -286,6 +286,36 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 
+def check_vacuum_bath(device: str = "cpu") -> dict:
+    """§8.2·vac — A5 boiling bath algebra vs CMB reference (not same object)."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.vacuum_bath_row()
+    four_pi = 4.0 * math.pi
+    ok = (
+        abs(row["h_nu0_over_E0"] - four_pi) / four_pi < 1e-12
+        and row["rho_E_vac_J_m3"] > 0.0
+        and row["z_min"] == 2.0 ** (-row["frac_bits"])
+        and row["T_M_bath_K"] < row["T_uP_ceiling_K"]
+        and row["log10_T_M_bath"] > 30.0
+        and row["log10_T_M_bath_over_CMB"] > 28.0
+        and row["is_CMB"] is False
+        and abs(row["lambda_0_over_l_P"] - (1.0 / math.sqrt(2.0))) / (1.0 / math.sqrt(2.0)) < 1e-12
+    )
+    return {
+        "id": "Vacuum_bath",
+        "T_M_bath_K": row["T_M_bath_K"],
+        "log10_T_M_bath": row["log10_T_M_bath"],
+        "T_CMB_K_ref": row["T_CMB_K_ref"],
+        "z_min": row["z_min"],
+        "rho_over_uP": row["rho_over_uP"],
+        "lambda_0_over_l_P": row["lambda_0_over_l_P"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_bubble_tick(device: str = "cpu") -> dict:
     """META §3.0.1 — exact bubble age t = N·hT from stamped hT (no readout)."""
     from mt_ca.si_constants import SI
@@ -1406,6 +1436,7 @@ def run_all(device: str) -> list[dict]:
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),
         check_higgs_mass(device=device),
+        check_vacuum_bath(device=device),
         check_alpha_bridges(device=device),
         check_proton_mass(device=device),
         check_electron_mass(device=device),
@@ -1462,3 +1493,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+                                                                                        
