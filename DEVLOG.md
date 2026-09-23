@@ -270,6 +270,7 @@
 | 2026-09-23 | META §3.0.1 fix | `t_SI=N·hT` exact on M (no readout); open = infer N + anchor N=0; N_today~10⁶¹ |
 | 2026-09-23 | bubble_tick | `SI.bubble_tick_row()` + verify **`Bubble_tick`**: N_today≈1.141×10⁶¹, N_CMB≈3.146×10⁵⁶, t_start=0 |
 | 2026-09-23 | §8.2·vac | A5 bath: `vacuum_bath_row` · `T_M,bath~10³¹ K` · `λ₀~l_P` · **`Vacuum_bath` PASS** · ≠ CMB · Bose open |
+| 2026-09-23 | §7.3 Planck←cell | `planck_from_cell_conditions_row` · **`Planck_from_cell` PASS** — ρ_cell=μ_P, u_P=μ_Pc², t_P/E_P derived via κ |
 | 2026-09-23 | §7.2·κ bottom-up | Planck ladder embeds **c**; **κ_geom** from hull not **c/c₀**; **`Kappa_bottom_up` PASS** — **`hT=κt_P`**, **`c=κc₀`** check |
 | 2026-09-23 | §8.2·geo·voronoi | rhombic dodecahedron WS: **`V=v_hV`**, **`R_in=a/2`**, **`V_hull/V=16/3`**, dual cuboctahedron · **`Rhombic_dodecahedron_geo`**, **`Rhombic_dodecahedron_ask` PASS** |
 | 2026-09-23 | §8.2·geo | cuboctahedron 1-tick: **`V_cubo=(16/3)v_hV`** at `a=l_P` · `cuboctahedron_geometry_row` · **`Cuboctahedron_geo` PASS** · α_geom=137 (~260 ppm) exploratory; stamped π ~2 ppm |
