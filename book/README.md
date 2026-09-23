@@ -16,17 +16,16 @@ PDF: `book/pdf/main.pdf` (XeLaTeX, Times New Roman).
 
 | Глава | Файл | Содержание |
 |-------|------|------------|
-| Предисловие | `frontmatter.tex` | Как читать: объект, затем условия, затем теоремы |
-| 1 | `chapters/00-descent.tex` | Вопрос: известная физика и планковский предел |
-| 2 | `chapters/01-carrier-object.tex` | Носитель: узлы, шаг, такт, поле |
-| 3 | `chapters/00-axiom-rationale.tex` | Физический смысл $A_1$--$A_{16}$ |
-| 4 | `chapters/02-axioms.tex` | Формальный реестр, теорема 2.3 |
-| 5 | `chapters/01-carrier.tex` | Геометрия: гекс-срез и FCC |
-| 6 | `chapters/00-foundations.tex` | Теорема дискретности |
-| 7 | `chapters/03-evolution.tex` | Закон $g$ |
-| 8 | `chapters/04-macro.tex` | Переход $M\to T$, теорема T-CR |
-| 9 | `chapters/05-matter.tex` | Механика ячейки, материя |
-| 10 | `chapters/06-si-sm.tex` | SI, $\alpha$, массы, SM |
+| Предисловие | `frontmatter.tex` | Как читать: требования спускаются вниз, носитель появляется по ходу |
+| 1 | `chapters/00-descent.tex` | Требования, макромир, микромир, КМ, КТП, планковский мир |
+| 2 | `chapters/00-axiom-rationale.tex` | Перенос требований: отсюда появляются узлы, шаг, такт, поле |
+| 3 | `chapters/02-axioms.tex` | Формальный реестр, теорема 2.3 |
+| 4 | `chapters/01-carrier.tex` | Геометрия: гекс-срез и FCC |
+| 5 | `chapters/00-foundations.tex` | Теорема дискретности |
+| 6 | `chapters/03-evolution.tex` | Закон $g$ |
+| 7 | `chapters/04-macro.tex` | Переход $M\to T$, теорема T-CR |
+| 8 | `chapters/05-matter.tex` | Механика ячейки, материя |
+| 9 | `chapters/06-si-sm.tex` | SI, $\alpha$, массы, SM |
 | Прил. A | `appendix/00-background.tex` | CA, Тоффоли/Фредкин, Маделунг |
 
 Текст написан **вручную** как монография: связная русская проза, теоремы с доказательствами.
