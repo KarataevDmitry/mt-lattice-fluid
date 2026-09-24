@@ -2171,7 +2171,7 @@ class SIConstants:
           B) force: α = κ / M
              · κ = R_in/R_out = 1/√2 — CLOSED (geo)
              · M ∈ ℕ — combinatorial CLOSED (nF census = 97);
-               coarse κ/97 ~−1040 ppm; soft preferred (seat+face) lab-inside; unit-descent OPEN
+               coarse κ/97 ~−1040 ppm; soft preferred (seat+face) lab-inside; unit-descent SEALED
              · note: κ∉ℚ ⇒ α not pure ℤ/ℤ unless rewritten
           C) Schwinger: α = a_e / (2r)
              · 2r = 1/(2π) — CLOSED (foot)
@@ -2295,7 +2295,7 @@ class SIConstants:
             "note": (
                 "Method: α=m/n with two independent physics. "
                 "Force dual κ/M: M=97 combinatorial CLOSED (nF census); "
-                "coarse −1040 ppm; soft preferred lab-inside (descent OPEN). Also: ae/(2r) (ae open), "
+                "coarse −1040 ppm; soft preferred lab-inside (descent SEALED). Also: ae/(2r) (ae open), "
                 "N_c/N_a0 (N_a0 open, N_c α-tied). Reject M/512 single-path."
             ),
         }
@@ -2675,7 +2675,7 @@ class SIConstants:
 
         Contrast: π-ansatz α⁻¹=4π³+π²+π is continuum solid-angle T-readout
         (~2 ppm) — competing *number*, not the discrete descent.
-        Coarse κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; why subtract seat+face units — descent OPEN.
+        Coarse κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; unit descent SEALED (G-grade completeness).
         """
         census = self.alpha_nF_kick_census_row()
         meaning = self.alpha_meaning_ask_row()
