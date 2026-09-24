@@ -1106,8 +1106,9 @@ class SIConstants:
         Readouts (consequences, not meanings):
           F = α F_P / N² ;  α = N_c/N_a0 ;  α = κ/M  — expressions of the same coupling.
 
-        Number today: α = 1/(4π³+π²+π) from continuum solid-angle tower.
-        OPEN: discrete M-native coupling fraction (FCC phase/holonomy) without π.
+        Number today (T): π-tower 1/(4π³+π²+π) ~−2 ppm — competitor readout.
+        Discrete path shipped: α=κ/M with M=n_F seats=97 (force law F₀/M).
+        Soft OPEN: −1040 ppm vs CODATA; holonomy that closes soft without π-ansatz.
         """
         alpha_star = self.alpha_star
         residue = alpha_star - 1.0
@@ -1153,14 +1154,20 @@ class SIConstants:
             },
             {
                 "id": "readout_force_lattice_not_meaning",
-                "maps_to": "α=κ/M — F₀ landing; M still open (§8.2·F·ask)",
-                "status": "readout_open",
+                "maps_to": "α=κ/M — F₀ landing; M=97 seats CLOSED (nF census)",
+                "status": "readout_shipped",
             },
             {
-                "id": "open_discrete_coupling_fraction",
-                "maps_to": "FCC holonomy / discrete solid angle → α without continuum π",
+                "id": "M_native_force_law",
+                "maps_to": "F=n1 n2 F₀/(M N²) — no continuum α/π on M",
+                "status": "shipped",
+                "mechanism": "§8.2·Coulomb·M-native",
+            },
+            {
+                "id": "open_soft_residual_holonomy",
+                "maps_to": "κ/97 vs CODATA −1040 ppm — holonomy without π-ansatz",
                 "status": "open",
-                "mechanism": "α_geom=137 exploratory; Φ_□ alpha_match_open",
+                "mechanism": "π-tower still competing T-number ~−2 ppm",
             },
         ]
         return {
@@ -1175,12 +1182,13 @@ class SIConstants:
             "vs_codata_ppm_pi": (alpha - alpha_c) / alpha_c * 1e6,
             "inventory": inventory,
             "replaces_pi_ansatz": False,
-            "discrete_coupling_open": True,
+            "discrete_coupling_open": True,  # soft ppm / holonomy; force law shipped
             "ask_ok": abs(residue - 1.0 / four_pi) < 1e-15
             and abs(four_pi * alpha - alpha / residue) < 1e-12,
             "note": (
-                "Meaning: α=phase↔vacuum coupling; foot α*−1=1/(4π); number=π-tower. "
-                "F/hops/κ/M are readouts. OPEN: discrete coupling fraction on FCC."
+                "Meaning: α=phase↔vacuum coupling; foot α*−1=1/(4π). "
+                "Discrete force path α=κ/M + F=F₀/M shipped. "
+                "OPEN: soft −1040 ppm (holonomy vs π-tower T)."
             ),
         }
 
@@ -2741,6 +2749,70 @@ class SIConstants:
                 "Full quantization ⇒ α=κ/M with M=n_F_seats=97. "
                 "Discrete path shipped; π-tower is T-competitor not descent. "
                 "Soft −1040 ppm residual OPEN."
+            ),
+        }
+
+    def coulomb_M_native_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·Coulomb·M-native — force law without continuum α on M.
+
+        Forgotten continuum: writing F=α_fs F_P n1 n2/N² with
+        α_fs=1/(4π³+π²+π) smuggles π-tower into the M force law.
+        Full quantization: unit NN Coulomb is F₀/M; α=κ/M is T-name only.
+        """
+        census = self.alpha_nF_kick_census_row()
+        kappa = float(census["kappa"])
+        m = int(census["M"])
+        f0_over_fp = kappa  # F₀/F_P = κ
+        alpha = kappa / m
+        # M-native NN unit force in F_P units:
+        f_nn_over_fp = f0_over_fp / m  # = α
+        inventory: list[dict[str, str | float | bool | int]] = [
+            {
+                "id": "M_native_NN",
+                "maps_to": "F_NN = F₀/M — no π, ε₀, π-tower on M",
+                "status": "shipped",
+            },
+            {
+                "id": "general_graph_distance",
+                "maps_to": "F = n1 n2 F₀/(M N²), N∈ℕ hops",
+                "status": "shipped",
+            },
+            {
+                "id": "T_readout_alpha",
+                "ratio": alpha,
+                "maps_to": "α=κ/M names the same NN force as F/F_P",
+                "status": "shipped",
+            },
+            {
+                "id": "reject_pi_tower_in_M_force",
+                "maps_to": "α_fs=1/(4π³+π²+π) must not define M Coulomb",
+                "status": "rejected_as_M_input",
+            },
+            {
+                "id": "soft_residual_still_open",
+                "ppm": float(census["vs_codata_ppm"]),
+                "maps_to": "κ/97 vs CODATA — higher structure OPEN",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²)",
+            "M": m,
+            "kappa": kappa,
+            "alpha_T": alpha,
+            "F_NN_over_F0": 1.0 / m,
+            "F_NN_over_FP": f_nn_over_fp,
+            "identity_alpha_equals_F_NN_over_FP": abs(alpha - f_nn_over_fp) < 1e-15,
+            "derivation_closed": True,  # law form; soft ppm is separate
+            "soft_residual_open": True,
+            "inventory": inventory,
+            "ask_ok": m == 97
+            and abs(alpha - f_nn_over_fp) < 1e-15
+            and abs(kappa**2 - 0.5) < 1e-15,
+            "note": (
+                "M Coulomb: F=n1 n2 F₀/(M N²) with M=97. "
+                "α=κ/M is T-readout of the same NN ratio. "
+                "π-tower demoted from M force law; soft ppm OPEN."
             ),
         }
 

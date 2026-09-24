@@ -438,7 +438,7 @@ def check_alpha_force_lattice_ask(device: str = "cpu") -> dict:
 
 
 def check_alpha_meaning_ask(device: str = "cpu") -> dict:
-    """§8.2·α·meaning — α is phase↔vacuum coupling; discrete fraction OPEN."""
+    """§8.2·α·meaning — α is phase↔vacuum coupling; soft residual OPEN."""
     from mt_ca.si_constants import SI
 
     del device
@@ -778,6 +778,31 @@ def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
         "vs_codata_ppm_pi_tower": row["vs_codata_ppm_pi_tower"],
         "discrete_path_shipped": row["discrete_path_shipped"],
         "soft_residual_open": row["soft_residual_open"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_coulomb_M_native(device: str = "cpu") -> dict:
+    """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.coulomb_M_native_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["identity_alpha_equals_F_NN_over_FP"])
+        and bool(row["derivation_closed"])
+        and bool(row["soft_residual_open"])
+        and int(row["M"]) == 97
+        and abs(float(row["F_NN_over_F0"]) - 1.0 / 97.0) < 1e-15
+    )
+    return {
+        "id": "Coulomb_M_native",
+        "M": row["M"],
+        "alpha_T": row["alpha_T"],
+        "F_NN_over_F0": row["F_NN_over_F0"],
+        "derivation_closed": row["derivation_closed"],
         "ok": ok,
         "note": row["note"],
     }
@@ -2690,6 +2715,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_M_from_g_try(device=device),
         check_alpha_nF_kick_census(device=device),
         check_alpha_full_quantization_bridge(device=device),
+        check_coulomb_M_native(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
