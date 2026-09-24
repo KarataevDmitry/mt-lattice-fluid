@@ -2890,9 +2890,10 @@ class SIConstants:
                 "id": "wedge_promotion_overcount",
                 "maps_to": (
                     "seat appears only after *M homogenize; inv-cut needs none. "
-                    "Candidate: promotion replicates M into dens and overcounts "
-                    "one soft unit (core seat already in M=1+N12·Nhier; face rides "
-                    "with (n_sq+1)-channel). Not sealed."
+                    "Best double-count shape: dens multiplies face-bookkeeping (7) "
+                    "by seat-bookkeeping (M); repair = remove one seat unit AND one "
+                    "face unit (=8/7). Not one thing twice — two coupled counts in a "
+                    "product. Not sealed."
                 ),
                 "status": "candidate_wedge",
             },
