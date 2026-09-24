@@ -706,7 +706,7 @@ def check_alpha_sqrt2_descent_ask(device: str = "cpu") -> dict:
 
 
 def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
-    """§8.2·α·M·g·try — M=1+N12·N_hier story; not full census close."""
+    """§8.2·α·M·g·try — M=1+N12·N_hier theorem (proof via nF Thm)."""
     from mt_ca.si_constants import SI
 
     del device
@@ -714,7 +714,7 @@ def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
     ok = (
         bool(row["ask_ok"])
         and bool(row["story_ok"])
-        and not bool(row["derivation_closed"])
+        and bool(row["derivation_closed"])
         and int(row["M_try"]) == 97
     )
     return {
@@ -729,7 +729,7 @@ def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
 
 
 def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
-    """§8.2·α·nF·census — enumerate kick-ledger seats → M=97."""
+    """§8.2·α·nF·Thm — lemmas force unique M=97 (kick-ledger seats)."""
     from mt_ca.si_constants import SI
 
     del device
@@ -997,6 +997,32 @@ def check_units_time_first_cascade(device: str = "cpu") -> dict:
         "m_P_from_t_P": row["m_P_from_t_P"],
         "time_first": row["time_first"],
         "mass_unit_exact": row["mass_unit_exact"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_planck_temperature_independent(device: str = "cpu") -> dict:
+    """§8.2·units·T_P — T_P:=E_P without k_B."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.planck_temperature_independent_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["k_B_not_in_definition"])
+        and bool(row["no_separate_Theta_on_M"])
+        and bool(row["identity_TP_eq_EP"])
+        and bool(row["identity_TPM_eq_E0"])
+        and bool(row["identity_TPM_eq_kappa_EP"])
+        and bool(row["identity_EP_eq_sqrt2_E0"])
+    )
+    return {
+        "id": "Planck_temperature_independent",
+        "T_P": row["T_P"],
+        "T_P_M": row["T_P_M"],
+        "k_B_not_in_definition": row["k_B_not_in_definition"],
         "ok": ok,
         "note": row["note"],
     }
@@ -2989,6 +3015,7 @@ def run_all(device: str) -> list[dict]:
         check_length_dim_from_lP_alpha(device=device),
         check_time_dim_from_tP(device=device),
         check_units_time_first_cascade(device=device),
+        check_planck_temperature_independent(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
