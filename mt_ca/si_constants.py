@@ -2763,13 +2763,18 @@ class SIConstants:
 
         Preferred: α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ^{n_□}))
                  = 7 M² κ (7M+κ) / (49 M⁴ − 7 M κ³ − 8)
-        Soft unit 1/(1−κ^{n_□})=8/7 (n_□=6 cubocta squares; κ²=1/2 locks number).
+        Soft unit uniquely fixed by symmetry (no lab):
+          U = (d+1)/d , d = N4 + 3 SU(2) Pauli = 7
+            = 1/(1−κ^{n_□})   (1-tick cubocta isotropy)
+            = |Q8|/(|Q8|−1)   (binary finite of SU(2); |Q8|−1=d)
         Meaning of 7 (candidate, fundamental): N4 causal cross + 3 SU(2) Pauli
         generators — same space+symmetry laws as the descent (§3.6 / §3.10).
         n_sq+1 and 2³−1 rhyme with 7 (echo / algebra), not required parents.
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Wedge (candidate, not sealed): homogenize erases 1-tick soft residue;
-        preferred restores soft unit once (local cubocta). Global-M book = false trail.
+        Wedge: after value-preserving M-scale rewrite of inv-cut, den hosts the
+        unique soft singlet U once. Homogenize does NOT erase value (α_inv≡α_hom).
+        Why "once in den" from G-covariance — near-seal; derivation_closed=False.
+        Global-M book = false trail.
         """
         census = self.alpha_nF_kick_census_row()
         geo = self.cuboctahedron_geometry_row()
@@ -2911,11 +2916,21 @@ class SIConstants:
                 "status": "shipped_unit",
             },
             {
+                "id": "soft_unit_symmetry_triple",
+                "maps_to": (
+                    "U=(d+1)/d = 1/(1−κ^{n_□}) = |Q8|/(|Q8|−1), "
+                    "d=N4+3=7=|Q8|−1=n_□+1. Fixed by space⊕spin symmetry "
+                    "+ 1-tick isotropy — no CODATA."
+                ),
+                "status": "shipped_symmetry_identity",
+                "d": seven,
+                "U": soft_unit,
+            },
+            {
                 "id": "soft_unit_via_kappa_n_sq",
                 "maps_to": (
-                    "8/7=1/(1−κ^{n_□})=1/(1−κ^6): exponent = cubocta n_faces_square; "
-                    "κ²=1/2 locks NUMBER. Also = seat 1 + face 1/(n_□+1). "
-                    "7=2³−1 algebra echo — meaning of 7 is N4+SU(2) candidate."
+                    "Geo face of the triple: 8/7=1/(1−κ^{n_□}); "
+                    "exponent = cubocta n_faces_square; κ²=1/2 locks number."
                 ),
                 "status": "shipped_number_identity",
                 "value": soft_unit,
@@ -2943,23 +2958,21 @@ class SIConstants:
             {
                 "id": "homogenize_is_algebra_not_global_glue",
                 "maps_to": (
-                    "After inv-cut, ×M homogenize rewrites α to seat-scale — algebraic clearing, "
-                    "not introducing a global layer. 7·M⁴ in the den is powers of local integers, "
-                    "not local×global product-rule physics."
+                    "×M homogenize is value-preserving rewrite of inv-cut (α_inv≡α_hom). "
+                    "Not erase, not global glue. Opens M-scale den without soft singlet."
                 ),
                 "status": "shipped_reframe",
             },
             {
-                "id": "candidate_local_cubocta_residue",
+                "id": "candidate_symmetry_soft_singlet_in_den",
                 "maps_to": (
-                    "After ×M homogenize, den is 7M⁴−Mκ³ — no constant soft term. "
-                    "1-tick cubocta still carries soft unit 1/(1−κ^{n_□})=8/7 "
-                    "(series over square faces = seat+face on the same cell). "
-                    "Preferred restores that local residue once. "
-                    "Seat-only (−1) drops the face quantum of the same cell. "
+                    "After M-scale rewrite, den = 7M⁴−Mκ³ has no soft singlet. "
+                    "Unique U from space⊕spin (d+1)/d must enter den once — "
+                    "G-scalar of the cell. Seat-only (−1) drops 1/d generator quantum. "
+                    "Remaining wedge: prove 'once in den' from G-covariance of α. "
                     "Not sealed; derivation_closed=False."
                 ),
-                "status": "candidate_local_descent",
+                "status": "candidate_symmetry_descent",
             },
         ]
         return {
@@ -2997,11 +3010,18 @@ class SIConstants:
             "identity_pref_cleared": abs(a_pref - a_pref_cleared) < 1e-15,
             "identity_soft_via_kappa": abs(soft_unit - 1.0 / (1.0 - kappa**n_sq)) < 1e-15
             and abs(soft_unit - (1.0 + face_q)) < 1e-15,
+            "identity_soft_symmetry_triple": (
+                abs(soft_unit - (seven + 1) / seven) < 1e-15
+                and abs(soft_unit - 1.0 / (1.0 - kappa**n_sq)) < 1e-15
+                and abs(soft_unit - 8.0 / 7.0) < 1e-15
+                and n_sq + 1 == seven
+            ),
             "identity_seven_N4_plus_SU2": seven == 7 and n4 == 4 and n_su2 == 3,
             "seven_meaning_fundamental_candidate": True,
             "carrier_soft_unit_answer_candidate": False,
             "false_trail_global_M_book": True,
-            "local_cubocta_residue_candidate": True,
+            "local_cubocta_residue_candidate": False,
+            "symmetry_soft_singlet_candidate": True,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
@@ -3019,6 +3039,7 @@ class SIConstants:
             and n4 == 4
             and n_su2 == 3
             and abs((n_sq + 2) / (n_sq + 1) - 1.0 / (1.0 - kappa**n_sq)) < 1e-15
+            and abs(soft_unit - (seven + 1) / seven) < 1e-15
             and abs(a_dress - a_exact_frac) < 1e-15
             and abs(a_invcut - a_invcut_frac) < 1e-15
             and abs(a_pref - a_pref_alt) < 1e-15
@@ -3031,8 +3052,8 @@ class SIConstants:
             "note": (
                 "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ^{n_□})) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Soft unit=1/(1−κ^{n_□}); 7=N4+SU(2); M local (A1); "
-                "global-M false trail; candidate: restore cubocta soft residue after homogenize."
+                "Soft unit from symmetry: U=(d+1)/d=1/(1−κ^{n_□})=8/7, d=N4+SU(2). "
+                "Wedge: unique soft singlet once in M-scale den; not sealed."
             ),
         }
 
