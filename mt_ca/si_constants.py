@@ -2768,7 +2768,7 @@ class SIConstants:
         generators — same space+symmetry laws as the descent (§3.6 / §3.10).
         n_sq+1 and 2³−1 rhyme with 7 (echo / algebra), not required parents.
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Wedge (OPEN): why homogenize subtracts exactly that soft unit — not sealed.
+        Wedge (OPEN): why subtract soft unit — local-only; global-M book demoted false trail.
         """
         census = self.alpha_nF_kick_census_row()
         geo = self.cuboctahedron_geometry_row()
@@ -2919,39 +2919,42 @@ class SIConstants:
                 "value": 1.0 / (1.0 - kappa**6),
             },
             {
-                "id": "carrier_layers_local_vs_global",
+                "id": "false_trail_global_M_book",
                 "maps_to": (
-                    "LOCAL: 7=N4+SU(2) — how the cell couples (causal cross + spin). "
-                    "GLOBAL: M=n_F seats — how F0 splits on the kick ledger (Thm 5.1). "
-                    "Different books on the carrier."
+                    "Demoted: treating M as a GLOBAL book separate from local 7. "
+                    "Locality (A1) is hard — M is not a non-local ledger."
                 ),
-                "status": "shipped_carrier_layers",
+                "status": "false_trail",
             },
             {
-                "id": "carrier_homogenize_product",
+                "id": "both_local_7_and_M",
                 "maps_to": (
-                    "After inv-cut, ×M homogenize rewrites α to M-scale. "
-                    "Denominator grows a 7·M⁴ term — product of local channels × global seats."
+                    "Both live on one nucleus under A1: "
+                    "7=N4+SU(2) — how the cell couples (causal cross + spin); "
+                    "M=1+N12·N_hier — local kick-ledger seat census of that same charged FCC star "
+                    "(§8.2·α·nF · model/01-carrier: M = lattice + local g). "
+                    "Not two books — two local counts."
                 ),
-                "status": "shipped_carrier_mechanism",
+                "status": "shipped_locality",
             },
             {
-                "id": "carrier_why_subtract_soft_unit",
+                "id": "homogenize_is_algebra_not_global_glue",
                 "maps_to": (
-                    "Carrier already accounts each layer once: force law per seat (F0/M), "
-                    "face channel per local 7 (α0/7). Homogenize product overcounts by "
-                    "exactly one soft unit = seat 1 + face quantum 1/7 = 8/7. "
-                    "Subtract soft unit = restore layer separation."
+                    "After inv-cut, ×M homogenize rewrites α to seat-scale — algebraic clearing, "
+                    "not introducing a global layer. 7·M⁴ in the den is powers of local integers, "
+                    "not local×global product-rule physics."
                 ),
-                "status": "candidate_carrier_answer",
+                "status": "shipped_reframe",
             },
             {
-                "id": "open_why_subtract_units",
+                "id": "open_why_subtract_soft_unit_local_only",
                 "maps_to": (
-                    "Carrier answer above — product-rule candidate. "
-                    "Not sealed as axiom until live product-rule stamp; derivation_closed still False."
+                    "Soft unit 8/7 = seat 1 + face 1/7 is κ-/cubocta-local. "
+                    "Why subtract after homogenize — still OPEN; search space = local-only "
+                    "(face/seat on the cell), not restore separation of a global book. "
+                    "derivation_closed=False."
                 ),
-                "status": "open_pending_seal",
+                "status": "open_local_descent",
             },
         ]
         return {
@@ -2991,7 +2994,8 @@ class SIConstants:
             and abs(soft_unit - (1.0 + face_q)) < 1e-15,
             "identity_seven_N4_plus_SU2": seven == 7 and n4 == 4 and n_su2 == 3,
             "seven_meaning_fundamental_candidate": True,
-            "carrier_soft_unit_answer_candidate": True,
+            "carrier_soft_unit_answer_candidate": False,
+            "false_trail_global_M_book": True,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
@@ -3021,7 +3025,8 @@ class SIConstants:
             "note": (
                 "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶)) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Soft unit via κ; 7=N4+SU(2); carrier: homogenize product → subtract soft unit (candidate)."
+                "Soft unit via κ; 7=N4+SU(2); M local seat census (A1); "
+                "global-M book = false trail; unit descent OPEN local-only."
             ),
         }
 
