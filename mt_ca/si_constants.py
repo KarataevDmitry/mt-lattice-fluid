@@ -2763,11 +2763,12 @@ class SIConstants:
 
         Preferred: α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ⁶))
                  = 7 M² κ (7M+κ) / (49 M⁴ − 7 M κ³ − 8)
-        Soft unit 1/(1−κ⁶)=8/7 (κ²=1/2, 7=n_sq+1=2³−1).
+        Soft unit 1/(1−κ⁶)=8/7 (κ²=1/2 locks the *number*).
+        Meaning of 7 (candidate, fundamental): N4 causal cross + 3 SU(2) Pauli
+        generators — same space+symmetry laws as the descent (§3.6 / §3.10).
+        n_sq+1 and 2³−1 rhyme with 7 (echo / algebra), not required parents.
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Meaning: face-bookkeeping×seat-bookkeeping dens; repair one soft unit.
-        Wedge (OPEN): why product overcounts — double-count candidate, not sealed.
-        Structural α exact; Δ(CODATA)=lab door (now inside ε).
+        Wedge (OPEN): why homogenize subtracts exactly that soft unit — not sealed.
         """
         census = self.alpha_nF_kick_census_row()
         geo = self.cuboctahedron_geometry_row()
@@ -2775,8 +2776,11 @@ class SIConstants:
         m = int(census["M"])
         n_sq = int(geo["n_faces_square"])
         n_tri = int(geo["n_faces_triangle"])
+        n4 = int(N4_CAUSAL_LINKS)  # von Neumann orthogonal cross (§3.6)
+        n_su2 = 3  # Pauli generators / SU(2) (§3.10)
+        seven = n4 + n_su2  # candidate fundamental meaning of 7
         face_q = 1.0 / (n_sq + 1)
-        soft_unit = 1.0 / (1.0 - kappa**6)  # = 8/7 = 1 + face_q
+        soft_unit = 1.0 / (1.0 - kappa**6)  # = 8/7; number from κ
         u0 = float(self.F_0) * float(self.l_P) ** 2
         hbar_c = float(self.hbar) * float(self.c)
         alpha_c = 7.2973525643e-3  # CODATA 2022
@@ -2867,10 +2871,21 @@ class SIConstants:
                 "status": "explained",
             },
             {
-                "id": "n_sq_from_cubocta",
+                "id": "seven_N4_plus_SU2",
+                "N4": n4,
+                "SU2_generators": n_su2,
+                "seven": seven,
+                "maps_to": (
+                    "7 = N4 causal cross + 3 SU(2) Pauli generators — "
+                    "space+symmetry of the descent; candidate fundamental"
+                ),
+                "status": "candidate_fundamental_meaning",
+            },
+            {
+                "id": "n_sq_echo_of_seven",
                 "count": n_sq,
-                "maps_to": "cubocta square faces; face_q=1/(n_sq+1)",
-                "status": "shipped_geo",
+                "maps_to": "cubocta n_sq+1=7 rhymes; echo not required parent",
+                "status": "shipped_geo_echo",
             },
             {
                 "id": "axiom_seat_plus_face_unit",
@@ -2896,24 +2911,29 @@ class SIConstants:
             },
             {
                 "id": "soft_unit_via_kappa",
-                "maps_to": "8/7=2^3/(2^3-1)=1/(1-κ^6) because κ^2=1/2 and 7=2^3-1=n_sq+1",
-                "status": "shipped_identity",
+                "maps_to": (
+                    "8/7=2^3/(2^3-1)=1/(1-κ^6): κ^2=1/2 locks NUMBER; "
+                    "7=2^3-1 algebra echo — meaning of 7 is N4+SU(2) candidate"
+                ),
+                "status": "shipped_number_identity",
                 "value": 1.0 / (1.0 - kappa**6),
             },
             {
-                "id": "wedge_promotion_overcount",
+                "id": "wedge_seven_is_space_plus_symmetry",
                 "maps_to": (
-                    "seat appears only after *M homogenize; inv-cut needs none. "
-                    "Best double-count shape: dens multiplies face-bookkeeping (7) "
-                    "by seat-bookkeeping (M); repair = remove one seat unit AND one "
-                    "face unit (=8/7). Not one thing twice — two coupled counts in a "
-                    "product. Not sealed."
+                    "Nature troll: soft-unit denominator 7 binds the same hard laws "
+                    "we already descended from — von Neumann N4 (light-cone cross) "
+                    "and SU(2) Pauli 3. Need not converge with cubocta n_sq+1; "
+                    "that rhyme can be echo. Descent still OPEN (why subtract)."
                 ),
-                "status": "candidate_wedge",
+                "status": "candidate_wedge_fundamental",
             },
             {
                 "id": "open_why_subtract_units",
-                "maps_to": "why homogenize overcounts exactly one soft unit — descent OPEN",
+                "maps_to": (
+                    "why homogenize subtracts soft unit built on (N4+SU2) — "
+                    "descent OPEN; product-rule not sealed"
+                ),
                 "status": "open_derivation",
             },
         ]
@@ -2925,6 +2945,9 @@ class SIConstants:
             "hbar_c_over_U0": hbar_c / u0,
             "n_faces_square": n_sq,
             "n_faces_triangle": n_tri,
+            "N4_causal": n4,
+            "SU2_generators": n_su2,
+            "seven_N4_plus_SU2": seven,
             "face_quantum": face_q,
             "soft_unit": soft_unit,
             "alpha_codata": alpha_c,
@@ -2949,6 +2972,8 @@ class SIConstants:
             "identity_pref_cleared": abs(a_pref - a_pref_cleared) < 1e-15,
             "identity_soft_via_kappa": abs(soft_unit - 1.0 / (1.0 - kappa**6)) < 1e-15
             and abs(soft_unit - (1.0 + face_q)) < 1e-15,
+            "identity_seven_N4_plus_SU2": seven == 7 and n4 == 4 and n_su2 == 3,
+            "seven_meaning_fundamental_candidate": True,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
@@ -2962,6 +2987,9 @@ class SIConstants:
             and n_sq == 6
             and n_tri == 8
             and abs(face_q - 1.0 / 7.0) < 1e-15
+            and seven == 7
+            and n4 == 4
+            and n_su2 == 3
             and abs((n_sq + 2) / (n_sq + 1) - 1.0 / (1.0 - kappa**6)) < 1e-15
             and abs(a_dress - a_exact_frac) < 1e-15
             and abs(a_invcut - a_invcut_frac) < 1e-15
@@ -2975,7 +3003,7 @@ class SIConstants:
             "note": (
                 "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶)) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Soft unit via κ; double-count wedge OPEN."
+                "Soft unit via κ; 7=N4+SU(2) candidate; descent OPEN."
             ),
         }
 
