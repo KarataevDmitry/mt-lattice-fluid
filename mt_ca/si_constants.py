@@ -3732,13 +3732,15 @@ class SIConstants:
     def units_time_first_cascade_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·units·time-first — t_P → l_P=c·t_P → m_P=ℏ/(c² t_P).
 
-        Ontology order (prettier than length-first):
-          1. Quantum of time t_P (natural [T]).
-          2. Length = light-path in one quantum: l_P = c·t_P  ([L]).
-          3. Mass unit exact: m_P = ℏ/(c² t_P) = ℏ/(c·l_P)  ([M]).
-        On carrier: hT = κ·t_P; c0 = l_P/hT; same cascade.
-        Newton G is NOT step 3 — it follows later: G = ℏ c / m_P² (= l_P² c³/ℏ).
-        SI metre/second/kilogram packaging = T-export only.
+                Same SI base triad {L, M, T} â only the quanta differ from Cs/c/kg prototypes.
+        Ontology (time-first):
+          1. [T] := t_P
+          2. [L] := l_P = cÂ·t_P   (light-path in one time quantum)
+          3. [M] := m_P = â/(cÂ² t_P) = â/(cÂ·l_P)
+        Everything else (force, energy, â¦) â derived from {L,M,T} exactly as in SI.
+        On carrier: hT = ÎºÂ·t_P; c0 = l_P/hT.
+        Newton G = âc/m_PÂ² is derived, not a fourth base.
+        Historical SI metre/second/kilogram numbers = T-export labels only.
         """
         time = self.time_dim_from_tP_row()
         length = self.length_dim_from_lP_alpha_row()
@@ -3804,9 +3806,11 @@ class SIConstants:
             "identity_mP_eq_hbar_over_c_lP": id_M_from_L,
             "identity_mP_time_eq_length_form": id_M_same,
             "time_first": True,
+            "si_base_triad_LMT": True,
             "mass_unit_exact": True,
+            "derived_units_as_in_SI": True,
             "G_not_ontology_step": True,
-            "not_SI_metre_second_kg": True,
+            "not_SI_metre_second_kg_prototypes": True,
             "derivation_closed": True,
             "inventory": inventory,
             "ask_ok": (
@@ -3817,8 +3821,8 @@ class SIConstants:
                 and id_M_same
             ),
             "note": (
-                "Time-first cascade: t_P → l_P=c·t_P ([L]) → m_P=ℏ/(c²t_P) ([M]). "
-                "G=ℏc/m_P² is a consequence, not the mass-unit step."
+                "SI-same base triad {L,M,T}: t_P, l_P=cÂ·t_P, m_P=â/(cÂ²t_P). "
+                "Derived units from the triad as in SI. G=âc/m_PÂ² derived, not base."
             ),
         }
 
