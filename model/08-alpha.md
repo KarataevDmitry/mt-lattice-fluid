@@ -41,18 +41,10 @@ m_W &= \frac{e(M_Z)\,v}{2\sin\theta_W}, &
 \end{aligned}
 $$
 #### Постоянная тонкой структуры α
-**SEALED:** α = soft-face fundamentals (§8.2·U0) — `SI.alpha_from_fundamentals` из κ, N₁₂, N_hier, M, d, U.
-π-tower ниже — **T-readout only** (конкурирующее число ~2 ppm), не определение α.
-Из gate (§7.1): `α* = 1 + 1/(4π)` — vacuum residue на тик (нога, не α).
-T-слой (demoted competitor):
-```
-α_fs⁻¹ = 4π³ + π² + π
-α_fs = 1 / (4π³ + π² + π) ≈ 0.0072973363
-```
-| | π-tower (T) | CODATA 2018 |
-|---|--------|-------------|
-| `α_fs` | `0.007297336344…` | `0.0072973525693…` |
-| `α_fs⁻¹` | `137.036303776…` | `137.035999084…` |
+**SEALED:** α = `SI.alpha_from_fundamentals` (κ, N₁₂, N_hier→M, d, U).
+π-tower **удалена** — не определение, не конкурент, не ярлык.
+Из gate (§7.1): `α* = 1 + 1/(4π)` — vacuum residue на тик (**нога**, не α).
+`α_fs` / `α_fs_inv` в коде — алиасы `alpha_preferred` / `1/α`.
 
 #### §8.2·α·meaning · Физический смысл (опора, не F-решётка)
 **α — это:** безразмерная сила **фазового сопряжения** единичного заряда с вакуумом (EM-канал; телесный угол / фазовый объём emergent 3D).
@@ -67,7 +59,7 @@ T-слой (demoted competitor):
 Тождество ноги: `4π·α = α/(α*−1)`.
 **Код:** `SI.alpha_meaning_ask_row()` · verify **`Alpha_meaning_ask`**.
 #### §8.2·α·descent · Забыть α — спуск из физики
-**Амнезия:** не использовать `α_fs`, CODATA, π-полином как *вход*.
+**Амнезия:** не использовать CODATA / lab как *вход*; α = fundamentals.
 | шаг | физика | что вылезает |
 |-----|--------|--------------|
 | 1 | A5 + Heisenberg | `Δφ_min = 1/2` |
@@ -201,7 +193,7 @@ $$
 | **96** = `N₁₂·N_hier` (= `n_△·N₁₂`) | links × hierarchy | ≈135.76 | ~+9366 ppm |
 | **97** = `N₁₂·N_hier+1` | nearest int | ≈137.18 | ~−1040 ppm |
 | `137/√2` | `α_geom` path | 137 | ~+263 ppm — **отвергнуто** (инъекция 137) |
-**Итог:** путь живой — `α` из посадки Кулона на `F₀`. **`M=97` — теорема** (§8.2·α·nF·Thm); 96 = неполная перепись без ядра. π-ansatz (~2 ppm) **не** снят — soft residual.
+**Итог:** путь живой — `α` из посадки Кулона на `F₀`. **`M=97` — теорема** (§8.2·α·nF·Thm); 96 = неполная перепись без ядра. π-tower **removed**; α = soft-face fundamentals.
 **Код:** `SI.alpha_force_lattice_ask_row()` · verify **`Alpha_force_lattice_ask`**.
 #### Кулон из носителя (не fitted Maxwell)
 **M-native (полное квантование — без continuum-α в законе силы):**
@@ -217,7 +209,7 @@ $$
 F_{12} = \alpha\, F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}},
 \qquad \alpha = \kappa/M,\quad F_0 = \kappa F_P.
 $$
-π-tower — конкурирующее T-число (~2 ppm), не спуск $g$. **α** = soft-face preferred (M=97) §8.2·U0 — SEALED. Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm).
+**α** = soft-face preferred (M=97) §8.2·U0 — SEALED. Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm).
 **Сборка (после M-native):**
 | кусок | где | смысл |
 |-------|-----|--------|
@@ -504,7 +496,7 @@ $$
 | compactness | **`V/S`** [m] | **`V/(Sa)`** | surface/bulk | тело ✅; ≠α |
 | площади □ vs △ | **`6a²`, `8·(√3/4)a²`** | **`A_□/A_tot`** | EM weight | тело ✅; ≠α (scale) |
 | dihedral | **135°** | **3/4×180°** | ridge phase | тело ✅; ≠α |
-| **`α_fs`** | — | π-ansatz | T-readout | ограничение |
+| **`α`** | soft-face | fundamentals | sealed | — |
 #### §8.2·α·EM·faces · Спросили носитель: вес граней / dihedral → α?
 **Метод:** geo·ask лист 1 — площади/углы при `a=l_P` → какая доля = сопряжение?
 **Ответы:**
@@ -522,7 +514,7 @@ $$
 | force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97** CLOSED; soft preferred lab-inside; unit descent **SEALED** |
 | Schwinger | $a_e$ | $2r=1/(2\pi)$ | $2r$ CLOSED; $a_e$ OPEN/lab |
 **Отвергнуто:** одна нога на оба ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
-**α sealed:** soft-face preferred с $M=97$ (§8.2·U0). Demoted: $\alpha_0=\kappa/M$. Duel π-tower — T-only.
+**α sealed:** soft-face preferred с $M=97$ (§8.2·U0). Demoted: $\alpha_0=\kappa/M$. π-tower removed.
 **Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
 #### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
 **Лемма (force dual, demoted coarse).** Пусть $\alpha_0=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
@@ -569,7 +561,7 @@ $$
 
 **Статус:** **теорема CLOSED**. Runtime-гистограмма $\Delta p$ из сима — N/A (в CA нет opcode Кулона); это не дыра счёта мест.
 **Код:** `SI.alpha_nF_kick_census_row()` · verify **`Alpha_nF_kick_census`**.
-#### §8.2·α·full-quant · α из полного квантования (не π-ansatz)
+#### §8.2·α·full-quant · α из полного квантования (fundamentals)
 **Смысл «тонкой структуры».** §0.9: на M нет continuum-волны — есть occupancy мод / **$n_E\cdot E_0$**. Сила — **$n_F\cdot F_0$** (Thm 5.1). Постоянная тонкой структуры — не «магическое π», а **безразмерная тонкость**: на сколько unit NN Coulomb слабее одного Planck-force пакета на носителе.
 $$
 F_{\mathrm{Coulomb}}(N{=}1)=F_0/M,\quad M=n_{F,\mathrm{seats}}=97\ \text{CLOSED (Thm)}.
@@ -579,8 +571,7 @@ $$
 | путь | формула | vs CODATA | роль |
 |------|---------|-----------|------|
 | **α (soft-face)** | preferred $|_{M=97}$ | ~−0.000068 ppm | **sealed** §8.2·U0 |
-| **π-tower (T)** | $1/(4\pi^3+\pi^2+\pi)$ | ~+2 ppm | continuum $\Omega=4\pi$ readout |
-π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED** (G-grade completeness; не дыра в $M$).
+Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED** (G-grade completeness; не дыра в $M$).
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
 #### §8.2·α·U0·soft-face · α from fundamentals (SEALED)
@@ -590,22 +581,33 @@ $$
 κ = 1/√2                         # FCC 1-tick
 N₁₂ = 12                         # FCC causal links
 N_hier = ⌊B_hV⌋−1 = 8            # hierarchy channels
-M = 1 + N₁₂·N_hier = 97          # force seats (Thm nF)
 d = N₄ + 3 = 7                   # von Neumann cross + SU(2)
 U = (d+1)/d = 8/7 = 1/(1−κ⁶)     # soft singlet
 ```
 
-**α (structural, sealed):**
+**α (structural, sealed) — M уже подставлен:**
 ```
+M := 1 + N₁₂·N_hier
+
 α = M² · κ · (d·M + κ) / (d·M⁴ − M·κ³ − U)
+
+  = (1+N₁₂·N_hier)² · κ · (d·(1+N₁₂·N_hier) + κ)
+    / ( d·(1+N₁₂·N_hier)⁴ − (1+N₁₂·N_hier)·κ³ − U )
 ```
-Подстановка фундаменталов → `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
+κ⁶-лицо (то же число; U=1/(1−κ⁶), (1−κ⁶)/κ⁶ = d = 7):
+```
+α = M² κ ( ((1−κ⁶)/κ⁶) M + κ )
+    / ( ((1−κ⁶)/κ⁶) M⁴ − M κ³ − 1/(1−κ⁶) )
+  при M = 1+N₁₂·N_hier
+```
+`SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`). M=97 — следствие Thm nF, не отдельный knob.
 
 **Единица пакета (SI-перевод, не вход в α):** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 
-Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm); ladder / π-tower — T-only, не спуск $g$.
-**Δ vs CODATA:** дверь T (~0.45σ inside). Структурная α точна — нет $u(\alpha)$.
+Demoted: $lpha_0=\kappa/M$ (~−1040 ppm); ladder demoted; π-tower removed.
+**Δ vs CODATA:** дверь T (~0.45σ inside). Структурная α точна — нет $u(lpha)$.
 **Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
+
 
 #### §8.2·α·upstairs · SEALED cascade on preferred α
 Структурная α закрыта (soft-face). **Вверх — закон каскада (exact):**
@@ -616,7 +618,7 @@ m_p = α · (v/2) · (1 + κ²/N12)
 m_e = α² · m_H / N_φ
 m_n = m_p + 2·m_e
 ```
-Вход: `alpha_preferred`. π-tower — только T-ярлык. Contrasts к PDG — **T-дверь**, не u(m).
+Вход: `alpha_preferred`. Contrasts к PDG — **T-дверь**, не u(m).
 Мягкие полы ~10⁻³ (packing / empty-cell) — высшая структура, не дыра в α.
 **Код:** `SI.alpha_preferred` · `SI.alpha_upstairs_mass_probe_row()` · verify **`Alpha_upstairs_mass_probe`**.
 
