@@ -915,6 +915,18 @@ r_e  = α·N_c · l_P        = α² · a0
 SI-2019 секунда (`Δν_Cs` exact) — тот же класс тавтологии, что c-fixed метр: T-export only.
 **Код:** `SI.time_dim_from_tP_row()` · verify **`Time_dim_from_tP`**.
 
+#### §8.2·units·time-first · каскад: t_P → метр → G
+Порядок красивее length-first:
+
+1. **Квант времени** `t_P` (`[T]`; на носителе тик `hT = κ·t_P`)
+2. **Метр / длина** = путь света за один квант: `l_P = c · t_P`
+3. **G точна:** `G = c⁵ t_P² / ℏ` (= `l_P² c³ / ℏ`, §8.4.2)
+
+SI-метр/секунда — T-export (тавтологии Cs/`c`). α дальше только иерархия hops.
+**Код:** `SI.units_time_first_cascade_row()` · verify **`Units_time_first_cascade`**.
+
+
+
 
 
 

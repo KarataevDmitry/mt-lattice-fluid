@@ -10,6 +10,14 @@
 
 
 
+
+## 2026-09-24 · §8.2·units·time-first — t_P → l_P → G (SEALED)
+
+**DoD:** Ontology: time quantum first; metre = light-path in one quantum; G = c⁵ t_P²/ℏ exact.
+
+**Code:** `SI.units_time_first_cascade_row()` · verify `Units_time_first_cascade`.
+
+
 ## 2026-09-24 · §8.2·[T]·t_P — time dim = t_P; M tick hT (SEALED)
 
 **DoD:** [T]=[L]/[V] ⇒ t_P=l_P/c. M tick hT=κ·t_P. SI-2019 Cs second = T-export tautology twin of c-fixed metre.
