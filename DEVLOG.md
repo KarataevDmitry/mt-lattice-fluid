@@ -496,7 +496,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
 
-**α·U0·soft-face:** preferred α=M²·κ·(7M+κ)/(7M⁴−M·κ³−1); structural α exact; Δ vs CODATA2022 ~−0.00030 ppm = lab door, not u(α). Alpha_U0_soft_face_ask.
+**α·U0·soft-face:** preferred α=7 M² κ (7M+κ)/(49 M⁴−7 M κ³−8) ~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band); seat+face unit. `Alpha_U0_soft_face_ask`.
 
 ---
 

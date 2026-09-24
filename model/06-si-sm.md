@@ -774,36 +774,38 @@ $$
 π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft residual дискретного пути — **OPEN** (вышележащая структура / duel), не дыра в $M$.
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
-#### §8.2·α·U0·soft-face · seat-unit after inv-cut
+#### §8.2·α·U0·soft-face · seat+face unit (inside CODATA band)
 
 **Единица:** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 **Грубо:** $\alpha_0=\kappa/M$ (~−1040 ppm).
-**Face:** $1/7=1/(n_\square+1)$, канал $x=\alpha_0/7$.
-**Якорь ppm:** CODATA **2022** $\alpha=7.297\,352\,5643(11)\times10^{-3}$ ($u_r\sim1.6\times10^{-10}$).
+**Face:** $1/7=1/(n_\square+1)$.
+**Якорь ppm:** CODATA **2022** ($u_r\sim1.6\times10^{-10}$).
 
-Лестница одного канала:
+Лестница:
 $$
-\underbrace{\frac{\alpha_0}{1-x}}_{\sim +1.03\,\mathrm{ppm}}
+\alpha_0
 \;\to\;
-\underbrace{\alpha_0(1+x)}_{\sim -0.057\,\mathrm{ppm}}
+\alpha_0(1+x)
 \;\to\;
-\underbrace{\frac{M\kappa(7M+\kappa)}{7M^{3}-\kappa^{3}}}_{\sim -0.0019\,\mathrm{ppm}}
+\frac{M\kappa(7M+\kappa)}{7M^{3}-\kappa^{3}}
 \;\to\;
-\underbrace{\frac{M^{2}\kappa(7M+\kappa)}{7M^{4}-M\kappa^{3}-1}}_{\sim -0.00030\,\mathrm{ppm}\ (\mathrm{preferred})}.
+\frac{M^{2}\kappa(7M+\kappa)}{7M^{4}-M\kappa^{3}-1}
+\;\to\;
+\underbrace{\frac{7M^{2}\kappa(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}}_{\sim -0.000068\,\mathrm{ppm}\ (\sim 0.45\sigma)}.
 $$
-**Аксиома preferred:** после inv-cut — $M$-гомогенизация знаменателя и вычитание unit quantum $1$.
-Эквивалент: $\mathrm{den}_C \leftarrow \mathrm{den}_C - 1/M$.
+**Аксиома preferred:** после inv-cut — $M$-гомогенизация; вычесть **seat** $1$ и **face** $1/7$ (сумма $8/7=(n_\square+2)/(n_\square+1)$).
 
 | путь | vs CODATA 2022 | роль |
 |------|----------------|------|
-| $\alpha_0=\kappa/97$ | ~−1040 ppm | coarse |
-| $\alpha_0/(1-\alpha_0/7)$ | ~+1.03 ppm | demoted resum |
-| $\alpha_0(1+\alpha_0/7)$ | ~−0.057 ppm | demoted 1st-order |
-| $M\kappa(7M+\kappa)/(7M^{3}-\kappa^{3})$ | ~−0.0019 ppm | demoted inv-cut |
-| $M^{2}\kappa(7M+\kappa)/(7M^{4}-M\kappa^{3}-1)$ | ~−0.00030 ppm (~2σ) | preferred |
+| $\alpha_0$ | ~−1040 ppm | coarse |
+| $\alpha_0/(1-x)$ | ~+1.03 ppm | demoted resum |
+| $\alpha_0(1+x)$ | ~−0.057 ppm | demoted 1st-order |
+| inv-cut | ~−0.0019 ppm | demoted |
+| seat (−1) | ~−0.00030 ppm (~2σ) | demoted |
+| seat+face (−8/7) | ~−0.000068 ppm (~0.45σ) | **preferred / inside band** |
 
-**Структурная α:** точна (полином от M, κ, face) — у неё нет погрешности.
-**Δ vs CODATA:** это не err(α) модели, а грубость лабораторного якоря (CODATA сама даёт ε). Сходимость Δ→0 возможна, но не обязательна и не критерий CLOSED теории. Сравнение — дверь T, не дыра в M.
+**Структурная α:** точна — нет $u(\alpha)$.
+**Δ vs CODATA:** дверь T; сейчас **внутри** ε (~0.45σ).
 **Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
