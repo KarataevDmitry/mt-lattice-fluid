@@ -6,6 +6,16 @@
 
 ---
 
+
+## 2026-09-24 · §8.2·α·meter fint — N_a0/a0 readout (SEALED α-path)
+
+**DoD:** meter/optical a0 is **not** an input to α. Preferred α + upstairs cascade predict `N_a0=N_c/α`, `a0=N_a0·l_P`. Optical Bohr ≈ T-door ~0.45%. H→ℤN_a0 without α remains OPEN census (does not block α).
+
+**Code:** `SI.alpha_meter_na0_bridge_row()` · verify `Alpha_meter_na0_bridge` · MODEL `06-si-sm` §8.2·α·meter.
+
+**Numbers (preferred):** N_a0≈3.259×10²⁴ vs optical ≈3.274×10²⁴ · rel≈0.448%.
+
+
 ## §0. Граница MODEL / DEVLOG / META / BUILD
 
 | | **MODEL** | **DEVLOG** | **META** | **BUILD** |
