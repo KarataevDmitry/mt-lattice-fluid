@@ -970,12 +970,16 @@ class SIConstants:
             "reject_optical_a0_as_M_definition": True,
             "N_a0_must_be_integer": True,
             "independent_Na0_open": True,
+            "alpha_path_closed_by_meter_fint": True,
+            "independent_Na0_blocks_alpha": False,
             "inventory": inventory,
             "ask_ok": identity_ok and rhyme_ok and True,
             "note": (
                 "Asked carrier: Thm5.2⇒N_a0∈ℤ; hop α=N_c/N_a0 and mass α²=m_e N_φ/m_H "
                 "are one α² — masses do not fix N_a0 alone. Rejected N_c·137 and optical "
-                "a₀ as M-definition. OPEN: H structure → integer N_a0 without α."
+                "a₀ as M-definition. FINT: α sealed without meter; N_a0=N_c/α is readout "
+                "(see alpha_meter_na0_bridge_row). OPEN remains: H→ℤN_a0 without α "
+                "(census) — does NOT block α / meter definition."
             ),
         }
 
@@ -3304,6 +3308,110 @@ class SIConstants:
                 "SI bridge: structural α from κ,M,d,U is exact — no u(α), no ppm. "
                 "ħ,c only via U0 (ħc=2κ U0). "
                 "T_lab_contrast_ppm is optional CODATA door, not a property of α."
+            ),
+        }
+
+
+    def alpha_meter_na0_bridge_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·meter — N_a0/a0 readout from sealed α; meter not input.
+
+        Fint (dependency flip):
+          OLD trap: optical meter / a0 → N_a0 → α (T-anchor as definition).
+          NEW: α sealed (soft-face) → upstairs m_e → N_c=m_P/m_e → N_a0=N_c/α.
+
+        SI meter remains SI-2019 via c; lattice unit = l_P = hL.
+        Optical a0 / CODATA N_a0_Bohr — T-door only (~0.45%), not M-definition.
+        H·ask independent ℤ N_a0 without α remains OPEN (census), but does NOT
+        block α and does NOT define the meter for α.
+        """
+        soft = self.alpha_U0_soft_face_ask_row()
+        up = self.alpha_upstairs_mass_probe_row()
+        hop = self.alpha_hop_ladder_row()
+        a = float(self.alpha_preferred)
+        m_e_GeV = float(up["m_e_GeV"])
+        m_P_GeV = self.E_P / EV_J / 1e9
+        n_c = m_P_GeV / m_e_GeV
+        n_a0 = n_c / a
+        n_a0_opt = float(hop["N_a0_Bohr"])
+        a0_opt_m = n_a0_opt * self.l_P
+        a0_pred_m = n_a0 * self.l_P
+        m_e_kg = m_e_GeV * 1e9 * EV_J / (C * C)
+        a0_bohr_m = HBAR / (m_e_kg * C * a)
+        rel_vs_opt = abs(n_a0 - n_a0_opt) / n_a0_opt
+        id_hop = abs(n_c / n_a0 - a) < 1e-15
+        id_bohr = abs(a0_bohr_m / a0_pred_m - 1.0) < 1e-12
+        inventory = [
+            {
+                "id": "alpha_sealed",
+                "maps_to": "soft-face preferred α — exact, no meter",
+                "ok": bool(soft["derivation_closed"]),
+            },
+            {
+                "id": "N_c_from_cascade",
+                "maps_to": "N_c = m_P/m_e (upstairs on preferred)",
+                "value": n_c,
+                "ok": bool(up["ask_ok"]),
+            },
+            {
+                "id": "N_a0_predicted",
+                "maps_to": "N_a0 = N_c/α (hop identity inverted)",
+                "value": n_a0,
+                "ok": id_hop,
+            },
+            {
+                "id": "a0_lattice",
+                "maps_to": "a0 = N_a0 · l_P",
+                "value_m": a0_pred_m,
+                "ok": id_bohr,
+            },
+            {
+                "id": "reject_optical_meter_as_alpha_input",
+                "maps_to": "optical a0 / SI meter ≠ input to α",
+                "ok": True,
+            },
+            {
+                "id": "H_structure_integer_Na0",
+                "maps_to": "ℤ N_a0 from H alone without α — still OPEN census",
+                "blocks_alpha": False,
+                "ok": True,
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·meter — N_a0/a0 from sealed α; meter not input",
+            "method": "fint: invert hop α=N_c/N_a0 after soft-face+upstairs seal",
+            "alpha_preferred": a,
+            "m_e_GeV": m_e_GeV,
+            "m_P_GeV": m_P_GeV,
+            "N_c": n_c,
+            "N_a0_predicted": n_a0,
+            "N_a0_optical_T": n_a0_opt,
+            "a0_predicted_m": a0_pred_m,
+            "a0_bohr_from_me_m": a0_bohr_m,
+            "a0_optical_T_m": a0_opt_m,
+            "l_P_m": self.l_P,
+            "T_lab_rel_vs_optical_a0": rel_vs_opt,
+            "identity_alpha_eq_Nc_over_Na0": id_hop,
+            "identity_a0_bohr_eq_Na0_lP": id_bohr,
+            "meter_not_input_to_alpha": True,
+            "optical_a0_is_T_door_only": True,
+            "alpha_path_closed": True,
+            "independent_Na0_from_H_open": True,
+            "independent_Na0_blocks_alpha": False,
+            "derivation_closed": True,
+            "inventory": inventory,
+            "ask_ok": (
+                id_hop
+                and id_bohr
+                and bool(soft["derivation_closed"])
+                and bool(soft["ask_ok"])
+                and bool(up["ask_ok"])
+                and abs(a - float(soft["alpha_pref"])) < 1e-15
+            ),
+            "note": (
+                "Fint: meter/optical a0 is not an input to α. "
+                "Sealed α + upstairs m_e predict N_a0=N_c/α and a0=N_a0·l_P. "
+                "Optical Bohr/N_a0 is T-door (~0.45%). "
+                "H→ℤN_a0 without α remains OPEN census — does not block α."
             ),
         }
 

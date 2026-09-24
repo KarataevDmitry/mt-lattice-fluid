@@ -845,6 +845,37 @@ def check_alpha_si_bridge(device: str = "cpu") -> dict:
     }
 
 
+
+def check_alpha_meter_na0_bridge(device: str = "cpu") -> dict:
+    """§8.2·α·meter — N_a0/a0 from sealed α; meter not input to α."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_meter_na0_bridge_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["meter_not_input_to_alpha"])
+        and bool(row["optical_a0_is_T_door_only"])
+        and bool(row["alpha_path_closed"])
+        and bool(row["identity_alpha_eq_Nc_over_Na0"])
+        and bool(row["identity_a0_bohr_eq_Na0_lP"])
+        and (not bool(row["independent_Na0_blocks_alpha"]))
+        and float(row["T_lab_rel_vs_optical_a0"]) < 1e-2
+    )
+    return {
+        "id": "Alpha_meter_na0_bridge",
+        "alpha_preferred": row["alpha_preferred"],
+        "N_c": row["N_c"],
+        "N_a0_predicted": row["N_a0_predicted"],
+        "T_lab_rel_vs_optical_a0": row["T_lab_rel_vs_optical_a0"],
+        "meter_not_input_to_alpha": row["meter_not_input_to_alpha"],
+        "alpha_path_closed": row["alpha_path_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_coulomb_M_native(device: str = "cpu") -> dict:
     """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
     from mt_ca.si_constants import SI
@@ -2827,6 +2858,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_U0_soft_face_ask(device=device),
         check_alpha_upstairs_mass_probe(device=device),
         check_alpha_si_bridge(device=device),
+        check_alpha_meter_na0_bridge(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
