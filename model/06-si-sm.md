@@ -258,7 +258,7 @@ T-слой: EM-связность = **фазовый объём** emergent 3D re
 | **смысл** | phase↔vacuum coupling | stamped |
 | **нога** | `α*−1 = Δφ_min/(2π) = 1/(4π)` (пустая ячейка) | stamped |
 | **число** | `α⁻¹ = 4π³+π²+π` (башня на `4π`) | stamped T-readout |
-| **следствия** | `F=α F_P/N²`, `α=N_c/N_a0`, `α=κ/M` | readout / open M |
+| **следствия** | `F=F₀/(M N²)` на M; `α=κ/M` T-readout | discrete shipped; soft residual open |
 | **открыто** | дискретная доля сопряжения на FCC без continuum-`π` | `Φ_□` open · α_geom exploratory |
 Тождество ноги: `4π·α = α/(α*−1)`.
 **Код:** `SI.alpha_meaning_ask_row()` · verify **`Alpha_meaning_ask`**.
@@ -400,37 +400,36 @@ $$
 **Итог:** путь живой — `α` из посадки Кулона на `F₀`. **`M=97` закрыт census мест** (§8.2·α·nF·census); 96 = неполная перепись без ядра. π-ansatz (~2 ppm) **не** снят — soft residual.
 **Код:** `SI.alpha_force_lattice_ask_row()` · verify **`Alpha_force_lattice_ask`**.
 #### Кулон из носителя (не fitted Maxwell)
-**Уже закрыто** — закон не вводят отдельно, его **собирают**:
+**M-native (полное квантование — без continuum-α в законе силы):**
+$$
+F_{12} = n_1 n_2\,\frac{F_0}{M\, N^{2}}\,\hat{\mathbf{r}},
+\qquad N\in\mathbb{N}\ \text{(graph-distance в }\ell_P),
+\quad n_i\in\mathbb{Z}\ \text{(A10)},
+\quad M = n_{F,\mathrm{seats}} = 97.
+$$
+На NN ($N=1$, $|n_i|=1$): $F = F_0/M$ — один пакет силы на $M$ местах kick-ledger (§8.2·α·nF·census). **Не** появляются $\pi$, $\varepsilon_0$, π-tower.
+**T-readout:** тот же закон через $\alpha=\kappa/M$ и $F_P$:
+$$
+F_{12} = \alpha\, F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}},
+\qquad \alpha = \kappa/M,\quad F_0 = \kappa F_P.
+$$
+π-tower — конкурирующее T-число (~2 ppm), не спуск $g$; soft residual $\kappa/97$ (~−1040 ppm) OPEN.
+**Сборка (после M-native):**
 | кусок | где | смысл |
 |-------|-----|--------|
-| $Q = n\,e_0$, $n\in\mathbb{Z}$ | §5.2.2-III | топологический заряд (A10), не импульс |
-| $\alpha_{\mathrm{fs}}=e_0^{2}/(4\pi\varepsilon_0\,\hbar c)=1/(4\pi^{3}+\pi^{2}+\pi)$ | §8.2 выше | фазовый объём / телесный угол |
-| $4\pi$ | §1.4 · gate | телесный угол emergent 3D, не $\|N\|$ тайла |
-| $F_P=\hbar c/\ell_P^{2}=c^{4}/G$ | §5.2.1 · Planck | силовая шкала ячейки |
-| $\mathrm{div}\,j=0$ на звезде $N$ | §5.2.1 | локальный баланс потока |
-Из определения $\alpha_{\mathrm{fs}}$:
-$$
-\frac{1}{4\pi\varepsilon_0}
-=
-\frac{\alpha_{\mathrm{fs}}\,\hbar c}{e_0^{2}}.
-$$
-Два заряда $Q_i=n_i e_0$ на расстоянии $r=N\ell_P$ ($N\in\mathbb{N}$ — graph-distance в $\ell_P$):
-$$
-\mathbf{F}_{12}
-=
-\frac{1}{4\pi\varepsilon_0}\frac{Q_1 Q_2}{r^{2}}\,\hat{\mathbf{r}}
-=
-\alpha_{\mathrm{fs}}\,(\hbar c)\,\frac{n_1 n_2}{r^{2}}\,\hat{\mathbf{r}}
-=
-\alpha_{\mathrm{fs}}\,F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}}.
-$$
-На соседних ячейках ($N=1$, $|n_i|=1$): $|F|/F_P=\alpha_{\mathrm{fs}}\approx 1/137$ — без новой ручки.
-**Дискретный Гаусс (тот же носитель).** Поток фазового тока через замкнутую оболочку вокруг pra-дефекта $\propto n=Q/e_0$. В 3D readout телесный угол $4\pi$ даёт закон $1/r^{2}$ — это **следствие** геометрии носителя + заряда A10, не отдельный Maxwell-axiom на M. Полный Maxwell — **следующий абзац** (тот же канал, не схлопнутый).
+| $Q = n\,e_0$, $n\in\mathbb{Z}$ | §5.2.2-III | топологический заряд (A10) |
+| $F_0$, $M=97$ | Thm 5.1 · nF census | сила — целые пакеты / seats |
+| $\alpha=\kappa/M$ | §8.2·full-quant | T-имя тонкой структуры (не вход M) |
+| $F_P$; $F_0=\kappa F_P$ | §5.2.1 | Planck force ladder |
+| $\mathrm{div}\,j=0$ | §5.2.1 | локальный баланс |
+**Дискретный Гаусс.** Поток $j$ через оболочку $\propto n=Q/e_0$. Закон $1/N^{2}$ — graph-distance + A10, не отдельный Maxwell на M.
 | кусок | статус |
 |-------|--------|
-| $F\propto n_1 n_2/N^{2}$ из $\alpha_{\mathrm{fs}}+F_P$ | выведено алгебра |
-| Гаусс $\oint\!j\propto n$ на оболочке | выведено схема · sim двух зарядов |
-**Фальсификация:** совпадение с Кулоном требует шкалы $\neq\ell_P$, константы $\neq\alpha_{\mathrm{fs}}$, или заряда $\notin e_0\mathbb{Z}$ — claim мёртв.
+| $F = n_1 n_2 F_0/(M N^{2})$ на M | выведено (descent) |
+| $F = \alpha F_P n_1 n_2/N^{2}$ на T | readout той же силы |
+| Гаусс $\oint j \propto n$ | схема · sim open |
+**Фальсификация:** $N\notin\mathbb{N}\ell_P$, $n\notin\mathbb{Z}$, или NN-сила $\neq F_0/M$ — claim мёртв.
+**Код:** `SI.coulomb_M_native_row()` · verify **`Coulomb_M_native`**.
 #### Планковский ЭМ (формулы на соседних ячейках)
 Уже есть в носителе (§5.0.2 · §5.2.1). Не fitted Maxwell — **сбор** тех же кусков, что Кулон.
 **Кванты на одном шаге** ($\ell_P$, $hT$):
@@ -474,8 +473,8 @@ F = n_F F_0\ \ (n_F\in\mathbb{Z}).
 $$
 **Кулон на соседях** ($N=1$, $|n_i|=1$) — частный случай:
 $$
-|F|/F_P = \alpha_{\mathrm{fs}},
-\qquad F_P = c^4/G.
+|F| = F_0/M,
+\qquad |F|/F_P = \kappa/M = \alpha\ \text{(T-readout)}.
 $$
 **Скорость фронта по осям** (не macro-$c$):
 $$

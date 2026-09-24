@@ -494,6 +494,8 @@ x+N ≡ x ,   y+N ≡ y
 
 **α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` combinatorial CLOSED; π-tower demoted as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
 
+**Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
+
 ---
 
 ## §11. Код (M-only slice)
