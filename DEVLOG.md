@@ -12,6 +12,13 @@
 
 
 
+## 2026-09-24 · §8.2·units·T_P — independent of k_B (SEALED)
+
+**DoD:** T_P:=E_P=ℏ/t_P; T_P_M:=E_0. No separate Θ on M. k_B/kelvin = T-export only.
+
+**Code:** `SI.planck_temperature_independent_row()` · verify `Planck_temperature_independent`.
+
+
 ## 2026-09-24 · §8.2·units·time-first FIX — step 3 is [M]=m_P, not G
 
 **DoD:** Cascade t_P → l_P=c·t_P → m_P=ℏ/(c²t_P). G=ℏc/m_P² is consequence only.
@@ -363,6 +370,7 @@ z' = z · exp(iφ)
 | 2026-09-24 | §6·floor1·ask | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1 · Floor1_leptonic_ask PASS |
 | 2026-09-24 | §8.2·α·upstairs | cascade SEALED on α_preferred; PDG=T-door; soft floors open · Alpha_upstairs_mass_probe PASS |
 | 2026-09-24 | §8.2·α·SI-bridge | α exact (κ,M,d,U; no u(α)); U0↔ħc=2κU0; CODATA=T-door only · Alpha_si_bridge PASS |
+| 2026-09-24 | §8.2·α·nF·Thm | M=1+N₁₂·N_hier=97 — theorem from kick-ledger lemmas (core+star); not free count · Alpha_nF_kick_census PASS |
 | 2026-09-24 | §8.2·α·nF·census | seat table: 1 core + 12×8 hier = 97; F=F₀/97 ⇒ α=κ/97; combinatorial CLOSED · Alpha_nF_kick_census PASS |
 | 2026-09-24 | §8.2·α·M·g·try | M=1+N₁₂·N_hier=97 (core b + link×hier); α=κ/97 ~−1040ppm; → census · Alpha_M_from_g_try PASS |
 | 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent_ask PASS |
@@ -546,7 +554,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **Family scan** (`scripts/run_seed_family_scan.py`, 128²×1024): VACUUM/BOIL/IMPULSE → born=0 · **PLANE_WAVE → born=1** (|n|_auto≈2) · VORTEX_* planted persist. Brick-offset BOIL subfamily still 0/52.
 
-**α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` combinatorial CLOSED; π-tower demoted as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
+**α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` **теорема** CLOSED; π-tower demoted as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
 
 **Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
 
