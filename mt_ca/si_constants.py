@@ -485,11 +485,14 @@ class SIConstants:
 
     def alpha_fs(self) -> float:
 
-        """Fine-structure constant α — computed, not fitted."""
+        """π-tower T-readout α (demoted competitor; not structural preferred)."""
 
         return 1.0 / self.alpha_fs_inv
 
-
+    @property
+    def alpha_preferred(self) -> float:
+        """Structural α — soft-face preferred §8.2·U0 (lab-inside)."""
+        return float(self.alpha_U0_soft_face_ask_row()["alpha_pref"])
 
     def force_ansatz_row(self) -> dict[str, float]:
         """§8.4.1 — v ladder; α_s(v)=d/(N_hier π); runner 1/(dπ) ln(v/μ) → M_Z."""
@@ -498,7 +501,7 @@ class SIConstants:
         n_hier = int(math.floor(2.0 * math.pi / LN2)) - 1
         d_spatial = 3  # Minkowski space §1.6 — not N_c
         alpha_s_v = d_spatial / (n_hier * pi)
-        v = (self.alpha_fs**n_hier) * e_p_gev * math.sqrt(2.0 * pi)
+        v = (self.alpha_preferred**n_hier) * e_p_gev * math.sqrt(2.0 * pi)
         m_z = 91.1876  # GeV PDG pole mass (T control scale)
         beta_pack = 1.0 / (d_spatial * pi)
         alpha_s_mz = 1.0 / (1.0 / alpha_s_v + beta_pack * math.log(v / m_z))
@@ -2977,6 +2980,87 @@ class SIConstants:
         }
 
 
+
+    def alpha_upstairs_mass_probe_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·upstairs — mass cascade fed by preferred α (no re-fit).
+
+        α unknown closed at soft-face preferred. Upstairs: same stamped
+        m_H / m_p / m_e / m_n formulas with α_preferred; π-tower kept as T label.
+        """
+        soft = self.alpha_U0_soft_face_ask_row()
+        higgs = self.higgs_mass_row()
+        prot = self.proton_mass_row()
+        elec = self.electron_mass_row()
+        neut = self.neutron_mass_row()
+        a_pref = float(soft["alpha_pref"])
+        a_pi = float(self.alpha_fs)
+        inventory = [
+            {
+                "id": "alpha_input_preferred",
+                "alpha": a_pref,
+                "maps_to": "soft-face §8.2·U0 structural",
+                "status": "shipped_upstairs_input",
+            },
+            {
+                "id": "alpha_pi_tower_T_only",
+                "alpha": a_pi,
+                "maps_to": "π-tower demoted T-competitor",
+                "status": "demoted_T",
+            },
+            {
+                "id": "m_H_upstairs",
+                "GeV": float(higgs["m_H_GeV"]),
+                "rel_err": float(higgs["m_H_rel_err"]),
+                "status": "probe",
+            },
+            {
+                "id": "m_p_upstairs",
+                "GeV": float(prot["m_p_GeV"]),
+                "rel_err": float(prot["m_p_rel_err"]),
+                "status": "probe",
+            },
+            {
+                "id": "m_e_upstairs",
+                "GeV": float(elec["m_e_GeV"]),
+                "rel_err": float(elec["m_e_rel_err"]),
+                "status": "probe",
+            },
+            {
+                "id": "m_n_upstairs",
+                "GeV": float(neut["m_n_GeV"]),
+                "rel_err": float(neut["m_n_rel_err"]),
+                "status": "probe",
+            },
+            {
+                "id": "open_unit_descent",
+                "maps_to": "why soft unit subtracted — still OPEN; not blocking upstairs",
+                "status": "open_derivation",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·upstairs — preferred α feeds mass cascade",
+            "alpha_preferred": a_pref,
+            "alpha_pi_tower": a_pi,
+            "m_H_GeV": float(higgs["m_H_GeV"]),
+            "m_H_rel_err": float(higgs["m_H_rel_err"]),
+            "m_p_GeV": float(prot["m_p_GeV"]),
+            "m_p_rel_err": float(prot["m_p_rel_err"]),
+            "m_e_GeV": float(elec["m_e_GeV"]),
+            "m_e_rel_err": float(elec["m_e_rel_err"]),
+            "m_n_GeV": float(neut["m_n_GeV"]),
+            "m_n_rel_err": float(neut["m_n_rel_err"]),
+            "inventory": inventory,
+            "ask_ok": bool(soft["ask_ok"])
+            and abs(a_pref - float(self.alpha_preferred)) < 1e-15
+            and float(higgs["m_H_rel_err"]) < 0.01
+            and float(prot["m_p_rel_err"]) < 0.02
+            and float(elec["m_e_rel_err"]) < 0.02,
+            "note": (
+                "Upstairs: structural α_preferred feeds v/m_H/m_p/m_e. "
+                "π-tower remains T-label only. Mass floors (~10⁻³) are other physics."
+            ),
+        }
+
     def coulomb_M_native_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·Coulomb·M-native — force law without continuum α on M.
 
@@ -5007,9 +5091,9 @@ class SIConstants:
         lam0 = 1.0 / n_hier
         m_h0 = v * math.sqrt(2.0 * lam0)  # = v/2 when N_hier=8
         e_p_gev = self.E_P / EV_J / 1e9
-        m_h_direct = (self.alpha_fs**8) * e_p_gev * math.sqrt(math.pi / 2.0)
+        m_h_direct = (self.alpha_preferred**8) * e_p_gev * math.sqrt(math.pi / 2.0)
         # vacuum-bit quantum: (α*−1)·α_fs = α_fs/(4π)
-        delta_lam = self.alpha_fs / (4.0 * math.pi)
+        delta_lam = self.alpha_preferred / (4.0 * math.pi)
         lam = lam0 + n_hier * delta_lam
         m_h = v * math.sqrt(2.0 * lam)
         return {
@@ -5027,7 +5111,7 @@ class SIConstants:
             "m_H_rel_err": abs(m_h - M_HIGGS_GEV_PDG) / M_HIGGS_GEV_PDG,
             "m_H_over_v_bare": m_h0 / v,
             "m_H_over_v": m_h / v,
-            "note": "§8.3.1: bare v/2; λ=1/8+N_hier·(α_fs/4π) empty-cell stack",
+            "note": "§8.3.1: bare v/2; λ=1/8+N_hier·(α_preferred/4π) empty-cell stack",
         }
 
     def proton_mass_row(self) -> dict[str, float]:
@@ -5035,7 +5119,7 @@ class SIConstants:
         higgs = self.higgs_mass_row()
         v = float(higgs["v_GeV"])
         m_h_bare = float(higgs["m_H_bare_GeV"])
-        m_p0 = self.alpha_fs * m_h_bare  # = α · v/2
+        m_p0 = self.alpha_preferred * m_h_bare  # = α · v/2
         kappa = KAPPA_FCC_1TICK
         n12 = float(N12_FCC_CAUSAL_LINKS)
         delta_pack = (kappa * kappa) / n12  # (1/2)/12 = 1/24
@@ -5045,6 +5129,7 @@ class SIConstants:
             "v_GeV": v,
             "m_H_bare_GeV": m_h_bare,
             "alpha_fs": self.alpha_fs,
+            "alpha_preferred": self.alpha_preferred,
             "kappa_FCC": kappa,
             "N12": n12,
             "delta_pack": delta_pack,
@@ -5064,7 +5149,7 @@ class SIConstants:
         m_h_bare = float(higgs["m_H_bare_GeV"])
         m_h = float(higgs["m_H_GeV"])
         n_phi = float(HV.N_phi)
-        a2 = self.alpha_fs * self.alpha_fs
+        a2 = self.alpha_preferred * self.alpha_preferred
         m_e0 = a2 * m_h_bare / n_phi
         m_e = a2 * m_h / n_phi
         e_p_gev = self.m_P * (C * C) / EV_J / 1e9  # E_P [GeV]
@@ -5074,6 +5159,7 @@ class SIConstants:
             "m_H_bare_GeV": m_h_bare,
             "m_H_GeV": m_h,
             "alpha_fs": self.alpha_fs,
+            "alpha_preferred": self.alpha_preferred,
             "N_phi": n_phi,
             "m_e_bare_GeV": m_e0,
             "m_e_GeV": m_e,
@@ -5119,7 +5205,7 @@ class SIConstants:
         n_hier = float(higgs["N_hier"])
         n_phi = float(elec["N_phi"])
         m_e = float(elec["m_e_GeV"])
-        a = self.alpha_fs
+        a = self.alpha_preferred
         a5 = a**5
         m_nu0_gev = a5 * v / (n_hier * n_phi)
         m_nu_gev = a5 * (2.0 * m_h) / (n_hier * n_phi)
@@ -5133,7 +5219,8 @@ class SIConstants:
             "v_GeV": v,
             "m_H_GeV": m_h,
             "m_e_GeV": m_e,
-            "alpha_fs": a,
+            "alpha_fs": self.alpha_fs,
+            "alpha_preferred": a,
             "N_hier": n_hier,
             "N_phi": n_phi,
             "m_nu_atm_bare_eV": m_nu0_ev,

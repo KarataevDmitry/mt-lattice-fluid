@@ -783,6 +783,19 @@ def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
     }
 
 
+
+def check_alpha_upstairs_mass_probe(device=None):
+    from mt_ca.si_constants import SI
+    r = SI.alpha_upstairs_mass_probe_row()
+    return {
+        "id": "Alpha_upstairs_mass_probe",
+        "ok": bool(r["ask_ok"]),
+        "m_H_rel_err": r["m_H_rel_err"],
+        "m_p_rel_err": r["m_p_rel_err"],
+        "m_e_rel_err": r["m_e_rel_err"],
+        "note": r["note"],
+    }
+
 def check_coulomb_M_native(device: str = "cpu") -> dict:
     """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
     from mt_ca.si_constants import SI
@@ -2114,7 +2127,8 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
 
     del device
     pi = math.pi
-    a = SI.alpha_fs
+    a = SI.alpha_fs  # π-tower T-label
+    a_struct = SI.alpha_preferred  # upstairs structural feed
     a_star = SI.alpha_star
     residue = a_star - 1.0
 
@@ -2130,8 +2144,8 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         and abs(residue - SI.delta_phi_min / (2.0 * pi)) < 1e-15
     )
     delta_lambda_link_ok = (
-        abs(delta_lam - a / (4.0 * pi)) < 1e-15
-        and abs(delta_lam - a * residue) < 1e-15
+        abs(delta_lam - a_struct / (4.0 * pi)) < 1e-15
+        and abs(delta_lam - a_struct * residue) < 1e-15
     )
     phase_tower_ok = abs(SI.alpha_fs_inv - pi * (4.0 * pi**2 + pi + 1.0)) < 1e-9
     alpha_mz_runner_ok = runner["alpha_MZ_inv_rel_err"] < 2e-4
@@ -2193,8 +2207,8 @@ def check_proton_mass(device: str = "cpu") -> dict:
     row = SI.proton_mass_row()
     delta_pack = (KAPPA_FCC_1TICK ** 2) / float(N12_FCC_CAUSAL_LINKS)
     ok = (
-        abs(row["m_p_over_m_H_bare"] - row["alpha_fs"]) < 1e-12
-        and abs(row["m_p_bare_GeV"] - row["alpha_fs"] * row["m_H_bare_GeV"]) < 1e-12
+        abs(row["m_p_over_m_H_bare"] - row["alpha_preferred"]) < 1e-12
+        and abs(row["m_p_bare_GeV"] - row["alpha_preferred"] * row["m_H_bare_GeV"]) < 1e-12
         and abs(row["kappa_FCC"] - KAPPA_FCC_1TICK) < 1e-15
         and row["N12"] == float(N12_FCC_CAUSAL_LINKS)
         and abs(row["delta_pack"] - delta_pack) < 1e-15
@@ -2223,7 +2237,7 @@ def check_electron_mass(device: str = "cpu") -> dict:
     del device
     row = SI.electron_mass_row()
     n_phi = float(HV.N_phi)
-    a2 = row["alpha_fs"] ** 2
+    a2 = row["alpha_preferred"] ** 2
     ok = (
         row["N_phi"] == n_phi
         and n_phi == 13.0
@@ -2253,7 +2267,7 @@ def check_neutrino_mass(device: str = "cpu") -> dict:
     row = SI.neutrino_mass_row()
     n_phi = float(HV.N_phi)
     n_hier = float(row["N_hier"])
-    a = row["alpha_fs"]
+    a = row["alpha_preferred"]
     expected = (a**5) * (2.0 * row["m_H_GeV"]) / (n_hier * n_phi) * 1e9
     bare = (a**5) * row["v_GeV"] / (n_hier * n_phi) * 1e9
     bridge = (a**3) * row["m_e_GeV"] / (n_hier / 2.0) * 1e9
@@ -2754,6 +2768,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_full_quantization_bridge(device=device),
         check_coulomb_M_native(device=device),
         check_alpha_U0_soft_face_ask(device=device),
+        check_alpha_upstairs_mass_probe(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),

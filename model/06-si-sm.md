@@ -831,6 +831,12 @@ $$
 **Δ vs CODATA:** дверь T; сейчас **внутри** ε (~0.45σ).
 **Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
+#### §8.2·α·upstairs · preferred α кормит каскад масс
+Структурная α закрыта как выражение (soft-face). **Вверх:** $v$, $m_H$, $m_p$, $m_e$, $m_n$ берут `alpha_preferred`, не π-tower.
+π-tower остаётся T-ярлыком. Полы масс (~$10^{-3}$) — другая физика ($\kappa^2/N_{12}$ и т.п.), не дыра в α.
+**Код:** `SI.alpha_preferred` · `SI.alpha_upstairs_mass_probe_row()` · verify **`Alpha_upstairs_mass_probe`**.
+
+
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
 **Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
 | при `a=l_P` | формула | SI |
