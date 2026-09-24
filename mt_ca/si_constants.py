@@ -2752,6 +2752,90 @@ class SIConstants:
             ),
         }
 
+
+    def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·U0·soft-face — hunt soft residual via J·m = F0 l_P² packets.
+
+        Dimensional hint: α = U_em/U_ref with [U]=J·m = s0 c0 = F0 l_P² (our c0, not macro-c).
+        Coarse: U_em=U0, U_ref=(M/κ)U0 ⇒ α=κ/M (−1040 ppm).
+        Soft hit (no π): subtract one face quantum 1/7 from the inverse count:
+          α⁻¹ = M/κ − 1/7,  1/7 = 1/(n□+1) = 2/(n□+n△).
+        ~+1.03 ppm vs CODATA. Not CLOSED — mechanism of the −1/7 seat still ask.
+        """
+        import math
+
+        census = self.alpha_nF_kick_census_row()
+        kappa = float(census["kappa"])
+        m = int(census["M"])
+        n_sq, n_tri = 6, 8
+        face_q = 1.0 / (n_sq + 1)  # = 2/(n_sq+n_tri)
+        u0 = float(self.F_0) * float(self.l_P) ** 2
+        inv_coarse = m / kappa
+        inv_soft = inv_coarse - face_q
+        alpha_c = 7.2973525693e-3
+        a_coarse = kappa / m
+        a_soft = 1.0 / inv_soft
+
+        def ppm(a: float) -> float:
+            return (a - alpha_c) / alpha_c * 1.0e6
+
+        inventory: list[dict[str, str | float | bool | int]] = [
+            {
+                "id": "unit_U0",
+                "maps_to": "U0 = F0·l_P² = s0·c0 [J·m] — our length/speed, not ℏc macro",
+                "U0": u0,
+                "status": "shipped_unit",
+            },
+            {
+                "id": "coarse_kappa_over_M",
+                "alpha": a_coarse,
+                "ppm": ppm(a_coarse),
+                "maps_to": "U_em=U0, U_ref=(M/κ)U0",
+                "status": "shipped_coarse",
+            },
+            {
+                "id": "soft_face_quantum_1_over_7",
+                "face_quantum": face_q,
+                "alpha": a_soft,
+                "ppm": ppm(a_soft),
+                "maps_to": "α⁻¹=M/κ−1/7; 1/7=1/(n□+1)=2/14",
+                "status": "candidate",
+            },
+            {
+                "id": "reject_pi_in_soft",
+                "maps_to": "π-tower not used; soft piece is FCC face count",
+                "status": "rejected_pi",
+            },
+            {
+                "id": "mechanism_of_minus_face_seat",
+                "maps_to": "why U_ref loses exactly one 1/7·U0 — still ask",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·U0·soft-face — soft residual via F0 l_P² packets",
+            "M": m,
+            "kappa": kappa,
+            "U0_J_m": u0,
+            "face_quantum": face_q,
+            "alpha_coarse": a_coarse,
+            "alpha_soft": a_soft,
+            "vs_codata_ppm_coarse": ppm(a_coarse),
+            "vs_codata_ppm_soft": ppm(a_soft),
+            "inv_soft": inv_soft,
+            "derivation_closed": False,
+            "soft_candidate_shipped": True,
+            "inventory": inventory,
+            "ask_ok": m == 97
+            and abs(face_q - 1.0 / 7.0) < 1e-15
+            and abs(ppm(a_soft)) < 2.0,
+            "note": (
+                "U0=F0 l_P². Coarse α=κ/M (−1040 ppm). "
+                "Soft candidate α=1/(M/κ−1/7) ~+1.03 ppm via n□+1=7. "
+                "Mechanism OPEN — not claimed closed."
+            ),
+        }
+
     def coulomb_M_native_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·Coulomb·M-native — force law without continuum α on M.
 

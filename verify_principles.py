@@ -808,6 +808,32 @@ def check_coulomb_M_native(device: str = "cpu") -> dict:
     }
 
 
+
+def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
+    """§8.2·α·U0·soft-face — soft candidate 1/(M/κ−1/7); mechanism OPEN."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_U0_soft_face_ask_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["soft_candidate_shipped"])
+        and not bool(row["derivation_closed"])
+        and int(row["M"]) == 97
+        and abs(float(row["face_quantum"]) - 1.0 / 7.0) < 1e-15
+        and abs(float(row["vs_codata_ppm_soft"])) < 2.0
+    )
+    return {
+        "id": "Alpha_U0_soft_face_ask",
+        "M": row["M"],
+        "alpha_soft": row["alpha_soft"],
+        "vs_codata_ppm_soft": row["vs_codata_ppm_soft"],
+        "vs_codata_ppm_coarse": row["vs_codata_ppm_coarse"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_leptonic_ask(device: str = "cpu") -> dict:
     """§6·floor1·ask — pre-resonance band; content census open."""
     from mt_ca.si_constants import SI
@@ -2716,6 +2742,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_nF_kick_census(device=device),
         check_alpha_full_quantization_bridge(device=device),
         check_coulomb_M_native(device=device),
+        check_alpha_U0_soft_face_ask(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
