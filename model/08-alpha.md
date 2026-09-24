@@ -591,7 +591,13 @@ $$
 
 ($\Delta\varphi_{\min}$ — дно Heisenberg/Arg; в саму $\alpha$ ниже не входит, только в ногу/gate.)
 
-**$\alpha$ — только из дна** (без ярлыков $M,d,U$):
+Свёртка регистра (не новое дно — имя для $\lfloor B_{hV}\rfloor$, код `HV.mod_bits`):
+
+$$
+\mathrm{mod\_bits} := \lfloor B_{hV}\rfloor.
+$$
+
+**$\alpha$ — только из дна** (без ярлыков $M,d,U,N_{\mathrm{hier}}$):
 
 $$
 \boxed{
@@ -612,10 +618,12 @@ $$
 $$
 \hat M
 :=
-1 + |N_{12}|\bigl(\lfloor B_{hV}\rfloor - 1\bigr)
+1 + |N_{12}|\bigl(\mathrm{mod\_bits} - 1\bigr)
 =
-1 + |N_{12}|\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right).
+1 + |N_{12}|\bigl(\lfloor B_{hV}\rfloor - 1\bigr).
 $$
+
+(Не пишем $\lfloor 2\pi/\ln 2\rfloor$ голым — это разворот $B_{hV}$, уже в дне; $\mathrm{mod\_bits}$ — параметр регистра.)
 
 Эквивалентно $\kappa^{6}$-лицо (тождество геометрии: $(1-\kappa^{6})/\kappa^{6}=N_4+n_{\mathrm{SU}(2)}$):
 
@@ -633,7 +641,7 @@ $$
 \kappa=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}.
 $$
 
-Подстановка чисел дна: $\kappa=1/\sqrt{2}$, $\hat M=1+12\cdot 8=97$ $\Rightarrow$
+Подстановка чисел дна: $\kappa=1/\sqrt{2}$, $\mathrm{mod\_bits}=\lfloor B_{hV}\rfloor=9$, $\hat M=1+|N_{12}|(\mathrm{mod\_bits}-1)=97$ $\Rightarrow$
 $\alpha\approx 7.2973525638\times 10^{-3}$ (внутри CODATA $\varepsilon$).
 
 Код: `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
