@@ -2875,6 +2875,12 @@ class SIConstants:
                 "status": "lab_inside_band",
             },
             {
+                "id": "cleared_corr_eq_n_sq_plus_2",
+                "count": n_sq + 2,
+                "maps_to": "after ×7 clear: −8 = n_sq+2 = 7·(1+1/7) — same integer two ways",
+                "status": "shipped_identity",
+            },
+            {
                 "id": "open_why_subtract_units",
                 "maps_to": "why den loses seat+face after homogenize — descent still OPEN",
                 "status": "open_derivation",

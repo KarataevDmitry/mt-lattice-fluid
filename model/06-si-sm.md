@@ -804,6 +804,7 @@ $$
 | seat (−1) | ~−0.00030 ppm (~2σ) | demoted |
 | seat+face (−8/7) | ~−0.000068 ppm (~0.45σ) | **preferred / inside band** |
 
+**Целое −8:** после ×7-clear это и $7(1+1/7)$, и $n_\square+2$ (cubocta) — одно число двумя путями; не произвольный fit.
 **Структурная α:** точна — нет $u(\alpha)$.
 **Δ vs CODATA:** дверь T; сейчас **внутри** ε (~0.45σ).
 **Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
