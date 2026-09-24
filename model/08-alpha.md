@@ -41,7 +41,7 @@ m_W &= \frac{e(M_Z)\,v}{2\sin\theta_W}, &
 \end{aligned}
 $$
 #### Постоянная тонкой структуры α
-**SEALED:** α = `SI.alpha_from_fundamentals` (κ, N₁₂, N_hier→M, d, U).
+**SEALED:** α = `SI.alpha_from_fundamentals` — κ=R_in/R_out, M=1+|N₁₂|(⌊2π/ln2⌋−1), d=N₄+3, U=(d+1)/d.
 π-tower **удалена** — не определение, не конкурент, не ярлык.
 Из gate (§7.1): `α* = 1 + 1/(4π)` — vacuum residue на тик (**нога**, не α).
 `α_fs` / `α_fs_inv` в коде — алиасы `alpha_preferred` / `1/α`.
@@ -576,87 +576,102 @@ Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED*
 
 #### §8.2·α·U0·soft-face · α from fundamentals (SEALED)
 
-**Фундаменталы** (носитель; без $\hbar,c,e,\varepsilon_0$, лаб):
+Развёртка ярлыков до носителя — без fit, без лаб, без $\pi$-tower.
+
+**Словарь (геометрия + Bekenstein + симметрии):**
 
 $$
 \begin{aligned}
-R_{\mathrm{out}} &= a = \ell_P
-  && \text{(1-tick cubocta circumradius, 12 NN)} \\
-R_{\mathrm{in}} &= \frac{a}{\sqrt{2}}
-  && \text{(inradius; square faces limit)} \\
-\kappa &= \frac{R_{\mathrm{in}}}{R_{\mathrm{out}}} = \frac{1}{\sqrt{2}}
-  && \text{(§1.6.2 · §8.2·geo; not a fit)} \\
-N_{12} &= 12 && \text{(FCC causal links)} \\
-B_{hV} &= \frac{2\pi}{\ln 2} && \text{(Bekenstein bits / $hV$, §3.12.6)} \\
+a &= \ell_P
+  && \text{ребро 1-tick; 12 NN на $a$} \\
+R_{\mathrm{out}} &= a
+  && \text{circumradius cubocta} \\
+R_{\mathrm{in}} &= a/\sqrt{2}
+  && \text{inradius (□-грани)} \\
+\kappa &= R_{\mathrm{in}}/R_{\mathrm{out}}
+  && \text{§1.6.2; не fit} \\
+|N_{12}| &= 12
+  && \text{FCC causal NN} \\
+N_4 &= 4
+  && \text{von Neumann orthogonal cross} \\
+n_{\mathrm{SU}(2)} &= 3
+  && \text{Pauli generators} \\
+d &= N_4 + n_{\mathrm{SU}(2)} = 7 \\
+B_{hV} &= 2\pi/\ln 2
+  && \text{Bekenstein bits / $hV$, §3.12.6} \\
 N_{\mathrm{hier}} &= \lfloor B_{hV}\rfloor - 1
-  = \left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1 = 8
-  && \text{(occupancy bit out)} \\
-d &= N_4 + 3 = 7 && \text{(von Neumann cross + SU(2))} \\
-U &= \frac{d+1}{d} = \frac{8}{7} = \frac{1}{1-\kappa^{6}} && \text{(soft singlet)}
+  = \lfloor 2\pi/\ln 2\rfloor - 1 = 8 \\
+M &= 1 + |N_{12}|\,N_{\mathrm{hier}}
+  = 1 + |N_{12}|\bigl(\lfloor 2\pi/\ln 2\rfloor - 1\bigr) \\
+U &= (d+1)/d = 1/(1-\kappa^{6})
+  && \text{soft singlet; $=8/7$}
 \end{aligned}
 $$
 
-**α** (structural, sealed) — $M$ и $N_{\mathrm{hier}}$ подставлены:
+**Компакт** (те же объекты):
+
+$$
+\alpha
+=
+\frac{M^{2}\,\kappa\,(d M + \kappa)}{d M^{4} - M\kappa^{3} - U}.
+$$
+
+**Итоговая** (все ярлыки раскрыты; $\kappa^{6}$-лицо):
+
+$$
+\boxed{
+\alpha
+=
+\dfrac{
+M^{2}\,\kappa\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}\,M+\kappa\right)
+}{
+\dfrac{1-\kappa^{6}}{\kappa^{6}}\,M^{4}
+- M\kappa^{3}
+- \dfrac{1}{1-\kappa^{6}}
+}
+}
+$$
+
+где
 
 $$
 \begin{aligned}
-N_{\mathrm{hier}}
-  &:= \lfloor B_{hV}\rfloor - 1
-   = \left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1 \\
+\kappa
+  &= \frac{R_{\mathrm{in}}}{R_{\mathrm{out}}} = \frac{1}{\sqrt{2}}, \\
 M
-  &:= 1 + N_{12}\,N_{\mathrm{hier}}
-   = 1 + N_{12}\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right)
+  &= 1 + |N_{12}|\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right)
+   = 1 + 12\cdot 8 = 97, \\
+\frac{1-\kappa^{6}}{\kappa^{6}}
+  &= d = N_4 + n_{\mathrm{SU}(2)} = 7.
 \end{aligned}
 $$
 
-$$
-\alpha
-=
-\frac{M^{2}\,\kappa\,(d M + \kappa)}{d M^{4} - M\kappa^{3} - U}
-$$
+Эквивалентная запись без $M$-аббревиатуры:
 
 $$
 \alpha
 =
 \frac{
-\displaystyle
-\Bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\Bigr]^{2}
-\kappa
-\Bigl(
-d\bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\bigr]+\kappa
-\Bigr)
+\hat M^{2}\,\kappa\bigl(d\hat M+\kappa\bigr)
 }{
-\displaystyle
-d\Bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\Bigr]^{4}
--
-\bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\bigr]\kappa^{3}
-- U
-}
-$$
-
-$\kappa^{6}$-лицо (то же число; $U=1/(1-\kappa^{6})$, $(1-\kappa^{6})/\kappa^{6}=d=7$):
-
-$$
-\alpha
-=
-\frac{
-M^{2}\,\kappa\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}M+\kappa\right)
-}{
-\dfrac{1-\kappa^{6}}{\kappa^{6}}M^{4}-M\kappa^{3}-\dfrac{1}{1-\kappa^{6}}
-}
-\qquad\text{при }\;
-M = 1 + N_{12}\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right).
+d\hat M^{4}-\hat M\,\kappa^{3}-U}
+\qquad
+\hat M := 1 + |N_{12}|\bigl(\lfloor 2\pi/\ln 2\rfloor - 1\bigr),
+\;
+\kappa := R_{\mathrm{in}}/R_{\mathrm{out}},
+\;
+U := (d+1)/d.
 $$
 
 Код: `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
-$M=97$, $N_{\mathrm{hier}}=8$ — следствия Thm nF + Bekenstein brick, не knobs.
-$\pi$ здесь — тик/Bekenstein ($2\pi/\ln 2$), не удалённый $\pi$-tower $\alpha$-полином.
+Числа $97$, $8$, $1/\sqrt{2}$ — следствия словаря, не knobs.
+$\pi$ в $B_{hV}$ — тик/Bekenstein, не удалённый $\pi$-tower.
 
 **Единица пакета** (SI-перевод, не вход в $\alpha$):
 $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 
-Demoted: $\alpha_0=\kappa/M$ (~$-1040$ ppm); ladder demoted; $\pi$-tower removed.
-**$\Delta$ vs CODATA:** дверь T (~$0.45\sigma$ inside). Структурная $\alpha$ точна — нет $u(\alpha)$.
+Demoted: $\alpha_0=\kappa/M$; ladder demoted; $\pi$-tower removed.
+**$\Delta$ vs CODATA:** дверь T (~$0.45\sigma$). Структурная $\alpha$ точна — нет $u(\alpha)$.
 **Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 
