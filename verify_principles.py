@@ -920,6 +920,8 @@ def check_length_dim_from_lP_alpha(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["derivation_closed"])
         and bool(row["length_dim_is_l_P"])
+        and bool(row["identity_L_eq_V_T"])
+        and bool(row["identity_lP_eq_sqrt_hbarGc"])
         and bool(row["alpha_sets_length_hierarchy"])
         and bool(row["not_historical_SI_metre"])
         and bool(row["identity_a0_eq_Nc_over_alpha"])

@@ -3519,7 +3519,10 @@ class SIConstants:
         Not SI-metre reconstruction. Natural unit: l_P ≡ hL.
         α is dimensionless and exact (soft-face) ⇒ every EM length is
             L = N(α, N_c, …) · l_P
-        by dimensional analysis ([α]=1, [L]=[l_P]):
+        Length unit itself from velocity × time (and/or ħ):
+            [L] = [V][T]  ⇒  l_P = c · t_P = √(ħ G / c³)
+        On carrier: hL = c0 · hT (A1 light-like); l_P := hL.
+        α ([α]=1, exact) then sets the hop hierarchy:
             λ̄_C / l_P = N_c = m_P/m_e
             a0    / l_P = N_c/α = N_a0
             r_e   / l_P = α·N_c = α²·N_a0
@@ -3529,6 +3532,13 @@ class SIConstants:
         meter = self.alpha_meter_na0_bridge_row()
         anchor = self.anchor_a_is_l_P_row()
         a = float(self.alpha_preferred)
+        lp = float(self.l_P)
+        tp = float(self.t_P)  # textbook Planck time; hT = κ·t_P
+        c_macro = float(self.c)
+        lp_from_c_t = c_macro * tp
+        lp_from_hbar = math.sqrt(float(self.hbar) * float(self.G) / (c_macro ** 3))
+        id_L_eq_VT = abs(lp_from_c_t / lp - 1.0) < 1e-12
+        id_L_eq_planck = abs(lp_from_hbar / lp - 1.0) < 1e-12
         n_c = float(meter["N_c"])
         n_a0 = float(meter["N_a0_predicted"])
         n_compton = n_c  # λ̄_C / l_P
@@ -3541,6 +3551,16 @@ class SIConstants:
                 "id": "natural_unit_l_P",
                 "maps_to": "[L] := l_P ≡ hL — natural length unit",
                 "ok": bool(anchor["a_equals_hL"]),
+            },
+            {
+                "id": "L_eq_V_T",
+                "maps_to": "[L]=[V][T] ⇒ l_P = c·t_P",
+                "ok": id_L_eq_VT,
+            },
+            {
+                "id": "L_eq_hbar_G_c",
+                "maps_to": "l_P = √(ħG/c³) — same unit from ħ,G,c",
+                "ok": id_L_eq_planck,
             },
             {
                 "id": "alpha_dimensionless_exact",
@@ -3575,6 +3595,12 @@ class SIConstants:
             "theorem": "§8.2·[L]·l_P — length dim = l_P; hierarchy from α",
             "method": "dimensional analysis: [L]=[l_P], [α]=1 ⇒ L = N(α,N_c)·l_P",
             "natural_unit": "l_P",
+            "identity_L_eq_V_T": id_L_eq_VT,
+            "identity_lP_eq_c_tP": id_L_eq_VT,
+            "identity_lP_eq_sqrt_hbarGc": id_L_eq_planck,
+            "l_P": lp,
+            "t_P": tp,
+            "c": c_macro,
             "alpha_preferred": a,
             "N_c": n_c,
             "N_Compton": n_compton,
@@ -3590,14 +3616,17 @@ class SIConstants:
             "inventory": inventory,
             "ask_ok": (
                 all(bool(item["ok"]) for item in inventory)
+                and id_L_eq_VT
+                and id_L_eq_planck
                 and id_a0
                 and id_re
                 and id_alpha
                 and abs(a - float(soft["alpha_pref"])) < 1e-15
             ),
             "note": (
-                "Natural length unit = l_P. α exact ⇒ Compton/Bohr/r_e are "
-                "pure hop counts N_c, N_c/α, α·N_c. No SI-metre fit."
+                "Length unit defined: [L]=[V][T] ⇒ l_P=c·t_P=√(ħG/c³); "
+                "on carrier hL=c0·hT. α exact ⇒ Compton/Bohr/r_e hop hierarchy. "
+                "Not historical SI-metre."
             ),
         }
 
