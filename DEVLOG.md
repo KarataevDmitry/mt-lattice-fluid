@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals CLOSED as MODEL readout; §10→eng pointer · Gpu_eng_tail_close PASS |
 | 2026-09-24 | §1.7·torus·close | finite wall-free Λ=T³/T²; Λ×S¹=phase fiber; reject walls/sphere; N soft; eng wrap=readout · Carrier_torus_close PASS |
 | 2026-09-24 | §6·floor1·C3·bath·dogfood | VACUUM_BOIL whole-lattice: contrast self-grows; b not yet; gauge VACUUM frozen · Floor1_C3_bath_dogfood PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·reopen | alone n_ticks=1 demoted soft (void artifact?); continuum≠M kept · Floor1_C3_gamma_close PASS |
@@ -445,83 +446,44 @@ _геометрия(n,N₄)**.
 
 ---
 
-## §10. GPU / численная реализация (инженерный контракт)
+## §10. GPU / численная реализация (eng readout · физика CLOSED)
 
-Физика §0–§8 замкнута; ниже — **три предохранителя**, без которых GPU-код падает или «молчит».
+**Физика предохранителей закрыта в MODEL:** §1.7 (тор) · **§0.10** (пол/seed · `R(Φ)` · SI literals) · verify `Carrier_torus_close` · `Gpu_eng_tail_close`.  
+Ниже — **только** пути в коде. Не новая физика, не knobs.
 
-### 10.1 Границы: тор (periodic BC) — eng readout §1.7
-
-**Физика:** конечный носитель без стенок = тор — **MODEL §1.7** (`Carrier_torus_close`). Ниже — только GPU-склейка.
-
-Конечная сетка `N×N` (MVP 2D). На краях **`g` не обрывается** — **periodic wrap**:
+### 10.1 Границы: periodic wrap → §1.7
 
 ```
 x+N ≡ x ,   y+N ≡ y
-N на краю сшивает правый↔левый, верхний↔нижний
 ```
 
-**Код:** `laplacian` — `torch.roll`; bond wrap в linear/local_ca.  
-**Зачем:** eng той же топологии §1.7; глобальная норма без стенки-поглощателя.
+**Код:** `laplacian` — `torch.roll`; bond wrap в linear/local_ca.
 
-### 10.2 Инициализация: «первичный бульон», не `z≡0` · Планковский пол
+### 10.2 Пол + seed → §0.10 / §0.5
 
-При **`z=0`** gate даёт **`φ = 2π/(4π)`**, но **`z·exp(iΦ)=0`** — deadlock; кипение не стартует (A5).
+`|z|≥z_min=1/64`; IC ~ пол; `gauge_fix=False` на tick encode.
 
-**Планковский пол (§0.5 · §3.12.6) — не knob, некуда устремлять:**
+**Код:** `fixed_point.vacuum_amplitude_quantum` · `seeds.make_seed` · `encode_spinor(gauge_fix=False)`.
 
-```
-B_amp = ⌈log₂(N_ring / N_φ)⌉ = frac_bits = 6
-z_min = 2^{−B_amp} = 1/64          — smallest |z| on Q(frac_bits) lattice
-vacuum_amplitude = z_min             — MConfig default (derived)
-|z(x)| ≥ z_min  after encode        — enforce_planck_cell_floor; A5
-```
+### 10.3 Шаг → §0.10 / §3.12.5
 
-**t=0:** комплексный фазовый шум **`~ z_min`**, не **`1e-6`**, не **`→0`**:
+`R(Φ)=ω^Φ` / float `exp(iφ)` decode; **не** Euler `z+=iφz`.
 
-```
-SeedClass.VACUUM → N(0, z_min) + i·N(0, z_min)   per spinor lane
-```
+**Код:** `update.micro_step` · `linear_step_local_ca`. Hygiene: `norm_drift` в verify.
 
-**Encode (M-canonical):** **`gauge_fix=False`** — per-cell U(1) **убивает** **`ζ_imag`**; global gauge — только T/reporting (**`gauge_fix_u1_global`**), не tick path.
+### 10.4 Literals → §0.10 / SI
 
-**Код:** `fixed_point.vacuum_amplitude_quantum` · `seeds.make_seed(VACUUM)` · `simulator.reset()` · `encode_spinor(gauge_fix=False)`.
+`DX, DT, K_P, ALPHA_STAR, …` = `as_code_dict()` paste. Округление ≠ другая физика.
 
-### 10.3 Алгебра шага: `exp(iφ)` / `ω^Φ`, не Euler `z += iφz`
+**Код:** `python -c "from mt_ca.si_constants import as_code_dict; print(as_code_dict())"`.
 
-Нелинейность **только** модуль-сохраняющий доворот (A3, A4). Linear — product локальных 2×2 unitaries, не raw add.
-
-**Canonical M (§3.12.5):** **`R(Φ)=ω^Φ`** на **`Z_N[i]`** — дискретный аналог **`exp(iφ)`**; float **`exp`** только decode/probe.
-
-```
-z* = local_ca(z; γ)
-z' = z* · exp(i·φ)          ← T-нотация; на M: R(Φ_disc) via Rot_LUT
-φ  = 2π · (α*/(|z*|²+ε)−1) · w(ρ)
-```
-
-**Код:** `update.micro_step` · `linear_step_local_ca`.  
-**Float drift:** bond-unitaries + `exp(iφ)`; контроль — `verify_principles` A3 (`norm_drift < 1e-4`).
-
-### 10.4 GPU literals (SI anchor · `si_constants.as_code_dict()`)
-
-В natural sim **`ε=1`**, `|z|²↔ρ_E/u_P`; ниже — **размерный якорь** для отчётов / будущих SI-kernels:
-
-```
-DX            = 1.616255e-35   # l_P  [m]
-DT            = 3.812187e-44   # hT = t_P/√2  [s]  (не textbook t_P)
-K_P           = 4.632947e+113 # bulk modulus [Pa = J/m³]
-ALPHA_FACTOR  = 1.07957747     # α* = 1 + 1/(4π)
-```
-
-**Код:** `python -c "from mt_ca.si_constants import as_code_dict; print(as_code_dict())"`.  
-Расхождение с округлёнными paste (~`KP 4.622584e+113`, `DT 3.811984e-44`) — **CODATA/округление**, не другая физика.
-
-**4 топокласса §9.7:** `VACUUM`, `PLANE_WAVE`, `VORTEX_P/M/N2` · `seeds.py` · 4070 MVP 512² — секунды на прогон.
+**4 топокласса seeds:** `VACUUM`, `PLANE_WAVE`, `VORTEX_P/M/N2` · `seeds.py`.
 
 ---
 
 ## §11. Код (M-only slice)
 
-`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — GPU-контракт.
+`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — eng readout §0.10/§1.7.
 
 
 ### Layout MODEL после split

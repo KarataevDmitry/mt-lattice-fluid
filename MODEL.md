@@ -49,7 +49,7 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 
 | файл | содержание |
 |------|------------|
-| [`model/00-foundations.md`](model/00-foundations.md) | §0 основания |
+| [`model/00-foundations.md`](model/00-foundations.md) | §0 основания · **eng-хвост §0.10** |
 | [`model/01-carrier.md`](model/01-carrier.md) | §1 носитель: FCC N₁₂ · гекс-срез · κ · **тор §1.7** |
 | [`model/02-axioms.md`](model/02-axioms.md) | §2 абсолютные условия A1–A16 |
 | [`model/03-evolution.md`](model/03-evolution.md) | §3 `g`, ДА, спинор, leapfrog |
