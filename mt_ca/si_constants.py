@@ -2773,6 +2773,7 @@ class SIConstants:
         n_sq = int(geo["n_faces_square"])
         n_tri = int(geo["n_faces_triangle"])
         face_q = 1.0 / (n_sq + 1)
+        soft_unit = 1.0 / (1.0 - kappa**6)  # = 8/7 = 1 + face_q
         u0 = float(self.F_0) * float(self.l_P) ** 2
         hbar_c = float(self.hbar) * float(self.c)
         alpha_c = 7.2973525643e-3  # CODATA 2022
@@ -2791,8 +2792,12 @@ class SIConstants:
             (m * m) * kappa * (7.0 * m + kappa)
             / (7.0 * m**4 - m * kappa**3 - 1.0)
         )
-        # preferred: seat + face (−1 − 1/7 = −8/7)
-        a_pref = (
+        # preferred: inline soft unit via κ
+        # α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ⁶))
+        a_pref = (m * m) * kappa * (7.0 * m + kappa) / (
+            7.0 * m**4 - m * kappa**3 - soft_unit
+        )
+        a_pref_cleared = (
             7.0 * (m * m) * kappa * (7.0 * m + kappa)
             / (49.0 * m**4 - 7.0 * m * kappa**3 - 8.0)
         )
@@ -2918,6 +2923,7 @@ class SIConstants:
             "n_faces_square": n_sq,
             "n_faces_triangle": n_tri,
             "face_quantum": face_q,
+            "soft_unit": soft_unit,
             "alpha_codata": alpha_c,
             "codata_year": 2022,
             "alpha_coarse": a0,
@@ -2937,6 +2943,9 @@ class SIConstants:
             "identity_dress_frac": abs(a_dress - a_exact_frac) < 1e-15,
             "identity_invcut_frac": abs(a_invcut - a_invcut_frac) < 1e-15,
             "identity_pref_face_seat": abs(a_pref - a_pref_alt) < 1e-15,
+            "identity_pref_cleared": abs(a_pref - a_pref_cleared) < 1e-15,
+            "identity_soft_via_kappa": abs(soft_unit - 1.0 / (1.0 - kappa**6)) < 1e-15
+            and abs(soft_unit - (1.0 + face_q)) < 1e-15,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
