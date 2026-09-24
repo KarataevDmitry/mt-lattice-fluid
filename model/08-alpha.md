@@ -576,85 +576,70 @@ Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED*
 
 #### §8.2·α·U0·soft-face · α from bottom constants (SEALED)
 
-**Фундаменталы = только дно.** Ярлыки $M,d,U,N_{\mathrm{hier}}$ — **не** фундамент; они **выводятся**.
-
-##### Дно (дальше в модели не режется)
+**Дно** (больше не режется; $M,d,U,N_{\mathrm{hier}}$ сюда не входят):
 
 $$
 \begin{aligned}
-B_{hV} &= \frac{2\pi}{\ln 2}
-  && \text{Bekenstein bit-budget одного $hV$ (§3.12.6 · P6)} \\
-\Delta\varphi_{\min} &= \tfrac12
-  && \text{Heisenberg / Arg floor (A5 · §3.7 · $s_0=\hbar\Delta\varphi_{\min}$)} \\
-|N_{12}| &= 12
-  && \text{FCC light-like NN (Thm §1.6.1; не knob)} \\
-\kappa &= \frac{R_{\mathrm{in}}}{R_{\mathrm{out}}} = \frac{1}{\sqrt{2}}
-  && \text{1-tick cubocta radii (§1.6.2; не fit)} \\
-N_4 &= 4
-  && \text{von Neumann orthogonal cross} \\
-n_{\mathrm{SU}(2)} &= 3
-  && \text{Pauli generators}
+B_{hV} &= \frac{2\pi}{\ln 2}, &
+\kappa &= \frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}, &
+|N_{12}| &= 12, \\
+N_4 &= 4, &
+n_{\mathrm{SU}(2)} &= 3, &
+\Delta\varphi_{\min} &= \tfrac12.
 \end{aligned}
 $$
 
-Из дна (чисто числа / геометрия кирпича): $2\pi$, $\ln 2$, $\tfrac12$, упаковка FCC, крест, SU(2).
-$\hbar,c,G$ — **не** входы в $\alpha$ (безразмерна); SI — T-export.
+($\Delta\varphi_{\min}$ — дно Heisenberg/Arg; в саму $\alpha$ ниже не входит, только в ногу/gate.)
 
-##### Вывод (не фундамент)
-
-$$
-\begin{aligned}
-N_{\mathrm{hier}}
-  &= \lfloor B_{hV}\rfloor - 1
-   = \left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1 = 8
-  && \text{(occupancy bit out)} \\
-M
-  &= 1 + |N_{12}|\,N_{\mathrm{hier}}
-   = 1 + |N_{12}|\bigl(\lfloor B_{hV}\rfloor - 1\bigr) = 97
-  && \text{(Thm nF seats)} \\
-d
-  &= N_4 + n_{\mathrm{SU}(2)} = 7 \\
-U
-  &= \frac{d+1}{d} = \frac{1}{1-\kappa^{6}} = \frac{8}{7}
-  && \text{(soft singlet)}
-\end{aligned}
-$$
-
-##### Итоговая $\alpha$ (из дна через вывод)
+**$\alpha$ — только из дна** (без ярлыков $M,d,U$):
 
 $$
 \boxed{
 \alpha
 =
-\dfrac{
-M^{2}\,\kappa\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}\,M+\kappa\right)
+\frac{
+\hat M^{2}\,\kappa\Bigl(\bigl(N_4+n_{\mathrm{SU}(2)}\bigr)\hat M+\kappa\Bigr)
 }{
-\dfrac{1-\kappa^{6}}{\kappa^{6}}\,M^{4}
-- M\kappa^{3}
+\bigl(N_4+n_{\mathrm{SU}(2)}\bigr)\hat M^{4}
+- \hat M\,\kappa^{3}
+- \dfrac{N_4+n_{\mathrm{SU}(2)}+1}{N_4+n_{\mathrm{SU}(2)}}
+}
+}
+$$
+
+где единственная свёртка записи (не новый фундамент):
+
+$$
+\hat M
+:=
+1 + |N_{12}|\bigl(\lfloor B_{hV}\rfloor - 1\bigr)
+=
+1 + |N_{12}|\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right).
+$$
+
+Эквивалентно $\kappa^{6}$-лицо (тождество геометрии: $(1-\kappa^{6})/\kappa^{6}=N_4+n_{\mathrm{SU}(2)}$):
+
+$$
+\alpha
+=
+\frac{
+\hat M^{2}\,\kappa\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}\hat M+\kappa\right)
+}{
+\dfrac{1-\kappa^{6}}{\kappa^{6}}\hat M^{4}
+- \hat M\,\kappa^{3}
 - \dfrac{1}{1-\kappa^{6}}
-}
-}
+},
+\qquad
+\kappa=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}.
 $$
 
-с подстановкой **только** донных объектов:
+Подстановка чисел дна: $\kappa=1/\sqrt{2}$, $\hat M=1+12\cdot 8=97$ $\Rightarrow$
+$\alpha\approx 7.2973525638\times 10^{-3}$ (внутри CODATA $\varepsilon$).
 
-$$
-\begin{aligned}
-\kappa
-  &= R_{\mathrm{in}}/R_{\mathrm{out}}, \\
-M
-  &= 1 + |N_{12}|\bigl(\lfloor B_{hV}\rfloor - 1\bigr)
-   = 1 + |N_{12}|\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right), \\
-\frac{1-\kappa^{6}}{\kappa^{6}}
-  &= N_4 + n_{\mathrm{SU}(2)}.
-\end{aligned}
-$$
-
-Код: `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`) — считает вывод из того же дна.
+Код: `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
 
 **Единица пакета** (SI-перевод, не вход): $U_0=F_0\,l_P^{2}$, $\hbar c=2\kappa\,U_0$.
-Demoted: $\alpha_0=\kappa/M$; $\pi$-tower removed.
-**$\Delta$ vs CODATA:** дверь T. Структурная $\alpha$ точна — нет $u(\alpha)$.
+Demoted: $\alpha_0=\kappa/\hat M$; $\pi$-tower removed.
 **Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 
