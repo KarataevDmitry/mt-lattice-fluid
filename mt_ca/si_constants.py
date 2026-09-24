@@ -2758,12 +2758,12 @@ class SIConstants:
     def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·U0·soft-face — face+seat unit on α0=κ/M.
 
-        Preferred: α = 7 M² κ (7M+κ)/(49 M⁴ − 7 M κ³ − 8)
-                 = M² κ (7M+κ)/(7M⁴ − M κ³ − 1 − 1/7)
+        Preferred: α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ⁶))
+                 = 7 M² κ (7M+κ) / (49 M⁴ − 7 M κ³ − 8)
+        Soft unit 1/(1−κ⁶)=8/7 (κ²=1/2, 7=n_sq+1=2³−1).
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Ladder: resum → dress → inv-cut → seat(−1) → face(−1/7).
-        Axiom: after M-homogenize, subtract soft unit (n_sq+2)/(n_sq+1)=8/7.
-        Wedge (OPEN): seat appears only post-*M; candidate overcount of one soft unit.
+        Meaning: face-bookkeeping×seat-bookkeeping dens; repair one soft unit.
+        Wedge (OPEN): why product overcounts — double-count candidate, not sealed.
         Structural α exact; Δ(CODATA)=lab door (now inside ε).
         """
         census = self.alpha_nF_kick_census_row()
@@ -2910,7 +2910,7 @@ class SIConstants:
             },
         ]
         return {
-            "theorem": "§8.2·α·U0·soft-face — α=7 M² κ (7M+κ)/(49 M⁴−7 M κ³−8)",
+            "theorem": "§8.2·α·U0·soft-face — α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶))",
             "M": m,
             "kappa": kappa,
             "U0_J_m": u0,
@@ -2961,9 +2961,9 @@ class SIConstants:
             and abs(ppm(a_dress)) < 0.1
             and abs(ppm(a_resum) - 1.02725) < 0.01,
             "note": (
-                "Preferred α=7 M² κ (7M+κ)/(49 M⁴−7 M κ³−8) "
+                "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶)) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Seat+face unit after inv-cut. Structural α exact."
+                "Soft unit via κ; double-count wedge OPEN."
             ),
         }
 

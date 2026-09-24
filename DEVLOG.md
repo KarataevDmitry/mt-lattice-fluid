@@ -496,7 +496,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
 
-**α·U0·soft-face:** preferred α=7 M² κ (7M+κ)/(49 M⁴−7 M κ³−8) ~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band); seat+face unit. `Alpha_U0_soft_face_ask`. Soft lab door closed; **unit-descent** (−8/7 why) still OPEN; `n_sq` wired from cubocta geo. Wedge: seat only post-×M; candidate promotion overcount of one soft unit — descent still OPEN.
+**α·U0·soft-face:** preferred α=7 M² κ (7M+κ)/(49 M⁴−7 M κ³−8) ~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band); seat+face unit. `Alpha_U0_soft_face_ask`. Soft lab door closed; **unit-descent** (−8/7 why) still OPEN; `n_sq` wired from cubocta geo. Wedge: seat only post-×M; candidate promotion overcount of one soft unit — descent still OPEN. Preferred rewritten α=M²κ(7M+κ)/(7M⁴−Mκ³−1/(1−κ⁶)); meaning table stamped.
 
 ---
 
