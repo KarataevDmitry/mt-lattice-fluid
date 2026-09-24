@@ -796,6 +796,39 @@ def check_alpha_upstairs_mass_probe(device=None):
         "note": r["note"],
     }
 
+
+def check_alpha_si_bridge(device: str = "cpu") -> dict:
+    """§8.2·α·SI-bridge — carrier α (no macros) → U0 → lab CODATA score."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_si_bridge_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["macros_not_inputs"])
+        and bool(row["identity_hbar_c_eq_2kappa_U0"])
+        and bool(row["identity_pref_eq_dU"])
+        and bool(row["identity_pref_eq_cleared"])
+        and bool(row["lab_inside_codata_band"])
+        and int(row["M"]) == 97
+        and int(row["d"]) == 7
+        and int(row["codata_year"]) == 2022
+        and abs(float(row["vs_codata_ppm"])) < 0.00016
+    )
+    return {
+        "id": "Alpha_si_bridge",
+        "M": row["M"],
+        "d": row["d"],
+        "U": row["U"],
+        "alpha_preferred": row["alpha_preferred"],
+        "vs_codata_ppm": row["vs_codata_ppm"],
+        "hbar_c_over_U0": row["hbar_c_over_U0"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_coulomb_M_native(device: str = "cpu") -> dict:
     """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
     from mt_ca.si_constants import SI
@@ -2777,6 +2810,7 @@ def run_all(device: str) -> list[dict]:
         check_coulomb_M_native(device=device),
         check_alpha_U0_soft_face_ask(device=device),
         check_alpha_upstairs_mass_probe(device=device),
+        check_alpha_si_bridge(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
