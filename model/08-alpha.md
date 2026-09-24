@@ -41,18 +41,19 @@ m_W &= \frac{e(M_Z)\,v}{2\sin\theta_W}, &
 \end{aligned}
 $$
 #### Постоянная тонкой структуры α
-Из gate (§7.1): `α* = 1 + 1/(4π)` — vacuum residue `(α*−1) = Δφ_min/(2π) = 1/(4π)` на тик.
-T-слой: EM-связность = **фазовый объём** emergent 3D readout над циклом `2π`; **`4π` = телесный угол**, не `|N|` тайла (§1.4.3):
+**SEALED:** α = soft-face fundamentals (§8.2·U0) — `SI.alpha_from_fundamentals` из κ, N₁₂, N_hier, M, d, U.
+π-tower ниже — **T-readout only** (конкурирующее число ~2 ppm), не определение α.
+Из gate (§7.1): `α* = 1 + 1/(4π)` — vacuum residue на тик (нога, не α).
+T-слой (demoted competitor):
 ```
 α_fs⁻¹ = 4π³ + π² + π
 α_fs = 1 / (4π³ + π² + π) ≈ 0.0072973363
 ```
-**Не** заменять `4 → 6` при переходе на гекс — сломает CODATA.
-| | Модель | CODATA 2018 |
+| | π-tower (T) | CODATA 2018 |
 |---|--------|-------------|
 | `α_fs` | `0.007297336344…` | `0.0072973525693…` |
 | `α_fs⁻¹` | `137.036303776…` | `137.035999084…` |
-**Считается сейчас** — подставь `π`. Не sim, не knob. Честный хвост vs CODATA: $\Delta(\alpha^{-1})\approx 3\cdot 10^{-4}$ (~2 ppm на $\alpha$) — формула не подгонялась под цифры таблицы.
+
 #### §8.2·α·meaning · Физический смысл (опора, не F-решётка)
 **α — это:** безразмерная сила **фазового сопряжения** единичного заряда с вакуумом (EM-канал; телесный угол / фазовый объём emergent 3D).
 **α — это не:** определение силы Ньютона; не hop-счёт сам по себе; не `κ/M` как первичное.
@@ -60,7 +61,7 @@ T-слой: EM-связность = **фазовый объём** emergent 3D re
 |------|--------|--------|
 | **смысл** | phase↔vacuum coupling | stamped |
 | **нога** | `α*−1 = Δφ_min/(2π) = 1/(4π)` (пустая ячейка) | stamped |
-| **число** | `α⁻¹ = 4π³+π²+π` (башня на `4π`) | stamped T-readout |
+| **число** | soft-face fundamentals (§8.2·U0) | sealed |
 | **следствия** | `F=F₀/(M N²)` на M; **α** = soft-face preferred (M=97); `α₀=κ/M` demoted | discrete + lab-inside; unit descent SEALED |
 | **открыто** | дискретная доля сопряжения на FCC без continuum-`π` | `Φ_□` open · α_geom exploratory |
 Тождество ноги: `4π·α = α/(α*−1)`.
@@ -582,76 +583,29 @@ $$
 π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED** (G-grade completeness; не дыра в $M$).
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
-#### §8.2·α·U0·soft-face · seat+face unit (inside CODATA band)
+#### §8.2·α·U0·soft-face · α from fundamentals (SEALED)
 
-**Единица:** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
-**Грубо:** $\alpha_0=\kappa/M$ (~−1040 ppm).
-**Семёрка (кандидат фундаментальный):** $7 = N_4 + 3$ — ортогональный крест von Neumann (§3.6, жёсткая окрестность / $c_0$) + три генератора Паули SU(2) (§3.10). Те же законы спуска: пространство + симметрии.
-**Число soft unit из симметрии (без лаб):** $d=N_4+3=7$ (крест + Паули) $\Rightarrow$ $U=(d+1)/d=8/7$. Мост с геометрией 1-tick: $U=1/(1-\kappa^{n_\square})$ при $n_\square=6$, $\kappa^{2}=1/2$. Эхо спинора: $|Q_8|/(|Q_8|-1)=8/7$, $|Q_8|-1=d$. Три лица одного скаляра.
-**Грань cubocta:** $n_\square+1=7$ (geo) — рифма / эхо, **не обязана** быть родителем семёрки.
-**Якорь ppm:** CODATA **2022** ($u_r\sim1.6\times10^{-10}$).
+**Фундаменталы (носитель; без ℏ,c,e,ε₀,π,лаб):**
+```
+κ = 1/√2                         # FCC 1-tick
+N₁₂ = 12                         # FCC causal links
+N_hier = ⌊B_hV⌋−1 = 8            # hierarchy channels
+M = 1 + N₁₂·N_hier = 97          # force seats (Thm nF)
+d = N₄ + 3 = 7                   # von Neumann cross + SU(2)
+U = (d+1)/d = 8/7 = 1/(1−κ⁶)     # soft singlet
+```
 
-**Preferred (через soft unit):**
-$$
-\alpha
-=
-\frac{M^{2}\,\kappa\!\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}M+\kappa\right)}{\dfrac{1-\kappa^{6}}{\kappa^{6}}M^{4}-M\kappa^{3}-\dfrac{1}{1-\kappa^{6}}}
-=
-\frac{M^{2}\,\kappa\,(7M+\kappa)}{7M^{4}-M\kappa^{3}-\dfrac{1}{1-\kappa^{6}}}
-=
-\frac{7M^{2}\,\kappa\,(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}.
-$$
-**Подстановка $M=97$ (Thm nF seats, CLOSED):**
-$$
-\alpha
-=
-\frac{97^{2}\,\kappa\!\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}\cdot97+\kappa\right)}{\dfrac{1-\kappa^{6}}{\kappa^{6}}\cdot97^{4}-97\,\kappa^{3}-\dfrac{1}{1-\kappa^{6}}}
-=
-\frac{7\cdot97^{2}\,\kappa\,(7\cdot97+\kappa)}{49\cdot97^{4}-7\cdot97\,\kappa^{3}-8},
-\qquad\kappa=1/\sqrt{2}.
-$$
+**α (structural, sealed):**
+```
+α = M² · κ · (d·M + κ) / (d·M⁴ − M·κ³ − U)
+```
+Подстановка фундаменталов → `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
 
-| кусок | смысл |
-|-------|--------|
-| $M^{2}\kappa$ | пакет силы / места после подъёма шкалы |
-| $(7M+\kappa)$ | каналы грани × места + остаток $\kappa$ |
-| $7M^{4}$ | алгебра: локальные $7$ и $M$ в одной шкале (не «две книги») |
-| $-M\kappa^{3}$ | мягкий геометрический хвост (inv-cut) |
-| $-1/(1-\kappa^{n_\square})$ | **что вычитаем**: soft unit (= $8/7$), один раз |
+**Единица пакета (SI-перевод, не вход в α):** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 
-**Чтение:** грубо $\alpha_{0}=\kappa/M$; смысл $7$ — $N_4+\mathrm{SU}(2)$; soft unit $U=(d+1)/d$ из симметрии. После $M$-записи — вычитание одного soft singlet (G-grade completeness).
-
-
-Лестница:
-$$
-\alpha_0
-\;\to\;
-\alpha_0(1+x)
-\;\to\;
-\frac{M\kappa(7M+\kappa)}{7M^{3}-\kappa^{3}}
-\;\to\;
-\frac{M^{2}\kappa(7M+\kappa)}{7M^{4}-M\kappa^{3}-1}
-\;\to\;
-\underbrace{\frac{7M^{2}\kappa(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}}_{\sim -0.000068\,\mathrm{ppm}\ (\sim 0.45\sigma)}.
-$$
-**Аксиома preferred (SEALED):** после inv-cut — value-preserving $M$-запись ($\alpha_{\mathrm{inv}}\equiv\alpha_{\mathrm{hom}}$); в знаменатель — soft singlet $U=8/7=(d+1)/d=1/(1-\kappa^{n_\square})$ ровно один раз, soft-minus.
-**Носитель (symmetry-first, closed):** A1 · $d=N_4+\mathrm{SU}(2)$ · $U=(d+1)/d$ (= geo = $Q_8$-эхо). $M$ локален. Global-$M$ book — ложный след.
-**G-grade completeness (soft):** $M$-den несёт только seat-weighted grades; grade-0 синглет $U$ — в den один раз; не $\times M/\times d$ (A1); не в num (сила/свет). Знак «−» — тот же паттерн, что $-\kappa^{3}$. Seat-only ($-1$) неполон ($\neq U$). `derivation_closed=True`.
-
-
-| путь | vs CODATA 2022 | роль |
-|------|----------------|------|
-| $\alpha_0$ | ~−1040 ppm | coarse |
-| $\alpha_0/(1-x)$ | ~+1.03 ppm | demoted resum |
-| $\alpha_0(1+x)$ | ~−0.057 ppm | demoted 1st-order |
-| inv-cut | ~−0.0019 ppm | demoted |
-| seat (−1) | ~−0.00030 ppm (~2σ) | demoted |
-| seat+face (−8/7) | ~−0.000068 ppm (~0.45σ) | **preferred / inside band** |
-
-**Целое −8:** после ×7-clear это и $7(1+1/7)$, и $n_\square+2$ (cubocta) — одно число двумя путями; не произвольный fit.
-**Структурная α:** точна — нет $u(\alpha)$.
-**Δ vs CODATA:** дверь T; сейчас **внутри** ε (~0.45σ).
-**Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
+Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm); ladder / π-tower — T-only, не спуск $g$.
+**Δ vs CODATA:** дверь T (~0.45σ inside). Структурная α точна — нет $u(\alpha)$.
+**Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 #### §8.2·α·upstairs · SEALED cascade on preferred α
 Структурная α закрыта (soft-face). **Вверх — закон каскада (exact):**
@@ -667,20 +621,12 @@ m_n = m_p + 2·m_e
 **Код:** `SI.alpha_preferred` · `SI.alpha_upstairs_mass_probe_row()` · verify **`Alpha_upstairs_mass_probe`**.
 
 #### §8.2·α·SI-bridge · носитель → пакет U₀ → лаборатория
-**Определение α (носитель; без ħ,c,e,ε₀):**
-```
-d = N4 + SU(2) = 7
-U = (d+1)/d = 8/7
-α = M² · κ · (d·M + κ) / (d·M⁴ − M·κ³ − U)
-  = 7 · M² · κ · (7M + κ) / (49·M⁴ − 7·M·κ³ − 8)
-```
-**Единичный пакет (как ħ,c входят в SI-перевод силы/действия — не в α):**
+**α** — §8.2·U0 fundamentals (`SI.alpha_from_fundamentals`). U₀ / ℏc — SI-перевод, не вход в α.
 ```
 U0 = F0 · l_P² = s0 · c0
 ħ c = 2 κ U0
 ```
-**Лабораторная дверь (T, не свойство α):** contrast того же числа vs CODATA 2022 — опционально. Структурная α **точна**: нет $u(\alpha)$, нет ppm у α.
-Макроконстанты — **не входы** в определение α на клетке.
+Лаб-дверь (T): contrast vs CODATA опционален; у α нет $u(\alpha)$.
 **Код:** `SI.alpha_si_bridge_row()` · verify **`Alpha_si_bridge`**.
 
 ---
