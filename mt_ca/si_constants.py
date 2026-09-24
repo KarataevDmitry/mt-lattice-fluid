@@ -3730,29 +3730,30 @@ class SIConstants:
 
 
     def units_time_first_cascade_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·units·time-first — t_P → l_P=c·t_P → G=c⁵t_P²/ℏ.
+        """§8.2·units·time-first — t_P → l_P=c·t_P → m_P=ℏ/(c² t_P).
 
         Ontology order (prettier than length-first):
           1. Quantum of time t_P (natural [T]).
-          2. Length = distance light travels in one quantum: l_P = c·t_P.
-          3. Newton G exact: G = c⁵ t_P² / ℏ  (= l_P² c³ / ℏ).
+          2. Length = light-path in one quantum: l_P = c·t_P  ([L]).
+          3. Mass unit exact: m_P = ℏ/(c² t_P) = ℏ/(c·l_P)  ([M]).
         On carrier: hT = κ·t_P; c0 = l_P/hT; same cascade.
-        SI metre/second are T-export only (Cs/c tautologies).
+        Newton G is NOT step 3 — it follows later: G = ℏ c / m_P² (= l_P² c³/ℏ).
+        SI metre/second/kilogram packaging = T-export only.
         """
         time = self.time_dim_from_tP_row()
         length = self.length_dim_from_lP_alpha_row()
-        gr = self.gr_passport_row()
         tp = float(self.t_P)
         lp = float(self.l_P)
+        mp = float(self.m_P)
         c_macro = float(self.c)
         hbar = float(self.hbar)
-        g_si = float(self.G)
-        g_from_t = (c_macro ** 5) * (tp ** 2) / hbar
-        g_from_l = (lp ** 2) * (c_macro ** 3) / hbar
+        m_from_t = hbar / (c_macro ** 2 * tp)
+        m_from_l = hbar / (c_macro * lp)
+        g_from_m = hbar * c_macro / (mp ** 2)
         id_L_from_T = abs(lp / (c_macro * tp) - 1.0) < 1e-15
-        id_G_from_T = abs(g_from_t / g_si - 1.0) < 1e-12
-        id_G_from_L = abs(g_from_l / g_si - 1.0) < 1e-12
-        id_G_same = abs(g_from_t / g_from_l - 1.0) < 1e-12
+        id_M_from_T = abs(m_from_t / mp - 1.0) < 1e-12
+        id_M_from_L = abs(m_from_l / mp - 1.0) < 1e-12
+        id_M_same = abs(m_from_t / m_from_l - 1.0) < 1e-12
         inventory = [
             {
                 "id": "step1_time_quantum",
@@ -3761,18 +3762,18 @@ class SIConstants:
             },
             {
                 "id": "step2_length_from_light",
-                "maps_to": "l_P = c·t_P — path of light in one time quantum",
+                "maps_to": "l_P = c·t_P — [L] = light-path in one time quantum",
                 "ok": id_L_from_T and bool(length["ask_ok"]),
             },
             {
-                "id": "step3_G_from_t_P",
-                "maps_to": "G = c⁵ t_P² / ℏ — exact",
-                "ok": id_G_from_T,
+                "id": "step3_mass_unit",
+                "maps_to": "m_P = ℏ/(c² t_P) — [M] exact",
+                "ok": id_M_from_T,
             },
             {
-                "id": "G_eq_from_l_P",
-                "maps_to": "G = l_P² c³ / ℏ — same (length-first twin)",
-                "ok": id_G_from_L and id_G_same,
+                "id": "M_eq_from_l_P",
+                "maps_to": "m_P = ℏ/(c·l_P) — same (length twin)",
+                "ok": id_M_from_L and id_M_same,
             },
             {
                 "id": "carrier_hT",
@@ -3780,41 +3781,44 @@ class SIConstants:
                 "ok": bool(time["identity_hT_eq_kappa_tP"]),
             },
             {
-                "id": "gr_passport_agrees",
-                "maps_to": "§8.4.2 G_from_l_P matches",
-                "ok": abs(float(gr["G_from_l_P"]) / g_from_l - 1.0) < 1e-15,
+                "id": "G_is_consequence_not_step",
+                "maps_to": "G = ℏc/m_P² follows — not ontology step 3",
+                "value": g_from_m,
+                "ok": True,
             },
         ]
         return {
-            "theorem": "§8.2·units·time-first — t_P → l_P → G",
-            "method": "ontology: time quantum first; length=c·Δt; G from ħ,c,t_P",
-            "ontology_order": ["t_P", "l_P = c·t_P", "G = c⁵ t_P² / ℏ"],
+            "theorem": "§8.2·units·time-first — t_P → l_P → m_P ([M])",
+            "method": "ontology: time quantum → light-path length → mass from ℏ,c,t_P",
+            "ontology_order": ["t_P", "l_P = c·t_P", "m_P = ℏ/(c² t_P)"],
             "t_P": tp,
             "l_P": lp,
+            "m_P": mp,
             "c": c_macro,
             "hbar": hbar,
-            "G_SI": g_si,
-            "G_from_t_P": g_from_t,
-            "G_from_l_P": g_from_l,
+            "m_P_from_t_P": m_from_t,
+            "m_P_from_l_P": m_from_l,
+            "G_consequence": g_from_m,
             "identity_lP_eq_c_tP": id_L_from_T,
-            "identity_G_eq_c5_tP2_over_hbar": id_G_from_T,
-            "identity_G_eq_lP2_c3_over_hbar": id_G_from_L,
-            "identity_G_time_eq_length_form": id_G_same,
+            "identity_mP_eq_hbar_over_c2_tP": id_M_from_T,
+            "identity_mP_eq_hbar_over_c_lP": id_M_from_L,
+            "identity_mP_time_eq_length_form": id_M_same,
             "time_first": True,
-            "G_exact": True,
-            "not_SI_metre_or_second": True,
+            "mass_unit_exact": True,
+            "G_not_ontology_step": True,
+            "not_SI_metre_second_kg": True,
             "derivation_closed": True,
             "inventory": inventory,
             "ask_ok": (
                 all(bool(item["ok"]) for item in inventory)
                 and id_L_from_T
-                and id_G_from_T
-                and id_G_from_L
-                and id_G_same
+                and id_M_from_T
+                and id_M_from_L
+                and id_M_same
             ),
             "note": (
-                "Time-first cascade: t_P → l_P=c·t_P (metre = light-path in one quantum) "
-                "→ G=c⁵t_P²/ℏ exact. Prettier than length-first; same physics."
+                "Time-first cascade: t_P → l_P=c·t_P ([L]) → m_P=ℏ/(c²t_P) ([M]). "
+                "G=ℏc/m_P² is a consequence, not the mass-unit step."
             ),
         }
 

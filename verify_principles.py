@@ -972,7 +972,7 @@ def check_time_dim_from_tP(device: str = "cpu") -> dict:
 
 
 def check_units_time_first_cascade(device: str = "cpu") -> dict:
-    """§8.2·units·time-first — t_P → l_P=c·t_P → G exact."""
+    """§8.2·units·time-first — t_P → l_P → m_P ([M])."""
     from mt_ca.si_constants import SI
 
     del device
@@ -981,18 +981,20 @@ def check_units_time_first_cascade(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["derivation_closed"])
         and bool(row["time_first"])
-        and bool(row["G_exact"])
+        and bool(row["mass_unit_exact"])
+        and bool(row["G_not_ontology_step"])
         and bool(row["identity_lP_eq_c_tP"])
-        and bool(row["identity_G_eq_c5_tP2_over_hbar"])
-        and bool(row["identity_G_eq_lP2_c3_over_hbar"])
-        and bool(row["identity_G_time_eq_length_form"])
+        and bool(row["identity_mP_eq_hbar_over_c2_tP"])
+        and bool(row["identity_mP_eq_hbar_over_c_lP"])
+        and bool(row["identity_mP_time_eq_length_form"])
     )
     return {
         "id": "Units_time_first_cascade",
         "ontology_order": row["ontology_order"],
-        "G_from_t_P": row["G_from_t_P"],
+        "m_P": row["m_P"],
+        "m_P_from_t_P": row["m_P_from_t_P"],
         "time_first": row["time_first"],
-        "G_exact": row["G_exact"],
+        "mass_unit_exact": row["mass_unit_exact"],
         "ok": ok,
         "note": row["note"],
     }
