@@ -492,6 +492,8 @@ x+N ≡ x ,   y+N ≡ y
 
 **Family scan** (`scripts/run_seed_family_scan.py`, 128²×1024): VACUUM/BOIL/IMPULSE → born=0 · **PLANE_WAVE → born=1** (|n|_auto≈2) · VORTEX_* planted persist. Brick-offset BOIL subfamily still 0/52.
 
+**α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` combinatorial CLOSED; π-tower demoted as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
+
 ---
 
 ## §11. Код (M-only slice)

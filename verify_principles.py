@@ -662,14 +662,17 @@ def check_alpha_dual_fraction_ask(device: str = "cpu") -> dict:
 
     del device
     row = SI.alpha_dual_fraction_ask_row()
+    strongest = str(row["strongest_alive_pair"])
     ok = (
         bool(row["ask_ok"])
         and not bool(row["derivation_closed"])
-        and row["strongest_alive_pair"] == "force κ/M"
+        and bool(row.get("M_combinatorial_closed", False))
+        and strongest.startswith("force κ/M")
     )
     return {
         "id": "Alpha_dual_fraction_ask",
         "strongest_alive_pair": row["strongest_alive_pair"],
+        "M_combinatorial_closed": row.get("M_combinatorial_closed"),
         "M_target": row["M_target"],
         "kappa": row["kappa"],
         "derivation_closed": row["derivation_closed"],
@@ -747,6 +750,34 @@ def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
         "alpha": row["alpha"],
         "vs_codata_ppm": row["vs_codata_ppm"],
         "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
+    """§8.2·α·full-quant — α=κ/M from full quantization; π-tower demoted as descent."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.alpha_full_quantization_bridge_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["discrete_path_shipped"])
+        and bool(row["M_combinatorial_closed"])
+        and bool(row["pi_tower_demoted_as_descent"])
+        and bool(row["soft_residual_open"])
+        and not bool(row["derivation_closed"])
+        and int(row["M"]) == 97
+    )
+    return {
+        "id": "Alpha_full_quantization_bridge",
+        "M": row["M"],
+        "alpha": row["alpha"],
+        "vs_codata_ppm_discrete": row["vs_codata_ppm_discrete"],
+        "vs_codata_ppm_pi_tower": row["vs_codata_ppm_pi_tower"],
+        "discrete_path_shipped": row["discrete_path_shipped"],
+        "soft_residual_open": row["soft_residual_open"],
         "ok": ok,
         "note": row["note"],
     }
@@ -2658,6 +2689,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_sqrt2_descent_ask(device=device),
         check_alpha_M_from_g_try(device=device),
         check_alpha_nF_kick_census(device=device),
+        check_alpha_full_quantization_bridge(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
