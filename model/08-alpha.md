@@ -576,42 +576,82 @@ Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED*
 
 #### §8.2·α·U0·soft-face · α from fundamentals (SEALED)
 
-**Фундаменталы (носитель; без ℏ,c,e,ε₀,лаб):**
-```
-κ = 1/√2                              # FCC 1-tick
-N₁₂ = 12                              # FCC causal links
-B_hV = 2π / ln 2                      # Bekenstein bits / hV brick (§3.12.6)
-N_hier = ⌊B_hV⌋ − 1                   # hierarchy channels (occupancy bit out)
-         = ⌊2π/ln2⌋ − 1 = 8
-d = N₄ + 3 = 7                        # von Neumann cross + SU(2)
-U = (d+1)/d = 8/7 = 1/(1−κ⁶)          # soft singlet
-```
+**Фундаменталы** (носитель; без $\hbar,c,e,\varepsilon_0$, лаб):
 
-**α (structural, sealed) — M и N_hier уже подставлены:**
-```
-N_hier := ⌊B_hV⌋ − 1 = ⌊2π/ln2⌋ − 1
-M      := 1 + N₁₂·N_hier
-        = 1 + N₁₂·(⌊2π/ln2⌋ − 1)
+$$
+\begin{aligned}
+\kappa &= \frac{1}{\sqrt{2}} && \text{(FCC 1-tick)} \\
+N_{12} &= 12 && \text{(FCC causal links)} \\
+B_{hV} &= \frac{2\pi}{\ln 2} && \text{(Bekenstein bits / $hV$, §3.12.6)} \\
+N_{\mathrm{hier}} &= \lfloor B_{hV}\rfloor - 1
+  = \left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1 = 8
+  && \text{(occupancy bit out)} \\
+d &= N_4 + 3 = 7 && \text{(von Neumann cross + SU(2))} \\
+U &= \frac{d+1}{d} = \frac{8}{7} = \frac{1}{1-\kappa^{6}} && \text{(soft singlet)}
+\end{aligned}
+$$
 
-α = M² · κ · (d·M + κ) / (d·M⁴ − M·κ³ − U)
+**α** (structural, sealed) — $M$ и $N_{\mathrm{hier}}$ подставлены:
 
-  = [1+N₁₂·(⌊2π/ln2⌋−1)]² · κ · ( d·[1+N₁₂·(⌊2π/ln2⌋−1)] + κ )
-    / ( d·[1+N₁₂·(⌊2π/ln2⌋−1)]⁴ − [1+N₁₂·(⌊2π/ln2⌋−1)]·κ³ − U )
-```
-κ⁶-лицо (то же число; U=1/(1−κ⁶), (1−κ⁶)/κ⁶ = d = 7):
-```
-α = M² κ ( ((1−κ⁶)/κ⁶) M + κ )
-    / ( ((1−κ⁶)/κ⁶) M⁴ − M κ³ − 1/(1−κ⁶) )
-  при M = 1 + N₁₂·(⌊2π/ln2⌋ − 1)
-```
-`SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
-M=97 / N_hier=8 — следствия Thm nF + Bekenstein brick, не knobs.
-π здесь — **тик/Bekenstein** (`2π/ln2`), не удалённый π-tower α-полином.
+$$
+\begin{aligned}
+N_{\mathrm{hier}}
+  &:= \lfloor B_{hV}\rfloor - 1
+   = \left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1 \\
+M
+  &:= 1 + N_{12}\,N_{\mathrm{hier}}
+   = 1 + N_{12}\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right)
+\end{aligned}
+$$
 
-**Единица пакета (SI-перевод, не вход в α):** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
+$$
+\alpha
+=
+\frac{M^{2}\,\kappa\,(d M + \kappa)}{d M^{4} - M\kappa^{3} - U}
+$$
 
-Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm); ladder demoted; π-tower removed.
-**Δ vs CODATA:** дверь T (~0.45σ inside). Структурная α точна — нет $u(\alpha)$.
+$$
+\alpha
+=
+\frac{
+\displaystyle
+\Bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\Bigr]^{2}
+\kappa
+\Bigl(
+d\bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\bigr]+\kappa
+\Bigr)
+}{
+\displaystyle
+d\Bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\Bigr]^{4}
+-
+\bigl[1+N_{12}\bigl(\lfloor 2\pi/\ln 2\rfloor-1\bigr)\bigr]\kappa^{3}
+- U
+}
+$$
+
+$\kappa^{6}$-лицо (то же число; $U=1/(1-\kappa^{6})$, $(1-\kappa^{6})/\kappa^{6}=d=7$):
+
+$$
+\alpha
+=
+\frac{
+M^{2}\,\kappa\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}M+\kappa\right)
+}{
+\dfrac{1-\kappa^{6}}{\kappa^{6}}M^{4}-M\kappa^{3}-\dfrac{1}{1-\kappa^{6}}
+}
+\qquad\text{при }\;
+M = 1 + N_{12}\left(\left\lfloor\frac{2\pi}{\ln 2}\right\rfloor - 1\right).
+$$
+
+Код: `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
+$M=97$, $N_{\mathrm{hier}}=8$ — следствия Thm nF + Bekenstein brick, не knobs.
+$\pi$ здесь — тик/Bekenstein ($2\pi/\ln 2$), не удалённый $\pi$-tower $\alpha$-полином.
+
+**Единица пакета** (SI-перевод, не вход в $\alpha$):
+$U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
+
+Demoted: $\alpha_0=\kappa/M$ (~$-1040$ ppm); ladder demoted; $\pi$-tower removed.
+**$\Delta$ vs CODATA:** дверь T (~$0.45\sigma$ inside). Структурная $\alpha$ точна — нет $u(\alpha)$.
 **Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 
