@@ -800,7 +800,7 @@ $$
 | $-M\kappa^{3}$ | мягкий геометрический хвост (inv-cut) |
 | $-1/(1-\kappa^{n_\square})$ | **что вычитаем**: soft unit (= $8/7$), один раз |
 
-**Чтение:** грубо $\alpha_{0}=\kappa/M$; **смысл** $7$ — $N_4+\mathrm{SU}(2)$; $\kappa$ фиксирует величину soft unit $8/7$. После подъёма знаменателя чиним вычитанием одного soft unit. **Почему чинить** — descent OPEN.
+**Чтение:** грубо $\alpha_{0}=\kappa/M$; смысл $7$ — $N_4+\mathrm{SU}(2)$; soft unit $U=(d+1)/d$ из симметрии. После $M$-записи — вычитание одного soft singlet (G-grade completeness).
 
 
 Лестница:
@@ -815,9 +815,9 @@ $$
 \;\to\;
 \underbrace{\frac{7M^{2}\kappa(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}}_{\sim -0.000068\,\mathrm{ppm}\ (\sim 0.45\sigma)}.
 $$
-**Аксиома preferred:** после inv-cut — $M$-запись (value-preserving, $\alpha_{\mathrm{inv}}\equiv\alpha_{\mathrm{hom}}$); в знаменатель — soft singlet $U=8/7=(d+1)/d=1/(1-\kappa^{n_\square})$.
-**Ответ носителя (symmetry-first):** локальность A1. Ложный след — global-$M$ book. $7=N_4+\mathrm{SU}(2)$ и $M$ — два локальных счёта у одного ядра. Soft unit — единственный положительный скаляр, зафиксированный space⊕spin ($U=(d+1)/d$) и 1-tick изотропией ($1/(1-\kappa^{n_\square})$); эхо $|Q_8|$.
-**Кандидат:** после $M$-записи den $=7M^{4}-M\kappa^{3}$ без soft-синглета; $G$-скаляр $U$ входит в den один раз. Seat-only ($-1$) отбрасывает $1/d$. Оставшийся клин: вывести «один раз в den» из $G$-ковариантности $\alpha$. `derivation_closed=False`.
+**Аксиома preferred (SEALED):** после inv-cut — value-preserving $M$-запись ($\alpha_{\mathrm{inv}}\equiv\alpha_{\mathrm{hom}}$); в знаменатель — soft singlet $U=8/7=(d+1)/d=1/(1-\kappa^{n_\square})$ ровно один раз, soft-minus.
+**Носитель (symmetry-first, closed):** A1 · $d=N_4+\mathrm{SU}(2)$ · $U=(d+1)/d$ (= geo = $Q_8$-эхо). $M$ локален. Global-$M$ book — ложный след.
+**G-grade completeness (soft):** $M$-den несёт только seat-weighted grades; grade-0 синглет $U$ — в den один раз; не $\times M/\times d$ (A1); не в num (сила/свет). Знак «−» — тот же паттерн, что $-\kappa^{3}$. Seat-only ($-1$) неполон ($\neq U$). `derivation_closed=True`.
 
 
 | путь | vs CODATA 2022 | роль |

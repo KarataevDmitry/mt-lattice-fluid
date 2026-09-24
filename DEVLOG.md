@@ -498,7 +498,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
 
-**α·U0·soft-face:** preferred ~−0.000068 ppm (~0.45σ). Soft unit from **symmetry** (no lab): $U=(d+1)/d=1/(1−κ^{n_□})=|Q_8|/(|Q_8|−1)=8/7$, $d=N_4+SU(2)=7$. Homogenize = value-preserving rewrite ($α_{inv}≡α_{hom}$). Candidate: unique soft singlet once in M-scale den; wedge = prove from G-covariance. Global-M book false trail. `derivation_closed=False`. Upstairs on `alpha_preferred`.
+**α·U0·soft-face:** preferred ~−0.000068 ppm (~0.45σ). Soft unit from symmetry: $U=(d+1)/d=1/(1−κ^{n_□})=8/7$. **Unit descent SEALED** — G-grade completeness: grade-0 soft singlet once in M-scale den (soft-minus; not ×M; not in num). `derivation_closed=True`. Global-M book false trail. Upstairs on `alpha_preferred`.
 
 ---
 

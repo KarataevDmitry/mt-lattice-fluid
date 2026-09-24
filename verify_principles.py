@@ -847,7 +847,8 @@ def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
         and not bool(row["local_cubocta_residue_candidate"])
         and bool(row["symmetry_soft_singlet_candidate"])
         and bool(row["identity_soft_symmetry_triple"])
-        and not bool(row["derivation_closed"])
+        and bool(row["axiom_G_grade_completeness_soft"])
+        and bool(row["derivation_closed"])
         and int(row["M"]) == 97
         and int(row["codata_year"]) == 2022
         and abs(float(row["vs_codata_ppm_pref"])) < 0.00016

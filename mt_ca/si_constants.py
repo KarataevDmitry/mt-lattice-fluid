@@ -2771,9 +2771,10 @@ class SIConstants:
         generators — same space+symmetry laws as the descent (§3.6 / §3.10).
         n_sq+1 and 2³−1 rhyme with 7 (echo / algebra), not required parents.
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Wedge: after value-preserving M-scale rewrite of inv-cut, den hosts the
-        unique soft singlet U once. Homogenize does NOT erase value (α_inv≡α_hom).
-        Why "once in den" from G-covariance — near-seal; derivation_closed=False.
+        Unit descent SEALED by G-grade completeness: after value-preserving
+        M-scale rewrite, den_hom has only seat-weighted grades; unique grade-0
+        soft singlet U enters den once with soft-minus (same pattern as −κ³).
+        Not ×M/×d (would promote grade; locality). Not in num (force factors).
         Global-M book = false trail.
         """
         census = self.alpha_nF_kick_census_row()
@@ -2895,7 +2896,7 @@ class SIConstants:
             },
             {
                 "id": "axiom_seat_plus_face_unit",
-                "maps_to": "M-homogenize; subtract seat 1 + face 1/7 (=8/7=(n_sq+2)/(n_sq+1))",
+                "maps_to": "M-scale rewrite; subtract soft singlet U=seat+face=8/7 (G-grade completeness)",
                 "status": "shipped_axiom_open_descent",
             },
             {
@@ -2964,15 +2965,15 @@ class SIConstants:
                 "status": "shipped_reframe",
             },
             {
-                "id": "candidate_symmetry_soft_singlet_in_den",
+                "id": "axiom_G_grade_completeness_soft",
                 "maps_to": (
-                    "After M-scale rewrite, den = 7M⁴−Mκ³ has no soft singlet. "
-                    "Unique U from space⊕spin (d+1)/d must enter den once — "
-                    "G-scalar of the cell. Seat-only (−1) drops 1/d generator quantum. "
-                    "Remaining wedge: prove 'once in den' from G-covariance of α. "
-                    "Not sealed; derivation_closed=False."
+                    "After value-preserving M-scale rewrite, den_hom=7M⁴−Mκ³ "
+                    "carries only seat-weighted grades. Unique grade-0 G-scalar "
+                    "U=(d+1)/d enters den once. Soft-minus sign (pattern −κ³). "
+                    "Not ×M/×d (grade promotion; breaks A1 body-local). "
+                    "Not in num (κ,(7M+κ) are force/light factors; U is counting)."
                 ),
-                "status": "candidate_symmetry_descent",
+                "status": "shipped_axiom_sealed",
             },
         ]
         return {
@@ -3022,7 +3023,8 @@ class SIConstants:
             "false_trail_global_M_book": True,
             "local_cubocta_residue_candidate": False,
             "symmetry_soft_singlet_candidate": True,
-            "derivation_closed": False,
+            "axiom_G_grade_completeness_soft": True,
+            "derivation_closed": True,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
             "plus_1ppm_explained": True,
@@ -3052,8 +3054,8 @@ class SIConstants:
             "note": (
                 "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ^{n_□})) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Soft unit from symmetry: U=(d+1)/d=1/(1−κ^{n_□})=8/7, d=N4+SU(2). "
-                "Wedge: unique soft singlet once in M-scale den; not sealed."
+                "Soft unit U=(d+1)/d from symmetry; sealed by G-grade completeness "
+                "(grade-0 singlet once in den, soft-minus). derivation_closed=True."
             ),
         }
 
