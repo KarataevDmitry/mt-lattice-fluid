@@ -580,7 +580,12 @@ Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED*
 
 $$
 \begin{aligned}
-\kappa &= \frac{1}{\sqrt{2}} && \text{(FCC 1-tick)} \\
+R_{\mathrm{out}} &= a = \ell_P
+  && \text{(1-tick cubocta circumradius, 12 NN)} \\
+R_{\mathrm{in}} &= \frac{a}{\sqrt{2}}
+  && \text{(inradius; square faces limit)} \\
+\kappa &= \frac{R_{\mathrm{in}}}{R_{\mathrm{out}}} = \frac{1}{\sqrt{2}}
+  && \text{(§1.6.2 · §8.2·geo; not a fit)} \\
 N_{12} &= 12 && \text{(FCC causal links)} \\
 B_{hV} &= \frac{2\pi}{\ln 2} && \text{(Bekenstein bits / $hV$, §3.12.6)} \\
 N_{\mathrm{hier}} &= \lfloor B_{hV}\rfloor - 1
