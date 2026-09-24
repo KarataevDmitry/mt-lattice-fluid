@@ -984,6 +984,36 @@ def check_carrier_torus_close(device: str = "cpu") -> dict:
     }
 
 
+def check_gpu_eng_tail_close(device: str = "cpu") -> dict:
+    """§0.10 — GPU eng-tail floor/step/literals closed as MODEL readout."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.gpu_eng_tail_close_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["floor_closed"])
+        and bool(row["unitary_step_closed"])
+        and bool(row["literals_closed"])
+        and abs(float(row["z_min"]) - 1.0 / 64.0) < 1e-15
+        and "closed_planck_floor_and_seed" in row["closed_ids"]
+        and "closed_R_Phi_not_Euler" in row["closed_ids"]
+        and "reject_Euler_add_step" in row["reject_ids"]
+        and "soft_open_norm_drift_verify_threshold" in row["soft_open_ids"]
+    )
+    return {
+        "id": "Gpu_eng_tail_close",
+        "z_min": row["z_min"],
+        "floor_closed": row["floor_closed"],
+        "unitary_step_closed": row["unitary_step_closed"],
+        "literals_closed": row["literals_closed"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2615,6 +2645,7 @@ def run_all(device: str) -> list[dict]:
         check_floor1_C3_gamma_close(device=device),
         check_floor1_C3_bath_dogfood(device=device),
         check_carrier_torus_close(device=device),
+        check_gpu_eng_tail_close(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),

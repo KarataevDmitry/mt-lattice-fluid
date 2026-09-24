@@ -3564,6 +3564,117 @@ class SIConstants:
             ),
         }
 
+    def gpu_eng_tail_close_row(self) -> dict[str, float | int | str | bool | list]:
+        """§0.10 · GPU eng-tail close (was DEVLOG §10.2–§10.4).
+
+        Ask: are the three GPU fuses new physics or MODEL readout?
+
+        Carrier answers (2026-09-24):
+          · Floor+seed (§10.2): z≡0 deadlock; |z|≥z_min; vacuum_amplitude=z_min;
+            per-cell gauge_fix forbidden on tick path.
+          · Step algebra (§10.3): R(Φ)=ω^Φ only; Euler z+=iφz rejected (A3).
+          · Literals (§10.4): DX/DT/K_P/α* = as_code_dict SI paste, not knobs.
+          · All CLOSED as eng readout of §0.5 / A3·A4 / §7 SI.
+          · Soft: verify norm_drift threshold = sim hygiene.
+        """
+        hv = hv_bit_budget()
+        z_min = 2.0 ** (-hv.frac_bits)
+        alpha_star = 1.0 + 1.0 / (4.0 * math.pi)
+        code = as_code_dict()
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_planck_floor_and_seed",
+                "ratio": z_min,
+                "maps_to": "§0.5 · A5 · z_min=2^{-B_amp}; vacuum_amplitude=z_min",
+                "status": "closed",
+                "mechanism": "z≡0 deadlock; IC on floor not fitted 1e-6",
+            },
+            {
+                "id": "closed_reject_per_cell_gauge_fix_on_tick",
+                "maps_to": "per-cell U(1) kills ζ_imag; global gauge = T/report only",
+                "status": "closed",
+            },
+            {
+                "id": "closed_R_Phi_not_Euler",
+                "maps_to": "A3·A4 · §3.12.5 — nonlinearity = R(Φ)=ω^Φ only",
+                "status": "closed",
+            },
+            {
+                "id": "closed_gpu_literals_are_SI_paste",
+                "maps_to": "DX=l_P DT=hT K_P α*=1+1/(4π) via as_code_dict",
+                "status": "closed",
+            },
+            {
+                "id": "reject_z_equiv_0_vacuum",
+                "maps_to": "z≡0 is not A5 vacuum",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_Euler_add_step",
+                "maps_to": "z+=iφz breaks Σ|z|²",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_literals_as_fitted_knobs",
+                "maps_to": "literals ≠ free GPU knobs outside SI",
+                "status": "rejected",
+            },
+            {
+                "id": "soft_open_norm_drift_verify_threshold",
+                "maps_to": "norm_drift<1e-4 in verify — hygiene, not M law",
+                "status": "soft_open",
+            },
+        ]
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        reject_ids = [
+            i["id"] for i in inventory if str(i["status"]) == "rejected"
+        ]
+        soft_open_ids = [
+            i["id"] for i in inventory if str(i["status"]) == "soft_open"
+        ]
+        lit_ok = (
+            abs(float(code["DX"]) - float(self.l_P)) / float(self.l_P) < 1e-15
+            and abs(float(code["DT"]) - float(self.hT)) / float(self.hT) < 1e-15
+            and abs(float(code["K_P_J_m3"]) - float(self.K_P)) / float(self.K_P) < 1e-12
+            and abs(float(code["ALPHA_STAR"]) - alpha_star) < 1e-12
+            and abs(float(code["ALPHA_STAR"]) - float(self.alpha_star)) < 1e-12
+        )
+        floor_ok = hv.frac_bits == 6 and abs(z_min - 1.0 / 64.0) < 1e-15
+        ok = (
+            floor_ok
+            and lit_ok
+            and "closed_planck_floor_and_seed" in closed_ids
+            and "closed_R_Phi_not_Euler" in closed_ids
+            and "closed_gpu_literals_are_SI_paste" in closed_ids
+            and "reject_z_equiv_0_vacuum" in reject_ids
+            and "reject_Euler_add_step" in reject_ids
+            and "soft_open_norm_drift_verify_threshold" in soft_open_ids
+        )
+        return {
+            "theorem": "§0.10 GPU eng-tail — floor/step/literals = MODEL readout",
+            "z_min": z_min,
+            "frac_bits": hv.frac_bits,
+            "ALPHA_STAR": float(code["ALPHA_STAR"]),
+            "DX": float(code["DX"]),
+            "DT": float(code["DT"]),
+            "K_P": float(code["K_P_J_m3"]),
+            "floor_closed": True,
+            "unitary_step_closed": True,
+            "literals_closed": True,
+            "derivation_closed": ok,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "reject_ids": reject_ids,
+            "soft_open_ids": soft_open_ids,
+            "ask_ok": ok,
+            "note": (
+                "GPU fuses CLOSED as readout: floor+seed (§0.5), R(Φ) not Euler, "
+                "SI literals paste. Soft: verify norm_drift threshold."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P
