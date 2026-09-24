@@ -340,7 +340,7 @@ def check_alpha_dual_fraction_ask(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and not bool(row["derivation_closed"])
         and bool(row.get("M_combinatorial_closed", False))
-        and strongest.startswith("force κ/M")
+        and ("soft-face" in strongest or strongest.startswith("force"))
     )
     return {
         "id": "Alpha_dual_fraction_ask",
@@ -363,7 +363,7 @@ def check_alpha_sqrt2_descent_ask(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["lemma_force_alpha_not_rational"])
         and bool(row["reject_exact_rational_alpha_under_force"])
-        and not bool(row["derivation_M_closed"])
+        and bool(row["derivation_M_closed"])
         and abs(float(row["kappa"]) ** 2 - 0.5) < 1e-15
     )
     return {

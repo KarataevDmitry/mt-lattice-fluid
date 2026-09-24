@@ -214,6 +214,10 @@ KAPPA_FCC_1TICK = 1.0 / math.sqrt(2.0)  # inscribed sphere in cuboctahedron (12 
 
 HV = hv_bit_budget()
 
+# §8.2·α·nF·Thm — force seats on one charged FCC core (not a free fit).
+N_HIER_CHANNELS = int(HV.mod_bits) - 1  # ⌊B_hV⌋−1 = 8 (occupancy bit out of hierarchy)
+M_FORCE_SEATS = 1 + N12_FCC_CAUSAL_LINKS * N_HIER_CHANNELS  # = 97
+
 
 def kappa_link(*, n_links: int = N4_CAUSAL_LINKS) -> float:
     """Isotropic per-link fraction 1/|N| — unifies γ, cr_strength, ν_CA_natural (§5.2.2 · §1.4 · §1.6)."""
@@ -738,7 +742,7 @@ class SIConstants(SIAlphaRows, SIFloor1Rows, SIUnitsRows, SICarrierRows, SISmRow
 
     @property
     def alpha_preferred(self) -> float:
-        """Structural α — soft-face preferred §8.2·U0 (lab-inside)."""
+        """Structural α — soft-face preferred with M=M_FORCE_SEATS=97 substituted."""
         return float(self.alpha_U0_soft_face_ask_row()["alpha_pref"])
 
 

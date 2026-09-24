@@ -83,7 +83,7 @@ class SIAlphaThmRows:
             {
                 "id": "pair_force_kappa_over_M",
                 "ratio": kappa / m97,
-                "maps_to": "α=κ/M; κ closed, M=97 theorem (nF seats)",
+                "maps_to": "α₀=κ/M; κ closed, M=97 theorem (nF seats)",
                 "status": "shipped_pair_theorem",
                 "mechanism": "full-quant force dual: geo κ × n_F seats",
             },
@@ -128,9 +128,9 @@ class SIAlphaThmRows:
             },
             {
                 "id": "open_soft_residual_vs_pi_tower",
-                "maps_to": "next: soft residue on κ/97 OR demote π-ansatz as T-only",
-                "status": "open",
-                "mechanism": "discrete path shipped; ppm duel with continuum tower",
+                "maps_to": "next: α=soft-face sealed; π-ansatz T-only",
+                "status": "sealed_preferred",
+                "mechanism": "α=soft-face; π-tower T-only",
             },
         ]
         return {
@@ -146,7 +146,7 @@ class SIAlphaThmRows:
             "alpha_from_Nc_Na0": n_c / n_a0,
             "alpha_from_kappa_M97": kappa / m97,
             "alpha_from_ae_over_2r": ae_codata / two_r,
-            "strongest_alive_pair": "force κ/M + soft-face preferred (lab inside; unit descent open)",
+            "strongest_alive_pair": "soft-face preferred (M=97); α₀=κ/M demoted",
             "derivation_closed": False,
             "M_theorem_closed": True,
             "M_combinatorial_closed": True,  # alias
@@ -168,7 +168,7 @@ class SIAlphaThmRows:
         Classic move: assume √2=p/q lowest terms ⇒ both even ⇒ contradiction.
         Same steel on the force dual:
 
-          Lemma (force). Suppose α = κ/M with κ = 1/√2 (geo CLOSED) and M∈ℕ.
+          Lemma (force). Suppose α₀ = κ/M (demoted) with κ = 1/√2 (geo CLOSED) and M∈ℕ.
           If α were rational p/q ∈ ℚ (q≠0), then
               1/(M√2) = p/q  ⇒  √2 = q/(p M) ∈ ℚ,
           contradicting irrationality of √2. Hence α ∉ ℚ.
@@ -182,7 +182,7 @@ class SIAlphaThmRows:
             (optical Na0 is T) or duals live on different layers.
 
         Status: lemma closed as logic on stamped κ; does not yet fix M.
-        OPEN: still need M from g (integer leg of the irrational α=κ/M).
+        M=97 CLOSED (nF Thm). α=soft-face preferred; α₀=κ/M demoted.
         """
         alpha_c = 7.2973525693e-3
         kappa = KAPPA_FCC_1TICK
@@ -202,7 +202,7 @@ class SIAlphaThmRows:
         inventory: list[dict[str, str | float | bool]] = [
             {
                 "id": "lemma_force_alpha_irrational",
-                "maps_to": "α=κ/M, κ=1/√2, M∈ℕ ⇒ α∉ℚ (else √2∈ℚ)",
+                "maps_to": "α₀=κ/M, κ=1/√2, M∈ℕ ⇒ α∉ℚ (else √2∈ℚ)",
                 "status": "shipped_lemma",
                 "mechanism": "same steel as √2 irrationality; κ from hull",
             },
@@ -245,7 +245,7 @@ class SIAlphaThmRows:
             {
                 "id": "alive_kappa_over_M97",
                 "ppm": ppm(impostors["kappa/97"]),
-                "maps_to": "α=κ/97 — form allowed (∉ℚ); M still from g",
+                "maps_to": "demoted α₀=κ/97 allowed (∉ℚ); M=97 CLOSED; α=soft-face",
                 "status": "alive_candidate",
                 "mechanism": "~−1040 ppm; nearest int to M_target",
             },
@@ -264,21 +264,21 @@ class SIAlphaThmRows:
             "lemma_force_alpha_not_rational": True,
             "reject_exact_rational_alpha_under_force": True,
             "impostor_ppm": {k: ppm(v) for k, v in impostors.items()},
-            "derivation_M_closed": False,
+            "derivation_M_closed": True,
             "inventory": inventory,
             "ask_ok": abs(kappa * kappa - 0.5) < 1e-15
             and abs(m_tgt - kappa / alpha_c) < 1e-12
             and True,
             "note": (
-                "√2-style: α=κ/M with κ=1/√2 ⇒ α∉ℚ. Exact p/q (137, 512, …) "
-                "rejected under force dual. Fraction = κ/M not α∈ℚ. M from g OPEN."
+                "√2-style: α₀=κ/M with κ=1/√2 ⇒ α∉ℚ. Exact p/q (137, 512, …) "
+                "rejected under force dual. Fraction = κ/M not α∈ℚ. M=97 CLOSED; α=soft-face."
             ),
         }
 
     def alpha_M_from_g_try_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·M·g·try — try close integer M from stamped g/Bekenstein bits.
 
-        Dual: α=κ/M. κ CLOSED. Need M∈ℕ without α.
+        Dual demoted α₀=κ/M. κ+M CLOSED; α = soft-face preferred.
 
         Already stamped (not new knobs):
           N₁₂ = 12 (FCC links)
@@ -298,7 +298,7 @@ class SIAlphaThmRows:
           the causal star × hierarchy depth. Same −1/+1 bookkeeping as T1,
           inverted for EM force quanta (Thm 5.1 n_F).
 
-        Score AFTER: α=κ/97 ~ −1040 ppm vs CODATA (higher structure / soft).
+        Score AFTER: demoted α₀ ~−1040 ppm; α = soft-face preferred.
         M=96 = N₁₂·N_hier alone — misses core seat (~+9366 ppm).
 
         Status: lemmas force unique M — theorem, not a motivated try.
@@ -351,7 +351,7 @@ class SIAlphaThmRows:
             {
                 "id": "score_kappa_over_97",
                 "ppm": ppm(a_try),
-                "maps_to": "α=κ/97 after try",
+                "maps_to": "α₀ demoted score after try",
                 "status": "scored_after",
                 "mechanism": "~−1040 ppm — soft/higher structure, not α-input",
             },
@@ -385,7 +385,7 @@ class SIAlphaThmRows:
             and abs(ppm(a_try) + 1040.3688788164525) < 1.0,
             "note": (
                 "Thm: M=1+N₁₂·N_hier=97 from core b=1 + link×hier "
-                "(same −1 as N_hier). α=κ/97. Forced by kick-ledger axioms."
+                "(same −1 as N_hier). M=97 → soft-face α. Forced by kick-ledger axioms."
             ),
         }
 
@@ -394,7 +394,7 @@ class SIAlphaThmRows:
 
         Theorem (force seats). Under Thm 5.1 / §3.12, unit NN Coulomb is
         one F₀ packet weaker than the Planck force quantum:
-          F_Coulomb(N=1) = F₀/M,  α = κ/M.
+          F_Coulomb(N=1) = F₀/M,  α₀ = κ/M (demoted).
         M is the unique integer of independent Δp seats on one charged FCC
         core. Forbidden: inject α or 137 to pick M.
 
@@ -408,7 +408,7 @@ class SIAlphaThmRows:
 
         Conclusion:
           M = n_F_seats = 1 + N₁₂·N_hier = 97.
-          Then α = κ/M (score after; never input). Unique under the lemmas.
+          Then α₀ = κ/M (demoted) (score after; never input). Unique under the lemmas.
 
         Scope: seat geometry from g — not a runtime Δp histogram (no Coulomb
         opcode in CA). Soft −1040 ppm is higher-structure residue, not a
@@ -487,7 +487,7 @@ class SIAlphaThmRows:
             {
                 "id": "score_after_kappa_over_M",
                 "ppm": ppm,
-                "maps_to": "α=κ/97 after census — not input",
+                "maps_to": "α₀ demoted after census — not α; not input",
                 "status": "scored_after",
             },
             {
@@ -520,7 +520,7 @@ class SIAlphaThmRows:
             "note": (
                 "Thm: M=1+N₁₂·N_hier. Core b=1 (force source) + isotropic "
                 "star N₁₂ × exclusive hier channels N_hier=⌊B_hV⌋−1. "
-                "Unit NN Coulomb F=F₀/M ⇒ α=κ/M. Unique; not a free count."
+                "Unit NN Coulomb F=F₀/M; M unique. α=soft-face preferred, not α₀."
             ),
         }
 
@@ -530,12 +530,12 @@ class SIAlphaThmRows:
         Operator steer: fine-structure constant ↔ full quantization (§0.9).
         On M there is no continuum wave; force is n_F·F₀ (Thm 5.1).
         Unit NN Coulomb is one quantum weaker than F₀ by integer M seats:
-          α F_P = F₀/M  ⇒  α = κ/M,  κ=1/√2 CLOSED, M=n_F_seats=97 CLOSED
+          α F_P = F₀/M  ⇒  α₀ = κ/M (demoted),  κ=1/√2 CLOSED, M=n_F_seats=97 CLOSED
           (nF Thm). Number scored after; no α input.
 
         Contrast: π-ansatz α⁻¹=4π³+π²+π is continuum solid-angle T-readout
         (~2 ppm) — competing *number*, not the discrete descent.
-        Coarse κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; unit descent SEALED (G-grade completeness).
+        Demoted α₀=κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; unit descent SEALED (G-grade completeness).
         """
         census = self.alpha_nF_kick_census_row()
         meaning = self.alpha_meaning_ask_row()
@@ -561,7 +561,7 @@ class SIAlphaThmRows:
             },
             {
                 "id": "fine_structure_is_seat_ratio",
-                "maps_to": "α = κ/M = F₀/(M F_P) — thin structure of force seats",
+                "maps_to": "α₀=κ/M demoted coarse; α=soft-face preferred (seats M=97)",
                 "status": "shipped",
             },
             {
@@ -573,7 +573,7 @@ class SIAlphaThmRows:
             {
                 "id": "score_kappa_over_M",
                 "ppm": ppm(a),
-                "maps_to": "α=κ/97 after — not used to pick M",
+                "maps_to": "α₀ demoted after — not used to pick M",
                 "status": "scored_after",
             },
             {
@@ -610,7 +610,7 @@ class SIAlphaThmRows:
             and abs(kappa**2 - 0.5) < 1e-15
             and abs(ppm(a) + 1040.3688788164525) < 1.0,
             "note": (
-                "Full quantization ⇒ α=κ/M with M=n_F_seats=97. "
+                "Full quantization ⇒ M=97 seats; α=soft-face preferred (α₀ demoted). "
                 "Discrete path shipped; π-tower is T-competitor not descent. "
                 "Soft −1040 ppm residual OPEN."
             ),

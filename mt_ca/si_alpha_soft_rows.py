@@ -9,6 +9,7 @@ from mt_ca.si_constants import (
     EV_J,
     HBAR,
     KAPPA_FCC_1TICK,
+    M_FORCE_SEATS,
     N12_FCC_CAUSAL_LINKS,
     N4_CAUSAL_LINKS,
     hv_bit_budget,
@@ -41,6 +42,8 @@ class SIAlphaSoftRows:
         geo = self.cuboctahedron_geometry_row()
         kappa = float(census["kappa"])
         m = int(census["M"])
+        if m != M_FORCE_SEATS:
+            raise AssertionError(f"M={m} != M_FORCE_SEATS={M_FORCE_SEATS} (nF Thm)")
         n_sq = int(geo["n_faces_square"])
         n_tri = int(geo["n_faces_triangle"])
         n4 = int(N4_CAUSAL_LINKS)  # von Neumann orthogonal cross (§3.6)
@@ -129,8 +132,11 @@ class SIAlphaSoftRows:
                 "id": "preferred_seat_plus_face",
                 "alpha": a_pref,
                 "ppm": ppm(a_pref),
-                "maps_to": "7 M² κ (7M+κ)/(49 M⁴ − 7 M κ³ − 8)",
-                "status": "preferred_candidate",
+                "maps_to": (
+                    "M²κ(((1−κ⁶)/κ⁶)M+κ)/(((1−κ⁶)/κ⁶)M⁴−Mκ³−1/(1−κ⁶)) "
+                    "with M=97 (≡ 7·97²·κ·(7·97+κ)/(49·97⁴−7·97·κ³−8))"
+                ),
+                "status": "preferred_sealed_M97",
             },
             {
                 "id": "plus_1ppm_explained",
@@ -157,7 +163,7 @@ class SIAlphaSoftRows:
             {
                 "id": "axiom_seat_plus_face_unit",
                 "maps_to": "M-scale rewrite; subtract soft singlet U=seat+face=8/7 (G-grade completeness)",
-                "status": "shipped_axiom_open_descent",
+                "status": "shipped_axiom_sealed",
             },
             {
                 "id": "lab_delta_vs_codata2022",
@@ -237,8 +243,12 @@ class SIAlphaSoftRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·U0·soft-face — α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶))",
+            "theorem": (
+                "§8.2·α·U0·soft-face — preferred with M=97: "
+                "α=M²κ(((1−κ⁶)/κ⁶)M+κ)/(((1−κ⁶)/κ⁶)M⁴−Mκ³−1/(1−κ⁶))|_{M=97}"
+            ),
             "M": m,
+            "M_FORCE_SEATS": M_FORCE_SEATS,
             "kappa": kappa,
             "U0_J_m": u0,
             "hbar_c_over_U0": hbar_c / u0,
@@ -312,7 +322,8 @@ class SIAlphaSoftRows:
             and abs(ppm(a_dress)) < 0.1
             and abs(ppm(a_resum) - 1.02725) < 0.01,
             "note": (
-                "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ^{n_□})) "
+                "Preferred α with M=97 (nF Thm) substituted: "
+                "7·97²·κ·(7·97+κ)/(49·97⁴−7·97·κ³−8) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
                 "Soft unit U=(d+1)/d from symmetry; sealed by G-grade completeness "
                 "(grade-0 singlet once in den, soft-minus). derivation_closed=True."

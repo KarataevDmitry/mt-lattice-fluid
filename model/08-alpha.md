@@ -61,7 +61,7 @@ T-слой: EM-связность = **фазовый объём** emergent 3D re
 | **смысл** | phase↔vacuum coupling | stamped |
 | **нога** | `α*−1 = Δφ_min/(2π) = 1/(4π)` (пустая ячейка) | stamped |
 | **число** | `α⁻¹ = 4π³+π²+π` (башня на `4π`) | stamped T-readout |
-| **следствия** | `F=F₀/(M N²)` на M; `α=κ/M` coarse; soft-face preferred | discrete + lab-inside; unit descent open |
+| **следствия** | `F=F₀/(M N²)` на M; **α** = soft-face preferred (M=97); `α₀=κ/M` demoted | discrete + lab-inside; unit descent SEALED |
 | **открыто** | дискретная доля сопряжения на FCC без continuum-`π` | `Φ_□` open · α_geom exploratory |
 Тождество ноги: `4π·α = α/(α*−1)`.
 **Код:** `SI.alpha_meaning_ask_row()` · verify **`Alpha_meaning_ask`**.
@@ -94,7 +94,7 @@ $$
 **DoD:** Arg-binding композита H на Λ должен coarse-grain к $\Delta m$. **Открыто:** $\Delta m$ из Arg-связи p–e **без** вставки α.
 **Код:** `SI.alpha_mass_defect_optics_row()` · verify **`Alpha_mass_defect_optics`**.
 #### §8.2·α·Arg-try · Попытка: Δm из Arg-ledger без α
-**Тождество (мостик закрыт):** при $\alpha=\kappa/M$, $U=E_0/(M N_{a0})$, $BE=U/2$
+**Тождество (мостик закрыт):** при demoted $\alpha_0=\kappa/M$, $U=E_0/(M N_{a0})$, $BE=U/2$
 $$
 \frac{\Delta m}{m_{\mathrm{arg}}}=\frac{BE}{E_0}=\frac{1}{2 M N_{a0}},\qquad
 \frac{\Delta m}{m_e}=\frac{\kappa^{2}}{2 M^{2}}=\frac{\alpha^{2}}{2}.
@@ -211,18 +211,18 @@ F_{12} = n_1 n_2\,\frac{F_0}{M\, N^{2}}\,\hat{\mathbf{r}},
 \quad M = n_{F,\mathrm{seats}} = 97.
 $$
 На NN ($N=1$, $|n_i|=1$): $F = F_0/M$ — один пакет силы на $M$ местах kick-ledger (§8.2·α·nF·Thm). **Не** появляются $\pi$, $\varepsilon_0$, π-tower.
-**T-readout:** тот же закон через $\alpha=\kappa/M$ и $F_P$:
+**T-readout (legacy coarse):** через demoted $\alpha_0=\kappa/M$ и $F_P$:
 $$
 F_{12} = \alpha\, F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}},
 \qquad \alpha = \kappa/M,\quad F_0 = \kappa F_P.
 $$
-π-tower — конкурирующее T-число (~2 ppm), не спуск $g$; coarse $\kappa/97$ (~−1040 ppm); soft preferred (seat+face) lab-inside; unit descent **SEALED** (§8.2·U0·soft-face).
+π-tower — конкурирующее T-число (~2 ppm), не спуск $g$. **α** = soft-face preferred (M=97) §8.2·U0 — SEALED. Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm).
 **Сборка (после M-native):**
 | кусок | где | смысл |
 |-------|-----|--------|
 | $Q = n\,e_0$, $n\in\mathbb{Z}$ | §5.2.2-III | топологический заряд (A10) |
 | $F_0$, $M=97$ | Thm 5.1 · nF census | сила — целые пакеты / seats |
-| $\alpha=\kappa/M$ | §8.2·full-quant | T-имя тонкой структуры (не вход M) |
+| soft-face $\alpha(M{=}97)$ | §8.2·U0 | **α** sealed; $\alpha_0=\kappa/M$ demoted |
 | $F_P$; $F_0=\kappa F_P$ | §5.2.1 | Planck force ladder |
 | $\mathrm{div}\,j=0$ | §5.2.1 | локальный баланс |
 **Дискретный Гаусс.** Поток $j$ через оболочку $\propto n=Q/e_0$. Закон $1/N^{2}$ — graph-distance + A10, не отдельный Maxwell на M.
@@ -521,19 +521,19 @@ $$
 | force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97** CLOSED; soft preferred lab-inside; unit descent **SEALED** |
 | Schwinger | $a_e$ | $2r=1/(2\pi)$ | $2r$ CLOSED; $a_e$ OPEN/lab |
 **Отвергнуто:** одна нога на оба ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
-**Сильнейшая dual:** $\alpha=\kappa/M$ coarse **shipped**; soft preferred (seat+face) **lab-inside**; duel π-tower demoted; **unit descent SEALED**.
+**α sealed:** soft-face preferred с $M=97$ (§8.2·U0). Demoted: $\alpha_0=\kappa/M$. Duel π-tower — T-only.
 **Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
 #### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
-**Лемма (force dual).** Пусть $\alpha=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
+**Лемма (force dual, demoted coarse).** Пусть $\alpha_0=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
 Если $\alpha=p/q\in\mathbb{Q}$, то $\sqrt{2}=q/(pM)\in\mathbb{Q}$ — противоречие. Значит $\alpha\notin\mathbb{Q}$.
 **Следствия:**
 1. Точные $1/137$, $M/512$ и любой $p/q$ как *определение* α — **несовместимы** с dual $\kappa/M$.
 2. «Дробь $m/n$» на носителе ≠ $\alpha\in\mathbb{Q}$; это отношение двух величин носителя ($\kappa/M$ — иррациональное / целое).
 3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
-**Не закрывает** unit-descent soft-face — только выкидывает рациональные самозванцы. Coarse $\alpha=\kappa/97$ (~−1040 ppm); preferred — §8.2·U0·soft-face (lab-inside).
+Лемма про demoted $\alpha_0$ — не определение **α**. **α** = soft-face preferred §8.2·U0 с $M=97$.
 **Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
 #### §8.2·α·M·g·try · Попытка: $M$ из stamped бит-бюджета
-**Dual:** $\alpha=\kappa/M$. $\kappa$ закрыт. Нужен $M\in\mathbb{N}$ без α.
+**Dual (demoted):** $\alpha_0=\kappa/M$. $\kappa$ и $M=97$ закрыты; **α** — soft-face, не $\alpha_0$.
 **Уже stamped:** $N_{12}=12$; $\lfloor B_{hV}\rfloor=9$; $N_{\mathrm{hier}}=\lfloor B_{hV}\rfloor-1=8$ (T1: минус бит занятости $b$); $b\in\{0,1\}$ на ядре.
 **Try (бухгалтерия силы):** иерархия **не** считает $b$ внутри $N_{\mathrm{hier}}$. Кулон на NN всё же сидит на **заряженном ядре** ($b=1$) плюс канал link×hier наружу:
 $$
@@ -542,7 +542,7 @@ M = 1 + N_{12}\cdot N_{\mathrm{hier}}
 = 97.
 $$
 Чтение: одно место $F_0$ на занятом $hV$ + $N_{12}\cdot N_{\mathrm{hier}}$ мест на звезде × глубина иерархии. Тот же $-1/+1$, что T1, **инвертированный** для EM $n_F$.
-**После:** $\alpha=\kappa/97$ ~−1040 ppm. $M=96$ без ядра — ~+9366 ppm, неполный счёт.
+**После:** $M=97$ в soft-face preferred (=**α**). Demoted $\alpha_0=\kappa/97$ ~−1040 ppm — не α. $M=96$ без ядра — неполный счёт.
 **Статус:** мотивированный try → **теорема** §8.2·α·nF·Thm.
 **Код:** `SI.alpha_M_from_g_try_row()` · verify **`Alpha_M_from_g_try`**.
 
@@ -564,20 +564,20 @@ $M$ — сколько **независимых мест** (seats) у одног
 $$
 M = n_{F,\mathrm{seats}} = 1 + N_{12}\cdot N_{\mathrm{hier}} = 97.
 $$
-Тогда $\alpha=\kappa/M$ (~−1040 ppm — мягкий остаток выше, не дыра в счёте). $M=96$ без ядра — неполная перепись. Единственное $M$ под леммами.
+Тогда $M=97$ подставляется в soft-face preferred (=**α**). Demoted $\alpha_0=\kappa/M$ (~−1040 ppm) — не α. $M=96$ без ядра — неполная перепись. Единственное $M$ под леммами.
 
 **Статус:** **теорема CLOSED**. Runtime-гистограмма $\Delta p$ из сима — N/A (в CA нет opcode Кулона); это не дыра счёта мест.
 **Код:** `SI.alpha_nF_kick_census_row()` · verify **`Alpha_nF_kick_census`**.
 #### §8.2·α·full-quant · α из полного квантования (не π-ansatz)
 **Смысл «тонкой структуры».** §0.9: на M нет continuum-волны — есть occupancy мод / **$n_E\cdot E_0$**. Сила — **$n_F\cdot F_0$** (Thm 5.1). Постоянная тонкой структуры — не «магическое π», а **безразмерная тонкость**: на сколько unit NN Coulomb слабее одного Planck-force пакета на носителе.
 $$
-\alpha F_P = F_0/M \quad\Rightarrow\quad \alpha=\kappa/M,
-\quad \kappa=1/\sqrt{2}\ \text{CLOSED},\quad M=n_{F,\mathrm{seats}}=97\ \text{CLOSED (Thm)}.
+F_{\mathrm{Coulomb}}(N{=}1)=F_0/M,\quad M=n_{F,\mathrm{seats}}=97\ \text{CLOSED (Thm)}.
+\quad \alpha_0=\kappa/M\ \text{(demoted coarse)};\quad \alpha=\text{soft-face preferred}|_{M=97}\ \text{SEALED}.
 $$
 **Два числа — два слоя:**
 | путь | формула | vs CODATA | роль |
 |------|---------|-----------|------|
-| **дискрет (descent)** | $\alpha=\kappa/97$ | ~−1040 ppm | полное квантование + seats |
+| **α (soft-face)** | preferred $|_{M=97}$ | ~−0.000068 ppm | **sealed** §8.2·U0 |
 | **π-tower (T)** | $1/(4\pi^3+\pi^2+\pi)$ | ~+2 ppm | continuum $\Omega=4\pi$ readout |
 π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED** (G-grade completeness; не дыра в $M$).
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
@@ -595,9 +595,20 @@ $$
 $$
 \alpha
 =
+\frac{M^{2}\,\kappa\!\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}M+\kappa\right)}{\dfrac{1-\kappa^{6}}{\kappa^{6}}M^{4}-M\kappa^{3}-\dfrac{1}{1-\kappa^{6}}}
+=
 \frac{M^{2}\,\kappa\,(7M+\kappa)}{7M^{4}-M\kappa^{3}-\dfrac{1}{1-\kappa^{6}}}
 =
 \frac{7M^{2}\,\kappa\,(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}.
+$$
+**Подстановка $M=97$ (Thm nF seats, CLOSED):**
+$$
+\alpha
+=
+\frac{97^{2}\,\kappa\!\left(\dfrac{1-\kappa^{6}}{\kappa^{6}}\cdot97+\kappa\right)}{\dfrac{1-\kappa^{6}}{\kappa^{6}}\cdot97^{4}-97\,\kappa^{3}-\dfrac{1}{1-\kappa^{6}}}
+=
+\frac{7\cdot97^{2}\,\kappa\,(7\cdot97+\kappa)}{49\cdot97^{4}-7\cdot97\,\kappa^{3}-8},
+\qquad\kappa=1/\sqrt{2}.
 $$
 
 | кусок | смысл |

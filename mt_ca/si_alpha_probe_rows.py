@@ -224,17 +224,17 @@ class SIAlphaProbeRows:
         }
 
     def alpha_force_lattice_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·F·ask — Coulomb lands on F₀ lattice ⇒ α = κ/M.
+        """§8.2·F·ask — Coulomb lands on F₀ lattice; α=soft-face (α₀ demoted).
 
         Thm 5.1: force transfers as n_F·F₀. Unit NN Coulomb F=α F_P.
         F₀/F_P = κ (geometry). One EM quantum at N=1:
-            α F_P = F₀/M  ⇒  α = κ/M , M∈ℕ.
+            α F_P = F₀/M  ⇒  α₀ = κ/M (demoted) , M∈ℕ.
 
         Probe (2026-09-23):
           • target M = F₀/(α_c F_P) ≈ 96.899
           • cleanest carrier M = N₁₂·N_hier = 96 (= n_△·N₁₂ = N_hier·(N_φ−1))
-            → α=κ/96, inv≈135.76, ~+9366 ppm vs CODATA
-          • nearest int M = 97 = N₁₂·N_hier+1 → α=κ/97, inv≈137.18, ~−1040 ppm
+            → α₀=κ/96 (demoted), inv≈135.76, ~+9366 ppm vs CODATA
+          • nearest int M = 97 = N₁₂·N_hier+1 → α₀=κ/97 (demoted; α=soft-face), inv≈137.18, ~−1040 ppm
           • M=137/√2 recovers α=1/137 — injects α_geom, empty for derivation
           • π-ansatz still ~2 ppm; force path does **not** replace it yet
         OPEN: which M from g (why 96 vs 97 / shell rule).
@@ -281,7 +281,7 @@ class SIAlphaProbeRows:
             },
             {
                 "id": "Coulomb_NN_on_F0",
-                "maps_to": "α F_P = F₀/M ⇒ α=κ/M",
+                "maps_to": "α F_P = F₀/M ⇒ α₀=κ/M",
                 "status": "constraint",
                 "mechanism": "Thm5.1 force quanta + §8.2 Coulomb form",
             },
@@ -310,7 +310,7 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·F·ask — α from F₀ lattice: α=κ/M",
+            "theorem": "§8.2·F·ask — F₀ lattice seats; α=soft-face (α₀ demoted)",
             "kappa": kappa,
             "F0_N": f0,
             "F_P_N": f_p,
@@ -334,7 +334,7 @@ class SIAlphaProbeRows:
             and abs(m_96 - 96.0) < 1e-12
             and abs(m_target - 96.899) < 0.01,
             "note": (
-                "Force lattice: α=κ/M. Best int M=97 (−1040 ppm); cleanest M=96 "
+                "Force lattice seats M=97; α=soft-face. Demoted α₀ (−1040 ppm); incomplete M=96 "
                 "(+9366 ppm). M=137κ rejects (α_geom). π-ansatz not replaced; M from g OPEN."
             ),
         }
@@ -351,10 +351,10 @@ class SIAlphaProbeRows:
           α*−1 = Δφ_min/(2π) = 1/(4π)  — vacuum residue per tick.
 
         Readouts (consequences, not meanings):
-          F = α F_P / N² ;  α = N_c/N_a0 ;  α = κ/M  — expressions of the same coupling.
+          F = α F_P / N² ;  α = N_c/N_a0 ;  α₀ = κ/M (demoted)  — expressions of the same coupling.
 
         Number today (T): π-tower 1/(4π³+π²+π) ~−2 ppm — competitor readout.
-        Discrete path shipped: α=κ/M with M=n_F seats=97 (force law F₀/M).
+        Seats M=97 + soft-face α shipped (force law F₀/M); α₀ demoted.
         Soft OPEN: −1040 ppm vs CODATA; holonomy that closes soft without π-ansatz.
         """
         alpha_star = self.alpha_star
@@ -401,7 +401,7 @@ class SIAlphaProbeRows:
             },
             {
                 "id": "readout_force_lattice_not_meaning",
-                "maps_to": "α=κ/M — F₀ landing; M=97 seats CLOSED (nF census)",
+                "maps_to": "F₀ landing; M=97 seats; α=soft-face (α₀ demoted)",
                 "status": "readout_shipped",
             },
             {
@@ -412,7 +412,7 @@ class SIAlphaProbeRows:
             },
             {
                 "id": "open_soft_residual_holonomy",
-                "maps_to": "κ/97 vs CODATA −1040 ppm — holonomy without π-ansatz",
+                "maps_to": "demoted α₀=κ/97 vs CODATA −1040 ppm — holonomy without π-ansatz",
                 "status": "open",
                 "mechanism": "π-tower still competing T-number ~−2 ppm",
             },
@@ -434,7 +434,7 @@ class SIAlphaProbeRows:
             and abs(four_pi * alpha - alpha / residue) < 1e-12,
             "note": (
                 "Meaning: α=phase↔vacuum coupling; foot α*−1=1/(4π). "
-                "Discrete force path α=κ/M + F=F₀/M shipped. "
+                "F=F₀/M + soft-face α shipped; α₀ demoted. "
                 "OPEN: soft −1040 ppm (holonomy vs π-tower T)."
             ),
         }
@@ -612,7 +612,7 @@ class SIAlphaProbeRows:
     def alpha_arg_binding_try_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·Arg-try — try Δm from Arg ledger without α-input.
 
-        Exact bridge (no new knob; α=κ/M, U=E₀/(M N_a0), BE=U/2):
+        Exact bridge (no new knob; demoted α₀=κ/M in identities, U=E₀/(M N_a0), BE=U/2):
             Δm / m_arg = BE/E₀ = 1/(2 M N_a0)
             Δm / m_e   = κ²/(2 M²) = α²/2
 
