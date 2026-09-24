@@ -641,8 +641,7 @@ $$
 \kappa=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}.
 $$
 
-Подстановка чисел дна: $\kappa=1/\sqrt{2}$, $\mathrm{mod\_bits}=\lfloor B_{hV}\rfloor=9$, $\hat M=1+|N_{12}|(\mathrm{mod\_bits}-1)=97$ $\Rightarrow$
-$\alpha\approx 7.2973525638\times 10^{-3}$ (внутри CODATA $\varepsilon$).
+Подстановка дна (exact): $\kappa=1/\sqrt{2}$, $\mathrm{mod\_bits}=\lfloor B_{hV}\rfloor=9$, $\hat M=1+|N_{12}|(\mathrm{mod\_bits}-1)=97$. Тогда $\alpha\in\mathbb{Q}(\sqrt{2})$ — **точного** значения формулы, не approx. Десятичная печать / сравнение с CODATA — отдельно, не часть определения.
 
 Код: `SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
 
