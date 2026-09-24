@@ -2756,21 +2756,12 @@ class SIConstants:
 
 
     def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·U0·soft-face — face dressing of coarse α0=κ/M.
+        """§8.2·α·U0·soft-face — face + seat-unit on α0=κ/M.
 
-        Unit: U0=F0·l_P²=s0·c0; hbar*c=2*kappa*U0.
-        Coarse: α0=κ/M (−1040 ppm).
-        Face quantum 1/7=1/(n_sq+1)=2/14; channel x=α0/7.
-
-        Same face channel, three cuts:
-          A) resum α0/(1−x)                         → ~+1.03 ppm  (demoted)
-          B) first-order α0(1+x)=κ(7M+κ)/(7M²)      → ~−0.058 ppm (truncation)
-          C) inv-cut then dress (preferred):
-             α⁻¹ = (M/κ − α0²/7)/(1+α0/7)
-                 = (7M³ − κ³)/(M κ (7M+κ))
-             α   = M κ (7M+κ)/(7M³ − κ³)            → ~−0.0026 ppm
-        Axiom: cut bare inv by face×α0 (=α0²/7), then ÷(1+x).
-        Residual −0.0026 ppm still OPEN (~17× CODATA u_r).
+        Preferred: α = M² κ (7M+κ)/(7M⁴ − M κ³ − 1)
+        ≈ −0.00030 ppm vs CODATA 2022 (~2σ). Residual OPEN.
+        Ladder: resum → dress → inv-cut → seat-unit.
+        Axiom: M-homogenize inv-cut den, subtract unit 1.
         """
         census = self.alpha_nF_kick_census_row()
         kappa = float(census["kappa"])
@@ -2779,19 +2770,22 @@ class SIConstants:
         face_q = 1.0 / (n_sq + 1)
         u0 = float(self.F_0) * float(self.l_P) ** 2
         hbar_c = float(self.hbar) * float(self.c)
-        alpha_c = 7.2973525693e-3
+        alpha_c = 7.2973525643e-3  # CODATA 2022
         a0 = kappa / m
         x = a0 / 7.0
-        a_resum = a0 / (1.0 - x)  # = 1/(M/κ − 1/7)
-        a_dress = a0 * (1.0 + x)  # = κ(7M+κ)/(7M²)
+        a_resum = a0 / (1.0 - x)
+        a_dress = a0 * (1.0 + x)
         a_exact_frac = kappa * (7.0 * m + kappa) / (7.0 * m * m)
-        # preferred: (inv₀ − α0²/7)/(1+x)  ⇔  M κ (7M+κ)/(7M³ − κ³)
         inv0 = m / kappa
-        inv_pref = (inv0 - a0 * x) / (1.0 + x)
-        a_pref = 1.0 / inv_pref
-        a_pref_frac = (
-            m * kappa * (7.0 * m + kappa) / (7.0 * m * m * m - kappa * kappa * kappa)
+        inv_c = (inv0 - a0 * x) / (1.0 + x)
+        a_invcut = 1.0 / inv_c
+        den_c = 7.0 * m * m * m - kappa * kappa * kappa
+        a_invcut_frac = m * kappa * (7.0 * m + kappa) / den_c
+        a_pref = (
+            (m * m) * kappa * (7.0 * m + kappa)
+            / (7.0 * m**4 - m * kappa**3 - 1.0)
         )
+        a_pref_alt = a_invcut_frac / (1.0 - 1.0 / (m * den_c))
 
         def ppm(a: float) -> float:
             return (a - alpha_c) / alpha_c * 1.0e6
@@ -2815,84 +2809,92 @@ class SIConstants:
                 "id": "resum_alpha0_over_1_minus_x",
                 "alpha": a_resum,
                 "ppm": ppm(a_resum),
-                "maps_to": "α0/(1−α0/7)=1/(M/κ−1/7) — overshoot +1.03",
+                "maps_to": "α0/(1−α0/7)",
                 "status": "demoted_resummation",
             },
             {
                 "id": "dressing_alpha0_times_1_plus_x",
                 "alpha": a_dress,
                 "ppm": ppm(a_dress),
-                "maps_to": "α0(1+α0/7)=κ(7M+κ)/(7M²) — 1st-order trunc",
+                "maps_to": "α0(1+α0/7)",
                 "status": "demoted_first_order",
             },
             {
-                "id": "preferred_inv_cut_then_dress",
+                "id": "inv_cut_then_dress",
+                "alpha": a_invcut,
+                "ppm": ppm(a_invcut),
+                "maps_to": "M·κ·(7M+κ)/(7M³−κ³)",
+                "status": "demoted_inv_cut",
+            },
+            {
+                "id": "preferred_seat_unit",
                 "alpha": a_pref,
                 "ppm": ppm(a_pref),
-                "maps_to": (
-                    "α=M·κ·(7M+κ)/(7M³−κ³); "
-                    "α⁻¹=(M/κ−α0²/7)/(1+α0/7)"
-                ),
+                "maps_to": "M²·κ·(7M+κ)/(7M⁴−M·κ³−1)",
                 "status": "preferred_candidate",
             },
             {
                 "id": "plus_1ppm_explained",
-                "maps_to": "+1.03 was resum 1/(1−x) vs dressing 1+x",
+                "maps_to": "+1.03 resum vs dressing",
                 "status": "explained",
             },
             {
-                "id": "axiom_inv_cut_then_dress",
-                "maps_to": (
-                    "cut bare inv by face×α0 (=α0²/7), then ÷(1+x); "
-                    "7=n_sq+1"
-                ),
+                "id": "axiom_seat_unit",
+                "maps_to": "M-homogenize inv-cut den, subtract unit 1",
                 "status": "shipped_axiom",
             },
             {
-                "id": "open_residual_minus_0p0026_ppm",
+                "id": "open_residual_vs_codata2022",
                 "ppm": ppm(a_pref),
-                "maps_to": "−0.0026 ppm after preferred — still ask (~17× u_r)",
+                "maps_to": "~−0.00030 ppm (~2σ) — still ask",
                 "status": "open",
             },
         ]
         return {
-            "theorem": "§8.2·α·U0·soft-face — α=M κ (7M+κ)/(7M³−κ³)",
+            "theorem": "§8.2·α·U0·soft-face — α=M² κ (7M+κ)/(7M⁴−M κ³−1)",
             "M": m,
             "kappa": kappa,
             "U0_J_m": u0,
             "hbar_c_over_U0": hbar_c / u0,
             "face_quantum": face_q,
+            "alpha_codata": alpha_c,
+            "codata_year": 2022,
             "alpha_coarse": a0,
             "alpha_resum": a_resum,
             "alpha_dress": a_dress,
-            "alpha_soft": a_pref,  # preferred
+            "alpha_invcut": a_invcut,
+            "alpha_soft": a_pref,
             "alpha_pref": a_pref,
             "vs_codata_ppm_coarse": ppm(a0),
             "vs_codata_ppm_resum": ppm(a_resum),
             "vs_codata_ppm_dress": ppm(a_dress),
+            "vs_codata_ppm_invcut": ppm(a_invcut),
             "vs_codata_ppm_soft": ppm(a_pref),
             "vs_codata_ppm_pref": ppm(a_pref),
             "identity_dress_frac": abs(a_dress - a_exact_frac) < 1e-15,
-            "identity_pref_frac": abs(a_pref - a_pref_frac) < 1e-15,
+            "identity_invcut_frac": abs(a_invcut - a_invcut_frac) < 1e-15,
+            "identity_pref_homogenized": abs(a_pref - a_pref_alt) < 1e-15,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
             "plus_1ppm_explained": True,
             "axiom_inv_cut_shipped": True,
+            "axiom_seat_unit_shipped": True,
             "inventory": inventory,
             "ask_ok": m == 97
             and abs(face_q - 1.0 / 7.0) < 1e-15
             and abs(a_dress - a_exact_frac) < 1e-15
-            and abs(a_pref - a_pref_frac) < 1e-15
+            and abs(a_invcut - a_invcut_frac) < 1e-15
+            and abs(a_pref - a_pref_alt) < 1e-15
             and abs(hbar_c / u0 - 2.0 * kappa) < 1e-12
-            and abs(ppm(a_pref)) < 0.01
+            and abs(ppm(a_pref)) < 0.001
+            and abs(ppm(a_invcut)) < 0.01
             and abs(ppm(a_dress)) < 0.1
-            and abs(ppm(a_resum) - 1.026566) < 0.01,
+            and abs(ppm(a_resum) - 1.02725) < 0.01,
             "note": (
-                "α0=κ/M. Face 1/7: preferred α=M·κ·(7M+κ)/(7M³−κ³) "
-                "~−0.0026 ppm (inv-cut then dress). "
-                "α0(1+α0/7) demoted to 1st-order (~−0.058). "
-                "Resum +1.03 demoted. Residual −0.0026 OPEN."
+                "Preferred α=M²·κ·(7M+κ)/(7M⁴−M·κ³−1) "
+                "~−0.00030 ppm vs CODATA 2022 (~2σ). "
+                "Seat-unit after inv-cut; residual OPEN."
             ),
         }
 
