@@ -881,6 +881,20 @@ H·ask «ℤ N_a0 из структуры H без α» остаётся **OPEN 
 
 **Код:** `SI.alpha_meter_na0_bridge_row()` · verify **`Alpha_meter_na0_bridge`**.
 
+#### §8.2·meter·decouple · SI-метр ∉ M
+После seal α + meter-fint: **на M метра нет.**
+
+| слой | длина |
+|------|--------|
+| **M** | hops of **hL** (a≡l_P, Thm 5.2 / §7.4) |
+| **α, masses, N_a0** | без метра (`N_a0=N_c/α`) |
+| **T-export** | optional: `x_m = N·l_P_SI`, SI-2019, optical a0 — lab speech only |
+
+`√(ħG/c³)` пишет метры для лаборатории; **не** правит линейку M.
+**Код:** `SI.meter_decouple_from_M_row()` · verify **`Meter_decouple_from_M`**.
+
+
+
 
 
 

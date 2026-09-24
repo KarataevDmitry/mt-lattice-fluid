@@ -7,6 +7,14 @@
 ---
 
 
+
+## 2026-09-24 · §8.2·meter·decouple — SI metre ∉ M (SEALED)
+
+**DoD:** After α seal, SI metre is fully off the M board. Lengths = hops of hL. α / masses / N_a0 never consult the metre. SI-2019 + optical a0 + √(ħG/c³) = T-export only.
+
+**Code:** `SI.meter_decouple_from_M_row()` · verify `Meter_decouple_from_M` · MODEL §8.2·meter·decouple.
+
+
 ## 2026-09-24 · §8.2·α·meter fint — N_a0/a0 readout (SEALED α-path)
 
 **DoD:** meter/optical a0 is **not** an input to α. Preferred α + upstairs cascade predict `N_a0=N_c/α`, `a0=N_a0·l_P`. Optical Bohr ≈ T-door ~0.45%. H→ℤN_a0 without α remains OPEN census (does not block α).
