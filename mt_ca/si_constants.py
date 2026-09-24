@@ -2762,7 +2762,8 @@ class SIConstants:
                  = M² κ (7M+κ)/(7M⁴ − M κ³ − 1 − 1/7)
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
         Ladder: resum → dress → inv-cut → seat(−1) → face(−1/7).
-        Axiom: after M-homogenize, subtract seat 1 and face 1/7 (=8/7).
+        Axiom: after M-homogenize, subtract soft unit (n_sq+2)/(n_sq+1)=8/7.
+        Wedge (OPEN): seat appears only post-*M; candidate overcount of one soft unit.
         Structural α exact; Δ(CODATA)=lab door (now inside ε).
         """
         census = self.alpha_nF_kick_census_row()
@@ -2881,8 +2882,23 @@ class SIConstants:
                 "status": "shipped_identity",
             },
             {
+                "id": "soft_unit_seat_plus_face",
+                "maps_to": "(n_sq+2)/(n_sq+1)=8/7 = seat 1 + face 1/(n_sq+1)",
+                "status": "shipped_unit",
+            },
+            {
+                "id": "wedge_promotion_overcount",
+                "maps_to": (
+                    "seat appears only after *M homogenize; inv-cut needs none. "
+                    "Candidate: promotion replicates M into dens and overcounts "
+                    "one soft unit (core seat already in M=1+N12·Nhier; face rides "
+                    "with (n_sq+1)-channel). Not sealed."
+                ),
+                "status": "candidate_wedge",
+            },
+            {
                 "id": "open_why_subtract_units",
-                "maps_to": "why den loses seat+face after homogenize — descent still OPEN",
+                "maps_to": "why homogenize overcounts exactly one soft unit — descent OPEN",
                 "status": "open_derivation",
             },
         ]

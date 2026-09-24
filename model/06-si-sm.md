@@ -793,7 +793,8 @@ $$
 \;\to\;
 \underbrace{\frac{7M^{2}\kappa(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}}_{\sim -0.000068\,\mathrm{ppm}\ (\sim 0.45\sigma)}.
 $$
-**Аксиома preferred:** после inv-cut — $M$-гомогенизация; вычесть **seat** $1$ и **face** $1/7$ (сумма $8/7=(n_\square+2)/(n_\square+1)$). Куски stamped; **почему вычитание** — descent OPEN.
+**Аксиома preferred:** после inv-cut — $M$-гомогенизация; вычесть **soft unit** $\frac{n_\square+2}{n_\square+1}=\frac{8}{7}$ (seat $1$ + face $1/(n_\square+1)$).
+**Клин (не печать):** seat появляется **только** после $\times M$; inv-cut его не требует. Кандидат: promotion тиражирует $M$ в знаменатель и **пересчитывает** один soft unit (ядро census уже в $M=1+N_{12}N_{\mathrm{hier}}$; face едет с каналом $n_\square+1$). **Descent OPEN** — нужен stamped reason overcount'а, не CODATA-fit.
 
 | путь | vs CODATA 2022 | роль |
 |------|----------------|------|
