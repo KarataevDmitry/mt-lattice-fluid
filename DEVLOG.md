@@ -9,6 +9,14 @@
 
 
 
+
+## 2026-09-24 · §8.2·[T]·t_P — time dim = t_P; M tick hT (SEALED)
+
+**DoD:** [T]=[L]/[V] ⇒ t_P=l_P/c. M tick hT=κ·t_P. SI-2019 Cs second = T-export tautology twin of c-fixed metre.
+
+**Code:** `SI.time_dim_from_tP_row()` · verify `Time_dim_from_tP`.
+
+
 ## 2026-09-24 · §8.2·[L]·l_P — length dim = l_P; hierarchy from α (SEALED)
 
 **DoD:** Natural unit l_P. Exact α ⇒ Compton/Bohr/r_e = N_c, N_c/α, α·N_c hops. Not SI-metre fit.
