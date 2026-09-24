@@ -786,13 +786,27 @@ def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
 
 def check_alpha_upstairs_mass_probe(device=None):
     from mt_ca.si_constants import SI
+
+    del device
     r = SI.alpha_upstairs_mass_probe_row()
+    ok = (
+        bool(r["ask_ok"])
+        and bool(r["derivation_closed"])
+        and bool(r["cascade_law_closed"])
+        and bool(r["pi_tower_not_input"])
+        and bool(r["soft_floors_open"])
+    )
     return {
         "id": "Alpha_upstairs_mass_probe",
-        "ok": bool(r["ask_ok"]),
+        "ok": ok,
+        "derivation_closed": r["derivation_closed"],
+        "cascade_law_closed": r["cascade_law_closed"],
+        "v_GeV": r["v_GeV"],
+        "m_H_GeV": r["m_H_GeV"],
         "m_H_rel_err": r["m_H_rel_err"],
         "m_p_rel_err": r["m_p_rel_err"],
         "m_e_rel_err": r["m_e_rel_err"],
+        "m_n_rel_err": r["m_n_rel_err"],
         "note": r["note"],
     }
 

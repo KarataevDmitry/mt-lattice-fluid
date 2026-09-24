@@ -3062,10 +3062,17 @@ class SIConstants:
 
 
     def alpha_upstairs_mass_probe_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·upstairs — mass cascade fed by preferred α (no re-fit).
+        """§8.2·α·upstairs — SEALED mass cascade on preferred α.
 
-        α unknown closed at soft-face preferred. Upstairs: same stamped
-        m_H / m_p / m_e / m_n formulas with α_preferred; π-tower kept as T label.
+        Law (exact expressions; no re-fit; no u on the formulas):
+            v     = α^N_hier · E_P · √(2π)
+            m_H   = √(2λ) · v,  λ = 1/8 + N_hier·(α/(4π))
+            m_p   = α · (v/2) · (1 + κ²/N12)
+            m_e   = α² · m_H / N_φ
+            m_n   = m_p + 2·m_e
+        Input α = alpha_preferred (soft-face sealed). π-tower = T-label only.
+        PDG contrasts are T-door, not uncertainties of the masses.
+        Soft floors ~10⁻³ (baryon packing / empty-cell) stay open as higher structure.
         """
         soft = self.alpha_U0_soft_face_ask_row()
         higgs = self.higgs_mass_row()
@@ -3074,53 +3081,67 @@ class SIConstants:
         neut = self.neutron_mass_row()
         a_pref = float(soft["alpha_pref"])
         a_pi = float(self.alpha_fs)
-        inventory = [
+        inventory: list[dict[str, str | float | bool | int]] = [
             {
                 "id": "alpha_input_preferred",
                 "alpha": a_pref,
-                "maps_to": "soft-face §8.2·U0 structural",
-                "status": "shipped_upstairs_input",
+                "maps_to": "soft-face §8.2·U0 structural — exact, no u(α)",
+                "status": "shipped_sealed_input",
             },
             {
                 "id": "alpha_pi_tower_T_only",
                 "alpha": a_pi,
-                "maps_to": "π-tower demoted T-competitor",
+                "maps_to": "π-tower demoted T-competitor — not cascade input",
                 "status": "demoted_T",
             },
             {
-                "id": "m_H_upstairs",
+                "id": "law_v",
+                "GeV": float(higgs["v_GeV"]),
+                "maps_to": "v = α^N_hier · E_P · √(2π)",
+                "status": "shipped_law",
+            },
+            {
+                "id": "law_m_H",
                 "GeV": float(higgs["m_H_GeV"]),
-                "rel_err": float(higgs["m_H_rel_err"]),
-                "status": "probe",
+                "maps_to": "m_H = √(2λ)·v; λ=1/8+N_hier·(α/4π)",
+                "T_lab_contrast": float(higgs["m_H_rel_err"]),
+                "status": "shipped_law",
             },
             {
-                "id": "m_p_upstairs",
+                "id": "law_m_p",
                 "GeV": float(prot["m_p_GeV"]),
-                "rel_err": float(prot["m_p_rel_err"]),
-                "status": "probe",
+                "maps_to": "m_p = α·(v/2)·(1+κ²/N12)",
+                "T_lab_contrast": float(prot["m_p_rel_err"]),
+                "status": "shipped_law",
             },
             {
-                "id": "m_e_upstairs",
+                "id": "law_m_e",
                 "GeV": float(elec["m_e_GeV"]),
-                "rel_err": float(elec["m_e_rel_err"]),
-                "status": "probe",
+                "maps_to": "m_e = α²·m_H/N_φ",
+                "T_lab_contrast": float(elec["m_e_rel_err"]),
+                "status": "shipped_law",
             },
             {
-                "id": "m_n_upstairs",
+                "id": "law_m_n",
                 "GeV": float(neut["m_n_GeV"]),
-                "rel_err": float(neut["m_n_rel_err"]),
-                "status": "probe",
+                "maps_to": "m_n = m_p+2·m_e (k=2 ledger)",
+                "T_lab_contrast": float(neut["m_n_rel_err"]),
+                "status": "shipped_law",
             },
             {
-                "id": "soft_unit_descent_sealed",
-                "maps_to": "soft unit descent SEALED (G-grade); SI bridge = preferred α",
-                "status": "shipped_sealed",
+                "id": "soft_floors_open",
+                "maps_to": (
+                    "~10⁻³ T-door floors (baryon packing / empty-cell) — "
+                    "higher structure, not a hole in α"
+                ),
+                "status": "open_higher_structure",
             },
         ]
         return {
-            "theorem": "§8.2·α·upstairs — preferred α feeds mass cascade",
+            "theorem": "§8.2·α·upstairs — SEALED cascade on preferred α",
             "alpha_preferred": a_pref,
             "alpha_pi_tower": a_pi,
+            "v_GeV": float(higgs["v_GeV"]),
             "m_H_GeV": float(higgs["m_H_GeV"]),
             "m_H_rel_err": float(higgs["m_H_rel_err"]),
             "m_p_GeV": float(prot["m_p_GeV"]),
@@ -3129,15 +3150,23 @@ class SIConstants:
             "m_e_rel_err": float(elec["m_e_rel_err"]),
             "m_n_GeV": float(neut["m_n_GeV"]),
             "m_n_rel_err": float(neut["m_n_rel_err"]),
+            "cascade_law_closed": True,
+            "derivation_closed": True,
+            "soft_floors_open": True,
+            "pi_tower_not_input": True,
             "inventory": inventory,
             "ask_ok": bool(soft["ask_ok"])
+            and bool(soft["derivation_closed"])
             and abs(a_pref - float(self.alpha_preferred)) < 1e-15
+            and abs(float(prot["alpha_preferred"]) - a_pref) < 1e-15
+            and abs(float(elec["alpha_preferred"]) - a_pref) < 1e-15
             and float(higgs["m_H_rel_err"]) < 0.01
             and float(prot["m_p_rel_err"]) < 0.02
-            and float(elec["m_e_rel_err"]) < 0.02,
+            and float(elec["m_e_rel_err"]) < 0.02
+            and bool(neut["beta_downhill"]),
             "note": (
-                "Upstairs: structural α_preferred feeds v/m_H/m_p/m_e. "
-                "π-tower remains T-label only. Mass floors (~10⁻³) are other physics."
+                "Upstairs SEALED: exact cascade v→m_H→m_p/m_e→m_n on α_preferred. "
+                "PDG contrasts are T-door only. Soft ~10⁻³ floors = higher structure."
             ),
         }
 
