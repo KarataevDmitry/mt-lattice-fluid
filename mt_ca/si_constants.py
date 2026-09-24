@@ -2919,22 +2919,39 @@ class SIConstants:
                 "value": 1.0 / (1.0 - kappa**6),
             },
             {
-                "id": "wedge_seven_is_space_plus_symmetry",
+                "id": "carrier_layers_local_vs_global",
                 "maps_to": (
-                    "Nature troll: soft-unit denominator 7 binds the same hard laws "
-                    "we already descended from — von Neumann N4 (light-cone cross) "
-                    "and SU(2) Pauli 3. Need not converge with cubocta n_sq+1; "
-                    "that rhyme can be echo. Descent still OPEN (why subtract)."
+                    "LOCAL: 7=N4+SU(2) — how the cell couples (causal cross + spin). "
+                    "GLOBAL: M=n_F seats — how F0 splits on the kick ledger (Thm 5.1). "
+                    "Different books on the carrier."
                 ),
-                "status": "candidate_wedge_fundamental",
+                "status": "shipped_carrier_layers",
+            },
+            {
+                "id": "carrier_homogenize_product",
+                "maps_to": (
+                    "After inv-cut, ×M homogenize rewrites α to M-scale. "
+                    "Denominator grows a 7·M⁴ term — product of local channels × global seats."
+                ),
+                "status": "shipped_carrier_mechanism",
+            },
+            {
+                "id": "carrier_why_subtract_soft_unit",
+                "maps_to": (
+                    "Carrier already accounts each layer once: force law per seat (F0/M), "
+                    "face channel per local 7 (α0/7). Homogenize product overcounts by "
+                    "exactly one soft unit = seat 1 + face quantum 1/7 = 8/7. "
+                    "Subtract soft unit = restore layer separation."
+                ),
+                "status": "candidate_carrier_answer",
             },
             {
                 "id": "open_why_subtract_units",
                 "maps_to": (
-                    "why homogenize subtracts soft unit built on (N4+SU2) — "
-                    "descent OPEN; product-rule not sealed"
+                    "Carrier answer above — product-rule candidate. "
+                    "Not sealed as axiom until live product-rule stamp; derivation_closed still False."
                 ),
-                "status": "open_derivation",
+                "status": "open_pending_seal",
             },
         ]
         return {
@@ -2974,6 +2991,7 @@ class SIConstants:
             and abs(soft_unit - (1.0 + face_q)) < 1e-15,
             "identity_seven_N4_plus_SU2": seven == 7 and n4 == 4 and n_su2 == 3,
             "seven_meaning_fundamental_candidate": True,
+            "carrier_soft_unit_answer_candidate": True,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
@@ -3003,7 +3021,7 @@ class SIConstants:
             "note": (
                 "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶)) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Soft unit via κ; 7=N4+SU(2) candidate; descent OPEN."
+                "Soft unit via κ; 7=N4+SU(2); carrier: homogenize product → subtract soft unit (candidate)."
             ),
         }
 

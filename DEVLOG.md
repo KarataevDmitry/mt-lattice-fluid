@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-24 | §8.2·α·carrier-soft | носитель: homogenize = product local($N_4$+SU2)×global($M$); subtract soft unit restores layers · candidate, not sealed |
 | 2026-09-24 | §8.2·α·7=N4+SU2 | семёрка soft unit: кандидат **фундаментальный** $7=N_4+3$ (крест+Паули); κ/n_□ — число/эхо; descent OPEN · `seven_N4_plus_SU2` |
 | 2026-09-24 | §6·seed·brick·scan | VACUUM_BOIL = N_φ Heisenberg bricks (full fill); reject N_ring ramp ring-scan; seeker → run_seed_brick_scan |
 | 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals CLOSED as MODEL readout; §10→eng pointer · Gpu_eng_tail_close PASS |
