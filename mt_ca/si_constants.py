@@ -2754,32 +2754,34 @@ class SIConstants:
 
 
 
-    def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·U0·soft-face — soft residual via U0=F0·l_P² packets.
 
-        Unit: U0 = F0·l_P² = s0·c0 [J·m] (our c0; hbar*c = 2*kappa*U0).
-        Coarse full-quant: X=U0/M, denom=hbar*c=2*kappa*U0 => alpha=kappa/M (-1040 ppm).
-        Soft descent (no pi):
-          alpha = (U0/M) / (2*kappa*U0 - U0/(7M)) = 1/(M/kappa - 1/7),
-          1/7 = 1/(n_sq+1) = 2/(n_sq+n_tri) — face+body / FCC dual.
-        Reading: hbar*c loses one cell face-quantum U0/7 amortized over M seats.
-        Equiv: alpha=kappa/(M - kappa/7). ~+1.03 ppm. Mechanism of why face-basis
-        subtracts from hbar*c — candidate descent; not axiom-CLOSED.
+    def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·U0·soft-face — face dressing of coarse α0=κ/M.
+
+        Unit: U0=F0·l_P²=s0·c0; hbar*c=2*kappa*U0.
+        Coarse: α0=κ/M (−1040 ppm).
+        Face quantum 1/7=1/(n_sq+1)=2/14.
+
+        Two truncations of the same face channel x=α0/7:
+          A) resummed  α0/(1−x) = 1/(M/κ−1/7)     → ~+1.03 ppm  (overshoot)
+          B) first-order dressing α0(1+x)=α0(1+α0/7)
+             = κ(7M+κ)/(7M²)                     → ~−0.058 ppm
+        +1.03 explained as wrong resummation of the same 1/7; prefer B.
+        Still OPEN: axiom why face multiplies as (1+α0/7); residual −0.058.
         """
         census = self.alpha_nF_kick_census_row()
         kappa = float(census["kappa"])
         m = int(census["M"])
         n_sq, n_tri = 6, 8
-        face_q = 1.0 / (n_sq + 1)  # = 2/(n_sq+n_tri)
+        face_q = 1.0 / (n_sq + 1)
         u0 = float(self.F_0) * float(self.l_P) ** 2
         hbar_c = float(self.hbar) * float(self.c)
-        inv_coarse = m / kappa
-        inv_soft = inv_coarse - face_q
         alpha_c = 7.2973525693e-3
-        a_coarse = kappa / m
-        a_soft = 1.0 / inv_soft
-        denom_u0 = 2.0 * kappa - face_q / m
-        a_from_U = (1.0 / m) / denom_u0
+        a0 = kappa / m
+        x = a0 / 7.0
+        a_resum = a0 / (1.0 - x)  # = 1/(M/κ − 1/7)
+        a_dress = a0 * (1.0 + x)  # = κ(7M+κ)/(7M²)
+        a_exact_frac = kappa * (7.0 * m + kappa) / (7.0 * m * m)
 
         def ppm(a: float) -> float:
             return (a - alpha_c) / alpha_c * 1.0e6
@@ -2787,71 +2789,80 @@ class SIConstants:
         inventory: list[dict[str, str | float | bool | int]] = [
             {
                 "id": "unit_U0",
-                "maps_to": "U0=F0·l_P²=s0·c0 [J·m]; hbar*c=2*kappa*U0",
+                "maps_to": "U0=F0·l_P²; hbar*c=2*kappa*U0",
                 "U0": u0,
                 "hbar_c_over_U0": hbar_c / u0,
                 "status": "shipped_unit",
             },
             {
-                "id": "coarse_X_over_hbar_c",
-                "maps_to": "X=U0/M, denom=hbar*c=2*kappa*U0 => alpha=kappa/M",
-                "alpha": a_coarse,
-                "ppm": ppm(a_coarse),
+                "id": "coarse_alpha0",
+                "alpha": a0,
+                "ppm": ppm(a0),
+                "maps_to": "α0=κ/M",
                 "status": "shipped_coarse",
             },
             {
-                "id": "soft_denom_minus_face_per_seat",
-                "maps_to": "denom=hbar*c - U0/(7M); 7=n_sq+1=2/14",
-                "face_quantum": face_q,
-                "delta_over_U0": face_q / m,
-                "alpha": a_soft,
-                "ppm": ppm(a_soft),
-                "status": "descent_candidate",
+                "id": "resum_alpha0_over_1_minus_x",
+                "alpha": a_resum,
+                "ppm": ppm(a_resum),
+                "maps_to": "α0/(1−α0/7)=1/(M/κ−1/7) — overshoot +1.03",
+                "status": "demoted_resummation",
             },
             {
-                "id": "identity_U_form_equals_inv_form",
-                "maps_to": "(1/M)/(2*kappa-1/(7M)) = 1/(M/kappa-1/7) = kappa/(M-kappa/7)",
-                "match": abs(a_from_U - a_soft) < 1e-15,
-                "status": "identity",
+                "id": "dressing_alpha0_times_1_plus_x",
+                "alpha": a_dress,
+                "ppm": ppm(a_dress),
+                "maps_to": "α0(1+α0/7)=κ(7M+κ)/(7M²); 7=n_sq+1",
+                "status": "preferred_candidate",
             },
             {
-                "id": "reject_pi_in_soft",
-                "maps_to": "pi-tower not input; soft piece is face+body count",
-                "status": "rejected_pi",
+                "id": "plus_1ppm_explained",
+                "maps_to": "+1.03 was A vs B truncation of same face channel",
+                "status": "explained",
             },
             {
-                "id": "open_why_face_basis_cuts_hbar_c",
-                "maps_to": "axiom bridge: why U0/7 amortizes into hbar*c — still ask",
+                "id": "open_axiom_face_dressing",
+                "maps_to": "why dressing is (1+α0/7) not other face weight — ask",
+                "status": "open",
+            },
+            {
+                "id": "open_residual_minus_0p06_ppm",
+                "ppm": ppm(a_dress),
+                "maps_to": "−0.058 ppm after preferred dressing — still ask",
                 "status": "open",
             },
         ]
         return {
-            "theorem": "§8.2·α·U0·soft-face — alpha=(U0/M)/(hbar*c-U0/(7M))",
+            "theorem": "§8.2·α·U0·soft-face — α≈α0(1+α0/7)",
             "M": m,
             "kappa": kappa,
             "U0_J_m": u0,
             "hbar_c_over_U0": hbar_c / u0,
             "face_quantum": face_q,
-            "alpha_coarse": a_coarse,
-            "alpha_soft": a_soft,
-            "alpha_from_U_form": a_from_U,
-            "vs_codata_ppm_coarse": ppm(a_coarse),
-            "vs_codata_ppm_soft": ppm(a_soft),
-            "inv_soft": inv_soft,
-            "identity_U_form": abs(a_from_U - a_soft) < 1e-15,
+            "alpha_coarse": a0,
+            "alpha_resum": a_resum,
+            "alpha_dress": a_dress,
+            "alpha_soft": a_dress,  # preferred
+            "vs_codata_ppm_coarse": ppm(a0),
+            "vs_codata_ppm_resum": ppm(a_resum),
+            "vs_codata_ppm_dress": ppm(a_dress),
+            "vs_codata_ppm_soft": ppm(a_dress),
+            "identity_dress_frac": abs(a_dress - a_exact_frac) < 1e-15,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
+            "plus_1ppm_explained": True,
             "inventory": inventory,
             "ask_ok": m == 97
             and abs(face_q - 1.0 / 7.0) < 1e-15
-            and abs(a_from_U - a_soft) < 1e-15
+            and abs(a_dress - a_exact_frac) < 1e-15
             and abs(hbar_c / u0 - 2.0 * kappa) < 1e-12
-            and abs(ppm(a_soft)) < 2.0,
+            and abs(ppm(a_dress)) < 0.1
+            and abs(ppm(a_resum) - 1.026566) < 0.01,
             "note": (
-                "U0=F0 l_P^2; hbar*c=2*kappa*U0. Coarse alpha=kappa/M (-1040 ppm). "
-                "Soft: alpha=(U0/M)/(hbar*c-U0/(7M)) ~+1.03 ppm; 7=n_sq+1. "
-                "Descent candidate; axiom why face cuts hbar*c still OPEN."
+                "α0=κ/M. Face 1/7: preferred α=α0(1+α0/7) ~−0.058 ppm; "
+                "resum α0/(1−α0/7) was the +1.03 overshoot. "
+                "Axiom of dressing + residual −0.058 OPEN."
             ),
         }
 

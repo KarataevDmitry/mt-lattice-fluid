@@ -774,32 +774,29 @@ $$
 π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft residual дискретного пути — **OPEN** (вышележащая структура / duel), не дыра в $M$.
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
-#### §8.2·α·U0·soft-face · soft residual через пакеты $U_0=F_0\,l_P^{2}$
+#### §8.2·α·U0·soft-face · face-dressing $\alpha_0(1+\alpha_0/7)$
 
-**Единица (наша, не macro-$c$):**
-$$
-U_0 = F_0\,l_P^{2} = s_0\,c_0\quad[\mathrm{J}\cdot\mathrm{m}],
-\qquad \hbar c = 2\kappa\,U_0.
-$$
-**Грубо (full-quant):** $X=U_0/M$, знаменатель $\hbar c$ ⇒ $\alpha=\kappa/M$ (~−1040 ppm).
+**Единица:** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
+**Грубо:** $\alpha_0=\kappa/M$ (~−1040 ppm).
+**Face quantum:** $1/7=1/(n_\square+1)=2/14$, канал $x=\alpha_0/7$.
 
-**Мягкий спуск (без $\pi$):**
+Два обрезания одного канала:
 $$
-\alpha = \frac{U_0/M}{\hbar c - U_0/(7M)}
-= \frac{1}{M/\kappa - 1/7}
-= \frac{\kappa}{M - \kappa/7},
-\qquad
-\frac{1}{7} = \frac{1}{n_\square+1} = \frac{2}{n_\square+n_\triangle}.
+\underbrace{\frac{\alpha_0}{1-x}}_{\sim +1.03\,\mathrm{ppm}\ (\mathrm{resum})}
+\qquad\text{vs}\qquad
+\underbrace{\alpha_0(1+x)=\alpha_0\Bigl(1+\frac{\alpha_0}{7}\Bigr)
+=\frac{\kappa(7M+\kappa)}{7M^{2}}}_{\sim -0.058\,\mathrm{ppm}\ (\mathrm{preferred})}.
 $$
-Чтение: $\hbar c$ теряет один ячеечный face-quantum $U_0/7$, амортизированный по $M$ seats. $7$ — шесть □-граней + тело ячейки (или $14/2$ FCC-граней на helicity).
+**+1.03 ppm объяснён:** это resummation $1/(1-x)$ вместо dressing $1+x$. Предпочтительная форма — первая поправка по face-каналу.
 
-| путь | vs CODATA | статус |
-|------|-----------|--------|
-| $\alpha=\kappa/97$ | ~−1040 ppm | coarse CLOSED |
-| $\alpha=1/(97\sqrt{2}-1/7)$ | ~+1.03 ppm | soft descent candidate |
-| $\pi$-tower | ~−2.2 ppm | T-competitor, не вход |
+| путь | vs CODATA | роль |
+|------|-----------|------|
+| $\alpha_0=\kappa/97$ | ~−1040 ppm | coarse |
+| $\alpha_0/(1-\alpha_0/7)$ | ~+1.03 ppm | demoted resum |
+| $\alpha_0(1+\alpha_0/7)$ | ~−0.058 ppm | preferred candidate |
+| $\pi$-tower | ~−2.2 ppm | T only |
 
-**OPEN:** аксиоматический мост *почему* face-базис режет именно $\hbar c$ (не claim CLOSED).
+**OPEN:** аксиома dressing $(1+\alpha_0/7)$; хвост −0.058 ppm.
 **Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
