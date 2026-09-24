@@ -716,10 +716,10 @@ $$
 | пара | $m$ (путь A) | $n$ (путь B) | статус ног |
 |------|--------------|--------------|------------|
 | hops | $N_c$ | $N_{a0}$ | $N_{a0}$ OPEN (H); $N_c$ сегодня α-tied через $m_e$ |
-| force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M OPEN** (F·ask) — живая dual |
+| force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97 combinatorial CLOSED** (nF); soft residual OPEN |
 | Schwinger | $a_e$ | $2r=1/(2\pi)$ | $2r$ CLOSED; $a_e$ OPEN/lab |
 **Отвергнуто:** одна нога на оба ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
-**Сильнейшая живая dual сейчас:** $\alpha=\kappa/M$ — закрыть $M$ из $g$.
+**Сильнейшая dual:** $\alpha=\kappa/M$ — дискретная перепись мест **shipped**; duel с π-tower (~2 ppm vs ~−1040 ppm) — soft OPEN.
 **Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
 #### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
 **Лемма (force dual).** Пусть $\alpha=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
@@ -728,7 +728,7 @@ $$
 1. Точные $1/137$, $M/512$ и любой $p/q$ как *определение* α — **несовместимы** с dual $\kappa/M$.
 2. «Дробь $m/n$» на носителе ≠ $\alpha\in\mathbb{Q}$; это отношение двух величин носителя ($\kappa/M$ — иррациональное / целое).
 3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
-**Не закрывает** $M$ — только выкидывает рациональные самозванцы. Живой кандидат формы: $\alpha=\kappa/97$ (~−1040 ppm); $M$ из $g$ OPEN.
+**Не закрывает** soft residual — только выкидывает рациональные самозванцы. Кандидат формы: $\alpha=\kappa/97$ (~−1040 ppm); $M$ combinatorial CLOSED (nF census).
 **Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
 #### §8.2·α·M·g·try · Попытка: $M$ из stamped бит-бюджета
 **Dual:** $\alpha=\kappa/M$. $\kappa$ закрыт. Нужен $M\in\mathbb{N}$ без α.
@@ -761,6 +761,19 @@ $$
 Тогда $\alpha=\kappa/M$ (~−1040 ppm — мягкий остаток выше, не дыра в счёте). $M=96$ без ядра — неполная перепись.
 **Статус:** комбинаторная перепись мест kick-ledger **CLOSED**. Runtime-гистограмма $\Delta p$ из сима — N/A (в CA нет opcode Кулона); это не дыра счёта мест.
 **Код:** `SI.alpha_nF_kick_census_row()` · verify **`Alpha_nF_kick_census`**.
+#### §8.2·α·full-quant · α из полного квантования (не π-ansatz)
+**Смысл «тонкой структуры».** §0.9: на M нет continuum-волны — есть occupancy мод / **$n_E\cdot E_0$**. Сила — **$n_F\cdot F_0$** (Thm 5.1). Постоянная тонкой структуры — не «магическое π», а **безразмерная тонкость**: на сколько unit NN Coulomb слабее одного Planck-force пакета на носителе.
+$$
+\alpha F_P = F_0/M \quad\Rightarrow\quad \alpha=\kappa/M,
+\quad \kappa=1/\sqrt{2}\ \text{CLOSED},\quad M=n_{F,\mathrm{seats}}=97\ \text{CLOSED (census)}.
+$$
+**Два числа — два слоя:**
+| путь | формула | vs CODATA | роль |
+|------|---------|-----------|------|
+| **дискрет (descent)** | $\alpha=\kappa/97$ | ~−1040 ppm | полное квантование + seats |
+| **π-tower (T)** | $1/(4\pi^3+\pi^2+\pi)$ | ~+2 ppm | continuum $\Omega=4\pi$ readout |
+π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft residual дискретного пути — **OPEN** (вышележащая структура / duel), не дыра в $M$.
+**Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
 **Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
 | при `a=l_P` | формула | SI |
