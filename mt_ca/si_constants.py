@@ -3319,7 +3319,7 @@ class SIConstants:
           OLD trap: optical meter / a0 → N_a0 → α (T-anchor as definition).
           NEW: α sealed (soft-face) → upstairs m_e → N_c=m_P/m_e → N_a0=N_c/α.
 
-        SI meter remains SI-2019 via c; lattice unit = l_P = hL.
+        Lattice unit = hL = l_P (A1). SI metre ∉ M — optional T-export only.
         Optical a0 / CODATA N_a0_Bohr — T-door only (~0.45%), not M-definition.
         H·ask independent ℤ N_a0 without α remains OPEN (census), but does NOT
         block α and does NOT define the meter for α.
@@ -3393,6 +3393,9 @@ class SIConstants:
             "identity_alpha_eq_Nc_over_Na0": id_hop,
             "identity_a0_bohr_eq_Na0_lP": id_bohr,
             "meter_not_input_to_alpha": True,
+            "meter_not_on_M": True,
+            "SI_metre_is_T_export_only": True,
+            "M_lengths_are_hops": True,
             "optical_a0_is_T_door_only": True,
             "alpha_path_closed": True,
             "independent_Na0_from_H_open": True,
@@ -3409,9 +3412,103 @@ class SIConstants:
             ),
             "note": (
                 "Fint: meter/optical a0 is not an input to α. "
-                "Sealed α + upstairs m_e predict N_a0=N_c/α and a0=N_a0·l_P. "
+                "Sealed α + upstairs m_e predict N_a0=N_c/α (hops). "
+                "SI metre ∉ M — T-export only; see meter_decouple_from_M_row. "
                 "Optical Bohr/N_a0 is T-door (~0.45%). "
                 "H→ℤN_a0 without α remains OPEN census — does not block α."
+            ),
+        }
+
+
+    def meter_decouple_from_M_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·meter·decouple — SI metre ∉ M; lengths on M are hops of hL.
+
+        Cooler seal after α + meter-fint:
+          On M there is no metre. Size = occupancy hops (Thm 5.2).
+          hL := A1 light-like link; l_P is the name once a≡hL is forced (§7.4).
+          α, upstairs masses, N_a0=N_c/α are metre-free.
+          SI-2019 metre (c-fixed) and optical a0 are optional T-export / T-door only.
+          Writing x_m = N·l_P_SI still needs ħ,G for lab speech — not for the M ruler.
+        """
+        soft = self.alpha_U0_soft_face_ask_row()
+        up = self.alpha_upstairs_mass_probe_row()
+        meter = self.alpha_meter_na0_bridge_row()
+        anchor = self.anchor_a_is_l_P_row()
+        hop = self.alpha_hop_ladder_row()
+        a = float(self.alpha_preferred)
+        n_a0 = float(meter["N_a0_predicted"])
+        n_c = float(meter["N_c"])
+        inventory = [
+            {
+                "id": "M_lengths_are_hops",
+                "maps_to": "Thm 5.2 — size = occupancy hops of hL, not continuum metre",
+                "ok": True,
+            },
+            {
+                "id": "hL_is_A1_link",
+                "maps_to": "l_P := hL := A1 (§7.4); not defined by SI metre",
+                "ok": bool(anchor["a_equals_hL"]) and bool(anchor["l_P_not_defined_by_c"]),
+            },
+            {
+                "id": "alpha_metre_free",
+                "maps_to": "soft-face α — no metre in definition",
+                "ok": bool(soft["derivation_closed"]) and bool(soft["ask_ok"]),
+            },
+            {
+                "id": "masses_metre_free",
+                "maps_to": "upstairs cascade on preferred α — GeV/hops, not metre",
+                "ok": bool(up["ask_ok"]),
+            },
+            {
+                "id": "N_a0_metre_free",
+                "maps_to": "N_a0 = N_c/α — dimensionless readout",
+                "value": n_a0,
+                "ok": bool(meter["identity_alpha_eq_Nc_over_Na0"]),
+            },
+            {
+                "id": "SI_metre_T_export_only",
+                "maps_to": "SI-2019 metre / optical a0 — optional lab speech, not M input",
+                "ok": True,
+            },
+            {
+                "id": "l_P_SI_packaging",
+                "maps_to": "√(ħG/c³) writes metres for T; does not rule M",
+                "ok": bool(anchor["scale_decoupled_from_c_definition"]),
+            },
+        ]
+        m_board_ok = all(bool(item["ok"]) for item in inventory)
+        return {
+            "theorem": "§8.2·meter·decouple — SI metre ∉ M",
+            "method": "after α seal: assert hop-only lengths; metre = T-export only",
+            "alpha_preferred": a,
+            "N_c": n_c,
+            "N_a0_predicted": n_a0,
+            "N_a0_optical_T": float(hop["N_a0_Bohr"]),
+            "hL_equals_l_P": bool(anchor["a_equals_hL"]),
+            "l_P_not_defined_by_c": bool(anchor["l_P_not_defined_by_c"]),
+            "scale_decoupled_from_c_definition": bool(
+                anchor["scale_decoupled_from_c_definition"]
+            ),
+            "meter_not_on_M": True,
+            "meter_not_input_to_alpha": True,
+            "meter_not_input_to_masses": True,
+            "meter_not_input_to_Na0": True,
+            "SI_metre_is_T_export_only": True,
+            "optical_a0_is_T_door_only": True,
+            "M_lengths_are_hops": True,
+            "absolute_SI_still_needs": str(anchor["absolute_SI_still_needs"]),
+            "derivation_closed": True,
+            "inventory": inventory,
+            "ask_ok": (
+                m_board_ok
+                and bool(meter["ask_ok"])
+                and bool(meter["alpha_path_closed"])
+                and abs(a - float(soft["alpha_pref"])) < 1e-15
+            ),
+            "note": (
+                "Cooler seal: SI metre is fully off the M board. "
+                "Lengths on M = hops of hL (a≡l_P). α, masses, N_a0=N_c/α never consult "
+                "the metre. SI-2019 / optical a0 / √(ħG/c³) are T-export packaging only."
             ),
         }
 

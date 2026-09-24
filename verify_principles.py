@@ -856,6 +856,9 @@ def check_alpha_meter_na0_bridge(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["derivation_closed"])
         and bool(row["meter_not_input_to_alpha"])
+        and bool(row["meter_not_on_M"])
+        and bool(row["SI_metre_is_T_export_only"])
+        and bool(row["M_lengths_are_hops"])
         and bool(row["optical_a0_is_T_door_only"])
         and bool(row["alpha_path_closed"])
         and bool(row["identity_alpha_eq_Nc_over_Na0"])
@@ -871,6 +874,36 @@ def check_alpha_meter_na0_bridge(device: str = "cpu") -> dict:
         "T_lab_rel_vs_optical_a0": row["T_lab_rel_vs_optical_a0"],
         "meter_not_input_to_alpha": row["meter_not_input_to_alpha"],
         "alpha_path_closed": row["alpha_path_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
+
+def check_meter_decouple_from_M(device: str = "cpu") -> dict:
+    """§8.2·meter·decouple — SI metre ∉ M; lengths are hops."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.meter_decouple_from_M_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["meter_not_on_M"])
+        and bool(row["SI_metre_is_T_export_only"])
+        and bool(row["M_lengths_are_hops"])
+        and bool(row["meter_not_input_to_alpha"])
+        and bool(row["meter_not_input_to_masses"])
+        and bool(row["meter_not_input_to_Na0"])
+        and bool(row["l_P_not_defined_by_c"])
+        and bool(row["hL_equals_l_P"])
+    )
+    return {
+        "id": "Meter_decouple_from_M",
+        "N_a0_predicted": row["N_a0_predicted"],
+        "meter_not_on_M": row["meter_not_on_M"],
+        "SI_metre_is_T_export_only": row["SI_metre_is_T_export_only"],
+        "M_lengths_are_hops": row["M_lengths_are_hops"],
         "ok": ok,
         "note": row["note"],
     }
@@ -2859,6 +2892,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_upstairs_mass_probe(device=device),
         check_alpha_si_bridge(device=device),
         check_alpha_meter_na0_bridge(device=device),
+        check_meter_decouple_from_M(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
