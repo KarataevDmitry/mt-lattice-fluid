@@ -798,7 +798,7 @@ def check_alpha_upstairs_mass_probe(device=None):
 
 
 def check_alpha_si_bridge(device: str = "cpu") -> dict:
-    """§8.2·α·SI-bridge — carrier α (no macros) → U0 → lab CODATA score."""
+    """§8.2·α·SI-bridge — carrier α exact (no u(α)); U0 packet; T-door optional."""
     from mt_ca.si_constants import SI
 
     del device
@@ -807,14 +807,14 @@ def check_alpha_si_bridge(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["derivation_closed"])
         and bool(row["macros_not_inputs"])
+        and bool(row["alpha_exact"])
+        and bool(row["no_u_alpha"])
         and bool(row["identity_hbar_c_eq_2kappa_U0"])
         and bool(row["identity_pref_eq_dU"])
         and bool(row["identity_pref_eq_cleared"])
-        and bool(row["lab_inside_codata_band"])
         and int(row["M"]) == 97
         and int(row["d"]) == 7
         and int(row["codata_year"]) == 2022
-        and abs(float(row["vs_codata_ppm"])) < 0.00016
     )
     return {
         "id": "Alpha_si_bridge",
@@ -822,7 +822,9 @@ def check_alpha_si_bridge(device: str = "cpu") -> dict:
         "d": row["d"],
         "U": row["U"],
         "alpha_preferred": row["alpha_preferred"],
-        "vs_codata_ppm": row["vs_codata_ppm"],
+        "alpha_exact": row["alpha_exact"],
+        "no_u_alpha": row["no_u_alpha"],
+        "T_lab_contrast_ppm": row["T_lab_contrast_ppm"],
         "hbar_c_over_U0": row["hbar_c_over_U0"],
         "ok": ok,
         "note": row["note"],

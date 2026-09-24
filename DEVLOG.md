@@ -311,7 +311,7 @@ z' = z · exp(iφ)
 | 2026-09-24 | §6·floor1·dressing·ask | ρ_Θ halo: R_min=1·dl (ε-star) CLOSED; outer R_dress OPEN; reject Compton/α/forced N₁₂^{3…4} · Floor1_dressing_ask PASS |
 | 2026-09-24 | §6·floor1·B0·census | only stable B=0 matter @N₁₂³…⁴ = dressed lightest Q=±1; Q=0 blobs=pre-resonance · Floor1_B0_census_ask PASS |
 | 2026-09-24 | §6·floor1·ask | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1 · Floor1_leptonic_ask PASS |
-| 2026-09-24 | §8.2·α·SI-bridge | carrier α=κ,M,d,U only; U0↔ħc=2κU0; lab score ~−0.000068 ppm · Alpha_si_bridge PASS |
+| 2026-09-24 | §8.2·α·SI-bridge | α exact (κ,M,d,U; no u(α)); U0↔ħc=2κU0; CODATA=T-door only · Alpha_si_bridge PASS |
 | 2026-09-24 | §8.2·α·nF·census | seat table: 1 core + 12×8 hier = 97; F=F₀/97 ⇒ α=κ/97; combinatorial CLOSED · Alpha_nF_kick_census PASS |
 | 2026-09-24 | §8.2·α·M·g·try | M=1+N₁₂·N_hier=97 (core b + link×hier); α=κ/97 ~−1040ppm; → census · Alpha_M_from_g_try PASS |
 | 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent_ask PASS |
@@ -501,7 +501,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **α·U0·soft-face:** preferred ~−0.000068 ppm (~0.45σ). Soft unit from symmetry: $U=(d+1)/d=1/(1−κ^{n_□})=8/7$. **Unit descent SEALED** — G-grade completeness: grade-0 soft singlet once in M-scale den (soft-minus; not ×M; not in num). `derivation_closed=True`. Global-M book false trail. Upstairs on `alpha_preferred`.
 
-**α·SI-bridge:** carrier α from κ,M,d,U only (no ħ,c,e,ε₀). Unit packet: U0=F0·l_P², ħc=2κ U0. Lab e²/(4π ε₀ ħ c) = score vs CODATA 2022. `Alpha_si_bridge` PASS.
+**α·SI-bridge:** carrier α from κ,M,d,U only — **exact** (no u(α), no ppm of α). Unit packet: U0=F0·l_P², ħc=2κ U0. CODATA contrast = optional T-door only. `Alpha_si_bridge` PASS.
 
 ---
 

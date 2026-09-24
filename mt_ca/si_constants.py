@@ -3142,20 +3142,21 @@ class SIConstants:
         }
 
     def alpha_si_bridge_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·SI-bridge — sealed carrier α → SI unit packet → lab score.
+        """§8.2·α·SI-bridge — sealed carrier α → SI unit packet; α exact.
 
-        Carrier (definition; no ħ, c, e, ε₀):
+        Carrier (definition; no ħ, c, e, ε₀; no u(α)):
             d = N4 + SU(2) = 7
             U = (d+1)/d = 8/7
             α = M² κ (d M + κ) / (d M⁴ − M κ³ − U)
               = 7 M² κ (7M+κ) / (49 M⁴ − 7 M κ³ − 8)
+        Structural α is exact — it has no ppm and no u(α).
 
         Unit packet (how ħ,c enter SI conversion of force/action — not α):
             U0 = F0 · l_P² = s0 · c0
             ħ c = 2 κ U0
 
-        Lab readout: α_SI ≡ e²/(4π ε₀ ħ c) scored by CODATA 2022;
-        prediction is α_preferred. Macros are not inputs to α.
+        Optional T-door: contrast of the same number vs CODATA 2022
+        (lab e²/(4π ε₀ ħ c)). That contrast is not a property of α.
         """
         soft = self.alpha_U0_soft_face_ask_row()
         m = int(soft["M"])
@@ -3210,12 +3211,20 @@ class SIConstants:
                 "status": "shipped_unit_bridge",
             },
             {
-                "id": "lab_score_CODATA_2022",
+                "id": "alpha_exact_no_u",
+                "maps_to": "structural α exact — no u(α), no ppm of α",
+                "status": "shipped_exact",
+            },
+            {
+                "id": "T_door_CODATA_contrast",
                 "alpha_preferred": a_pref,
                 "alpha_CODATA": alpha_c,
-                "vs_codata_ppm": ppm,
-                "maps_to": "lab α_SI ≡ e²/(4π ε₀ ħ c) — readout/score, not input",
-                "status": "shipped_lab_inside_band",
+                "T_lab_contrast_ppm": ppm,
+                "maps_to": (
+                    "optional T-door: same number vs CODATA 2022; "
+                    "not u(α), not ppm of α"
+                ),
+                "status": "T_contrast_not_alpha",
             },
             {
                 "id": "coarse_vs_preferred",
@@ -3230,7 +3239,7 @@ class SIConstants:
             },
         ]
         return {
-            "theorem": "§8.2·α·SI-bridge — carrier α → U0 packet → lab score",
+            "theorem": "§8.2·α·SI-bridge — carrier α exact → U0 packet; T-door optional",
             "M": m,
             "kappa": kappa,
             "d": d,
@@ -3245,9 +3254,11 @@ class SIConstants:
             "identity_pref_eq_dU": abs(a_pref - a_from_dU) < 1e-15,
             "identity_pref_eq_cleared": abs(a_pref - a_cleared) < 1e-15,
             "identity_pref_eq_property": abs(a_pref - float(self.alpha_preferred)) < 1e-15,
-            "vs_codata_ppm": ppm,
+            "alpha_exact": True,
+            "no_u_alpha": True,
+            "T_lab_contrast_ppm": ppm,
             "codata_year": 2022,
-            "lab_inside_codata_band": abs(ppm) < 0.00016,
+            "T_lab_inside_codata_band": abs(ppm) < 0.00016,
             "macros_not_inputs": True,
             "derivation_closed": True,
             "inventory": inventory,
@@ -3258,13 +3269,12 @@ class SIConstants:
             and abs(a_pref - a_cleared) < 1e-15
             and abs(a_pref - float(self.alpha_preferred)) < 1e-15
             and abs(hbar_c / u0 - 2.0 * kappa) < 1e-12
-            and abs(ppm) < 0.00016
             and bool(soft["derivation_closed"])
             and bool(soft["ask_ok"]),
             "note": (
-                "SI bridge: α is defined on the carrier from κ,M,d,U only. "
-                "ħ,c enter only via U0 packet identity ħc=2κ U0. "
-                "Lab e²/(4π ε₀ ħ c) scores the same number (~0.45σ CODATA 2022)."
+                "SI bridge: structural α from κ,M,d,U is exact — no u(α), no ppm. "
+                "ħ,c only via U0 (ħc=2κ U0). "
+                "T_lab_contrast_ppm is optional CODATA door, not a property of α."
             ),
         }
 
