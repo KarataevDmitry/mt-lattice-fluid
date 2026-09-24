@@ -810,7 +810,7 @@ def check_coulomb_M_native(device: str = "cpu") -> dict:
 
 
 def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
-    """§8.2·α·U0·soft-face — prefer α0(1+α0/7); +1.03 explained."""
+    """§8.2·α·U0·soft-face — prefer inv-cut α; +1.03 explained; axiom shipped."""
     from mt_ca.si_constants import SI
 
     del device
@@ -820,22 +820,26 @@ def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
         and bool(row["soft_candidate_shipped"])
         and bool(row["mechanism_descent_shipped"])
         and bool(row["plus_1ppm_explained"])
+        and bool(row["axiom_inv_cut_shipped"])
         and bool(row["identity_dress_frac"])
+        and bool(row["identity_pref_frac"])
         and not bool(row["derivation_closed"])
         and int(row["M"]) == 97
+        and abs(float(row["vs_codata_ppm_pref"])) < 0.01
         and abs(float(row["vs_codata_ppm_dress"])) < 0.1
         and abs(float(row["vs_codata_ppm_resum"]) - 1.026566) < 0.01
     )
     return {
         "id": "Alpha_U0_soft_face_ask",
         "M": row["M"],
+        "alpha_pref": row["alpha_pref"],
         "alpha_dress": row["alpha_dress"],
+        "vs_codata_ppm_pref": row["vs_codata_ppm_pref"],
         "vs_codata_ppm_dress": row["vs_codata_ppm_dress"],
         "vs_codata_ppm_resum": row["vs_codata_ppm_resum"],
         "ok": ok,
         "note": row["note"],
     }
-
 
 def check_floor1_leptonic_ask(device: str = "cpu") -> dict:
     """§6·floor1·ask — pre-resonance band; content census open."""

@@ -774,29 +774,36 @@ $$
 π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft residual дискретного пути — **OPEN** (вышележащая структура / duel), не дыра в $M$.
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
-#### §8.2·α·U0·soft-face · face-dressing $\alpha_0(1+\alpha_0/7)$
+#### §8.2·α·U0·soft-face · inv-cut then dress
 
 **Единица:** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 **Грубо:** $\alpha_0=\kappa/M$ (~−1040 ppm).
 **Face quantum:** $1/7=1/(n_\square+1)=2/14$, канал $x=\alpha_0/7$.
 
-Два обрезания одного канала:
+Три обрезания одного канала:
 $$
 \underbrace{\frac{\alpha_0}{1-x}}_{\sim +1.03\,\mathrm{ppm}\ (\mathrm{resum})}
 \qquad\text{vs}\qquad
-\underbrace{\alpha_0(1+x)=\alpha_0\Bigl(1+\frac{\alpha_0}{7}\Bigr)
-=\frac{\kappa(7M+\kappa)}{7M^{2}}}_{\sim -0.058\,\mathrm{ppm}\ (\mathrm{preferred})}.
+\underbrace{\alpha_0(1+x)=\frac{\kappa(7M+\kappa)}{7M^{2}}}_{\sim -0.058\,\mathrm{ppm}\ (\mathrm{1st\ order})}
+\qquad\text{vs}\qquad
+\underbrace{\alpha=\frac{M\kappa(7M+\kappa)}{7M^{3}-\kappa^{3}}}_{\sim -0.0026\,\mathrm{ppm}\ (\mathrm{preferred})}.
 $$
-**+1.03 ppm объяснён:** это resummation $1/(1-x)$ вместо dressing $1+x$. Предпочтительная форма — первая поправка по face-каналу.
+Эквивалент preferred на обратной:
+$\alpha^{-1}=(M/\kappa-\alpha_0^{2}/7)/(1+\alpha_0/7)$.
+
+**Аксиома (shipped):** срезать bare inv на face×α₀ (=α₀²/7), затем ÷(1+x).
+**+1.03 ppm объяснён:** resummation $1/(1-x)$ вместо dressing $1+x$.
+**α₀(1+α₀/7) demoted:** первая поправка (truncation), не preferred.
 
 | путь | vs CODATA | роль |
 |------|-----------|------|
 | $\alpha_0=\kappa/97$ | ~−1040 ppm | coarse |
 | $\alpha_0/(1-\alpha_0/7)$ | ~+1.03 ppm | demoted resum |
-| $\alpha_0(1+\alpha_0/7)$ | ~−0.058 ppm | preferred candidate |
+| $\alpha_0(1+\alpha_0/7)$ | ~−0.058 ppm | demoted 1st-order |
+| $M\kappa(7M+\kappa)/(7M^{3}-\kappa^{3})$ | ~−0.0026 ppm | preferred |
 | $\pi$-tower | ~−2.2 ppm | T only |
 
-**OPEN:** аксиома dressing $(1+\alpha_0/7)$; хвост −0.058 ppm.
+**OPEN:** хвост −0.0026 ppm (~17× CODATA $u_r$). Не CLOSED.
 **Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
