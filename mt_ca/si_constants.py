@@ -2159,7 +2159,8 @@ class SIConstants:
              · N_a0 ~ H size in hops — OPEN from H structure (H·ask)
           B) force: α = κ / M
              · κ = R_in/R_out = 1/√2 — CLOSED (geo)
-             · M ∈ ℕ — OPEN from g (F·ask); 96=N12·N_hier, 97 nearest
+             · M ∈ ℕ — combinatorial CLOSED (nF census = 97);
+               soft residual vs CODATA (~−1040 ppm) still OPEN
              · note: κ∉ℚ ⇒ α not pure ℤ/ℤ unless rewritten
           C) Schwinger: α = a_e / (2r)
              · 2r = 1/(2π) — CLOSED (foot)
@@ -2210,9 +2211,9 @@ class SIConstants:
             {
                 "id": "pair_force_kappa_over_M",
                 "ratio": kappa / m97,
-                "maps_to": "α=κ/M; κ closed, M open",
-                "status": "alive_pair",
-                "mechanism": "best live dual: geo κ × integer M from g",
+                "maps_to": "α=κ/M; κ closed, M=97 combinatorial closed (nF)",
+                "status": "shipped_pair_combinatorial",
+                "mechanism": "full-quant force dual: geo κ × n_F seats",
             },
             {
                 "id": "leg_kappa_closed",
@@ -2221,11 +2222,18 @@ class SIConstants:
                 "status": "shipped_leg",
             },
             {
-                "id": "leg_M_open",
+                "id": "leg_M_combinatorial_closed",
+                "ratio": m97,
+                "maps_to": "M=1+N12·N_hier=97 — nF kick census CLOSED",
+                "status": "shipped_leg",
+                "mechanism": "§8.2·α·nF·census; not inject 137",
+            },
+            {
+                "id": "soft_residual_open",
                 "ratio": m_tgt,
-                "maps_to": "M≈96.90; 96=N12·N_hier, 97=nearest — from g OPEN",
-                "status": "open_leg",
-                "mechanism": "F·ask; not inject 137",
+                "maps_to": "CODATA wants M≈96.90; κ/97 ~−1040 ppm — soft OPEN",
+                "status": "open_soft",
+                "mechanism": "higher structure; π-tower still competing T-number",
             },
             {
                 "id": "pair_schwinger_ae_over_2r",
@@ -2247,10 +2255,10 @@ class SIConstants:
                 "mechanism": "circular; H·ask mass≡hop α² warning",
             },
             {
-                "id": "open_pick_pair_close_open_leg",
-                "maps_to": "next: close M from g OR N_a0 from H OR ae from cloud",
+                "id": "open_soft_residual_vs_pi_tower",
+                "maps_to": "next: soft residue on κ/97 OR demote π-ansatz as T-only",
                 "status": "open",
-                "mechanism": "strongest alive dual today: κ/M (force)",
+                "mechanism": "discrete path shipped; ppm duel with continuum tower",
             },
         ]
         return {
@@ -2266,15 +2274,17 @@ class SIConstants:
             "alpha_from_Nc_Na0": n_c / n_a0,
             "alpha_from_kappa_M97": kappa / m97,
             "alpha_from_ae_over_2r": ae_codata / two_r,
-            "strongest_alive_pair": "force κ/M",
+            "strongest_alive_pair": "force κ/M (combinatorial shipped; soft residual open)",
             "derivation_closed": False,
+            "M_combinatorial_closed": True,
             "inventory": inventory,
             "ask_ok": abs(n_c / n_a0 - alpha_c) / alpha_c < 1e-12
             and abs(kappa / m_tgt - alpha_c) / alpha_c < 1e-9
             and abs(ae_codata / two_r - alpha_c) / alpha_c < 2e-3,
             "note": (
                 "Method: α=m/n with two independent physics. "
-                "Alive duals: κ/M (M open), ae/(2r) (ae open), "
+                "Force dual κ/M: M=97 combinatorial CLOSED (nF census); "
+                "soft residual ~−1040 ppm OPEN. Also: ae/(2r) (ae open), "
                 "N_c/N_a0 (N_a0 open, N_c α-tied). Reject M/512 single-path."
             ),
         }
@@ -2640,6 +2650,97 @@ class SIConstants:
                 "Unit NN Coulomb F=F₀/97 ⇒ α=κ/97. "
                 "Combinatorial kick-ledger geometry CLOSED; "
                 "runtime sim histogram N/A (no Coulomb opcode)."
+            ),
+        }
+
+    def alpha_full_quantization_bridge_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·full-quant — α from full quantization, not π-tower.
+
+        Operator steer: fine-structure constant ↔ full quantization (§0.9).
+        On M there is no continuum wave; force is n_F·F₀ (Thm 5.1).
+        Unit NN Coulomb is one quantum weaker than F₀ by integer M seats:
+          α F_P = F₀/M  ⇒  α = κ/M,  κ=1/√2 CLOSED, M=n_F_seats=97 CLOSED
+          (nF census). Number scored after; no α input.
+
+        Contrast: π-ansatz α⁻¹=4π³+π²+π is continuum solid-angle T-readout
+        (~2 ppm) — competing *number*, not the discrete descent.
+        Soft residual κ/97 vs CODATA (~−1040 ppm) remains OPEN.
+        """
+        census = self.alpha_nF_kick_census_row()
+        meaning = self.alpha_meaning_ask_row()
+        kappa = float(census["kappa"])
+        m = int(census["M"])
+        a = float(census["alpha"])
+        a_pi = float(meaning["alpha_fs"])
+        alpha_c = 7.2973525693e-3
+
+        def ppm(x: float) -> float:
+            return (x - alpha_c) / alpha_c * 1e6
+
+        inventory: list[dict[str, str | float | bool | int]] = [
+            {
+                "id": "full_quant_no_wave",
+                "maps_to": "§0.9 — excitations = n_k / n_E·E₀, not A·sin",
+                "status": "shipped",
+            },
+            {
+                "id": "force_quanta_F0",
+                "maps_to": "Thm 5.1 — F = n_F·F₀; F₀/F_P = κ",
+                "status": "shipped",
+            },
+            {
+                "id": "fine_structure_is_seat_ratio",
+                "maps_to": "α = κ/M = F₀/(M F_P) — thin structure of force seats",
+                "status": "shipped",
+            },
+            {
+                "id": "M_nF_seats",
+                "count": m,
+                "maps_to": "M = 1 + N₁₂·N_hier from nF census",
+                "status": "closed",
+            },
+            {
+                "id": "score_kappa_over_M",
+                "ppm": ppm(a),
+                "maps_to": "α=κ/97 after — not used to pick M",
+                "status": "scored_after",
+            },
+            {
+                "id": "pi_tower_is_T_competitor",
+                "ppm": ppm(a_pi),
+                "maps_to": "π-ansatz ~2 ppm — continuum Ω readout, not discrete descent",
+                "status": "T_readout_not_descent",
+            },
+            {
+                "id": "soft_residual_open",
+                "ppm": ppm(a),
+                "maps_to": "−1040 ppm higher structure / π duel — OPEN",
+                "status": "open",
+            },
+        ]
+        return {
+            "theorem": "§8.2·α·full-quant — fine structure from n_F seats",
+            "kappa": kappa,
+            "M": m,
+            "alpha": a,
+            "alpha_inv": 1.0 / a,
+            "alpha_pi_tower": a_pi,
+            "vs_codata_ppm_discrete": ppm(a),
+            "vs_codata_ppm_pi_tower": ppm(a_pi),
+            "M_combinatorial_closed": bool(census["derivation_closed"]),
+            "pi_tower_demoted_as_descent": True,
+            "soft_residual_open": True,
+            "derivation_closed": False,  # soft residual / number duel open
+            "discrete_path_shipped": bool(census["census_ok"]),
+            "inventory": inventory,
+            "ask_ok": bool(census["census_ok"])
+            and m == 97
+            and abs(kappa**2 - 0.5) < 1e-15
+            and abs(ppm(a) + 1040.3688788164525) < 1.0,
+            "note": (
+                "Full quantization ⇒ α=κ/M with M=n_F_seats=97. "
+                "Discrete path shipped; π-tower is T-competitor not descent. "
+                "Soft −1040 ppm residual OPEN."
             ),
         }
 
