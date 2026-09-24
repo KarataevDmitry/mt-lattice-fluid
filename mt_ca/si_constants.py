@@ -217,6 +217,23 @@ HV = hv_bit_budget()
 # §8.2·α·nF·Thm — force seats on one charged FCC core (not a free fit).
 N_HIER_CHANNELS = int(HV.mod_bits) - 1  # ⌊B_hV⌋−1 = 8 (occupancy bit out of hierarchy)
 M_FORCE_SEATS = 1 + N12_FCC_CAUSAL_LINKS * N_HIER_CHANNELS  # = 97
+D_SOFT = N4_CAUSAL_LINKS + 3  # von Neumann cross + SU(2) Pauli = 7
+U_SOFT = (D_SOFT + 1) / D_SOFT  # = 8/7 = 1/(1−κ⁶)
+
+
+def alpha_from_fundamentals(
+    *,
+    kappa: float = KAPPA_FCC_1TICK,
+    m: int = M_FORCE_SEATS,
+    d: int = D_SOFT,
+    u: float = U_SOFT,
+) -> float:
+    """Structural α — only carrier fundamentals (§8.2·U0). No lab / π."""
+    m_f = float(m)
+    d_f = float(d)
+    return (m_f * m_f) * kappa * (d_f * m_f + kappa) / (
+        d_f * m_f**4 - m_f * kappa**3 - u
+    )
 
 
 def kappa_link(*, n_links: int = N4_CAUSAL_LINKS) -> float:
@@ -742,8 +759,8 @@ class SIConstants(SIAlphaRows, SIFloor1Rows, SIUnitsRows, SICarrierRows, SISmRow
 
     @property
     def alpha_preferred(self) -> float:
-        """Structural α — soft-face preferred with M=M_FORCE_SEATS=97 substituted."""
-        return float(self.alpha_U0_soft_face_ask_row()["alpha_pref"])
+        """Structural α from carrier fundamentals (§8.2·U0)."""
+        return alpha_from_fundamentals()
 
 
 

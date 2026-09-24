@@ -12,6 +12,7 @@ from mt_ca.si_constants import (
     M_FORCE_SEATS,
     N12_FCC_CAUSAL_LINKS,
     N4_CAUSAL_LINKS,
+    alpha_from_fundamentals,
     hv_bit_budget,
 )
 
@@ -69,11 +70,12 @@ class SIAlphaSoftRows:
             (m * m) * kappa * (7.0 * m + kappa)
             / (7.0 * m**4 - m * kappa**3 - 1.0)
         )
-        # preferred: soft unit = 1/(1−κ^{n_□}) from local cubocta
-        # α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ^{n_□}))
-        a_pref = (m * m) * kappa * (7.0 * m + kappa) / (
+        # preferred = sealed fundamentals (κ, M, d, U)
+        a_pref = alpha_from_fundamentals(kappa=kappa, m=int(m))
+        _a_check = (m * m) * kappa * (7.0 * m + kappa) / (
             7.0 * m**4 - m * kappa**3 - soft_unit
         )
+        assert abs(a_pref - _a_check) < 1e-15
         a_pref_cleared = (
             7.0 * (m * m) * kappa * (7.0 * m + kappa)
             / (49.0 * m**4 - 7.0 * m * kappa**3 - 8.0)
