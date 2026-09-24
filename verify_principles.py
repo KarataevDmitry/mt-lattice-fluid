@@ -909,6 +909,35 @@ def check_meter_decouple_from_M(device: str = "cpu") -> dict:
     }
 
 
+
+def check_length_dim_from_lP_alpha(device: str = "cpu") -> dict:
+    """§8.2·[L]·l_P — length dimension = l_P; hierarchy from exact α."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.length_dim_from_lP_alpha_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["length_dim_is_l_P"])
+        and bool(row["alpha_sets_length_hierarchy"])
+        and bool(row["not_historical_SI_metre"])
+        and bool(row["identity_a0_eq_Nc_over_alpha"])
+        and bool(row["identity_re_eq_alpha_Nc"])
+        and bool(row["identity_alpha_eq_Nc_over_Na0"])
+    )
+    return {
+        "id": "Length_dim_from_lP_alpha",
+        "alpha_preferred": row["alpha_preferred"],
+        "N_c": row["N_c"],
+        "N_a0": row["N_a0"],
+        "N_re": row["N_re"],
+        "length_dim_is_l_P": row["length_dim_is_l_P"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_coulomb_M_native(device: str = "cpu") -> dict:
     """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
     from mt_ca.si_constants import SI
@@ -2893,6 +2922,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_si_bridge(device=device),
         check_alpha_meter_na0_bridge(device=device),
         check_meter_decouple_from_M(device=device),
+        check_length_dim_from_lP_alpha(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),

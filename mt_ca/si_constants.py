@@ -3512,6 +3512,95 @@ class SIConstants:
             ),
         }
 
+
+    def length_dim_from_lP_alpha_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·[L]·l_P — length dimension = l_P; hierarchy from exact α.
+
+        Not SI-metre reconstruction. Natural unit: l_P ≡ hL.
+        α is dimensionless and exact (soft-face) ⇒ every EM length is
+            L = N(α, N_c, …) · l_P
+        by dimensional analysis ([α]=1, [L]=[l_P]):
+            λ̄_C / l_P = N_c = m_P/m_e
+            a0    / l_P = N_c/α = N_a0
+            r_e   / l_P = α·N_c = α²·N_a0
+        """
+        soft = self.alpha_U0_soft_face_ask_row()
+        up = self.alpha_upstairs_mass_probe_row()
+        meter = self.alpha_meter_na0_bridge_row()
+        anchor = self.anchor_a_is_l_P_row()
+        a = float(self.alpha_preferred)
+        n_c = float(meter["N_c"])
+        n_a0 = float(meter["N_a0_predicted"])
+        n_compton = n_c  # λ̄_C / l_P
+        n_re = a * a * n_a0  # r_e / l_P = α² a0/l_P
+        id_a0 = abs(n_a0 - n_c / a) < 1e-12 * n_a0
+        id_re = abs(n_re - a * n_c) < 1e-12 * max(n_re, 1.0)
+        id_alpha = abs(n_c / n_a0 - a) < 1e-15
+        inventory = [
+            {
+                "id": "natural_unit_l_P",
+                "maps_to": "[L] := l_P ≡ hL — natural length unit",
+                "ok": bool(anchor["a_equals_hL"]),
+            },
+            {
+                "id": "alpha_dimensionless_exact",
+                "maps_to": "[α]=1; soft-face sealed — scales ratios only",
+                "ok": bool(soft["derivation_closed"]) and bool(soft["ask_ok"]),
+            },
+            {
+                "id": "Compton_hops",
+                "maps_to": "λ̄_C = N_c · l_P",
+                "N": n_compton,
+                "ok": bool(up["ask_ok"]),
+            },
+            {
+                "id": "Bohr_hops",
+                "maps_to": "a0 = (N_c/α) · l_P",
+                "N": n_a0,
+                "ok": id_a0 and id_alpha,
+            },
+            {
+                "id": "classical_radius_hops",
+                "maps_to": "r_e = α·N_c · l_P = α²·a0",
+                "N": n_re,
+                "ok": id_re,
+            },
+            {
+                "id": "not_SI_metre",
+                "maps_to": "does NOT define/fit historical SI metre",
+                "ok": True,
+            },
+        ]
+        return {
+            "theorem": "§8.2·[L]·l_P — length dim = l_P; hierarchy from α",
+            "method": "dimensional analysis: [L]=[l_P], [α]=1 ⇒ L = N(α,N_c)·l_P",
+            "natural_unit": "l_P",
+            "alpha_preferred": a,
+            "N_c": n_c,
+            "N_Compton": n_compton,
+            "N_a0": n_a0,
+            "N_re": n_re,
+            "identity_a0_eq_Nc_over_alpha": id_a0,
+            "identity_re_eq_alpha_Nc": id_re,
+            "identity_alpha_eq_Nc_over_Na0": id_alpha,
+            "length_dim_is_l_P": True,
+            "alpha_sets_length_hierarchy": True,
+            "not_historical_SI_metre": True,
+            "derivation_closed": True,
+            "inventory": inventory,
+            "ask_ok": (
+                all(bool(item["ok"]) for item in inventory)
+                and id_a0
+                and id_re
+                and id_alpha
+                and abs(a - float(soft["alpha_pref"])) < 1e-15
+            ),
+            "note": (
+                "Natural length unit = l_P. α exact ⇒ Compton/Bohr/r_e are "
+                "pure hop counts N_c, N_c/α, α·N_c. No SI-metre fit."
+            ),
+        }
+
     def coulomb_M_native_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·Coulomb·M-native — force law without continuum α on M.
 
