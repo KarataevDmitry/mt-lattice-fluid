@@ -779,6 +779,7 @@ $$
 **Единица:** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 **Грубо:** $\alpha_0=\kappa/M$ (~−1040 ppm).
 **Face:** $1/7=1/(n_\square+1)$, $n_\square=6$ из cubocta (geo CLOSED).
+**Soft unit через $\kappa$:** $\frac{8}{7}=\frac{2^{3}}{2^{3}-1}=\frac{1}{1-\kappa^{6}}$, потому что $\kappa^{2}=1/2$ и $7=2^{3}-1=n_\square+1$ (тот же cubocta).
 **Якорь ppm:** CODATA **2022** ($u_r\sim1.6\times10^{-10}$).
 
 Лестница:

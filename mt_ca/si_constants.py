@@ -2887,6 +2887,12 @@ class SIConstants:
                 "status": "shipped_unit",
             },
             {
+                "id": "soft_unit_via_kappa",
+                "maps_to": "8/7=2^3/(2^3-1)=1/(1-κ^6) because κ^2=1/2 and 7=2^3-1=n_sq+1",
+                "status": "shipped_identity",
+                "value": 1.0 / (1.0 - kappa**6),
+            },
+            {
                 "id": "wedge_promotion_overcount",
                 "maps_to": (
                     "seat appears only after *M homogenize; inv-cut needs none. "
@@ -2944,6 +2950,7 @@ class SIConstants:
             and n_sq == 6
             and n_tri == 8
             and abs(face_q - 1.0 / 7.0) < 1e-15
+            and abs((n_sq + 2) / (n_sq + 1) - 1.0 / (1.0 - kappa**6)) < 1e-15
             and abs(a_dress - a_exact_frac) < 1e-15
             and abs(a_invcut - a_invcut_frac) < 1e-15
             and abs(a_pref - a_pref_alt) < 1e-15
