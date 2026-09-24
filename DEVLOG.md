@@ -297,6 +297,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
+| 2026-09-24 | §1.7·torus·close | finite wall-free Λ=T³/T²; Λ×S¹=phase fiber; reject walls/sphere; N soft; eng wrap=readout · Carrier_torus_close PASS |
 | 2026-09-24 | §6·floor1·C3·bath·dogfood | VACUUM_BOIL whole-lattice: contrast self-grows; b not yet; gauge VACUUM frozen · Floor1_C3_bath_dogfood PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·reopen | alone n_ticks=1 demoted soft (void artifact?); continuum≠M kept · Floor1_C3_gamma_close PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·close | reject continuum Γ on M; local C3 τ_M=1·hT · Floor1_C3_gamma_close PASS |
@@ -448,17 +449,19 @@ _геометрия(n,N₄)**.
 
 Физика §0–§8 замкнута; ниже — **три предохранителя**, без которых GPU-код падает или «молчит».
 
-### 10.1 Границы: тор (periodic BC)
+### 10.1 Границы: тор (periodic BC) — eng readout §1.7
+
+**Физика:** конечный носитель без стенок = тор — **MODEL §1.7** (`Carrier_torus_close`). Ниже — только GPU-склейка.
 
 Конечная сетка `N×N` (MVP 2D). На краях **`g` не обрывается** — **periodic wrap**:
 
 ```
 x+N ≡ x ,   y+N ≡ y
-N₄ на краю сшивает правый↔левый, верхний↔нижний
+N на краю сшивает правый↔левый, верхний↔нижний
 ```
 
-**Код:** `laplacian.von_neumann_laplacian` — `torch.roll`; `linear_step_local_ca` — wrap в bond-sweeps.  
-**Зачем:** глобальная норма без стенки-поглощателя; унитарность на торе.
+**Код:** `laplacian` — `torch.roll`; bond wrap в linear/local_ca.  
+**Зачем:** eng той же топологии §1.7; глобальная норма без стенки-поглощателя.
 
 ### 10.2 Инициализация: «первичный бульон», не `z≡0` · Планковский пол
 
