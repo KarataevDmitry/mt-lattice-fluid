@@ -22,7 +22,7 @@ from mt_ca.fixed_point import decode_spinor
 from mt_ca.seeds import HV, vacuum_boil_fixed
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.spinor import spinor_density
-from mt_ca.topology import matter_occupancy_b, winding_nearest_int, winding_number
+from mt_ca.topology import matter_occupancy_b, winding_channels, winding_nearest_int
 
 
 def gate_b(z: torch.Tensor, *, top_k: int = 4, contour_radius: int = 2) -> dict:
@@ -33,13 +33,20 @@ def gate_b(z: torch.Tensor, *, top_k: int = 4, contour_radius: int = 2) -> dict:
     ny, nx = rho.shape
     b_hits = 0
     w_abs_max = 0.0
+    w_rel_max = 0.0
+    w_u1_max = 0.0
     margin = contour_radius + 1
     for i in range(k):
         y = int(idx[i].item() // nx)
         x = int(idx[i].item() % nx)
         if y < margin or x < margin or y >= ny - margin or x >= nx - margin:
             continue
-        w = winding_number(z, center=(y, x), radius=contour_radius)
+        ch = winding_channels(z, center=(y, x), radius=contour_radius)
+        w = ch["auto"]
+        if ch["rel"] == ch["rel"]:
+            w_rel_max = max(w_rel_max, abs(float(ch["rel"])))
+        if ch["u1"] == ch["u1"]:
+            w_u1_max = max(w_u1_max, abs(float(ch["u1"])))
         if w == w:
             w_abs_max = max(w_abs_max, abs(float(w)))
             if abs(w) >= 0.75:
@@ -52,6 +59,8 @@ def gate_b(z: torch.Tensor, *, top_k: int = 4, contour_radius: int = 2) -> dict:
         "rho_max": float(rho.max().item()),
         "contrast": float((rho.max() / (rho.mean() + 1e-30)).item()),
         "winding_abs_max": w_abs_max,
+        "winding_rel_max": w_rel_max,
+        "winding_u1_max": w_u1_max,
     }
 
 

@@ -482,6 +482,16 @@ x+N ≡ x ,   y+N ≡ y
 
 ---
 
+## §10.5 Thermometer dual-channel (2026-09-24)
+
+**Gap:** A10 readout was only `∮ d arg(z₂/z₁)`. Locked equal-lane boil (`z₁≡z₂`, VACUUM_BOIL bricks) → rel≡0 → seeker reported dead universe while contrast grew.
+
+**Fix:** `mt_ca/topology.py` — channels **rel** / **u1**=`Arg(z₁+z₂)` / **auto**=max`|n|`. MODEL §5.0 stamped. `MatterOccupancyB` gate includes locked U(1) synth. Brick-scan gate reports `winding_rel_max` / `winding_u1_max`.
+
+**Probe:** SYNTH_U1 locked → rel=0, u1≈1, b=1 · VORTEX_P → rel≈1, u1≈0, b=1 · class-gradient boil IC still ~curl-free (no magic b from stripes).
+
+---
+
 ## §11. Код (M-only slice)
 
 `mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — eng readout §0.10/§1.7.

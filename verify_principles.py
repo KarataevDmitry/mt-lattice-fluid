@@ -2498,7 +2498,7 @@ def check_ladder_ledger(size: int = 64, device: str = "cpu") -> dict:
 def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
     from mt_ca.macro import macro_amplitude, macro_matter_b
     from mt_ca.spinor import spinor_density
-    from mt_ca.topology import matter_occupancy_b, matter_occupancy_b_field, winding_number
+    from mt_ca.topology import matter_occupancy_b, matter_occupancy_b_field, winding_channels, winding_number
 
     dev = torch.device(device)
     radius = 2
@@ -2512,15 +2512,34 @@ def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
     cy, cx = torch.unravel_index(spinor_density(z_p).argmax(), z_p.shape[:2])
     cy, cx = int(cy.item()), int(cx.item())
     w = winding_number(z_p, center=(cy, cx), radius=2)
+    ch_p = winding_channels(z_p, center=(cy, cx), radius=2)
     core_b = 1 if w == w and abs(w) >= 0.75 else matter_occupancy_b(z_p, y=cy, x=cx)
     vortex_macro_b = float(macro_matter_b(z_p, radius=radius).max().item())
+
+    # Locked equal-lane U(1) vortex: old Arg(z₂/z₁) thermometer was blind (§5.0).
+    z_u1 = torch.zeros(size, size, 2, device=dev, dtype=torch.complex64)
+    yy, xx = torch.meshgrid(
+        torch.arange(size, device=dev),
+        torch.arange(size, device=dev),
+        indexing="ij",
+    )
+    ang = torch.atan2((yy - cy).float(), (xx - cx).float())
+    amp = 0.5
+    z_u1[..., 0] = amp * torch.exp(1j * ang)
+    z_u1[..., 1] = amp * torch.exp(1j * ang)
+    ch_u1 = winding_channels(z_u1, center=(cy, cx), radius=16)
+    u1_b = matter_occupancy_b(z_u1, y=cy, x=cx, contour_radius=16)
 
     ok = (
         vac_b_mean < 0.05
         and vac_macro_b < 0.05
         and vac_macro_amp > vac_macro_b
         and core_b == 1
+        and abs(ch_p["rel"]) >= 0.75
         and vortex_macro_b > 0.1
+        and abs(ch_u1["u1"]) >= 0.75
+        and abs(ch_u1["rel"]) < 0.25
+        and u1_b == 1
     )
     return {
         "id": "MatterOccupancyB",
@@ -2528,9 +2547,12 @@ def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
         "vac_macro_b": vac_macro_b,
         "vac_macro_amp": vac_macro_amp,
         "vortex_core_b": core_b,
+        "vortex_channels": ch_p,
         "vortex_macro_b_max": vortex_macro_b,
+        "u1_locked_channels": ch_u1,
+        "u1_locked_b": u1_b,
         "ok": ok,
-        "note": "§5.0: b=min(1,|n_∂|); macro ⟨b⟩ primary over |z|²",
+        "note": "§5.0: b=min(1,|n_∂|); dual channel rel+U(1) auto; macro ⟨b⟩ primary over |z|²",
     }
 
 
