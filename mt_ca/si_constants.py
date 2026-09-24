@@ -2759,7 +2759,7 @@ class SIConstants:
         """§8.2·α·U0·soft-face — face + seat-unit on α0=κ/M.
 
         Preferred: α = M² κ (7M+κ)/(7M⁴ − M κ³ − 1)
-        ≈ −0.00030 ppm vs CODATA 2022 (~2σ). Residual OPEN.
+        Structural α exact (M,κ,face). Δ vs CODATA is lab door, not model uncertainty.
         Ladder: resum → dress → inv-cut → seat-unit.
         Axiom: M-homogenize inv-cut den, subtract unit 1.
         """
@@ -2846,7 +2846,7 @@ class SIConstants:
             {
                 "id": "open_residual_vs_codata2022",
                 "ppm": ppm(a_pref),
-                "maps_to": "~−0.00030 ppm (~2σ) — still ask",
+                "maps_to": "Δ vs CODATA2022 ~−0.00030 ppm — lab door, not model u(α)",
                 "status": "open",
             },
         ]
@@ -2894,7 +2894,7 @@ class SIConstants:
             "note": (
                 "Preferred α=M²·κ·(7M+κ)/(7M⁴−M·κ³−1) "
                 "~−0.00030 ppm vs CODATA 2022 (~2σ). "
-                "Seat-unit after inv-cut; residual OPEN."
+                "Seat-unit after inv-cut. Structural α exact; Δ(CODATA)=lab coarseness, not u(α)."
             ),
         }
 

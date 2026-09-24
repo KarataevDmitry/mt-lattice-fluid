@@ -802,7 +802,8 @@ $$
 | $M\kappa(7M+\kappa)/(7M^{3}-\kappa^{3})$ | ~−0.0019 ppm | demoted inv-cut |
 | $M^{2}\kappa(7M+\kappa)/(7M^{4}-M\kappa^{3}-1)$ | ~−0.00030 ppm (~2σ) | preferred |
 
-**OPEN:** хвост ~2σ CODATA 2022 — не CLOSED.
+**Структурная α:** точна (полином от M, κ, face) — у неё нет погрешности.
+**Δ vs CODATA:** это не err(α) модели, а грубость лабораторного якоря (CODATA сама даёт ε). Сходимость Δ→0 возможна, но не обязательна и не критерий CLOSED теории. Сравнение — дверь T, не дыра в M.
 **Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
