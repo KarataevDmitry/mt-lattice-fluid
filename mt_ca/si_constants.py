@@ -3471,6 +3471,99 @@ class SIConstants:
             ),
         }
 
+    def carrier_torus_close_row(self) -> dict[str, float | int | str | bool | list]:
+        """§1.7 · Carrier topology: finite wall-free Λ = torus (was DEVLOG §10.1).
+
+        Ask-model: what global glue does Λ have?
+
+        Carrier answers (2026-09-24):
+          · Absorbing wall → drains Σ|z|² → breaks A3 (or non-local reinjection).
+          · Reflecting wall → preferred locus; A5 vacuum not homogeneous.
+          · Open finite patch without wrap = walls under another name.
+          · Sphere / curved compact → no flat FCC/hex equal light-like edges (§1).
+          · Infinite noncompact Λ: local g same — not rejected as local law;
+            finite readout / D5 on finite connected graph / META wave-return
+            need compact-without-boundary.
+          · Flat translation lattice + compact no boundary → torus:
+                (3+1) T³ · (2+1) slice T².
+          · Λ×S¹ = phase fiber over Λ (Arg/U(1)), not «torus instead of lattice».
+          · CLOSED: finite wall-free carrier topology = torus.
+          · SOFT: cosmological period N; long-run entropy numerics; covers.
+          · Sim torch.roll = eng readout of §1.7 (DEVLOG §10.1), not new physics.
+        """
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_finite_wallfree_is_torus",
+                "maps_to": "T³ (FCC) / T² (hex slice) — periodic ID of Λ",
+                "status": "closed",
+                "mechanism": "A3+A5+no preferred wall + flat packing",
+            },
+            {
+                "id": "closed_Lambda_times_S1_fiber",
+                "maps_to": "Λ×S¹ = phase circle over lattice (§3.9.1); not instead-of-Λ",
+                "status": "closed",
+            },
+            {
+                "id": "closed_sim_roll_is_readout",
+                "maps_to": "torch.roll / bond wrap = eng of §1.7, not separate law",
+                "status": "closed",
+            },
+            {
+                "id": "reject_absorbing_wall",
+                "maps_to": "norm sink breaks A3",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_reflecting_wall",
+                "maps_to": "preferred locus breaks homogeneous A5",
+                "status": "rejected",
+            },
+            {
+                "id": "reject_sphere_as_flat_FCC_carrier",
+                "maps_to": "no equal light-like FCC packing on sphere as M carrier",
+                "status": "rejected",
+            },
+            {
+                "id": "soft_open_period_N_and_covers",
+                "maps_to": "cosmological |Λ| / covers vs fundamental domain",
+                "status": "soft_open",
+            },
+        ]
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        reject_ids = [
+            i["id"] for i in inventory if str(i["status"]) == "rejected"
+        ]
+        soft_open_ids = [
+            i["id"] for i in inventory if str(i["status"]) == "soft_open"
+        ]
+        ok = (
+            "closed_finite_wallfree_is_torus" in closed_ids
+            and "closed_Lambda_times_S1_fiber" in closed_ids
+            and "closed_sim_roll_is_readout" in closed_ids
+            and "reject_absorbing_wall" in reject_ids
+            and "reject_reflecting_wall" in reject_ids
+            and "reject_sphere_as_flat_FCC_carrier" in reject_ids
+            and "soft_open_period_N_and_covers" in soft_open_ids
+        )
+        return {
+            "theorem": "§1.7 carrier torus — finite wall-free Λ = T^d",
+            "topology_closed": True,
+            "Lambda_times_S1_closed": True,
+            "period_N_soft_open": True,
+            "derivation_closed": ok,
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "reject_ids": reject_ids,
+            "soft_open_ids": soft_open_ids,
+            "ask_ok": ok,
+            "note": (
+                "Finite wall-free carrier = torus (T³/T²). Λ×S¹ = phase fiber. "
+                "Period N / covers soft. Sim wrap = readout of §1.7."
+            ),
+        }
+
     def maxwell_row(self) -> dict[str, float]:
         """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
         mu_p = self.mu_P

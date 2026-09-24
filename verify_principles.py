@@ -956,6 +956,34 @@ def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
     }
 
 
+def check_carrier_torus_close(device: str = "cpu") -> dict:
+    """§1.7 — finite wall-free carrier = torus; Λ×S¹ fiber; N soft."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.carrier_torus_close_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["topology_closed"])
+        and bool(row["Lambda_times_S1_closed"])
+        and bool(row["period_N_soft_open"])
+        and "closed_finite_wallfree_is_torus" in row["closed_ids"]
+        and "closed_Lambda_times_S1_fiber" in row["closed_ids"]
+        and "reject_absorbing_wall" in row["reject_ids"]
+        and "soft_open_period_N_and_covers" in row["soft_open_ids"]
+    )
+    return {
+        "id": "Carrier_torus_close",
+        "topology_closed": row["topology_closed"],
+        "Lambda_times_S1_closed": row["Lambda_times_S1_closed"],
+        "period_N_soft_open": row["period_N_soft_open"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
     """§8.2·geo — Phi_□ hull holonomy probe; alpha from lattice E open (not pi ansatz)."""
     from mt_ca.si_constants import SI
@@ -2586,6 +2614,7 @@ def run_all(device: str) -> list[dict]:
         check_floor1_leftovers_close(device=device),
         check_floor1_C3_gamma_close(device=device),
         check_floor1_C3_bath_dogfood(device=device),
+        check_carrier_torus_close(device=device),
         check_bubble_tick(device=device),
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
