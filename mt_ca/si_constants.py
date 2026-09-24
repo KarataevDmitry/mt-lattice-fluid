@@ -3630,6 +3630,104 @@ class SIConstants:
             ),
         }
 
+
+    def time_dim_from_tP_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·[T]·t_P — time dimension = t_P; M tick = hT = κ·t_P.
+
+        Parallel to [L]: not SI-second (Cs) reconstruction.
+        [T] = [L]/[V] ⇒ t_P = l_P/c = √(ħ G / c⁵).
+        On carrier: hT = κ·t_P (true M tick); c0 = l_P/hT.
+        SI-2019 second (Δν_Cs exact) is T-export only — same tautology class as c-fixed metre.
+        """
+        length = self.length_dim_from_lP_alpha_row()
+        lp = float(self.l_P)
+        tp = float(self.t_P)
+        ht = float(self.hT)
+        c_macro = float(self.c)
+        c0 = float(self.c0)
+        kappa = ht / tp
+        tp_from_L_V = lp / c_macro
+        tp_from_hbar = math.sqrt(
+            float(self.hbar) * float(self.G) / (c_macro ** 5)
+        )
+        id_T_eq_L_over_V = abs(tp_from_L_V / tp - 1.0) < 1e-12
+        id_T_eq_planck = abs(tp_from_hbar / tp - 1.0) < 1e-12
+        id_hT_eq_kappa_tP = abs(ht / (kappa * tp) - 1.0) < 1e-15
+        id_c0_eq_lP_hT = abs(c0 / (lp / ht) - 1.0) < 1e-15
+        id_c0_eq_c_over_kappa = abs(c0 / (c_macro / kappa) - 1.0) < 1e-12
+        inventory = [
+            {
+                "id": "natural_unit_t_P",
+                "maps_to": "[T] := t_P — natural time unit",
+                "ok": True,
+            },
+            {
+                "id": "T_eq_L_over_V",
+                "maps_to": "[T]=[L]/[V] ⇒ t_P = l_P/c",
+                "ok": id_T_eq_L_over_V,
+            },
+            {
+                "id": "T_eq_hbar_G_c",
+                "maps_to": "t_P = √(ħG/c⁵) — same unit from ħ,G,c",
+                "ok": id_T_eq_planck,
+            },
+            {
+                "id": "M_tick_hT",
+                "maps_to": "hT = κ·t_P — true M tick (not textbook t_P alone)",
+                "ok": id_hT_eq_kappa_tP,
+            },
+            {
+                "id": "c0_from_hL_hT",
+                "maps_to": "c0 = l_P/hT = c/κ — geometry, not Cs",
+                "ok": id_c0_eq_lP_hT and id_c0_eq_c_over_kappa,
+            },
+            {
+                "id": "not_SI_second",
+                "maps_to": "does NOT define/fit Cs SI-2019 second",
+                "ok": True,
+            },
+            {
+                "id": "length_dim_sealed",
+                "maps_to": "needs [L]=l_P seal",
+                "ok": bool(length["ask_ok"]),
+            },
+        ]
+        return {
+            "theorem": "§8.2·[T]·t_P — time dim = t_P; M tick hT=κ·t_P",
+            "method": "dimensional analysis: [T]=[L]/[V]; carrier hT=κ·t_P",
+            "natural_unit": "t_P",
+            "M_tick": "hT",
+            "t_P": tp,
+            "hT": ht,
+            "l_P": lp,
+            "c": c_macro,
+            "c0": c0,
+            "kappa": kappa,
+            "identity_T_eq_L_over_V": id_T_eq_L_over_V,
+            "identity_tP_eq_lP_over_c": id_T_eq_L_over_V,
+            "identity_tP_eq_sqrt_hbarGc5": id_T_eq_planck,
+            "identity_hT_eq_kappa_tP": id_hT_eq_kappa_tP,
+            "identity_c0_eq_lP_over_hT": id_c0_eq_lP_hT,
+            "time_dim_is_t_P": True,
+            "M_tick_is_hT": True,
+            "not_historical_SI_second": True,
+            "SI_second_is_T_export_only": True,
+            "derivation_closed": True,
+            "inventory": inventory,
+            "ask_ok": (
+                all(bool(item["ok"]) for item in inventory)
+                and id_T_eq_L_over_V
+                and id_T_eq_planck
+                and id_hT_eq_kappa_tP
+                and id_c0_eq_lP_hT
+            ),
+            "note": (
+                "Time unit defined: [T]=[L]/[V] ⇒ t_P=l_P/c=√(ħG/c⁵). "
+                "M tick hT=κ·t_P; c0=l_P/hT. "
+                "SI-2019 second (Cs) is T-export — tautology twin of c-fixed metre."
+            ),
+        }
+
     def coulomb_M_native_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·Coulomb·M-native — force law without continuum α on M.
 

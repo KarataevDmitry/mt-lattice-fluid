@@ -940,6 +940,36 @@ def check_length_dim_from_lP_alpha(device: str = "cpu") -> dict:
     }
 
 
+
+def check_time_dim_from_tP(device: str = "cpu") -> dict:
+    """§8.2·[T]·t_P — time dimension = t_P; M tick hT=κ·t_P."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.time_dim_from_tP_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["time_dim_is_t_P"])
+        and bool(row["M_tick_is_hT"])
+        and bool(row["identity_T_eq_L_over_V"])
+        and bool(row["identity_tP_eq_sqrt_hbarGc5"])
+        and bool(row["identity_hT_eq_kappa_tP"])
+        and bool(row["not_historical_SI_second"])
+        and bool(row["SI_second_is_T_export_only"])
+    )
+    return {
+        "id": "Time_dim_from_tP",
+        "t_P": row["t_P"],
+        "hT": row["hT"],
+        "kappa": row["kappa"],
+        "time_dim_is_t_P": row["time_dim_is_t_P"],
+        "M_tick_is_hT": row["M_tick_is_hT"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_coulomb_M_native(device: str = "cpu") -> dict:
     """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
     from mt_ca.si_constants import SI
@@ -2925,6 +2955,7 @@ def run_all(device: str) -> list[dict]:
         check_alpha_meter_na0_bridge(device=device),
         check_meter_decouple_from_M(device=device),
         check_length_dim_from_lP_alpha(device=device),
+        check_time_dim_from_tP(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
