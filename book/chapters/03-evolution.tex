@@ -104,17 +104,13 @@ n=z^\dagger\sigma z/|z|^2
   \Phi=\Bigl\lfloor\frac{K_P\zeta_{\mathrm{imag}}}{\zeta_{\mathrm{real}}+|Z|^2+K_P}\Bigr\rfloor,\quad
   |\Phi|\ge\Delta\phi_{\mathrm{disc}}\ \text{или}\ \Phi=0;
 \]
-\item $\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ на обеих компонентах; обратимость~$A_{13}$.
+\item $\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ на обеих компонентах.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-Замыкание идёт по цепочке условий $A_3$--$A_{16}$; покажем, что каждый пункт теоремы
-вынужден.
-
-\smallskip
 \emph{Схема «лягушка''.}
-Условие~$A_3$ запрещает изменение $\sum_x|z|^2$ за такт.
+Норма $\sum_x|z|^2$ за такт сохраняется.
 Обновление первого порядка $z'=z+\gamma\Delta z$ с вещественным~$\gamma$ его не сохраняет:
 \[
   |z'|^2-|z|^2=2\gamma\,\Re(z^*\Delta z)+\gamma^2|\Delta z|^2,
@@ -128,38 +124,36 @@ n=z^\dagger\sigma z/|z|^2
 \[
   Z(x,t-\Delta t)=2Z(x,t)+\lfloor\mathcal{N}\rfloor-Z(x,t+\Delta t),
 \]
-и это есть $g^{-1}$, требуемый условием~$A_{13}$.
+и это есть $g^{-1}$.
 Округление $\lfloor\cdot\rfloor$ --- работа в кольце $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$.
 
 \smallskip
 \emph{Голономия.}
 Разность $\Arg(z(y)/z(x))$ на решётке скачет на $2\pi$.
-$A_9$ (\Axref{ax:A9}) фиксирует физически значимую фазу через
-$\zeta=(\sum_{y\in N(x)} z(y))\cdot z(x)^*$ без $\atan$ по парам
-(§3 настоящей главы);
-$\zeta_{\mathrm{real}}$, $\zeta_{\mathrm{imag}}$ --- действительная и мнимая части
-этой голономии и входят в $\lfloor\mathcal{N}\rfloor$.
+Фаза шага есть
+\[
+  \zeta=\Bigl(\sum_{y\in N(x)} z(y)\Bigr)\cdot z(x)^*.
+\]
+В удар входят $\zeta_{\mathrm{real}}$ и $\zeta_{\mathrm{imag}}$.
 
 \smallskip
 \emph{Насыщающий импульс.}
-$A_5$ (\Axref{ax:A5}): при $|z|\to 0$ знаменатель saturating gate обращается в ноль,
-фазовый отклик $\Phi$ неограничен --- вакуум не может быть статическим $z=0$.
-$A_7$ (\Axref{ax:A7}): при больших $|z|$ рост ограничен добавкой $|Z|^2+K_P$ в знаменатель.
-Отсюда
+При $|z|\to 0$ знаменатель обращается в нуль, и фазовый отклик $\Phi$ неограничен.
+При больших $|z|$ рост ограничен добавкой $|Z|^2+K_P$ в знаменателе:
 \[
   \Phi=\Bigl\lfloor\frac{K_P\,\zeta_{\mathrm{imag}}}{\zeta_{\mathrm{real}}+|Z|^2+K_P}\Bigr\rfloor,
 \]
-с порогом $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ из~$A_{16}$ (\Axref{ax:A16}).
+\[
+  \Phi=0\quad\text{или}\quad |\Phi|\ge\Delta\phi_{\mathrm{disc}}.
+\]
 
 \smallskip
-\emph{Вращатель и обратимость.}
-$A_4$ (\Axref{ax:A4}) допускает нелинейность только как унитарную фазу на~$\mathbb{C}^2$;
-реализуем её дискретным $SU(2)$-вращателем $R(\Phi)$ (\cref{def:rotation-gate}).
-Подстановка $\lfloor\mathcal{N}\rfloor=R(\Phi)-Z$ в «лягушку'' замыкает шаг.
-Эквивалентность $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor\Leftrightarrow g^{-1}$
---- CL-1 (\cref{sec:congruence}), проверка mod~$N_{\mathrm{ring}}=512$.
-Лестница CL-1--CL-8 согласует энергию, импульс, секторы~$N_\phi$ и спин~$1/2$
-с тем же $N_{\mathrm{ring}}$ (\cref{sec:bit-budget}).
+\emph{Вращатель.}
+Нелинейность шага есть унитарная фаза на~$\mathbb{C}^2$:
+\[
+  \lfloor\mathcal{N}\rfloor=R(\Phi)-Z
+\]
+на обеих компонентах (\cref{def:rotation-gate}).
 \end{proof}
 
 \subsection{Информационный бюджет ячейки}
@@ -176,30 +170,70 @@ $A_4$ (\Axref{ax:A4}) допускает нелинейность только �
 \label{sec:congruence}
 
 \begin{proposition}[CL-1 -- CL-8]
-По модулю~$N_{\mathrm{ring}}$:
-\begin{itemize}
-\item CL-1: $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor$ $\Leftrightarrow$ $g^{-1}$ ($A_{13}$);
-\item CL-2: $R(N/2)\mapsto -z$ (спин~$1/2$);
-\item CL-3: $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ ($A_{16}$);
-\item CL-4: $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$, $E=n_E E_0$;
-\item CL-5--CL-8: условия на greatest common divisor для генератора~$\mathbb{Z}_N$,
-  секторов~$N_\phi$, учёта энергии и импульса.
-\end{itemize}
+По модулю $N_{\mathrm{ring}}=512$ шаг обратим, половина кольца меняет знак спинора, энергия и импульс кратны кванту, а $41$ и $13$ порождают кольцо.
 \end{proposition}
 
 \begin{proof}
-CL-1 --- та же алгебра, что в доказательстве \cref{thm:g-law}:
-из $Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor$ неизвестный предыдущий регистр выражается явно,
-и это есть $g^{-1}$.
-CL-2: угол $\Phi=N_{\mathrm{ring}}/2$ есть поворот на~$\pi$, и $R$ меняет знак спинора (следствие о спине~$1/2$).
-CL-3 --- порог $|\Phi|\ge\Delta\phi_{\mathrm{disc}}$ или $\Phi=0$ в формуле импульса, то есть~$A_{16}$.
-CL-4 делит этот импульс на кванты: $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$, $E=n_E E_0$.
-CL-5 и CL-6 проверяются арифметикой кольца.
-$N_{\mathrm{ring}}=512=2^9$, а $\Delta\phi_{\mathrm{disc}}=41$ и $N_\phi=13$ нечётны, поэтому
-$\gcd(41,512)=1$ и $\gcd(13,512)=1$:
-шаг фазы порождает всё кольцо, и тринадцать секторов не склеиваются.
-CL-7 и CL-8: каждое приращение энергии и импульса есть целое число квантов $E_0$ и $p_0$
-(\cref{lem:51d,lem:51e}), значит сумма приращений по замкнутому шагу сравнима с нулём по модулю кванта.
+\emph{CL-1.}
+Из схемы второго порядка
+\[
+  Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor
+\]
+предыдущий регистр выражается явно:
+\[
+  Z^-=2Z+\lfloor\mathcal{N}\rfloor-Z^+.
+\]
+
+\emph{CL-2.}
+Шаг кольца есть $2\pi/N_{\mathrm{ring}}$, поэтому половина кольца --- угол $\pi$:
+\[
+  \frac{2\pi}{N_{\mathrm{ring}}}\cdot\frac{N_{\mathrm{ring}}}{2}=\pi,
+  \qquad
+  R(N_{\mathrm{ring}}/2)\,z=-z.
+\]
+
+\emph{CL-3.}
+\[
+  \Phi=0\quad\text{или}\quad |\Phi|\ge\Delta\phi_{\mathrm{disc}}.
+\]
+
+\emph{CL-4.}
+\[
+  n_E=\Bigl\lfloor\frac{|\Phi|}{\Delta\phi_{\mathrm{disc}}}\Bigr\rfloor,
+  \qquad
+  E=n_E E_0.
+\]
+
+\emph{CL-5, CL-6.}
+\[
+  N_{\mathrm{ring}}=2^9=512,
+  \qquad
+  \Delta\phi_{\mathrm{disc}}=41,
+  \qquad
+  N_\phi=13,
+\]
+\[
+  \gcd(41,512)=1,
+  \qquad
+  \gcd(13,512)=1.
+\]
+Кратности $41$ пробегают всё кольцо $\mathbb{Z}/512\mathbb{Z}$.
+Умножение на $13$ в этом кольце обратимо, тринадцать секторов различны.
+
+\emph{CL-7, CL-8.}
+\[
+  \Delta E=n_E E_0,
+  \qquad
+  \Delta p=n_p p_0,
+  \qquad
+  n_E,n_p\in\mathbb{Z}.
+\]
+На замкнутом шаге
+\[
+  \sum\Delta E=E_0\sum n_E,
+  \qquad
+  \sum\Delta p=p_0\sum n_p.
+\]
 \end{proof}
 
-Топологический заряд $n\in\mathbb{Z}$ ($A_{10}$) не сводится к mod~$N_{\mathrm{ring}}$.
+Топологический заряд $n\in\mathbb{Z}$. Регистр фазы --- вычет по модулю~$N_{\mathrm{ring}}$.
