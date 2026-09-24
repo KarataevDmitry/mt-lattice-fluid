@@ -413,7 +413,7 @@ $$
 F_{12} = \alpha\, F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}},
 \qquad \alpha = \kappa/M,\quad F_0 = \kappa F_P.
 $$
-π-tower — конкурирующее T-число (~2 ppm), не спуск $g$; coarse $\kappa/97$ (~−1040 ppm); soft preferred (seat+face) lab-inside; unit descent OPEN (§8.2·U0·soft-face).
+π-tower — конкурирующее T-число (~2 ppm), не спуск $g$; coarse $\kappa/97$ (~−1040 ppm); soft preferred (seat+face) lab-inside; unit descent **SEALED** (§8.2·U0·soft-face).
 **Сборка (после M-native):**
 | кусок | где | смысл |
 |-------|-----|--------|
@@ -715,10 +715,10 @@ $$
 | пара | $m$ (путь A) | $n$ (путь B) | статус ног |
 |------|--------------|--------------|------------|
 | hops | $N_c$ | $N_{a0}$ | $N_{a0}$ OPEN (H); $N_c$ сегодня α-tied через $m_e$ |
-| force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97** CLOSED; soft preferred lab-inside; unit descent OPEN |
+| force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97** CLOSED; soft preferred lab-inside; unit descent **SEALED** |
 | Schwinger | $a_e$ | $2r=1/(2\pi)$ | $2r$ CLOSED; $a_e$ OPEN/lab |
 **Отвергнуто:** одна нога на оба ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
-**Сильнейшая dual:** $\alpha=\kappa/M$ coarse **shipped**; soft preferred (seat+face) **lab-inside**; duel π-tower demoted; **unit descent OPEN**.
+**Сильнейшая dual:** $\alpha=\kappa/M$ coarse **shipped**; soft preferred (seat+face) **lab-inside**; duel π-tower demoted; **unit descent SEALED**.
 **Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
 #### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
 **Лемма (force dual).** Пусть $\alpha=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
@@ -771,7 +771,7 @@ $$
 |------|---------|-----------|------|
 | **дискрет (descent)** | $\alpha=\kappa/97$ | ~−1040 ppm | полное квантование + seats |
 | **π-tower (T)** | $1/(4\pi^3+\pi^2+\pi)$ | ~+2 ppm | continuum $\Omega=4\pi$ readout |
-π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft preferred (seat+face) — **lab-inside**; почему den теряет seat+face — **OPEN** (не дыра в $M$).
+π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED** (G-grade completeness; не дыра в $M$).
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
 #### §8.2·α·U0·soft-face · seat+face unit (inside CODATA band)
