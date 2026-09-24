@@ -490,6 +490,8 @@ x+N ≡ x ,   y+N ≡ y
 
 **Probe:** SYNTH_U1 locked → rel=0, u1≈1, b=1 · VORTEX_P → rel≈1, u1≈0, b=1 · class-gradient boil IC still ~curl-free (no magic b from stripes).
 
+**Family scan** (`scripts/run_seed_family_scan.py`, 128²×1024): VACUUM/BOIL/IMPULSE → born=0 · **PLANE_WAVE → born=1** (|n|_auto≈2) · VORTEX_* planted persist. Brick-offset BOIL subfamily still 0/52.
+
 ---
 
 ## §11. Код (M-only slice)
