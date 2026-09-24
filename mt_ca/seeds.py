@@ -13,8 +13,8 @@ from mt_ca.z_ring import mod_lane
 class SeedClass(str, Enum):
     """Physical IC classes on the lattice (§0.5 · §5 · Seed taxonomy).
 
-    VACUUM — full ocean at z_min, gauge-fixed Heisenberg class 0 (holomorphic Φ=0).
-    VACUUM_BOIL — full ocean, every cell a brick; NN phase step = Δφ_min (A5 boil).
+    VACUUM — full ocean, every cell a brick, gauge-fixed class 0 (Φ=0 dead).
+    VACUUM_BOIL — full ocean, every cell a brick; NN Δclass=±1 ⇒ Δφ=Δφ_min (A5).
     IMPULSE / PLANE_WAVE — energy packets on gauge-fixed ocean.
     VORTEX_* — topological matter (n∈ℤ) on that ocean.
     """
@@ -96,13 +96,21 @@ def vacuum_boil_fixed(
     mod_bits: int = HV.mod_bits,
     frac_bits: int = HV.frac_bits,
     phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    class_dy: int = 1,
+    class_dx: int = 1,
+    class_offset: int = 0,
 ) -> torch.Tensor:
-    """Whole-lattice A5 boil IC — every cell a brick; NN Δφ = Δφ_min (§0.5 · §3.12.6).
+    """Full-lattice A5 boil — every cell a Heisenberg brick (§5.0 · §3.12.6 · §6 bath).
 
-    Gauge-fixed VACUUM (phase_class=0 everywhere) is holomorphic Φ=0 by design.
-    Dogfood: bath only moves when the *whole* lattice carries on-threshold phase
-    steps — not a lonely excitation on empty/flat vacuum.
-    Deterministic: tick(y,x) = (y+x)·Δφ_disc mod N_ring. No RNG.
+    Canon: пустоты нет; пространство заполнено. Brick = one amplitude quantum +
+    one phase class k∈{0,…,N_φ−1}. NN along axes differ by ±1 class ⇒ Δφ=Δφ_min.
+
+    phase_class(y,x) = (class_dy·y + class_dx·x + class_offset) mod N_φ
+    tick = heisenberg_phase_tick(class) — discrete brick orientations, NOT a free
+    N_ring plane-wave ramp (that was the rejected «stripe» ring-scan family).
+
+    Default class_dy=class_dx=1, offset=0. No RNG.
     """
     if len(spatial) != 2:
         raise ValueError("vacuum_boil_fixed currently 2D (ny, nx) only")
@@ -110,12 +118,16 @@ def vacuum_boil_fixed(
     ny, nx = spatial
     n_ring = 1 << phase_bits
     delta = heisenberg_phi_min_disc(phase_bits=phase_bits)
+    dy = int(class_dy) % n_phi
+    dx = int(class_dx) % n_phi
+    off = int(class_offset) % n_phi
     yy, xx = torch.meshgrid(
         torch.arange(ny, device=device, dtype=torch.int64),
         torch.arange(nx, device=device, dtype=torch.int64),
         indexing="ij",
     )
-    tick = ((yy + xx) * int(delta)) % n_ring
+    phase_class = (dy * yy + dx * xx + off) % n_phi
+    tick = (phase_class * int(delta)) % n_ring
     q = 1
     ang = tick.to(torch.float64) * (2.0 * math.pi / n_ring)
     re = torch.round(q * torch.cos(ang)).to(torch.int64)
