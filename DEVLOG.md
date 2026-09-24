@@ -8,6 +8,14 @@
 
 
 
+
+## 2026-09-24 · §8.2·[L]·l_P — length dim = l_P; hierarchy from α (SEALED)
+
+**DoD:** Natural unit l_P. Exact α ⇒ Compton/Bohr/r_e = N_c, N_c/α, α·N_c hops. Not SI-metre fit.
+
+**Code:** `SI.length_dim_from_lP_alpha_row()` · verify `Length_dim_from_lP_alpha`.
+
+
 ## 2026-09-24 · §8.2·meter·decouple — SI metre ∉ M (SEALED)
 
 **DoD:** After α seal, SI metre is fully off the M board. Lengths = hops of hL. α / masses / N_a0 never consult the metre. SI-2019 + optical a0 + √(ħG/c³) = T-export only.
