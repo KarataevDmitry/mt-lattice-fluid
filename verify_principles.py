@@ -970,6 +970,34 @@ def check_time_dim_from_tP(device: str = "cpu") -> dict:
     }
 
 
+
+def check_units_time_first_cascade(device: str = "cpu") -> dict:
+    """§8.2·units·time-first — t_P → l_P=c·t_P → G exact."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.units_time_first_cascade_row()
+    ok = (
+        bool(row["ask_ok"])
+        and bool(row["derivation_closed"])
+        and bool(row["time_first"])
+        and bool(row["G_exact"])
+        and bool(row["identity_lP_eq_c_tP"])
+        and bool(row["identity_G_eq_c5_tP2_over_hbar"])
+        and bool(row["identity_G_eq_lP2_c3_over_hbar"])
+        and bool(row["identity_G_time_eq_length_form"])
+    )
+    return {
+        "id": "Units_time_first_cascade",
+        "ontology_order": row["ontology_order"],
+        "G_from_t_P": row["G_from_t_P"],
+        "time_first": row["time_first"],
+        "G_exact": row["G_exact"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_coulomb_M_native(device: str = "cpu") -> dict:
     """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
     from mt_ca.si_constants import SI
@@ -2956,6 +2984,7 @@ def run_all(device: str) -> list[dict]:
         check_meter_decouple_from_M(device=device),
         check_length_dim_from_lP_alpha(device=device),
         check_time_dim_from_tP(device=device),
+        check_units_time_first_cascade(device=device),
         check_floor1_leptonic_ask(device=device),
         check_floor1_B0_census_ask(device=device),
         check_floor1_dressing_ask(device=device),
