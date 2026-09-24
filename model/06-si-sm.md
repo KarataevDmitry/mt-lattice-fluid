@@ -258,7 +258,7 @@ T-слой: EM-связность = **фазовый объём** emergent 3D re
 | **смысл** | phase↔vacuum coupling | stamped |
 | **нога** | `α*−1 = Δφ_min/(2π) = 1/(4π)` (пустая ячейка) | stamped |
 | **число** | `α⁻¹ = 4π³+π²+π` (башня на `4π`) | stamped T-readout |
-| **следствия** | `F=F₀/(M N²)` на M; `α=κ/M` T-readout | discrete shipped; soft residual open |
+| **следствия** | `F=F₀/(M N²)` на M; `α=κ/M` coarse; soft-face preferred | discrete + lab-inside; unit descent open |
 | **открыто** | дискретная доля сопряжения на FCC без continuum-`π` | `Φ_□` open · α_geom exploratory |
 Тождество ноги: `4π·α = α/(α*−1)`.
 **Код:** `SI.alpha_meaning_ask_row()` · verify **`Alpha_meaning_ask`**.
@@ -413,7 +413,7 @@ $$
 F_{12} = \alpha\, F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}},
 \qquad \alpha = \kappa/M,\quad F_0 = \kappa F_P.
 $$
-π-tower — конкурирующее T-число (~2 ppm), не спуск $g$; soft residual $\kappa/97$ (~−1040 ppm) OPEN.
+π-tower — конкурирующее T-число (~2 ppm), не спуск $g$; coarse $\kappa/97$ (~−1040 ppm); soft preferred (seat+face) lab-inside; unit descent OPEN (§8.2·U0·soft-face).
 **Сборка (после M-native):**
 | кусок | где | смысл |
 |-------|-----|--------|
@@ -715,10 +715,10 @@ $$
 | пара | $m$ (путь A) | $n$ (путь B) | статус ног |
 |------|--------------|--------------|------------|
 | hops | $N_c$ | $N_{a0}$ | $N_{a0}$ OPEN (H); $N_c$ сегодня α-tied через $m_e$ |
-| force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97 combinatorial CLOSED** (nF); soft residual OPEN |
+| force | $\kappa=1/\sqrt{2}$ | $M\in\mathbb{N}$ | **κ CLOSED**; **M=97** CLOSED; soft preferred lab-inside; unit descent OPEN |
 | Schwinger | $a_e$ | $2r=1/(2\pi)$ | $2r$ CLOSED; $a_e$ OPEN/lab |
 **Отвергнуто:** одна нога на оба ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
-**Сильнейшая dual:** $\alpha=\kappa/M$ — дискретная перепись мест **shipped**; duel с π-tower (~2 ppm vs ~−1040 ppm) — soft OPEN.
+**Сильнейшая dual:** $\alpha=\kappa/M$ coarse **shipped**; soft preferred (seat+face) **lab-inside**; duel π-tower demoted; **unit descent OPEN**.
 **Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
 #### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
 **Лемма (force dual).** Пусть $\alpha=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo CLOSED), $M\in\mathbb{N}$.
@@ -727,7 +727,7 @@ $$
 1. Точные $1/137$, $M/512$ и любой $p/q$ как *определение* α — **несовместимы** с dual $\kappa/M$.
 2. «Дробь $m/n$» на носителе ≠ $\alpha\in\mathbb{Q}$; это отношение двух величин носителя ($\kappa/M$ — иррациональное / целое).
 3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
-**Не закрывает** soft residual — только выкидывает рациональные самозванцы. Кандидат формы: $\alpha=\kappa/97$ (~−1040 ppm); $M$ combinatorial CLOSED (nF census).
+**Не закрывает** unit-descent soft-face — только выкидывает рациональные самозванцы. Coarse $\alpha=\kappa/97$ (~−1040 ppm); preferred — §8.2·U0·soft-face (lab-inside).
 **Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
 #### §8.2·α·M·g·try · Попытка: $M$ из stamped бит-бюджета
 **Dual:** $\alpha=\kappa/M$. $\kappa$ закрыт. Нужен $M\in\mathbb{N}$ без α.
@@ -771,14 +771,14 @@ $$
 |------|---------|-----------|------|
 | **дискрет (descent)** | $\alpha=\kappa/97$ | ~−1040 ppm | полное квантование + seats |
 | **π-tower (T)** | $1/(4\pi^3+\pi^2+\pi)$ | ~+2 ppm | continuum $\Omega=4\pi$ readout |
-π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft residual дискретного пути — **OPEN** (вышележащая структура / duel), не дыра в $M$.
+π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft preferred (seat+face) — **lab-inside**; почему den теряет seat+face — **OPEN** (не дыра в $M$).
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
 #### §8.2·α·U0·soft-face · seat+face unit (inside CODATA band)
 
 **Единица:** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 **Грубо:** $\alpha_0=\kappa/M$ (~−1040 ppm).
-**Face:** $1/7=1/(n_\square+1)$.
+**Face:** $1/7=1/(n_\square+1)$, $n_\square=6$ из cubocta (geo CLOSED).
 **Якорь ppm:** CODATA **2022** ($u_r\sim1.6\times10^{-10}$).
 
 Лестница:
@@ -793,7 +793,7 @@ $$
 \;\to\;
 \underbrace{\frac{7M^{2}\kappa(7M+\kappa)}{49M^{4}-7M\kappa^{3}-8}}_{\sim -0.000068\,\mathrm{ppm}\ (\sim 0.45\sigma)}.
 $$
-**Аксиома preferred:** после inv-cut — $M$-гомогенизация; вычесть **seat** $1$ и **face** $1/7$ (сумма $8/7=(n_\square+2)/(n_\square+1)$).
+**Аксиома preferred:** после inv-cut — $M$-гомогенизация; вычесть **seat** $1$ и **face** $1/7$ (сумма $8/7=(n_\square+2)/(n_\square+1)$). Куски stamped; **почему вычитание** — descent OPEN.
 
 | путь | vs CODATA 2022 | роль |
 |------|----------------|------|

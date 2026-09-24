@@ -2168,7 +2168,7 @@ class SIConstants:
           B) force: α = κ / M
              · κ = R_in/R_out = 1/√2 — CLOSED (geo)
              · M ∈ ℕ — combinatorial CLOSED (nF census = 97);
-               soft residual vs CODATA (~−1040 ppm) still OPEN
+               coarse κ/97 ~−1040 ppm; soft preferred (seat+face) lab-inside; unit-descent OPEN
              · note: κ∉ℚ ⇒ α not pure ℤ/ℤ unless rewritten
           C) Schwinger: α = a_e / (2r)
              · 2r = 1/(2π) — CLOSED (foot)
@@ -2239,9 +2239,9 @@ class SIConstants:
             {
                 "id": "soft_residual_open",
                 "ratio": m_tgt,
-                "maps_to": "CODATA wants M≈96.90; κ/97 ~−1040 ppm — soft OPEN",
-                "status": "open_soft",
-                "mechanism": "higher structure; π-tower still competing T-number",
+                "maps_to": "coarse κ/97 ~−1040 ppm; preferred seat+face inside CODATA band",
+                "status": "lab_closed_derivation_open",
+                "mechanism": "soft-face §8.2·U0; why −8/7 unit still OPEN",
             },
             {
                 "id": "pair_schwinger_ae_over_2r",
@@ -2282,7 +2282,7 @@ class SIConstants:
             "alpha_from_Nc_Na0": n_c / n_a0,
             "alpha_from_kappa_M97": kappa / m97,
             "alpha_from_ae_over_2r": ae_codata / two_r,
-            "strongest_alive_pair": "force κ/M (combinatorial shipped; soft residual open)",
+            "strongest_alive_pair": "force κ/M + soft-face preferred (lab inside; unit descent open)",
             "derivation_closed": False,
             "M_combinatorial_closed": True,
             "inventory": inventory,
@@ -2292,7 +2292,7 @@ class SIConstants:
             "note": (
                 "Method: α=m/n with two independent physics. "
                 "Force dual κ/M: M=97 combinatorial CLOSED (nF census); "
-                "soft residual ~−1040 ppm OPEN. Also: ae/(2r) (ae open), "
+                "coarse −1040 ppm; soft preferred lab-inside (descent OPEN). Also: ae/(2r) (ae open), "
                 "N_c/N_a0 (N_a0 open, N_c α-tied). Reject M/512 single-path."
             ),
         }
@@ -2672,7 +2672,7 @@ class SIConstants:
 
         Contrast: π-ansatz α⁻¹=4π³+π²+π is continuum solid-angle T-readout
         (~2 ppm) — competing *number*, not the discrete descent.
-        Soft residual κ/97 vs CODATA (~−1040 ppm) remains OPEN.
+        Coarse κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; why subtract seat+face units — descent OPEN.
         """
         census = self.alpha_nF_kick_census_row()
         meaning = self.alpha_meaning_ask_row()
@@ -2766,9 +2766,11 @@ class SIConstants:
         Structural α exact; Δ(CODATA)=lab door (now inside ε).
         """
         census = self.alpha_nF_kick_census_row()
+        geo = self.cuboctahedron_geometry_row()
         kappa = float(census["kappa"])
         m = int(census["M"])
-        n_sq, n_tri = 6, 8
+        n_sq = int(geo["n_faces_square"])
+        n_tri = int(geo["n_faces_triangle"])
         face_q = 1.0 / (n_sq + 1)
         u0 = float(self.F_0) * float(self.l_P) ** 2
         hbar_c = float(self.hbar) * float(self.c)
@@ -2856,15 +2858,26 @@ class SIConstants:
                 "status": "explained",
             },
             {
+                "id": "n_sq_from_cubocta",
+                "count": n_sq,
+                "maps_to": "cubocta square faces; face_q=1/(n_sq+1)",
+                "status": "shipped_geo",
+            },
+            {
                 "id": "axiom_seat_plus_face_unit",
-                "maps_to": "M-homogenize; subtract seat 1 + face 1/7 (=8/7)",
-                "status": "shipped_axiom",
+                "maps_to": "M-homogenize; subtract seat 1 + face 1/7 (=8/7=(n_sq+2)/(n_sq+1))",
+                "status": "shipped_axiom_open_descent",
             },
             {
                 "id": "lab_delta_vs_codata2022",
                 "ppm": ppm(a_pref),
                 "maps_to": "Δ ~−0.000068 ppm (~0.45σ) — inside CODATA band",
                 "status": "lab_inside_band",
+            },
+            {
+                "id": "open_why_subtract_units",
+                "maps_to": "why den loses seat+face after homogenize — descent still OPEN",
+                "status": "open_derivation",
             },
         ]
         return {
@@ -2873,6 +2886,8 @@ class SIConstants:
             "kappa": kappa,
             "U0_J_m": u0,
             "hbar_c_over_U0": hbar_c / u0,
+            "n_faces_square": n_sq,
+            "n_faces_triangle": n_tri,
             "face_quantum": face_q,
             "alpha_codata": alpha_c,
             "codata_year": 2022,
@@ -2903,6 +2918,8 @@ class SIConstants:
             "lab_inside_codata_band": abs(ppm(a_pref)) < 0.00016,
             "inventory": inventory,
             "ask_ok": m == 97
+            and n_sq == 6
+            and n_tri == 8
             and abs(face_q - 1.0 / 7.0) < 1e-15
             and abs(a_dress - a_exact_frac) < 1e-15
             and abs(a_invcut - a_invcut_frac) < 1e-15
