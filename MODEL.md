@@ -3,7 +3,7 @@
 **Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».
 **Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.
 **Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.
-**SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md), часть **MODEL**, не meta.
+**SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md) (hub §6–§8), часть **MODEL**, не meta.
 
 ### Иерархия слоёв (SSOT)
 
@@ -55,7 +55,14 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 | [`model/03-evolution.md`](model/03-evolution.md) | §3 `g`, ДА, спинор, leapfrog |
 | [`model/04-macro.md`](model/04-macro.md) | §4 M→T |
 | [`model/05-matter.md`](model/05-matter.md) | §5 dV, occupancy, гидро |
-| [`model/06-si-sm.md`](model/06-si-sm.md) | §6–§8 лестница · SI · SM |
+| [`model/06-si-sm.md`](model/06-si-sm.md) | hub §6–§8 (оглавление) |
+| [`model/06-ladder.md`](model/06-ladder.md) | §6 иерархия M→SM |
+| [`model/07-si-bridge.md`](model/07-si-bridge.md) | §7 SI-мост |
+| [`model/08-alpha.md`](model/08-alpha.md) | §8.1–8.2 α |
+| [`model/08-units.md`](model/08-units.md) | §8.2 meter / units |
+| [`model/08-masses.md`](model/08-masses.md) | §8.2 массы |
+| [`model/08-higgs.md`](model/08-higgs.md) | §8.3 Higgs |
+| [`model/08-forces.md`](model/08-forces.md) | §8.4 силы · GR · Weinberg · CKM |
 
 **Носитель (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆** = {111} FCC. Квадрат N₄ — не физика M (см. DEVLOG).
 
