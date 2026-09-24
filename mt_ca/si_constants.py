@@ -2761,14 +2761,15 @@ class SIConstants:
     def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·U0·soft-face — face+seat unit on α0=κ/M.
 
-        Preferred: α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ⁶))
+        Preferred: α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ^{n_□}))
                  = 7 M² κ (7M+κ) / (49 M⁴ − 7 M κ³ − 8)
-        Soft unit 1/(1−κ⁶)=8/7 (κ²=1/2 locks the *number*).
+        Soft unit 1/(1−κ^{n_□})=8/7 (n_□=6 cubocta squares; κ²=1/2 locks number).
         Meaning of 7 (candidate, fundamental): N4 causal cross + 3 SU(2) Pauli
         generators — same space+symmetry laws as the descent (§3.6 / §3.10).
         n_sq+1 and 2³−1 rhyme with 7 (echo / algebra), not required parents.
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Wedge (OPEN): why subtract soft unit — local-only; global-M book demoted false trail.
+        Wedge (candidate, not sealed): homogenize erases 1-tick soft residue;
+        preferred restores soft unit once (local cubocta). Global-M book = false trail.
         """
         census = self.alpha_nF_kick_census_row()
         geo = self.cuboctahedron_geometry_row()
@@ -2780,7 +2781,7 @@ class SIConstants:
         n_su2 = 3  # Pauli generators / SU(2) (§3.10)
         seven = n4 + n_su2  # candidate fundamental meaning of 7
         face_q = 1.0 / (n_sq + 1)
-        soft_unit = 1.0 / (1.0 - kappa**6)  # = 8/7; number from κ
+        soft_unit = 1.0 / (1.0 - kappa**n_sq)  # = 8/7; n_□ from cubocta, number from κ
         u0 = float(self.F_0) * float(self.l_P) ** 2
         hbar_c = float(self.hbar) * float(self.c)
         alpha_c = 7.2973525643e-3  # CODATA 2022
@@ -2799,8 +2800,8 @@ class SIConstants:
             (m * m) * kappa * (7.0 * m + kappa)
             / (7.0 * m**4 - m * kappa**3 - 1.0)
         )
-        # preferred: inline soft unit via κ
-        # α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ⁶))
+        # preferred: soft unit = 1/(1−κ^{n_□}) from local cubocta
+        # α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ^{n_□}))
         a_pref = (m * m) * kappa * (7.0 * m + kappa) / (
             7.0 * m**4 - m * kappa**3 - soft_unit
         )
@@ -2910,13 +2911,15 @@ class SIConstants:
                 "status": "shipped_unit",
             },
             {
-                "id": "soft_unit_via_kappa",
+                "id": "soft_unit_via_kappa_n_sq",
                 "maps_to": (
-                    "8/7=2^3/(2^3-1)=1/(1-κ^6): κ^2=1/2 locks NUMBER; "
-                    "7=2^3-1 algebra echo — meaning of 7 is N4+SU(2) candidate"
+                    "8/7=1/(1−κ^{n_□})=1/(1−κ^6): exponent = cubocta n_faces_square; "
+                    "κ²=1/2 locks NUMBER. Also = seat 1 + face 1/(n_□+1). "
+                    "7=2³−1 algebra echo — meaning of 7 is N4+SU(2) candidate."
                 ),
                 "status": "shipped_number_identity",
-                "value": 1.0 / (1.0 - kappa**6),
+                "value": soft_unit,
+                "n_sq": n_sq,
             },
             {
                 "id": "false_trail_global_M_book",
@@ -2947,14 +2950,16 @@ class SIConstants:
                 "status": "shipped_reframe",
             },
             {
-                "id": "open_why_subtract_soft_unit_local_only",
+                "id": "candidate_local_cubocta_residue",
                 "maps_to": (
-                    "Soft unit 8/7 = seat 1 + face 1/7 is κ-/cubocta-local. "
-                    "Why subtract after homogenize — still OPEN; search space = local-only "
-                    "(face/seat on the cell), not restore separation of a global book. "
-                    "derivation_closed=False."
+                    "After ×M homogenize, den is 7M⁴−Mκ³ — no constant soft term. "
+                    "1-tick cubocta still carries soft unit 1/(1−κ^{n_□})=8/7 "
+                    "(series over square faces = seat+face on the same cell). "
+                    "Preferred restores that local residue once. "
+                    "Seat-only (−1) drops the face quantum of the same cell. "
+                    "Not sealed; derivation_closed=False."
                 ),
-                "status": "open_local_descent",
+                "status": "candidate_local_descent",
             },
         ]
         return {
@@ -2990,12 +2995,13 @@ class SIConstants:
             "identity_invcut_frac": abs(a_invcut - a_invcut_frac) < 1e-15,
             "identity_pref_face_seat": abs(a_pref - a_pref_alt) < 1e-15,
             "identity_pref_cleared": abs(a_pref - a_pref_cleared) < 1e-15,
-            "identity_soft_via_kappa": abs(soft_unit - 1.0 / (1.0 - kappa**6)) < 1e-15
+            "identity_soft_via_kappa": abs(soft_unit - 1.0 / (1.0 - kappa**n_sq)) < 1e-15
             and abs(soft_unit - (1.0 + face_q)) < 1e-15,
             "identity_seven_N4_plus_SU2": seven == 7 and n4 == 4 and n_su2 == 3,
             "seven_meaning_fundamental_candidate": True,
             "carrier_soft_unit_answer_candidate": False,
             "false_trail_global_M_book": True,
+            "local_cubocta_residue_candidate": True,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
             "mechanism_descent_shipped": True,
@@ -3012,7 +3018,7 @@ class SIConstants:
             and seven == 7
             and n4 == 4
             and n_su2 == 3
-            and abs((n_sq + 2) / (n_sq + 1) - 1.0 / (1.0 - kappa**6)) < 1e-15
+            and abs((n_sq + 2) / (n_sq + 1) - 1.0 / (1.0 - kappa**n_sq)) < 1e-15
             and abs(a_dress - a_exact_frac) < 1e-15
             and abs(a_invcut - a_invcut_frac) < 1e-15
             and abs(a_pref - a_pref_alt) < 1e-15
@@ -3023,10 +3029,10 @@ class SIConstants:
             and abs(ppm(a_dress)) < 0.1
             and abs(ppm(a_resum) - 1.02725) < 0.01,
             "note": (
-                "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ⁶)) "
+                "Preferred α=M² κ (7M+κ)/(7 M⁴−M κ³−1/(1−κ^{n_□})) "
                 "~−0.000068 ppm vs CODATA 2022 (~0.45σ, inside band). "
-                "Soft unit via κ; 7=N4+SU(2); M local seat census (A1); "
-                "global-M book = false trail; unit descent OPEN local-only."
+                "Soft unit=1/(1−κ^{n_□}); 7=N4+SU(2); M local (A1); "
+                "global-M false trail; candidate: restore cubocta soft residue after homogenize."
             ),
         }
 

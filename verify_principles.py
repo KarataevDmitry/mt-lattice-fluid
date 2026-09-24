@@ -844,6 +844,7 @@ def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
         and bool(row["seven_meaning_fundamental_candidate"])
         and not bool(row["carrier_soft_unit_answer_candidate"])
         and bool(row["false_trail_global_M_book"])
+        and bool(row["local_cubocta_residue_candidate"])
         and not bool(row["derivation_closed"])
         and int(row["M"]) == 97
         and int(row["codata_year"]) == 2022
