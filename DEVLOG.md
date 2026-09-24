@@ -496,7 +496,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
 
-**α·U0·soft-face:** hunt via U0=F0·l_P² [J·m]; candidate α=1/(M/κ−1/7) ~+1.03 ppm (1/7=1/(n□+1)); mechanism OPEN. `Alpha_U0_soft_face_ask`.
+**α·U0·soft-face:** descent α=(U0/M)/(ℏc−U0/(7M)) ~+1.03 ppm; ℏc=2κ·U0; 7=n□+1. Axiom bridge OPEN. `Alpha_U0_soft_face_ask`.
 
 ---
 

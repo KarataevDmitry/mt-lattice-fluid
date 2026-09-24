@@ -2753,28 +2753,33 @@ class SIConstants:
         }
 
 
+
     def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·U0·soft-face — hunt soft residual via J·m = F0 l_P² packets.
+        """§8.2·α·U0·soft-face — soft residual via U0=F0·l_P² packets.
 
-        Dimensional hint: α = U_em/U_ref with [U]=J·m = s0 c0 = F0 l_P² (our c0, not macro-c).
-        Coarse: U_em=U0, U_ref=(M/κ)U0 ⇒ α=κ/M (−1040 ppm).
-        Soft hit (no π): subtract one face quantum 1/7 from the inverse count:
-          α⁻¹ = M/κ − 1/7,  1/7 = 1/(n□+1) = 2/(n□+n△).
-        ~+1.03 ppm vs CODATA. Not CLOSED — mechanism of the −1/7 seat still ask.
+        Unit: U0 = F0·l_P² = s0·c0 [J·m] (our c0; hbar*c = 2*kappa*U0).
+        Coarse full-quant: X=U0/M, denom=hbar*c=2*kappa*U0 => alpha=kappa/M (-1040 ppm).
+        Soft descent (no pi):
+          alpha = (U0/M) / (2*kappa*U0 - U0/(7M)) = 1/(M/kappa - 1/7),
+          1/7 = 1/(n_sq+1) = 2/(n_sq+n_tri) — face+body / FCC dual.
+        Reading: hbar*c loses one cell face-quantum U0/7 amortized over M seats.
+        Equiv: alpha=kappa/(M - kappa/7). ~+1.03 ppm. Mechanism of why face-basis
+        subtracts from hbar*c — candidate descent; not axiom-CLOSED.
         """
-        import math
-
         census = self.alpha_nF_kick_census_row()
         kappa = float(census["kappa"])
         m = int(census["M"])
         n_sq, n_tri = 6, 8
         face_q = 1.0 / (n_sq + 1)  # = 2/(n_sq+n_tri)
         u0 = float(self.F_0) * float(self.l_P) ** 2
+        hbar_c = float(self.hbar) * float(self.c)
         inv_coarse = m / kappa
         inv_soft = inv_coarse - face_q
         alpha_c = 7.2973525693e-3
         a_coarse = kappa / m
         a_soft = 1.0 / inv_soft
+        denom_u0 = 2.0 * kappa - face_q / m
+        a_from_U = (1.0 / m) / denom_u0
 
         def ppm(a: float) -> float:
             return (a - alpha_c) / alpha_c * 1.0e6
@@ -2782,57 +2787,71 @@ class SIConstants:
         inventory: list[dict[str, str | float | bool | int]] = [
             {
                 "id": "unit_U0",
-                "maps_to": "U0 = F0·l_P² = s0·c0 [J·m] — our length/speed, not ℏc macro",
+                "maps_to": "U0=F0·l_P²=s0·c0 [J·m]; hbar*c=2*kappa*U0",
                 "U0": u0,
+                "hbar_c_over_U0": hbar_c / u0,
                 "status": "shipped_unit",
             },
             {
-                "id": "coarse_kappa_over_M",
+                "id": "coarse_X_over_hbar_c",
+                "maps_to": "X=U0/M, denom=hbar*c=2*kappa*U0 => alpha=kappa/M",
                 "alpha": a_coarse,
                 "ppm": ppm(a_coarse),
-                "maps_to": "U_em=U0, U_ref=(M/κ)U0",
                 "status": "shipped_coarse",
             },
             {
-                "id": "soft_face_quantum_1_over_7",
+                "id": "soft_denom_minus_face_per_seat",
+                "maps_to": "denom=hbar*c - U0/(7M); 7=n_sq+1=2/14",
                 "face_quantum": face_q,
+                "delta_over_U0": face_q / m,
                 "alpha": a_soft,
                 "ppm": ppm(a_soft),
-                "maps_to": "α⁻¹=M/κ−1/7; 1/7=1/(n□+1)=2/14",
-                "status": "candidate",
+                "status": "descent_candidate",
+            },
+            {
+                "id": "identity_U_form_equals_inv_form",
+                "maps_to": "(1/M)/(2*kappa-1/(7M)) = 1/(M/kappa-1/7) = kappa/(M-kappa/7)",
+                "match": abs(a_from_U - a_soft) < 1e-15,
+                "status": "identity",
             },
             {
                 "id": "reject_pi_in_soft",
-                "maps_to": "π-tower not used; soft piece is FCC face count",
+                "maps_to": "pi-tower not input; soft piece is face+body count",
                 "status": "rejected_pi",
             },
             {
-                "id": "mechanism_of_minus_face_seat",
-                "maps_to": "why U_ref loses exactly one 1/7·U0 — still ask",
+                "id": "open_why_face_basis_cuts_hbar_c",
+                "maps_to": "axiom bridge: why U0/7 amortizes into hbar*c — still ask",
                 "status": "open",
             },
         ]
         return {
-            "theorem": "§8.2·α·U0·soft-face — soft residual via F0 l_P² packets",
+            "theorem": "§8.2·α·U0·soft-face — alpha=(U0/M)/(hbar*c-U0/(7M))",
             "M": m,
             "kappa": kappa,
             "U0_J_m": u0,
+            "hbar_c_over_U0": hbar_c / u0,
             "face_quantum": face_q,
             "alpha_coarse": a_coarse,
             "alpha_soft": a_soft,
+            "alpha_from_U_form": a_from_U,
             "vs_codata_ppm_coarse": ppm(a_coarse),
             "vs_codata_ppm_soft": ppm(a_soft),
             "inv_soft": inv_soft,
+            "identity_U_form": abs(a_from_U - a_soft) < 1e-15,
             "derivation_closed": False,
             "soft_candidate_shipped": True,
+            "mechanism_descent_shipped": True,
             "inventory": inventory,
             "ask_ok": m == 97
             and abs(face_q - 1.0 / 7.0) < 1e-15
+            and abs(a_from_U - a_soft) < 1e-15
+            and abs(hbar_c / u0 - 2.0 * kappa) < 1e-12
             and abs(ppm(a_soft)) < 2.0,
             "note": (
-                "U0=F0 l_P². Coarse α=κ/M (−1040 ppm). "
-                "Soft candidate α=1/(M/κ−1/7) ~+1.03 ppm via n□+1=7. "
-                "Mechanism OPEN — not claimed closed."
+                "U0=F0 l_P^2; hbar*c=2*kappa*U0. Coarse alpha=kappa/M (-1040 ppm). "
+                "Soft: alpha=(U0/M)/(hbar*c-U0/(7M)) ~+1.03 ppm; 7=n_sq+1. "
+                "Descent candidate; axiom why face cuts hbar*c still OPEN."
             ),
         }
 

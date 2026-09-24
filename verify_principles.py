@@ -810,7 +810,7 @@ def check_coulomb_M_native(device: str = "cpu") -> dict:
 
 
 def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
-    """§8.2·α·U0·soft-face — soft candidate 1/(M/κ−1/7); mechanism OPEN."""
+    """§8.2·α·U0·soft-face — (U0/M)/(hbar*c−U0/(7M)); descent candidate."""
     from mt_ca.si_constants import SI
 
     del device
@@ -818,10 +818,13 @@ def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
     ok = (
         bool(row["ask_ok"])
         and bool(row["soft_candidate_shipped"])
+        and bool(row["mechanism_descent_shipped"])
+        and bool(row["identity_U_form"])
         and not bool(row["derivation_closed"])
         and int(row["M"]) == 97
         and abs(float(row["face_quantum"]) - 1.0 / 7.0) < 1e-15
         and abs(float(row["vs_codata_ppm_soft"])) < 2.0
+        and abs(float(row["hbar_c_over_U0"]) - 2.0 * float(row["kappa"])) < 1e-12
     )
     return {
         "id": "Alpha_U0_soft_face_ask",
@@ -829,6 +832,7 @@ def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
         "alpha_soft": row["alpha_soft"],
         "vs_codata_ppm_soft": row["vs_codata_ppm_soft"],
         "vs_codata_ppm_coarse": row["vs_codata_ppm_coarse"],
+        "hbar_c_over_U0": row["hbar_c_over_U0"],
         "ok": ok,
         "note": row["note"],
     }

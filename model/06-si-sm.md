@@ -773,6 +773,35 @@ $$
 | **π-tower (T)** | $1/(4\pi^3+\pi^2+\pi)$ | ~+2 ppm | continuum $\Omega=4\pi$ readout |
 π-ansatz **не** спуск из $g$; он конкурирует как T-число. Soft residual дискретного пути — **OPEN** (вышележащая структура / duel), не дыра в $M$.
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
+
+#### §8.2·α·U0·soft-face · soft residual через пакеты $U_0=F_0\,l_P^{2}$
+
+**Единица (наша, не macro-$c$):**
+$$
+U_0 = F_0\,l_P^{2} = s_0\,c_0\quad[\mathrm{J}\cdot\mathrm{m}],
+\qquad \hbar c = 2\kappa\,U_0.
+$$
+**Грубо (full-quant):** $X=U_0/M$, знаменатель $\hbar c$ ⇒ $\alpha=\kappa/M$ (~−1040 ppm).
+
+**Мягкий спуск (без $\pi$):**
+$$
+\alpha = \frac{U_0/M}{\hbar c - U_0/(7M)}
+= \frac{1}{M/\kappa - 1/7}
+= \frac{\kappa}{M - \kappa/7},
+\qquad
+\frac{1}{7} = \frac{1}{n_\square+1} = \frac{2}{n_\square+n_\triangle}.
+$$
+Чтение: $\hbar c$ теряет один ячеечный face-quantum $U_0/7$, амортизированный по $M$ seats. $7$ — шесть □-граней + тело ячейки (или $14/2$ FCC-граней на helicity).
+
+| путь | vs CODATA | статус |
+|------|-----------|--------|
+| $\alpha=\kappa/97$ | ~−1040 ppm | coarse CLOSED |
+| $\alpha=1/(97\sqrt{2}-1/7)$ | ~+1.03 ppm | soft descent candidate |
+| $\pi$-tower | ~−2.2 ppm | T-competitor, не вход |
+
+**OPEN:** аксиоматический мост *почему* face-базис режет именно $\hbar c$ (не claim CLOSED).
+**Код:** `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
+
 #### §8.2·geo·voronoi · Ромбический додекаэдр: ячейка FCC
 **Не hull соседей** — **Вороной / WS** узла **`hV`**. Якорь тот же: **`a=l_P`** (12 NN на **`l_P`**; ребро каждого ромба **`a`**).
 | при `a=l_P` | формула | SI |
