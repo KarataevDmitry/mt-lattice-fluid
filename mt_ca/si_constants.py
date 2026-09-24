@@ -215,7 +215,7 @@ KAPPA_FCC_1TICK = 1.0 / math.sqrt(2.0)  # inscribed sphere in cuboctahedron (12 
 HV = hv_bit_budget()
 
 # §8.2·α·nF·Thm — force seats on one charged FCC core (not a free fit).
-N_HIER_CHANNELS = int(HV.mod_bits) - 1  # ⌊B_hV⌋−1 = 8 (occupancy bit out of hierarchy)
+N_HIER_CHANNELS = int(HV.mod_bits) - 1  # ⌊B_hV⌋−1; B_hV=2π/ln2 → ⌊…⌋−1=8 (occupancy bit out)
 M_FORCE_SEATS = 1 + N12_FCC_CAUSAL_LINKS * N_HIER_CHANNELS  # = 97
 D_SOFT = N4_CAUSAL_LINKS + 3  # von Neumann cross + SU(2) Pauli = 7
 U_SOFT = (D_SOFT + 1) / D_SOFT  # = 8/7 = 1/(1−κ⁶)
@@ -260,7 +260,7 @@ def hex_bridge_row() -> dict[str, float]:
         "kappa_link": kappa_link(n_links=N6_CAUSAL_LINKS),
         "nu_CA_natural": kappa_link(n_links=N6_CAUSAL_LINKS),
         "alpha_star": 1.0 + 1.0 / (4.0 * math.pi),
-        "alpha_fs_inv": 4.0 * math.pi**3 + math.pi**2 + math.pi,
+        "alpha_fs_inv": 1.0 / alpha_from_fundamentals(),
         "cell_area_over_lP2": math.sqrt(3.0) / 2.0,
     }
 
@@ -285,7 +285,7 @@ def fcc_bridge_row() -> dict[str, float]:
         "nu_CA_natural": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
         "v_hV_over_lP3": 1.0 / math.sqrt(2.0),
         "alpha_star": 1.0 + 1.0 / (4.0 * math.pi),
-        "alpha_fs_inv": 4.0 * math.pi**3 + math.pi**2 + math.pi,
+        "alpha_fs_inv": 1.0 / alpha_from_fundamentals(),
         "note": "asymptotic FCC graph-ball κ — open leaf",
     }
 
@@ -738,29 +738,20 @@ class SIConstants(SIAlphaRows, SIFloor1Rows, SIUnitsRows, SICarrierRows, SISmRow
 
 
     @property
-
-    def alpha_fs_inv(self) -> float:
-
-        """Inverse fine-structure constant from gate phase geometry (§8.2)."""
-
-        pi = math.pi
-
-        return 4.0 * pi**3 + pi**2 + pi
-
-
-
-    @property
-
-    def alpha_fs(self) -> float:
-
-        """π-tower T-readout α (demoted competitor; not structural preferred)."""
-
-        return 1.0 / self.alpha_fs_inv
-
-    @property
     def alpha_preferred(self) -> float:
-        """Structural α from carrier fundamentals (§8.2·U0)."""
+        """Structural alpha from carrier fundamentals (sec 8.2 U0)."""
         return alpha_from_fundamentals()
+
+    @property
+    def alpha_fs(self) -> float:
+        """alpha — alias of alpha_preferred (pi-tower removed)."""
+        return self.alpha_preferred
+
+    @property
+    def alpha_fs_inv(self) -> float:
+        """1/alpha — structural fundamentals (pi-tower removed)."""
+        return 1.0 / self.alpha_preferred
+
 
 
 
@@ -1414,7 +1405,6 @@ def hv_bit_budget_row() -> dict[str, float | int]:
 lepton_mass_factor = lepton_geometry_factor
 
 baryon_mass_factor = baryon_geometry_factor
-
 
 
 

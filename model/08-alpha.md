@@ -576,36 +576,42 @@ Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED*
 
 #### §8.2·α·U0·soft-face · α from fundamentals (SEALED)
 
-**Фундаменталы (носитель; без ℏ,c,e,ε₀,π,лаб):**
+**Фундаменталы (носитель; без ℏ,c,e,ε₀,лаб):**
 ```
-κ = 1/√2                         # FCC 1-tick
-N₁₂ = 12                         # FCC causal links
-N_hier = ⌊B_hV⌋−1 = 8            # hierarchy channels
-d = N₄ + 3 = 7                   # von Neumann cross + SU(2)
-U = (d+1)/d = 8/7 = 1/(1−κ⁶)     # soft singlet
+κ = 1/√2                              # FCC 1-tick
+N₁₂ = 12                              # FCC causal links
+B_hV = 2π / ln 2                      # Bekenstein bits / hV brick (§3.12.6)
+N_hier = ⌊B_hV⌋ − 1                   # hierarchy channels (occupancy bit out)
+         = ⌊2π/ln2⌋ − 1 = 8
+d = N₄ + 3 = 7                        # von Neumann cross + SU(2)
+U = (d+1)/d = 8/7 = 1/(1−κ⁶)          # soft singlet
 ```
 
-**α (structural, sealed) — M уже подставлен:**
+**α (structural, sealed) — M и N_hier уже подставлены:**
 ```
-M := 1 + N₁₂·N_hier
+N_hier := ⌊B_hV⌋ − 1 = ⌊2π/ln2⌋ − 1
+M      := 1 + N₁₂·N_hier
+        = 1 + N₁₂·(⌊2π/ln2⌋ − 1)
 
 α = M² · κ · (d·M + κ) / (d·M⁴ − M·κ³ − U)
 
-  = (1+N₁₂·N_hier)² · κ · (d·(1+N₁₂·N_hier) + κ)
-    / ( d·(1+N₁₂·N_hier)⁴ − (1+N₁₂·N_hier)·κ³ − U )
+  = [1+N₁₂·(⌊2π/ln2⌋−1)]² · κ · ( d·[1+N₁₂·(⌊2π/ln2⌋−1)] + κ )
+    / ( d·[1+N₁₂·(⌊2π/ln2⌋−1)]⁴ − [1+N₁₂·(⌊2π/ln2⌋−1)]·κ³ − U )
 ```
 κ⁶-лицо (то же число; U=1/(1−κ⁶), (1−κ⁶)/κ⁶ = d = 7):
 ```
 α = M² κ ( ((1−κ⁶)/κ⁶) M + κ )
     / ( ((1−κ⁶)/κ⁶) M⁴ − M κ³ − 1/(1−κ⁶) )
-  при M = 1+N₁₂·N_hier
+  при M = 1 + N₁₂·(⌊2π/ln2⌋ − 1)
 ```
-`SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`). M=97 — следствие Thm nF, не отдельный knob.
+`SI.alpha_from_fundamentals()` (= `SI.alpha_preferred`).
+M=97 / N_hier=8 — следствия Thm nF + Bekenstein brick, не knobs.
+π здесь — **тик/Bekenstein** (`2π/ln2`), не удалённый π-tower α-полином.
 
 **Единица пакета (SI-перевод, не вход в α):** $U_0=F_0\,l_P^{2}=s_0\,c_0$, $\hbar c=2\kappa\,U_0$.
 
-Demoted: $lpha_0=\kappa/M$ (~−1040 ppm); ladder demoted; π-tower removed.
-**Δ vs CODATA:** дверь T (~0.45σ inside). Структурная α точна — нет $u(lpha)$.
+Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm); ladder demoted; π-tower removed.
+**Δ vs CODATA:** дверь T (~0.45σ inside). Структурная α точна — нет $u(\alpha)$.
 **Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
 
 
