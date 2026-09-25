@@ -30,7 +30,7 @@ z(x,t) ∈ Z_N[i] на v_p — целочисленный спинорный и�
 **Следствие 0.4 — Континуум на M.** **Нет** (§1.4). Непрерывные поля, диффуры, «плавное» время — **T** (readout на **фиксированной** решётке), не предел **`hL → 0`**.
 **Следствие 0.5 — Планковский пол амплитуды (A5 · §3.12.6).** На **`hV`** нет «устремления в ноль» — ни как knob, ни как предел:
 ```
-z_min = 2^{−B_amp} = 1 / Q(frac_bits) — одна амплитудная кванта кирпича
+z_min = 2^{−B_amp} = 1 / Q(frac_bits) — одна амплитудная кванта ячейки
 |z(x)| ≥ z_min на M (Z_N[i]); |z|² = 0 только c=0 — excluded §0.10
 vacuum_amplitude = z_min — derived, не fitted
 ```
@@ -72,7 +72,7 @@ vacuum_amplitude = z_min — derived, не fitted
 **Вопрос.** Три GPU-предохранителя — новая физика или readout уже выведено?
 
 **Вывод:**
-1. **Пол + seed (был §10.2).** `z≡0` → `z·R(Φ)=0` deadlock; A5 требует `|z|≥z_min` (§0.5 · §3.12.6). `vacuum_amplitude=z_min` — derived. IC ~ пол / кирпичи boil — не fitted `1e-6`. Per-cell `gauge_fix` на tick-path убивает `ζ_imag` → **запрещён** на M; global U(1) только T/reporting.
+1. **Пол + seed (был §10.2).** `z≡0` → `z·R(Φ)=0` deadlock; A5 требует `|z|≥z_min` (§0.5 · §3.12.6). `vacuum_amplitude=z_min` — derived. IC ~ пол / ячейки boil — не fitted `1e-6`. Per-cell `gauge_fix` на tick-path убивает `ζ_imag` → **запрещён** на M; global U(1) только T/reporting.
 2. **Алгебра шага (был §10.3).** Нелинейность только **`R(Φ)=ω^Φ`** (A3·A4 · §0.7b · §3.12.5). Euler `z+=iφz` ломает норму → **отвергнут**.
 3. **Literals (был §10.4).** `DX=l_P`, `DT=hT=t_P/√2`, `K_P`, `α*=1+1/(4π)` — paste из SI (§7 · `as_code_dict`), **не** knobs. Округление paste ≠ другая физика.
 

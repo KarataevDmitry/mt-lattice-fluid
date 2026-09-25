@@ -836,7 +836,7 @@ class SIAlphaProbeRows:
         Carrier answers (2026-09-24):
           • A4 + A16 / §3.10: spin-½ double cover — 2π→−1, 4π→+1.
           • Thm 5.1: L₀=s₀=ℏ/2 — one spin quantum on hV.
-          • A10: charge n=±1 on electron pra-vortex.
+          • A10: charge n=±1 on electron planckon.
           • Orbital circulating charge → g_orb=1 (μ=(Q/2m)L).
           • Double cover doubles spin magnetic response vs orbital → bare g_s=2.
           • ⇒ μ_bare = e ℏ/(2m) = μ_B for |S|=ℏ/2, |Q|=e — no α.
@@ -864,7 +864,7 @@ class SIAlphaProbeRows:
         inventory: list[dict[str, str | float | bool]] = [
             {
                 "id": "spinor_double_cover",
-                "maps_to": "A16 / §3.10: 2π→−1, 4π→+1 on pra-vortex",
+                "maps_to": "A16 / §3.10: 2π→−1, 4π→+1 on planckon",
                 "status": "derived",
                 "mechanism": "A4 SU(2) spinor; CL-2 R(N/2)→−z",
             },
@@ -879,7 +879,7 @@ class SIAlphaProbeRows:
                 "id": "charge_n_pm1",
                 "maps_to": "A10: ∮ d arg=2πn; electron n=±1",
                 "status": "derived",
-                "mechanism": "pra-vortex hV; not α",
+                "mechanism": "planckon hV; not α",
             },
             {
                 "id": "g_orb_equals_1",

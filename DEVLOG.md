@@ -138,7 +138,9 @@
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
 - **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim leaf
-- **§5.0.4:** запрещёнка пра-частицы (уровни/`E₀`/Паули/оболочки ε; не орбиталь внутри `l_P`) — sim spectrum open
+- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅ (`Brick_internal_spectrum`); **n_E≥1 excitation sim** + полный каталог состояний — open
+- **Глоссарий:** `model/00-glossary.md` — планкон / планковская ячейка / вакуум; sweep MODEL+book (`scripts/apply_planckon_glossary.py`)
+- **§5.0.4-B:** внешние оболочки ε / отбор — open (этаж 1)
 - **§1.6.5:** один КА-схема; `|N|` только от упаковки размерности — не «гекс↔FCC переключатель»
 - **§1.6.4:** Minkowski `(3+1)FCC ↔ (2+1)hex` — погружение слоя `{111}`; якорь `c` на 4D — open bulk-coupling
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open

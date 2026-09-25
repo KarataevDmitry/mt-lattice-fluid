@@ -49,12 +49,14 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 
 | файл | содержание |
 |------|------------|
+| [`model/00-glossary.md`](model/00-glossary.md) | **глоссарий:** планкон · планковская ячейка · вакуум |
 | [`model/00-foundations.md`](model/00-foundations.md) | §0 основания · **eng-хвост §0.10** |
 | [`model/01-carrier.md`](model/01-carrier.md) | §1 носитель: FCC N₁₂ · гекс-срез · κ · **тор §1.7** |
 | [`model/02-axioms.md`](model/02-axioms.md) | §2 абсолютные условия A1–A16 |
 | [`model/03-evolution.md`](model/03-evolution.md) | §3 `g`, ДА, спинор, leapfrog |
 | [`model/04-macro.md`](model/04-macro.md) | §4 M→T |
 | [`model/05-matter.md`](model/05-matter.md) | §5 dV, occupancy, гидро |
+| [`model/05-floor0-spectrum.md`](model/05-floor0-spectrum.md) | §5.0.4-A внутренний спектр планкона (этаж 0) |
 | [`model/06-si-sm.md`](model/06-si-sm.md) | hub §6–§8 (оглавление) |
 | [`model/06-ladder.md`](model/06-ladder.md) | §6 иерархия M→SM · **§6.0 лестница до T** |
 | [`model/07-si-bridge.md`](model/07-si-bridge.md) | §7 SI-мост |
