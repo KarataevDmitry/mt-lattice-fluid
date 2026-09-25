@@ -491,17 +491,51 @@ def fig_light_cone() -> None:
     _save(fig, "carrier-light-cone.pdf")
 
 
-def fig_hex_kgeom() -> None:
+def fig_hex_neighbors() -> None:
+    """Hex Voronoi cell and one-tick neighborhood |N|=6."""
+    a = 1.0
+    fig, ax = plt.subplots(figsize=(6.4, 5.2))
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    _draw_hex_tiling(ax, s=a, rings=3, highlight=(0, 0))
+    angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
+    verts = np.column_stack([a * np.cos(angles), a * np.sin(angles)])
+
+    ax.plot(0, 0, "o", color=COL["red"], ms=9, zorder=6)
+    for v in verts:
+        ax.plot([0, v[0]], [0, v[1]], color=COL["red"], lw=1.4, ls=":", zorder=4)
+        ax.plot(v[0], v[1], "o", color=COL["node"], ms=6, zorder=5)
+
+    e0, e1 = verts[0], verts[1]
+    emid = 0.5 * (e0 + e1)
+    ax.annotate(
+        "",
+        xy=emid + np.array([0.1, 0.07]),
+        xytext=emid - np.array([0.1, 0.07]),
+        arrowprops=dict(arrowstyle="<->", color=COL["blue"], lw=1.2),
+    )
+    ax.text(emid[0] + 0.16, emid[1] + 0.1, r"$a=h_L$", fontsize=11, color=COL["blue"])
+
+    ax.text(0, 2.55, r"гексагональная ячейка Вороного, $|N(x)|=6$", ha="center", fontsize=11)
+    ax.text(0, -2.35, r"соседи на расстоянии $h_L$ за один такт $h_T$", ha="center", fontsize=10)
+    lim = 3.1
+    ax.set_xlim(-lim, lim)
+    ax.set_ylim(-lim * 0.92, lim * 0.92)
+    _save(fig, "carrier-hex-neighbors.pdf")
+
+
+def fig_hex_radii() -> None:
+    """Pure shell geometry: inscribed vs circumscribed radii of a regular hexagon."""
     a = 1.0
     r_in = a * math.sqrt(3) / 2
     angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
     verts = np.column_stack([a * np.cos(angles), a * np.sin(angles)])
 
-    fig, ax = plt.subplots(figsize=(7.2, 5.0))
+    fig, ax = plt.subplots(figsize=(6.8, 5.0))
     ax.set_aspect("equal")
     ax.axis("off")
 
-    # описанная и вписанная окружности — разница радиусов видна сразу
     ax.add_patch(plt.Circle((0, 0), a, fill=False, ec=COL["red"], lw=2.2, zorder=1))
     ax.add_patch(plt.Circle((0, 0), r_in, fill=False, ec=COL["green"], lw=2.2, ls="--", zorder=1))
 
@@ -516,18 +550,7 @@ def fig_hex_kgeom() -> None:
     ax.text(0.07, a * 0.52, r"$R_{\mathrm{out}}=a$", color=COL["red"], fontsize=13)
     ax.text(r_in * 0.45, -0.14, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=COL["green"], fontsize=12)
 
-    e0, e1 = verts[0], verts[1]
-    emid = 0.5 * (e0 + e1)
-    ax.annotate(
-        "",
-        xy=emid + np.array([0.12, 0.08]),
-        xytext=emid - np.array([0.12, 0.08]),
-        arrowprops=dict(arrowstyle="<->", color=COL["node"], lw=1.2),
-    )
-    ax.text(emid[0] + 0.18, emid[1] + 0.12, r"$a$", fontsize=12, color=COL["node"])
-
-    # шкала сравнения длин (тот же масштаб, крупнее)
-    bx, by = 1.55, -0.55
+    bx, by = 1.45, -0.55
     ax.plot([bx, bx + a], [by, by], color=COL["red"], lw=3.0, solid_capstyle="round")
     ax.plot([bx, bx + r_in], [by - 0.22, by - 0.22], color=COL["green"], lw=3.0, solid_capstyle="round")
     ax.plot([bx, bx], [by - 0.06, by + 0.06], color=COL["node"], lw=0.8)
@@ -537,10 +560,10 @@ def fig_hex_kgeom() -> None:
     ax.text(bx + r_in * 0.5, by - 0.34, r"$R_{\mathrm{in}}$", color=COL["green"], fontsize=10, ha="center")
 
     ax.text(-0.05, -1.42, r"$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$", fontsize=12, ha="center")
-    ax.text(0, 1.38, r"гексагональная ячейка Вороного, $|N|=6$", ha="center", fontsize=11)
-    ax.set_xlim(-1.35, 2.65)
+    ax.text(0, 1.32, r"однотактовое тело: вписанная и описанная сферы", ha="center", fontsize=11)
+    ax.set_xlim(-1.35, 2.55)
     ax.set_ylim(-1.55, 1.55)
-    _save(fig, "carrier-hex-kgeom.pdf")
+    _save(fig, "carrier-hex-radii.pdf")
 
 
 def fig_packing_compare() -> None:
@@ -747,7 +770,8 @@ def main() -> None:
     fig_epsilon_neighborhood()
     fig_plane_tilings()
     fig_light_cone()
-    fig_hex_kgeom()
+    fig_hex_neighbors()
+    fig_hex_radii()
     fig_packing_compare()
     fig_fcc_shell()
     fig_cubocta_faces()

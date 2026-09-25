@@ -56,23 +56,20 @@
 квадрат (четыре) и шестиугольник (шесть) (\cref{fig:carrier-tilings}).
 Равная длина рёбер~$\hl$ исключает диагональ за один такт квадратной решётки.
 Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
-(\cref{fig:carrier-hex-kgeom}).
+(\cref{fig:carrier-hex-neighbors}).
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{\linewidth}
-    \centering
-    \includegraphics[width=0.92\linewidth]{carrier-tilings.pdf}
-    \caption{Три регулярных замощения плоскости (выделена одна плитка).}
-    \label{fig:carrier-tilings}
-  \end{subfigure}\\[0.5em]
-  \begin{subfigure}[t]{0.62\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{carrier-hex-kgeom.pdf}
-    \caption{Гексагональный срез: $R_{\mathrm{in}}$, $R_{\mathrm{out}}$, $\kgeom_{\mathrm{hex}}$.}
-    \label{fig:carrier-hex-kgeom}
-  \end{subfigure}
-  \caption{Замощения плоскости и гексагональная ячейка Вороного.}
+  \includegraphics[width=0.92\linewidth]{carrier-tilings.pdf}
+  \caption{Три регулярных замощения плоскости (выделена одна плитка).}
+  \label{fig:carrier-tilings}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.62\linewidth]{carrier-hex-neighbors.pdf}
+  \caption{Гексагональная ячейка Вороного и соседство $N(x)$, $|N|=6$.}
+  \label{fig:carrier-hex-neighbors}
 \end{figure}
 
 \subsection{Константы на гексагональном слое}
@@ -82,10 +79,20 @@
 \[
   R_{\mathrm{in}}=\frac{\sqrt{3}}{2}\,a.
 \]
+Это чистая геометрия однотактового тела, без соседей
+(\cref{fig:carrier-hex-radii}).
 Отношение к радиусу до вершины $R_{\mathrm{out}}=a$ даёт геометрический множитель среза
 \[
   \kgeom_{\mathrm{hex}}=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}=\frac{\sqrt{3}}{2}.
 \]
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.58\linewidth]{carrier-hex-radii.pdf}
+  \caption{Вписанный и описанный радиусы правильного шестиугольника: $\kgeom_{\mathrm{hex}}$.}
+  \label{fig:carrier-hex-radii}
+\end{figure}
+
 Тактовая скорость $c_0=\hl/\htick$ и макроскопическая~$c$ связаны этим же отношением, $c=\kgeom_{\mathrm{hex}} c_0$,
 поэтому
 \[
