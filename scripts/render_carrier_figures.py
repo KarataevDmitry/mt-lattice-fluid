@@ -166,43 +166,131 @@ def fig_epsilon_neighborhood() -> None:
     _save(fig, "carrier-epsilon.pdf")
 
 
-def fig_plane_tilings() -> None:
-    """Three regular plane tilings with |N|."""
-    fig, axes = plt.subplots(1, 3, figsize=(8.8, 3.0))
-    titles = [
-        (r"треугольник, $|N|=3$", 3, "tri"),
-        (r"квадрат, $|N|=4$", 4, "sq"),
-        (r"шестиугольник, $|N|=6$", 6, "hex"),
-    ]
+def _draw_triangle_tiling(ax, a: float, rows: int, cols: int, highlight_idx: tuple[int, int, int] | None = None) -> None:
+    """Equilateral-triangle tessellation via parallelogram splits."""
+    h = a * math.sqrt(3) / 2
+    v1 = np.array([a, 0.0])
+    v2 = np.array([a / 2, h])
+    for i in range(-cols, cols):
+        for j in range(-rows, rows):
+            p = i * v1 + j * v2
+            tris = (
+                (0, np.vstack([p, p + v1, p + v2])),
+                (1, np.vstack([p + v1, p + v2, p + v1 + v2])),
+            )
+            for t_idx, verts in tris:
+                hi = highlight_idx == (i, j, t_idx)
+                ax.add_patch(
+                    Polygon(
+                        verts,
+                        closed=True,
+                        facecolor="#fff4e8" if hi else ("#eef4fb" if t_idx == 0 else "#f7f9fc"),
+                        edgecolor=COL["blue"],
+                        lw=1.4 if hi else 0.75,
+                        zorder=2 if hi else 1,
+                    )
+                )
 
-    for ax, (title, n, kind) in zip(axes, titles):
-        ax.set_aspect("equal")
-        ax.axis("off")
-        ax.plot(0, 0, "o", color=COL["red"], ms=7, zorder=5)
-        if kind == "tri":
-            for k in range(3):
-                ang = np.pi / 2 + k * 2 * np.pi / 3
-                p = np.array([np.cos(ang), np.sin(ang)])
-                ax.plot([0, p[0]], [0, p[1]], color=COL["blue"], lw=1.2)
-                ax.plot(p[0], p[1], "o", color=COL["node"], ms=5)
-        elif kind == "sq":
-            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                ax.plot([0, dx], [0, dy], color=COL["blue"], lw=1.2)
-                ax.plot(dx, dy, "o", color=COL["node"], ms=5)
-            diag = 1 / math.sqrt(2)
-            ax.plot([diag, -diag], [diag, -diag], color=COL["red"], lw=1.0, ls="--", alpha=0.8)
-            ax.plot([diag, -diag], [-diag, diag], color=COL["red"], lw=1.0, ls="--", alpha=0.8)
-            ax.text(0.55, 0.55, r"$h_L\sqrt{2}$", fontsize=9, color=COL["red"])
-            ax.text(0.0, -1.35, "диагональ\nнедостижима", fontsize=8, ha="center", color=COL["red"])
-        else:
-            for k in range(6):
-                ang = k * np.pi / 3
-                p = np.array([np.cos(ang), np.sin(ang)])
-                ax.plot([0, p[0]], [0, p[1]], color=COL["blue"], lw=1.2)
-                ax.plot(p[0], p[1], "o", color=COL["node"], ms=5)
-        ax.set_xlim(-1.45, 1.45)
-        ax.set_ylim(-1.55, 1.35)
-        ax.set_title(title, fontsize=10)
+
+def _draw_square_tiling(ax, a: float, n: int, highlight: tuple[int, int] | None = None) -> None:
+    """Square-grid tessellation of the plane."""
+    for i in range(-n, n):
+        for j in range(-n, n):
+            x, y = i * a, j * a
+            hi = highlight == (i, j)
+            ax.add_patch(
+                Polygon(
+                    [(x, y), (x + a, y), (x + a, y + a), (x, y + a)],
+                    closed=True,
+                    facecolor="#fff4e8" if hi else "#eef4fb",
+                    edgecolor=COL["blue"],
+                    lw=1.4 if hi else 0.75,
+                    zorder=2 if hi else 1,
+                )
+            )
+
+
+def _draw_hex_tiling(ax, s: float, rings: int, highlight: tuple[int, int] | None = None) -> None:
+    """Hexagonal (honeycomb) tessellation of the plane."""
+    dx = math.sqrt(3) * s
+    dy = 1.5 * s
+    for row in range(-rings, rings + 1):
+        for col in range(-rings, rings + 1):
+            cx = col * dx + (row % 2) * dx / 2
+            cy = row * dy
+            angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
+            verts = np.column_stack([cx + s * np.cos(angles), cy + s * np.sin(angles)])
+            hi = highlight == (row, col)
+            ax.add_patch(
+                Polygon(
+                    verts,
+                    closed=True,
+                    facecolor="#fff4e8" if hi else "#eef4fb",
+                    edgecolor=COL["blue"],
+                    lw=1.4 if hi else 0.75,
+                    zorder=2 if hi else 1,
+                )
+            )
+
+
+def fig_plane_tilings() -> None:
+    """Three regular plane tilings — the plane partitioned into tiles."""
+    fig, axes = plt.subplots(1, 3, figsize=(9.2, 3.1))
+
+    # triangular tiling (tile = △); nodes at tile centres → |N|=3
+    ax = axes[0]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    a = 0.55
+    _draw_triangle_tiling(ax, a=a, rows=5, cols=5, highlight_idx=(0, 0, 0))
+    h = a * math.sqrt(3) / 2
+    v1 = np.array([a, 0.0])
+    v2 = np.array([a / 2, h])
+    cx, cy = (v1 + v2) / 3  # centroid of highlighted triangle
+    for ang in np.deg2rad([0, 120, 240]):
+        p = cx + a * np.array([np.cos(ang), np.sin(ang)])
+        ax.plot([cx, p[0]], [cy, p[1]], color=COL["red"], lw=0.9, ls=":", zorder=4)
+        ax.plot(p[0], p[1], "o", color=COL["node"], ms=3.5, zorder=5)
+    ax.plot(cx, cy, "o", color=COL["red"], ms=5, zorder=6)
+    ax.set_xlim(-2.6, 2.6)
+    ax.set_ylim(-2.0, 2.0)
+    ax.set_title(r"треугольники, $|N|=3$", fontsize=10)
+
+    # square tiling
+    ax = axes[1]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    a = 0.65
+    _draw_square_tiling(ax, a=a, n=4, highlight=(0, 0))
+    cx, cy = a / 2, a / 2
+    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        p = np.array([cx, cy]) + a * np.array([dx, dy])
+        ax.plot([cx, p[0]], [cy, p[1]], color=COL["red"], lw=0.9, ls=":", zorder=4)
+        ax.plot(p[0], p[1], "o", color=COL["node"], ms=3.5, zorder=5)
+    diag = a / math.sqrt(2)
+    ax.plot([cx + diag, cx - diag], [cy + diag, cy - diag], color=COL["red"], lw=0.9, ls="--", zorder=3)
+    ax.plot([cx + diag, cx - diag], [cy - diag, cy + diag], color=COL["red"], lw=0.9, ls="--", zorder=3)
+    ax.plot(cx, cy, "o", color=COL["red"], ms=5, zorder=6)
+    ax.text(cx + 0.42 * a, cy + 0.42 * a, r"$h_L\sqrt{2}$", fontsize=8, color=COL["red"])
+    ax.set_xlim(-2.2, 2.2)
+    ax.set_ylim(-2.2, 2.2)
+    ax.set_title(r"квадраты, $|N|=4$", fontsize=10)
+
+    # hexagonal tiling
+    ax = axes[2]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    s = 0.42
+    _draw_hex_tiling(ax, s=s, rings=4, highlight=(0, 0))
+    ax.plot(0, 0, "o", color=COL["red"], ms=5, zorder=6)
+    for ang in np.linspace(0, 2 * np.pi, 7)[:-1]:
+        p = s * np.array([np.cos(ang), np.sin(ang)])
+        ax.plot([0, p[0]], [0, p[1]], color=COL["red"], lw=0.9, ls=":", zorder=4)
+        ax.plot(p[0], p[1], "o", color=COL["node"], ms=3.5, zorder=5)
+    lim = 2.5
+    ax.set_xlim(-lim, lim)
+    ax.set_ylim(-lim, lim)
+    ax.set_title(r"шестиугольники, $|N|=6$", fontsize=10)
 
     fig.suptitle("Три регулярных замощения плоскости", fontsize=11, y=1.02)
     _save(fig, "carrier-tilings.pdf")
