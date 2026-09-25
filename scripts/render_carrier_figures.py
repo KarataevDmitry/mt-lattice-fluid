@@ -406,57 +406,56 @@ def fig_plane_tilings() -> None:
     _save(fig, "carrier-tilings.pdf")
 
 
+def _light_cone_surface(c0: float, t_max: float, n: int = 40) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    theta = np.linspace(0, 2 * np.pi, n)
+    t = np.linspace(0, t_max, n // 2)
+    th, tt = np.meshgrid(theta, t)
+    r = c0 * tt
+    x = r * np.cos(th)
+    y = r * np.sin(th)
+    return x, y, tt, th
+
+
 def fig_light_cone() -> None:
-    """Spacetime: first shell on cone, second shell spacelike."""
+    """3D past/future light cones with present hypersurface (Minkowski-style)."""
     a = 1.0
     ht = 1.0
     c0 = a / ht
+    cone_col = "#4fa9b8"
 
-    fig, axes = plt.subplots(1, 2, figsize=(8.6, 3.6))
+    fig = plt.figure(figsize=(7.2, 6.4))
+    ax: Axes3D = fig.add_subplot(111, projection="3d")
 
-    # spacetime diagram
-    ax = axes[0]
-    ax.set_aspect("equal")
-    ax.axhline(0, color="#ddd", lw=0.8)
-    ax.axvline(0, color="#ddd", lw=0.8)
-    t = np.linspace(0, 1.2, 50)
-    ax.plot(c0 * t, t, color=COL["green"], lw=1.4)
-    ax.plot(-c0 * t, t, color=COL["green"], lw=1.4)
-    ax.fill_between(c0 * t, 0, t, alpha=0.08, color=COL["green"])
-    ax.plot([a, a], [0, ht], "o-", color=COL["blue"], lw=1.2, ms=6, label=r"1-я оболочка, $r=h_L$")
-    ax.plot([a * math.sqrt(2), a * math.sqrt(2)], [0, ht], "x", color=COL["red"], ms=10, mew=2)
-    ax.annotate(
-        r"2-я оболочка, $r=h_L\sqrt{2}$",
-        xy=(a * math.sqrt(2), ht),
-        xytext=(a * 1.05, ht + 0.25),
-        fontsize=9,
-        color=COL["red"],
-        arrowprops=dict(arrowstyle="->", color=COL["red"], lw=0.8),
-    )
-    ax.text(0.15, 0.95, "пространственноподобно", fontsize=8, color=COL["red"], rotation=0)
-    ax.set_xlabel(r"пространство $x$")
-    ax.set_ylabel(r"время $t$")
-    ax.set_title(r"световой конус $c_0$", fontsize=10)
-    ax.set_xlim(-0.2, 1.8)
-    ax.set_ylim(-0.05, 1.35)
+    xf, yf, tf, _ = _light_cone_surface(c0, 1.15)
+    xp, yp, tp, _ = _light_cone_surface(c0, 1.15)
+    ax.plot_surface(xf, yf, tf, color=cone_col, alpha=0.38, linewidth=0, shade=True)
+    ax.plot_surface(xp, yp, -tp, color=cone_col, alpha=0.38, linewidth=0, shade=True)
 
-    # square lattice spatial view
-    ax = axes[1]
-    ax.set_aspect("equal")
-    ax.axis("off")
-    ax.plot(0, 0, "o", color=COL["red"], ms=8)
-    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-        ax.plot([0, dx], [0, dy], color=COL["blue"], lw=1.4)
-        ax.plot(dx, dy, "o", color=COL["blue"], ms=6)
-    for dx, dy in ((1, 1), (1, -1), (-1, 1), (-1, -1)):
-        ax.plot([0, dx], [0, dy], color=COL["red"], lw=1.0, ls="--")
-        ax.plot(dx, dy, "x", color=COL["red"], ms=8, mew=2)
-    ax.text(0, -1.45, r"за $h_T$ достижимы только рёбра длины $h_L$", ha="center", fontsize=10)
-    ax.set_xlim(-1.5, 1.5)
-    ax.set_ylim(-1.65, 1.35)
-    ax.set_title("квадратная решётка", fontsize=10)
+    lim = 1.15
+    xx, yy = np.meshgrid(np.linspace(-lim, lim, 10), np.linspace(-lim, lim, 10))
+    ax.plot_surface(xx, yy, np.zeros_like(xx), color="#8fd4a6", alpha=0.22, linewidth=0, shade=False)
+    ax.plot([-lim, lim], [0, 0], [0, 0], color="#333333", lw=0.7, alpha=0.5)
+    ax.plot([0, 0], [-lim, lim], [0, 0], color="#333333", lw=0.7, alpha=0.5)
 
-    fig.suptitle("Световой конус отсекает вторую координационную оболочку", fontsize=11, y=1.02)
+    ax.scatter([0], [0], [0], color=COL["red"], s=55, depthshade=True, zorder=10)
+    ax.text(0.05, 0.05, 0.04, "узел $x$", fontsize=10, color=COL["red"])
+
+    ax.scatter([a], [0], [ht], color=COL["blue"], s=48, depthshade=True, zorder=10)
+    ax.plot([0, a], [0, 0], [0, ht], color=COL["blue"], lw=1.2, alpha=0.8)
+    ax.text(a + 0.05, 0.0, ht * 0.55, r"$r=h_L$", fontsize=9, color=COL["blue"])
+
+    r2 = a * math.sqrt(2)
+    ax.scatter([r2], [0], [ht], color=COL["red"], marker="x", s=70, linewidths=2, zorder=10)
+    ax.plot([0, r2], [0, 0], [0, ht], color=COL["red"], lw=1.0, ls="--", alpha=0.85)
+    ax.text(r2 + 0.04, 0.0, ht + 0.06, r"$h_L\sqrt{2}$", fontsize=9, color=COL["red"])
+
+    ax.text(0.0, 0.0, 1.22, "будущий\nконус", fontsize=9, ha="center", color="#2c6e7a")
+    ax.text(0.0, 0.0, -1.22, "прошлый\nконус", fontsize=9, ha="center", color="#2c6e7a")
+    ax.text(lim * 0.72, lim * 0.72, 0.04, r"$t=0$", fontsize=9, color="#2d6a3e")
+    ax.text(0.02, -0.55, 0.65, "время $t$", fontsize=10, color="#333333")
+
+    _style_3d(ax, 1.35, elev=22, azim=-52)
+    ax.set_title(r"Световой конус $c_0$: $c_0 h_T = h_L$", fontsize=11, pad=10)
     _save(fig, "carrier-light-cone.pdf")
 
 
