@@ -493,40 +493,53 @@ def fig_light_cone() -> None:
 
 def fig_hex_kgeom() -> None:
     a = 1.0
+    r_in = a * math.sqrt(3) / 2
     angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
     verts = np.column_stack([a * np.cos(angles), a * np.sin(angles)])
 
-    fig, ax = plt.subplots(figsize=(5.6, 4.8))
+    fig, ax = plt.subplots(figsize=(7.2, 5.0))
     ax.set_aspect("equal")
     ax.axis("off")
 
-    hex_patch = Polygon(verts, closed=True, fill=False, lw=1.6, ec=COL["blue"])
+    # описанная и вписанная окружности — разница радиусов видна сразу
+    ax.add_patch(plt.Circle((0, 0), a, fill=False, ec=COL["red"], lw=2.2, zorder=1))
+    ax.add_patch(plt.Circle((0, 0), r_in, fill=False, ec=COL["green"], lw=2.2, ls="--", zorder=1))
+
+    hex_patch = Polygon(verts, closed=True, facecolor="#eef4fb", edgecolor=COL["blue"], lw=2.0, zorder=2)
     ax.add_patch(hex_patch)
 
-    ax.plot(0, 0, "o", color=COL["red"], ms=7, zorder=5)
+    ax.plot(0, 0, "o", color=COL["red"], ms=8, zorder=6)
+    ax.plot([0, 0], [0, a], color=COL["red"], lw=2.0, zorder=5)
+    ax.plot([0, r_in], [0, 0], color=COL["green"], lw=2.0, zorder=5)
+    ax.plot([r_in, r_in], [-0.04, 0.04], color=COL["green"], lw=1.2, zorder=5)
 
-    # R_out — to vertex (top); R_in — to edge midpoint (right): 90° apart, visibly different lengths
-    v_top = verts[1]
-    mid_right = 0.5 * (verts[5] + verts[0])
-    ax.annotate("", xy=v_top, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=2.0))
-    ax.annotate("", xy=mid_right, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=COL["green"], lw=2.0))
-    ax.text(0.08, 0.62, r"$R_{\mathrm{out}}=a$", color=COL["red"], fontsize=12, ha="left")
-    ax.text(mid_right[0] * 0.55 + 0.06, -0.02, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=COL["green"], fontsize=11)
+    ax.text(0.07, a * 0.52, r"$R_{\mathrm{out}}=a$", color=COL["red"], fontsize=13)
+    ax.text(r_in * 0.45, -0.14, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=COL["green"], fontsize=12)
 
-    # edge length a on upper-right side
     e0, e1 = verts[0], verts[1]
+    emid = 0.5 * (e0 + e1)
     ax.annotate(
         "",
-        xy=0.5 * (e0 + e1) + np.array([0.08, 0.05]),
-        xytext=0.5 * (e0 + e1) - np.array([0.08, 0.05]),
-        arrowprops=dict(arrowstyle="<->", color=COL["node"], lw=1.0),
+        xy=emid + np.array([0.12, 0.08]),
+        xytext=emid - np.array([0.12, 0.08]),
+        arrowprops=dict(arrowstyle="<->", color=COL["node"], lw=1.2),
     )
-    ax.text(0.62, 0.38, r"$a$", fontsize=11, color=COL["node"])
+    ax.text(emid[0] + 0.18, emid[1] + 0.12, r"$a$", fontsize=12, color=COL["node"])
 
-    ax.text(0.02, -1.35, r"$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$", fontsize=12, ha="center")
-    ax.text(0, 1.28, r"гексагональная ячейка Вороного, $|N|=6$", ha="center", fontsize=11)
-    ax.set_xlim(-1.45, 1.45)
-    ax.set_ylim(-1.45, 1.45)
+    # шкала сравнения длин (тот же масштаб, крупнее)
+    bx, by = 1.55, -0.55
+    ax.plot([bx, bx + a], [by, by], color=COL["red"], lw=3.0, solid_capstyle="round")
+    ax.plot([bx, bx + r_in], [by - 0.22, by - 0.22], color=COL["green"], lw=3.0, solid_capstyle="round")
+    ax.plot([bx, bx], [by - 0.06, by + 0.06], color=COL["node"], lw=0.8)
+    ax.plot([bx + a, bx + a], [by - 0.06, by + 0.06], color=COL["red"], lw=0.8)
+    ax.plot([bx + r_in, bx + r_in], [by - 0.28, by - 0.16], color=COL["green"], lw=0.8)
+    ax.text(bx + a * 0.5, by + 0.1, r"$R_{\mathrm{out}}$", color=COL["red"], fontsize=10, ha="center")
+    ax.text(bx + r_in * 0.5, by - 0.34, r"$R_{\mathrm{in}}$", color=COL["green"], fontsize=10, ha="center")
+
+    ax.text(-0.05, -1.42, r"$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$", fontsize=12, ha="center")
+    ax.text(0, 1.38, r"гексагональная ячейка Вороного, $|N|=6$", ha="center", fontsize=11)
+    ax.set_xlim(-1.35, 2.65)
+    ax.set_ylim(-1.55, 1.55)
     _save(fig, "carrier-hex-kgeom.pdf")
 
 
