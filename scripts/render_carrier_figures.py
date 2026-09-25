@@ -9,8 +9,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon, Wedge
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d.axes3d import Axes3D
-from scipy.spatial import Voronoi
+from scipy.spatial import ConvexHull, Voronoi
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "book" / "sources" / "figures"
@@ -103,6 +104,115 @@ def _style_3d(ax: Axes3D, lim: float, elev: float = 22, azim: float = -58) -> No
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_zticks([])
+
+
+def _sphere_mesh(center: np.ndarray, radius: float, n: int = 14) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    u = np.linspace(0, 2 * np.pi, n)
+    v = np.linspace(0, np.pi, max(6, n // 2))
+    u, v = np.meshgrid(u, v)
+    x = center[0] + radius * np.cos(u) * np.sin(v)
+    y = center[1] + radius * np.sin(u) * np.sin(v)
+    z = center[2] + radius * np.cos(v)
+    return x, y, z
+
+
+def _add_sphere(ax: Axes3D, center: np.ndarray, radius: float, color: str, alpha: float = 0.9, n: int = 14) -> None:
+    x, y, z = _sphere_mesh(center, radius, n=n)
+    ax.plot_surface(x, y, z, color=color, alpha=alpha, linewidth=0, antialiased=True, shade=True)
+
+
+def _simple_cubic_centers(n: int, a: float = 1.0) -> np.ndarray:
+    return np.array([(i * a, j * a, k * a) for i in range(-n, n + 1) for j in range(-n, n + 1) for k in range(-n, n + 1)])
+
+
+def _bcc_centers(n: int, a: float = 1.0) -> np.ndarray:
+    pts: set[tuple[float, float, float]] = set()
+    for i in range(-n, n + 1):
+        for j in range(-n, n + 1):
+            for k in range(-n, n + 1):
+                pts.add((i * a, j * a, k * a))
+                pts.add((i * a + a / 2, j * a + a / 2, k * a + a / 2))
+    return np.array(sorted(pts))
+
+
+def _draw_sphere_packing(
+    ax: Axes3D,
+    centers: np.ndarray,
+    radius: float,
+    *,
+    base_color: str = "#9bb8d3",
+    center_idx: int | None = None,
+    neighbor_idx: set[int] | None = None,
+) -> None:
+    mesh_n = 8 if len(centers) > 24 else 12
+    for i, c in enumerate(centers):
+        if center_idx is not None and i == center_idx:
+            col, alpha = COL["red"], 0.95
+        elif neighbor_idx and i in neighbor_idx:
+            col, alpha = "#e8a598", 0.88
+        else:
+            col, alpha = base_color, 0.82
+        _add_sphere(ax, c, radius, col, alpha=alpha, n=mesh_n)
+
+
+def _cuboctahedron_face_groups(verts: np.ndarray, a: float) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    s = a / math.sqrt(2)
+    squares: list[np.ndarray] = []
+    for axis in range(3):
+        for sign in (-1, 1):
+            level = sign * s
+            on = [v for v in verts if abs(v[axis] - level) < 1e-6]
+            if len(on) == 4:
+                squares.append(np.array(on))
+    tri_list = [
+        [(s, s, 0), (s, 0, s), (0, s, s)],
+        [(s, s, 0), (s, 0, -s), (0, s, -s)],
+        [(s, -s, 0), (s, 0, s), (0, -s, s)],
+        [(s, -s, 0), (s, 0, -s), (0, -s, -s)],
+        [(-s, s, 0), (-s, 0, s), (0, s, s)],
+        [(-s, s, 0), (-s, 0, -s), (0, s, -s)],
+        [(-s, -s, 0), (-s, 0, s), (0, -s, s)],
+        [(-s, -s, 0), (-s, 0, -s), (0, -s, -s)],
+    ]
+    triangles = [np.array(t) for t in tri_list]
+    return squares, triangles
+
+
+def _add_poly_faces(ax: Axes3D, faces: list[np.ndarray], color: str, alpha: float, edge: str = COL["blue"]) -> None:
+    polys = Poly3DCollection(faces, facecolors=color, edgecolors=edge, linewidths=0.6, alpha=alpha)
+    ax.add_collection3d(polys)
+
+
+def _voronoi_cell_mesh(vor: Voronoi, point_idx: int) -> tuple[np.ndarray, np.ndarray] | tuple[None, None]:
+    region = [v for v in vor.regions[vor.point_region[point_idx]] if v >= 0]
+    if len(region) < 4:
+        return None, None
+    verts = vor.vertices[region]
+    try:
+        hull = ConvexHull(verts)
+    except Exception:
+        return None, None
+    return verts, hull.simplices
+
+
+def _draw_voronoi_tessellation(ax: Axes3D, lattice_radius: int, a: float, origin_only_neighbors: bool = True) -> None:
+    pts = _fcc_lattice_points(lattice_radius, a)
+    vor = Voronoi(pts)
+    origin_idx = int(np.argmin(np.linalg.norm(pts, axis=1)))
+    for i, p in enumerate(pts):
+        if origin_only_neighbors and np.linalg.norm(p) > 1.8 * a:
+            continue
+        mesh = _voronoi_cell_mesh(vor, i)
+        if mesh[0] is None:
+            continue
+        verts, simplices = mesh
+        tris = verts[simplices]
+        if i == origin_idx:
+            col, alpha, lw = "#fff4e8", 0.55, 0.9
+        else:
+            col, alpha, lw = "#eef4fb", 0.18, 0.4
+        polys = Poly3DCollection(tris, facecolors=col, edgecolors=COL["blue"], linewidths=lw, alpha=alpha)
+        ax.add_collection3d(polys)
 
 
 def fig_lattice_field() -> None:
@@ -382,73 +492,57 @@ def fig_hex_kgeom() -> None:
 
 
 def fig_packing_compare() -> None:
-    """SC / BCC / FCC coordination numbers."""
-    fig, axes = plt.subplots(1, 3, figsize=(8.8, 2.8))
+    """SC / BCC / FCC — real 3D sphere packings."""
+    fig = plt.figure(figsize=(9.6, 3.4))
     specs = [
-        ("SC", 6, [(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)]),
-        ("BCC", 8, [(1, 1, 1), (1, 1, -1), (1, -1, 1), (1, -1, -1), (-1, 1, 1), (-1, 1, -1), (-1, -1, 1), (-1, -1, -1)]),
-        ("FCC", 12, None),
+        ("SC", 6, _simple_cubic_centers(1, 1.0), 0.5),
+        ("BCC", 8, _bcc_centers(1, 1.0), math.sqrt(3) / 4),
+        ("FCC", 12, _fcc_lattice_points(1, 1.0), 0.5),
     ]
-    for ax, (name, n, dirs) in zip(axes, specs):
-        ax.set_aspect("equal")
-        ax.axis("off")
-        ax.plot(0, 0, "o", color=COL["red"], ms=8)
-        if name == "FCC":
-            dirs = _fcc_vertices(1.0)
-            dirs = [tuple(v) for v in dirs]
-        else:
-            dirs = [tuple(np.array(d) / np.linalg.norm(d)) for d in dirs]
-        for d in dirs:
-            ax.plot([0, d[0]], [0, d[1]], color=COL["blue"], lw=1.0)
-            ax.plot(d[0], d[1], "o", color=COL["node"], ms=4)
-        ax.set_xlim(-1.2, 1.2)
-        ax.set_ylim(-1.2, 1.2)
-        ax.set_title(f"{name}, $|N|={n}$", fontsize=10)
-    fig.suptitle("Координационные числа кубических упаковок (проекция)", fontsize=11, y=1.02)
+    for k, (name, n, centers, radius) in enumerate(specs):
+        ax: Axes3D = fig.add_subplot(1, 3, k + 1, projection="3d")
+        center_idx = int(np.argmin(np.linalg.norm(centers, axis=1)))
+        _draw_sphere_packing(ax, centers, radius, center_idx=center_idx)
+        lim = max(1.2, float(np.max(np.abs(centers)) + radius + 0.15))
+        _style_3d(ax, lim, elev=24, azim=-58)
+        ax.set_title(f"{name}, $|N|={n}$", fontsize=10, pad=6)
+    fig.suptitle("Три кубические упаковки равных сфер", fontsize=11, y=1.02)
     _save(fig, "carrier-packing.pdf")
 
 
 def fig_fcc_shell() -> None:
+    """FCC closest packing — touching spheres."""
     a = 1.0
-    verts = _fcc_vertices(a)
-    edges = _cubocta_edges(verts, a)
+    centers = _fcc_lattice_points(1, a)
+    radius = a / 2
+    center_idx = int(np.argmin(np.linalg.norm(centers, axis=1)))
+    center = centers[center_idx]
+    dists = np.linalg.norm(centers - center, axis=1)
+    neighbors = set(int(i) for i in np.where(np.isclose(dists, a, atol=1e-5))[0])
 
-    fig = plt.figure(figsize=(5.8, 5.2))
+    fig = plt.figure(figsize=(6.0, 5.4))
     ax: Axes3D = fig.add_subplot(111, projection="3d")
-    _wire_3d(ax, verts, edges, color=COL["blue"], lw=1.2, alpha=0.9)
-    ax.scatter(verts[:, 0], verts[:, 1], verts[:, 2], c=COL["red"], s=36, depthshade=True)
-    ax.scatter([0], [0], [0], c=COL["green"], s=50, depthshade=True)
-    for i, j in edges:
-        for k in (i, j):
-            ax.plot([0, verts[k, 0]], [0, verts[k, 1]], [0, verts[k, 2]], color=COL["light"], lw=0.6, alpha=0.5)
-    _style_3d(ax, 0.85)
-    ax.set_title(r"FCC: $|N|=12$, ребро $a=h_L$", fontsize=11, pad=8)
+    _draw_sphere_packing(ax, centers, radius, center_idx=center_idx, neighbor_idx=neighbors)
+    _style_3d(ax, 1.05, elev=22, azim=-52)
+    ax.set_title(r"FCC: плотнейшая упаковка, $|N|=12$, $a=h_L$", fontsize=10, pad=8)
     _save(fig, "carrier-fcc-shell.pdf")
 
 
 def fig_cubocta_faces() -> None:
-    """Square vs triangular face distances on cuboctahedron."""
+    """Solid cuboctahedron with square and triangular faces."""
     a = 1.0
-    s = a / math.sqrt(2)
     verts = _fcc_vertices(a)
-    edges = _cubocta_edges(verts, a)
+    squares, triangles = _cuboctahedron_face_groups(verts, a)
 
-    fig = plt.figure(figsize=(6.0, 5.0))
+    fig = plt.figure(figsize=(6.2, 5.2))
     ax: Axes3D = fig.add_subplot(111, projection="3d")
-    _wire_3d(ax, verts, edges, color=COL["blue"], lw=1.0, alpha=0.7)
-
-    sq = np.array([[s, s, 0], [s, -s, 0], [s, 0, s], [s, 0, -s]])
-    tri = np.array([[s, s, 0], [s, 0, s], [0, s, s]])
-    sq_loop = np.vstack([sq, sq[0]])
-    tri_loop = np.vstack([tri, tri[0]])
-    ax.plot(sq_loop[:, 0], sq_loop[:, 1], sq_loop[:, 2], color=COL["red"], lw=2.2)
-    ax.plot(tri_loop[:, 0], tri_loop[:, 1], tri_loop[:, 2], color=COL["green"], lw=2.2, ls="--")
-
-    ax.scatter([0], [0], [0], c=COL["node"], s=40)
-    _style_3d(ax, 0.9, elev=18, azim=-42)
-    ax.text2D(0.05, 0.92, r"квадратная грань: $R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", transform=ax.transAxes, color=COL["red"], fontsize=10)
-    ax.text2D(0.05, 0.86, r"треугольная грань: $a\sqrt{2/3}$", transform=ax.transAxes, color=COL["green"], fontsize=10)
-    ax.set_title("Кубооктаэдр: разные грани — разные расстояния", fontsize=10, pad=8)
+    _add_poly_faces(ax, squares, "#f5b7b1", alpha=0.75, edge=COL["red"])
+    _add_poly_faces(ax, triangles, "#b8e0c2", alpha=0.55, edge=COL["green"])
+    _wire_3d(ax, verts, _cubocta_edges(verts, a), color=COL["blue"], lw=0.8, alpha=0.5)
+    _style_3d(ax, 0.95, elev=18, azim=-42)
+    ax.text2D(0.04, 0.93, r"квадрат: $R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", transform=ax.transAxes, color=COL["red"], fontsize=10)
+    ax.text2D(0.04, 0.87, r"треугольник: $a\sqrt{2/3}$", transform=ax.transAxes, color=COL["green"], fontsize=10)
+    ax.set_title("Кубооктаэдр — выпуклая оболочка 12 соседей", fontsize=10, pad=8)
     _save(fig, "carrier-cubocta-faces.pdf")
 
 
@@ -473,56 +567,38 @@ def fig_hull_voronoi() -> None:
 
 
 def fig_voronoi_cell() -> None:
-    """Rhombic dodecahedron = Voronoi cell of FCC."""
-    pts = _fcc_lattice_points(radius=2, a=1.0)
-    vor = Voronoi(pts)
-    origin_idx = np.argmin(np.linalg.norm(pts, axis=1))
-    region = vor.regions[vor.point_region[origin_idx]]
-    region = [i for i in region if i >= 0]
-    cell_verts = vor.vertices[region]
-
-    edges = set()
-    for ridge, verts_idx in zip(vor.ridge_vertices, vor.ridge_points):
-        if origin_idx in verts_idx:
-            rv = [v for v in ridge if v >= 0]
-            if len(rv) == 2 and rv[0] in region and rv[1] in region:
-                edges.add(tuple(sorted(rv)))
-
-    fig = plt.figure(figsize=(5.6, 5.0))
+    """3D Voronoi tessellation of FCC — space partitioned into rhombic dodecahedra."""
+    a = 1.0
+    fig = plt.figure(figsize=(6.4, 5.4))
     ax: Axes3D = fig.add_subplot(111, projection="3d")
-    for i, j in edges:
-        ax.plot(
-            [cell_verts[i, 0], cell_verts[j, 0]],
-            [cell_verts[i, 1], cell_verts[j, 1]],
-            [cell_verts[i, 2], cell_verts[j, 2]],
-            color=COL["blue"],
-            lw=1.2,
-        )
-    ax.scatter(cell_verts[:, 0], cell_verts[:, 1], cell_verts[:, 2], c=COL["red"], s=20)
-    ax.scatter([0], [0], [0], c=COL["green"], s=45)
-    _style_3d(ax, 0.65, elev=25, azim=-50)
-    ax.set_title(r"Ячейка Вороного FCC (ромбододекаэдр), $v_{\mathrm{hV}}=a^3/\sqrt{2}$", fontsize=10, pad=8)
+    _draw_voronoi_tessellation(ax, lattice_radius=2, a=a, origin_only_neighbors=True)
+    _style_3d(ax, 1.15, elev=24, azim=-50)
+    ax.set_title(r"Замощение $\mathbb{R}^3$ ячейками Вороного FCC", fontsize=10, pad=8)
     _save(fig, "carrier-voronoi-cell.pdf")
 
 
 def fig_fcc_111_slice() -> None:
-    """FCC lattice with {111} plane and hexagonal slice."""
-    pts = _fcc_lattice_points(radius=2, a=1.0)
-    fig = plt.figure(figsize=(6.2, 5.2))
+    """FCC sphere packing cut by {111} plane — real 3D slice."""
+    a = 1.0
+    radius = a / 2
+    centers = _fcc_lattice_points(1, a)
+    fig = plt.figure(figsize=(6.4, 5.4))
     ax: Axes3D = fig.add_subplot(111, projection="3d")
-    ax.scatter(pts[:, 0], pts[:, 1], pts[:, 2], c=COL["light"], s=18, depthshade=True, alpha=0.7)
 
-    # plane x+y+z = const through origin neighbors
-    d = 0.0
-    xx, yy = np.meshgrid(np.linspace(-1, 1, 10), np.linspace(-1, 1, 10))
-    zz = d - xx - yy
-    ax.plot_surface(xx, yy, zz, alpha=0.18, color=COL["green"], linewidth=0)
+    on_slice = np.abs(centers.sum(axis=1)) < 0.12
+    for i, c in enumerate(centers):
+        if on_slice[i]:
+            _add_sphere(ax, c, radius, "#e8a598", alpha=0.95, n=12)
+        else:
+            _add_sphere(ax, c, radius, "#9bb8d3", alpha=0.55, n=10)
 
-    on_plane = pts[np.abs(pts.sum(axis=1) - d) < 0.08]
-    ax.scatter(on_plane[:, 0], on_plane[:, 1], on_plane[:, 2], c=COL["red"], s=55, depthshade=True)
+    lim = 1.05
+    xx, yy = np.meshgrid(np.linspace(-lim, lim, 12), np.linspace(-lim, lim, 12))
+    zz = -xx - yy
+    ax.plot_surface(xx, yy, zz, alpha=0.22, color=COL["green"], linewidth=0, shade=False)
 
-    _style_3d(ax, 1.1, elev=20, azim=-58)
-    ax.set_title(r"Срез $\{111\}$: гексагональный слой $(2{+}1)$", fontsize=10, pad=8)
+    _style_3d(ax, 1.05, elev=20, azim=-58)
+    ax.set_title(r"Срез $\{111\}$ через FCC-упаковку", fontsize=10, pad=8)
     _save(fig, "carrier-fcc-111-slice.pdf")
 
 
@@ -563,28 +639,28 @@ def fig_two_speeds() -> None:
 
 
 def fig_slice_bridge() -> None:
-    """(3+1) FCC vs (2+1) hex slice with different kappa."""
-    fig, axes = plt.subplots(1, 2, figsize=(8.6, 3.6))
+    """(3+1) FCC packing vs (2+1) hex slice."""
+    fig = plt.figure(figsize=(9.0, 3.8))
 
-    ax = axes[0]
-    ax.set_aspect("equal")
-    ax.axis("off")
-    for k in range(6):
-        ang = k * np.pi / 3 + np.pi / 6
-        p = np.array([np.cos(ang), np.sin(ang)])
-        ax.plot([0, p[0]], [0, p[1]], color=COL["blue"], lw=1.2)
-    ax.plot(0, 0, "o", color=COL["red"], ms=8)
-    ax.text(0, -1.35, r"$(2{+}1)$: $\kappa_{\mathrm{hex}}=\sqrt{3}/2$, $|N|=6$", ha="center", fontsize=10)
-    ax.set_xlim(-1.3, 1.3)
-    ax.set_ylim(-1.55, 1.2)
-    ax.set_title("гексагональный срез", fontsize=10)
+    ax2d = fig.add_subplot(1, 2, 1)
+    ax2d.set_aspect("equal")
+    ax2d.axis("off")
+    s = 0.42
+    _draw_hex_tiling(ax2d, s=s, rings=3, highlight=(0, 0))
+    ax2d.plot(0, 0, "o", color=COL["red"], ms=5, zorder=6)
+    ax2d.set_xlim(-2.2, 2.2)
+    ax2d.set_ylim(-2.2, 2.2)
+    ax2d.set_title(r"$(2{+}1)$: $\kappa_{\mathrm{hex}}=\sqrt{3}/2$", fontsize=10)
 
-    ax = axes[1]
-    ax.axis("off")
-    ax.text(0.5, 0.55, r"$(3{+}1)$ FCC", ha="center", fontsize=12, transform=ax.transAxes)
-    ax.text(0.5, 0.38, r"$\kappa_{\mathrm{FCC}}=1/\sqrt{2}$, $|N|=12$", ha="center", fontsize=10, transform=ax.transAxes)
-    ax.text(0.5, 0.22, r"$c=\kappa c_0$ — одно $c$, разное разбиение", ha="center", fontsize=10, transform=ax.transAxes, color=COL["blue"])
-    ax.text(0.5, 0.06, r"срез $\{111\}$ вложен в объём", ha="center", fontsize=10, transform=ax.transAxes, color=COL["green"])
+    ax3d: Axes3D = fig.add_subplot(1, 2, 2, projection="3d")
+    a = 1.0
+    centers = _fcc_lattice_points(1, a)
+    _draw_sphere_packing(ax3d, centers, a / 2)
+    lim = 1.05
+    xx, yy = np.meshgrid(np.linspace(-lim, lim, 8), np.linspace(-lim, lim, 8))
+    ax3d.plot_surface(xx, yy, -xx - yy, alpha=0.2, color=COL["green"], linewidth=0, shade=False)
+    _style_3d(ax3d, 1.05, elev=22, azim=-52)
+    ax3d.set_title(r"$(3{+}1)$ FCC, срез $\{111\}$", fontsize=10, pad=6)
 
     fig.suptitle(r"Связь среза $(2{+}1)$ и носителя $(3{+}1)$", fontsize=11, y=1.02)
     _save(fig, "carrier-slice-bridge.pdf")
