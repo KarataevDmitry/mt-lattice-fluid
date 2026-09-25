@@ -212,6 +212,12 @@ if (Test-Path -LiteralPath $figScript) {
     & python $figScript
     if ($LASTEXITCODE -ne 0) { throw "render_carrier_figures.py failed (exit $LASTEXITCODE)" }
 }
+
+$axiomFigScript = Join-Path (Split-Path $Root -Parent) 'scripts' 'render_axiom_figures.py'
+if (Test-Path -LiteralPath $axiomFigScript) {
+    & python $axiomFigScript
+    if ($LASTEXITCODE -ne 0) { throw "render_axiom_figures.py failed (exit $LASTEXITCODE)" }
+}
 $pdf = Join-Path $Out "$JobName.pdf"
 Stop-ProcessesLockingPdf -PdfPath $pdf
 

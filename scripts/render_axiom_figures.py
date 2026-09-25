@@ -1,0 +1,282 @@
+#!/usr/bin/env python3
+"""Render figures for axiom chapters (00-axiom-rationale, 02-axioms)."""
+
+from __future__ import annotations
+
+import math
+import sys
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Circle, FancyArrowPatch, Polygon, Rectangle, Wedge
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from render_carrier_figures import COL, _draw_hex_tiling, _save
+
+plt.rcParams.update(
+    {
+        "font.family": "serif",
+        "font.serif": ["Times New Roman", "DejaVu Serif"],
+        "mathtext.fontset": "cm",
+        "axes.unicode_minus": False,
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+    }
+)
+
+
+def fig_axiom_ladder() -> None:
+    """Physical descent ladder (ch. axiom-rationale)."""
+    fig, ax = plt.subplots(figsize=(5.8, 5.6))
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+
+    steps = [
+        (9.0, r"$c=\infty$", "классическая механика"),
+        (7.4, r"$c\neq\infty$", "СТО"),
+        (5.8, r"$\hbar\neq 0$", "квантовая механика"),
+        (4.2, r"рождение частиц", "теория поля"),
+        (2.6, r"$\hbar,\,G,\,c$", "узлы на решётке"),
+    ]
+    x0, x1 = 2.0, 8.0
+    for y, label, title in steps:
+        ax.plot([x0, x1], [y, y], color=COL["blue"], lw=2.0)
+        ax.text(1.2, y, label, ha="right", va="center", fontsize=10)
+        ax.text(8.2, y, title, ha="left", va="center", fontsize=10)
+
+    for y1, y2 in zip([s[0] for s in steps], [s[0] for s in steps[1:]]):
+        ax.annotate(
+            "",
+            xy=(4.9, y2 + 0.18),
+            xytext=(4.9, y1 - 0.18),
+            arrowprops=dict(arrowstyle="-|>", color=COL["gray"], lw=1.2),
+        )
+
+    ax.text(5.0, 0.7, "спуск: снимается одна идеализация", ha="center", fontsize=10, color=COL["gray"])
+    ax.set_title("Лестница физических идеализаций", fontsize=11, pad=10)
+    _save(fig, "axiom-ladder.pdf")
+
+
+def fig_axiom_locality() -> None:
+    """A1–A2: causal neighborhood and local law g."""
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.0))
+
+    ax = axes[0]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    a = 1.0
+    angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
+    ax.plot(0, 0, "o", color=COL["red"], ms=10, zorder=6)
+    for t in angles:
+        p = a * np.array([np.cos(t), np.sin(t)])
+        ax.plot([0, p[0]], [0, p[1]], color=COL["blue"], lw=1.5, zorder=2)
+        ax.plot(p[0], p[1], "o", color=COL["node"], ms=6, zorder=4)
+    wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=COL["green"], alpha=0.22, zorder=1)
+    ax.add_patch(wedge)
+    ax.text(0, -1.45, r"$A_1$: $c_0 h_T=h_L$, окрестность $N(x)$", ha="center", fontsize=10)
+    ax.set_xlim(-1.45, 1.45)
+    ax.set_ylim(-1.65, 1.35)
+
+    ax = axes[1]
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 6)
+    ax.axis("off")
+    for i, (x, y) in enumerate([(1.2, 3.0), (1.2, 1.0), (1.2, 5.0), (3.0, 2.0), (3.0, 4.0)]):
+        ax.add_patch(Circle((x, y), 0.35, facecolor="#eef4fb", edgecolor=COL["blue"], lw=1.2))
+        ax.text(x, y, rf"$z_{i+1}$", ha="center", va="center", fontsize=9)
+    ax.add_patch(Rectangle((5.0, 2.2), 1.6, 1.6, facecolor="#fff4e8", edgecolor=COL["node"], lw=1.4))
+    ax.text(5.8, 3.0, r"$g$", ha="center", va="center", fontsize=14)
+    ax.add_patch(Circle((8.2, 3.0), 0.45, facecolor="#fdecea", edgecolor=COL["red"], lw=1.6))
+    ax.text(8.2, 3.0, r"$z(x)$", ha="center", va="center", fontsize=10, color=COL["red"])
+    for x, y in [(1.2, 3.0), (1.2, 1.0), (1.2, 5.0), (3.0, 2.0), (3.0, 4.0)]:
+        ax.annotate("", xy=(5.0, 3.0), xytext=(x + 0.35, y), arrowprops=dict(arrowstyle="-|>", color=COL["gray"], lw=1.0))
+    ax.annotate("", xy=(7.75, 3.0), xytext=(6.6, 3.0), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.4))
+    ax.text(5.0, 0.55, r"$A_2$: $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$", ha="center", fontsize=10)
+
+    fig.suptitle("Каузальность и локальность", fontsize=11, y=1.02)
+    _save(fig, "axiom-locality.pdf")
+
+
+def fig_axiom_unitarity() -> None:
+    """A3–A4: norm preservation and spinor on C^2."""
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.0))
+
+    ax = axes[0]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    r = 1.0
+    ax.add_patch(Circle((0, 0), r, fill=False, ec=COL["gray"], lw=1.0, ls="--"))
+    phi0, phi1 = np.deg2rad(35), np.deg2rad(95)
+    for phi, col, lab in ((phi0, COL["blue"], r"$z$"), (phi1, COL["green"], r"$z\,e^{i\Phi}$")):
+        ax.annotate("", xy=(r * np.cos(phi), r * np.sin(phi)), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=2.0))
+        ax.text(1.15 * r * np.cos(phi), 1.15 * r * np.sin(phi), lab, color=col, fontsize=11)
+    ax.text(0, -1.45, r"$A_3$: $|z|$ не меняется, только фаза", ha="center", fontsize=10)
+    ax.set_xlim(-1.55, 1.55)
+    ax.set_ylim(-1.65, 1.55)
+
+    ax = axes[1]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    for cx, col, lab in ((-0.55, COL["blue"], r"$z_1$"), (0.55, COL["green"], r"$z_2$")):
+        ax.add_patch(Circle((cx, 0), 0.55, fill=False, ec=col, lw=1.0))
+        ax.annotate("", xy=(cx + 0.38, 0.22), xytext=(cx, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=1.6))
+        ax.text(cx, -0.85, lab, ha="center", color=col, fontsize=11)
+    ax.annotate(
+        "",
+        xy=(0.9, 0.55),
+        xytext=(-0.9, 0.55),
+        arrowprops=dict(arrowstyle="<->", color=COL["red"], lw=1.2),
+    )
+    ax.text(0, 0.82, r"$SU(2)$", ha="center", color=COL["red"], fontsize=11)
+    ax.text(0, -1.35, r"$A_4$: $z\in\mathbb{C}^2$, не скаляр", ha="center", fontsize=10)
+    ax.set_xlim(-1.55, 1.55)
+    ax.set_ylim(-1.55, 1.15)
+
+    fig.suptitle("Унитарность и спинор", fontsize=11, y=1.02)
+    _save(fig, "axiom-unitarity.pdf")
+
+
+def fig_axiom_thermo() -> None:
+    """A5–A6: vacuum floor and phase mixing at fixed N."""
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.8))
+
+    ax = axes[0]
+    z = np.linspace(0, 1.2, 200)
+    v = (z - 0.35) ** 2 + 0.05
+    ax.plot(z, v, color=COL["blue"], lw=2.0)
+    ax.axvline(0.35, color=COL["green"], ls="--", lw=1.2)
+    ax.plot(0, 2.5, marker="x", color=COL["red"], ms=12, mew=2)
+    ax.text(0.04, 2.2, r"$z=0$: deadlock", color=COL["red"], fontsize=9)
+    ax.scatter([0.35], [0.05], color=COL["green"], s=50, zorder=5)
+    ax.text(0.42, 0.22, r"вакуум $z_{\min}>0$", color=COL["green"], fontsize=9)
+    ax.set_xlabel(r"$|z|$")
+    ax.set_ylabel(r"отклик $\Phi$")
+    ax.set_title(r"$A_5$: третье начало", fontsize=10)
+    ax.set_xlim(-0.05, 1.15)
+    ax.set_ylim(-0.1, 2.8)
+
+    ax = axes[1]
+    n = 12
+    phases = np.linspace(0, 2 * np.pi, n, endpoint=False)
+    bars = np.ones(n)
+    colors = [plt.cm.twilight(p / (2 * np.pi)) for p in phases]
+    ax.bar(phases, bars, width=0.45, color=colors, edgecolor=COL["node"], lw=0.6)
+    ax.axhline(1.0, color=COL["red"], ls="--", lw=1.2)
+    ax.text(1.0, 1.08, r"$N=\sum|z|^2$", color=COL["red"], fontsize=10)
+    ax.set_xlabel(r"фазы в $\varepsilon$-окрестности")
+    ax.set_ylabel("вес")
+    ax.set_title(r"$A_6$: энтропия фаз $\uparrow$, $N$ фикс.", fontsize=10)
+    ax.set_xlim(-0.2, 2 * np.pi + 0.2)
+    ax.set_ylim(0, 1.25)
+
+    fig.suptitle("Термодинамика микроуровня", fontsize=11, y=1.03)
+    _save(fig, "axiom-thermo.pdf")
+
+
+def fig_axiom_defects() -> None:
+    """A9–A11: holonomy, winding, vortex focus."""
+    fig, axes = plt.subplots(1, 3, figsize=(10.2, 3.5))
+
+    ax = axes[0]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    sq = np.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
+    ax.plot(sq[:, 0], sq[:, 1], color=COL["blue"], lw=1.5)
+    for k, (x, y) in enumerate([(0, 0), (1, 0), (1, 1), (0, 1)]):
+        ang = np.deg2rad(45 + 90 * k)
+        ax.annotate("", xy=(x + 0.18 * np.cos(ang), y + 0.18 * np.sin(ang)), xytext=(x, y), arrowprops=dict(arrowstyle="-|>", color=COL["green"], lw=1.2))
+    ax.text(0.5, -0.22, r"$A_9$: $\zeta=(\sum_N z)\cdot z^*$", ha="center", fontsize=9)
+    ax.set_xlim(-0.2, 1.2)
+    ax.set_ylim(-0.35, 1.15)
+
+    ax = axes[1]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.add_patch(Circle((0, 0), 1.0, fill=False, ec=COL["gray"], lw=1.0))
+    th = np.linspace(0, 2 * np.pi, 80)
+    ax.plot(np.cos(th), np.sin(th), color=COL["blue"], lw=2.0)
+    ax.annotate("", xy=(1.0, 0), xytext=(0.85, 0.52), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.8, connectionstyle="arc3,rad=0.5"))
+    ax.plot(0, 0, "o", color=COL["red"], ms=6)
+    ax.text(0, -1.28, r"$A_{10}$: $\oint d\arg z=2\pi n$", ha="center", fontsize=9)
+    ax.set_xlim(-1.35, 1.35)
+    ax.set_ylim(-1.45, 1.25)
+
+    ax = axes[2]
+    ax.set_aspect("equal")
+    ax.axis("off")
+    r = np.linspace(0.05, 1.2, 120)
+    wide = np.exp(-((r - 0.7) ** 2) / 0.25)
+    tight = np.exp(-(r ** 2) / 0.03)
+    ax.plot(r, wide, color=COL["gray"], lw=1.6, ls="--", label="smear")
+    ax.plot(r, tight, color=COL["red"], lw=2.0, label="vortex")
+    ax.text(0.15, 0.85, "размазано", color=COL["gray"], fontsize=9)
+    ax.text(0.05, 0.55, "полюс", color=COL["red"], fontsize=9)
+    ax.set_xlabel(r"$r$")
+    ax.set_ylabel(r"$|\nabla\arg z|$")
+    ax.set_title(r"$A_{11}$: anti-smear", fontsize=10)
+    ax.set_xlim(0, 1.25)
+    ax.set_ylim(0, 1.05)
+
+    fig.suptitle("Аналитичность и топологические дефекты", fontsize=11, y=1.03)
+    _save(fig, "axiom-defects.pdf")
+
+
+def fig_axiom_m_t() -> None:
+    """Determinism on M vs coarse readout on T."""
+    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.8))
+    n = 16
+    rng = np.random.default_rng(0)
+    phase = rng.uniform(0, 2 * np.pi, (n, n))
+
+    ax = axes[0]
+    ax.imshow(np.cos(phase), cmap="twilight", vmin=-1, vmax=1, interpolation="nearest")
+    ax.set_title(r"$\mathcal{M}$: детерминированный $z(x,t)$", fontsize=10)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    ax = axes[1]
+    k = np.array([0.25, 0.5, 0.25])
+    smooth = np.apply_along_axis(lambda v: np.convolve(v, k, mode="same"), 0, np.cos(phase))
+    smooth = np.apply_along_axis(lambda v: np.convolve(v, k, mode="same"), 1, smooth)
+    ax.imshow(smooth, cmap="twilight", vmin=-1, vmax=1, interpolation="bilinear")
+    ax.set_title(r"$\mathcal{T}$: $\Phi=\mathcal{B}z$, Born $|\Phi|^2$", fontsize=10)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    fig.suptitle("Детерминизм микроуровня и грубый прибор", fontsize=11, y=1.03)
+    _save(fig, "axiom-m-t.pdf")
+
+
+def fig_axiom_heat_death() -> None:
+    """Theorem 2.3: N invariant on M, Var(Phi) may drop on T."""
+    fig, ax = plt.subplots(figsize=(6.4, 3.8))
+    t = np.linspace(0, 10, 200)
+    n0 = 1.0
+    var = 0.8 * np.exp(-0.25 * t) + 0.05 * np.sin(2.5 * t) + 0.08
+    ax.plot(t, np.full_like(t, n0), color=COL["red"], lw=2.2, label=r"$N(t)$ на $\mathcal{M}$")
+    ax.plot(t, var, color=COL["blue"], lw=2.0, ls="--", label=r"$\mathrm{Var}(\Phi)$ на $\mathcal{T}$")
+    ax.set_xlabel(r"время $t$")
+    ax.set_ylabel("нормированная величина")
+    ax.legend(loc="upper right", fontsize=9)
+    ax.set_title(r"Нет тепловой смерти на $\mathcal{M}$", fontsize=10)
+    ax.text(5.0, 0.15, r"$g^{-1}$ существует; $\mathcal{B}$ необратима", ha="center", fontsize=9, color=COL["gray"])
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 1.15)
+    _save(fig, "axiom-heat-death.pdf")
+
+
+def main() -> None:
+    fig_axiom_ladder()
+    fig_axiom_locality()
+    fig_axiom_unitarity()
+    fig_axiom_thermo()
+    fig_axiom_defects()
+    fig_axiom_m_t()
+    fig_axiom_heat_death()
+
+
+if __name__ == "__main__":
+    main()
