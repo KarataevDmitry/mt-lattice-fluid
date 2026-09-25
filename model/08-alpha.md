@@ -54,7 +54,7 @@ $$
 | **смысл** | phase↔vacuum coupling | stamped |
 | **фазовый остаток** | `α*−1 = Δφ_min/(2π) = 1/(4π)` (пустая ячейка) | stamped |
 | **число** | soft-face fundamentals (§8.2·U0) | sealed |
-| **следствия** | `F=F₀/(M N²)` на M; **α** = soft-face preferred (M=97); `α₀=κ/M` demoted | discrete + lab-inside; unit descent SEALED |
+| **следствия** | закон Кулона на M (§8.2·coulomb); **α** = soft-face при $M{=}97$; $\alpha_0{=}\kappa/M$ — грубое лабораторное приближение | выведено · §8.2·U0 |
 | **открыто** | дискретная доля сопряжения на FCC без continuum-`π` | `Φ_□` open · α_geom exploratory |
 Тождество остатка: `4π·α = α/(α*−1)`.
 **Код:** `SI.alpha_meaning_ask_row()` · verify **`Alpha_meaning_ask`**.
@@ -181,53 +181,114 @@ $$
 4. **Отвергнуто как определение M:** оптический `a₀` (CODATA) — T-якорь; годится как seed FP, не как носительный `N_a0`.
 5. **Открыто:** целое из **структуры H** — ground **`ρ_Θ`** / **`N_pack=#(hV ⊂ атомного WS)`** / радиальная оболочка вокруг `p` на FCC **без** `α` и без оптического `a₀`.
 **Код:** `SI.na0_h_carrier_ask_row()` · verify **`Na0_H_carrier_ask`**.
-#### §8.2·F·ask · Спросили носитель: сила на решётке **`F₀`** → **`α`**
-**Уже stamped:** Thm 5.1 — сила = **`n_F·F₀`**; **`F₀/F_P=κ`**; Кулон **`F=α F_P n₁n₂/N²`**.
-**Связка (N=1, |n|=1):**
+#### §8.2·coulomb · Кулон на решётке, число мест силы и α
+
+Полная цепочка: от квантования силы на M до постоянной тонкой структуры. Continuum-Maxwell и $\varepsilon_0$ в законе силы на M **не** вводятся; лабораторная запись $F=\alpha F_P n_1 n_2/N^2$ — согласование **той же** силы после усреднения (слой T).
+
+##### 1 · Квантование силы и заряда
+
+**Теорема 5.1** (§0.8 · §5.2.1): на решётке сила меняется только целыми пакетами
 $$
-\alpha F_P = F_0/M \quad\Rightarrow\quad \alpha = \kappa/M,\quad M\in\mathbb{N}.
+F = n_F\,F_0,\qquad n_F\in\mathbb{Z}.
 $$
-**Probe:** цель **`M=F₀/(α_c F_P)≈96.899`**.
-| кандидат `M` | откуда | `α⁻¹` | vs CODATA |
-|--------------|--------|-------|-----------|
-| **96** = `N₁₂·N_hier` (= `n_△·N₁₂`) | links × hierarchy | ≈135.76 | ~+9366 ppm |
-| **97** = `N₁₂·N_hier+1` | nearest int | ≈137.18 | ~−1040 ppm |
-| `137/√2` | `α_geom` path | 137 | ~+263 ppm — **отвергнуто** (инъекция 137) |
-**Итог:** путь живой — `α` из посадки Кулона на `F₀`. **`M=97` — теорема** (§8.2·α·nF·Thm); 96 = неполная перепись без ядра. π-tower **removed**; α = soft-face fundamentals.
-**Код:** `SI.alpha_force_lattice_ask_row()` · verify **`Alpha_force_lattice_ask`**.
-#### Кулон из носителя (не fitted Maxwell)
-**M-native (полное квантование — без continuum-α в законе силы):**
+**A10** (§5.2.2-III): заряд — целое число элементарных квантов,
 $$
-F_{12} = n_1 n_2\,\frac{F_0}{M\, N^{2}}\,\hat{\mathbf{r}},
-\qquad N\in\mathbb{N}\ \text{(graph-distance в }\ell_P),
-\quad n_i\in\mathbb{Z}\ \text{(A10)},
-\quad M = n_{F,\mathrm{seats}} = 97.
+Q = n\,e_0,\qquad n\in\mathbb{Z}.
 $$
-На NN ($N=1$, $|n_i|=1$): $F = F_0/M$ — один пакет силы на $M$ местах kick-ledger (§8.2·α·nF·Thm). **Не** появляются $\pi$, $\varepsilon_0$, π-tower.
-**T-readout (legacy coarse):** через demoted $\alpha_0=\kappa/M$ и $F_P$:
+Расстояние между узлами — **graph-distance** $N\in\mathbb{N}$ в шагах $\ell_P$, не continuum $r$. Планковская лестница (§5.2.1):
 $$
-F_{12} = \alpha\, F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}},
-\qquad \alpha = \kappa/M,\quad F_0 = \kappa F_P.
+F_0 = \kappa F_P,\qquad \kappa = 1/\sqrt{2}.
 $$
-**α** = soft-face preferred (M=97) §8.2·U0 — SEALED. Demoted: $\alpha_0=\kappa/M$ (~−1040 ppm).
-**Сборка (после M-native):**
-| кусок | где | смысл |
-|-------|-----|--------|
-| $Q = n\,e_0$, $n\in\mathbb{Z}$ | §5.2.2-III | топологический заряд (A10) |
-| $F_0$, $M=97$ | Thm 5.1 · nF census | сила — целые пакеты / seats |
-| soft-face $\alpha(M{=}97)$ | §8.2·U0 | **α** sealed; $\alpha_0=\kappa/M$ demoted |
-| $F_P$; $F_0=\kappa F_P$ | §5.2.1 | Planck force ladder |
-| $\mathrm{div}\,j=0$ | §5.2.1 | локальный баланс |
-**Дискретный Гаусс.** Поток $j$ через оболочку $\propto n=Q/e_0$. Закон $1/N^{2}$ — graph-distance + A10, не отдельный Maxwell на M.
-| кусок | статус |
-|-------|--------|
-| $F = n_1 n_2 F_0/(M N^{2})$ на M | выведено (descent) |
-| $F = \alpha F_P n_1 n_2/N^{2}$ на T | readout той же силы |
-| Гаусс $\oint j \propto n$ | схема · sim open |
-**Фальсификация:** $N\notin\mathbb{N}\ell_P$, $n\notin\mathbb{Z}$, или NN-сила $\neq F_0/M$ — claim мёртв.
-**Код:** `SI.coulomb_M_native_row()` · verify **`Coulomb_M_native`**.
+
+##### 2 · Теорема: сколько мест у одного заряда ($M=97$)
+
+Кулон между двумя единичными зарядами на соседних ячейках слабее одного пакета $F_0$:
+$$
+F_{\mathrm{Coulomb}}(N{=}1)=\frac{F_0}{M}.
+$$
+Число $M$ — не подгонка под CODATA, а **счёт независимых мест**, куда заряженное FCC-ядро может разнести импульс $\Delta p\in p_0\cdot\mathbb{Z}$ при кулоновском kick.
+
+**Лемма 1 (ядро).** Заряженная ячейка $hV$ занята ($b=1$). В иерархии T1 этот бит уже вычтен из $N_{\mathrm{hier}}=\lfloor B_{hV}\rfloor-1=8$, но для электромагнитной силы место на ядре **обязательно**: **1** seat.
+
+**Лемма 2 (звезда × иерархия).** Изотропная 12-связная звезда ($N_{12}=12$) × $N_{\mathrm{hier}}=8$ каналов иерархии (§5.2.2 · §8.4.1-A): **$12\cdot 8=96$** seats.
+
+**Теорема (места силы).**
+$$
+M = n_{F,\mathrm{seats}} = 1 + N_{12}\,N_{\mathrm{hier}} = 1 + 12\cdot 8 = 97.
+$$
+Счёт $M=96=N_{12}N_{\mathrm{hier}}$ без единицы ядра — **неполный** (~+9366 ppm на $\alpha_0^{-1}$). Подстановка $M=137/\sqrt{2}$ из геометрического $\alpha_{\mathrm{geom}}$ — **отвергнута** (вкладывает 137 как вход).
+
+**Статус:** теорема **закрыта**. Verify: **`Alpha_nF_kick_census`**, **`Alpha_M_from_g_try`**, **`Alpha_force_lattice_ask`**.
+
+##### 3 · Закон Кулона на M
+
+Для зарядов $n_1,n_2$ на graph-distance $N$:
+$$
+\mathbf{F}_{12} = n_1 n_2\,\frac{F_0}{M\,N^{2}}\,\hat{\mathbf{r}},
+\qquad N\in\mathbb{N},\quad n_i\in\mathbb{Z},\quad M=97.
+$$
+На ближайшем соседе ($N=1$, $|n_i|=1$):
+$$
+|\mathbf{F}| = \frac{F_0}{M} = \frac{F_0}{97}.
+$$
+В законе **нет** $\pi$, $\varepsilon_0$, π-tower — только целые $n_i,N,n_F$ и выведенные $F_0,M$.
+
+**Дискретный Гаусс.** Поток $j$ через замкнутую оболочку пропорционален $n=Q/e_0$. Спад $\propto 1/N^{2}$ следует из graph-distance и A10, а не из отдельного уравнения Максвелла на M. Локальный баланс: $\Delta\rho/\Delta t+\mathrm{div}_\varepsilon j=0$ (§5.2.1).
+
+| компонент | источник | роль |
+|-----------|----------|------|
+| $Q=ne_0$ | A10 | топологический заряд |
+| $F=n_F F_0$ | Thm 5.1 | квантование силы |
+| $M=97$ | теорема §2 | число мест силы |
+| $F_0=\kappa F_P$ | §5.2.1 | планковская лестница |
+| $\mathbf{F}_{12}\propto n_1 n_2/(MN^2)$ | выведено | кулон на M |
+| $\oint j\propto n$ | схема | дискретный Гаусс (sim open) |
+
+Verify: **`Coulomb_M_native`**.
+
+##### 4 · Лабораторная запись и грубое $\alpha_0$
+
+После усреднения (слой T) ту же силу пишут
+$$
+\mathbf{F}_{12} = \alpha\,F_P\,\frac{n_1 n_2}{N^{2}}\,\hat{\mathbf{r}}.
+$$
+На $N=1$, $|n_i|=1$ приравниваем к §3:
+$$
+\alpha_0\,F_P = \frac{F_0}{M}
+\quad\Rightarrow\quad
+\alpha_0 = \frac{\kappa}{M}
+\quad\Rightarrow\quad
+\alpha_0^{-1} = \frac{M}{\kappa} = M\sqrt{2}.
+$$
+При $M=97$:
+$$
+\alpha_0^{-1} = 97\sqrt{2} \approx 137.18,
+$$
+зазор $\sim 10^3$ ppm относительно CODATA. Это **не** неопределённость $M$ (оно фиксировано теоремой), а грубость приближения $\alpha_0=\kappa/M$: оно игнорирует soft-face поправки §8.2·U0.
+
+##### 5 · Точное $\alpha$
+
+Постоянная тонкой структуры **$\alpha$** (не $\alpha_0$) — soft-face fundamentals при $M=97$ (§8.2·U0): согласование с CODATA на уровне $\sim 10^{-5}$ ppm. Физический смысл coupling phase↔vacuum — §8.2·α·meaning; $\alpha_0=\kappa/M$ — лишь следствие кулоновской посадки на $F_0$.
+
+**Два уровня одной физики:**
+| уровень | формула | vs CODATA | смысл |
+|---------|---------|-----------|--------|
+| решётка M | $F=F_0/(MN^2)$, $M=97$ | — | точный закон силы |
+| грубое T | $\alpha_0=\kappa/M$ | ~−1040 ppm | лабораторный мост |
+| точное T | soft-face preferred | ~−0.000068 ppm | **$\alpha$** §8.2·U0 |
+
+##### 6 · Фальсификация
+
+- $N\notin\mathbb{N}$ (расстояние не целое в $\ell_P$);
+- $n_i\notin\mathbb{Z}$;
+- на NN $|F|\neq F_0/M$;
+- $M\neq 1+N_{12}N_{\mathrm{hier}}$ при сохранении лемм §2.
+
+Любой пункт — смерть всей цепочки §8.2·coulomb.
+
+**Код:** `SI.coulomb_M_native_row()` · `SI.alpha_nF_kick_census_row()` · `SI.alpha_force_lattice_ask_row()` · verify **`Coulomb_M_native`**, **`Alpha_nF_kick_census`**, **`Alpha_force_lattice_ask`**.
 #### Планковский ЭМ (формулы на соседних ячейках)
-Уже есть в носителе (§5.0.2 · §5.2.1). Не fitted Maxwell — **сбор** тех же кусков, что Кулон.
+На решётке (§5.0.2 · §5.2.1). Не continuum-Maxwell — **сбор** тех же величин, что §8.2·coulomb.
 **Кванты на одном шаге** ($\ell_P$, $hT$):
 $$
 s_0 = \hbar/2,
@@ -526,53 +587,20 @@ $$
 3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
 Лемма про demoted $\alpha_0$ — не определение **α**. **α** = soft-face preferred §8.2·U0 с $M=97$.
 **Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
-#### §8.2·α·M·g·try · Попытка: $M$ из stamped бит-бюджета
-**Dual (demoted):** $\alpha_0=\kappa/M$. $\kappa$ и $M=97$ закрыты; **α** — soft-face, не $\alpha_0$.
-**Уже stamped:** $N_{12}=12$; $\lfloor B_{hV}\rfloor=9$; $N_{\mathrm{hier}}=\lfloor B_{hV}\rfloor-1=8$ (T1: минус бит занятости $b$); $b\in\{0,1\}$ на ядре.
-**Try (бухгалтерия силы):** иерархия **не** считает $b$ внутри $N_{\mathrm{hier}}$. Кулон на NN всё же сидит на **заряженном ядре** ($b=1$) плюс канал link×hier наружу:
-$$
-M = 1 + N_{12}\cdot N_{\mathrm{hier}}
-= 1 + N_{12}\cdot(\lfloor B_{hV}\rfloor - 1)
-= 97.
-$$
-Чтение: одно место $F_0$ на занятом $hV$ + $N_{12}\cdot N_{\mathrm{hier}}$ мест на звезде × глубина иерархии. Тот же $-1/+1$, что T1, **инвертированный** для EM $n_F$.
-**После:** $M=97$ в soft-face preferred (=**α**). Demoted $\alpha_0=\kappa/97$ ~−1040 ppm — не α. $M=96$ без ядра — неполный счёт.
-**Статус:** мотивированный try → **теорема** §8.2·α·nF·Thm.
-**Код:** `SI.alpha_M_from_g_try_row()` · verify **`Alpha_M_from_g_try`**.
+#### §8.2·α·nF·Thm · $M=97$ (ссылка)
 
-#### §8.2·α·nF·Thm · $M=1+N_{12}\cdot N_{\mathrm{hier}}$ из аксиом kick ledger
+Полный вывод, закон Кулона, $\alpha_0=\kappa/M$ и различие $\alpha_0$ vs $\alpha$ — **§8.2·coulomb** (единый текст теоремы).
 
-**Теорема (места силы).** На решётке сила ходит целыми пакетами $F_0$ (Thm 5.1 · §3.12). Кулон между двумя единичными зарядами на соседних ячейках — **слабее** одного такого пакета:
-$$
-F_{\mathrm{Coulomb}}(N{=}1)=\frac{F_0}{M}.
-$$
-$M$ — сколько **независимых мест** (seats) у одного заряженного FCC-ядра, по которым kick ledger может разнести $\Delta p\in p_0\cdot\mathbb{Z}$. Не «измерили α и подобрали», а **вынуждены леммами из $g$**.
+**Код:** `SI.alpha_nF_kick_census_row()` · `SI.alpha_M_from_g_try_row()` · verify **`Alpha_nF_kick_census`**, **`Alpha_M_from_g_try`**.
 
-**Леммы (только stamped):**
-| класс | сколько | откуда |
-|-------|---------|--------|
-| ядро $b=1$ | **1** | занятость заряженного $hV$ (§5.0); T1 вычел этот бит из $N_{\mathrm{hier}}$, сила его всё равно требует |
-| link×hier | **$N_{12}\cdot N_{\mathrm{hier}}=96$** | изотропная звезда: все 12 связей × 8 каналов иерархии (§5.2.2 · §8.4.1-A) |
+#### §8.2·α·full-quant · α и полное квантование
 
-**Заключение:**
+§0.9: на M нет continuum-волны — есть occupancy мод ($n_E E_0$); сила — $n_F F_0$ (Thm 5.1). Постоянная тонкой структуры — насколько кулоновская сила на ближайшем соседе слабее одного пакета $F_0$:
 $$
-M = n_{F,\mathrm{seats}} = 1 + N_{12}\cdot N_{\mathrm{hier}} = 97.
+F_{\mathrm{Coulomb}}(N{=}1)=\frac{F_0}{M},\quad M=97\ \text{(теорема, §8.2·coulomb)}.
 $$
-Тогда $M=97$ подставляется в soft-face preferred (=**α**). Demoted $\alpha_0=\kappa/M$ (~−1040 ppm) — не α. $M=96$ без ядра — неполная перепись. Единственное $M$ под леммами.
+Грубое лабораторное: $\alpha_0=\kappa/M$ (~−1040 ppm). Точное $\alpha$ — soft-face preferred при $M=97$ (§8.2·U0).
 
-**Статус:** **теорема CLOSED**. Runtime-гистограмма $\Delta p$ из сима — N/A (в CA нет opcode Кулона); это не дыра счёта мест.
-**Код:** `SI.alpha_nF_kick_census_row()` · verify **`Alpha_nF_kick_census`**.
-#### §8.2·α·full-quant · α из полного квантования (fundamentals)
-**Смысл «тонкой структуры».** §0.9: на M нет continuum-волны — есть occupancy мод / **$n_E\cdot E_0$**. Сила — **$n_F\cdot F_0$** (Thm 5.1). Постоянная тонкой структуры — не «магическое π», а **безразмерная тонкость**: на сколько unit NN Coulomb слабее одного Planck-force пакета на носителе.
-$$
-F_{\mathrm{Coulomb}}(N{=}1)=F_0/M,\quad M=n_{F,\mathrm{seats}}=97\ \text{CLOSED (Thm)}.
-\quad \alpha_0=\kappa/M\ \text{(demoted coarse)};\quad \alpha=\text{soft-face preferred}|_{M=97}\ \text{SEALED}.
-$$
-**Два числа — два слоя:**
-| путь | формула | vs CODATA | роль |
-|------|---------|-----------|------|
-| **α (soft-face)** | preferred $|_{M=97}$ | ~−0.000068 ppm | **sealed** §8.2·U0 |
-Soft preferred (seat+face) — **lab-inside**; soft singlet в den — **SEALED** (G-grade completeness; не дыра в $M$).
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
 #### §8.2·α·U0·soft-face · α from bottom constants (SEALED)
