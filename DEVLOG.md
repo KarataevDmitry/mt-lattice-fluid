@@ -12,7 +12,7 @@
 
 
 
-## 2026-09-24 · §8.2·units·T_P — independent of k_B (SEALED)
+## 2026-09-24 · §8.2·units·T_P — independent of k_B (closed)
 
 **DoD:** T_P:=E_P=ℏ/t_P; T_P_M:=E_0. No separate Θ on M. k_B/kelvin = T-export only.
 
@@ -26,35 +26,35 @@
 **Code:** `SI.units_time_first_cascade_row()` · verify `Units_time_first_cascade`.
 
 
-## 2026-09-24 · §8.2·units·time-first — t_P → l_P → G (SEALED)
+## 2026-09-24 · §8.2·units·time-first — t_P → l_P → G (closed)
 
 **DoD:** Ontology: time quantum first; metre = light-path in one quantum; G = c⁵ t_P²/ℏ exact.
 
 **Code:** `SI.units_time_first_cascade_row()` · verify `Units_time_first_cascade`.
 
 
-## 2026-09-24 · §8.2·[T]·t_P — time dim = t_P; M tick hT (SEALED)
+## 2026-09-24 · §8.2·[T]·t_P — time dim = t_P; M tick hT (closed)
 
 **DoD:** [T]=[L]/[V] ⇒ t_P=l_P/c. M tick hT=κ·t_P. SI-2019 Cs second = T-export tautology twin of c-fixed metre.
 
 **Code:** `SI.time_dim_from_tP_row()` · verify `Time_dim_from_tP`.
 
 
-## 2026-09-24 · §8.2·[L]·l_P — length dim = l_P; hierarchy from α (SEALED)
+## 2026-09-24 · §8.2·[L]·l_P — length dim = l_P; hierarchy from α (closed)
 
 **DoD:** Natural unit l_P. Exact α ⇒ Compton/Bohr/r_e = N_c, N_c/α, α·N_c hops. Not SI-metre fit.
 
 **Code:** `SI.length_dim_from_lP_alpha_row()` · verify `Length_dim_from_lP_alpha`.
 
 
-## 2026-09-24 · §8.2·meter·decouple — SI metre ∉ M (SEALED)
+## 2026-09-24 · §8.2·meter·decouple — SI metre ∉ M (closed)
 
-**DoD:** After α seal, SI metre is fully off the M board. Lengths = hops of hL. α / masses / N_a0 never consult the metre. SI-2019 + optical a0 + √(ħG/c³) = T-export only.
+**DoD:** After α is closed, SI metre is fully off the M board. Lengths = hops of hL. α / masses / N_a0 never consult the metre. SI-2019 + optical a0 + √(ħG/c³) = T-export only.
 
 **Code:** `SI.meter_decouple_from_M_row()` · verify `Meter_decouple_from_M` · MODEL §8.2·meter·decouple.
 
 
-## 2026-09-24 · §8.2·α·meter fint — N_a0/a0 readout (SEALED α-path)
+## 2026-09-24 · §8.2·α·meter fint — N_a0/a0 readout (closed α-path)
 
 **DoD:** meter/optical a0 is **not** an input to α. Preferred α + upstairs cascade predict `N_a0=N_c/α`, `a0=N_a0·l_P`. Optical Bohr ≈ T-door ~0.45%. H→ℤN_a0 without α remains OPEN census (does not block α).
 
@@ -188,7 +188,7 @@ z' = z · exp(iφ)
 
 ### §3.6 Isotropic streaming
 
-- ✅ shipped · T1 **micro≈1.0**
+- ✅ derived · T1 **micro≈1.0**
 - macro radial probe — open
 - legacy `local_ca`: micro ~1.25
 
@@ -270,7 +270,7 @@ z' = z · exp(iφ)
 | слой | impl |
 |------|------|
 | forward | **`projected_step_fixed`** |
-| reverse | kick ledger · **`Leapfrog`** bit-exact |
+| reverse | momentum ledger · **`Leapfrog`** bit-exact |
 | gauge-fix encode | ✅ U1 equivariance |
 
 ### §4 T-layer
@@ -321,7 +321,7 @@ z' = z · exp(iφ)
 | 2026-09-22 | §8.2 Stokes+$\Phi_\square$ | дискретный контур = сумма рёбер · $B_\square=\Phi_\square/\ell_P^{2}$ |
 | 2026-09-22 | §8.2 Lorentz из $K_P$ | $c^2=K_P/\mu_P$ + binomial(1-2-1) → макро-круг; ЭМ-блок закрыт контуром |
 | 2026-09-22 | §8.2 излучение | $h\nu_0=4\pi E_0$ · $n=0$ · Debye $\omega_D$ · Bose $u(\omega)$ open · `SI.radiation_row` |
-| 2026-09-22 | §8.2 ask-model | занятость $\langle n\rangle$/дискр.RJ = T-стат (§2.1), не закон M · M✅ квант+$n=0$ Bose-capable+BZ · Planck open |
+| 2026-09-22 | §8.2·5 | занятость $\langle n\rangle$/дискр.RJ = T-стат (§2.1), не закон M · M✅ квант+$n=0$ Bose-capable+BZ · Planck open |
 | 2026-09-22 | §8.2 radiation hinges | $\mu=0$✅ схема · open: $T_\gamma$, $\omega(k)$, $g_{\mathrm{pol}}=2$, A6→мера, осциллятор |
 | 2026-09-22 | §8.2 распад | аннигиляция≠распад · free $\gamma$ / одиночный $n\pm1$ стабильны · $\Gamma,\tau$ open · `SI.decay_row` |
 | 2026-09-22 | §8.2 lemma | $m\ll m_P\not\Rightarrow$ must decay · масса≠стабильность · кирпич≠свободная $m_P$ |
@@ -350,43 +350,43 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2 m_p pack | stack `1+κ²/N₁₂` (`κ=1/√2`, `N₁₂=12`) → m_p≈0.9353 GeV (0.32%); inscribed sphere, not soft |E| |
 | 2026-09-23 | §8.2 m_e | bare `α²·(v/2)/N_φ`≈0.504 MeV (1.37%); stack `α²·m_H/N_φ`≈0.513 MeV (0.45%); `N_φ=⌈4π⌉=13`; `f_геом` = следствие |
 | 2026-09-23 | §8.2 m_ν | atm `α⁵·2m_H/(N_hier N_φ)`≈0.04986 eV (0.21% vs √Δm²≈0.05); =`α³·m_e/(N_hier/2)`; sol/lightest lemmas |
-| 2026-09-23 | §8.2 ask-model β | слабый $\Delta B=0$ класс $n\to pe\bar\nu$ **разрешён** (SU(2)/$P_L$+оболочка); $\Gamma$ open ($m_n$ closed §8.2·7) |
+| 2026-09-23 | §8.2·5 β | слабый $\Delta B=0$ класс $n\to pe\bar\nu$ **разрешён** (SU(2)/$P_L$+оболочка); $\Gamma$ open ($m_n$ closed §8.2·7) |
 | 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
 | 2026-09-24 | §8.2·α·carrier-soft | носитель: homogenize = product local($N_4$+SU2)×global($M$); subtract soft unit restores layers · candidate, not sealed |
 | 2026-09-24 | §8.2·α·7=N4+SU2 | семёрка soft unit: кандидат **фундаментальный** $7=N_4+3$ (крест+Паули); κ/n_□ — число/эхо; descent OPEN · `seven_N4_plus_SU2` |
 | 2026-09-24 | §6·seed·brick·scan | VACUUM_BOIL = N_φ Heisenberg bricks (full fill); reject N_ring ramp ring-scan; seeker → run_seed_brick_scan |
-| 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals CLOSED as MODEL readout; §10→eng pointer · Gpu_eng_tail_close PASS |
+| 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals closed as MODEL readout; §10→eng pointer · Gpu_eng_tail_close PASS |
 | 2026-09-24 | §1.7·torus·close | finite wall-free Λ=T³/T²; Λ×S¹=phase fiber; reject walls/sphere; N soft; eng wrap=readout · Carrier_torus_close PASS |
 | 2026-09-24 | §6·floor1·C3·bath·dogfood | VACUUM_BOIL contrast grows; **b=1 after densitometer dual-channel** (stale emerged_b=False was blind A10); gauge VACUUM frozen · Floor1_C3_bath_dogfood PASS |
-| 2026-09-24 | §6·floor1·C3·gamma·reopen | alone n_ticks=1 demoted soft (void artifact?); continuum≠M kept · Floor1_C3_gamma_close PASS |
+| 2026-09-24 | §6·floor1·C3·gamma·reopen | alone n_ticks=1 coarse soft (void artifact?); continuum≠M kept · Floor1_C3_gamma_close PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·close | reject continuum Γ on M; local C3 τ_M=1·hT · Floor1_C3_gamma_close PASS |
-| 2026-09-24 | §6·floor1·leftovers·close | C3→C2+γ existence CLOSED (Γ soft); ν off-band ≠N₁₂^{3…4} · Floor1_leftovers_close PASS |
+| 2026-09-24 | §6·floor1·leftovers·close | C3→C2+γ existence closed (Γ soft); ν off-band ≠N₁₂^{3…4} · Floor1_leftovers_close PASS |
 | 2026-09-24 | §6·floor1·dressing·f·close | ρ_Θ=𝟙[|Δφ|≥Δφ_min]; reject continuum/α f; T-smooth=binomial · Floor1_dressing_f_close PASS |
 | 2026-09-24 | §6·floor1·dressing·close | R_dress=1·dl: N₁₂<N_φ ⇒ 2π/N₁₂>Δφ_min; local star; multi-shell=excitation · Floor1_dressing_close PASS |
-| 2026-09-24 | §6·floor1·dressing·ask | ρ_Θ halo: R_min=1·dl (ε-star) CLOSED; outer R_dress OPEN; reject Compton/α/forced N₁₂^{3…4} · Floor1_dressing_ask PASS |
-| 2026-09-24 | §6·floor1·B0·census | only stable B=0 matter @N₁₂³…⁴ = dressed lightest Q=±1; Q=0 blobs=pre-resonance · Floor1_B0_census_ask PASS |
-| 2026-09-24 | §6·floor1·ask | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1 · Floor1_leptonic_ask PASS |
-| 2026-09-24 | §8.2·α·upstairs | cascade SEALED on α_preferred; PDG=T-door; soft floors open · Alpha_upstairs_mass_probe PASS |
+| 2026-09-24 | §6·floor1·dressing | ρ_Θ halo: R_min=1·dl (ε-star) closed; outer R_dress OPEN; reject Compton/α/forced N₁₂^{3…4} · Floor1_dressing PASS |
+| 2026-09-24 | §6·floor1·B0·census | only stable B=0 matter @N₁₂³…⁴ = dressed lightest Q=±1; Q=0 blobs=pre-resonance · Floor1_B0_census PASS |
+| 2026-09-24 | §6·floor1 | band ~N₁₂³…N₁₂⁴·dl; reject Compton/a₀/confining/N_gen as floor1 · Floor1_leptonic PASS |
+| 2026-09-24 | §8.2·α·upstairs | cascade closed on α_preferred; PDG=T-door; soft floors open · Alpha_upstairs_mass_probe PASS |
 | 2026-09-24 | §8.2·α·SI-bridge | α exact (κ,M,d,U; no u(α)); U0↔ħc=2κU0; CODATA=T-door only · Alpha_si_bridge PASS |
-| 2026-09-24 | §8.2·α·nF·Thm | M=1+N₁₂·N_hier=97 — theorem from kick-ledger lemmas (core+star); not free count · Alpha_nF_kick_census PASS |
-| 2026-09-24 | §8.2·α·nF·census | seat table: 1 core + 12×8 hier = 97; F=F₀/97 ⇒ α=κ/97; combinatorial CLOSED · Alpha_nF_kick_census PASS |
+| 2026-09-24 | §8.2·α·nF·Thm | M=1+N₁₂·N_hier=97 — theorem from momentum registry lemmas (core+star); not free count · Alpha_nF_momentum_registry PASS |
+| 2026-09-24 | §8.2·α·nF·census | seat table: 1 core + 12×8 hier = 97; F=F₀/97 ⇒ α=κ/97; combinatorial closed · Alpha_nF_momentum_registry PASS |
 | 2026-09-24 | §8.2·α·M·g·try | M=1+N₁₂·N_hier=97 (core b + link×hier); α=κ/97 ~−1040ppm; → census · Alpha_M_from_g_try PASS |
-| 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent_ask PASS |
-| 2026-09-24 | §8.2·α·dual | method α=m/n two paths; alive: κ/M (M open), ae/(2r); reject M/512 single-path · Alpha_dual_fraction_ask PASS |
-| 2026-09-24 | §8.2·α·EM·faces | w_□/w_△/dihedral/V/S body ok but ≠α (wrong scale); α_geom=counts≠areas; OPEN Φ_□ · Alpha_em_face_weight_ask PASS |
-| 2026-09-24 | §8.2·α·Rydberg·Hall | R_∞=α²·r/λ̄_C (same phase residue r); R_K exact SI-2019 ≠ α source; same coupling OPEN · Alpha_rydberg_hall_ask PASS |
-| 2026-09-24 | §8.2·α·ae·ask | ae=α·2r factors (2r closed, α open); pure-geo ae reject; door ≠ bypass coupling OPEN · Alpha_ae_cloud_ask PASS |
-| 2026-09-24 | §8.2·α·g2·ask | bare g=2 from A16×g_orb; ae_bare=0; reject r/2r/z_vac/α-input; OPEN A5 holonomy→ae · Alpha_dirac_g2_ask PASS |
-| 2026-09-23 | §8.2·α·Schwinger | lab door ae; identity ae^(1)=2αr with r=1/(4π); 1/(2π)=2r geometry; open Dirac g=2 + A5→ae · Alpha_schwinger_ask PASS |
+| 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent PASS |
+| 2026-09-24 | §8.2·α·dual | method α=m/n two paths; alive: κ/M (M open), ae/(2r); reject M/512 single-path · Alpha_dual_fraction PASS |
+| 2026-09-24 | §8.2·α·EM·faces | w_□/w_△/dihedral/V/S body ok but ≠α (wrong scale); α_geom=counts≠areas; OPEN Φ_□ · Alpha_em_face_weight PASS |
+| 2026-09-24 | §8.2·α·Rydberg·Hall | R_∞=α²·r/λ̄_C (same phase residue r); R_K exact SI-2019 ≠ α source; same coupling OPEN · Alpha_rydberg_hall PASS |
+| 2026-09-24 | §8.2·α·ae | ae=α·2r factors (2r closed, α open); pure-geo ae reject; door ≠ bypass coupling OPEN · Alpha_ae_cloud PASS |
+| 2026-09-24 | §8.2·α·g2 | bare g=2 from A16×g_orb; ae_bare=0; reject r/2r/z_vac/α-input; OPEN A5 holonomy→ae · Alpha_dirac_g2 PASS |
+| 2026-09-23 | §8.2·α·Schwinger | lab door ae; identity ae^(1)=2αr with r=1/(4π); 1/(2π)=2r geometry; open Dirac g=2 + A5→ae · Alpha_schwinger PASS |
 | 2026-09-23 | §8.2·α·Arg-try | Arg identity Δm=m_arg/(2MN_a0) closed; best int M=97 ~−2080ppm; reject 137² / 1/(4π·11) / mass-cascade; derivation OPEN · Alpha_arg_binding_try PASS |
 | 2026-09-23 | §8.2·α·mass-defect | QM floor: α=√(2Δm/m_e); U/BE=2; E_coul_NN/E₀=α/κ; BE/E₀~1.58e-27 soft Arg; DoD Arg→Δm OPEN · Alpha_mass_defect_optics PASS |
-| 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; phase residue≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent_ask` PASS |
-| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning_ask` PASS |
-| 2026-09-23 | §8.2·F·ask | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice_ask` PASS |
-| 2026-09-23 | §8.2·H·ask | **спросили носитель** `N_a0`: Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); **reject** `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier_ask` PASS |
-| 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **ask later rejected as α-input** |
+| 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; phase residue≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent` PASS |
+| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning` PASS |
+| 2026-09-23 | §8.2·F | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice` PASS |
+| 2026-09-23 | §8.2·H | `N_a0` (размер H): Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); отвергнуто `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier` PASS |
+| 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **N_c·137 path later rejected as α-input** |
 | 2026-09-23 | α FP analytic | bare **closed form** `α*=[N_φ/(N_a0√(π/2))]^{1/11}`; stack poly `(2/π)α²³+(1/8)α²²=RHS²`; exponent **11=8+2+1** · **`Alpha_fixed_point` PASS** |
 | 2026-09-23 | α fixed-point | **first FP in model**: `alpha_fixed_point_row` · **`Alpha_fixed_point` PASS** — α*=N_c(m_e(α*))/N_a0 (optical a₀); inv≈137.092 (~−408 ppm CODATA); seed-invariant; π-poly not α-input |
 | 2026-09-23 | α hop + H | `Alpha_hop_ladder` + Bohr rung: α=N_c/N_a0; α²=N_re/N_a0 (= power in m_e); v_Bohr/c₀=ακ; still identity, N_★/N_a0 from g OPEN |
@@ -404,12 +404,12 @@ z' = z · exp(iφ)
 | 2026-09-23 | §5.2.6 phonon | `phonon_from_carrier_row` · **`Phonon_from_carrier` PASS** — v_a=2c0, k_max=pi/l_P, omega_D=2pi/hT from FCC WS |
 | 2026-09-23 | §7.3 Planck←cell | `planck_from_cell_conditions_row` · **`Planck_from_cell` PASS** — ρ_cell=μ_P, u_P=μ_Pc², t_P/E_P derived via κ |
 | 2026-09-23 | §7.2·κ bottom-up | Planck ladder embeds **c**; **κ_geom** from hull not **c/c₀**; **`Kappa_bottom_up` PASS** — **`hT=κt_P`**, **`c=κc₀`** check |
-| 2026-09-23 | §8.2·geo·voronoi | rhombic dodecahedron WS: **`V=v_hV`**, **`R_in=a/2`**, **`V_hull/V=16/3`**, dual cuboctahedron · **`Rhombic_dodecahedron_geo`**, **`Rhombic_dodecahedron_ask` PASS** |
-| 2026-09-23 | §8.2·geo | cuboctahedron 1-tick: **`V_cubo=(16/3)v_hV`** at `a=l_P` · `cuboctahedron_geometry_row` · **`Cuboctahedron_geo` PASS** · α_geom=137 (~260 ppm) exploratory; stamped π ~2 ppm |
-| 2026-09-23 | §8.2·geo·ask | `cuboctahedron_carrier_ask_row` · **`Cuboctahedron_ask` PASS** — ratio inventory (κ shipped; V/S, 6/8, 135°, Φ_□ open) |
+| 2026-09-23 | §8.2·geo·voronoi | rhombic dodecahedron WS: **`V=v_hV`**, **`R_in=a/2`**, **`V_hull/V=16/3`**, dual cuboctahedron · **`Rhombic_dodecahedron_geo`**, **`Rhombic_dodecahedron` PASS** |
+| 2026-09-23 | §8.2·geo | cuboctahedron 1-tick: **`V_cubo=(16/3)v_hV`** at `a=l_P` · `cuboctahedron_geometry_row` · **`Cuboctahedron_geo` PASS** · α_geom=137 (~260 ppm) exploratory; derived π ~2 ppm |
+| 2026-09-23 | §8.2·geo | `cuboctahedron_carrier_row` · **`Cuboctahedron` PASS** — ratio inventory (κ derived; V/S, 6/8, 135°, Φ_□ open) |
 | 2026-09-23 | §8.2·geo anchor | dimensional chain **`a=l_P` first** — `edge_a_m`, `V/S`, `A_□=a²`; ratios derived (κ=R_in/R_out after lengths) |
 | 2026-09-23 | §8.2·Φ_□ probe | `em_plaquette.py` · **`Phi_square_probe` PASS** — hull lattice path; vortex Δφ_NN~1.48; α link readout ok; **alpha_match_open** (1/r≠α yet) |
-| 2026-09-23 | §8.2 ask-model ΔB | stamped $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
+| 2026-09-23 | §8.2·5 ΔB | derived $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
 | 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |
 | 2026-09-22 | §0 | genesis narrative → DEVLOG §7; MODEL = postulates only |
@@ -509,7 +509,7 @@ _геометрия(n,N₄)**.
 
 ---
 
-## §10. GPU / численная реализация (eng readout · физика CLOSED)
+## §10. GPU / численная реализация (simulation readout · физика closed)
 
 **Физика предохранителей закрыта в MODEL:** §1.7 (тор) · **§0.10** (пол/seed · `R(Φ)` · SI literals) · verify `Carrier_torus_close` · `Gpu_eng_tail_close`.  
 Ниже — **только** пути в коде. Не новая физика, не knobs.
@@ -548,27 +548,27 @@ x+N ≡ x ,   y+N ≡ y
 
 **Gap:** A10 readout was only `∮ d arg(z₂/z₁)`. Locked equal-lane boil (`z₁≡z₂`, VACUUM_BOIL bricks) → rel≡0 → seeker reported dead universe while contrast grew.
 
-**Fix:** `mt_ca/topology.py` — channels **rel** / **u1**=`Arg(z₁+z₂)` / **auto**=max`|n|`. MODEL §5.0 stamped. `MatterOccupancyB` gate includes locked U(1) synth. Brick-scan gate reports `winding_rel_max` / `winding_u1_max`.
+**Fix:** `mt_ca/topology.py` — channels **rel** / **u1**=`Arg(z₁+z₂)` / **auto**=max`|n|`. MODEL §5.0 derived. `MatterOccupancyB` gate includes locked U(1) synth. Brick-scan gate reports `winding_rel_max` / `winding_u1_max`.
 
 **Probe:** SYNTH_U1 locked → rel=0, u1≈1, **b=1** · VORTEX_P → rel≈1, u1≈0, **b=1** · class-gradient boil IC still ~curl-free (no magic b from stripes). Stale bath `emerged_b=False` was this gap — not absence of matter.
 
 **Family scan** (`scripts/run_seed_family_scan.py`, 128²×1024): VACUUM/BOIL/IMPULSE → born=0 · **PLANE_WAVE → born=1** (|n|_auto≈2) · VORTEX_* planted persist. Brick-offset BOIL subfamily still 0/52.
 
-**α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` **теорема** CLOSED; π-tower demoted as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
+**α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` **теорема** closed; π-tower coarse as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
 
 **Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
 
-**α·U0·soft-face:** preferred ~−0.000068 ppm (~0.45σ). Soft unit from symmetry: $U=(d+1)/d=1/(1−κ^{n_□})=8/7$. **Unit descent SEALED** — G-grade completeness: grade-0 soft singlet once in M-scale den (soft-minus; not ×M; not in num). `derivation_closed=True`. Global-M book false trail. Upstairs on `alpha_preferred`.
+**α·U0·soft face:** preferred ~−0.000068 ppm (~0.45σ). Soft unit from symmetry: $U=(d+1)/d=1/(1−κ^{n_□})=8/7$. **Unit descent closed** — G-grade completeness: grade-0 soft singlet once in M-scale den (soft-minus; not ×M; not in num). `derivation_closed=True`. Global-M book false trail. Upstairs on `alpha_preferred`.
 
 **α·SI-bridge:** carrier α from κ,M,d,U only — **exact** (no u(α), no ppm of α). Unit packet: U0=F0·l_P², ħc=2κ U0. CODATA contrast = optional T-door only. `Alpha_si_bridge` PASS.
 
-**α·upstairs:** cascade SEALED on preferred α — v→m_H→m_p/m_e→m_n exact laws; PDG=T-door; soft ~10⁻³ floors open higher structure. `Alpha_upstairs_mass_probe` PASS.
+**α·upstairs:** cascade closed on preferred α — v→m_H→m_p/m_e→m_n exact laws; PDG=T-door; soft ~10⁻³ floors open higher structure. `Alpha_upstairs_mass_probe` PASS.
 
 ---
 
 ## §11. Код (M-only slice)
 
-`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — eng readout §0.10/§1.7.
+`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — simulation readout §0.10/§1.7.
 
 
 ### Layout MODEL после split
