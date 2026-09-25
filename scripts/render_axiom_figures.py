@@ -13,7 +13,7 @@ from matplotlib.patches import Arc, Circle, Rectangle, Wedge
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from render_carrier_figures import _save
+from render_carrier_figures import _draw_hex_neighborhood, _hex_cell_center, _save
 from figure_draft import LW_OBJECT, dim_linear, dim_radius, leader
 
 # Book palette: black/gray + line style, not rainbow.
@@ -76,19 +76,14 @@ def fig_axiom_locality() -> None:
     ax.axis("off")
     a = 1.0
     angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
-    ax.plot(0, 0, "o", color=INK, ms=9, zorder=6)
-    for t in angles:
-        p = a * np.array([np.cos(t), np.sin(t)])
-        ax.plot([0, p[0]], [0, p[1]], color=LIGHT, lw=1.0, ls=":", zorder=2)
-        ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=4)
-    p0 = a * np.array([np.cos(angles[0]), np.sin(angles[0])])
-    ax.plot([0, p0[0]], [0, p0[1]], color=INK, lw=1.3, zorder=3)
-    dim_radius(ax, a, math.degrees(angles[0]), r"$h_L$", label_gap=0.14)
-    wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=FILL, edgecolor=LIGHT, lw=0.8, zorder=1)
-    ax.add_patch(wedge)
-    ax.text(0, -1.45, r"$A_1$: $c_0 h_T=h_L$, окрестность $N(x)$", ha="center", fontsize=10)
-    ax.set_xlim(-1.45, 1.45)
-    ax.set_ylim(-1.65, 1.35)
+    _draw_hex_neighborhood(ax, a, rings=2, center=(0, 0))
+    e0, e1 = a * np.array([np.cos(angles[0]), np.sin(angles[0])]), a * np.array([np.cos(angles[1]), np.sin(angles[1])])
+    dim_linear(ax, (e0[0], e0[1]), (e1[0], e1[1]), r"$h_L$", offset=0.20, side=-1)
+    leader(ax, (0.0, 0.0), r"$x$", (-0.55, 0.42), fontsize=10)
+    leader(ax, (0.0, a * 0.55), r"$N(x)$", (0.55, 1.05), fontsize=10)
+    ax.text(0, -1.75, r"$A_1$: $c_0 h_T=h_L$, окрестность $N(x)$", ha="center", fontsize=10)
+    ax.set_xlim(-2.0, 2.0)
+    ax.set_ylim(-1.95, 1.55)
 
     ax = axes[1]
     ax.set_xlim(0, 10)

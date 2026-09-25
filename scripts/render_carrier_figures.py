@@ -10,7 +10,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Circle, FancyArrowPatch, Polygon, Rectangle, Wedge
+from matplotlib.patches import Circle, Polygon, Rectangle
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 from scipy.spatial import ConvexHull, Voronoi
@@ -26,6 +26,8 @@ LIGHT = "#aaaaaa"
 FILL = "#f0f0f0"
 FILL_ALT = "#e4e4e4"
 HI = "#d8d8d8"
+CELL_CENTER = "#b8cfe8"   # central Voronoi cell x
+CELL_NEIGHBOR = "#e8d5a8"  # one-tick neighborhood cells
 
 plt.rcParams.update(
     {
@@ -229,7 +231,16 @@ def _draw_voronoi_tessellation(ax: Axes3D, lattice_radius: int, a: float, origin
         ax.add_collection3d(polys)
 
 
-def _draw_triangle_tiling(ax, a: float, rows: int, cols: int, highlight_idx: tuple[int, int, int] | None = None) -> None:
+def _draw_triangle_tiling(
+    ax,
+    a: float,
+    rows: int,
+    cols: int,
+    highlight_idx: tuple[int, int, int] | None = None,
+    *,
+    center_idx: tuple[int, int, int] | None = None,
+    neighbor_idx: set[tuple[int, int, int]] | None = None,
+) -> None:
     h = a * math.sqrt(3) / 2
     v1 = np.array([a, 0.0])
     v2 = np.array([a / 2, h])
@@ -241,37 +252,61 @@ def _draw_triangle_tiling(ax, a: float, rows: int, cols: int, highlight_idx: tup
                 (1, np.vstack([p + v1, p + v2, p + v1 + v2])),
             )
             for t_idx, verts in tris:
-                hi = highlight_idx == (i, j, t_idx)
+                key = (i, j, t_idx)
+                if center_idx is not None and key == center_idx:
+                    role = "center"
+                elif neighbor_idx and key in neighbor_idx:
+                    role = "neighbor"
+                elif highlight_idx == key:
+                    role = "highlight"
+                else:
+                    role = "base"
                 ax.add_patch(
                     Polygon(
                         verts,
                         closed=True,
-                        facecolor=HI if hi else (FILL if t_idx == 0 else FILL_ALT),
-                        edgecolor=INK if hi else MUTED,
-                        lw=1.5 if hi else 0.7,
-                        zorder=2 if hi else 1,
+                        facecolor=_cell_facecolor(role) if role != "base" else (FILL if t_idx == 0 else FILL_ALT),
+                        edgecolor=INK if role in ("center", "neighbor", "highlight") else MUTED,
+                        lw=LW_OBJECT * 0.65 if role == "center" else (1.0 if role in ("neighbor", "highlight") else 0.7),
+                        zorder=3 if role == "center" else (2 if role in ("neighbor", "highlight") else 1),
                     )
                 )
 
 
-def _draw_square_tiling(ax, a: float, n: int, highlight: tuple[int, int] | None = None) -> None:
+def _draw_square_tiling(
+    ax,
+    a: float,
+    n: int,
+    highlight: tuple[int, int] | None = None,
+    *,
+    center: tuple[int, int] | None = None,
+    neighbors: set[tuple[int, int]] | None = None,
+) -> None:
     for i in range(-n, n):
         for j in range(-n, n):
             x, y = i * a, j * a
-            hi = highlight == (i, j)
+            role = _cell_role((i, j), center=center, neighbors=neighbors, highlight=highlight)
             ax.add_patch(
                 Polygon(
                     [(x, y), (x + a, y), (x + a, y + a), (x, y + a)],
                     closed=True,
-                    facecolor=HI if hi else FILL,
-                    edgecolor=INK if hi else MUTED,
-                    lw=1.5 if hi else 0.7,
-                    zorder=2 if hi else 1,
+                    facecolor=_cell_facecolor(role),
+                    edgecolor=INK if role in ("center", "neighbor") else MUTED,
+                    lw=LW_OBJECT * 0.65 if role == "center" else (1.0 if role == "neighbor" else 0.7),
+                    zorder=3 if role == "center" else (2 if role == "neighbor" else 1),
                 )
             )
 
 
-def _draw_hex_tiling(ax, s: float, rings: int, highlight: tuple[int, int] | None = None) -> None:
+def _draw_hex_tiling(
+    ax,
+    s: float,
+    rings: int,
+    highlight: tuple[int, int] | None = None,
+    *,
+    center: tuple[int, int] | None = None,
+    neighbors: set[tuple[int, int]] | None = None,
+) -> None:
     dx = math.sqrt(3) * s
     dy = 1.5 * s
     for row in range(-rings, rings + 1):
@@ -280,17 +315,78 @@ def _draw_hex_tiling(ax, s: float, rings: int, highlight: tuple[int, int] | None
             cy = row * dy
             angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
             verts = np.column_stack([cx + s * np.cos(angles), cy + s * np.sin(angles)])
-            hi = highlight == (row, col)
+            role = _cell_role((row, col), center=center, neighbors=neighbors, highlight=highlight)
             ax.add_patch(
                 Polygon(
                     verts,
                     closed=True,
-                    facecolor=HI if hi else FILL,
-                    edgecolor=INK if hi else MUTED,
-                    lw=1.5 if hi else 0.7,
-                    zorder=2 if hi else 1,
+                    facecolor=_cell_facecolor(role),
+                    edgecolor=INK if role in ("center", "neighbor") else MUTED,
+                    lw=LW_OBJECT * 0.65 if role == "center" else (1.0 if role == "neighbor" else 0.7),
+                    zorder=3 if role == "center" else (2 if role == "neighbor" else 1),
                 )
             )
+
+
+def _cell_facecolor(role: str) -> str:
+    if role == "center":
+        return CELL_CENTER
+    if role == "neighbor":
+        return CELL_NEIGHBOR
+    if role == "highlight":
+        return HI
+    return FILL
+
+
+def _cell_role(
+    ij: tuple[int, int],
+    *,
+    center: tuple[int, int] | None,
+    neighbors: set[tuple[int, int]] | None,
+    highlight: tuple[int, int] | None,
+) -> str:
+    if center is not None and ij == center:
+        return "center"
+    if neighbors and ij in neighbors:
+        return "neighbor"
+    if highlight is not None and ij == highlight:
+        return "highlight"
+    return "base"
+
+
+def _hex_cell_center(row: int, col: int, s: float) -> tuple[float, float]:
+    dx = math.sqrt(3) * s
+    dy = 1.5 * s
+    return col * dx + (row % 2) * dx / 2, row * dy
+
+
+def _hex_adjacent_cells(row: int, col: int, s: float, rings: int) -> set[tuple[int, int]]:
+    cx0, cy0 = _hex_cell_center(row, col, s)
+    nn = math.sqrt(3) * s
+    out: set[tuple[int, int]] = set()
+    for r in range(-rings, rings + 1):
+        for c in range(-rings, rings + 1):
+            if (r, c) == (row, col):
+                continue
+            cx, cy = _hex_cell_center(r, c, s)
+            if abs(math.hypot(cx - cx0, cy - cy0) - nn) < 0.06 * s:
+                out.add((r, c))
+    return out
+
+
+def _draw_hex_neighborhood(
+    ax,
+    s: float,
+    rings: int = 3,
+    center: tuple[int, int] = (0, 0),
+    *,
+    show_node: bool = True,
+) -> set[tuple[int, int]]:
+    neighbors = _hex_adjacent_cells(*center, s, rings)
+    _draw_hex_tiling(ax, s=s, rings=rings, center=center, neighbors=neighbors)
+    if show_node:
+        ax.plot(0, 0, "o", color=INK, ms=8, zorder=6, mew=LW_OBJECT * 0.35)
+    return neighbors
 
 
 def fig_lattice_field() -> None:
@@ -340,22 +436,18 @@ def fig_epsilon_neighborhood() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
 
-    ax.plot(0, 0, "o", color=INK, ms=9, zorder=5)
-    for th in angles:
-        p = a * np.array([np.cos(th), np.sin(th)])
-        ax.plot([0, p[0]], [0, p[1]], color=LIGHT, lw=1.0, ls=":", zorder=2)
-        ax.plot(p[0], p[1], "o", color=MUTED, ms=7, zorder=4)
+    _draw_hex_neighborhood(ax, a, rings=2, center=(0, 0))
+    leader(ax, (0.0, 0.0), r"$x$", (-0.55, 0.42), fontsize=10)
+    leader(ax, (0.0, a * 0.55), r"$N(x)$", (0.55, 1.05), fontsize=10)
 
-    p0 = a * np.array([np.cos(angles[0]), np.sin(angles[0])])
-    ax.plot([0, p0[0]], [0, p0[1]], color=INK, lw=1.5, zorder=3)
-    dim_radius(ax, a, math.degrees(angles[0]), r"$h_L$", label_gap=0.16)
+    e0, e1 = a * np.array([np.cos(angles[0]), np.sin(angles[0])]), a * np.array([np.cos(angles[1]), np.sin(angles[1])])
+    dim_linear(ax, (e0[0], e0[1]), (e1[0], e1[1]), r"$h_L$", offset=0.20, side=-1)
 
-    wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=FILL, edgecolor=LIGHT, lw=0.8, zorder=1)
-    ax.add_patch(wedge)
-    ax.text(0, -1.35, r"$N(x)$: узлы на расстоянии $h_L$ за один такт $h_T$", ha="center", fontsize=11)
-    leader(ax, (0.0, a * 1.08), r"$c_0h_T=h_L$", (0.55, a * 1.22), color=MUTED)
-    ax.set_xlim(-1.4, 1.4)
-    ax.set_ylim(-1.55, 1.45)
+    ax.text(0, -2.05, r"$N(x)$: соседние клетки на расстоянии $h_L$ за один такт $h_T$", ha="center", fontsize=11)
+    ax.text(0, -2.45, r"$c_0h_T=h_L$", ha="center", fontsize=10, color=MUTED)
+    lim = 2.35
+    ax.set_xlim(-lim, lim)
+    ax.set_ylim(-2.65, lim * 0.92)
     _save(fig, "carrier-epsilon.pdf")
 
 
@@ -401,16 +493,14 @@ def fig_neighbors_2d() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     a = 0.55
-    _draw_triangle_tiling(ax, a=a, rows=4, cols=4, highlight_idx=None)
+    center_idx = (0, 0, 0)
+    neighbor_idx = {(0, 0, 1), (-1, 0, 1), (-1, -1, 0)}
+    _draw_triangle_tiling(ax, a=a, rows=4, cols=4, center_idx=center_idx, neighbor_idx=neighbor_idx)
     h = a * math.sqrt(3) / 2
     v1 = np.array([a, 0.0])
     v2 = np.array([a / 2, h])
     cx, cy = (v1 + v2) / 3
-    ax.plot(cx, cy, "o", color=INK, ms=7, zorder=6)
-    for ang in np.deg2rad([0, 120, 240]):
-        p = cx + a * np.array([np.cos(ang), np.sin(ang)])
-        ax.plot([cx, p[0]], [cy, p[1]], color=INK, lw=1.2, zorder=4)
-        ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=5)
+    ax.plot(cx, cy, "o", color=INK, ms=7, zorder=6, mew=LW_OBJECT * 0.3)
     ax.set_xlim(-1.8, 2.4)
     ax.set_ylim(-1.4, 1.8)
     ax.set_title(r"$|N|=3$", fontsize=10)
@@ -419,16 +509,13 @@ def fig_neighbors_2d() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     a = 0.65
-    _draw_square_tiling(ax, a=a, n=3, highlight=None)
-    cx, cy = 0.0, 0.0
-    ax.plot(cx, cy, "o", color=INK, ms=7, zorder=6)
-    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-        p = np.array([cx, cy]) + a * np.array([dx, dy])
-        ax.plot([cx, p[0]], [cy, p[1]], color=INK, lw=1.2, zorder=4)
-        ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=5)
-    diag = a / math.sqrt(2)
-    ax.plot([0, diag], [0, diag], color=MUTED, lw=1.0, ls="--", zorder=3)
-    dim_linear(ax, (0.0, 0.0), (diag, diag), r"$h_L\sqrt{2}$", offset=0.22, color=MUTED, ls="--", side=-1)
+    center = (0, 0)
+    neighbors = {(1, 0), (-1, 0), (0, 1), (0, -1)}
+    _draw_square_tiling(ax, a=a, n=3, center=center, neighbors=neighbors)
+    ax.plot(a / 2, a / 2, "o", color=INK, ms=7, zorder=6, mew=LW_OBJECT * 0.3)
+    diag = a * math.sqrt(2)
+    ax.plot([a / 2, a / 2 + diag / 2], [a / 2, a / 2 + diag / 2], color=MUTED, lw=1.0, ls="--", zorder=3)
+    dim_linear(ax, (a / 2, a / 2), (a / 2 + diag / 2, a / 2 + diag / 2), r"$h_L\sqrt{2}$", offset=0.22, color=MUTED, ls="--", side=-1)
     ax.set_xlim(-1.6, 1.6)
     ax.set_ylim(-1.6, 1.6)
     ax.set_title(r"$|N|=4$", fontsize=10)
@@ -437,17 +524,12 @@ def fig_neighbors_2d() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     s = 0.42
-    _draw_hex_tiling(ax, s=s, rings=3, highlight=None)
-    ax.plot(0, 0, "o", color=INK, ms=7, zorder=6)
-    for ang in np.linspace(0, 2 * np.pi, 7)[:-1]:
-        p = s * np.array([np.cos(ang), np.sin(ang)])
-        ax.plot([0, p[0]], [0, p[1]], color=INK, lw=1.2, zorder=4)
-        ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=5)
+    _draw_hex_neighborhood(ax, s, rings=3, center=(0, 0))
     ax.set_xlim(-2.0, 2.0)
     ax.set_ylim(-2.0, 2.0)
     ax.set_title(r"$|N|=6$", fontsize=10)
 
-    fig.suptitle(r"Соседство $N(x)$ на регулярных решётках", fontsize=11, y=1.03)
+    fig.suptitle(r"Соседство $N(x)$: центральная клетка и окрестность", fontsize=11, y=1.03)
     _save(fig, "carrier-neighbors-2d.pdf")
 
 
@@ -530,21 +612,17 @@ def fig_hex_neighbors() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
 
-    _draw_hex_tiling(ax, s=a, rings=3, highlight=(0, 0))
+    _draw_hex_neighborhood(ax, a, rings=3, center=(0, 0))
     angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
     verts = np.column_stack([a * np.cos(angles), a * np.sin(angles)])
 
-    ax.plot(0, 0, "o", color=INK, ms=9, zorder=6)
-    for v in verts:
-        ax.plot([0, v[0]], [0, v[1]], color=INK, lw=1.4, ls=":", zorder=4)
-        ax.plot(v[0], v[1], "o", color=MUTED, ms=6, zorder=5)
-
     e0, e1 = verts[0], verts[1]
     dim_linear(ax, (e0[0], e0[1]), (e1[0], e1[1]), r"$a=h_L$", offset=0.22, side=-1)
-    dim_radius(ax, a, 30, r"$h_L$", label_gap=0.14)
+    leader(ax, (0.0, 0.0), r"$x$", (-0.55, 0.35), fontsize=10)
+    leader(ax, (0.0, a * 0.55), r"$N(x)$", (0.55, 1.05), fontsize=10)
 
     ax.text(0, 2.55, r"гексагональная ячейка Вороного, $|N(x)|=6$", ha="center", fontsize=11)
-    ax.text(0, -2.35, r"соседи на расстоянии $h_L$ за один такт $h_T$", ha="center", fontsize=10)
+    ax.text(0, -2.35, r"центральная клетка и шесть соседних за такт $h_T$", ha="center", fontsize=10)
     lim = 3.1
     ax.set_xlim(-lim, lim)
     ax.set_ylim(-lim * 0.92, lim * 0.92)
@@ -816,17 +894,13 @@ def fig_field_neighbors() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     a = 1.0
-    angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
-    ax.plot(0, 0, "o", color=INK, ms=10, zorder=6, mew=LW_OBJECT * 0.35)
-    neighbor_pts: list[tuple[float, float]] = []
-    for t in angles:
-        p = a * np.array([np.cos(t), np.sin(t)])
-        neighbor_pts.append((float(p[0]), float(p[1])))
-        ax.plot([0, p[0]], [0, p[1]], color=LIGHT, lw=0.8, ls=":", zorder=1)
-        ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=4)
-    wedge = Wedge((0, 0), a * 1.08, 0, 360, width=0.07, facecolor=FILL, edgecolor=LIGHT, lw=0.7, zorder=0)
-    ax.add_patch(wedge)
+    neighbors = _draw_hex_neighborhood(ax, a, rings=2, center=(0, 0))
     leader(ax, (0, a * 0.55), r"$N(x)$", (0.55, 1.15), fontsize=10)
+    neighbor_pts: list[tuple[float, float]] = []
+    for row, col in sorted(neighbors):
+        cx, cy = _hex_cell_center(row, col, a)
+        neighbor_pts.append((cx, cy))
+        ax.plot(cx, cy, "o", color=MUTED, ms=4, zorder=5)
 
     gx, gy = 2.05, 0.0
     ax.add_patch(Rectangle((gx - 0.38, gy - 0.38), 0.76, 0.76, facecolor=FILL, edgecolor=INK, lw=LW_OBJECT, zorder=6))
