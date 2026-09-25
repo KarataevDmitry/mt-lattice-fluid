@@ -220,3 +220,28 @@ def check_neutron_mass(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
+
+def check_annihilation_t_stats(device: str = "cpu") -> dict:
+    """§5.0.3 T-readout: lattice τ_M, dipole 2γ proxy, ensemble ⟨dσ/dΩ⟩ isotropy."""
+    from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
+
+    row = annihilation_t_stats_probe(size=160, steps=64, block=8, ensemble=12, device=device)
+    # Partial DoD: dipole back-to-back on ΔΦ; full ensemble axis + PDG τ bridge open.
+    ok = bool(row["back_to_back_proxy"])
+    return {
+        "id": "Annihilation_T_stats",
+        "probe_path": row["probe_path"],
+        "tick_focus": row["tick_focus"],
+        "tau_M_s": row["tau_M_s"],
+        "tau_M_over_tau_PDG": row["tau_M_over_tau_PDG"],
+        "peaks_on_delta": row["peaks_on_delta"],
+        "elongation_delta": row["elongation_delta"],
+        "ensemble_axis_hist_cv": row["ensemble_axis_hist_cv"],
+        "mean_axis_tracking_err_rad": row["mean_axis_tracking_err_rad"],
+        "back_to_back_proxy": row["back_to_back_proxy"],
+        "ensemble_isotropic": row["ensemble_isotropic"],
+        "axis_tracks_injection": row["axis_tracks_injection"],
+        "axis_tracks_pi": row["axis_tracks_pi"],
+        "ok": ok,
+        "note": row["note"],
+    }

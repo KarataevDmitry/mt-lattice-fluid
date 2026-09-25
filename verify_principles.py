@@ -101,6 +101,7 @@ def run_all(device: str) -> list[dict]:
         check_proton_mass(device=device),
         check_electron_mass(device=device),
         check_neutron_mass(device=device),
+        check_annihilation_t_stats(device=device),
         check_neutrino_mass(device=device),
         check_mechanical_quantum(device=device),
         check_quarter_quantum(device=device),
