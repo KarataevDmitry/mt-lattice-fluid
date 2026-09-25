@@ -14,6 +14,7 @@ from matplotlib.patches import Arc, Circle, Rectangle, Wedge
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from render_carrier_figures import _save
+from figure_draft import dim_linear, dim_radius, leader
 
 # Book palette: black/gray + line style, not rainbow.
 INK = "#222222"
@@ -78,8 +79,11 @@ def fig_axiom_locality() -> None:
     ax.plot(0, 0, "o", color=INK, ms=9, zorder=6)
     for t in angles:
         p = a * np.array([np.cos(t), np.sin(t)])
-        ax.plot([0, p[0]], [0, p[1]], color=INK, lw=1.3, zorder=2)
+        ax.plot([0, p[0]], [0, p[1]], color=LIGHT, lw=1.0, ls=":", zorder=2)
         ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=4)
+    p0 = a * np.array([np.cos(angles[0]), np.sin(angles[0])])
+    ax.plot([0, p0[0]], [0, p0[1]], color=INK, lw=1.3, zorder=3)
+    dim_radius(ax, a, math.degrees(angles[0]), r"$h_L$", label_gap=0.14)
     wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=FILL, edgecolor=LIGHT, lw=0.8, zorder=1)
     ax.add_patch(wedge)
     ax.text(0, -1.45, r"$A_1$: $c_0 h_T=h_L$, окрестность $N(x)$", ha="center", fontsize=10)
@@ -100,6 +104,8 @@ def fig_axiom_locality() -> None:
     for x, y in [(1.2, 3.0), (1.2, 1.0), (1.2, 5.0), (3.0, 2.0), (3.0, 4.0)]:
         ax.annotate("", xy=(5.0, 3.0), xytext=(x + 0.35, y), arrowprops=dict(arrowstyle="-|>", color=LIGHT, lw=0.9))
     ax.annotate("", xy=(7.75, 3.0), xytext=(6.6, 3.0), arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
+    leader(ax, (8.2, 3.0), r"$z(x)$", (9.0, 3.55), fontsize=10)
+    leader(ax, (5.8, 3.0), r"$g$", (5.8, 4.0), fontsize=11)
     ax.text(5.0, 0.55, r"$A_2$: $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$", ha="center", fontsize=10)
 
     fig.suptitle("Каузальность и локальность", fontsize=11, y=1.02)
@@ -125,7 +131,7 @@ def _draw_phasor(
         xytext=(cx, cy),
         arrowprops=dict(arrowstyle="-|>", color=color, lw=lw, linestyle=ls),
     )
-    ax.text(1.1 * (x - cx) + cx, 1.1 * (y - cy) + cy, label, color=INK, fontsize=10)
+    leader(ax, (x, y), label, (1.22 * (x - cx) + cx, 1.22 * (y - cy) + cy), fontsize=10)
 
 
 def fig_axiom_unitarity() -> None:
@@ -154,7 +160,13 @@ def fig_axiom_unitarity() -> None:
         )
     )
     phi_mid = 0.5 * (phi0 + phi1)
-    ax.text(1.55 * arc_r * np.cos(phi_mid), 1.55 * arc_r * np.sin(phi_mid), r"$\Phi$", fontsize=11)
+    leader(
+        ax,
+        (arc_r * np.cos(phi_mid), arc_r * np.sin(phi_mid)),
+        r"$\Phi$",
+        (1.7 * arc_r * np.cos(phi_mid), 1.7 * arc_r * np.sin(phi_mid)),
+        fontsize=11,
+    )
     ax.annotate(
         "",
         xy=(r * np.cos(phi1), r * np.sin(phi1)),
@@ -188,9 +200,9 @@ def fig_axiom_unitarity() -> None:
         xytext=(cx_before + rad + 0.05, 0),
         arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.8),
     )
-    ax.text(0, 0.28, r"$R(\Phi)$", ha="center", fontsize=11)
-    ax.text(cx_before, -0.95, r"$z=(z_1,z_2)^\top$", ha="center", fontsize=10)
-    ax.text(cx_after, -0.95, r"$R(\Phi)z$", ha="center", fontsize=10)
+    leader(ax, (0.0, 0.12), r"$R(\Phi)$", (0.0, 0.55), fontsize=11)
+    leader(ax, (cx_before, -0.55), r"$z=(z_1,z_2)^\top$", (cx_before, -0.95), fontsize=10)
+    leader(ax, (cx_after, -0.55), r"$R(\Phi)z$", (cx_after, -0.95), fontsize=10)
     ax.text(0, -1.42, r"$A_4$: $SU(2)$ на $\mathbb{C}^2$, не скаляр", ha="center", fontsize=10)
     ax.set_xlim(-2.05, 2.05)
     ax.set_ylim(-1.65, 1.25)
@@ -209,9 +221,9 @@ def fig_axiom_thermo() -> None:
     ax.plot(z, v, color=INK, lw=1.8)
     ax.axvline(0.35, color=MUTED, ls="--", lw=1.2)
     ax.plot(0, 2.5, marker="x", color=INK, ms=10, mew=1.8)
-    ax.text(0.04, 2.2, r"$z=0$: deadlock", fontsize=9)
+    leader(ax, (0.0, 2.5), r"$z=0$: deadlock", (0.12, 2.15), fontsize=9)
     ax.scatter([0.35], [0.05], color=INK, s=40, zorder=5)
-    ax.text(0.42, 0.22, r"вакуум $z_{\min}>0$", fontsize=9)
+    leader(ax, (0.35, 0.05), r"вакуум $z_{\min}>0$", (0.55, 0.28), fontsize=9)
     ax.set_xlabel(r"$|z|$")
     ax.set_ylabel(r"отклик $\Phi$")
     ax.set_title(r"$A_5$: третье начало", fontsize=10)
@@ -223,7 +235,7 @@ def fig_axiom_thermo() -> None:
     phases = np.linspace(0, 2 * np.pi, n, endpoint=False)
     ax.bar(phases, np.ones(n), width=0.45, color=FILL, edgecolor=INK, lw=0.7)
     ax.axhline(1.0, color=INK, ls="--", lw=1.1)
-    ax.text(1.0, 1.08, r"$N=\sum|z|^2$", fontsize=10)
+    leader(ax, (1.0, 1.0), r"$N=\sum|z|^2$", (1.55, 1.12), fontsize=10)
     ax.set_xlabel(r"фазы в $\varepsilon$-окрестности")
     ax.set_ylabel("вес")
     ax.set_title(r"$A_6$: энтропия фаз $\uparrow$, $N$ фикс.", fontsize=10)
@@ -278,8 +290,8 @@ def fig_axiom_defects() -> None:
     tight = np.exp(-(r ** 2) / 0.03)
     ax.plot(r, wide, color=MUTED, lw=1.5, ls="--")
     ax.plot(r, tight, color=INK, lw=1.8)
-    ax.text(0.15, 0.85, "размазано", color=MUTED, fontsize=9)
-    ax.text(0.05, 0.55, "полюс", fontsize=9)
+    leader(ax, (0.55, 0.72), "размазано", (0.2, 0.88), color=MUTED, fontsize=9)
+    leader(ax, (0.12, 0.88), "полюс", (0.05, 0.62), fontsize=9)
     ax.set_xlabel(r"$r$")
     ax.set_ylabel(r"$|\nabla\arg z|$")
     ax.set_title(r"$A_{11}$: anti-smear", fontsize=10)
@@ -328,7 +340,7 @@ def fig_axiom_heat_death() -> None:
     ax.set_ylabel("нормированная величина")
     ax.legend(loc="upper right", fontsize=9)
     ax.set_title(r"Нет тепловой смерти на $\mathcal{M}$", fontsize=10)
-    ax.text(5.0, 0.15, r"$g^{-1}$ существует; $\mathcal{B}$ необратима", ha="center", fontsize=9, color=MUTED)
+    leader(ax, (5.0, 0.12), r"$g^{-1}$ существует; $\mathcal{B}$ необратима", (5.0, -0.08), color=MUTED, fontsize=9)
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 1.15)
     _save(fig, "axiom-heat-death.pdf")

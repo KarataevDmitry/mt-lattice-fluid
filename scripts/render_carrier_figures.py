@@ -601,20 +601,61 @@ def fig_fcc_shell() -> None:
     _save(fig, "carrier-fcc-shell.pdf")
 
 
+def _draw_cubocta_section(ax, a: float) -> None:
+    """2D meridian section: distances to square vs triangular faces."""
+    r_hull = a / math.sqrt(2)
+    r_tri = a * math.sqrt(2 / 3)
+    r_out = a
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    ax.plot(0, 0, "o", color=INK, ms=6, zorder=6)
+    ax.plot([r_hull, r_hull], [-0.38, 0.38], color=INK, lw=2.0, zorder=2)
+
+    ang_v = math.radians(36)
+    vx, vy = r_out * math.cos(ang_v), r_out * math.sin(ang_v)
+    ax.plot([0, vx], [0, vy], color=INK, lw=1.3, zorder=3)
+    ax.plot(vx, vy, "o", color=INK, ms=5, zorder=5)
+
+    ang_t = math.radians(64)
+    tx, ty = r_tri * math.cos(ang_t), r_tri * math.sin(ang_t)
+    nx, ny = -math.sin(ang_t), math.cos(ang_t)
+    ax.plot([tx - 0.22 * nx, tx + 0.22 * nx], [ty - 0.22 * ny, ty + 0.22 * ny], color=MUTED, lw=1.6, ls="--", zorder=2)
+
+    dim_linear(ax, (0.0, 0.0), (r_hull, 0.0), r"$R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", offset=-0.2, side=-1)
+    dim_radius(ax, r_out, math.degrees(ang_v), r"$R_{\mathrm{out}}=a$", label_gap=0.1)
+    dim_linear(
+        ax,
+        (0.0, 0.0),
+        (tx, ty),
+        r"$a\sqrt{2/3}$",
+        offset=0.2,
+        color=MUTED,
+        ls="--",
+        side=1,
+    )
+    ax.set_xlim(-0.15, 1.35)
+    ax.set_ylim(-0.55, 1.05)
+
+
 def fig_cubocta_faces() -> None:
     a = 1.0
     verts = _fcc_vertices(a)
     squares, triangles = _cuboctahedron_face_groups(verts, a)
 
-    fig = plt.figure(figsize=(6.6, 5.6))
-    ax: Axes3D = fig.add_subplot(111, projection="3d")
-    _add_poly_faces(ax, squares, FILL, alpha=0.85, edge=INK, ls="-")
-    _add_poly_faces(ax, triangles, FILL_ALT, alpha=0.65, edge=MUTED, ls="--")
-    _wire_3d(ax, verts, _cubocta_edges(verts, a), color=LIGHT, lw=0.7, alpha=0.6)
-    _style_3d(ax, 0.95, elev=18, azim=-42, pad=0.15)
-    ax.text2D(0.04, 0.93, r"квадрат: $R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", transform=ax.transAxes, fontsize=10)
-    ax.text2D(0.04, 0.87, r"треугольник: $a\sqrt{2/3}$", transform=ax.transAxes, color=MUTED, fontsize=10)
-    ax.set_title("Кубооктаэдр — выпуклая оболочка 12 соседей", fontsize=10, pad=8)
+    fig = plt.figure(figsize=(10.4, 4.8))
+    ax3: Axes3D = fig.add_subplot(1, 2, 1, projection="3d")
+    _add_poly_faces(ax3, squares, FILL, alpha=0.85, edge=INK, ls="-")
+    _add_poly_faces(ax3, triangles, FILL_ALT, alpha=0.65, edge=MUTED, ls="--")
+    _wire_3d(ax3, verts, _cubocta_edges(verts, a), color=LIGHT, lw=0.7, alpha=0.6)
+    _style_3d(ax3, 0.95, elev=18, azim=-42, pad=0.15)
+    ax3.set_title("кубооктаэдр", fontsize=10, pad=8)
+
+    ax2d = fig.add_subplot(1, 2, 2)
+    _draw_cubocta_section(ax2d, a)
+    ax2d.set_title(r"меридиан: разные $R_{\mathrm{in}}$", fontsize=10)
+
+    fig.suptitle("Выпуклая оболочка 12 соседей FCC", fontsize=11, y=1.02)
     _save(fig, "carrier-cubocta-faces.pdf")
 
 
@@ -685,7 +726,8 @@ def fig_two_speeds() -> None:
     _draw_spacetime_2d(ax, c0, t_lim=1.35, x_lim=1.55, show_past=False)
     xs, ts = zip(*[(i * a, i * ht) for i in range(4)])
     ax.plot(xs, ts, "o-", color=INK, lw=1.5, ms=5, zorder=6)
-    ax.text(1.15, -0.12, r"тактовая $c_0$: один такт $h_T$, шаг $h_L$", ha="center", fontsize=9)
+    dim_axis_h(ax, 0, a, ht, r"$h_L$", offset=0.11)
+    dim_axis_v(ax, 0, ht, 0, r"$h_T$", offset=0.11)
     ax.set_title("микро: дискретный шаг по решётке", fontsize=10)
 
     ax = axes[1]
@@ -693,9 +735,9 @@ def fig_two_speeds() -> None:
     x_end = 1.4
     ax.plot([0, x_end], [0, x_end / c0], color=MUTED, lw=1.6, ls="--", zorder=4)
     ax.plot([0, x_end], [0, x_end / c_macro], color=INK, lw=2.0, zorder=5)
-    ax.text(x_end * 0.55, x_end / c0 + 0.06, r"$c_0$", color=MUTED, fontsize=10)
-    ax.text(x_end * 0.62, x_end / c_macro - 0.1, r"$c=\kappa c_0$", fontsize=10)
-    ax.text(0.75, -0.1, r"$\kappa=1/\sqrt{2}$", ha="center", fontsize=9)
+    leader(ax, (x_end * 0.7, x_end / c0), r"$c_0$", (x_end * 0.35, x_end / c0 + 0.12), color=MUTED, fontsize=10)
+    leader(ax, (x_end * 0.7, x_end / c_macro), r"$c=\kappa c_0$", (x_end * 0.35, x_end / c_macro - 0.14), fontsize=10)
+    leader(ax, (0.85, 0.55), r"$\kappa=1/\sqrt{2}$", (0.55, 0.75), color=MUTED, fontsize=9)
     ax.set_title("макро: осреднённый фронт", fontsize=10)
 
     fig.suptitle(r"Две скорости в плоскости $(x,t)$, наблюдатель в $(0,0)$", fontsize=11, y=1.02)
@@ -768,8 +810,8 @@ def _draw_worldlines_row(axes, *, kappa: float, row_title: str, t_lim: float = 1
     ts = [i * ht for i in range(n + 1)]
     ax.plot(xs, ts, "o-", color=INK, lw=2.1, ms=6, zorder=6)
     ax.text(-x_lim * 0.92, t_lim * 0.55, row_title, fontsize=9, color=MUTED, rotation=90, va="center")
-    ax.text(1.05, 0.42, r"$|\Delta x|=h_L$", fontsize=8)
-    ax.text(1.05, 0.58, r"$\Delta t=h_T$", fontsize=8)
+    dim_axis_h(ax, 0, a, ht, r"$h_L$", offset=0.11)
+    dim_axis_v(ax, 0, ht, 0, r"$h_T$", offset=0.11)
     ax.set_title(r"null на $M$", fontsize=9)
 
     ax = axes[1]
@@ -777,7 +819,7 @@ def _draw_worldlines_row(axes, *, kappa: float, row_title: str, t_lim: float = 1
     xs_mass = [0, 1, 2, 1, 2, 3, 2, 3, 4]
     ts_mass = [i * ht for i in range(len(xs_mass))]
     ax.plot(xs_mass, ts_mass, "o-", color=MUTED, lw=2.1, ms=5, zorder=6)
-    ax.text(1.15, 0.95, r"$K_P$", fontsize=8, color=MUTED)
+    leader(ax, (1.5, 1.5), r"$K_P$", (1.85, 1.15), color=MUTED, fontsize=8)
     ax.set_title(r"массивная", fontsize=9)
 
     ax = axes[2]
@@ -785,8 +827,8 @@ def _draw_worldlines_row(axes, *, kappa: float, row_title: str, t_lim: float = 1
     x_end = 1.35
     ax.plot([0, x_end], [0, x_end / c_macro], color=INK, lw=2.3, zorder=6)
     ax.plot(xs, ts, color=MUTED, lw=1.3, ls=":", marker="o", ms=4, zorder=5)
-    ax.text(x_end * 0.52, x_end / c_macro + 0.07, r"$c=\kappa c_0$", fontsize=9)
-    ax.text(x_end * 0.52, x_end / c0 - 0.1, r"$c_0$", color=MUTED, fontsize=8)
+    leader(ax, (x_end * 0.72, x_end / c_macro), r"$c=\kappa c_0$", (x_end * 0.45, x_end / c_macro + 0.18), fontsize=9)
+    leader(ax, (x_end * 0.72, x_end / c0), r"$c_0$", (x_end * 0.45, x_end / c0 - 0.18), color=MUTED, fontsize=8)
     ax.set_title(r"макро-фотон", fontsize=9)
 
 
