@@ -52,9 +52,11 @@
 \subsection{Регулярные замощения плоскости}
 
 Локальный закон на плоскости требует замощения без разрывов.
-На плоскости существуют ровно три регулярных типа: треугольник (три соседа),
-квадрат (четыре) и шестиугольник (шесть) (\cref{fig:carrier-tilings}).
-Равная длина рёбер~$\hl$ исключает диагональ за один такт квадратной решётки.
+На плоскости существуют ровно три регулярных типа: треугольник, квадрат и шестиугольник
+(\cref{fig:carrier-tilings}).
+Число соседей $|N(x)|$ на одном такте --- отдельный вопрос: узлы стоят в центрах плиток
+или в вершинах, и квадратная решётка допускает диагональ $h_L\sqrt{2}$, недостижимую за один~$\htick$
+(\cref{fig:carrier-neighbors-2d}).
 Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
 (\cref{fig:carrier-hex-neighbors}).
 
@@ -67,8 +69,15 @@
 
 \begin{figure}[htbp]
   \centering
+  \includegraphics[width=0.92\linewidth]{carrier-neighbors-2d.pdf}
+  \caption{Соседство $N(x)$ на трёх регулярных решётках: $|N|=3$, $4$ и $6$.}
+  \label{fig:carrier-neighbors-2d}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
   \includegraphics[width=0.62\linewidth]{carrier-hex-neighbors.pdf}
-  \caption{Гексагональная ячейка Вороного и соседство $N(x)$, $|N|=6$.}
+  \caption{Гексагональная ячейка Вороного: ребро $a=\hl$ и $|N(x)|=6$.}
   \label{fig:carrier-hex-neighbors}
 \end{figure}
 
@@ -123,12 +132,29 @@ $\kappa_{\mathrm{link}}=1/12$.
 В трёх измерениях плотнейшая упаковка равных шаров --- гранецентрированная кубическая или гексагональная плотная (теорема Кеплера).
 У каждого шара тогда ровно двенадцать соседей на расстоянии~$\hl$.
 Простая кубическая решётка имеет шесть соседей, объёмно-центрированная --- восемь; обе реже и отпадают, раз требуется максимальная плотность при одной длине ребра
-(\cref{fig:carrier-packing}).
+(\cref{fig:carrier-packing-sc,fig:carrier-packing-bcc,fig:carrier-packing-fcc}).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.88\linewidth]{carrier-packing.pdf}
-  \caption{Три кубические упаковки равных сфер: SC, BCC и FCC.}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-packing-sc.pdf}
+    \caption{SC, $|N|=6$.}
+    \label{fig:carrier-packing-sc}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-packing-bcc.pdf}
+    \caption{BCC, $|N|=8$.}
+    \label{fig:carrier-packing-bcc}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-packing-fcc.pdf}
+    \caption{FCC, $|N|=12$.}
+    \label{fig:carrier-packing-fcc}
+  \end{subfigure}
+  \caption{Три кубические упаковки равных сфер (первая координационная оболочка).}
   \label{fig:carrier-packing}
 \end{figure}
 

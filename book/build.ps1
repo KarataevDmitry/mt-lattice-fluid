@@ -206,14 +206,14 @@ if (-not (Test-Path (Join-Path $Sources 'main.tex'))) {
 }
 
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
-$figScript = Join-Path (Split-Path $Root -Parent) 'scripts' 'render_carrier_figures.py'
+$figScript = Join-Path (Join-Path (Split-Path $Root -Parent) 'scripts') 'render_carrier_figures.py'
 if (Test-Path -LiteralPath $figScript) {
     Write-Host 'render carrier figures ...'
     & python $figScript
     if ($LASTEXITCODE -ne 0) { throw "render_carrier_figures.py failed (exit $LASTEXITCODE)" }
 }
 
-$axiomFigScript = Join-Path (Split-Path $Root -Parent) 'scripts' 'render_axiom_figures.py'
+$axiomFigScript = Join-Path (Join-Path (Split-Path $Root -Parent) 'scripts') 'render_axiom_figures.py'
 if (Test-Path -LiteralPath $axiomFigScript) {
     & python $axiomFigScript
     if ($LASTEXITCODE -ne 0) { throw "render_axiom_figures.py failed (exit $LASTEXITCODE)" }
