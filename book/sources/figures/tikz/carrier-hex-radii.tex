@@ -1,0 +1,14 @@
+\begin{tikzpicture}[carrier panel, scale=1.5]
+  \def\a{1}
+  \pgfmathsetmacro{\rin}{0.866*\a}
+  \draw[carrier object] (0,0) circle (\a);
+  \draw[carrier muted, dashed] (0,0) circle (\rin);
+  \draw[carrier object, carrier fill] (0:\a) \foreach \b in {60,120,...,300} { -- (\b:\a) } -- cycle;
+  \node[carrier site] at (0,0) {};
+  \draw[carrier arrow] (0,0) -- (\a,0);
+  \node[anchor=south, inner sep=1pt] at (0.5*\a,-0.06) {$R_{\mathrm{out}}=a$};
+  \draw[carrier arrow, carrier muted] (0,0) -- (0,\rin);
+  \node[anchor=west, carrier muted, inner sep=1pt] at (0.08,0.5*\rin) {$R_{\mathrm{in}}$};
+  \node[anchor=north, font=\footnotesize] at (0,-1.35)
+    {$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$};
+\end{tikzpicture}

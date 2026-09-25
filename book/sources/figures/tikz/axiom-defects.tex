@@ -1,0 +1,24 @@
+\begin{tikzpicture}[carrier panel, scale=0.95]
+  \begin{scope}[shift={(-3.0,0)}]
+    \draw[carrier object] (0,0) rectangle (1,1);
+    \foreach \c/\x/\y in {0/0.15/0.15,1/0.85/0.15,2/0.85/0.85,3/0.15/0.85} {
+      \draw[carrier arrow, carrier muted] (\x,\y) -- ++(0.12,0.12);
+    }
+    \node[anchor=north, font=\scriptsize] at (0.5,-0.25) {$A_9$: $\zeta$};
+  \end{scope}
+  \begin{scope}
+    \draw[carrier muted] (0,0) circle (0.9);
+    \draw[carrier arrow] (0,0) -- (0.9,0);
+    \draw[carrier object] (0.9,0) arc (0:300:0.9);
+    \node[carrier site] at (0,0) {};
+    \node[anchor=north, font=\scriptsize] at (0,-1.15) {$A_{10}$: $\oint d\arg z$};
+  \end{scope}
+  \begin{scope}[shift={(3.0,0)}]
+    \draw[carrier muted, dashed, domain=0.05:1.2, samples=50] plot (\x, {exp(-((\x-0.7)^2)/0.25)});
+    \draw[carrier object, domain=0.05:1.2, samples=50] plot (\x, {exp(-(\x*\x)/0.03)});
+    \node[carrier muted, font=\scriptsize] at (0.55,0.72) {размазано};
+    \node[font=\scriptsize] at (0.15,0.88) {полюс};
+    \node[anchor=north, font=\scriptsize] at (0.6,-0.15) {$A_{11}$};
+    \node[carrier muted, font=\scriptsize] at (0.6,-0.4) {$r$};
+  \end{scope}
+\end{tikzpicture}

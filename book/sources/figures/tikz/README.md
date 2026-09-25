@@ -1,7 +1,8 @@
 # TikZ figures (hand-edited)
 
-Conceptual diagrams live here as `.tex` fragments included from chapters via `\input{figures/tikz/...}`.
+All book figures for carrier geometry and axioms live here as `.tex` fragments.
+Chapters include them via `\input{figures/tikz/...}`.
 
-Edit coordinates and arrows directly in TikZ — no matplotlib render step for these figures.
+Edit coordinates, arrows and labels directly in TikZ — no matplotlib render step.
 
-Legacy PDF pipeline (`scripts/render_*_figures.py`) remains only for 3D packing / heavy plots; run `book/build.ps1 -RenderFigures` when those need regeneration.
+`scripts/render_*_figures.py` are **legacy** (kept for reference only). `book/build.ps1` does not call them by default.

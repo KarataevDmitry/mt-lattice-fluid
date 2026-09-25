@@ -1,0 +1,25 @@
+\begin{tikzpicture}[carrier panel, scale=1.0]
+  \begin{scope}[iso view, shift={(-1.8,0,0)}, scale=1.1]
+    % cuboctahedron wireframe (schematic)
+    \foreach \x/\y/\z in {1,1,0/1,-1,0/-1,1,0/-1,-1,0/1,0,1/1,0,-1/-1,0,1/-1,0,-1/0,1,1/0,1,-1/0,-1,1/0,-1,-1} {
+      \fill[carrier fill] (\x,\y,\z) circle (1.8pt);
+    }
+    \node[carrier site] at (0,0,0) {};
+    \draw[carrier object] (1,1,0)--(1,0,1)--(0,1,1)--(-1,1,0)--(-1,0,1)--(0,-1,1)--(1,-1,0)--(1,0,-1)--(0,1,-1)--(-1,1,0);
+    \draw[carrier muted, dashed] (1,1,0)--(0,1,1)--(-1,1,0);
+    \fill[carrier hifill, opacity=0.5] (1,1,0)--(1,0,1)--(0,1,1)--cycle;
+    \node[anchor=north, font=\footnotesize] at (0,-1.35) {кубооктаэдр};
+  \end{scope}
+  \begin{scope}[shift={(1.6,0)}]
+    \draw[carrier muted] (-0.05,0) -- (1.3,0);
+    \node[carrier site] at (0,0) {};
+    \draw[carrier object] (0.72,0) -- (0.72,-0.38) -- (0.72,0.38);
+    \draw[carrier arrow] (0,0) -- (0.72,0);
+    \node[anchor=south, font=\scriptsize] at (0.36,-0.12) {$R_{\mathrm{in}}^{\mathrm{hull}}$};
+    \draw[carrier arrow] (0,0) -- (0.55,0.48);
+    \node[anchor=west, font=\scriptsize] at (0.6,0.5) {$R_{\mathrm{out}}=a$};
+    \draw[carrier muted, dashed] (0.48,0.62) -- (0.72,0.62);
+    \node[carrier muted, font=\scriptsize] at (0.6,0.75) {$a\sqrt{2/3}$};
+    \node[anchor=north, font=\footnotesize] at (0.65,-0.55) {меридиан};
+  \end{scope}
+\end{tikzpicture}

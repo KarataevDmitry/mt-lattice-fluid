@@ -1,0 +1,27 @@
+\begin{tikzpicture}[carrier panel, scale=1.05]
+  \begin{scope}[shift={(-2.2,0)}]
+    \draw[carrier muted, dashed] (0,0) circle (1);
+    \draw[carrier arrow] (0,0) -- (35:1);
+    \node at (35:1.15) {$z$};
+    \draw[carrier arrow, carrier muted, dashed] (0,0) -- (95:1);
+    \node[carrier muted] at (95:1.2) {$z\,e^{i\Phi}$};
+    \draw[carrier object] (35:0.38) arc (35:95:0.38);
+    \node at (65:0.55) {$\Phi$};
+    \node[anchor=north, font=\footnotesize] at (0,-1.35) {$A_3$: $|z|\mapsto|z|$};
+  \end{scope}
+  \begin{scope}[shift={(2.2,0)}]
+    \draw[carrier muted, dashed] (-1.1,0) circle (0.5);
+    \draw[carrier muted, dashed] (1.1,0) circle (0.5);
+    \draw[carrier arrow] (-1.1,0) -- (-35:0.42);
+    \node at (-35:0.58) {$z_1$};
+    \draw[carrier arrow] (-1.1,0) -- (112:0.33);
+    \node at (112:0.48) {$z_2$};
+    \draw[carrier arrow, carrier muted, dashed] (1.1,0) -- (-11:0.42);
+    \node[carrier muted] at (-11:0.58) {$z'_1$};
+    \draw[carrier arrow, carrier muted, dashed] (1.1,0) -- (136:0.33);
+    \node[carrier muted] at (136:0.48) {$z'_2$};
+    \draw[carrier arrow] (-0.55,0) -- (0.55,0);
+    \node[anchor=south] at (0,0.12) {$R(\Phi)$};
+    \node[anchor=north, font=\footnotesize] at (0,-1.35) {$A_4$: $SU(2)$ на $\mathbb{C}^2$};
+  \end{scope}
+\end{tikzpicture}

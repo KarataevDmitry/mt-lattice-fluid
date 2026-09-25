@@ -1,0 +1,13 @@
+\begin{tikzpicture}[carrier panel, iso view, scale=1.05]
+  \def\r{0.36}
+  \IsoSphereInk{0}{0}{0}{\r}
+  \foreach \x/\y/\z in {
+    1,1,0/1,-1,0/-1,1,0/-1,-1,0,
+    1,0,1/1,0,-1/-1,0,1/-1,0,-1,
+    0,1,1/0,1,-1/0,-1,1/0,-1,-1
+  } {
+    \IsoSphereMuted{\x}{\y}{\z}{\r}
+  }
+  \draw[carrier arrow, carrier muted] (0,0,0) -- (1,0,0);
+  \node[carrier muted, font=\scriptsize, anchor=west] at (0.55,-0.15) {$\hl$};
+\end{tikzpicture}

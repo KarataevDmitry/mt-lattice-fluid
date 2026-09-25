@@ -1,0 +1,11 @@
+\begin{tikzpicture}[carrier panel, iso view, scale=0.95]
+  \def\r{0.36}
+  \IsoSphereInk{0}{0}{0}{\r}
+  \foreach \s in {-1,1} {
+    \IsoSphereMuted{\s}{\s}{\s}{\r}
+    \IsoSphereMuted{\s}{\s}{-\s}{\r}
+    \IsoSphereMuted{\s}{-\s}{\s}{\r}
+    \IsoSphereMuted{-\s}{\s}{\s}{\r}
+  }
+  \node[anchor=north, font=\footnotesize] at (0,-1.2) {BCC, $|N|=8$};
+\end{tikzpicture}

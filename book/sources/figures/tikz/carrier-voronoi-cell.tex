@@ -1,0 +1,13 @@
+\begin{tikzpicture}[carrier panel, iso view, scale=1.0]
+  % schematic rhombic dodecahedron neighborhood
+  \node[carrier site] at (0,0,0) {};
+  \fill[carrier hifill, opacity=0.55]
+    (1,0,0) -- (0,1,0) -- (-1,0,0) -- (0,-1,0) -- cycle;
+  \draw[carrier object]
+    (1,0,0) -- (0,1,0) -- (-1,0,0) -- (0,-1,0) -- cycle;
+  \foreach \x/\y/\z in {1,1,0/1,-1,0/-1,1,0/-1,-1,0/1,0,1/1,0,-1/-1,0,1/-1,0,-1/0,1,1/0,1,-1/0,-1,1/0,-1,-1} {
+    \draw[carrier muted, line width=0.4pt] (0,0,0) -- (\x*0.55,\y*0.55,\z*0.55);
+    \fill[carrier fill, opacity=0.35] (\x*0.55,\y*0.55,\z*0.55) circle (1.5pt);
+  }
+  \draw[carrier object] (0.55,0.55,0) -- (0.55,0,0.55) -- (0,0.55,0.55) -- cycle;
+\end{tikzpicture}

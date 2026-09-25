@@ -1,0 +1,28 @@
+\begin{tikzpicture}[carrier panel, x=1.05cm, y=0.92cm]
+  \foreach \r in {0,...,3} {
+    \foreach \c in {0,...,4} {
+      \ifnum\r=1
+        \ifnum\c=2
+          \node[carrier site, minimum size=5pt] at (\c,\r) {};
+        \else
+          \node[carrier site, minimum size=3pt] at (\c,\r) {};
+        \fi
+      \else
+        \node[carrier site, minimum size=3pt] at (\c,\r) {};
+      \fi
+    }
+  }
+  \foreach \r in {0,...,3} \foreach \c in {0,...,3} {
+    \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c+1,\r);
+    \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c,\r+1);
+  }
+  \CarrierDimH{2}{3}{1}{$\hl$}
+  \node[anchor=west, inner sep=2pt] at (2.06,1.04) {$x\in\Lambda$};
+  \draw[carrier object] (3.05,-0.42) -- (4.05,-0.42);
+  \draw[carrier line] (3.05,-0.47) -- (3.05,-0.37) (4.05,-0.47) -- (4.05,-0.37);
+  \node at (3.05,-0.58) {\scriptsize $t$};
+  \node at (4.05,-0.58) {\scriptsize $t{+}1$};
+  \CarrierDimH{3.05}{4.05}{-0.42}{$\htick$}
+  \node[anchor=west, font=\footnotesize] at (0.05,3.35) {$\Lambda$ --- счётное множество узлов};
+  \node at (1.55,-0.05) {\footnotesize $c_0=\hl/\htick$};
+\end{tikzpicture}

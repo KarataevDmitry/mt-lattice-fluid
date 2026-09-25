@@ -1,0 +1,11 @@
+\begin{tikzpicture}[carrier panel, x=0.95cm, y=2.2cm]
+  \draw[carrier object, domain=0:10, samples=80] plot (\x, {1});
+  \draw[carrier muted, dashed, domain=0:10, samples=80]
+    plot (\x, {0.8*exp(-0.25*\x) + 0.05*sin(deg(2.5*\x)) + 0.08});
+  \node[anchor=west, font=\scriptsize] at (0.2,1.05) {$N(t)$ на $\mathcal{M}$};
+  \node[anchor=west, carrier muted, font=\scriptsize] at (6.5,0.35) {$\mathrm{Var}(\Phi)$ на $\mathcal{T}$};
+  \node[carrier muted, font=\scriptsize, rotate=90] at (-0.55,0.55) {нормированная величина};
+  \node[carrier muted, font=\scriptsize] at (5,-0.25) {время $t$};
+  \node[anchor=north, font=\footnotesize] at (5,-0.55)
+    {$g^{-1}$ существует; $\mathcal{B}$ необратима};
+\end{tikzpicture}

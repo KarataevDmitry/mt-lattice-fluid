@@ -1,0 +1,14 @@
+\begin{tikzpicture}[carrier panel, scale=1.45]
+  \node[carrier site] at (0,0) {};
+  \draw[carrier object] (0,0) circle (1);
+  \draw[carrier muted] (0,0) circle ({1/sqrt(2)});
+  \draw[carrier muted, dashed] (0,0) circle (0.5);
+  \draw[carrier arrow] (0,0) -- (1,0);
+  \node[anchor=south, inner sep=1pt] at (0.5,-0.06) {$R_{\mathrm{out}}=a$};
+  \draw[carrier arrow, carrier muted] (0,0) -- ({0.5/sqrt(2)},{0.5/sqrt(2)});
+  \node[carrier muted, font=\scriptsize, anchor=west] at (0.42,0.38) {$R_{\mathrm{in}}^{\mathrm{hull}}$};
+  \draw[carrier arrow, carrier muted, dashed] (0,0) -- (0.5,0);
+  \node[carrier muted, font=\scriptsize, anchor=north] at (0.5,0.08) {$R_{\mathrm{in}}^{\mathrm{Voronoi}}$};
+  \node[anchor=north, font=\footnotesize] at (0,-1.25)
+    {$\kappa_{\mathrm{FCC}}=1/\sqrt{2}$};
+\end{tikzpicture}

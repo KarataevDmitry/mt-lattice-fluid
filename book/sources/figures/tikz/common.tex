@@ -5,18 +5,104 @@
   carrier arrow/.style={-{Stealth[length=1.9mm,width=1.25mm]}, carrier line},
   carrier muted/.style={color=gray!62},
   carrier fill/.style={fill=gray!10},
+  carrier hifill/.style={fill=gray!22},
   carrier panel/.style={font=\small},
+  iso view/.style={
+    x={(0.82cm,-0.47cm)},
+    y={(0cm,0.94cm)},
+    z={(0.82cm,0.47cm)},
+  },
+  carrier site/.style={circle, inner sep=1.2pt, fill=black},
 }
 
-% Flat-top hexagon, circumradius #1, center #2 = (x,y) or coordinate
+% Flat-top hexagon, circumradius #1, center #2
 \newcommand{\CarrierHex}[2]{%
   \begin{scope}[shift={#2}]
     \draw[carrier object] (0:#1) \foreach \a in {60,120,...,300} { -- (\a:#1) } -- cycle;
   \end{scope}
 }
 
-% Hex grid: center cell + 6 neighbors, circumradius r, center-to-center d
 \newcommand{\CarrierHexRing}[2]{%
   \CarrierHex{#1}{(0,0)}%
   \foreach \a in {0,60,...,300} { \CarrierHex{#1}{(\a:#2)} }%
+}
+
+% Highlighted hex cell at origin + neighbors at distance d
+\newcommand{\CarrierHexNeighborhood}[2]{%
+  \foreach \a in {0,60,...,300} {%
+    \CarrierHex{#1}{(\a:#2)}%
+    \begin{scope}[shift={(\a:#2)}]
+      \fill[carrier hifill] (0:#1) \foreach \b in {60,120,...,300} { -- (\b:#1) } -- cycle;
+    \end{scope}
+  }%
+  \CarrierHex{#1}{(0,0)}%
+  \fill[carrier hifill] (0:#1) \foreach \a in {60,120,...,300} { -- (\a:#1) } -- cycle;
+}
+
+% Horizontal dimension between x1 and x2 at height y
+\newcommand{\CarrierDimH}[4]{%
+  \draw[carrier line, carrier muted] (#1,#3-0.08) -- (#1,#3+0.08)
+    (#2,#3-0.08) -- (#2,#3+0.08)
+    (#1,#3) -- (#2,#3);
+  \node[carrier muted, inner sep=1pt] at ({(#1+#2)/2},#3-0.14) {#4};
+}
+
+\newcommand{\CarrierDimV}[4]{%
+  \draw[carrier line, carrier muted] (#3-0.08,#1) -- (#3+0.08,#1)
+    (#3-0.08,#2) -- (#3+0.08,#2)
+    (#3,#1) -- (#3,#2);
+  \node[carrier muted, inner sep=1pt] at (#3+0.16,{(#1+#2)/2}) {#4};
+}
+
+% Isometric sphere at (x,y,z) with radius r in iso coords
+\newcommand{\CarrierIsoSphere}[4]{%
+  \begin{scope}[iso view, shift={(#1,#2,#3)}]
+    \draw[carrier object, fill=gray!#4] (0,0) circle (#3);
+  \end{scope}
+}
+
+% Better: draw sphere as ellipse in iso projection
+\newcommand{\IsoSphere}[4]{%
+  \begin{scope}[iso view, shift={(#1,#2,#3)}]
+    \fill[gray!#4] (0,0) ellipse ({0.95*#3} and {#3});
+    \draw[carrier object] (0,0) ellipse ({0.95*#3} and {#3});
+  \end{scope}
+}
+
+\newcommand{\IsoSphereInk}[4]{%
+  \begin{scope}[iso view, shift={(#1,#2,#3)}]
+    \fill[gray!18] (0,0) ellipse ({0.95*#4} and {#4});
+    \draw[carrier object] (0,0) ellipse ({0.95*#4} and {#4});
+  \end{scope}
+}
+
+\newcommand{\IsoSphereMuted}[4]{%
+  \begin{scope}[iso view, shift={(#1,#2,#3)}]
+    \fill[gray!32] (0,0) ellipse ({0.95*#4} and {#4});
+    \draw[carrier muted] (0,0) ellipse ({0.95*#4} and {#4});
+  \end{scope}
+}
+
+\newcommand{\IsoSphereLight}[4]{%
+  \begin{scope}[iso view, shift={(#1,#2,#3)}]
+    \fill[gray!8] (0,0) ellipse ({0.95*#4} and {#4});
+    \draw[carrier muted, line width=0.4pt] (0,0) ellipse ({0.95*#4} and {#4});
+  \end{scope}
+}
+
+% 2D light-cone wedge (future only): slope c0 = x/t
+\newcommand{\CarrierLightCone}[2]{%
+  \fill[carrier fill, opacity=0.7] (0,0) -- (#2,#1) -- (-#2,#1) -- cycle;
+  \draw[carrier muted] (-#2,#1) -- (0,0) -- (#2,#1);
+}
+
+% Square tiling patch; #3 = TikZ style list (e.g. carrier fill)
+\newcommand{\CarrierSquareCell}[3]{%
+  \draw[carrier object, #3] (#1,#2) rectangle ++(1,1);
+}
+
+% Equilateral triangle (upright), side 1, lower-left at (#1,#2)
+\newcommand{\CarrierTriUp}[3]{%
+  \draw[carrier object, #3]
+    (#1,#2) -- ++(1,0) -- ++(-0.5,{sqrt(3)/2}) -- cycle;
 }
