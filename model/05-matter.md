@@ -226,7 +226,25 @@ $$
 | синглет: $\hat{\epsilon}_1\perp\hat{\epsilon}_2$; триплет → $3\gamma$ | выведено схема SU(2)+C |
 | $\sigma_0$, $\Gamma$, $\tau$, $\mathrm{BR}$, boost-детали | T-статистика / калибровка (§8.2) |
 
-**Открыто (не закон M):** $\Gamma,\tau,\mathrm{BR}$, абсолютное $\sigma_0$; fine structure $d\sigma/d\Omega$ при поляризованных пучках / $S=1$ подканалы — T-readout (§8.2).
+#### T-статистика (readout, не закон $g$)
+
+**Смысл (§2.1):** на M каждый тик вычислим; «случайность» и $N(t)=N_0 e^{-t/\tau}$ — **грубый прибор + ансамбль**.
+
+| T-величина | на M | T-readout / PDG |
+|------------|------|------------------|
+| $\Gamma=\hbar/\tau$ | нет float-Γ | статистика многих одинаковых систем |
+| $\tau$ para-Ps | $n_{\mathrm{ticks}}\cdot hT$ только после **sim-open** bound state | PDG $\tau\approx 125\,$ps |
+| $d\sigma/d\Omega$ | ось столкновения фиксирует dipole | $\langle d\sigma/d\Omega\rangle=\sigma_0/(4\pi)$ при random $\hat{\mathbf{n}}$ |
+| $\mathrm{BR}(2\gamma)$ vs $3\gamma$ | SU(2)+C (§выше) | ortho-Ps → $3\gamma$ |
+
+**Probe (dogfood):** `mt_ca/annihilation_t_stats.py` · verify **`Annihilation_T_stats`**.
+
+- Путь: head-on dual Gaussian (T2-аналог двух macro-фронтов); **vortex $e^+e^-$ на torus** с глобальным winding — **sim-open**.
+- **$\tau_M$:** `tick_focus · hT` (порядка $10^{-42}\,$s при $hT=t_P/\sqrt{2}$) $\ll \tau_{\mathrm{para\text{-}Ps}}$ — нужен мост **bound state** (Compton/$a_0$ ladder), не новый knob в $g$.
+- **Back-to-back (одно событие):** `elongation_delta>1`, `peaks_on_delta≥2` на coarse $\Delta\Phi$ — dipole, не сфера.
+- **$\langle d\sigma/d\Omega\rangle$:** равномерный ансамбль вращений оси; точное совпадение измеренной оси с вложенной на hex — **open** (интерференция/fringes).
+
+**Открыто (не закон M):** $\Gamma,\tau,\mathrm{BR}$, абсолютное $\sigma_0$; fine structure $d\sigma/d\Omega$ при поляризованных пучках; vortex-pair live sim; readout-axis на FCC/hex.
 
 **Baryon asymmetry (§9.2 Phase IV→I):** не «50/50 случайность». M **детерминирован** (§2.1): первый A5-сдвиг «лёда» задаёт **хиральность** пузыря — **доминирует `n=+1`**. Антиматерия **локально** рождается (коллайдер, U-вихрь), но живёт в **«правой воде»** — быстро встречает **`n=+1`** фон → annihilation. **«Левые круги на правой воде»** — не мистика, а **геометрия стартового зародыша** (§9.7: какой класс «наш»).
 **Объём ячейки:**
