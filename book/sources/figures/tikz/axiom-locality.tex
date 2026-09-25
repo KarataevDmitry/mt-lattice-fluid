@@ -1,5 +1,5 @@
-\begin{tikzpicture}[carrier panel, scale=1.0]
-  \begin{scope}[shift={(-2.4,0)}]
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm]
     \CarrierHexRing{0.38}{0.65}
     \node[carrier site] at (0,0) {};
     \node[anchor=west, inner sep=2pt] at (0.06,0) {$x$};
@@ -8,7 +8,7 @@
     \node[carrier muted, font=\scriptsize, anchor=south] at (0.52,-0.1) {$\hl$};
     \node[anchor=north, font=\footnotesize] at (0,-1.55) {$A_1$: $c_0\htick=\hl$};
   \end{scope}
-  \begin{scope}[shift={(1.5,0)}, x=0.8cm, y=0.8cm]
+  \begin{scope}[xshift=5.5cm, x=0.75cm, y=0.75cm]
     \node[draw, carrier object, carrier fill, circle, minimum size=0.65cm, font=\scriptsize] (z1) at (0,0) {$z_1$};
     \node[draw, carrier object, carrier fill, circle, minimum size=0.65cm, font=\scriptsize] (z2) at (0,2) {$z_2$};
     \node[draw, carrier object, carrier fill, circle, minimum size=0.65cm, font=\scriptsize] (z3) at (1,1) {$z_3$};

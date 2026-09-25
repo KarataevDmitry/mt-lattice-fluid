@@ -1,7 +1,7 @@
-\begin{tikzpicture}[carrier panel, scale=0.95]
-  \begin{scope}[shift={(-3.2,0)}]
-    \foreach \i in {-2,...,2} {
-      \foreach \j in {-2,...,2} {
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm]
+    \foreach \i in {-1,...,1} {
+      \foreach \j in {-1,...,1} {
         \pgfmathsetmacro{\x}{\i*0.55 + mod(\j,2)*0.275}
         \pgfmathsetmacro{\y}{\j*0.48}
         \draw[carrier object, carrier fill]
@@ -9,24 +9,28 @@
       }
     }
     \draw[carrier object, carrier hifill] (0,0) -- (1,0) -- (0.5,0.866) -- cycle;
-    \node[anchor=north, font=\footnotesize] at (0.5,-0.35) {треугольники};
+    \node[anchor=north, font=\footnotesize] at (0.5,-0.55) {треугольники};
   \end{scope}
-  \begin{scope}[shift={(0,0)}]
-    \foreach \i in {-2,...,2} \foreach \j in {-2,...,2} {
-      \draw[carrier object, carrier fill] (\i,\j) rectangle ++(1,1);
+  \begin{scope}[xshift=4.4cm]
+    \foreach \i in {0,...,2} {
+      \foreach \j in {0,...,2} {
+        \draw[carrier object, carrier fill] (\i,\j) rectangle ++(1,1);
+      }
     }
-    \draw[carrier object, carrier hifill] (0,0) rectangle (1,1);
-    \CarrierDimH{0}{1}{-0.35}{$a$}
-    \node[anchor=north, font=\footnotesize] at (0.5,-0.55) {квадраты};
+    \draw[carrier object, carrier hifill] (1,1) rectangle ++(1,1);
+    \CarrierDimH{1}{2}{-0.35}{$a$}
+    \node[anchor=north, font=\footnotesize] at (1.5,-0.55) {квадраты};
   \end{scope}
-  \begin{scope}[shift={(3.2,0)}]
-    \foreach \r in {-2,...,2} \foreach \c in {-2,...,2} {
-      \pgfmathsetmacro{\cx}{\c*0.75 + mod(\r,2)*0.375}
-      \pgfmathsetmacro{\cy}{\r*0.65}
-      \CarrierHex{0.35}{(\cx,\cy)}
+  \begin{scope}[xshift=8.8cm]
+    \foreach \r in {-1,...,1} {
+      \foreach \c in {-1,...,1} {
+        \pgfmathsetmacro{\cx}{\c*0.75 + mod(\r,2)*0.375}
+        \pgfmathsetmacro{\cy}{\r*0.65}
+        \CarrierHex{0.32}{(\cx,\cy)}
+      }
     }
     \draw[carrier object, carrier hifill]
-      (30:0.35) \foreach \a in {90,150,...,330} { -- (\a:0.35) } -- cycle;
-    \node[anchor=north, font=\footnotesize] at (0,-1.15) {шестиугольники};
+      (30:0.32) \foreach \a in {90,150,...,330} { -- (\a:0.32) } -- cycle;
+    \node[anchor=north, font=\footnotesize] at (0,-1.05) {шестиугольники};
   \end{scope}
 \end{tikzpicture}

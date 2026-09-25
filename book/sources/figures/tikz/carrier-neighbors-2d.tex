@@ -1,29 +1,33 @@
-\begin{tikzpicture}[carrier panel, scale=0.92]
-  \begin{scope}[shift={(-3.1,0)}]
-    \foreach \i in {-1,...,1} \foreach \j in {-1,...,1} {
-      \pgfmathsetmacro{\x}{\i*0.55 + mod(\j,2)*0.275}
-      \pgfmathsetmacro{\y}{\j*0.48}
-      \draw[carrier object, carrier fill]
-        (\x,\y) -- ++(1,0) -- ++(-0.5,0.866) -- cycle;
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm]
+    \foreach \i in {-1,...,1} {
+      \foreach \j in {-1,...,1} {
+        \pgfmathsetmacro{\x}{\i*0.55 + mod(\j,2)*0.275}
+        \pgfmathsetmacro{\y}{\j*0.48}
+        \draw[carrier object, carrier fill]
+          (\x,\y) -- ++(1,0) -- ++(-0.5,0.866) -- cycle;
+      }
     }
     \fill[carrier hifill] (0.5,0.29) circle (2pt);
     \node[carrier site] at (0.5,0.29) {};
     \node[anchor=north, font=\footnotesize] at (0.5,-0.55) {$|N|=3$};
   \end{scope}
-  \begin{scope}
-    \foreach \i in {-1,...,1} \foreach \j in {-1,...,1} {
-      \draw[carrier object, carrier fill] (\i,\j) rectangle ++(1,1);
+  \begin{scope}[xshift=4.5cm]
+    \foreach \i in {0,...,2} {
+      \foreach \j in {0,...,2} {
+        \draw[carrier object, carrier fill] (\i,\j) rectangle ++(1,1);
+      }
     }
-    \foreach \i/\j in {0/0,1/0,-1/0,0/1,0/-1} {
+    \foreach \i/\j in {1/1,2/1,0/1,1/2,1/0} {
       \draw[carrier object, carrier hifill] (\i,\j) rectangle ++(1,1);
     }
-    \node[carrier site] at (0.5,0.5) {};
-    \draw[carrier muted, dashed] (0.5,0.5) -- (1.21,1.21);
-    \node[carrier muted, font=\scriptsize] at (1.05,0.95) {$\hl\sqrt{2}$};
-    \node[anchor=north, font=\footnotesize] at (0.5,-0.55) {$|N|=4$};
+    \node[carrier site] at (1.5,1.5) {};
+    \draw[carrier muted, dashed] (1.5,1.5) -- (2.71,2.71);
+    \node[carrier muted, font=\scriptsize] at (2.35,2.45) {$\hl\sqrt{2}$};
+    \node[anchor=north, font=\footnotesize] at (1.5,-0.55) {$|N|=4$};
   \end{scope}
-  \begin{scope}[shift={(3.1,0)}]
-    \CarrierHexNeighborhood{0.38}{0.65}
+  \begin{scope}[xshift=9cm]
+    \CarrierHexNeighborhood{0.36}{0.62}
     \node[carrier site] at (0,0) {};
     \node[anchor=north, font=\footnotesize] at (0,-1.05) {$|N|=6$};
   \end{scope}

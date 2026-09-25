@@ -1,19 +1,16 @@
-\begin{tikzpicture}[carrier panel, x=1.15cm, y=1.15cm]
-  % (2+1) hex slice
-  \begin{scope}
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm]
     \CarrierHexRing{0.38}{0.65}
     \filldraw[carrier object] (0,0) circle (2pt);
     \node[anchor=north, font=\footnotesize, align=center] at (0,-1.35)
       {$(2{+}1)$: $\kappa_{\mathrm{hex}}=\sqrt{3}/2$, $|N|=6$};
   \end{scope}
-
-  % bridge
-  \node[font=\Large] at (2.15,0) {$\Longleftrightarrow$};
-  \node[align=center, font=\scriptsize, carrier muted] at (2.15,-0.55)
-    {один $c$\\разные $\kappa$, $|N|$};
-
-  % (3+1) schematic: FCC ball + slice plane
-  \begin{scope}[shift={(3.6,0)}]
+  \begin{scope}[xshift=4.8cm]
+    \node[font=\Large] at (0,0) {$\Longleftrightarrow$};
+    \node[align=center, font=\scriptsize, carrier muted] at (0,-0.55)
+      {один $c$\\разные $\kappa$, $|N|$};
+  \end{scope}
+  \begin{scope}[xshift=7.5cm]
     \draw[carrier object] (0,0) circle (0.95);
     \foreach \a in {0,72,...,288} {
       \filldraw[carrier object, carrier fill] ({0.95*cos(\a)},{0.95*sin(\a)}) circle (2pt);

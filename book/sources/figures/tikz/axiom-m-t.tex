@@ -1,5 +1,5 @@
-\begin{tikzpicture}[carrier panel, x=0.32cm, y=0.32cm]
-  \begin{scope}
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm, x=0.32cm, y=0.32cm]
     \foreach \r in {0,...,15} {
       \foreach \c in {0,...,15} {
         \pgfmathsetmacro{\v}{cos(12*\r + 7*\c)}
@@ -9,7 +9,7 @@
     }
     \node[anchor=north, font=\footnotesize] at (8,-1) {$\mathcal{M}$: детерминированный $z(x,t)$};
   \end{scope}
-  \begin{scope}[shift={(6.2,0)}]
+  \begin{scope}[xshift=6.5cm, x=0.32cm, y=0.32cm]
     \foreach \r in {0,...,15} {
       \foreach \c in {0,...,15} {
         \pgfmathsetmacro{\v}{0.6*cos(12*\r + 7*\c) + 0.25*cos(3*\r) + 0.2*cos(3*\c)}

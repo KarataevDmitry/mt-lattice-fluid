@@ -1,12 +1,7 @@
-\begin{tikzpicture}[carrier panel, x=2.1cm, y=2.1cm]
-  \def\tlim{1.25}
-  \def\xlim{1.35}
-  \def\czero{1.08}   % c0 in plot units (x per t)
-  \def\kappa{0.7071}
-  \pgfmathsetmacro{\cmacro}{\czero*\kappa}
-
-  % --- left: discrete hops ---
-  \begin{scope}
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm, x=2.1cm, y=2.1cm]
+    \def\tlim{1.25}
+    \def\xlim{1.35}
     \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
     \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
     \draw[carrier object] (0,0) -- (\xlim,0) node[midway, below, inner sep=1pt] {$\hl$};
@@ -16,9 +11,12 @@
     }
     \node[anchor=north, font=\footnotesize] at (0.55,-0.18) {микро: шаг по решётке};
   \end{scope}
-
-  % --- right: macro slopes ---
-  \begin{scope}[shift={(2.55,0)}]
+  \begin{scope}[xshift=5.5cm, x=2.1cm, y=2.1cm]
+    \def\tlim{1.25}
+    \def\xlim{1.35}
+    \def\czero{1.08}
+    \def\kappa{0.7071}
+    \pgfmathsetmacro{\cmacro}{\czero*\kappa}
     \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
     \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
     \draw[carrier muted, dashed, line width=0.7pt] (0,0) -- (\xlim,\xlim/\czero);

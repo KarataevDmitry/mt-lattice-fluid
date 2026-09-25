@@ -1,6 +1,5 @@
-\begin{tikzpicture}[carrier panel, scale=1.0]
-  \begin{scope}[iso view, shift={(-1.8,0,0)}, scale=1.1]
-    % cuboctahedron wireframe (schematic)
+\begin{tikzpicture}[carrier panel]
+  \begin{scope}[xshift=0cm, iso view, scale=1.1]
     \foreach \x/\y/\z in {1,1,0/1,-1,0/-1,1,0/-1,-1,0/1,0,1/1,0,-1/-1,0,1/-1,0,-1/0,1,1/0,1,-1/0,-1,1/0,-1,-1} {
       \fill[carrier fill] (\x,\y,\z) circle (1.8pt);
     }
@@ -10,7 +9,7 @@
     \fill[carrier hifill, opacity=0.5] (1,1,0)--(1,0,1)--(0,1,1)--cycle;
     \node[anchor=north, font=\footnotesize] at (0,-1.35) {кубооктаэдр};
   \end{scope}
-  \begin{scope}[shift={(1.6,0)}]
+  \begin{scope}[xshift=5.5cm]
     \draw[carrier muted] (-0.05,0) -- (1.3,0);
     \node[carrier site] at (0,0) {};
     \draw[carrier object] (0.72,0) -- (0.72,-0.38) -- (0.72,0.38);

@@ -1,10 +1,10 @@
-\begin{tikzpicture}[carrier panel, x=0.72cm, y=0.64cm]
+\begin{tikzpicture}[carrier panel]
   \newcommand{\snapcell}[3]{%
     \fill[gray!#3] (#1,#2) circle (0.17);
     \draw[carrier object] (#1,#2) circle (0.17);
     \node[carrier site, minimum size=2pt] at (#1,#2) {};
   }
-  \begin{scope}
+  \begin{scope}[xshift=0cm, x=0.72cm, y=0.64cm]
     \foreach \r in {0,...,3} \foreach \c in {0,...,3} {
       \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c+1,\r);
       \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c,\r+1);
@@ -21,13 +21,13 @@
     \node[anchor=north, font=\footnotesize] at (1.5,-0.85) {$\Psi^t$};
     \node[anchor=west] at (1.08,2.08) {$x$};
   \end{scope}
-  \begin{scope}[shift={(5.2,0)}]
-    \node[draw, carrier object, carrier fill, minimum size=0.9cm] at (0,1.5) {$g$};
-    \draw[carrier arrow] (-0.9,1.5) -- (-0.45,1.5);
-    \draw[carrier arrow] (0.45,1.5) -- (0.9,1.5);
-    \node[carrier muted, font=\scriptsize] at (0,0.85) {параллельно};
+  \begin{scope}[xshift=3.6cm, y=1.5cm]
+    \node[draw, carrier object, carrier fill, minimum size=0.9cm] at (0,0) {$g$};
+    \draw[carrier arrow] (-1.1,0) -- (-0.5,0);
+    \draw[carrier arrow] (0.5,0) -- (1.1,0);
+    \node[carrier muted, font=\scriptsize] at (0,-0.65) {параллельно};
   \end{scope}
-  \begin{scope}[shift={(7.4,0)}]
+  \begin{scope}[xshift=5.2cm, x=0.72cm, y=0.64cm]
     \foreach \r in {0,...,3} \foreach \c in {0,...,3} {
       \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c+1,\r);
       \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c,\r+1);
