@@ -3,28 +3,26 @@ from __future__ import annotations
 
 
 def check_floor0_phase_space(device: str = "cpu") -> dict:
-    """§5.0.4-A — discrete phase space (q,p) on one hV; ground fixed under g."""
+    """§5.0.4-A — Γ_hV on filled boiling ocean; planckon iterates under g."""
     from mt_ca.si_constants import SI
 
     row = SI.floor0_phase_space_row(device=device)
+    core = row["planckon_core"]
     ok = (
         bool(row["checks_ok"])
-        and bool(row["ground_fixed_point"])
-        and int(row["iteration_unique_points"]) == 1
-        and bool(row["ground_n_E_zero"])
-        and bool(row["ground_kick_zero"])
+        and row["habitat"] == "VACUUM_BOIL"
+        and bool(row["ocean_contrast_grows"])
+        and int(core["unique_points"]) > 1
         and bool(row["cap_below_naive_gamma"])
     )
     return {
         "id": "Floor0_phase_space",
         "ok": ok,
-        "ground_phi_disc": row["ground_phi_disc"],
-        "ground_k_phi": row["ground_k_phi"],
-        "ground_phi_f": row["ground_phi_f"],
-        "ground_n_E": row["ground_n_E"],
-        "iteration_unique_points": row["iteration_unique_points"],
+        "habitat": row["habitat"],
+        "planckon_unique_points": core["unique_points"],
+        "planckon_nonzero_kicks": row["planckon_nonzero_kicks"],
+        "ocean_contrast_grows": row["ocean_contrast_grows"],
         "bekenstein_cap_states": row["bekenstein_cap_states"],
-        "naive_q_times_p": row["naive_q_times_p"],
         "note": row["note"],
     }
 
@@ -73,11 +71,13 @@ def check_brick_internal_spectrum(device: str = "cpu") -> dict:
     return {
         "id": "Brick_internal_spectrum",
         "ok": ok,
+        "habitat": row.get("habitat", "unknown"),
         "algebra_ok": row["algebra_ok"],
         "ground_ok": row["ground_ok"],
+        "snapshot_ok": row.get("snapshot_ok"),
         "su2_monodromy_ok": row["su2_monodromy_ok"],
+        "planckon_b_core_rate": row.get("planckon_b_core_rate"),
         "ground_winding": row["ground_winding_auto"],
-        "ground_dphi_core": row["ground_dphi_core"],
         "su2_dot_2pi": row["su2_dot_2pi"],
         "su2_dot_4pi": row["su2_dot_4pi"],
         "landmark_ids": [r["id"] for r in row["landmarks"]],

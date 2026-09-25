@@ -66,21 +66,17 @@ def main() -> None:
 
     if args.phase_space:
         row = SI.floor0_phase_space_row()
+        print(f"habitat: {row['habitat']}")
         for key in (
-            "ground_phi_disc",
-            "ground_k_phi",
-            "ground_phi_f",
-            "ground_n_E",
-            "ground_Phi_kick",
-            "ground_pi_p0_x",
-            "ground_pi_p0_y",
-            "ground_bloch",
-            "iteration_unique_points",
-            "ground_fixed_point",
+            "ocean_contrast_grows",
+            "planckon_iteration_unique",
+            "planckon_nonzero_kicks",
             "bekenstein_cap_states",
             "naive_q_times_p",
         ):
             print(f"{key}: {row[key]}")
+        print("planckon_core:", row["planckon_core"])
+        print("bath_brick:", row["bath_brick"])
         return
 
     row = SI.internal_state_catalog_row()

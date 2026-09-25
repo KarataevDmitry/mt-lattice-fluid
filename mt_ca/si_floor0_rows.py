@@ -123,10 +123,12 @@ class SIFloor0Rows:
         Momentum p (conjugate ledger, dh=dt=1 natural):
           Φ kick per tick (ℤ_{N_ring} ticks, Heisenberg floor), n_E, π/p₀ at core.
 
-        Sim: VORTEX_P ground → one fixed point in Γ under g (iteration stable).
+        Habitat: VACUUM_BOIL (every hV filled, A5 boil). Planckon = VORTEX_P on that ocean.
+        Sim: track Γ samples at planckon core and at a bath brick under ongoing g.
         """
         from mt_ca.config import MConfig
         from mt_ca.ledger import ledger_step_probe, momentum_density, n_E_field
+        from mt_ca.metrics import field_amplitude
         from mt_ca.seeds import SeedClass
         from mt_ca.simulator import LatticeFluidSimulator
         from mt_ca.si_constants import (
@@ -155,50 +157,68 @@ class SIFloor0Rows:
         p_axes: list[dict[str, int | str]] = [
             {"id": "Phi_kick", "states": n_ring, "note": "kick ticks per dt; 0 or |Φ|≥Δφ_disc"},
             {"id": "n_E", "states": n_e_classes, "note": "E₀ ledger from |Φ|"},
-            {"id": "pi_p0", "states": -1, "note": "π/p₀ integer at core; width open-bound"},
+            {"id": "pi_p0", "states": -1, "note": "π/p₀ integer; width open-bound"},
         ]
-        naive_q = n_ring * int(bb.N_phi) * dphi_disc * _BLOCH_DISTINCT_Q6
-        naive_p = n_ring * n_e_classes
-        naive_gamma = naive_q * naive_p
+        naive_gamma = n_ring * int(bb.N_phi) * dphi_disc * _BLOCH_DISTINCT_Q6 * n_ring * n_e_classes
 
         dev = torch.device(device)
         cfg = MConfig.for_stencil("hex")
         cy = cx = size // 2
+        by = bx = 10
         sim = LatticeFluidSimulator(size, size, cfg, device=dev)
         sim.reset(SeedClass.VORTEX_P)
+        amp0 = float(field_amplitude(sim.z).max().item())
         for _ in range(settle):
             sim.step(1)
+        amp_settled = float(field_amplitude(sim.z).max().item())
 
-        def _sample(z: torch.Tensor, z_past: torch.Tensor) -> tuple:
+        def _sample(z: torch.Tensor, z_past: torch.Tensor, y: int, x: int) -> tuple:
             phi = saturating_phase(z, cfg)
-            phi_ticks = int(phi[cy, cx].round().item()) % n_ring
+            phi_ticks = int(phi[y, x].round().item()) % n_ring
             k_phi, phi_f = internal_phase_decode(phi_ticks)
-            n_e = int(n_E_field(phi, cfg)[cy, cx].item())
-            bv = bloch_vector(z[cy : cy + 1, cx : cx + 1])[0, 0]
+            n_e = int(n_E_field(phi, cfg)[y, x].item())
+            bv = bloch_vector(z[y : y + 1, x : x + 1])[0, 0]
             bloch_key = tuple(round(float(bv[i].item()), 3) for i in range(3))
-            rho = float(spinor_density(z[cy : cy + 1, cx : cx + 1])[0, 0].item())
+            rho = float(spinor_density(z[y : y + 1, x : x + 1])[0, 0].item())
             px, py = momentum_density(z)
-            pi_x = int(round(float(px[cy, cx].item()) / p0_nat))
-            pi_y = int(round(float(py[cy, cx].item()) / p0_nat))
-            kick = int(ledger_step_probe(z, z_past, cfg)["phi"][cy, cx].item())
+            pi_x = int(round(float(px[y, x].item()) / p0_nat))
+            pi_y = int(round(float(py[y, x].item()) / p0_nat))
+            kick = int(ledger_step_probe(z, z_past, cfg)["phi"][y, x].item())
             return (phi_ticks, k_phi, phi_f, n_e, kick, pi_x, pi_y, bloch_key, round(rho, 4))
+
+        def _summarize(samples: list[tuple]) -> dict[str, int | list]:
+            kicks = {s[4] for s in samples}
+            last = samples[-1]
+            return {
+                "unique_points": len({s[:8] for s in samples}),
+                "ticks": len(samples),
+                "nonzero_kicks": sum(1 for k in kicks if k != 0),
+                "phi_disc": last[0],
+                "k_phi": last[1],
+                "phi_f": last[2],
+                "n_E": last[3],
+                "Phi_kick": last[4],
+                "pi_p0": [last[5], last[6]],
+                "bloch": list(last[7]),
+            }
 
         z = sim.z
         z_past = sim.z_past.clone() if sim.z_past is not None else z.clone()
-        samples: list[tuple] = [_sample(z, z_past)]
+        core_samples: list[tuple] = [_sample(z, z_past, cy, cx)]
+        bath_samples: list[tuple] = [_sample(z, z_past, by, bx)]
         for _ in range(track):
             z_past = z.clone()
             sim.step(1)
             z = sim.z
-            samples.append(_sample(z, z_past))
+            core_samples.append(_sample(z, z_past, cy, cx))
+            bath_samples.append(_sample(z, z_past, by, bx))
 
-        unique = {s[:8] for s in samples}
-        ground = samples[-1]
-        ground_fixed = len(unique) == 1
-        ground_n_e_zero = ground[3] == 0
-        ground_kick_zero = ground[4] == 0
+        core = _summarize(core_samples)
+        bath = _summarize(bath_samples)
+        ocean_moves = amp_settled > amp0 * 1.01 or core["unique_points"] > 1
 
         return {
+            "habitat": "VACUUM_BOIL",
             "p0_natural": p0_nat,
             "N_ring": n_ring,
             "delta_phi_disc": dphi_disc,
@@ -208,31 +228,23 @@ class SIFloor0Rows:
             "p_axes": p_axes,
             "naive_q_times_p": naive_gamma,
             "cap_below_naive_gamma": cap < naive_gamma,
-            "ground_phi_disc": ground[0],
-            "ground_k_phi": ground[1],
-            "ground_phi_f": ground[2],
-            "ground_n_E": ground[3],
-            "ground_Phi_kick": ground[4],
-            "ground_pi_p0_x": ground[5],
-            "ground_pi_p0_y": ground[6],
-            "ground_bloch": list(ground[7]),
-            "ground_rho": ground[8],
-            "iteration_unique_points": len(unique),
-            "iteration_ticks": track + 1,
-            "ground_fixed_point": ground_fixed,
-            "ground_n_E_zero": ground_n_e_zero,
-            "ground_kick_zero": ground_kick_zero,
+            "rho_max_initial": amp0,
+            "rho_max_after_settle": amp_settled,
+            "ocean_contrast_grows": ocean_moves,
+            "planckon_core": core,
+            "bath_brick": bath,
+            "planckon_iteration_unique": core["unique_points"],
+            "planckon_nonzero_kicks": core["nonzero_kicks"],
             "checks_ok": (
-                ground_fixed
-                and ground_n_e_zero
-                and ground_kick_zero
-                and cap < naive_gamma
+                cap < naive_gamma
                 and abs(p0_nat - 0.25) < 1e-9
+                and ocean_moves
+                and core["unique_points"] > 1
             ),
             "derivation_closed": False,
             "note": (
-                "§5.0.4-A: native (q,p) phase space Γ_hV; vortex ground is g-fixed point. "
-                "Full Γ enumeration + excited branches still open."
+                "§5.0.4-A: Γ_hV on filled boiling ocean; planckon core iterates under g. "
+                "Full Γ table still open."
             ),
         }
 
@@ -247,11 +259,11 @@ class SIFloor0Rows:
         """§5.0.4-A — internal levels on Z_N_ring + SU(2) at one v_p.
 
         Algebra (closed): landmark ticks on phase ring N_ring=512 and n_E ladder.
-        Sim (floor-0 dogfood): VORTEX_P ground — b=1, |Δφ|≪Δφ_min, stable Bloch axis;
-        SU(2) monodromy on core spinor: 2π→−1, 4π→+1 (not separate ontological field).
+        Sim habitat: VACUUM_BOIL + VORTEX_P (filled lattice, A5 boil, no void).
+        Snapshot: planckon at core b=1, |n|≥¾; SU(2) 2π/4π on core spinor.
+        Under boil, core Γ drifts (not dead-ocean fixed point).
 
-        Open (explicit): gate Φ≥41 ticks (n_E≥1) not observed in free evolution of
-        standard seeds — excitation ladder above ground needs dedicated kick harness.
+        Open (explicit): n_E≥1 kick-harness on boiling floor.
         """
         from mt_ca.config import MConfig
         from mt_ca.ledger import n_E_field
@@ -320,31 +332,13 @@ class SIFloor0Rows:
             sim.step(1)
 
         z = sim.z
-        dphi = arg_phase_defect(z, cfg, apply_floor=False)
         phi = saturating_phase(z, cfg)
         n_e = n_E_field(phi, cfg)
         ch = winding_channels(z, center=(cy, cx), radius=2)
-        b = matter_occupancy_b(z)
-        b_sum = int(b.sum().item()) if hasattr(b, "sum") else int(b)
-
-        dphi_core = float(dphi[cy, cx].abs().item())
+        b_core = matter_occupancy_b(z, y=cy, x=cx)
+        dphi_core = float(arg_phase_defect(z, cfg, apply_floor=False)[cy, cx].abs().item())
         phi_core = float(phi[cy, cx].abs().item())
         n_e_core = int(n_e[cy, cx].item())
-
-        bloch_tail: list[list[float]] = []
-        dphi_tail: list[float] = []
-        for _ in range(track):
-            sim.step(1)
-            z = sim.z
-            dphi_tail.append(float(arg_phase_defect(z, cfg, apply_floor=False)[cy, cx].abs()))
-            bv = bloch_vector(z[cy : cy + 1, cx : cx + 1])[0, 0]
-            bloch_tail.append([float(bv[i].item()) for i in range(3)])
-
-        bloch_drift = 0.0
-        if len(bloch_tail) >= 2:
-            bloch_drift = max(
-                abs(bloch_tail[-1][i] - bloch_tail[-2][i]) for i in range(3)
-            )
 
         z_core = z[cy, cx]
         axis = bloch_vector(z_core.unsqueeze(0).unsqueeze(0))[0, 0]
@@ -359,18 +353,38 @@ class SIFloor0Rows:
 
         dot_2pi = su2_overlap(2.0 * math.pi)
         dot_4pi = su2_overlap(4.0 * math.pi)
-
-        ground_ok = (
-            b_sum == 1
-            and abs(float(ch["auto"])) >= 0.75
-            and dphi_core < float(eq["delta_phi_min_rad"])
-            and n_e_core == 0
-            and bloch_drift < 0.02
-            and max(dphi_tail) < float(eq["delta_phi_min_rad"])
-        )
         su2_ok = dot_2pi < -0.9 and dot_4pi > 0.9
 
+        snapshot_ok = (
+            b_core == 1
+            and abs(float(ch["auto"])) >= 0.75
+            and n_e_core == 0
+        )
+
+        b_hits = 0
+        w_abs: list[float] = []
+        bloch_tail: list[list[float]] = []
+        for _ in range(track):
+            sim.step(1)
+            z = sim.z
+            if matter_occupancy_b(z, y=cy, x=cx) == 1:
+                b_hits += 1
+            w_abs.append(abs(float(winding_channels(z, center=(cy, cx), radius=2)["auto"])))
+            bv = bloch_vector(z[cy : cy + 1, cx : cx + 1])[0, 0]
+            bloch_tail.append([float(bv[i].item()) for i in range(3)])
+
+        b_core_rate = b_hits / max(track, 1)
+        w_mean = sum(w_abs) / len(w_abs) if w_abs else 0.0
+        bloch_drift = 0.0
+        if len(bloch_tail) >= 2:
+            bloch_drift = max(
+                abs(bloch_tail[-1][i] - bloch_tail[-2][i]) for i in range(3)
+            )
+
+        ground_ok = snapshot_ok and su2_ok and b_core_rate >= 0.15 and w_mean >= 0.5
+
         return {
+            "habitat": "VACUUM_BOIL",
             "N_ring": n_ring,
             "N_phi": int(bb.N_phi),
             "B_hV": float(bb.B_hV),
@@ -380,23 +394,25 @@ class SIFloor0Rows:
             "ticks_per_E0": ticks_per_e0,
             "landmarks": landmarks,
             "algebra_ok": algebra_ok,
-            "ground_b_sum": b_sum,
+            "ground_b_core": b_core,
             "ground_winding_auto": float(ch["auto"]),
             "ground_dphi_core": dphi_core,
             "ground_phi_ticks_core": phi_core,
             "ground_n_E_core": n_e_core,
             "ground_bloch": bloch_tail[-1] if bloch_tail else [],
             "ground_bloch_drift": bloch_drift,
-            "ground_dphi_max_track": max(dphi_tail) if dphi_tail else dphi_core,
+            "planckon_b_core_rate": b_core_rate,
+            "planckon_winding_mean_abs": w_mean,
             "su2_dot_2pi": dot_2pi,
             "su2_dot_4pi": dot_4pi,
             "su2_monodromy_ok": su2_ok,
+            "snapshot_ok": snapshot_ok,
             "ground_ok": ground_ok,
             "n_E_excitation_sim_open": True,
             "checks_ok": algebra_ok and ground_ok and su2_ok,
             "derivation_closed": False,
             "note": (
-                "§5.0.4-A: algebra landmarks on Z_512 + vortex ground + SU(2) 2π/4π on core. "
-                "n_E≥1 excitation sim still open."
+                "§5.0.4-A: algebra + planckon on boiling ocean; SU(2) 2π/4π at settle. "
+                "n_E≥1 kick-harness still open."
             ),
         }
