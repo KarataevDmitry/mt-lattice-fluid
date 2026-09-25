@@ -76,7 +76,7 @@ $$
 **Это не:** Compton/$a_0$ ($\sim 10^{22}\ldots 10^{24}\cdot\mathrm{dl}$, IR); confining этаж 2 ($\sim 10^{15}$); $N_{\mathrm{gen}}=d$ (счёт стеков, не длина). **Не претендует:** $m_\mu/m_e$ как размер этажа 1.
 **Это может быть:** мультиклеточные лептонные ($B=0$) пре-резонансы / обёртки на итерациях звезды — своя теория сборки на том же $g$, не новая калибровка.
 **Статус:** окно мотивировано; класс-census B=0 — §6·floor1·B0·census.
-**Код:** `SI.floor1_leptonic_ask_row()` · verify **`Floor1_leptonic_ask`**.
+**Код:** `SI.floor1_leptonic_row()` · verify **`Floor1_leptonic`**.
 #### §6·floor1·B0·census · Что устойчиво при $B=0$ на $N_{12}^{3}\ldots N_{12}^{4}$
 **Критерий (уже §8.2):** нет downhill-$g$ с теми же аддитивными инвариантами и меньшей энергией.
 | класс | стабилен? | зачем |
@@ -100,7 +100,7 @@ $$
 **Не один C3.** Gauge-fixed `VACUUM` (class 0) — Φ=0, мёртвый. `VACUUM_BOIL` — вся решётка кирпичами, NN Δφ=Δφ_min: live, контраст сам ~1.5→773, ρ_max→1 за 1024 тика.
 **Денсометр (§10.5):** старый A10 (`∮ d arg(z₂/z₁)`) на locked boil был слеп → ложный `emerged_b=False`. Dual-channel rel / u1=`Arg(z₁+z₂)` / auto — **b читается**. Probes: `SYNTH_U1`, `VORTEX_P` → **`b=1`**; family `PLANE_WAVE` → `born=1`.
 **Код:** `SeedClass.VACUUM_BOIL` · `scripts/run_filled_bath_emergence.py` · `SI.floor1_C3_bath_dogfood_row()` · verify **`Floor1_C3_bath_dogfood`**.
-**Код:** `SI.floor1_B0_census_ask_row()` · verify **`Floor1_B0_census_ask`**.
+**Код:** `SI.floor1_B0_census_row()` · verify **`Floor1_B0_census`**.
 #### §6·floor1·dressing · Что за обёртка электрона
 **Задача** (§5.0.5, не выдумка): что такое near-zone легчайшего $Q=\pm1$, и что фиксирует её радиус?
 **Закрыто:**
@@ -109,7 +109,7 @@ $$
 - минимальный хвост $\supseteq$ $\varepsilon$-окрестность $\Lambda$ $\Rightarrow$ $R_{\min}=1\cdot\mathrm{dl}$, звезда $N_{12}$;
 - anti-smear $K_P$ держит ядро; Гейзенберг держит неустранимый ореол;
 - оболочки = моды $\rho_\Theta$ на координационных сферах.
-**Код:** `SI.floor1_dressing_ask_row()` · verify **`Floor1_dressing_ask`**.
+**Код:** `SI.floor1_dressing_row()` · verify **`Floor1_dressing`**.
 #### §6·floor1·dressing·close · $R_{\mathrm{dress}}=1\cdot\mathrm{dl}$
 **Лемма:**
 1. Winding-1 на звезде: $\Delta\varphi_{\mathrm{ring}}=2\pi/N_{12}$. Из $N_\varphi=\lceil 2\pi/\Delta\varphi_{\min}\rceil$ следует $N_{12}<N_\varphi\Leftrightarrow 2\pi/N_{12}>\Delta\varphi_{\min}$ — вся ε-звезда над полом.

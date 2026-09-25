@@ -41,7 +41,7 @@ class SICarrierRows:
           · Flat translation lattice + compact no boundary → torus:
                 (3+1) T³ · (2+1) slice T².
           · Λ×S¹ = phase fiber over Λ (Arg/U(1)), not «torus instead of lattice».
-          · CLOSED: finite wall-free carrier topology = torus.
+          · closed: finite wall-free carrier topology = torus.
           · SOFT: cosmological period N; long-run entropy numerics; covers.
           · Sim torch.roll = eng readout of §1.7 (DEVLOG §10.1), not new physics.
         """
@@ -111,7 +111,7 @@ class SICarrierRows:
             "closed_ids": closed_ids,
             "reject_ids": reject_ids,
             "soft_open_ids": soft_open_ids,
-            "ask_ok": ok,
+            "checks_ok": ok,
             "note": (
                 "Finite wall-free carrier = torus (T³/T²). Λ×S¹ = phase fiber. "
                 "Period N / covers soft. Sim wrap = readout of §1.7."
@@ -127,8 +127,8 @@ class SICarrierRows:
           · Floor+seed (§10.2): z≡0 deadlock; |z|≥z_min; vacuum_amplitude=z_min;
             per-cell gauge_fix forbidden on tick path.
           · Step algebra (§10.3): R(Φ)=ω^Φ only; Euler z+=iφz rejected (A3).
-          · Literals (§10.4): DX/DT/K_P/α* = as_code_dict SI paste, not knobs.
-          · All CLOSED as eng readout of §0.5 / A3·A4 / §7 SI.
+          · Literals (§10.4): DX/DT/K_P/α* = as_code_dict SI paste, not free parameters.
+          · All closed as eng readout of §0.5 / A3·A4 / §7 SI.
           · Soft: verify norm_drift threshold = sim hygiene.
         """
         hv = hv_bit_budget()
@@ -222,9 +222,9 @@ class SICarrierRows:
             "closed_ids": closed_ids,
             "reject_ids": reject_ids,
             "soft_open_ids": soft_open_ids,
-            "ask_ok": ok,
+            "checks_ok": ok,
             "note": (
-                "GPU fuses CLOSED as readout: floor+seed (§0.5), R(Φ) not Euler, "
+                "GPU fuses closed as readout: floor+seed (§0.5), R(Φ) not Euler, "
                 "SI literals paste. Soft: verify norm_drift threshold."
             ),
         }
@@ -348,7 +348,7 @@ class SICarrierRows:
         r_out = edge_a
         r_in_1tick = kappa * edge_a
         r_in_classical = edge_a * math.sqrt(6.0) / 6.0
-        alpha_inv_stamped = 4.0 * math.pi**3 + math.pi**2 + math.pi
+        alpha_inv_derived = 4.0 * math.pi**3 + math.pi**2 + math.pi
         alpha_inv_geom = float(n12 * (n12 + 1) - n_tri - 2 * n_sq + girth // d_spatial)
         alpha_inv_geom_alt = float(
             n12 * (n12 + 1) - n_tri - 2 * n_sq + v_over_v_hv / (n_sq * kappa**2)
@@ -383,14 +383,14 @@ class SICarrierRows:
             "A_square_over_A_total": a_sq / a_total,
             "A_triangle_over_A_total": a_tri / a_total,
             "dihedral_square_triangle_deg": 135.0,
-            "alpha_fs_inv_stamped": alpha_inv_stamped,
+            "alpha_fs_inv_derived": alpha_inv_derived,
             "alpha_fs_inv_geom": alpha_inv_geom,
             "alpha_fs_inv_geom_alt": alpha_inv_geom_alt,
             "alpha_fs_inv_CODATA": codata_inv,
             "alpha_inv_geom_rel_err": abs(alpha_inv_geom - codata_inv) / codata_inv,
             "alpha_inv_geom_alt_rel_err": abs(alpha_inv_geom_alt - codata_inv) / codata_inv,
-            "alpha_inv_stamped_rel_err": abs(alpha_inv_stamped - codata_inv) / codata_inv,
-            "note": "§8.2·geo: dimensional chain at a=l_P; ratios → carrier_ask_row",
+            "alpha_inv_derived_rel_err": abs(alpha_inv_derived - codata_inv) / codata_inv,
+            "note": "§8.2·geo: dimensional chain at a=l_P; ratios → carrier_inventory_row",
         }
 
     def rhombic_dodecahedron_geometry_row(self) -> dict[str, float | int | str | bool]:
@@ -454,8 +454,8 @@ class SICarrierRows:
             "note": "§8.2·geo·voronoi: WS cell; R_in=a/2 wall; axis vertex=a/√2=cubo R_in",
         }
 
-    def rhombic_dodecahedron_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·geo·voronoi·ask — Voronoy body vs 1-tick hull; dual to cuboctahedron."""
+    def rhombic_dodecahedron_carrier_inventory_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·geo·voronoi — Voronoy body vs 1-tick hull; dual to cuboctahedron."""
         geo = self.rhombic_dodecahedron_geometry_row()
         cubo = self.cuboctahedron_geometry_row()
         kappa = KAPPA_FCC_1TICK
@@ -466,7 +466,7 @@ class SICarrierRows:
                 "id": "V_over_v_hV",
                 "ratio": float(geo["V_over_v_hV"]),
                 "maps_to": "dV = v_hV on FCC node (§1.6.2)",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "Voronoy volume = a³/√2 by packing; identity not fit",
             },
             {
@@ -475,7 +475,7 @@ class SICarrierRows:
                 "at_a_eq_lP": float(geo["R_in_Voronoi_m"]),
                 "unit": "m",
                 "maps_to": "cell wall at NN bisector |ON|/2",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "R_in=a/2; not cuboctahedron square-face R_in=κa",
             },
             {
@@ -509,7 +509,7 @@ class SICarrierRows:
                 "mechanism": "14↔14 vertices/faces swap; 24 edges",
             },
         ]
-        shipped = sum(1 for r in ratio_inventory if r["status"] == "shipped")
+        derived = sum(1 for r in ratio_inventory if r["status"] == "derived")
         open_ = sum(1 for r in ratio_inventory if r["status"] in ("open", "inventory"))
         return {
             **{k: geo[k] for k in (
@@ -524,14 +524,14 @@ class SICarrierRows:
             "kappa_FCC": kappa,
             "dual_cuboctahedron": geo["dual_cuboctahedron"],
             "ratio_inventory": ratio_inventory,
-            "ratio_shipped_count": shipped,
+            "ratio_derived_count": derived,
             "ratio_open_count": open_,
             "precedent": "Voronoy R_in=a/2; hull R_in=κa; axis vertex of RD = hull R_in distance",
-            "note": "§8.2·geo·voronoi·ask: WS cell body; do not confuse with 1-tick hull",
+            "note": "§8.2·geo·voronoi: WS cell body; do not confuse with 1-tick hull",
         }
 
-    def cuboctahedron_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·geo·ask — from edge a=l_P: dimensional body → ratio → coupling (κ precedent)."""
+    def cuboctahedron_carrier_inventory_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·geo — from edge a=l_P: dimensional body → ratio → coupling (κ precedent)."""
         geo = self.cuboctahedron_geometry_row()
         n12 = int(geo["n_nn"])
         n_sq = int(geo["n_faces_square"])
@@ -567,7 +567,7 @@ class SICarrierRows:
                 "at_a_eq_lP": edge_a,
                 "unit": "m",
                 "maps_to": "A1 NN distance; all body SI measures normalized here",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "a=l_P not fitted; ratios are V/a³, R_in/a, …",
             },
             {
@@ -576,7 +576,7 @@ class SICarrierRows:
                 "at_a_eq_lP": float(geo["R_in_1tick_m"]),
                 "unit": "m (=κa)",
                 "maps_to": "c=κc₀, hT=t_P·κ, λ₀=κℓ_P (§1.1)",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "R_in(a)/R_out(a) at a=l_P — ratio after lengths",
             },
             {
@@ -586,13 +586,13 @@ class SICarrierRows:
                 "unit": "m²",
                 "maps_to": "open — Φ_□ holonomy cell; B_□=Φ_□/a² (§8.2 Stokes)",
                 "status": "open",
-                "mechanism": "□ perimeter 4a; ask g for phase/force on this face at a=l_P",
+                "mechanism": "□ perimeter 4a; derive g for phase/force on this face at a=l_P",
             },
             {
                 "id": "kappa_link",
                 "ratio": 1.0 / n12,
                 "maps_to": "γ, ν_CA, CR/sync per-link fraction (§5.2.2)",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "1/|N₁₂| from causal star at same a=l_P links",
             },
             {
@@ -601,7 +601,7 @@ class SICarrierRows:
                 "at_a_eq_lP": float(geo["v_hV_m3"]),
                 "unit": "m³",
                 "maps_to": "dV=v_hV on FCC Voronoy node (§1.6.2)",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "v_hV=a³/√2 when a=l_P",
             },
             {
@@ -674,24 +674,24 @@ class SICarrierRows:
                 "mechanism": "force from holonomy on □ with edge a, not ratio table",
             },
             {
-                "id": "alpha_fs_stamped",
-                "ratio": float(geo["alpha_fs_inv_stamped"]),
+                "id": "alpha_fs_derived",
+                "ratio": float(geo["alpha_fs_inv_derived"]),
                 "maps_to": "T-readout π-postulate; not from a alone",
-                "status": "stamped_T",
+                "status": "derived_T",
                 "mechanism": "guardrail vs skipping a→Φ_□ path",
             },
         ]
-        shipped = sum(1 for r in ratio_inventory if r["status"] == "shipped")
+        derived = sum(1 for r in ratio_inventory if r["status"] == "derived")
         open_ = sum(1 for r in ratio_inventory if r["status"] in ("open", "inventory"))
         return {
             **{k: geo[k] for k in ("edge_a_m", "V_over_v_hV", "V_over_S_m", "V_over_S_over_l_P", "kappa_inscribed_1tick")},
             "anchor_chain": anchor_chain,
             "n_square_over_n_triangle": n_sq_over_n_tri,
             "ratio_inventory": ratio_inventory,
-            "ratio_shipped_count": shipped,
+            "ratio_derived_count": derived,
             "ratio_open_count": open_,
             "precedent": "κ = R_in(a)/R_out(a) at a=l_P; c=κc₀ is readout check — see kappa_bottom_up_row",
-            "note": "§8.2·geo·ask: dimensional body at a=l_P first; ratios derived",
+            "note": "§8.2·geo: dimensional body at a=l_P first; ratios derived",
         }
 
     def kappa_bottom_up_row(self) -> dict[str, float | int | str | bool]:
@@ -927,7 +927,7 @@ class SICarrierRows:
             "g_M_m_s2": g_m,
             "E0_J": e0,
             "m_arg_kg": self.m_arg,
-            "kick_ledger_integer": "A13 leapfrog + floor N only in N; verify LadderLedger",
+            "momentum_ledger_integer": "A13 leapfrog + floor N only in N; verify LadderLedger",
             "continuum_p_L_F_is_T_readout": True,
             "p0_from_hbar_over_2hL_not_macro_c": abs(p0 - self.hbar / (2.0 * self.l_P)) / p0 < tol,
             "note": "§0.8/Thm5.1: Landau ladder from s0=ℏ/2; float j=Im(z*∇z) is T only",

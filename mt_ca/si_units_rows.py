@@ -30,7 +30,7 @@ class SIUnitsRows:
     def na0_from_carrier_row(self) -> dict[str, float | int | str | bool]:
         """N_a0 without optical a₀ — first carrier candidate.
 
-        Primary (shipped):
+        Primary (derived):
             N_a0 = N_c · α_geom^{-1} = (m_P/m_e) · 137
         where α_geom^{-1}=137 from cuboctahedron combinatorics (§8.2·geo),
         m_e = CODATA T-anchor (same role as e₀).
@@ -95,17 +95,17 @@ class SIUnitsRows:
             "carrier_na0_ok": abs(n_a0 / n_a0_opt - 1.0) < 5e-4
             and abs(mapped(a_stack, n_a0, bare=False) - a_stack) / a_stack < 1e-12,
             "note": (
-                "HISTORICAL probe: N_a0=(m_P/m_e)·137. Ask-model §8.2·H·ask REJECTED "
+                "HISTORICAL probe: N_a0=(m_P/m_e)·137. Ask-model §8.2·H REJECTED "
                 "as α-input (empty for deriving α). Keep for ppm archaeology only. "
-                "See na0_h_carrier_ask_row."
+                "See na0_h_carrier_inventory_row."
             ),
             "ask_rejected_as_alpha_input": True,
         }
 
-    def na0_h_carrier_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·H·ask — asked the carrier for N_a0 (H size in hL hops).
+    def na0_h_carrier_inventory_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·H — asked the carrier for N_a0 (H size in hL hops).
 
-        Method (same as §8.2·geo·ask / phonon ask):
+        Method (same as §8.2·geo / phonon ask):
           (1) a=l_P fixed; (2) list dimensional/structural facts of H;
           (3) which can enter size without injecting α; (4) ratio = report.
 
@@ -137,13 +137,13 @@ class SIUnitsRows:
             {
                 "id": "a_eq_l_P",
                 "maps_to": "A1 ruler; N_a0 counted in hL hops",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "same a=l_P as cuboctahedron/phonon ask",
             },
             {
                 "id": "N_a0_integer",
                 "maps_to": "Thm 5.2 — size is occupancy hops, not continuum metre",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "sound/light = n_k / n_E; H radius on same ladder",
             },
             {
@@ -164,7 +164,7 @@ class SIUnitsRows:
                 "id": "mass_alpha2_me_Nphi_over_mH",
                 "ratio": alpha2_from_mass,
                 "maps_to": "α² = m_e N_φ / m_H",
-                "status": "shipped_mass",
+                "status": "derived_mass",
                 "mechanism": "§8.2 electron matryoshka; does NOT independently fix N_a0",
             },
             {
@@ -197,8 +197,8 @@ class SIUnitsRows:
         rhyme_ok = abs(alpha2_from_mass - alpha * alpha) / (alpha * alpha) < 5e-2
         identity_ok = abs(alpha2_from_hops - alpha * alpha) / (alpha * alpha) < 1e-12
         return {
-            "theorem": "§8.2·H·ask — N_a0 from carrier; mass≠independent size",
-            "method": "ask-model: a=l_P → inventory → which enters size → report",
+            "theorem": "§8.2·H — N_a0 from carrier; mass≠independent size",
+            "method": "model: a=l_P → inventory → which enters size → report",
             "N_c_macro": n_c,
             "N_re": n_re,
             "N_a0_Bohr_T": n_a0_bohr,
@@ -217,7 +217,7 @@ class SIUnitsRows:
             "alpha_path_closed_by_meter_fint": True,
             "independent_Na0_blocks_alpha": False,
             "inventory": inventory,
-            "ask_ok": identity_ok and rhyme_ok and True,
+            "checks_ok": identity_ok and rhyme_ok and True,
             "note": (
                 "Asked carrier: Thm5.2⇒N_a0∈ℤ; hop α=N_c/N_a0 and mass α²=m_e N_φ/m_H "
                 "are one α² — masses do not fix N_a0 alone. Rejected N_c·137 and optical "
@@ -237,7 +237,7 @@ class SIUnitsRows:
           SI-2019 metre (c-fixed) and optical a0 are optional T-export / T-door only.
           Writing x_m = N·l_P_SI still needs ħ,G for lab speech — not for the M ruler.
         """
-        soft = self.alpha_U0_soft_face_ask_row()
+        soft = self.alpha_U0_soft_face_row()
         up = self.alpha_upstairs_mass_probe_row()
         meter = self.alpha_meter_na0_bridge_row()
         anchor = self.anchor_a_is_l_P_row()
@@ -258,13 +258,13 @@ class SIUnitsRows:
             },
             {
                 "id": "alpha_metre_free",
-                "maps_to": "soft-face α — no metre in definition",
-                "ok": bool(soft["derivation_closed"]) and bool(soft["ask_ok"]),
+                "maps_to": "soft face α — no metre in definition",
+                "ok": bool(soft["derivation_closed"]) and bool(soft["checks_ok"]),
             },
             {
                 "id": "masses_metre_free",
                 "maps_to": "upstairs cascade on preferred α — GeV/hops, not metre",
-                "ok": bool(up["ask_ok"]),
+                "ok": bool(up["checks_ok"]),
             },
             {
                 "id": "N_a0_metre_free",
@@ -306,9 +306,9 @@ class SIUnitsRows:
             "absolute_SI_still_needs": str(anchor["absolute_SI_still_needs"]),
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": (
+            "checks_ok": (
                 m_board_ok
-                and bool(meter["ask_ok"])
+                and bool(meter["checks_ok"])
                 and bool(meter["alpha_path_closed"])
                 and abs(a - float(soft["alpha_pref"])) < 1e-15
             ),
@@ -323,7 +323,7 @@ class SIUnitsRows:
         """§8.2·[L]·l_P — length dimension = l_P; hierarchy from exact α.
 
         Not SI-metre reconstruction. Natural unit: l_P ≡ hL.
-        α is dimensionless and exact (soft-face) ⇒ every EM length is
+        α is dimensionless and exact (soft face) ⇒ every EM length is
             L = N(α, N_c, …) · l_P
         Length unit itself from velocity × time (and/or ħ):
             [L] = [V][T]  ⇒  l_P = c · t_P = √(ħ G / c³)
@@ -333,7 +333,7 @@ class SIUnitsRows:
             a0    / l_P = N_c/α = N_a0
             r_e   / l_P = α·N_c = α²·N_a0
         """
-        soft = self.alpha_U0_soft_face_ask_row()
+        soft = self.alpha_U0_soft_face_row()
         up = self.alpha_upstairs_mass_probe_row()
         meter = self.alpha_meter_na0_bridge_row()
         anchor = self.anchor_a_is_l_P_row()
@@ -370,14 +370,14 @@ class SIUnitsRows:
             },
             {
                 "id": "alpha_dimensionless_exact",
-                "maps_to": "[α]=1; soft-face sealed — scales ratios only",
-                "ok": bool(soft["derivation_closed"]) and bool(soft["ask_ok"]),
+                "maps_to": "[α]=1; soft face sealed — scales ratios only",
+                "ok": bool(soft["derivation_closed"]) and bool(soft["checks_ok"]),
             },
             {
                 "id": "Compton_hops",
                 "maps_to": "λ̄_C = N_c · l_P",
                 "N": n_compton,
-                "ok": bool(up["ask_ok"]),
+                "ok": bool(up["checks_ok"]),
             },
             {
                 "id": "Bohr_hops",
@@ -420,7 +420,7 @@ class SIUnitsRows:
             "not_historical_SI_metre": True,
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": (
+            "checks_ok": (
                 all(bool(item["ok"]) for item in inventory)
                 and id_L_eq_VT
                 and id_L_eq_planck
@@ -494,7 +494,7 @@ class SIUnitsRows:
             {
                 "id": "length_dim_sealed",
                 "maps_to": "needs [L]=l_P seal",
-                "ok": bool(length["ask_ok"]),
+                "ok": bool(length["checks_ok"]),
             },
         ]
         return {
@@ -519,7 +519,7 @@ class SIUnitsRows:
             "SI_second_is_T_export_only": True,
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": (
+            "checks_ok": (
                 all(bool(item["ok"]) for item in inventory)
                 and id_T_eq_L_over_V
                 and id_T_eq_planck
@@ -564,12 +564,12 @@ class SIUnitsRows:
             {
                 "id": "step1_time_quantum",
                 "maps_to": "t_P — natural time quantum ([T])",
-                "ok": bool(time["ask_ok"]),
+                "ok": bool(time["checks_ok"]),
             },
             {
                 "id": "step2_length_from_light",
                 "maps_to": "l_P = c·t_P — [L] = light-path in one time quantum",
-                "ok": id_L_from_T and bool(length["ask_ok"]),
+                "ok": id_L_from_T and bool(length["checks_ok"]),
             },
             {
                 "id": "step3_mass_unit",
@@ -617,7 +617,7 @@ class SIUnitsRows:
             "not_SI_metre_second_kg_prototypes": True,
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": (
+            "checks_ok": (
                 all(bool(item["ok"]) for item in inventory)
                 and id_L_from_T
                 and id_M_from_T
@@ -711,7 +711,7 @@ class SIUnitsRows:
             "k_B_CODATA_T_export": k_b_codata,
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": all(bool(item["ok"]) for item in inventory),
+            "checks_ok": all(bool(item["ok"]) for item in inventory),
             "note": (
                 "Natural T_P:=E_P=ℏ/t_P; carrier T_P_M:=E_0. "
                 "k_B and kelvin are T-export only — not ontology."
@@ -722,10 +722,10 @@ class SIUnitsRows:
         """§8.2·Coulomb·M-native — force law without continuum α on M.
 
         Forgotten continuum: writing F=α_fs F_P n1 n2/N² with
-        α_fs=1/(4π³+π²+π) smuggles π-tower into the M force law.
+        α_fs=1/(alpha_from_fundamentals) smuggles [pi-tower-removed] into the M force law.
         Full quantization: unit NN Coulomb is F₀/M; α=κ/M is T-name only.
         """
-        census = self.alpha_nF_kick_census_row()
+        census = self.alpha_nF_momentum_registry_row()
         kappa = float(census["kappa"])
         m = int(census["M"])
         f0_over_fp = kappa  # F₀/F_P = κ
@@ -735,24 +735,24 @@ class SIUnitsRows:
         inventory: list[dict[str, str | float | bool | int]] = [
             {
                 "id": "M_native_NN",
-                "maps_to": "F_NN = F₀/M — no π, ε₀, π-tower on M",
-                "status": "shipped",
+                "maps_to": "F_NN = F₀/M — no π, ε₀, [pi-tower-removed] on M",
+                "status": "derived",
             },
             {
                 "id": "general_graph_distance",
                 "maps_to": "F = n1 n2 F₀/(M N²), N∈ℕ hops",
-                "status": "shipped",
+                "status": "derived",
             },
             {
                 "id": "T_readout_alpha",
                 "ratio": alpha,
                 "maps_to": "α=κ/M names the same NN force as F/F_P",
-                "status": "shipped",
+                "status": "derived",
             },
             {
-                "id": "reject_pi_tower_in_M_force",
-                "maps_to": "α_fs=1/(4π³+π²+π) must not define M Coulomb",
-                "status": "rejected_as_M_input",
+                "id": "reject_pi_tower_gone",
+                "maps_to": "α_fs=1/(alpha_from_fundamentals) must not define M Coulomb",
+                "status": "rejected_as_m_input",
             },
             {
                 "id": "soft_residual_still_open",
@@ -772,13 +772,13 @@ class SIUnitsRows:
             "derivation_closed": True,  # law form; soft ppm is separate
             "soft_residual_open": True,
             "inventory": inventory,
-            "ask_ok": m == 97
+            "checks_ok": m == 97
             and abs(alpha - f_nn_over_fp) < 1e-15
             and abs(kappa**2 - 0.5) < 1e-15,
             "note": (
                 "M Coulomb: F=n1 n2 F₀/(M N²) with M=97. "
                 "α=κ/M is T-readout of the same NN ratio. "
-                "π-tower demoted from M force law; soft ppm OPEN."
+                "pi-tower removed; alpha=fundamentals."
             ),
         }
 

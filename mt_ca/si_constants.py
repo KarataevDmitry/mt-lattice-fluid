@@ -82,7 +82,7 @@ M_NEUTRON_GEV_PDG = 0.93956542052
 # Neutrino atmospheric scale √|Δm²₃₁| [eV] — PDG-ish; prediction = α⁵·2m_H/(N_hier N_φ) (§8.2)
 M_NU_ATM_EV_PDG = 0.05
 
-# ΛCDM anchors — T-layer observations for **our bubble** (not knobs in g). Planck 2018 central.
+# ΛCDM anchors — T-layer observations for **our bubble** (not free parameters in g). Planck 2018 central.
 SECOND_PER_YEAR = 365.25 * 86400.0
 SECOND_PER_KYR = SECOND_PER_YEAR * 1e3
 SECOND_PER_GYR = SECOND_PER_YEAR * 1e9
@@ -1301,14 +1301,14 @@ def congruence_ladder_row(
     phi_sample = 3 * phi_disc + 7
     n_e_sample = n_E_from_phi_ticks(phi_sample, phase_bits=pb)
     ladder: list[dict[str, str | bool]] = [
-        {"id": "CL-1", "law": "Z+ + Z- = 2Z + floor(N) (mod N_ring)", "shipped": True},
-        {"id": "CL-2", "law": "R(N_ring/2) -> -z (spin-1/2)", "shipped": True},
-        {"id": "CL-3", "law": "|Phi| >= delta_phi_disc or Phi=0", "shipped": True},
-        {"id": "CL-4", "law": "n_E = floor(|Phi|/delta_phi_disc)", "shipped": True},
-        {"id": "CL-5", "law": "gcd(delta_phi_disc, N_ring)=1", "shipped": g_phi == 1},
-        {"id": "CL-6", "law": "gcd(N_phi, N_ring)=1", "shipped": g_nphi == 1},
-        {"id": "CL-7", "law": "sum_N dE == 0 (mod E0)", "shipped": True},
-        {"id": "CL-8", "law": "sum_N dpi == 0 (mod p0)", "shipped": True},
+        {"id": "CL-1", "law": "Z+ + Z- = 2Z + floor(N) (mod N_ring)", "derived": True},
+        {"id": "CL-2", "law": "R(N_ring/2) -> -z (spin-1/2)", "derived": True},
+        {"id": "CL-3", "law": "|Phi| >= delta_phi_disc or Phi=0", "derived": True},
+        {"id": "CL-4", "law": "n_E = floor(|Phi|/delta_phi_disc)", "derived": True},
+        {"id": "CL-5", "law": "gcd(delta_phi_disc, N_ring)=1", "derived": g_phi == 1},
+        {"id": "CL-6", "law": "gcd(N_phi, N_ring)=1", "derived": g_nphi == 1},
+        {"id": "CL-7", "law": "sum_N dE == 0 (mod E0)", "derived": True},
+        {"id": "CL-8", "law": "sum_N dpi == 0 (mod p0)", "derived": True},
     ]
     open_leaves: list[dict[str, str]] = [
         {"id": "CL-O1", "topic": "image N_12 x Z_N[i] -> Z_N (Phi spectrum)"},
@@ -1346,7 +1346,7 @@ def congruence_ladder_row(
         "a_Q": amplitude_quantum(frac_bits=fb),
         "rho_Q": rho_field_quantum(frac_bits=fb),
         "kappa_link_fcc": kappa_link(n_links=n12),
-        "ladder_shipped_count": sum(1 for r in ladder if r["shipped"]),
+        "ladder_derived_count": sum(1 for r in ladder if r["derived"]),
         "ladder_rows": ladder,
         "open_leaves": open_leaves,
         "note": "§3.12.7: verify Congruence_ladder; ledger LadderLedger for CL-7/8",

@@ -137,5 +137,5 @@ def bit_exact_roundtrip_report(
         "n_back": n_back,
         "n_stable": n0 == n_back or seed_class == SeedClass.IMPULSE,
         "ok": ok,
-        "note": "Z_N[i] projected collision + kick ledger (§3.12.5)",
+        "note": "Z_N[i] projected collision + momentum ledger (§3.12.5)",
     }

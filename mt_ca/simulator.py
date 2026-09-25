@@ -36,7 +36,7 @@ class LatticeFluidSimulator:
         self.z_past = torch.zeros_like(self.z)
         self._f_curr: torch.Tensor | None = None
         self._f_past: torch.Tensor | None = None
-        self._kick_ledger: list[torch.Tensor] = []
+        self._momentum_ledger: list[torch.Tensor] = []
         self._norm0: float | None = None
 
     @property
@@ -57,7 +57,7 @@ class LatticeFluidSimulator:
         f0 = canonical_fixed(z, self.cfg)
         self._f_curr = f0.clone()
         self._f_past = f0.clone()
-        self._kick_ledger = []
+        self._momentum_ledger = []
         self._sync_z_from_fixed()
         self.z_past = self.z.clone()
 
@@ -111,7 +111,7 @@ class LatticeFluidSimulator:
             self.z_past = self.z.clone()
         self._f_curr = canonical_fixed(self.z, self.cfg)
         self._f_past = canonical_fixed(self.z_past, self.cfg)
-        self._kick_ledger = []
+        self._momentum_ledger = []
         self._sync_z_from_fixed()
         self._norm0 = total_norm_squared(self.z)
 
@@ -119,7 +119,7 @@ class LatticeFluidSimulator:
         assert self._f_curr is not None and self._f_past is not None
         for _ in range(steps):
             f_next, f_prev, f_kick = leapfrog_forward_fixed(self._f_curr, self._f_past, self.cfg)
-            self._kick_ledger.append(f_kick)
+            self._momentum_ledger.append(f_kick)
             self._f_curr = f_next
             self._f_past = f_prev
             self._sync_z_from_fixed()
@@ -129,12 +129,12 @@ class LatticeFluidSimulator:
         return self.z
 
     def step_reverse(self, steps: int = 1) -> torch.Tensor:
-        """T-reverse via leapfrog kick ledger (§3.12)."""
+        """T-reverse via leapfrog momentum ledger (§3.12)."""
         assert self._f_curr is not None and self._f_past is not None
         for _ in range(steps):
-            if not self._kick_ledger:
-                raise ValueError("kick ledger empty — nothing to reverse")
-            f_kick = self._kick_ledger.pop()
+            if not self._momentum_ledger:
+                raise ValueError("momentum ledger empty — nothing to reverse")
+            f_kick = self._momentum_ledger.pop()
             f_past, f_curr = leapfrog_reverse_fixed(self._f_past, self._f_curr, f_kick, self.cfg)
             self._f_past = f_past
             self._f_curr = f_curr

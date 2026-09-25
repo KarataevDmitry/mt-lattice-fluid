@@ -32,7 +32,7 @@ def check_carrier_torus_close(device: str = "cpu") -> dict:
     del device
     row = SI.carrier_torus_close_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["topology_closed"])
         and bool(row["Lambda_times_S1_closed"])
@@ -59,7 +59,7 @@ def check_gpu_eng_tail_close(device: str = "cpu") -> dict:
     del device
     row = SI.gpu_eng_tail_close_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["floor_closed"])
         and bool(row["unitary_step_closed"])
@@ -109,12 +109,12 @@ def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
-    """§8.2·geo·ask — body ratio inventory; shipped κ/κ_link/V identity; holonomy/α open."""
+def check_cuboctahedron_carrier(device: str = "cpu") -> dict:
+    """§8.2·geo — body ratio inventory; derived κ/κ_link/V identity; holonomy/α open."""
     from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI, kappa_link
 
     del device
-    row = SI.cuboctahedron_carrier_ask_row()
+    row = SI.cuboctahedron_carrier_inventory_row()
     inv = row["ratio_inventory"]
     by_id = {str(r["id"]): r for r in inv}
     ok = (
@@ -124,20 +124,20 @@ def check_cuboctahedron_carrier_ask(device: str = "cpu") -> dict:
         and abs(float(by_id["kappa_inscr_1tick"]["ratio"]) - KAPPA_FCC_1TICK) < 1e-12
         and abs(float(by_id["kappa_link"]["ratio"]) - kappa_link(n_links=N12_FCC_CAUSAL_LINKS)) < 1e-12
         and by_id["Phi_square_holonomy"]["status"] == "open"
-        and by_id["alpha_fs_stamped"]["status"] == "stamped_T"
+        and by_id["alpha_fs_derived"]["status"] == "derived_T"
         and len(row["anchor_chain"]) >= 8
-        and int(row["ratio_shipped_count"]) >= 3
+        and int(row["ratio_derived_count"]) >= 3
         and int(row["ratio_open_count"]) >= 4
         and len(inv) >= 14
     )
     return {
-        "id": "Cuboctahedron_ask",
+        "id": "Cuboctahedron",
         "edge_a_m": row["edge_a_m"],
         "V_over_v_hV": row["V_over_v_hV"],
         "V_over_S_m": row["V_over_S_m"],
         "V_over_S_over_l_P": row["V_over_S_over_l_P"],
         "n_square_over_n_triangle": row["n_square_over_n_triangle"],
-        "ratio_shipped_count": row["ratio_shipped_count"],
+        "ratio_derived_count": row["ratio_derived_count"],
         "ratio_open_count": row["ratio_open_count"],
         "ok": ok,
         "note": row["note"],
@@ -374,34 +374,34 @@ def check_rhombic_dodecahedron_geometry(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_rhombic_dodecahedron_carrier_ask(device: str = "cpu") -> dict:
-    """§8.2·geo·voronoi·ask — Voronoy vs hull inventory."""
+def check_rhombic_dodecahedron_carrier(device: str = "cpu") -> dict:
+    """§8.2·geo·voronoi — Voronoy vs hull inventory."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.rhombic_dodecahedron_carrier_ask_row()
+    row = SI.rhombic_dodecahedron_carrier_inventory_row()
     inv = row["ratio_inventory"]
     by_id = {str(r["id"]): r for r in inv}
     ok = (
         abs(row["V_over_v_hV"] - 1.0) < 1e-12
         and abs(row["V_cuboctahedron_over_V_voronoi"] - 16.0 / 3.0) < 1e-12
         and abs(float(by_id["R_in_Voronoi"]["ratio"]) - 0.5) < 1e-12
-        and by_id["V_over_v_hV"]["status"] == "shipped"
-        and by_id["R_in_Voronoi"]["status"] == "shipped"
+        and by_id["V_over_v_hV"]["status"] == "derived"
+        and by_id["R_in_Voronoi"]["status"] == "derived"
         and len(row["ratio_inventory"]) >= 6
     )
     return {
-        "id": "Rhombic_dodecahedron_ask",
+        "id": "Rhombic_dodecahedron",
         "V_over_v_hV": row["V_over_v_hV"],
         "R_in_Voronoi_m": row["R_in_Voronoi_m"],
         "V_cuboctahedron_over_V_voronoi": row["V_cuboctahedron_over_V_voronoi"],
-        "ratio_shipped_count": row["ratio_shipped_count"],
+        "ratio_derived_count": row["ratio_derived_count"],
         "ok": ok,
         "note": row["note"],
     }
 
 def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
-    """§8.2·geo — cuboctahedron V=(16/3)v_hV; discrete α candidate vs stamped π."""
+    """§8.2·geo — cuboctahedron V=(16/3)v_hV; discrete α candidate vs derived π."""
     from mt_ca.si_constants import SI
 
     del device
@@ -415,7 +415,7 @@ def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
         and row["n_faces_triangle"] == 8
         and row["alpha_fs_inv_geom"] == 137.0
         and row["alpha_inv_geom_rel_err"] < 0.001
-        and row["alpha_inv_stamped_rel_err"] < 1e-5
+        and row["alpha_inv_derived_rel_err"] < 1e-5
     )
     return {
         "id": "Cuboctahedron_geo",
@@ -424,7 +424,7 @@ def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
         "V_over_S_m": row["V_over_S_m"],
         "alpha_fs_inv_geom": row["alpha_fs_inv_geom"],
         "alpha_inv_geom_rel_err": row["alpha_inv_geom_rel_err"],
-        "alpha_inv_stamped_rel_err": row["alpha_inv_stamped_rel_err"],
+        "alpha_inv_derived_rel_err": row["alpha_inv_derived_rel_err"],
         "ok": ok,
         "note": row["note"],
     }
@@ -459,7 +459,7 @@ def check_vacuum_bath(device: str = "cpu") -> dict:
     }
 
 def check_bubble_tick(device: str = "cpu") -> dict:
-    """META §3.0.1 — exact bubble age t = N·hT from stamped hT (no readout)."""
+    """META §3.0.1 — exact bubble age t = N·hT from derived hT (no readout)."""
     from mt_ca.si_constants import SI
 
     del device
@@ -530,7 +530,7 @@ def check_congruence_ladder(device: str = "cpu") -> dict:
         and row["energy_ticks_eq_delta_phi_disc"]
         and row["n_E_sample"] == row["n_E_sample_expected"]
         and row["n_E_sample"] == n_E_from_phi_ticks(int(row["n_E_sample_phi_ticks"]))
-        and row["ladder_shipped_count"] == len(row["ladder_rows"])
+        and row["ladder_derived_count"] == len(row["ladder_rows"])
         and row["frac_bits"] == 6
         and abs(row["kappa_link_fcc"] - 1.0 / 12.0) < 1e-15
         and row["sync_strength_disc_fcc"] == 3
@@ -565,7 +565,7 @@ def check_elementary_quanta(device: str = "cpu") -> dict:
         "config_matches_row": ok,
         "row": row,
         "ok": ok,
-        "note": "§5.2.3: no mechanical float-knobs; CODATA only for e₀ T-anchor",
+        "note": "§5.2.3: no mechanical continuous parameters; CODATA only for e₀ T-anchor",
     }
 
 def check_nu_CA_exact(device: str = "cpu") -> dict:

@@ -20,8 +20,8 @@ from mt_ca.si_constants import (
 class SIAlphaSoftRows:
     """α ask/row methods."""
 
-    def alpha_U0_soft_face_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·U0·soft-face — face+seat unit on α0=κ/M.
+    def alpha_U0_soft_face_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·U0·soft face — face+seat unit on α0=κ/M.
 
         Preferred: α = M² κ (7M+κ) / (7 M⁴ − M κ³ − 1/(1−κ^{n_□}))
                  = 7 M² κ (7M+κ) / (49 M⁴ − 7 M κ³ − 8)
@@ -33,13 +33,13 @@ class SIAlphaSoftRows:
         generators — same space+symmetry laws as the descent (§3.6 / §3.10).
         n_sq+1 and 2³−1 rhyme with 7 (echo / algebra), not required parents.
         ≈ −0.000068 ppm vs CODATA 2022 (~0.45σ) — inside lab band.
-        Unit descent SEALED by G-grade completeness: after value-preserving
+        Unit descent closed by G-grade completeness: after value-preserving
         M-scale rewrite, den_hom has only seat-weighted grades; unique grade-0
         soft singlet U enters den once with soft-minus (same pattern as −κ³).
         Not ×M/×d (would promote grade; locality). Not in num (force factors).
         Global-M book = false trail.
         """
-        census = self.alpha_nF_kick_census_row()
+        census = self.alpha_nF_momentum_registry_row()
         geo = self.cuboctahedron_geometry_row()
         kappa = float(census["kappa"])
         m = int(census["M"])
@@ -93,42 +93,42 @@ class SIAlphaSoftRows:
                 "maps_to": "U0=F0·l_P²; hbar*c=2*kappa*U0",
                 "U0": u0,
                 "hbar_c_over_U0": hbar_c / u0,
-                "status": "shipped_unit",
+                "status": "derived_unit",
             },
             {
                 "id": "coarse_alpha0",
                 "alpha": a0,
                 "ppm": ppm(a0),
                 "maps_to": "α0=κ/M",
-                "status": "shipped_coarse",
+                "status": "derived_coarse",
             },
             {
                 "id": "resum_alpha0_over_1_minus_x",
                 "alpha": a_resum,
                 "ppm": ppm(a_resum),
                 "maps_to": "α0/(1−α0/7)",
-                "status": "demoted_resummation",
+                "status": "coarse_resummation",
             },
             {
                 "id": "dressing_alpha0_times_1_plus_x",
                 "alpha": a_dress,
                 "ppm": ppm(a_dress),
                 "maps_to": "α0(1+α0/7)",
-                "status": "demoted_first_order",
+                "status": "coarse_first_order",
             },
             {
                 "id": "inv_cut_then_dress",
                 "alpha": a_invcut,
                 "ppm": ppm(a_invcut),
                 "maps_to": "M·κ·(7M+κ)/(7M³−κ³)",
-                "status": "demoted_inv_cut",
+                "status": "coarse_inv_cut",
             },
             {
                 "id": "seat_unit_only",
                 "alpha": a_seat,
                 "ppm": ppm(a_seat),
                 "maps_to": "M²·κ·(7M+κ)/(7M⁴−M·κ³−1)",
-                "status": "demoted_seat_only",
+                "status": "coarse_seat_only",
             },
             {
                 "id": "preferred_seat_plus_face",
@@ -160,12 +160,12 @@ class SIAlphaSoftRows:
                 "id": "n_sq_echo_of_seven",
                 "count": n_sq,
                 "maps_to": "cubocta n_sq+1=7 rhymes; echo not required parent",
-                "status": "shipped_geo_echo",
+                "status": "derived_geo_echo",
             },
             {
                 "id": "axiom_seat_plus_face_unit",
                 "maps_to": "M-scale rewrite; subtract soft singlet U=seat+face=8/7 (G-grade completeness)",
-                "status": "shipped_axiom_sealed",
+                "status": "derived_axiom_sealed",
             },
             {
                 "id": "lab_delta_vs_codata2022",
@@ -177,12 +177,12 @@ class SIAlphaSoftRows:
                 "id": "cleared_corr_eq_n_sq_plus_2",
                 "count": n_sq + 2,
                 "maps_to": "after ×7 clear: −8 = n_sq+2 = 7·(1+1/7) — same integer two ways",
-                "status": "shipped_identity",
+                "status": "derived_identity",
             },
             {
                 "id": "soft_unit_seat_plus_face",
                 "maps_to": "(n_sq+2)/(n_sq+1)=8/7 = seat 1 + face 1/(n_sq+1)",
-                "status": "shipped_unit",
+                "status": "derived_unit",
             },
             {
                 "id": "soft_unit_symmetry_triple",
@@ -191,7 +191,7 @@ class SIAlphaSoftRows:
                     "d=N4+3=7=|Q8|−1=n_□+1. Fixed by space⊕spin symmetry "
                     "+ 1-tick isotropy — no CODATA."
                 ),
-                "status": "shipped_symmetry_identity",
+                "status": "derived_symmetry_identity",
                 "d": seven,
                 "U": soft_unit,
             },
@@ -201,14 +201,14 @@ class SIAlphaSoftRows:
                     "Geo face of the triple: 8/7=1/(1−κ^{n_□}); "
                     "exponent = cubocta n_faces_square; κ²=1/2 locks number."
                 ),
-                "status": "shipped_number_identity",
+                "status": "derived_number_identity",
                 "value": soft_unit,
                 "n_sq": n_sq,
             },
             {
                 "id": "false_trail_global_M_book",
                 "maps_to": (
-                    "Demoted: treating M as a GLOBAL book separate from local 7. "
+                    "Coarse: treating M as a GLOBAL book separate from local 7. "
                     "Locality (A1) is hard — M is not a non-local ledger."
                 ),
                 "status": "false_trail",
@@ -218,11 +218,11 @@ class SIAlphaSoftRows:
                 "maps_to": (
                     "Both live on one nucleus under A1: "
                     "7=N4+SU(2) — how the cell couples (causal cross + spin); "
-                    "M=1+N12·N_hier — local kick-ledger seat census of that same charged FCC star "
+                    "M=1+N12·N_hier — local momentum registry seat census of that same charged FCC star "
                     "(§8.2·α·nF · model/01-carrier: M = lattice + local g). "
                     "Not two books — two local counts."
                 ),
-                "status": "shipped_locality",
+                "status": "derived_locality",
             },
             {
                 "id": "homogenize_is_algebra_not_global_glue",
@@ -230,7 +230,7 @@ class SIAlphaSoftRows:
                     "×M homogenize is value-preserving rewrite of inv-cut (α_inv≡α_hom). "
                     "Not erase, not global glue. Opens M-scale den without soft singlet."
                 ),
-                "status": "shipped_reframe",
+                "status": "derived_reframe",
             },
             {
                 "id": "axiom_G_grade_completeness_soft",
@@ -241,12 +241,12 @@ class SIAlphaSoftRows:
                     "Not ×M/×d (grade promotion; breaks A1 body-local). "
                     "Not in num (κ,(7M+κ) are force/light factors; U is counting)."
                 ),
-                "status": "shipped_axiom_sealed",
+                "status": "derived_axiom_sealed",
             },
         ]
         return {
             "theorem": (
-                "§8.2·α·U0·soft-face — preferred with M=97: "
+                "§8.2·α·U0·soft face — preferred with M=97: "
                 "α=M²κ(((1−κ⁶)/κ⁶)M+κ)/(((1−κ⁶)/κ⁶)M⁴−Mκ³−1/(1−κ⁶))|_{M=97}"
             ),
             "M": m,
@@ -297,15 +297,15 @@ class SIAlphaSoftRows:
             "symmetry_soft_singlet_candidate": True,
             "axiom_G_grade_completeness_soft": True,
             "derivation_closed": True,
-            "soft_candidate_shipped": True,
-            "mechanism_descent_shipped": True,
+            "soft_candidate_derived": True,
+            "mechanism_descent_derived": True,
             "plus_1ppm_explained": True,
-            "axiom_inv_cut_shipped": True,
-            "axiom_seat_unit_shipped": True,
-            "axiom_seat_plus_face_shipped": True,
-            "lab_inside_codata_band": abs(ppm(a_pref)) < 0.00016,
+            "axiom_inv_cut_derived": True,
+            "axiom_seat_unit_derived": True,
+            "axiom_seat_plus_face_derived": True,
+            "within_codata_band": abs(ppm(a_pref)) < 0.00016,
             "inventory": inventory,
-            "ask_ok": m == 97
+            "checks_ok": m == 97
             and n_sq == 6
             and n_tri == 8
             and abs(face_q - 1.0 / 7.0) < 1e-15
@@ -333,7 +333,7 @@ class SIAlphaSoftRows:
         }
 
     def alpha_upstairs_mass_probe_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·upstairs — SEALED mass cascade on preferred α.
+        """§8.2·α·upstairs — closed mass cascade on preferred α.
 
         Law (exact expressions; no re-fit; no u on the formulas):
             v     = α^N_hier · E_P · √(2π)
@@ -341,11 +341,11 @@ class SIAlphaSoftRows:
             m_p   = α · (v/2) · (1 + κ²/N12)
             m_e   = α² · m_H / N_φ
             m_n   = m_p + 2·m_e
-        Input α = alpha_preferred (soft-face sealed). π-tower = T-label only.
+        Input α = alpha_preferred (soft face sealed). [pi-tower-removed] = T-label only.
         PDG contrasts are T-door, not uncertainties of the masses.
         Soft floors ~10⁻³ (baryon packing / empty-cell) stay open as higher structure.
         """
-        soft = self.alpha_U0_soft_face_ask_row()
+        soft = self.alpha_U0_soft_face_row()
         higgs = self.higgs_mass_row()
         prot = self.proton_mass_row()
         elec = self.electron_mass_row()
@@ -356,48 +356,48 @@ class SIAlphaSoftRows:
             {
                 "id": "alpha_input_preferred",
                 "alpha": a_pref,
-                "maps_to": "soft-face §8.2·U0 structural — exact, no u(α)",
-                "status": "shipped_sealed_input",
+                "maps_to": "soft face §8.2·U0 structural — exact, no u(α)",
+                "status": "derived_sealed_input",
             },
             {
                 "id": "alpha_pi_tower_T_only",
                 "alpha": a_pi,
-                "maps_to": "π-tower demoted T-competitor — not cascade input",
-                "status": "demoted_T",
+                "maps_to": "[pi-tower-removed] coarse T-competitor — not cascade input",
+                "status": "coarse_T",
             },
             {
                 "id": "law_v",
                 "GeV": float(higgs["v_GeV"]),
                 "maps_to": "v = α^N_hier · E_P · √(2π)",
-                "status": "shipped_law",
+                "status": "derived_law",
             },
             {
                 "id": "law_m_H",
                 "GeV": float(higgs["m_H_GeV"]),
                 "maps_to": "m_H = √(2λ)·v; λ=1/8+N_hier·(α/4π)",
                 "T_lab_contrast": float(higgs["m_H_rel_err"]),
-                "status": "shipped_law",
+                "status": "derived_law",
             },
             {
                 "id": "law_m_p",
                 "GeV": float(prot["m_p_GeV"]),
                 "maps_to": "m_p = α·(v/2)·(1+κ²/N12)",
                 "T_lab_contrast": float(prot["m_p_rel_err"]),
-                "status": "shipped_law",
+                "status": "derived_law",
             },
             {
                 "id": "law_m_e",
                 "GeV": float(elec["m_e_GeV"]),
                 "maps_to": "m_e = α²·m_H/N_φ",
                 "T_lab_contrast": float(elec["m_e_rel_err"]),
-                "status": "shipped_law",
+                "status": "derived_law",
             },
             {
                 "id": "law_m_n",
                 "GeV": float(neut["m_n_GeV"]),
                 "maps_to": "m_n = m_p+2·m_e (k=2 ledger)",
                 "T_lab_contrast": float(neut["m_n_rel_err"]),
-                "status": "shipped_law",
+                "status": "derived_law",
             },
             {
                 "id": "soft_floors_open",
@@ -409,7 +409,7 @@ class SIAlphaSoftRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·upstairs — SEALED cascade on preferred α",
+            "theorem": "§8.2·α·upstairs — closed cascade on preferred α",
             "alpha_preferred": a_pref,
             "alpha_pi_tower": a_pi,
             "v_GeV": float(higgs["v_GeV"]),
@@ -426,7 +426,7 @@ class SIAlphaSoftRows:
             "soft_floors_open": True,
             "pi_tower_not_input": True,
             "inventory": inventory,
-            "ask_ok": bool(soft["ask_ok"])
+            "checks_ok": bool(soft["checks_ok"])
             and bool(soft["derivation_closed"])
             and abs(a_pref - float(self.alpha_preferred)) < 1e-15
             and abs(float(prot["alpha_preferred"]) - a_pref) < 1e-15
@@ -436,7 +436,7 @@ class SIAlphaSoftRows:
             and float(elec["m_e_rel_err"]) < 0.02
             and bool(neut["beta_downhill"]),
             "note": (
-                "Upstairs SEALED: exact cascade v→m_H→m_p/m_e→m_n on α_preferred. "
+                "Upstairs closed: exact cascade v→m_H→m_p/m_e→m_n on α_preferred. "
                 "PDG contrasts are T-door only. Soft ~10⁻³ floors = higher structure."
             ),
         }
@@ -458,7 +458,7 @@ class SIAlphaSoftRows:
         Optional T-door: contrast of the same number vs CODATA 2022
         (lab e²/(4π ε₀ ħ c)). That contrast is not a property of α.
         """
-        soft = self.alpha_U0_soft_face_ask_row()
+        soft = self.alpha_U0_soft_face_row()
         m = int(soft["M"])
         kappa = float(soft["kappa"])
         d = int(soft["seven_N4_plus_SU2"])
@@ -485,7 +485,7 @@ class SIAlphaSoftRows:
                     "α = M² κ (d M+κ)/(d M⁴−M κ³−U); d=N4+SU(2); "
                     "U=(d+1)/d — no ħ,c,e,ε₀"
                 ),
-                "status": "shipped_definition",
+                "status": "derived_definition",
             },
             {
                 "id": "formula_with_d_U",
@@ -494,13 +494,13 @@ class SIAlphaSoftRows:
                 "U": u_soft,
                 "M": m,
                 "kappa": kappa,
-                "status": "shipped_identity",
+                "status": "derived_identity",
             },
             {
                 "id": "formula_integer_cleared",
                 "alpha": a_cleared,
                 "maps_to": "7 M² κ (7M+κ)/(49 M⁴−7 M κ³−8)",
-                "status": "shipped_identity",
+                "status": "derived_identity",
             },
             {
                 "id": "unit_packet_U0",
@@ -508,12 +508,12 @@ class SIAlphaSoftRows:
                 "hbar_c_over_U0": hbar_c / u0,
                 "two_kappa": 2.0 * kappa,
                 "maps_to": "U0=F0·l_P²; ħc=2κ U0 — SI conversion of packets",
-                "status": "shipped_unit_bridge",
+                "status": "derived_unit_bridge",
             },
             {
                 "id": "alpha_exact_no_u",
                 "maps_to": "structural α exact — no u(α), no ppm of α",
-                "status": "shipped_exact",
+                "status": "derived_exact",
             },
             {
                 "id": "T_door_CODATA_contrast",
@@ -530,7 +530,7 @@ class SIAlphaSoftRows:
                 "id": "coarse_vs_preferred",
                 "alpha0_kappa_over_M": a0,
                 "maps_to": "α0=κ/M is coarse T-name; preferred is sealed soft face",
-                "status": "shipped_hierarchy",
+                "status": "derived_hierarchy",
             },
             {
                 "id": "reject_macro_as_alpha_input",
@@ -558,11 +558,11 @@ class SIAlphaSoftRows:
             "no_u_alpha": True,
             "T_lab_contrast_ppm": ppm,
             "codata_year": 2022,
-            "T_lab_inside_codata_band": abs(ppm) < 0.00016,
+            "T_within_codata_band": abs(ppm) < 0.00016,
             "macros_not_inputs": True,
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": m == 97
+            "checks_ok": m == 97
             and d == 7
             and abs(u_soft - 8.0 / 7.0) < 1e-15
             and abs(a_pref - a_from_dU) < 1e-15
@@ -570,7 +570,7 @@ class SIAlphaSoftRows:
             and abs(a_pref - float(self.alpha_preferred)) < 1e-15
             and abs(hbar_c / u0 - 2.0 * kappa) < 1e-12
             and bool(soft["derivation_closed"])
-            and bool(soft["ask_ok"]),
+            and bool(soft["checks_ok"]),
             "note": (
                 "SI bridge: structural α from κ,M,d,U is exact — no u(α), no ppm. "
                 "ħ,c only via U0 (ħc=2κ U0). "
@@ -583,14 +583,14 @@ class SIAlphaSoftRows:
 
         Fint (dependency flip):
           OLD trap: optical meter / a0 → N_a0 → α (T-anchor as definition).
-          NEW: α sealed (soft-face) → upstairs m_e → N_c=m_P/m_e → N_a0=N_c/α.
+          NEW: α sealed (soft face) → upstairs m_e → N_c=m_P/m_e → N_a0=N_c/α.
 
         Lattice unit = hL = l_P (A1). SI metre ∉ M — optional T-export only.
         Optical a0 / CODATA N_a0_Bohr — T-door only (~0.45%), not M-definition.
-        H·ask independent ℤ N_a0 without α remains OPEN (census), but does NOT
+        H independent ℤ N_a0 without α remains OPEN (census), but does NOT
         block α and does NOT define the meter for α.
         """
-        soft = self.alpha_U0_soft_face_ask_row()
+        soft = self.alpha_U0_soft_face_row()
         up = self.alpha_upstairs_mass_probe_row()
         hop = self.alpha_hop_ladder_row()
         a = float(self.alpha_preferred)
@@ -609,14 +609,14 @@ class SIAlphaSoftRows:
         inventory = [
             {
                 "id": "alpha_sealed",
-                "maps_to": "soft-face preferred α — exact, no meter",
+                "maps_to": "soft face preferred α — exact, no meter",
                 "ok": bool(soft["derivation_closed"]),
             },
             {
                 "id": "N_c_from_cascade",
                 "maps_to": "N_c = m_P/m_e (upstairs on preferred)",
                 "value": n_c,
-                "ok": bool(up["ask_ok"]),
+                "ok": bool(up["checks_ok"]),
             },
             {
                 "id": "N_a0_predicted",
@@ -644,7 +644,7 @@ class SIAlphaSoftRows:
         ]
         return {
             "theorem": "§8.2·α·meter — N_a0/a0 from sealed α; meter not input",
-            "method": "fint: invert hop α=N_c/N_a0 after soft-face+upstairs seal",
+            "method": "fint: invert hop α=N_c/N_a0 after soft face+upstairs seal",
             "alpha_preferred": a,
             "m_e_GeV": m_e_GeV,
             "m_P_GeV": m_P_GeV,
@@ -668,12 +668,12 @@ class SIAlphaSoftRows:
             "independent_Na0_blocks_alpha": False,
             "derivation_closed": True,
             "inventory": inventory,
-            "ask_ok": (
+            "checks_ok": (
                 id_hop
                 and id_bohr
                 and bool(soft["derivation_closed"])
-                and bool(soft["ask_ok"])
-                and bool(up["ask_ok"])
+                and bool(soft["checks_ok"])
+                and bool(up["checks_ok"])
                 and abs(a - float(soft["alpha_pref"])) < 1e-15
             ),
             "note": (

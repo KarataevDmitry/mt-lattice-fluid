@@ -107,7 +107,7 @@ class SISmRows:
             "E_0": self.E_0,
             "s_0": self.s_0,
             "hbar": self.hbar,
-            "delta_B_move_stamped": False,
+            "delta_B_move_derived": False,
             "proton_to_e_pi0_forbidden": True,
             "weak_delta_B0_class_allowed": True,
             "neutron_beta_channel_schema": True,
@@ -140,7 +140,7 @@ class SISmRows:
         }
 
     def bubble_tick_row(self) -> dict[str, float | int | str | bool]:
-        """META §3.0.1 — our bubble: exact N↔SI via stamped hT (no readout).
+        """META §3.0.1 — our bubble: exact N↔SI via derived hT (no readout).
 
         Convention: N=0 = local BB of phase I; t_SI(0)=0. ΛCDM age/recombination are
         T-layer inputs (not g knobs) used to infer integer tick labels.

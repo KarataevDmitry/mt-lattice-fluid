@@ -93,14 +93,14 @@ def check_alpha_fixed_point(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_force_lattice_ask(device: str = "cpu") -> dict:
-    """§8.2·F·ask — α=κ/M from F₀ lattice; M from g still OPEN."""
+def check_alpha_force_lattice(device: str = "cpu") -> dict:
+    """§8.2·F — α=κ/M from F₀ lattice; M from g still OPEN."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_force_lattice_ask_row()
+    row = SI.alpha_force_lattice_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["M_from_g_open"])
         and not bool(row["replaces_pi_ansatz"])
         and abs(float(row["M_N12_Nhier"]) - 96.0) < 1e-12
@@ -108,7 +108,7 @@ def check_alpha_force_lattice_ask(device: str = "cpu") -> dict:
         and abs(float(row["vs_codata_ppm_M96"]) - 9365.5) < 1.0
     )
     return {
-        "id": "Alpha_force_lattice_ask",
+        "id": "Alpha_force_lattice",
         "M_target_CODATA": row["M_target_CODATA"],
         "alpha_M96_inv": row["alpha_M96_inv"],
         "alpha_M97_inv": row["alpha_M97_inv"],
@@ -119,21 +119,21 @@ def check_alpha_force_lattice_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_meaning_ask(device: str = "cpu") -> dict:
+def check_alpha_meaning(device: str = "cpu") -> dict:
     """§8.2·α·meaning — α is phase↔vacuum coupling; soft residual OPEN."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_meaning_ask_row()
+    row = SI.alpha_meaning_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["residue_equals_1_over_4pi"])
         and bool(row["discrete_coupling_open"])
         and not bool(row["replaces_pi_ansatz"])
         and abs(float(row["vs_codata_ppm_pi"]) + 2.223) < 0.01
     )
     return {
-        "id": "Alpha_meaning_ask",
+        "id": "Alpha_meaning",
         "vacuum_residue": row["vacuum_residue"],
         "four_pi_times_alpha": row["four_pi_times_alpha"],
         "alpha_fs_inv": row["alpha_fs_inv"],
@@ -142,14 +142,14 @@ def check_alpha_meaning_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_descent_ask(device: str = "cpu") -> dict:
+def check_alpha_descent(device: str = "cpu") -> dict:
     """§8.2·α·descent — amnesia vacuum→coupling; fraction OPEN."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_descent_ask_row()
+    row = SI.alpha_descent_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["residue_is_not_alpha"])
         and bool(row["coupling_fraction_open"])
         and not bool(row["used_alpha_fs_as_input"])
@@ -158,7 +158,7 @@ def check_alpha_descent_ask(device: str = "cpu") -> dict:
         and abs(float(row["vs_codata_ppm_pi_AFTER"]) + 2.223) < 0.01
     )
     return {
-        "id": "Alpha_descent_ask",
+        "id": "Alpha_descent",
         "vacuum_residue": row["vacuum_residue"],
         "N_phi": row["N_phi"],
         "alpha_geom_inv": row["alpha_geom_inv"],
@@ -176,7 +176,7 @@ def check_alpha_mass_defect_optics(device: str = "cpu") -> dict:
     del device
     row = SI.alpha_mass_defect_optics_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and abs(float(row["rel_alpha_from_dm"])) < 1e-12
         and abs(float(row["U_a0_over_BE"]) - 2.0) < 1e-12
         and abs(float(row["E_coul_NN_over_E0"]) - float(row["alpha_over_kappa"])) < 1e-12
@@ -199,7 +199,7 @@ def check_alpha_arg_binding_try(device: str = "cpu") -> dict:
     del device
     row = SI.alpha_arg_binding_try_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and not bool(row["derivation_closed"])
         and abs(float(row["rel_arg_identity"])) < 1e-12
     )
@@ -213,19 +213,19 @@ def check_alpha_arg_binding_try(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_schwinger_ask(device: str = "cpu") -> dict:
+def check_alpha_schwinger(device: str = "cpu") -> dict:
     """§8.2·α·Schwinger — lab door ae; phase residue explains 1/(2π)."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_schwinger_ask_row()
+    row = SI.alpha_schwinger_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and not bool(row["derivation_closed"])
         and abs(float(row["rel_2ar_vs_schwinger"])) < 1e-15
     )
     return {
-        "id": "Alpha_schwinger_ask",
+        "id": "Alpha_schwinger",
         "ae_Schwinger_1loop": row["ae_Schwinger_1loop"],
         "vacuum_phase_residue_r": row["vacuum_phase_residue_r"],
         "one_loop_vs_ae_ppm": row["one_loop_vs_ae_ppm"],
@@ -234,20 +234,20 @@ def check_alpha_schwinger_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_dirac_g2_ask(device: str = "cpu") -> dict:
-    """§8.2·α·g2·ask — bare g=2 closed; A5→ae still open."""
+def check_alpha_dirac_g2(device: str = "cpu") -> dict:
+    """§8.2·α·g2 — bare g=2 closed; A5→ae still open."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_dirac_g2_ask_row()
+    row = SI.alpha_dirac_g2_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["bare_g2_closed"])
         and not bool(row["derivation_ae_closed"])
         and abs(float(row["g_bare"]) - 2.0) < 1e-15
     )
     return {
-        "id": "Alpha_dirac_g2_ask",
+        "id": "Alpha_dirac_g2",
         "g_bare": row["g_bare"],
         "ae_bare": row["ae_bare"],
         "bare_g2_closed": row["bare_g2_closed"],
@@ -256,21 +256,21 @@ def check_alpha_dirac_g2_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_ae_cloud_ask(device: str = "cpu") -> dict:
-    """§8.2·α·ae·ask — ae=α·2r factors; does not bypass coupling OPEN."""
+def check_alpha_ae_cloud(device: str = "cpu") -> dict:
+    """§8.2·α·ae — ae=α·2r factors; does not bypass coupling OPEN."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_ae_cloud_ask_row()
+    row = SI.alpha_ae_cloud_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["factorization_closed"])
         and not bool(row["derivation_ae_closed"])
         and not bool(row["bypasses_coupling_open"])
         and abs(float(row["best_geo_ppm"])) > 1e3
     )
     return {
-        "id": "Alpha_ae_cloud_ask",
+        "id": "Alpha_ae_cloud",
         "two_r": row["two_r"],
         "best_geo_try": row["best_geo_try"],
         "best_geo_ppm": row["best_geo_ppm"],
@@ -281,14 +281,14 @@ def check_alpha_ae_cloud_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_rydberg_hall_ask(device: str = "cpu") -> dict:
+def check_alpha_rydberg_hall(device: str = "cpu") -> dict:
     """§8.2·α·Rydberg·Hall — lab doors; R_∞ phase-residue identity; same coupling OPEN."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_rydberg_hall_ask_row()
+    row = SI.alpha_rydberg_hall_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["factorization_rydberg_closed"])
         and not bool(row["hall_is_alpha_source_post2019"])
         and not bool(row["derivation_closed"])
@@ -296,7 +296,7 @@ def check_alpha_rydberg_hall_ask(device: str = "cpu") -> dict:
         and abs(float(row["rel_Rinf_phase_residue_vs_classic"])) < 1e-15
     )
     return {
-        "id": "Alpha_rydberg_hall_ask",
+        "id": "Alpha_rydberg_hall",
         "Rinf_vs_codata_ppm": row["Rinf_vs_codata_ppm"],
         "Hall_legacy_vs_codata_ppm": row["Hall_legacy_vs_codata_ppm"],
         "hall_is_alpha_source_post2019": row["hall_is_alpha_source_post2019"],
@@ -305,21 +305,21 @@ def check_alpha_rydberg_hall_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_em_face_weight_ask(device: str = "cpu") -> dict:
+def check_alpha_em_face_weight(device: str = "cpu") -> dict:
     """§8.2·α·EM·faces — area/dihedral ≠ α; Φ_□ still open."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_em_face_weight_ask_row()
+    row = SI.alpha_em_face_weight_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and not bool(row["face_weight_is_alpha"])
         and not bool(row["derivation_closed"])
         and not bool(row["bypasses_coupling_open"])
         and abs(float(row["best_ppm"])) > 1e3
     )
     return {
-        "id": "Alpha_em_face_weight_ask",
+        "id": "Alpha_em_face_weight",
         "w_square": row["w_square"],
         "best_try": row["best_try"],
         "best_ppm": row["best_ppm"],
@@ -329,21 +329,21 @@ def check_alpha_em_face_weight_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_dual_fraction_ask(device: str = "cpu") -> dict:
+def check_alpha_dual_fraction(device: str = "cpu") -> dict:
     """§8.2·α·dual — α=m/n via two independent paths; inventory pairs."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_dual_fraction_ask_row()
+    row = SI.alpha_dual_fraction_row()
     strongest = str(row["strongest_alive_pair"])
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and not bool(row["derivation_closed"])
         and bool(row.get("M_combinatorial_closed", False))
-        and ("soft-face" in strongest or strongest.startswith("force"))
+        and ("soft face" in strongest or strongest.startswith("force"))
     )
     return {
-        "id": "Alpha_dual_fraction_ask",
+        "id": "Alpha_dual_fraction",
         "strongest_alive_pair": row["strongest_alive_pair"],
         "M_combinatorial_closed": row.get("M_combinatorial_closed"),
         "M_target": row["M_target"],
@@ -353,21 +353,21 @@ def check_alpha_dual_fraction_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_sqrt2_descent_ask(device: str = "cpu") -> dict:
+def check_alpha_sqrt2_descent(device: str = "cpu") -> dict:
     """§8.2·α·√2·descent — force dual ⇒ α∉ℚ; reject exact p/q."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_sqrt2_descent_ask_row()
+    row = SI.alpha_sqrt2_descent_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["lemma_force_alpha_not_rational"])
         and bool(row["reject_exact_rational_alpha_under_force"])
         and bool(row["derivation_M_closed"])
         and abs(float(row["kappa"]) ** 2 - 0.5) < 1e-15
     )
     return {
-        "id": "Alpha_sqrt2_descent_ask",
+        "id": "Alpha_sqrt2_descent",
         "kappa": row["kappa"],
         "M_target": row["M_target"],
         "lemma_force_alpha_not_rational": row["lemma_force_alpha_not_rational"],
@@ -383,7 +383,7 @@ def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
     del device
     row = SI.alpha_M_from_g_try_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["story_ok"])
         and bool(row["derivation_closed"])
         and int(row["M_try"]) == 97
@@ -398,14 +398,14 @@ def check_alpha_M_from_g_try(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
-    """§8.2·α·nF·Thm — lemmas force unique M=97 (kick-ledger seats)."""
+def check_alpha_nF_momentum_registry(device: str = "cpu") -> dict:
+    """§8.2·α·nF·Thm — lemmas force unique M=97 (momentum registry seats)."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_nF_kick_census_row()
+    row = SI.alpha_nF_momentum_registry_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["census_ok"])
         and bool(row["derivation_closed"])
         and not bool(row["runtime_sim_closed"])
@@ -414,7 +414,7 @@ def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
         and int(row["n_link_hier"]) == 96
     )
     return {
-        "id": "Alpha_nF_kick_census",
+        "id": "Alpha_nF_momentum_registry",
         "n_F_seats": row["n_F_seats"],
         "M": row["M"],
         "alpha": row["alpha"],
@@ -431,8 +431,8 @@ def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
     del device
     row = SI.alpha_full_quantization_bridge_row()
     ok = (
-        bool(row["ask_ok"])
-        and bool(row["discrete_path_shipped"])
+        bool(row["checks_ok"])
+        and bool(row["discrete_path_derived"])
         and bool(row["M_combinatorial_closed"])
         and bool(row["pi_tower_absent"])
         and bool(row["soft_residual_open"])
@@ -445,7 +445,7 @@ def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
         "alpha": row["alpha"],
         "vs_codata_ppm_discrete": row["vs_codata_ppm_discrete"],
         "vs_codata_ppm_pi_tower": row["vs_codata_ppm_pi_tower"],
-        "discrete_path_shipped": row["discrete_path_shipped"],
+        "discrete_path_derived": row["discrete_path_derived"],
         "soft_residual_open": row["soft_residual_open"],
         "ok": ok,
         "note": row["note"],
@@ -457,7 +457,7 @@ def check_alpha_upstairs_mass_probe(device=None):
     del device
     r = SI.alpha_upstairs_mass_probe_row()
     ok = (
-        bool(r["ask_ok"])
+        bool(r["checks_ok"])
         and bool(r["derivation_closed"])
         and bool(r["cascade_law_closed"])
         and bool(r["pi_tower_not_input"])
@@ -484,7 +484,7 @@ def check_alpha_si_bridge(device: str = "cpu") -> dict:
     del device
     row = SI.alpha_si_bridge_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["macros_not_inputs"])
         and bool(row["alpha_exact"])
@@ -517,7 +517,7 @@ def check_alpha_meter_na0_bridge(device: str = "cpu") -> dict:
     del device
     row = SI.alpha_meter_na0_bridge_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["meter_not_input_to_alpha"])
         and bool(row["meter_not_on_M"])
@@ -549,7 +549,7 @@ def check_coulomb_M_native(device: str = "cpu") -> dict:
     del device
     row = SI.coulomb_M_native_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["identity_alpha_equals_F_NN_over_FP"])
         and bool(row["derivation_closed"])
         and bool(row["soft_residual_open"])
@@ -566,24 +566,24 @@ def check_coulomb_M_native(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
-    """§8.2 soft-face — prefer seat+face unit; inside CODATA 2022 band."""
+def check_alpha_U0_soft_face(device: str = "cpu") -> dict:
+    """§8.2 soft face — prefer seat+face unit; inside CODATA 2022 band."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.alpha_U0_soft_face_ask_row()
+    row = SI.alpha_U0_soft_face_row()
     ok = (
-        bool(row["ask_ok"])
-        and bool(row["soft_candidate_shipped"])
-        and bool(row["mechanism_descent_shipped"])
+        bool(row["checks_ok"])
+        and bool(row["soft_candidate_derived"])
+        and bool(row["mechanism_descent_derived"])
         and bool(row["plus_1ppm_explained"])
-        and bool(row["axiom_inv_cut_shipped"])
-        and bool(row["axiom_seat_unit_shipped"])
-        and bool(row["axiom_seat_plus_face_shipped"])
+        and bool(row["axiom_inv_cut_derived"])
+        and bool(row["axiom_seat_unit_derived"])
+        and bool(row["axiom_seat_plus_face_derived"])
         and bool(row["identity_dress_frac"])
         and bool(row["identity_invcut_frac"])
         and bool(row["identity_pref_face_seat"])
-        and bool(row["lab_inside_codata_band"])
+        and bool(row["within_codata_band"])
         and bool(row["identity_seven_N4_plus_SU2"])
         and bool(row["seven_meaning_fundamental_candidate"])
         and not bool(row["carrier_soft_unit_answer_candidate"])
@@ -599,13 +599,13 @@ def check_alpha_U0_soft_face_ask(device: str = "cpu") -> dict:
         and abs(float(row["vs_codata_ppm_seat"])) < 0.001
     )
     return {
-        "id": "Alpha_U0_soft_face_ask",
+        "id": "Alpha_U0_soft_face",
         "M": row["M"],
         "alpha_pref": row["alpha_pref"],
         "vs_codata_ppm_pref": row["vs_codata_ppm_pref"],
         "vs_codata_ppm_seat": row["vs_codata_ppm_seat"],
         "codata_year": row["codata_year"],
-        "lab_inside_codata_band": row["lab_inside_codata_band"],
+        "within_codata_band": row["within_codata_band"],
         "ok": ok,
         "note": row["note"],
     }

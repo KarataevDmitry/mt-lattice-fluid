@@ -26,7 +26,7 @@ from mt_ca.update import apply_heisenberg_floor, vacuum_phase, wrapped_phase_dif
 
 
 def check_na0_from_carrier(device: str = "cpu") -> dict:
-    """HISTORICAL: N_a0=N_c·137 probe; ask-model rejected as α-input."""
+    """HISTORICAL: N_a0=N_c·137 probe; model rejected as α-input."""
     from mt_ca.si_constants import SI
 
     del device
@@ -50,14 +50,14 @@ def check_na0_from_carrier(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_na0_h_carrier_ask(device: str = "cpu") -> dict:
-    """§8.2·H·ask — carrier inventory for N_a0; independent integer still OPEN."""
+def check_na0_h_carrier(device: str = "cpu") -> dict:
+    """§8.2·H — carrier inventory for N_a0; independent integer still OPEN."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.na0_h_carrier_ask_row()
+    row = SI.na0_h_carrier_inventory_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["N_a0_must_be_integer"])
         and bool(row["mass_hop_same_power"])
         and bool(row["reject_Nc_times_137"])
@@ -66,7 +66,7 @@ def check_na0_h_carrier_ask(device: str = "cpu") -> dict:
         and float(row["rel_mass_vs_hop_alpha2"]) < 1e-4
     )
     return {
-        "id": "Na0_H_carrier_ask",
+        "id": "Na0_H_carrier",
         "mass_hop_same_power": row["mass_hop_same_power"],
         "rel_mass_vs_hop_alpha2": row["rel_mass_vs_hop_alpha2"],
         "reject_Nc_times_137": row["reject_Nc_times_137"],
@@ -82,7 +82,7 @@ def check_meter_decouple_from_M(device: str = "cpu") -> dict:
     del device
     row = SI.meter_decouple_from_M_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["meter_not_on_M"])
         and bool(row["SI_metre_is_T_export_only"])
@@ -110,7 +110,7 @@ def check_length_dim_from_lP_alpha(device: str = "cpu") -> dict:
     del device
     row = SI.length_dim_from_lP_alpha_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["length_dim_is_l_P"])
         and bool(row["identity_L_eq_V_T"])
@@ -139,7 +139,7 @@ def check_time_dim_from_tP(device: str = "cpu") -> dict:
     del device
     row = SI.time_dim_from_tP_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["time_dim_is_t_P"])
         and bool(row["M_tick_is_hT"])
@@ -167,7 +167,7 @@ def check_units_time_first_cascade(device: str = "cpu") -> dict:
     del device
     row = SI.units_time_first_cascade_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["time_first"])
         and bool(row["si_base_triad_LMT"])
@@ -197,7 +197,7 @@ def check_planck_temperature_independent(device: str = "cpu") -> dict:
     del device
     row = SI.planck_temperature_independent_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["k_B_not_in_definition"])
         and bool(row["no_separate_Theta_on_M"])

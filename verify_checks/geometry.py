@@ -287,6 +287,8 @@ def check_spinor_360_sign(size: int = 64, device: str = "cpu") -> dict:
 
 def check_no_m_heat_death(device: str = "cpu") -> dict:
     """§2.3 theorem: M has no heat death / no shutdown — A3 + A5 + A13."""
+    from verify_checks.axioms import check_a3_unitarity, check_a5_vacuum_floor
+
     a3 = check_a3_unitarity(device=device)
     a5 = check_a5_vacuum_floor(device=device)
     a13 = check_leapfrog_bit_exact(device=device)

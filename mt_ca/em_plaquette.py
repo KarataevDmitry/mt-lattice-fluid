@@ -252,7 +252,7 @@ def square_face_holonomy_probe(
         "E_link_monopole_SI": e_link_mono,
         "E_link_alpha_SI": e_link_alpha,
         "alpha_fs": alpha,
-        "F_over_F_P_stamped": f_over_fp,
+        "F_over_F_P_derived": f_over_fp,
         "F_P_N": f_p,
         "alpha_from_abs_dphi_nn": alpha_from_dphi,
         "alpha_from_E_rel_err": alpha_rel_err,

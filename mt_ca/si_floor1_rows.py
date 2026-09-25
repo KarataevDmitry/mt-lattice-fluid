@@ -16,14 +16,14 @@ from mt_ca.si_constants import (
 class SIFloor1Rows:
     """Ask/row probes — do not grow si_constants with these."""
 
-    def floor1_leptonic_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§6·floor1·ask — what can live at 10³…10⁵·dl (pre-resonances / leptonic).
+    def floor1_leptonic_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1 — what can live at 10³…10⁵·dl (pre-resonances / leptonic).
 
         Walk (carrier, no α-fit):
           Floor 0 = one-cell pra-defect (electron core). Floor 2+ = confining
           (girth d, B-class). Floor 1 sits in the desert BETWEEN them.
 
-        Scale window (stamped integers, not CODATA):
+        Scale window (derived integers, not CODATA):
           N₁₂³ = 1728 ≈ 10³
           N₁₂⁴ = 20736 ≈ 2·10⁴
           N₁₂⁵ = 248832 ≈ 2.5·10⁵ (slightly above table hi)
@@ -111,7 +111,7 @@ class SIFloor1Rows:
             },
             {
                 "id": "closed_by_B0_census",
-                "maps_to": "floor1_B0_census_ask_row — C2 stable; C4=pre-resonance",
+                "maps_to": "floor1_B0_census_row — C2 stable; C4=pre-resonance",
                 "status": "closed",
                 "mechanism": "class census from §8.2 stability",
             },
@@ -123,7 +123,7 @@ class SIFloor1Rows:
         ]
 
         return {
-            "theorem": "§6·floor1·ask — leptonic pre-resonance band on N₁₂^{3…4}",
+            "theorem": "§6·floor1 — leptonic pre-resonance band on N₁₂^{3…4}",
             "N12": n12,
             "N_phi": n_phi,
             "N_hier": n_hier,
@@ -138,7 +138,7 @@ class SIFloor1Rows:
             "floor2_scale_above_floor1": floor2_above,
             "derivation_closed": False,
             "inventory": inventory,
-            "ask_ok": window_ok and ir_far and floor2_above and n12 == 12,
+            "checks_ok": window_ok and ir_far and floor2_above and n12 == 12,
             "note": (
                 "Floor 1: linear band ~N₁₂³…N₁₂⁴·dl (pre-resonances / leptonic). "
                 "Not Compton/a₀, not confining floor 2, not N_gen. "
@@ -146,11 +146,11 @@ class SIFloor1Rows:
             ),
         }
 
-    def floor1_B0_census_ask_row(self) -> dict[str, float | int | str | bool | list]:
+    def floor1_B0_census_row(self) -> dict[str, float | int | str | bool | list]:
         """§6·floor1·B0·census — which B=0 configs at ~N₁₂³…N₁₂⁴ can be stable.
 
-        Stability (already stamped §8.2 decay): no downhill g with same
-        additive invariants (Q, and stamped B,L,…) and lower ledger energy.
+        Stability (already derived §8.2 decay): no downhill g with same
+        additive invariants (Q, and derived B,L,…) and lower ledger energy.
 
         B=0 here = not confining/baryon class (≠ floor 2/3). Radius band
         from floor1 ask: N₁₂³…N₁₂⁴ · dl.
@@ -173,17 +173,17 @@ class SIFloor1Rows:
             — UNSTABLE at class level: products C2 + γ (n=0) conserve Q,
               A3 energy downhill by definition of higher E, radiation
               sector exists (C1). Multi-shell excitation already downhill
-              (dressing·close). Existence of channel CLOSED; Γ soft-OPEN.
+              (dressing·close). Existence of channel closed; Γ soft-OPEN.
 
           C4 Q=0 multi-cell blob without ± pair (pure excitation)
             — NO topo charge to protect; A5 returns to vacuum.
               = pre-resonance / transient. UNSTABLE.
 
           C5 ± pair bound at floor1 radius (positronium-like)
-            — annihilation channel stamped when ± meet (§5.0.3).
+            — annihilation channel derived when ± meet (§5.0.3).
               UNSTABLE as bound B=0 object.
 
-          C6 neutral with stamped L (ν-scheme)
+          C6 neutral with derived L (ν-scheme)
             — may be stable if lightest in its L sector; spatial size
               NOT in floor1 band (reject R≡N₁₂^{3…4}). Off-band object.
 
@@ -272,23 +272,23 @@ class SIFloor1Rows:
             "derivation_closed": census_ok,
             "sim_metastable_maps_open": False,
             "soft_Gamma_open": True,  # n_ticks filled-bath soft (continuum≠M closed)
-            "ask_ok": census_ok,
+            "checks_ok": census_ok,
             "note": (
                 "B=0 census @ N₁₂³…N₁₂⁴: C2 dressed e± STABLE; "
                 "C4 Q=0 blobs = pre-resonances UNSTABLE; "
-                "C5 ± annihilate; C3 channel CLOSED; continuum Γ≠M; n_ticks bath SOFT; "
+                "C5 ± annihilate; C3 channel closed; continuum Γ≠M; n_ticks bath SOFT; "
                 "C6 ν off-band (R≠floor1)."
             ),
         }
 
-    def floor1_dressing_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§6·floor1·dressing·ask — what is the near-zone of lightest Q=±1?
+    def floor1_dressing_row(self) -> dict[str, float | int | str | bool | list]:
+        """§6·floor1·dressing — what is the near-zone of lightest Q=±1?
 
         Ask to carrier (§5.0.5), not invention:
 
           What is ρ_Θ? What fixes its support radius?
 
-        CLOSED from stamped pieces:
+        closed from derived pieces:
           · dressing = ρ_Θ cloud around b=1 core (§5.0.5)
             — NOT a second particle; NOT Compton/a0 cloud
           · ρ_Θ(x) ∝ f(|Δφ_N(x)|, |ζ(x)|) with floor Δφ_min
@@ -382,7 +382,7 @@ class SIFloor1Rows:
             i["id"] for i in inventory if str(i["status"]).startswith("rejected")
         ]
 
-        ask_ok = (
+        checks_ok = (
             n12 == 12
             and abs(dphi - 0.5) < 1e-12
             and r_min == 1.0
@@ -393,7 +393,7 @@ class SIFloor1Rows:
         )
 
         return {
-            "theorem": "§6·floor1·dressing·ask — near-zone ρ_Θ of lightest Q=±1",
+            "theorem": "§6·floor1·dressing — near-zone ρ_Θ of lightest Q=±1",
             "N12": n12,
             "N_phi": n_phi,
             "Delta_phi_min": dphi,
@@ -406,7 +406,7 @@ class SIFloor1Rows:
             "closed_ids": closed_ids,
             "open_ids": open_ids,
             "reject_ids": reject_ids,
-            "ask_ok": ask_ok,
+            "checks_ok": checks_ok,
             "note": (
                 "Dressing = ρ_Θ halo (§5.0.5): min ⊇ ε-star (1·dl, N12). "
                 "Outer R_dress OPEN (shell-walk / combinatorial). "
@@ -417,9 +417,9 @@ class SIFloor1Rows:
     def floor1_dressing_close_row(self) -> dict[str, float | int | str | bool | list]:
         """§6·floor1·dressing·close — outer R_dress of lightest Q=±1 = ε-star.
 
-        Closes open from floor1_dressing_ask_row.
+        Closes open from floor1_dressing_row.
 
-        Lemma (stamped pieces only):
+        Lemma (derived pieces only):
           1. Winding-1 on the causal star: Δφ_ring = 2π/N12.
              N_phi = ⌈2π/Δφ_min⌉ ⇒ N12 < N_phi ⇔ 2π/N12 > Δφ_min.
              Entire ε-star sits above the Heisenberg floor (forced halo).
@@ -498,7 +498,7 @@ class SIFloor1Rows:
             "N12_lt_Nphi": n12_lt_nphi,
             "derivation_closed": lemma_ok,
             "inventory": inventory,
-            "ask_ok": lemma_ok,
+            "checks_ok": lemma_ok,
             "note": (
                 "R_dress=R_min=1·dl: N12<N_phi forces full ε-halo above Δφ_min; "
                 "local gate=first shell; multi-shell=excitation. "
@@ -509,17 +509,17 @@ class SIFloor1Rows:
     def floor1_dressing_f_close_row(self) -> dict[str, float | int | str | bool | list]:
         """§6·floor1·dressing·f·close — shape of f in ρ_Θ∝f(|Δφ|,|ζ|).
 
-        Closes soft-OPEN from dressing·close / dressing·ask.
+        Closes soft-OPEN from dressing·close / dressing.
 
         Carrier (§5.0.5): cloud = where |Δφ|, |ζ|, Arg-pressure hold
         ≥ Heisenberg floor; ⟨ρ_Θ⟩_T = binomial coarse; ∫ρ_Θ ∼ n_E
-        (integer quanta, not float-KN). No mechanical float-knobs on M.
+        (integer quanta, not float-KN). No mechanical continuous parameters on M.
 
-        CLOSED:
+        closed:
           ρ_Θ(x) = 𝟙[ |Δφ_N(x)| ≥ Δφ_min ]
-          — Heaviside / set-membership on the only stamped numeric floor.
+          — Heaviside / set-membership on the only derived numeric floor.
           |ζ| co-varies via gate ζ=(Σ_N z)·z* but has no independent
-          stamped floor; does not add a free continuous axis.
+          derived floor; does not add a free continuous axis.
           Amplitude inside the support is not a continuum profile on M:
           cells are in/out; T smooths via binomial (§4.1).
 
@@ -551,7 +551,7 @@ class SIFloor1Rows:
             },
             {
                 "id": "closed_zeta_no_extra_floor",
-                "maps_to": "|ζ| gate scalar; no stamped ζ_min → not second free axis",
+                "maps_to": "|ζ| gate scalar; no derived ζ_min → not second free axis",
                 "status": "closed",
             },
             {
@@ -589,7 +589,7 @@ class SIFloor1Rows:
             "inventory": inventory,
             "closed_ids": closed_ids,
             "reject_ids": reject_ids,
-            "ask_ok": ok,
+            "checks_ok": ok,
             "note": (
                 "f closed as Heisenberg indicator: ρ_Θ=𝟙[|Δφ_N|≥Δφ_min]. "
                 "No float knobs; ∫∈ℤ; T-smooth=binomial not M-f. "
@@ -607,7 +607,7 @@ class SIFloor1Rows:
           A3: ΣE ≤ E(C3) by definition of higher E.
           Multi-shell excitation already downhill (dressing·close).
           §8.2: composite/excited «may have channel down».
-          ⇒ channel *existence* CLOSED; object UNSTABLE.
+          ⇒ channel *existence* closed; object UNSTABLE.
           Γ soft → floor1_C3_gamma_close_row (not continuum ℏ/τ on M).
 
         C6 / ν:
@@ -683,9 +683,9 @@ class SIFloor1Rows:
             "inventory": inventory,
             "closed_ids": closed_ids,
             "soft_open_ids": soft_open_ids,
-            "ask_ok": ok,
+            "checks_ok": ok,
             "note": (
-                "Floor1 leftovers: C3→C2+γ existence CLOSED; continuum Γ≠M; "
+                "Floor1 leftovers: C3→C2+γ existence closed; continuum Γ≠M; "
                 "n_ticks in filled bath SOFT; ν off-band."
             ),
         }
@@ -698,7 +698,7 @@ class SIFloor1Rows:
           Continuum N(t)=N0 e^{-t/τ}, Γ=ℏ/τ, BR — NOT laws of M.
           That is T-statistics of many systems (§2.1). g is deterministic.
 
-        CLOSED on M:
+        closed on M:
           · Clock form = n_ticks ∈ ℕ · hT (ledger time), not float Γ.
           · Reject treating soft as free continuum rate knob on M.
 
@@ -706,7 +706,7 @@ class SIFloor1Rows:
           · Hyp. n_ticks=1 for *lonely* multi-shell C3 (A1+local downhill)
             may be an empty-background artifact. Vacuum dogfood: bath
             boiled only when the *whole* lattice was set — no void.
-            n_ticks for C3 embedded in filled A5 bath is not stamped.
+            n_ticks for C3 embedded in filled A5 bath is not derived.
 
         NOT claimed here:
           · PDG μ lifetime (composite organ + m_μ — other leaf).
@@ -733,7 +733,7 @@ class SIFloor1Rows:
                 "ratio": tau_alone_hyp,
                 "maps_to": (
                     "alone hyp n_ticks=1 may be void artifact; "
-                    "filled A5 bath n_ticks unstamped"
+                    "filled A5 bath n_ticks underived"
                 ),
                 "status": "soft_open",
                 "mechanism": "vacuum boiled only on whole-lattice set — no void",
@@ -775,7 +775,7 @@ class SIFloor1Rows:
             "closed_ids": closed_ids,
             "reject_ids": reject_ids,
             "soft_open_ids": soft_open_ids,
-            "ask_ok": form_ok,
+            "checks_ok": form_ok,
             "note": (
                 "Continuum ℏ/τ ≠ M (CLOSED). Alone n_ticks=1 is soft hyp — "
                 "may fall because lonely/void; filled-bath clock open. "
@@ -818,7 +818,7 @@ class SIFloor1Rows:
             },
             {
                 "id": "soft_open_C3_n_ticks_filled_bath",
-                "maps_to": "n_ticks for C3-in-bath still unstamped",
+                "maps_to": "n_ticks for C3-in-bath still underived",
                 "status": "soft_open",
             },
         ]
@@ -844,7 +844,7 @@ class SIFloor1Rows:
             "inventory": inventory,
             "closed_ids": closed_ids,
             "soft_open_ids": soft_open_ids,
-            "ask_ok": ok,
+            "checks_ok": ok,
             "note": (
                 "VACUUM_BOIL self-organizes contrast; gauge VACUUM does not. "
                 "Stale emerged_b=False was blind thermometer — dual-channel sees b=1. "

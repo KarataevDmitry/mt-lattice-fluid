@@ -57,7 +57,7 @@ $$
 | **следствия** | закон Кулона на M (§8.2·coulomb); **α** = мягкая грань при $M{=}97$; $\alpha_0{=}\kappa/M$ — грубое лабораторное приближение | выведено · §8.2·U0 |
 | **открыто** | дискретная доля сопряжения на FCC без continuum-`π` | `Φ_□` open · α_geom exploratory |
 Тождество остатка: `4π·α = α/(α*−1)`.
-**Код:** `SI.alpha_meaning_ask_row()` · verify **`Alpha_meaning_ask`**.
+**Код:** `SI.alpha_meaning_row()` · verify **`Alpha_meaning`**.
 #### §8.2·α·descent · Забыть α — спуск из физики
 **Амнезия:** не использовать CODATA / lab как *вход*; α = fundamentals.
 | шаг | физика | что вылезает |
@@ -71,7 +71,7 @@ $$
 **Фазовый остаток — не α.** `r ≈ 0.08` — доля минимального фазового шага в цикле $2\pi$; тонкая структура на порядок меньше.
 **Два завершения (score только AFTER):** continuum-башня на `Ω` → ~2 ppm; `α_geom=137` с граней → ~263 ppm. Сырые `r`, `r²`, `κ_link·r` — неверный масштаб.
 **Открыто:** доля сопряжения заряда сквозь `Ω` из `g`/holonomy — не ansatz.
-**Код:** `SI.alpha_descent_ask_row()` · verify **`Alpha_descent_ask`**.
+**Код:** `SI.alpha_descent_row()` · verify **`Alpha_descent`**.
 #### §8.2·α·mass-defect · Оптика: дефект массы H = этаж КМ (DoD)
 **КМ (предыдущий этаж):** $BE=\tfrac12\alpha^2 m_e c^2$, $\Delta m=BE/c^2$ ⇒
 $$
@@ -115,7 +115,7 @@ $$
 Фактор $1/(2\pi)$ — геометрия тика (Heisenberg-пол), не fitted константа QED.
 **DoD:** bare $g=2$ для вихря $n=\pm1$ (топология) + A5-dressing → $a_e$ **без** вставки α; тогда α сверху = $a_e/(2r)$.
 Однопетлевой Швингер vs CODATA $a_e$ ~+1516 ppm — ожидаемый зазор высших петель.
-**Код:** `SI.alpha_schwinger_ask_row()` · verify **`Alpha_schwinger_ask`**.
+**Код:** `SI.alpha_schwinger_row()` · verify **`Alpha_schwinger`**.
 #### §8.2·α·g2  · bare $g=2$ и A5→$a_e$
 **Подход:** (1) факты вихря $n=\pm1$ + спинора; (2) что фиксирует гиромагнитное без α; (3) чем A5-ванна одевает момент; (4) отвергнуть / зафиксировать.
 **Вывод:**
@@ -128,7 +128,7 @@ $$
 7. **Тождество двери:** $a_e^{(1)}=2\alpha\,r$, $r=\Delta\varphi_{\min}/(2\pi)$ — геометрия; сверху $\alpha=a_e/(2r)$.
 8. **Отвергнуто:** $a_e\stackrel{?}{=}r$ или $2r$ (⇒ α=1 или ½); $a_e\stackrel{?}{=}|z|_{\mathrm{vac}}^2$ (масштаб $z_{\min}$, не ~$10^{-3}$); вставка α в dressing (круговое для DoD); CODATA $a_e$ как M-определение α.
 9. **Открыто:** доля holonomy-облака A5 вокруг вихря → $a_e$ без α; затем α сверху.
-**Код:** `SI.alpha_dirac_g2_ask_row()` · verify **`Alpha_dirac_g2_ask`**.
+**Код:** `SI.alpha_dirac_g2_row()` · verify **`Alpha_dirac_g2`**.
 #### §8.2·α·ae  · A5-облако → $a_e$
 **Подход:** (1) назвать облако на Λ; (2) безразмерный избыток μ; (3) α-free дроби; (4) отвергнуть / зафиксировать.
 **Вывод:**
@@ -141,7 +141,7 @@ $$
 3. **α-free tries** ($\Delta\varphi_{\min}/N_{\mathrm{ring}}$, $\kappa/N_{\mathrm{ring}}$, $r/N_{12}$, $\kappa^2/N_{12}$, …) — **неверный масштаб** (лучшие $|\mathrm{ppm}|\gg 10^3$).
 4. **Отвергнуто как вывод $a_e$:** $2r/137$ и $\alpha/(2\pi)$ — вставка $\alpha_{\mathrm{geom}}$/α; сверху $\alpha=a_e/(2r)$ возвращает то же.
 5. **Итог:** дверь Швингера **не обходит** OPEN сопряжения — только **режет** задачу: $\alpha=a_e/(2r)$ при известном $2r$. $a_e$ без α ⇔ дискретная доля сопряжения (или лабораторный $a_e$). Та же гора, острее факторизация.
-**Код:** `SI.alpha_ae_cloud_ask_row()` · verify **`Alpha_ae_cloud_ask`**.
+**Код:** `SI.alpha_ae_cloud_row()` · verify **`Alpha_ae_cloud`**.
 #### §8.2·α·Rydberg·Hall · Лаб-двери рядом со Швингером
 **Двери:**
 - **Ридберг:** меряют $R_\infty$ (спектроскопия H/D) → $\alpha^{2}$ при известных $m_e$ и QED-уровнях.
@@ -158,7 +158,7 @@ $$
 3. Холл post-2019 — эталон $h/e^{2}$, не источник α.
 4. **Отвергнуто:** $R_\infty$ или optical $a_0$ как M-определение α; α из $R_K$ без $\mu_0/\varepsilon_0$-моста после 2019.
 5. **Итог:** та же гора, что meaning / Schwinger / §8.2·α·ae.
-**Код:** `SI.alpha_rydberg_hall_ask_row()` · verify **`Alpha_rydberg_hall_ask`**.
+**Код:** `SI.alpha_rydberg_hall_row()` · verify **`Alpha_rydberg_hall`**.
 **π-guardrail (§8.2·geo):** непрерывный **`4π`** — **T-readout** (телесный угол), **не** метрика одной **`v_h`**. На **1-tick** теле **кубооктаэдра** живут **6□ + 8△**, **`V=(16/3)v_hV`**, **`κ=1/√2`** — см. **`SI.cuboctahedron_geometry_row()`**.
 **Exploratory (π-free, cuboctahedron combinatorics — не ):**
 ```
@@ -180,7 +180,7 @@ $$
 3. **Отвергнуто:** `N_a0 = N_c·137` (`α_geom`). Вкладывает `α⁻¹` в размер → `α=N_c/N_a0` возвращает то же. Пусто для вывода `α`.
 4. **Отвергнуто как определение M:** оптический `a₀` (CODATA) — T-якорь; годится как seed FP, не как носительный `N_a0`.
 5. **Открыто:** целое из **структуры H** — ground **`ρ_Θ`** / **`N_pack=#(hV ⊂ атомного WS)`** / радиальная оболочка вокруг `p` на FCC **без** `α` и без оптического `a₀`.
-**Код:** `SI.na0_h_carrier_ask_row()` · verify **`Na0_H_carrier_ask`**.
+**Код:** `SI.na0_h_carrier_inventory_row()` · verify **`Na0_H_carrier`**.
 #### §8.2·coulomb · Кулон на решётке, число мест силы и α
 
 Полная цепочка: от квантования силы на M до постоянной тонкой структуры. Continuum-Maxwell и $\varepsilon_0$ в законе силы на M **не** вводятся; лабораторная запись $F=\alpha F_P n_1 n_2/N^2$ — согласование **той же** силы после усреднения (слой T).
@@ -218,7 +218,7 @@ M = n_{F,\mathrm{seats}} = 1 + N_{12}\,N_{\mathrm{hier}} = 1 + 12\cdot 8 = 97.
 $$
 Счёт $M=96=N_{12}N_{\mathrm{hier}}$ без единицы ядра — **неполный** (~+9366 ppm на $\alpha_0^{-1}$). Подстановка $M=137/\sqrt{2}$ из геометрического $\alpha_{\mathrm{geom}}$ — **отвергнута** (вкладывает 137 как вход).
 
-**Статус:** теорема **закрыта**. Verify: **`Alpha_nF_kick_census`**, **`Alpha_M_from_g_try`**, **`Alpha_force_lattice_ask`**.
+**Статус:** теорема **закрыта**. Verify: **`Alpha_nF_momentum_registry`**, **`Alpha_M_from_g_try`**, **`Alpha_force_lattice`**.
 
 ##### 3 · Закон Кулона на M
 
@@ -286,7 +286,7 @@ $$
 
 Любой пункт — смерть всей цепочки §8.2·coulomb.
 
-**Код:** `SI.coulomb_M_native_row()` · `SI.alpha_nF_kick_census_row()` · `SI.alpha_force_lattice_ask_row()` · verify **`Coulomb_M_native`**, **`Alpha_nF_kick_census`**, **`Alpha_force_lattice_ask`**.
+**Код:** `SI.coulomb_M_native_row()` · `SI.alpha_nF_momentum_registry_row()` · `SI.alpha_force_lattice_row()` · verify **`Coulomb_M_native`**, **`Alpha_nF_momentum_registry`**, **`Alpha_force_lattice`**.
 #### Планковский ЭМ (формулы на соседних ячейках)
 На решётке (§5.0.2 · §5.2.1). Не continuum-Maxwell — **сбор** тех же величин, что §8.2·coulomb.
 **Кванты на одном шаге** ($\ell_P$, $hT$):
@@ -567,7 +567,7 @@ $$
 3. Scaled tries ($w/N_{12}$, $w\cdot r$, …) — всё ещё $|\mathrm{ppm}|\gg 10^3$ → **отвергнуто**.
 4. $\alpha_{\mathrm{geom}}^{-1}=137$ — из *счёта* граней, не из площадей; другой объект (descent).
 5. Канал, который остаётся: $\Phi_\square$ на □ (Stokes) — **вес ≠ голономия**.
-**Код:** `SI.alpha_em_face_weight_ask_row()` · verify **`Alpha_em_face_weight_ask`**.
+**Код:** `SI.alpha_em_face_weight_row()` · verify **`Alpha_em_face_weight`**.
 #### §8.2·α·dual · $\alpha=m/n$ двумя путями
 **Идея:** если сопряжение — дробь, числитель и знаменатель приходят из **разной** физики. Не одна магическая формула. DoD: закрыть числитель и знаменатель **без** вставки α; сверху $\alpha=m/n$.
 | пара | $m$ (путь A) | $n$ (путь B) | статус |
@@ -577,7 +577,7 @@ $$
 | Schwinger | $a_e$ | $2r=1/(2\pi)$ | $2r$ закрыто; $a_e$ OPEN/lab |
 **Отвергнуто:** одна величина на обе роли ($M/512$); решать $m$ и $n$ из одного уравнения, где уже есть α.
 **α закрыто:** предпочтительная мягкая грань с $M=97$ (§8.2·U0). Грубое: $\alpha_0=\kappa/M$. π-tower removed.
-**Код:** `SI.alpha_dual_fraction_ask_row()` · verify **`Alpha_dual_fraction_ask`**.
+**Код:** `SI.alpha_dual_fraction_row()` · verify **`Alpha_dual_fraction`**.
 #### §8.2·α·√2·descent · Приём как у иррациональности $\sqrt{2}$
 **Лемма (force dual, грубое приближение).** Пусть $\alpha_0=\kappa/M$, $\kappa=1/\sqrt{2}$ (geo закрыто), $M\in\mathbb{N}$.
 Если $\alpha=p/q\in\mathbb{Q}$, то $\sqrt{2}=q/(pM)\in\mathbb{Q}$ — противоречие. Значит $\alpha\notin\mathbb{Q}$.
@@ -586,12 +586,12 @@ $$
 2. «Дробь $m/n$» на носителе ≠ $\alpha\in\mathbb{Q}$; это отношение двух величин носителя ($\kappa/M$ — иррациональное / целое).
 3. Hop-dual $N_c/N_{a0}$ с обоими $\in\mathbb{Z}$ дал бы $\alpha\in\mathbb{Q}$ — **натяжение** с force dual (optical $N_{a0}$ = T; или слои разные).
 Лемма про грубого $\alpha_0$ — не определение **α**. **α** = предпочтительная мягкая грань §8.2·U0 с $M=97$.
-**Код:** `SI.alpha_sqrt2_descent_ask_row()` · verify **`Alpha_sqrt2_descent_ask`**.
+**Код:** `SI.alpha_sqrt2_descent_row()` · verify **`Alpha_sqrt2_descent`**.
 #### §8.2·α·nF·Thm · $M=97$ (ссылка)
 
 Полный вывод, закон Кулона, $\alpha_0=\kappa/M$ и различие $\alpha_0$ vs $\alpha$ — **§8.2·coulomb** (единый текст теоремы).
 
-**Код:** `SI.alpha_nF_kick_census_row()` · `SI.alpha_M_from_g_try_row()` · verify **`Alpha_nF_kick_census`**, **`Alpha_M_from_g_try`**.
+**Код:** `SI.alpha_nF_momentum_registry_row()` · `SI.alpha_M_from_g_try_row()` · verify **`Alpha_nF_momentum_registry`**, **`Alpha_M_from_g_try`**.
 
 #### §8.2·α·full-quant · α и полное квантование
 
@@ -603,7 +603,7 @@ $$
 
 **Код:** `SI.alpha_full_quantization_bridge_row()` · verify **`Alpha_full_quantization_bridge`**.
 
-#### §8.2·α·U0·soft-face · α из констант дна (закрыто)
+#### §8.2·α·U0·soft face · α из констант дна (закрыто)
 
 **Дно** (больше не режется; $M,d,U,N_{\mathrm{hier}}$ сюда не входят):
 
@@ -676,7 +676,7 @@ $$
 
 **Единица пакета** (SI-перевод, не вход): $U_0=F_0\,l_P^{2}$, $\hbar c=2\kappa\,U_0$.
 Грубое: $\alpha_0=\kappa/\hat M$; $\pi$-tower removed.
-**Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_ask_row()` · verify **`Alpha_U0_soft_face_ask`**.
+**Код:** `SI.alpha_from_fundamentals` · `SI.alpha_U0_soft_face_row()` · verify **`Alpha_U0_soft_face`**.
 
 
 #### §8.2·α·upstairs · закрыто cascade on preferred α

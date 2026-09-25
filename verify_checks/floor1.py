@@ -25,14 +25,14 @@ from mt_ca.spinor import (
 from mt_ca.update import apply_heisenberg_floor, vacuum_phase, wrapped_phase_diff
 
 
-def check_floor1_leptonic_ask(device: str = "cpu") -> dict:
-    """§6·floor1·ask — pre-resonance band; content census open."""
+def check_floor1_leptonic(device: str = "cpu") -> dict:
+    """§6·floor1 — pre-resonance band; content census open."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.floor1_leptonic_ask_row()
+    row = SI.floor1_leptonic_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["window_ok"])
         and bool(row["ir_landmarks_far_above"])
         and not bool(row["derivation_closed"])
@@ -41,7 +41,7 @@ def check_floor1_leptonic_ask(device: str = "cpu") -> dict:
         and abs(float(row["L_mid_dl"]) - 20736.0) < 1e-9
     )
     return {
-        "id": "Floor1_leptonic_ask",
+        "id": "Floor1_leptonic",
         "L_lo_dl": row["L_lo_dl"],
         "L_mid_dl": row["L_mid_dl"],
         "derivation_closed": row["derivation_closed"],
@@ -49,14 +49,14 @@ def check_floor1_leptonic_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_floor1_B0_census_ask(device: str = "cpu") -> dict:
+def check_floor1_B0_census(device: str = "cpu") -> dict:
     """§6·floor1·B0·census — class census of stable B=0 at N12^3…^4."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.floor1_B0_census_ask_row()
+    row = SI.floor1_B0_census_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["census_ok"])
         and bool(row["derivation_closed"])
         and not bool(row["sim_metastable_maps_open"])
@@ -67,7 +67,7 @@ def check_floor1_B0_census_ask(device: str = "cpu") -> dict:
         and row["classes"][6]["status"] == "stable_off_band"
     )
     return {
-        "id": "Floor1_B0_census_ask",
+        "id": "Floor1_B0_census",
         "R_lo_dl": row["R_lo_dl"],
         "R_hi_dl": row["R_hi_dl"],
         "stable_matter_ids": row["stable_matter_ids"],
@@ -76,14 +76,14 @@ def check_floor1_B0_census_ask(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
-def check_floor1_dressing_ask(device: str = "cpu") -> dict:
-    """§6·floor1·dressing·ask — near-zone ρ_Θ of lightest Q=±1; outer R open."""
+def check_floor1_dressing(device: str = "cpu") -> dict:
+    """§6·floor1·dressing — near-zone ρ_Θ of lightest Q=±1; outer R open."""
     from mt_ca.si_constants import SI
 
     del device
-    row = SI.floor1_dressing_ask_row()
+    row = SI.floor1_dressing_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["min_support_closed"])
         and not bool(row["derivation_closed"])
         and int(row["N12"]) == 12
@@ -94,7 +94,7 @@ def check_floor1_dressing_ask(device: str = "cpu") -> dict:
         and "reject_R_equals_floor1_band" in row["reject_ids"]
     )
     return {
-        "id": "Floor1_dressing_ask",
+        "id": "Floor1_dressing",
         "R_min_dl": row["R_min_dl"],
         "R_floor1_lo_dl": row["R_floor1_lo_dl"],
         "derivation_closed": row["derivation_closed"],
@@ -110,7 +110,7 @@ def check_floor1_dressing_close(device: str = "cpu") -> dict:
     del device
     row = SI.floor1_dressing_close_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["star_above_floor"])
         and bool(row["N12_lt_Nphi"])
@@ -135,7 +135,7 @@ def check_floor1_dressing_f_close(device: str = "cpu") -> dict:
     del device
     row = SI.floor1_dressing_f_close_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and row["f_form"] == "Heaviside(|Δφ_N|-Δφ_min)"
         and abs(float(row["Delta_phi_min"]) - 0.5) < 1e-12
@@ -157,7 +157,7 @@ def check_floor1_leftovers_close(device: str = "cpu") -> dict:
     del device
     row = SI.floor1_leftovers_close_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["derivation_closed"])
         and bool(row["C3_channel_existence_closed"])
         and bool(row["C3_Gamma_soft_open"])
@@ -182,7 +182,7 @@ def check_floor1_C3_gamma_close(device: str = "cpu") -> dict:
     del device
     row = SI.floor1_C3_gamma_close_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and not bool(row["derivation_closed"])
         and bool(row["continuum_rejected"])
         and "closed_M_clock_form_n_ticks" in row["closed_ids"]
@@ -205,7 +205,7 @@ def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
     del device
     row = SI.floor1_C3_bath_dogfood_row()
     ok = (
-        bool(row["ask_ok"])
+        bool(row["checks_ok"])
         and bool(row["vacuum_frozen"])
         and bool(row["boil_emerged_b"])
         and float(row["boil_contrast_final"]) > 10.0

@@ -223,18 +223,18 @@ class SIAlphaProbeRows:
             ),
         }
 
-    def alpha_force_lattice_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·F·ask — Coulomb lands on F₀ lattice; α=soft-face (α₀ demoted).
+    def alpha_force_lattice_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·F — Coulomb lands on F₀ lattice; α=soft face (α₀ coarse).
 
         Thm 5.1: force transfers as n_F·F₀. Unit NN Coulomb F=α F_P.
         F₀/F_P = κ (geometry). One EM quantum at N=1:
-            α F_P = F₀/M  ⇒  α₀ = κ/M (demoted) , M∈ℕ.
+            α F_P = F₀/M  ⇒  α₀ = κ/M (coarse) , M∈ℕ.
 
         Probe (2026-09-23):
           • target M = F₀/(α_c F_P) ≈ 96.899
           • cleanest carrier M = N₁₂·N_hier = 96 (= n_△·N₁₂ = N_hier·(N_φ−1))
-            → α₀=κ/96 (demoted), inv≈135.76, ~+9366 ppm vs CODATA
-          • nearest int M = 97 = N₁₂·N_hier+1 → α₀=κ/97 (demoted; α=soft-face), inv≈137.18, ~−1040 ppm
+            → α₀=κ/96 (coarse), inv≈135.76, ~+9366 ppm vs CODATA
+          • nearest int M = 97 = N₁₂·N_hier+1 → α₀=κ/97 (coarse; α=soft face), inv≈137.18, ~−1040 ppm
           • M=137/√2 recovers α=1/137 — injects α_geom, empty for derivation
           • fundamentals still ~2 ppm; force path does **not** replace it yet
         OPEN: which M from g (why 96 vs 97 / shell rule).
@@ -277,7 +277,7 @@ class SIAlphaProbeRows:
                 "id": "F0_over_FP_is_kappa",
                 "ratio": f0 / f_p,
                 "maps_to": "κ from hull; force ladder vs Planck force",
-                "status": "shipped",
+                "status": "derived",
             },
             {
                 "id": "Coulomb_NN_on_F0",
@@ -310,7 +310,7 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·F·ask — F₀ lattice seats; α=soft-face (α₀ demoted)",
+            "theorem": "§8.2·F — F₀ lattice seats; α=soft face (α₀ coarse)",
             "kappa": kappa,
             "F0_N": f0,
             "F_P_N": f_p,
@@ -330,19 +330,19 @@ class SIAlphaProbeRows:
             "inventory": inventory,
             "replaces_pi_ansatz": False,
             "M_from_g_open": True,
-            "ask_ok": abs(f0 / f_p - kappa) / kappa < 1e-12
+            "checks_ok": abs(f0 / f_p - kappa) / kappa < 1e-12
             and abs(m_96 - 96.0) < 1e-12
             and abs(m_target - 96.899) < 0.01,
             "note": (
-                "Force lattice seats M=97; α=soft-face. Demoted α₀ (−1040 ppm); incomplete M=96 "
+                "Force lattice seats M=97; α=soft face. Coarse α₀ (−1040 ppm); incomplete M=96 "
                 "(+9366 ppm). M=137κ rejects (α_geom). fundamentals not replaced; M from g OPEN."
             ),
         }
 
-    def alpha_meaning_ask_row(self) -> dict[str, float | int | str | bool | list]:
+    def alpha_meaning_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·meaning — restart from physical meaning of α (not F-lattice / N_a0).
 
-        Meaning (already stamped §8.2 / §7.1 / §8.4.1):
+        Meaning (already derived §8.2 / §7.1 / §8.4.1):
           α = dimensionless **phase coupling** of unit charge to vacuum
               (EM channel; solid-angle / phase-volume of emergent 3D),
           NOT the definition of force, NOT a hop count by itself.
@@ -351,10 +351,10 @@ class SIAlphaProbeRows:
           α*−1 = Δφ_min/(2π) = 1/(4π)  — vacuum residue per tick.
 
         Readouts (consequences, not meanings):
-          F = α F_P / N² ;  α = N_c/N_a0 ;  α₀ = κ/M (demoted)  — expressions of the same coupling.
+          F = α F_P / N² ;  α = N_c/N_a0 ;  α₀ = κ/M (coarse)  — expressions of the same coupling.
 
-        Number: soft-face fundamentals (pi-tower removed).
-        Seats M=97 + soft-face α shipped (force law F₀/M); α₀ demoted.
+        Number: soft face fundamentals (pi-tower removed).
+        Seats M=97 + soft face α derived (force law F₀/M); α₀ coarse.
         Soft OPEN: −1040 ppm vs CODATA; holonomy that closes soft without fundamentals.
         """
         alpha_star = self.alpha_star
@@ -366,21 +366,21 @@ class SIAlphaProbeRows:
             {
                 "id": "meaning_phase_coupling",
                 "maps_to": "α = EM phase↔vacuum coupling (solid angle / phase volume)",
-                "status": "shipped_meaning",
+                "status": "derived_meaning",
                 "mechanism": "§8.2; not |N| tile; not Newton force primary",
             },
             {
                 "id": "vacuum_phase_residue",
                 "ratio": residue,
                 "maps_to": "α*−1 = Δφ_min/(2π) = 1/(4π)",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "empty cell gate §7.1; occupancy bit separate (§8.4.1)",
             },
             {
                 "id": "tower_solid_angle",
                 "ratio": self.alpha_fs_inv,
                 "maps_to": "α⁻¹ = alpha_from_fundamentals — removed; alpha=fundamentals",
-                "status": "shipped_number",
+                "status": "derived_number",
                 "mechanism": "~2 ppm CODATA; π-guardrail: 4π≠|N|",
             },
             {
@@ -401,18 +401,18 @@ class SIAlphaProbeRows:
             },
             {
                 "id": "readout_force_lattice_not_meaning",
-                "maps_to": "F₀ landing; M=97 seats; α=soft-face (α₀ demoted)",
-                "status": "readout_shipped",
+                "maps_to": "F₀ landing; M=97 seats; α=soft face (α₀ coarse)",
+                "status": "readout_derived",
             },
             {
                 "id": "M_native_force_law",
                 "maps_to": "F=n1 n2 F₀/(M N²) — no continuum α/π on M",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "§8.2·Coulomb·M-native",
             },
             {
                 "id": "open_soft_residual_holonomy",
-                "maps_to": "demoted α₀=κ/97 vs CODATA −1040 ppm — holonomy without fundamentals",
+                "maps_to": "coarse α₀=κ/97 vs CODATA −1040 ppm — holonomy without fundamentals",
                 "status": "open",
                 "mechanism": "pi-tower removed",
             },
@@ -429,17 +429,17 @@ class SIAlphaProbeRows:
             "vs_codata_ppm_pi": (alpha - alpha_c) / alpha_c * 1e6,
             "inventory": inventory,
             "replaces_pi_ansatz": False,
-            "discrete_coupling_open": True,  # soft ppm / holonomy; force law shipped
-            "ask_ok": abs(residue - 1.0 / four_pi) < 1e-15
+            "discrete_coupling_open": True,  # soft ppm / holonomy; force law derived
+            "checks_ok": abs(residue - 1.0 / four_pi) < 1e-15
             and abs(four_pi * alpha - alpha / residue) < 1e-12,
             "note": (
                 "Meaning: α=phase↔vacuum coupling; phase residue α*−1=1/(4π). "
-                "F=F₀/M + soft-face α shipped; α₀ demoted. "
-                "alpha=soft-face fundamentals."
+                "F=F₀/M + soft face α derived; α₀ coarse. "
+                "alpha=soft face fundamentals."
             ),
         }
 
-    def alpha_descent_ask_row(self) -> dict[str, float | int | str | bool | list]:
+    def alpha_descent_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·descent — forget α; descend vacuum→residue→Ω→charge→coupling.
 
         Amnesia construction (no α_fs / CODATA / π-poly as input):
@@ -493,7 +493,7 @@ class SIAlphaProbeRows:
             {"step": 2, "physics": "tick cycle 2π → residue r=Δφ_min/(2π)", "out": residue},
             {"step": 3, "physics": "d=3 → Ω=1/r; N_φ=⌈Ω⌉", "out_Omega": omega, "out_Nphi": n_phi},
             {"step": 4, "physics": "FCC hull → κ, N12, faces", "kappa": kappa, "N12": n12},
-            {"step": 5, "physics": "A10 charge n∈ℤ", "status": "shipped"},
+            {"step": 5, "physics": "A10 charge n∈ℤ", "status": "derived"},
             {
                 "step": 6,
                 "physics": "dimensionless EM coupling = ?",
@@ -517,7 +517,7 @@ class SIAlphaProbeRows:
             "residue_is_not_alpha": True,
             "coupling_fraction_open": True,
             "used_alpha_fs_as_input": False,
-            "ask_ok": abs(residue - 1.0 / (4.0 * math.pi)) < 1e-15
+            "checks_ok": abs(residue - 1.0 / (4.0 * math.pi)) < 1e-15
             and n_phi == 13
             and alpha_geom_inv == 137,
             "note": (
@@ -579,7 +579,7 @@ class SIAlphaProbeRows:
                 "id": "soft_Arg_ledger",
                 "ratio": be / self.E_0,
                 "maps_to": "BE ≪ E₀ — binding is coarse Arg, not one E₀ quantum",
-                "status": "shipped_scale",
+                "status": "derived_scale",
             },
             {
                 "id": "open_Arg_binding_without_alpha",
@@ -600,7 +600,7 @@ class SIAlphaProbeRows:
             "alpha_over_kappa": alpha_c / kappa,
             "BE_over_E0": be / self.E_0,
             "inventory": inventory,
-            "ask_ok": abs(math.sqrt(2.0 * dm / m_e) - alpha_c) / alpha_c < 1e-12
+            "checks_ok": abs(math.sqrt(2.0 * dm / m_e) - alpha_c) / alpha_c < 1e-12
             and abs(u_a0 / be - 2.0) < 1e-12
             and abs(e_coul_nn / self.E_0 - alpha_c / kappa) < 1e-12,
             "note": (
@@ -612,7 +612,7 @@ class SIAlphaProbeRows:
     def alpha_arg_binding_try_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·Arg-try — try Δm from Arg ledger without α-input.
 
-        Exact bridge (no new knob; demoted α₀=κ/M in identities, U=E₀/(M N_a0), BE=U/2):
+        Exact bridge (no new knob; coarse α₀=κ/M in identities, U=E₀/(M N_a0), BE=U/2):
             Δm / m_arg = BE/E₀ = 1/(2 M N_a0)
             Δm / m_e   = κ²/(2 M²) = α²/2
 
@@ -721,7 +721,7 @@ class SIAlphaProbeRows:
             "reject_1_over_11_ppm": ppm_dm(cand_11),
             "derivation_closed": False,
             "inventory": inventory,
-            "ask_ok": abs(dm_from_arg / dm - 1.0) < 1e-12
+            "checks_ok": abs(dm_from_arg / dm - 1.0) < 1e-12
             and abs(be / self.E_0 - arg_ratio) < 1e-12
             and abs(ppm_dm(cand_97) + 2079.655) < 1.0,
             "note": (
@@ -730,7 +730,7 @@ class SIAlphaProbeRows:
             ),
         }
 
-    def alpha_schwinger_ask_row(self) -> dict[str, float | int | str | bool | list]:
+    def alpha_schwinger_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·Schwinger — start from ae (lab door), not from [pi-tower-removed].
 
         Experiment (Kusch / Schwinger → geonium): measure ae=(g−2)/2, then
@@ -762,7 +762,7 @@ class SIAlphaProbeRows:
             {
                 "id": "lab_door_ae",
                 "maps_to": "measure ae in Penning (geonium); α from QED series",
-                "status": "shipped_experiment",
+                "status": "derived_experiment",
             },
             {
                 "id": "schwinger_one_loop",
@@ -780,7 +780,7 @@ class SIAlphaProbeRows:
                 "id": "factor_1_over_2pi_is_geometry",
                 "ratio": abs(ae_schwinger / alpha_c - 1.0 / (2.0 * math.pi)),
                 "maps_to": "1/(2π) = 2r — Heisenberg minimum on tick, not fitted",
-                "status": "shipped_geometry",
+                "status": "derived_geometry",
             },
             {
                 "id": "one_loop_vs_codata_ae",
@@ -790,12 +790,12 @@ class SIAlphaProbeRows:
             },
             {
                 "id": "open_Dirac_g2_on_vortex",
-                "maps_to": "→ §8.2·α·g2·ask (closed bare)",
+                "maps_to": "→ §8.2·α·g2 (closed bare)",
                 "status": "delegated",
             },
             {
                 "id": "open_A5_dressing_ae_without_alpha",
-                "maps_to": "→ §8.2·α·g2·ask (still open)",
+                "maps_to": "→ §8.2·α·g2 (still open)",
                 "status": "delegated",
             },
         ]
@@ -816,19 +816,19 @@ class SIAlphaProbeRows:
             "one_loop_vs_ae_ppm": (ae_schwinger - ae_codata) / ae_codata * 1e6,
             "derivation_closed": False,
             "inventory": inventory,
-            "ask_ok": abs(two_a_r / ae_schwinger - 1.0) < 1e-15
+            "checks_ok": abs(two_a_r / ae_schwinger - 1.0) < 1e-15
             and abs(ae_schwinger / alpha_c - 1.0 / (2.0 * math.pi)) < 1e-15,
             "note": (
                 "Start here: ae lab door. Identity ae^(1)=2αr with r=1/(4π). "
-                "Bare g=2 + A5→ae: see alpha_dirac_g2_ask_row."
+                "Bare g=2 + A5→ae: see alpha_dirac_g2_row."
             ),
         }
 
-    def alpha_dirac_g2_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·g2·ask — asked carrier: bare g=2 and A5→ae without α.
+    def alpha_dirac_g2_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·g2 — asked carrier: bare g=2 and A5→ae without α.
 
-        Method (same as §8.2·H·ask / geo·ask):
-          (1) list stamped facts of n=±1 vortex + spinor;
+        Method (same as §8.2·H / geo):
+          (1) list derived facts of n=±1 vortex + spinor;
           (2) what fixes gyromagnetic ratio without α;
           (3) what A5 bath can dress into ae;
           (4) reject circular / wrong-scale; report.
@@ -865,41 +865,41 @@ class SIAlphaProbeRows:
             {
                 "id": "spinor_double_cover",
                 "maps_to": "A16 / §3.10: 2π→−1, 4π→+1 on pra-vortex",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "A4 SU(2) spinor; CL-2 R(N/2)→−z",
             },
             {
                 "id": "L0_equals_s0",
                 "ratio": self.s_0,
                 "maps_to": "Thm 5.1: L₀=s₀=ℏ/2 — one spin quantum",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "Landau ladder; |n_L|=1 for spin-½",
             },
             {
                 "id": "charge_n_pm1",
                 "maps_to": "A10: ∮ d arg=2πn; electron n=±1",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "pra-vortex hV; not α",
             },
             {
                 "id": "g_orb_equals_1",
                 "ratio": g_orb,
                 "maps_to": "circulating charge: μ=(Q/2m)L → g_orb=1",
-                "status": "shipped_classical",
+                "status": "derived_classical",
                 "mechanism": "orbital baseline before spinor",
             },
             {
                 "id": "bare_g_equals_2",
                 "ratio": g_bare,
                 "maps_to": "g_s = g_orb × double_cover = 2",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "spatial 2π = half spinor cycle → ×2 magnetic response",
             },
             {
                 "id": "ae_bare_zero",
                 "ratio": ae_bare,
                 "maps_to": "bare ae=(g−2)/2=0 — Dirac floor",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "anomaly is dressing, not topology",
             },
             {
@@ -950,8 +950,8 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·g2·ask — bare g=2 closed; A5→ae open",
-            "method": "ask-model: spinor+charge inventory → g → dressing",
+            "theorem": "§8.2·α·g2 — bare g=2 closed; A5→ae open",
+            "method": "model: spinor+charge inventory → g → dressing",
             "g_orb": g_orb,
             "double_cover": double_cover,
             "g_bare": g_bare,
@@ -968,7 +968,7 @@ class SIAlphaProbeRows:
             "reject_ae_eq_z_vac": True,
             "reject_alpha_input": True,
             "inventory": inventory,
-            "ask_ok": abs(g_bare - 2.0) < 1e-15
+            "checks_ok": abs(g_bare - 2.0) < 1e-15
             and abs(ae_bare) < 1e-15
             and abs(two_r - 1.0 / (2.0 * math.pi)) < 1e-15
             and abs(ae_from_alpha / (alpha_c * two_r) - 1.0) < 1e-15,
@@ -979,8 +979,8 @@ class SIAlphaProbeRows:
             ),
         }
 
-    def alpha_ae_cloud_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·ae·ask — asked carrier: A5 holonomy-cloud → ae without α.
+    def alpha_ae_cloud_row(self) -> dict[str, float | int | str | bool | list]:
+        """§8.2·α·ae — asked carrier: A5 holonomy-cloud → ae without α.
 
         Method: (1) name the cloud on Λ; (2) what dimensionless excess of μ;
         (3) try α-free fractions; (4) reject circular; report.
@@ -989,7 +989,7 @@ class SIAlphaProbeRows:
           • Cloud = ρ_Θ halo (Heisenberg §5.0.5) + Φ_□ Stokes channel + A5 bath.
           • Factorization (Schwinger door = carrier reading):
                 ae^(1) = α · 2r ,  2r = Δφ_min/π = 1/(2π)
-            = coupling × tick-cycle geometry. Geometry CLOSED; coupling OPEN
+            = coupling × tick-cycle geometry. Geometry closed; coupling OPEN
             (same OPEN as §8.2·α·meaning / descent).
           • Pure-geo tries (no α / no 137) land wrong scale — reject as ae.
           • REJECT ae≟2r/137 or α/(2π) as M-derivation (injects α or α_geom).
@@ -1035,19 +1035,19 @@ class SIAlphaProbeRows:
             {
                 "id": "cloud_rho_Theta_halo",
                 "maps_to": "§5.0.5 ρ_Θ — Heisenberg halo around b=1 core",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "|Δφ|,|ζ| ≥ Δφ_min; not δ on one v_p",
             },
             {
                 "id": "cloud_Phi_square_channel",
                 "maps_to": "Φ_□ Stokes — EM plaquette read of phase cloud",
-                "status": "shipped_channel",
+                "status": "derived_channel",
                 "mechanism": "§8.2 Planck EM; alpha_match_open on probe",
             },
             {
                 "id": "cloud_A5_bath",
                 "maps_to": "A5 ocean dresses μ; bare ae=0 (g2 ask)",
-                "status": "shipped",
+                "status": "derived",
                 "mechanism": "anomaly = dressing, not topology",
             },
             {
@@ -1061,7 +1061,7 @@ class SIAlphaProbeRows:
                 "id": "geometry_2r_closed",
                 "ratio": two_r,
                 "maps_to": "2r=Δφ_min/π=1/(2π)",
-                "status": "shipped_geometry",
+                "status": "derived_geometry",
                 "mechanism": "Heisenberg minimum on tick cycle",
             },
             {
@@ -1093,8 +1093,8 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·ae·ask — ae=α·2r factors; cloud ≠ new α path",
-            "method": "ask-model: name cloud → try fractions → reject → report",
+            "theorem": "§8.2·α·ae — ae=α·2r factors; cloud ≠ new α path",
+            "method": "model: name cloud → try fractions → reject → report",
             "vacuum_phase_residue_r": r,
             "two_r": two_r,
             "ae_CODATA": ae_codata,
@@ -1108,7 +1108,7 @@ class SIAlphaProbeRows:
             "derivation_ae_closed": False,
             "bypasses_coupling_open": False,
             "inventory": inventory,
-            "ask_ok": abs(ae_1loop / (alpha_c * two_r) - 1.0) < 1e-15
+            "checks_ok": abs(ae_1loop / (alpha_c * two_r) - 1.0) < 1e-15
             and abs(best_geo_ppm) > 1e3
             and abs(ppm(circular["2r/137"])) < 5e3,
             "note": (
@@ -1118,7 +1118,7 @@ class SIAlphaProbeRows:
             ),
         }
 
-    def alpha_rydberg_hall_ask_row(self) -> dict[str, float | int | str | bool | list]:
+    def alpha_rydberg_hall_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·Rydberg·Hall — lab doors next to Schwinger; same mountain?
 
         Lab (spectroscopy / QHE):
@@ -1165,12 +1165,12 @@ class SIAlphaProbeRows:
             {
                 "id": "lab_door_rydberg",
                 "maps_to": "measure R_∞ (H/D spectroscopy); α² from R_∞+m_e+QED",
-                "status": "shipped_experiment",
+                "status": "derived_experiment",
             },
             {
                 "id": "lab_door_hall",
                 "maps_to": "QHE plateau R_H=R_K/i; R_K=h/e²",
-                "status": "shipped_experiment",
+                "status": "derived_experiment",
             },
             {
                 "id": "rydberg_phase_residue_identity",
@@ -1196,7 +1196,7 @@ class SIAlphaProbeRows:
                 "id": "hall_RK_exact_SI2019",
                 "ratio": r_k,
                 "maps_to": "R_K=h/e² exact after SI-2019",
-                "status": "shipped_metrology",
+                "status": "derived_metrology",
                 "mechanism": "e,h fixed; Hall no longer independent α source",
             },
             {
@@ -1216,7 +1216,7 @@ class SIAlphaProbeRows:
                 "id": "reject_optical_a0_as_M",
                 "maps_to": "a₀ from Rydberg chain as M N_a0",
                 "status": "rejected_as_M_definition",
-                "mechanism": "already H·ask; T optical length",
+                "mechanism": "already H; T optical length",
             },
             {
                 "id": "reject_RK_without_mu0_bridge",
@@ -1252,7 +1252,7 @@ class SIAlphaProbeRows:
             "derivation_closed": False,
             "bypasses_coupling_open": False,
             "inventory": inventory,
-            "ask_ok": abs(r_inf_from_phase_residue / r_inf_classic - 1.0) < 1e-15
+            "checks_ok": abs(r_inf_from_phase_residue / r_inf_classic - 1.0) < 1e-15
             and abs((r_inf_from_phase_residue - r_inf_codata) / r_inf_codata) < 1e-8
             and abs((alpha_from_hall_legacy - alpha_c) / alpha_c) < 1e-8
             and abs(alpha2_hop / (alpha_c * alpha_c) - 1.0) < 1e-12,
@@ -1262,10 +1262,10 @@ class SIAlphaProbeRows:
             ),
         }
 
-    def alpha_em_face_weight_ask_row(self) -> dict[str, float | int | str | bool | list]:
+    def alpha_em_face_weight_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·EM·faces — asked carrier: A_□/A_tot, dihedral, V/S → α?
 
-        Method (geo·ask leaf 1): dimensional areas/angles at a=l_P first;
+        Method (geo leaf 1): dimensional areas/angles at a=l_P first;
         ask which ratio can be EM coupling; score vs α only AFTER.
 
         Carrier answers (2026-09-24):
@@ -1315,33 +1315,33 @@ class SIAlphaProbeRows:
                 "id": "body_w_square",
                 "ratio": w_sq,
                 "maps_to": "A_□ tot / A_tot at a=l_P — dimensional→ratio",
-                "status": "shipped_body",
+                "status": "derived_body",
                 "mechanism": "6a² vs 6a²+8·(√3/4)a²",
             },
             {
                 "id": "body_w_triangle",
                 "ratio": w_tri,
                 "maps_to": "A_△ tot / A_tot",
-                "status": "shipped_body",
+                "status": "derived_body",
             },
             {
                 "id": "body_dihedral",
                 "ratio": dihedral_over_180,
                 "maps_to": "135°/180° = 3/4 — □–△ ridge",
-                "status": "shipped_body",
+                "status": "derived_body",
             },
             {
                 "id": "body_compactness",
                 "ratio": v_sa,
                 "maps_to": "V/(S a) at a=l_P",
-                "status": "shipped_body",
+                "status": "derived_body",
             },
             {
                 "id": "precedent_kappa_not_face_weight",
                 "ratio": kappa,
                 "maps_to": "κ=R_in/R_out couples c,hT — face weight does not",
-                "status": "shipped_precedent",
-                "mechanism": "geo·ask: only κ closed as coupling so far",
+                "status": "derived_precedent",
+                "mechanism": "geo: only κ closed as coupling so far",
             },
             {
                 "id": "reject_raw_weights_as_alpha",
@@ -1368,7 +1368,7 @@ class SIAlphaProbeRows:
                 "id": "open_Phi_square_not_weight",
                 "maps_to": "Φ_□ Stokes on □ — channel open; weight ≠ holonomy",
                 "status": "open",
-                "mechanism": "geo·ask Phi_square; alpha_match_open",
+                "mechanism": "geo Phi_square; alpha_match_open",
             },
             {
                 "id": "open_coupling_fraction",
@@ -1378,7 +1378,7 @@ class SIAlphaProbeRows:
         ]
         return {
             "theorem": "§8.2·α·EM·faces — area/dihedral ≠ α; Φ_□ still open",
-            "method": "ask-model: body areas → try ratios → reject scale",
+            "method": "model: body areas → try ratios → reject scale",
             "w_square": w_sq,
             "w_triangle": w_tri,
             "dihedral_over_180": dihedral_over_180,
@@ -1391,7 +1391,7 @@ class SIAlphaProbeRows:
             "derivation_closed": False,
             "bypasses_coupling_open": False,
             "inventory": inventory,
-            "ask_ok": abs(w_sq + w_tri - 1.0) < 1e-12
+            "checks_ok": abs(w_sq + w_tri - 1.0) < 1e-12
             and abs(best_ppm) > 1e3
             and abs(ppm(w_sq)) > 1e6,
             "note": (
