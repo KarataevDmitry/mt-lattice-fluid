@@ -1,11 +1,117 @@
 \chapter{Система SI и Стандартная модель}
 \label{ch:si-sm}
 
-\section{Иерархия масштабов}
+\section{Полная лестница масштабов до макромира}
+\label{sec:full-ladder}
 
-От ячейки~$\hv$ к первичному дефекту, составным узлам, макроскопическим частицам
-и, наконец, полям Стандартной модели --- каждый уровень есть осреднение предыдущего
-без новых свободных параметров в~$g$.
+От ячейки~$\hv$ до метра и гладкого ньютоновского мира одна ось длины:
+число планковских шагов~$N=L/\hl$.
+Каждый рунг --- не новая физика, а тот же узел или оболочка,
+прочитанная на большем радиусе или через осреднение~\cref{sec:readout,ch:macro}.
+
+\begin{definition}[Длина в планковских шагах]
+\label{def:hop-count}
+Для любой длины~$L$
+\[
+  N:=\frac{L}{\hl}=\frac{L}{\ell_P}.
+\]
+Якорь электромагнитной шкалы --- комптоновская длина электрона
+$N_c:=m_P/m_e\approx 2{,}3\times 10^{22}$.
+\end{definition}
+
+На одной лестнице сосуществуют три закона роста~$N$; их нельзя смешивать.
+
+\begin{remark}[Три разных «лестницы'']
+Оглавление монографии (главы~1--9), битовая таблица $\mathrm{CL}{-}1\ldots\mathrm{CL}{-}8$
+на $\mathbb{Z}_{N_{\mathrm{ring}}}$ (\cref{ch:matter}) и рунги~$k$ ниже ---
+разные объекты.
+Здесь --- только \emph{физическая} ось длины до макромира.
+\end{remark}
+
+\paragraph{Геометрия каузальной звезды.}
+Составные оболочки до инфракрасной зоны растут степенями числа соседей FCC:
+\[
+  N=N_{12}^{m},\qquad N_{12}=12,\quad m=0,1,2,\ldots
+\]
+Это окно лептонного этажа ($m=3\ldots 5$ даёт $10^3\ldots 10^5\cdot\hl$),
+а не комптоновский или боровский радиус.
+
+\paragraph{Инфракрасная hop-лестница.}
+От якоря~$N_c$ длина растёт делением на~$\alpha_{\mathrm{fs}}$:
+\begin{equation}
+\label{eq:ir-hop-ladder}
+  N_{k+1}=\frac{N_k}{\alpha_{\mathrm{fs}}},\qquad
+  N_{-1}=\alpha_{\mathrm{fs}} N_c\quad(r_e),\quad
+  N_0=N_c\quad(\bar\lambda_C),\quad
+  N_1=\frac{N_c}{\alpha_{\mathrm{fs}}}\quad(a_0),\quad
+  N_k=\frac{N_c}{\alpha_{\mathrm{fs}}^{k}}\ \text{для }k\geq 0.
+\end{equation}
+Тождества~\eqref{eq:ir-hop-ladder} согласованы с мостом к~SI (\cref{def:si-bridge}).
+
+\paragraph{Массы и степени~$\alpha$.}
+Энергетическая иерархия частиц (\cref{thm:vev}) задаёт \emph{масштаб массы}, не длину:
+$v\sim\alpha_{\mathrm{fs}}^{8}$, $m_H\sim\alpha_{\mathrm{fs}}^{8}$,
+$m_p\sim\alpha_{\mathrm{fs}}^{1}v$, $m_e\sim\alpha_{\mathrm{fs}}^{2}m_H$,
+$m_\nu\sim\alpha_{\mathrm{fs}}^{5}m_H$.
+Длина тела массы~$M$ на том же законе: $N=m_P/M$.
+
+\begin{proposition}[Рунги от кирпича до метра]
+\label{prop:ladder-rungs}
+Порядок величин при $N_{12}=12$, $\alpha_{\mathrm{fs}}^{-1}\approx 137$:
+
+\smallskip
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}r r r l l l@{}}
+\toprule
+$k$ & $N$ & $\log_{10}N$ & $\alpha$-рунг & объект & слой \\
+\midrule
+0 & $1$ & $0$ & $m_P$ & кирпич $\hv$, pra-дефект & $\Mlayer$ \\
+1 & $12$ & $1.1$ & --- & $\varepsilon$-звезда; $R_{\mathrm{dress}}=\hl$ & $\Mlayer$ \\
+2 & $144$ & $2.2$ & --- & вторая координационная сфера & $\Mlayer$ \\
+3 & $1728$ & $3.2$ & --- & лептонное окно (пре-резонансы) & $\Mlayer$ \\
+4 & $2.07\times 10^4$ & $4.3$ & --- & полоса лептонного этажа & $\Mlayer$ \\
+5 & $2.5\times 10^5$ & $5.4$ & --- & верх лептонного этажа & $\Mlayer$ \\
+6 & $\sim 10^{15}$ & $15$ & confining & кварковые фокусы ($d\approx 3$) & $\Mlayer$ \\
+7 & $\alpha N_c$ & $20.2$ & $-1$ & $r_e$; адронная упаковка & $\Mlayer$--$\Tlayer$ \\
+8 & $N_c$ & $22.4$ & $0$ & $\bar\lambda_C(e)$; масса $m_e$ & $\Mlayer\to\Tlayer$ \\
+9 & $N_c/\alpha$ & $24.5$ & $1$ & боровский $a_0$; облако H & $\Tlayer$ \\
+10 & $N_c/\alpha^2$ & $26.6$ & $2$ & орбиталь $\mathrm{\AA}$, $N_{\mathrm{pack}}$ & $\Tlayer$ \\
+11--13 & $\ldots$ & $28.8\ldots 33$ & $3\ldots 5$ & молекула, мм--см & $\Tlayer$ \\
+14 & $\sim 10^{35}$ & $35.3$ & $6$ & метр; macro-газ, тело & $\Tlayer$ \\
+15 & $\lambda\gg\sigma_R\hl$ & --- & --- & гладкий макромир (теор.~\ref{thm:t-cr}) & $\Tlayer$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{proposition}
+
+Схематично:
+\begin{center}
+\small
+\begin{tabular}{@{}l@{\quad}l@{}}
+$k=0\ldots 5$ & $N=N_{12}^{m}$ --- геометрия составного узла на~$\Mlayer$ \\
+$k=6$ & $\sim 10^{15}\hl$ --- кварковый этаж (схема) \\
+$k=7\ldots 9$ & $N_{-1},N_0,N_1$ --- EM IR: $r_e\to\bar\lambda_C\to a_0$ \\
+$k\geq 10$ & $N_k=N_c/\alpha_{\mathrm{fs}}^{k}$ --- атом, химия, метр \\
+$k=15$ & $\lambda\gg\sigma_R\hl$ --- непрерывный предел readout'а без $\hl\to 0$ \\
+\end{tabular}
+\end{center}
+
+Переход $\Mlayer\to\Tlayer$ --- не отдельный рунг, а обязательный фильтр на каждом шаге вниз:
+биномиальное ядро~\cref{def:soft-readout}, статистика $|\Phi|^2$ (\cref{ch:macro})
+и уравнения типа NLSE с вязкостью~$\nu_{CA}$.
+Проверка модели с экспериментом --- только на~$\Tlayer$ (массы, $\Gamma$, рассеяние, SI);
+микроуровень опровергается лишь несходимостью макроинвариантов.
+
+\begin{remark}
+Радиус одевания электрона $R_{\mathrm{dress}}=\hl$ ($k=1$) не совпадает
+с комптоновской длиной ($k=8$) и с боровским радиусом ($k=9$).
+Степени $N_{12}^{m}$ ($k\leq 5$) и деления $N_c/\alpha^{k}$ ($k\geq 7$) ---
+разные законы на одной оси~$N$.
+Точные целые $N_k$ для $k\geq 10$ и число упаковки $N_{\mathrm{pack}}$
+атомной ячейки Вороного остаются предметом дальнейшего вывода.
+\end{remark}
 
 \section{Мост к системе SI}
 
