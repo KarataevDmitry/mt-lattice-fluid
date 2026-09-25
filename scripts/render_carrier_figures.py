@@ -409,22 +409,22 @@ def fig_lattice_field() -> None:
             if any(abs(nx - px) < 0.01 and abs(ny - py) < 0.01 for px, py in pts):
                 ax.plot([x, nx], [y, ny], color=LIGHT, lw=0.8, zorder=1)
 
-    dim_axis_h(ax, cx, cx + dx, cy - 0.55, r"$h_L$", offset=0.0, below=True)
-    leader(ax, (cx, cy), r"$x\in\Lambda$", (cx - 0.15, cy + 0.62), fontsize=10)
+    dim_axis_h(ax, cx, cx + dx, cy, r"$h_L$", offset=0.38, below=True)
+    leader(ax, (cx, cy), r"$x\in\Lambda$", (cx + 0.12, cy + 0.72), fontsize=10)
 
-    t0, t1 = 0.35, 1.35
-    ty = -0.95
+    t0, t1 = 3.05, 4.05
+    ty = -0.42
     ax.plot([t0, t1], [ty, ty], color=INK, lw=LW_OBJECT, zorder=2, solid_capstyle="butt")
     for t in (t0, t1):
-        ax.plot([t, t], [ty - 0.06, ty + 0.06], color=INK, lw=LW_DIM, zorder=3)
-    ax.text(t0, ty - 0.18, r"$t$", ha="center", va="top", fontsize=10)
-    ax.text(t1, ty - 0.18, r"$t{+}1$", ha="center", va="top", fontsize=10)
-    dim_axis_h(ax, t0, t1, ty + 0.22, r"$h_T$", offset=0.0, below=False)
-    ax.text(0.5 * (t0 + t1), ty + 0.52, r"$c_0=h_L/h_T$", ha="center", fontsize=10)
+        ax.plot([t, t], [ty - 0.05, ty + 0.05], color=INK, lw=LW_DIM, zorder=3)
+    ax.text(t0, ty - 0.16, r"$t$", ha="center", va="top", fontsize=10)
+    ax.text(t1, ty - 0.16, r"$t{+}1$", ha="center", va="top", fontsize=10)
+    dim_axis_h(ax, t0, t1, ty, r"$h_T$", offset=0.30, below=False)
+    ax.text(1.55, -0.05, r"$c_0=h_L/h_T$", ha="center", fontsize=10)
 
     ax.text(0.02, 3.35, r"$\Lambda$ — счётное множество узлов", fontsize=10)
     ax.set_xlim(-0.45, 4.85)
-    ax.set_ylim(-1.25, 3.55)
+    ax.set_ylim(-0.72, 3.55)
     _save(fig, "carrier-lattice-field.pdf")
 
 
@@ -866,65 +866,67 @@ def fig_slice_bridge() -> None:
     _save(fig, "carrier-slice-bridge.pdf")
 
 
-def _draw_spinor_inset(ax, cx: float, cy: float, *, box_w: float = 0.95, box_h: float = 0.72) -> None:
+def _draw_spinor_inset(ax, cx: float, cy: float, *, box_w: float = 0.88, box_h: float = 0.62) -> None:
     """Column spinor z(x) = (z_1, z_2)^T in C^2 next to node x."""
-    bx, by = cx + 0.55, cy + 0.35
+    bx, by = cx + 0.42, cy + 0.18
     ax.add_patch(Rectangle((bx, by), box_w, box_h, facecolor="white", edgecolor=INK, lw=LW_OBJECT, zorder=6))
-    ax.text(bx + box_w / 2, by + box_h * 0.72, r"$z(x)=\binom{z_1}{z_2}$", ha="center", va="center", fontsize=11, zorder=7)
-    ax.text(bx + box_w + 0.08, by + box_h / 2, r"$\in\mathbb{C}^2$", ha="left", va="center", fontsize=10, zorder=7)
-    ax.plot([cx + 0.08, bx], [cy + 0.08, by + box_h * 0.35], color=INK, lw=LW_DIM, zorder=5)
-    ax.annotate("", xy=(bx, by + box_h * 0.35), xytext=(cx + 0.08, cy + 0.08), arrowprops=dict(arrowstyle="-|>", color=INK, lw=LW_DIM, mutation_scale=7))
+    ax.text(bx + box_w / 2, by + box_h / 2, r"$z(x)=\binom{z_1}{z_2}\in\mathbb{C}^2$", ha="center", va="center", fontsize=10, zorder=7)
+    leader(ax, (cx, cy), r"$x$", (cx - 0.52, cy + 0.02), fontsize=10)
 
 
 def fig_field_neighbors() -> None:
     """Two ideas: (i) spinor state at x; (ii) local law g on neighborhood N(x)."""
-    fig, axes = plt.subplots(1, 2, figsize=(9.2, 4.2))
+    fig = plt.figure(figsize=(9.4, 3.9))
+    gs = fig.add_gridspec(1, 2, width_ratios=[1.0, 1.35], wspace=0.22)
+    ax0 = fig.add_subplot(gs[0, 0])
+    ax1 = fig.add_subplot(gs[0, 1])
 
-    ax = axes[0]
-    ax.set_aspect("equal")
-    ax.axis("off")
-    ax.plot(0, 0, "o", color=INK, ms=11, zorder=5, mew=LW_OBJECT * 0.4)
-    leader(ax, (0, 0), r"$x$", (-0.42, 0.38), fontsize=11)
-    _draw_spinor_inset(ax, 0, 0)
-    ax.text(0, -1.05, r"(i) состояние узла — спинор $z(x)\in\mathbb{C}^2$", ha="center", fontsize=10)
-    ax.set_xlim(-1.15, 1.85)
-    ax.set_ylim(-1.25, 1.25)
+    ax0.set_aspect("equal")
+    ax0.axis("off")
+    ax0.plot(0, 0, "o", color=INK, ms=11, zorder=5, mew=LW_OBJECT * 0.4)
+    _draw_spinor_inset(ax0, 0, 0)
+    ax0.set_xlim(-0.95, 1.45)
+    ax0.set_ylim(-0.55, 1.05)
 
-    ax = axes[1]
-    ax.set_aspect("equal")
-    ax.axis("off")
-    a = 1.0
-    neighbors = _draw_hex_neighborhood(ax, a, rings=2, center=(0, 0))
-    leader(ax, (0, a * 0.55), r"$N(x)$", (0.55, 1.15), fontsize=10)
-    neighbor_pts: list[tuple[float, float]] = []
+    ax1.set_aspect("equal")
+    ax1.axis("off")
+    a = 0.82
+    neighbors = _draw_hex_neighborhood(ax1, a, rings=2, center=(0, 0))
+    leader(ax1, (0.0, 0.0), r"$x$", (-0.42, 0.55), fontsize=10)
+    n_cell = max(neighbors, key=lambda rc: _hex_cell_center(*rc, a)[1])
+    ny = _hex_cell_center(*n_cell, a)
+    leader(ax1, ny, r"$N(x)$", (0.20, 1.08), fontsize=10)
+
+    gx, gy = 2.35, 0.0
+    ax1.add_patch(Rectangle((gx - 0.34, gy - 0.34), 0.68, 0.68, facecolor=FILL, edgecolor=INK, lw=LW_OBJECT, zorder=6))
+    ax1.text(gx, gy, r"$g$", ha="center", va="center", fontsize=13, zorder=7)
+    ox = gx + 0.95
+    ax1.add_patch(Circle((ox, gy), 0.38, facecolor="white", edgecolor=INK, lw=LW_OBJECT, zorder=6))
+    ax1.text(ox, gy, r"$z(x,t{+}1)$", ha="center", va="center", fontsize=9, zorder=7)
+
     for row, col in sorted(neighbors):
-        cx, cy = _hex_cell_center(row, col, a)
-        neighbor_pts.append((cx, cy))
-        ax.plot(cx, cy, "o", color=MUTED, ms=4, zorder=5)
-
-    gx, gy = 2.05, 0.0
-    ax.add_patch(Rectangle((gx - 0.38, gy - 0.38), 0.76, 0.76, facecolor=FILL, edgecolor=INK, lw=LW_OBJECT, zorder=6))
-    ax.text(gx, gy, r"$g$", ha="center", va="center", fontsize=14, zorder=7)
-    ax.add_patch(Circle((gx + 1.05, gy), 0.42, facecolor="white", edgecolor=INK, lw=LW_OBJECT, zorder=6))
-    ax.text(gx + 1.05, gy, r"$z(x,t{+}1)$", ha="center", va="center", fontsize=9, zorder=7)
-
-    for i, (px, py) in enumerate(neighbor_pts[:4]):
-        ox = px * 0.22
-        oy = py * 0.22
-        ax.text(px + ox, py + oy, rf"$z(y_{i+1})$", ha="center", va="center", fontsize=8, color=MUTED, zorder=5)
-        ax.annotate(
+        px, py = _hex_cell_center(row, col, a)
+        if px < 0.05:
+            continue
+        ax1.annotate(
             "",
-            xy=(gx - 0.38, gy),
-            xytext=(px * 0.55, py * 0.55),
+            xy=(gx - 0.34, gy),
+            xytext=(px * 0.72, py * 0.72),
             arrowprops=dict(arrowstyle="-|>", color=LIGHT, lw=0.8, mutation_scale=6),
             zorder=3,
         )
-    ax.annotate("", xy=(gx + 0.63, gy), xytext=(gx + 0.38, gy), arrowprops=dict(arrowstyle="-|>", color=INK, lw=LW_OBJECT, mutation_scale=8))
-    ax.text(0, -1.35, r"(ii) локальный закон: $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$", ha="center", fontsize=10)
-    ax.set_xlim(-1.35, 3.05)
-    ax.set_ylim(-1.55, 1.45)
+    ax1.annotate(
+        "",
+        xy=(ox - 0.38, gy),
+        xytext=(gx + 0.34, gy),
+        arrowprops=dict(arrowstyle="-|>", color=INK, lw=LW_OBJECT, mutation_scale=8),
+    )
+    ax1.set_xlim(-1.45, 3.15)
+    ax1.set_ylim(-1.25, 1.25)
 
-    fig.subplots_adjust(wspace=0.28)
+    fig.text(0.27, 0.03, r"(i) состояние узла — спинор $z(x)\in\mathbb{C}^2$", ha="center", fontsize=10)
+    fig.text(0.73, 0.03, r"(ii) локальный закон: $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$", ha="center", fontsize=10)
+    fig.subplots_adjust(left=0.04, right=0.98, top=0.96, bottom=0.12)
     _save(fig, "carrier-field-z.pdf")
 
 
