@@ -383,7 +383,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·α·Arg-try | Arg identity Δm=m_arg/(2MN_a0) closed; best int M=97 ~−2080ppm; reject 137² / 1/(4π·11) / mass-cascade; derivation OPEN · Alpha_arg_binding_try PASS |
 | 2026-09-23 | §8.2·α·mass-defect | QM floor: α=√(2Δm/m_e); U/BE=2; E_coul_NN/E₀=α/κ; BE/E₀~1.58e-27 soft Arg; DoD Arg→Δm OPEN · Alpha_mass_defect_optics PASS |
 | 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; foot≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent_ask` PASS |
-| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; нога α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning_ask` PASS |
+| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning_ask` PASS |
 | 2026-09-23 | §8.2·F·ask | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice_ask` PASS |
 | 2026-09-23 | §8.2·H·ask | **спросили носитель** `N_a0`: Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); **reject** `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier_ask` PASS |
 | 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **ask later rejected as α-input** |
