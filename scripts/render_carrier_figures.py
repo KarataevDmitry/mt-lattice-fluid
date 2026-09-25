@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Render carrier-geometry figures for book/sources/chapters/01-carrier.tex."""
+"""Render carrier-geometry figures for book/sources/chapters/01-carrier.tex.
+
+Drafting primitives: figure_draft (dimension lines, leaders — labels off geometry)."""
 
 from __future__ import annotations
 
@@ -12,6 +14,8 @@ from matplotlib.patches import Polygon, Wedge
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 from scipy.spatial import ConvexHull, Voronoi
+
+from figure_draft import dim_axis_h, dim_axis_v, dim_linear, dim_radius, leader
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "book" / "sources" / "figures"
@@ -41,44 +45,6 @@ def _save(fig: plt.Figure, name: str) -> None:
     fig.savefig(path, bbox_inches="tight", pad_inches=0.10)
     plt.close(fig)
     print(f"wrote {path}")
-
-
-def _dim_radius(
-    ax,
-    r: float,
-    angle_deg: float,
-    label: str,
-    *,
-    color: str = INK,
-    ls: str = "-",
-    lw: float = 1.25,
-    tick: float = 0.04,
-    label_gap: float = 0.14,
-) -> None:
-    """Radial dimension from origin — extension line + arrow + label outside."""
-    th = math.radians(angle_deg)
-    ux, uy = math.cos(th), math.sin(th)
-    px, py = r * ux, r * uy
-    ax.plot([0, px], [0, py], color=color, lw=lw, ls=ls, zorder=4, solid_capstyle="butt")
-    nx, ny = -uy, ux
-    ax.plot(
-        [px - tick * nx, px + tick * nx],
-        [py - tick * ny, py + tick * ny],
-        color=color,
-        lw=lw,
-        zorder=5,
-        solid_capstyle="round",
-    )
-    ax.annotate(
-        "",
-        xy=(px, py),
-        xytext=(0, 0),
-        arrowprops=dict(arrowstyle="-|>", color=color, lw=lw, linestyle=ls),
-    )
-    lx, ly = (r + label_gap) * ux, (r + label_gap) * uy
-    ha = "left" if ux > 0.2 else ("right" if ux < -0.2 else "center")
-    va = "bottom" if uy > 0.2 else ("top" if uy < -0.2 else "center")
-    ax.text(lx, ly, label, fontsize=10, color=color, ha=ha, va=va, zorder=6)
 
 
 def _fcc_vertices(a: float = 1.0) -> np.ndarray:
@@ -345,13 +311,7 @@ def fig_lattice_field() -> None:
             if any(abs(nx - px) < 0.01 and abs(ny - py) < 0.01 for px, py in pts):
                 ax.plot([x, nx], [y, ny], color=LIGHT, lw=0.9, zorder=1)
 
-    ax.annotate(
-        r"$z(x)\in\mathbb{C}^2$",
-        xy=(cx, cy),
-        xytext=(cx + 0.55, cy + 0.55),
-        fontsize=12,
-        arrowprops=dict(arrowstyle="->", color=INK, lw=1.2),
-    )
+    leader(ax, (cx, cy), r"$z(x)\in\mathbb{C}^2$", (cx + 0.55, cy + 0.55), fontsize=12)
     ax.text(0.02, -0.35, r"$\Lambda$ — счётное множество узлов; шаг $h_L$, такт $h_T$, $c_0=h_L/h_T$", fontsize=10)
     ax.set_xlim(-0.4, 4.8)
     ax.set_ylim(-0.6, 3.2)
@@ -367,15 +327,19 @@ def fig_epsilon_neighborhood() -> None:
     ax.axis("off")
 
     ax.plot(0, 0, "o", color=INK, ms=9, zorder=5)
-    for t in angles:
-        p = a * np.array([np.cos(t), np.sin(t)])
-        ax.plot([0, p[0]], [0, p[1]], color=INK, lw=1.5, zorder=2)
+    for th in angles:
+        p = a * np.array([np.cos(th), np.sin(th)])
+        ax.plot([0, p[0]], [0, p[1]], color=LIGHT, lw=1.0, ls=":", zorder=2)
         ax.plot(p[0], p[1], "o", color=MUTED, ms=7, zorder=4)
+
+    p0 = a * np.array([np.cos(angles[0]), np.sin(angles[0])])
+    ax.plot([0, p0[0]], [0, p0[1]], color=INK, lw=1.5, zorder=3)
+    dim_radius(ax, a, math.degrees(angles[0]), r"$h_L$", label_gap=0.16)
 
     wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=FILL, edgecolor=LIGHT, lw=0.8, zorder=1)
     ax.add_patch(wedge)
     ax.text(0, -1.35, r"$N(x)$: узлы на расстоянии $h_L$ за один такт $h_T$", ha="center", fontsize=11)
-    ax.text(0, 1.25, r"$c_0h_T=h_L$", ha="center", fontsize=11, color=MUTED)
+    leader(ax, (0.0, a * 1.08), r"$c_0h_T=h_L$", (0.55, a * 1.22), color=MUTED)
     ax.set_xlim(-1.4, 1.4)
     ax.set_ylim(-1.55, 1.45)
     _save(fig, "carrier-epsilon.pdf")
@@ -398,8 +362,9 @@ def fig_plane_tilings() -> None:
     ax.axis("off")
     a = 0.65
     _draw_square_tiling(ax, a=a, n=4, highlight=(0, 0))
+    dim_linear(ax, (0.0, 0.0), (a, 0.0), r"$a$", offset=-0.18, side=-1)
     ax.set_xlim(-2.2, 2.2)
-    ax.set_ylim(-2.2, 2.2)
+    ax.set_ylim(-2.35, 2.2)
     ax.set_title(r"квадраты", fontsize=10)
 
     ax = axes[2]
@@ -448,15 +413,8 @@ def fig_neighbors_2d() -> None:
         ax.plot([cx, p[0]], [cy, p[1]], color=INK, lw=1.2, zorder=4)
         ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=5)
     diag = a / math.sqrt(2)
-    ax.plot([diag, -diag], [diag, -diag], color=MUTED, lw=1.0, ls="--", zorder=3)
-    ax.plot([diag, -diag], [-diag, diag], color=MUTED, lw=1.0, ls="--", zorder=3)
-    ax.annotate(
-        "",
-        xy=(diag * 0.92, diag * 0.92),
-        xytext=(diag * 0.55, diag * 0.55),
-        arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.0, linestyle="--"),
-    )
-    ax.text(a * 0.55, a * 0.62, r"$h_L\sqrt{2}$", fontsize=8, color=MUTED)
+    ax.plot([0, diag], [0, diag], color=MUTED, lw=1.0, ls="--", zorder=3)
+    dim_linear(ax, (0.0, 0.0), (diag, diag), r"$h_L\sqrt{2}$", offset=0.22, color=MUTED, ls="--", side=-1)
     ax.set_xlim(-1.6, 1.6)
     ax.set_ylim(-1.6, 1.6)
     ax.set_title(r"$|N|=4$", fontsize=10)
@@ -499,9 +457,9 @@ def _draw_spacetime_2d(ax, c0: float, *, t_lim: float = 1.25, x_lim: float = 1.6
         ax.text(-0.08, -t_lim * 0.72, "прошлое", fontsize=9, ha="center", color=MUTED)
 
     ax.scatter([0], [0], color=INK, s=55, zorder=5)
-    ax.text(0.06, -0.06, "наблюдатель", fontsize=9, color=INK)
-    ax.text(-0.1, t_lim * 0.78, "будущее", fontsize=9, ha="center", color=MUTED)
-    ax.text(x_lim * 0.82, 0.03, r"$t=0$", fontsize=9, color=MUTED)
+    leader(ax, (0.0, 0.0), "наблюдатель", (0.22, -0.12), fontsize=9)
+    leader(ax, (0.0, t_lim * 0.72), "будущее", (-0.42, t_lim * 0.88), color=MUTED, fontsize=9)
+    leader(ax, (x_lim * 0.78, 0.0), r"$t=0$", (x_lim * 0.55, -0.14), color=MUTED, fontsize=9)
     ax.set_xlabel(r"пространство $x$")
     ax.set_ylabel(r"время $t$")
     ax.set_xlim(-x_lim, x_lim)
@@ -528,10 +486,11 @@ def fig_light_cone() -> None:
     _draw_spacetime_2d(ax2d, c0, t_lim=1.2, x_lim=1.75)
     ax2d.scatter([a], [ht], color=INK, s=48, zorder=6)
     ax2d.plot([0, a], [0, ht], color=INK, lw=1.2, zorder=4)
-    ax2d.text(a + 0.05, ht * 0.45, r"$h_L$", fontsize=9)
     ax2d.scatter([r2], [ht], color=MUTED, marker="x", s=70, linewidths=2, zorder=6)
     ax2d.plot([0, r2], [0, ht], color=MUTED, lw=1.0, ls="--", zorder=4)
-    ax2d.text(r2 + 0.04, ht + 0.04, r"$h_L\sqrt{2}$", fontsize=9, color=MUTED)
+    dim_axis_h(ax2d, 0, a, ht, r"$h_L$", offset=0.14)
+    dim_axis_v(ax2d, 0, ht, 0, r"$h_T$", offset=0.14)
+    dim_linear(ax2d, (0.0, 0.0), (r2, ht), r"$h_L\sqrt{2}$", offset=0.18, color=MUTED, ls="--", side=1)
     ax2d.set_title(r"срез $(x,t)$: $c_0 h_T=h_L$", fontsize=10)
 
     ax3d: Axes3D = fig.add_subplot(1, 2, 2, projection="3d")
@@ -567,14 +526,8 @@ def fig_hex_neighbors() -> None:
         ax.plot(v[0], v[1], "o", color=MUTED, ms=6, zorder=5)
 
     e0, e1 = verts[0], verts[1]
-    emid = 0.5 * (e0 + e1)
-    ax.annotate(
-        "",
-        xy=emid + np.array([0.1, 0.07]),
-        xytext=emid - np.array([0.1, 0.07]),
-        arrowprops=dict(arrowstyle="<->", color=INK, lw=1.2),
-    )
-    ax.text(emid[0] + 0.16, emid[1] + 0.1, r"$a=h_L$", fontsize=11)
+    dim_linear(ax, (e0[0], e0[1]), (e1[0], e1[1]), r"$a=h_L$", offset=0.22, side=-1)
+    dim_radius(ax, a, 30, r"$h_L$", label_gap=0.14)
 
     ax.text(0, 2.55, r"гексагональная ячейка Вороного, $|N(x)|=6$", ha="center", fontsize=11)
     ax.text(0, -2.35, r"соседи на расстоянии $h_L$ за один такт $h_T$", ha="center", fontsize=10)
@@ -600,8 +553,8 @@ def fig_hex_radii() -> None:
 
     ax.plot(0, 0, "o", color=INK, ms=8, zorder=6)
 
-    _dim_radius(ax, a, 90, r"$R_{\mathrm{out}}=a$", color=INK, label_gap=0.12)
-    _dim_radius(ax, r_in, 0, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=MUTED, ls="--", label_gap=0.12)
+    dim_radius(ax, a, 90, r"$R_{\mathrm{out}}=a$", color=INK, label_gap=0.12)
+    dim_radius(ax, r_in, 0, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=MUTED, ls="--", label_gap=0.12)
 
     ax.text(-0.05, -1.42, r"$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$", fontsize=12, ha="center")
     ax.text(0, 1.32, r"однотактовое тело: вписанная и описанная сферы", ha="center", fontsize=11)
@@ -676,9 +629,9 @@ def fig_hull_voronoi() -> None:
         ax.add_patch(plt.Circle((0, 0), r, fill=False, ec=col, lw=lw, ls=ls, zorder=1))
     ax.plot(0, 0, "o", color=INK, ms=6, zorder=6)
 
-    _dim_radius(ax, r_vor, 118, r"$R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2$", color=MUTED, ls="--")
-    _dim_radius(ax, r_hull, -28, r"$R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", color=MUTED)
-    _dim_radius(ax, r_out, 22, r"$R_{\mathrm{out}}=a$", color=INK)
+    dim_radius(ax, r_vor, 118, r"$R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2$", color=MUTED, ls="--")
+    dim_radius(ax, r_hull, -28, r"$R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", color=MUTED)
+    dim_radius(ax, r_out, 22, r"$R_{\mathrm{out}}=a$", color=INK)
 
     ax.text(0, -1.22, r"$\kappa_{\mathrm{FCC}}=1/\sqrt{2}$;\quad $R_{\mathrm{in}}^{\mathrm{Voronoi}}=\kappa\, R_{\mathrm{in}}^{\mathrm{hull}}$", ha="center", fontsize=11)
     ax.set_xlim(-1.15, 1.65)
@@ -794,10 +747,8 @@ def fig_field_neighbors() -> None:
 
     circ = plt.Circle((0, 0), 0.35, fill=False, ec=INK, lw=1.0)
     ax.add_patch(circ)
-    ax.annotate("", xy=(0.28, 0.18), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
-    ax.text(0.0, 0.48, r"$z_1$", ha="center", fontsize=10)
-    ax.annotate("", xy=(-0.22, -0.28), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.3, linestyle="--"))
-    ax.text(-0.38, -0.42, r"$z_2$", fontsize=10, color=MUTED)
+    leader(ax, (0.28, 0.18), r"$z_1$", (0.05, 0.52), fontsize=10)
+    leader(ax, (-0.22, -0.28), r"$z_2$", (-0.48, -0.44), color=MUTED, fontsize=10)
     ax.text(0.02, -1.35, r"состояние узла $z(x)\in\mathbb{C}^2$; локальный закон на $N(x)$", ha="center", fontsize=10)
     ax.set_xlim(-1.45, 1.45)
     ax.set_ylim(-1.55, 1.35)
