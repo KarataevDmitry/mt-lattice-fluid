@@ -1,4 +1,14 @@
-pdf/*.aux
-pdf/*.log
-pdf/*.out
-pdf/*.toc
+# Build artifacts (sources → out/)
+out/*
+!out/.gitkeep
+
+# Legacy pdf/ tree (removed — use out/)
+pdf/
+
+# tools: large extraction dumps, not sources
+tools/*.txt
+
+# Local editor / scratch
+*.synctex.gz
+*.fdb_latexmk
+*.fls

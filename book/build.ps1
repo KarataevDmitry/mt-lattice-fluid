@@ -1,29 +1,34 @@
 #!/usr/bin/env pwsh
-# Build book/pdf/main.pdf — hand-written LaTeX only
+# Build book/out/main.pdf from book/sources/main.tex (XeLaTeX × 3)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$Book = Join-Path $PSScriptRoot '.'
-$PdfDir = Join-Path $Book 'pdf'
-New-Item -ItemType Directory -Force -Path $PdfDir | Out-Null
 
-Push-Location $Book
+$Root = $PSScriptRoot
+$Sources = Join-Path $Root 'sources'
+$Out = Join-Path $Root 'out'
+$JobName = 'main'
+
+if (-not (Test-Path (Join-Path $Sources 'main.tex'))) {
+    throw "Missing sources/main.tex — run from book/ root"
+}
+
+New-Item -ItemType Directory -Force -Path $Out | Out-Null
+
+Push-Location $Sources
 try {
-    $job = 'main-latest'
-    foreach ($i in 1..3) {
-        $null = xelatex -interaction=nonstopmode -output-directory=pdf -jobname=$job main.tex 2>&1
+    foreach ($pass in 1..3) {
+        Write-Host "xelatex pass $pass/3 ..."
+        & xelatex -interaction=nonstopmode -halt-on-error -output-directory="$Out" -jobname="$JobName" main.tex
+        if ($LASTEXITCODE -ne 0) {
+            throw "xelatex failed (exit $LASTEXITCODE) on pass $pass"
+        }
     }
-    $latest = Join-Path $PdfDir "$job.pdf"
-    if (-not (Test-Path $latest)) { throw "PDF not produced ($job)" }
 
-    $main = Join-Path $PdfDir 'main.pdf'
-    try {
-        Copy-Item -LiteralPath $latest -Destination $main -Force
-        Write-Host "Built: $main"
+    $pdf = Join-Path $Out "$JobName.pdf"
+    if (-not (Test-Path $pdf)) {
+        throw "PDF not produced: $pdf"
     }
-    catch {
-        Write-Warning 'main.pdf locked (close viewer); open pdf/main-latest.pdf'
-        Write-Host "Built: $latest"
-    }
+    Write-Host "Built: $pdf"
 }
 finally {
     Pop-Location
