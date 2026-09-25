@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 """Dogfood META §3.2 phase IV→I: ice + deterministic phase shift → birth?
 
-Arms:
-  ice_uniform      — synchronous ω (uniform class), no shift
-  ice_disk_d1      — local +1 class bump in disk (domain nucleation)
-  ice_wall_d1      — half-plane class wall
-  ice_ripple       — minimal coherent k·r on ice (not PLANE_WAVE seed)
-  boil_control     — live VACUUM_BOIL (known born=0)
-  boil_relax_wall  — boil settle then spinor phase wall on result
+Arms (2+1 hex or 3+1 FCC via --fcc):
+  ice_uniform, ice_disk_d1, ice_wall_d1, ice_ripple, boil_control, boil_relax_wall
 
-Gate: b≥1 at density peak (|n_∂|≥¾), dual rel/u1/auto — same as family scan.
+Tracks born_final and born_ever (with --sample-every).
 """
 
 from __future__ import annotations
@@ -26,7 +21,13 @@ from mt_ca.app.runner import apply_scenario
 from mt_ca.app.scenario import get_scenario
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor, encode_spinor
-from mt_ca.seeds import ice_ocean_spinor
+from mt_ca.seeds import (
+    boil_ocean_spinor_3d,
+    ice_ocean_spinor,
+    ice_ocean_spinor_3d,
+    make_seed,
+    SeedClass,
+)
 from mt_ca.simulator import LatticeFluidSimulator
 
 
@@ -39,11 +40,17 @@ def _apply_spinor_phase_wall(
     half_plane_x: bool = True,
     delta_angle: float = 0.25,
 ) -> torch.Tensor:
-    """Post-relax deterministic wall: rotate spinor phase on half the lattice."""
-    ny, nx = z.shape[0], z.shape[1]
-    xx = torch.arange(nx, device=z.device).view(1, nx)
-    mask = (xx >= nx // 2) if half_plane_x else (xx < nx // 2)
-    mask = mask.expand(ny, nx)
+    """Deterministic half-space spinor phase rotation."""
+    if z.ndim == 4:
+        nz, ny, nx = z.shape[:3]
+        xx = torch.arange(nx, device=z.device).view(1, 1, nx)
+        mask = (xx >= nx // 2) if half_plane_x else (xx < nx // 2)
+        mask = mask.expand(nz, ny, nx)
+    else:
+        ny, nx = z.shape[0], z.shape[1]
+        xx = torch.arange(nx, device=z.device).view(1, nx)
+        mask = (xx >= nx // 2) if half_plane_x else (xx < nx // 2)
+        mask = mask.expand(ny, nx)
     factor = torch.exp(torch.tensor(1j * delta_angle, device=z.device, dtype=dtype))
     z2 = z.clone()
     z2[mask] = z2[mask] * factor
@@ -58,29 +65,65 @@ def run_arm(
     steps: int,
     label: str,
     premise: str,
+    sample_every: int | None = None,
 ) -> dict[str, Any]:
     ic_fn()
     g0 = gate_b(sim.z)
-    sim.step(steps)
-    g1 = gate_b(sim.z)
+    born_ever = False
+    first_born_t: int | None = None
+    samples: list[dict[str, Any]] = []
+    if sample_every is not None and sample_every > 0:
+        done = 0
+        while done < steps:
+            chunk = min(sample_every, steps - done)
+            sim.step(chunk)
+            done += chunk
+            g = gate_b(sim.z)
+            born_now = bool(g["passed"] and not g0["passed"])
+            if born_now and not born_ever:
+                first_born_t = done
+            born_ever = born_ever or born_now
+            samples.append(
+                {
+                    "t": done,
+                    "b_hits": int(g["b_hits_topk"]),
+                    "born": born_now,
+                    "contrast": g["contrast"],
+                    "winding_abs_max": g["winding_abs_max"],
+                }
+            )
+        g1 = gate_b(sim.z)
+    else:
+        sim.step(steps)
+        g1 = gate_b(sim.z)
+    born_final = bool(g1["passed"] and not g0["passed"])
+    born_ever = born_ever or born_final
+    if born_final and first_born_t is None:
+        first_born_t = steps
     return {
         "arm": label,
         "premise": premise,
         "gate0": g0,
         "gate1": g1,
         "passed": bool(g1["passed"]),
-        "born": bool(g1["passed"] and not g0["passed"]),
+        "born": born_final,
+        "born_ever": born_ever,
+        "first_born_t": first_born_t,
         "contrast0": g0["contrast"],
         "contrast1": g1["contrast"],
+        "samples": samples,
     }
 
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--size", type=int, default=128)
+    p.add_argument("--size", type=int, default=48)
     p.add_argument("--steps", type=int, default=1024)
     p.add_argument("--settle", type=int, default=512, help="boil_relax settle ticks")
     p.add_argument("--disk-radius", type=int, default=16)
+    p.add_argument("--sample-every", type=int, default=64)
+    p.add_argument("--fcc", action="store_true", help="3+1 FCC (canon §1.6)")
+    p.add_argument("--nz", type=int, default=0)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--json-out", type=str, default="")
     p.add_argument("--json", action="store_true")
@@ -88,8 +131,16 @@ def main() -> int:
     if args.device == "cuda" and not torch.cuda.is_available():
         args.device = "cpu"
 
-    cfg = MConfig.for_stencil("hex")
-    sim = LatticeFluidSimulator(args.size, args.size, cfg, device=args.device)
+    stencil = "fcc" if args.fcc else "hex"
+    nz = (args.nz if args.nz > 0 else args.size) if args.fcc else None
+    cfg = MConfig.for_stencil(stencil)
+    sim = LatticeFluidSimulator(
+        args.size,
+        args.size,
+        cfg,
+        nz=nz,
+        device=args.device,
+    )
     ny, nx = args.size, args.size
     kw = {
         "device": sim.device,
@@ -98,57 +149,67 @@ def main() -> int:
         "frac_bits": cfg.frac_bits,
         "phase_bits": cfg.phase_bits,
     }
+    sample_every = args.sample_every if args.sample_every > 0 else None
+    disk_kind = "sphere" if args.fcc else "disk"
 
     def set_ice(**ice_kw: Any) -> None:
-        sim.set_field(ice_ocean_spinor(ny, nx, **kw, **ice_kw))
+        if nz is not None:
+            sim.set_field(ice_ocean_spinor_3d(nz, ny, nx, **kw, **ice_kw))
+        else:
+            sim.set_field(ice_ocean_spinor(ny, nx, **kw, **ice_kw))
+
+    def set_boil() -> None:
+        if nz is not None:
+            sim.set_field(boil_ocean_spinor_3d(nz, ny, nx, **kw))
+        else:
+            apply_scenario(sim, get_scenario("habitat_boil"))
 
     arms_spec: list[tuple[str, str, Callable[[], None]]] = [
-        (
-            "ice_uniform",
-            "phase III ice, no shift",
-            lambda: set_ice(),
-        ),
+        ("ice_uniform", "phase III ice, no shift", lambda: set_ice()),
         (
             "ice_disk_d1",
-            f"ice + disk Δclass=1 r={args.disk_radius}",
-            lambda: set_ice(shift_kind="disk", radius=args.disk_radius, delta_class=1),
-        ),
-        (
-            "ice_disk_d2",
-            f"ice + disk Δclass=2 r={args.disk_radius}",
-            lambda: set_ice(shift_kind="disk", radius=args.disk_radius, delta_class=2),
+            f"ice + {disk_kind} Δclass=1 r={args.disk_radius}",
+            lambda: set_ice(shift_kind=disk_kind, radius=args.disk_radius, delta_class=1),
         ),
         (
             "ice_wall_d1",
-            "ice + half-plane class wall Δclass=1",
+            "ice + half-space class wall Δclass=1",
             lambda: set_ice(shift_kind="wall", delta_class=1),
         ),
         (
             "ice_ripple",
-            "ice + minimal coherent k·r ripple (Δclass=1)",
+            "ice + minimal coherent k·r ripple",
             lambda: set_ice(shift_kind="ripple", delta_class=1),
         ),
-        (
-            "boil_control",
-            "live VACUUM_BOIL (no shift)",
-            lambda: apply_scenario(sim, get_scenario("habitat_boil")),
-        ),
+        ("boil_control", "live VACUUM_BOIL", set_boil),
     ]
 
     results: list[dict[str, Any]] = []
     t0 = time.perf_counter()
     for i, (label, premise, ic_fn) in enumerate(arms_spec):
-        row = run_arm(sim=sim, ic_fn=ic_fn, steps=args.steps, label=label, premise=premise)
+        row = run_arm(
+            sim=sim,
+            ic_fn=ic_fn,
+            steps=args.steps,
+            label=label,
+            premise=premise,
+            sample_every=sample_every,
+        )
         results.append(row)
+        ever_s = (
+            f" ever={int(row['born_ever'])}@t{row['first_born_t']}"
+            if sample_every
+            else ""
+        )
         print(
             f"{i + 1}/{len(arms_spec)} {label:16} "
             f"b0={row['gate0']['b_hits_topk']} b1={row['gate1']['b_hits_topk']} "
-            f"born={int(row['born'])} contrast {row['contrast0']:.2f}→{row['contrast1']:.1f}",
+            f"born={int(row['born'])}{ever_s} "
+            f"contrast {row['contrast0']:.2f}→{row['contrast1']:.1f}",
             flush=True,
         )
 
-    # boil relax → spinor phase wall (post heat-death proxy)
-    apply_scenario(sim, get_scenario("habitat_boil"))
+    set_boil()
     if args.settle > 0:
         sim.step(args.settle)
     z_wall = _apply_spinor_phase_wall(
@@ -158,41 +219,49 @@ def main() -> int:
         dtype=sim.dtype,
     )
     sim.set_field(z_wall)
-    g0 = gate_b(sim.z)
-    sim.step(args.steps)
-    g1 = gate_b(sim.z)
-    relax_row = {
-        "arm": "boil_relax_wall",
-        "premise": f"boil settle={args.settle} then spinor half-plane phase wall",
-        "gate0": g0,
-        "gate1": g1,
-        "passed": bool(g1["passed"]),
-        "born": bool(g1["passed"] and not g0["passed"]),
-        "contrast0": g0["contrast"],
-        "contrast1": g1["contrast"],
-        "settle_steps": args.settle,
-    }
+    relax_row = run_arm(
+        sim=sim,
+        ic_fn=lambda: None,
+        steps=args.steps,
+        label="boil_relax_wall",
+        premise=f"boil settle={args.settle} then spinor half-space phase wall",
+        sample_every=sample_every,
+    )
+    relax_row["settle_steps"] = args.settle
     results.append(relax_row)
+    ever_s = (
+        f" ever={int(relax_row['born_ever'])}@t{relax_row['first_born_t']}"
+        if sample_every
+        else ""
+    )
     print(
         f"{len(arms_spec) + 1}/{len(arms_spec) + 1} boil_relax_wall  "
         f"b0={relax_row['gate0']['b_hits_topk']} b1={relax_row['gate1']['b_hits_topk']} "
-        f"born={int(relax_row['born'])} contrast {relax_row['contrast0']:.2f}→{relax_row['contrast1']:.1f}",
+        f"born={int(relax_row['born'])}{ever_s} "
+        f"contrast {relax_row['contrast0']:.2f}→{relax_row['contrast1']:.1f}",
         flush=True,
     )
 
     elapsed = time.perf_counter() - t0
-    born_arms = [r["arm"] for r in results if r["born"]]
+    born_final = [r["arm"] for r in results if r["born"]]
+    born_ever = [r["arm"] for r in results if r["born_ever"]]
     out = {
         "id": "phase_iv_to_i",
         "premise": "META §3.2: ice + deterministic shift → spontaneous b?",
+        "stencil": stencil,
+        "dims": f"{nz}x{args.size}x{args.size}" if nz else f"{args.size}x{args.size}",
         "size": args.size,
+        "nz": nz,
         "steps": args.steps,
         "settle": args.settle,
+        "sample_every": sample_every,
         "device": args.device,
         "seconds": round(elapsed, 3),
         "arms": results,
-        "born_count": len(born_arms),
-        "born_arms": born_arms,
+        "born_final_count": len(born_final),
+        "born_final_arms": born_final,
+        "born_ever_count": len(born_ever),
+        "born_ever_arms": born_ever,
         "gate": "b≥1 at density peak (|n_∂|≥¾) dual rel/u1/auto",
     }
     if args.json_out:

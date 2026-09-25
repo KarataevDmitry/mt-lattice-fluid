@@ -47,6 +47,7 @@ def run_one(
     seed: SeedClass,
     steps: int,
     nz: int | None = None,
+    sample_every: int | None = None,
 ) -> dict:
     if nz is None:
         apply_scenario(sim, scenario_for_seed(seed))
@@ -64,18 +65,50 @@ def run_one(
         )
         sim.set_field(z)
     g0 = gate_b(sim.z)
-    sim.step(steps)
-    g1 = gate_b(sim.z)
     planted = seed in PLANTED_FAMILIES
+    born_ever = False
+    first_born_t: int | None = None
+    samples: list[dict] = []
+    if sample_every is not None and sample_every > 0:
+        done = 0
+        while done < steps:
+            chunk = min(sample_every, steps - done)
+            sim.step(chunk)
+            done += chunk
+            g = gate_b(sim.z)
+            born_now = bool(g["passed"] and not g0["passed"])
+            if born_now and not born_ever:
+                first_born_t = done
+            born_ever = born_ever or born_now
+            samples.append(
+                {
+                    "t": done,
+                    "b_hits": int(g["b_hits_topk"]),
+                    "born": born_now,
+                    "contrast": g["contrast"],
+                    "winding_abs_max": g["winding_abs_max"],
+                }
+            )
+        g1 = gate_b(sim.z)
+    else:
+        sim.step(steps)
+        g1 = gate_b(sim.z)
+    born_final = bool(g1["passed"] and not g0["passed"])
+    born_ever = born_ever or born_final
+    if born_final and first_born_t is None:
+        first_born_t = steps
     return {
         "seed": seed.value,
         "role": "planted_control" if planted else "birth_candidate",
         "gate0": g0,
         "gate1": g1,
         "passed": bool(g1["passed"]),
-        "born": bool(g1["passed"] and not g0["passed"]),
+        "born": born_final,
+        "born_ever": born_ever,
+        "first_born_t": first_born_t,
         "persisted": bool(planted and g0["passed"] and g1["passed"]),
         "lost_plant": bool(planted and g0["passed"] and not g1["passed"]),
+        "samples": samples,
     }
 
 
@@ -102,6 +135,12 @@ def main() -> int:
         default=0,
         help="FCC depth (default: same as --size when --fcc)",
     )
+    p.add_argument(
+        "--sample-every",
+        type=int,
+        default=0,
+        help="if >0, sample gate every N ticks (born_ever, first_born_t)",
+    )
     args = p.parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         args.device = "cpu"
@@ -118,15 +157,24 @@ def main() -> int:
         device=args.device,
     )
 
+    sample_every = args.sample_every if args.sample_every > 0 else None
     rows: list[dict] = []
     t0 = time.perf_counter()
     for i, seed in enumerate(families):
-        row = run_one(sim=sim, seed=seed, steps=args.steps, nz=nz)
+        row = run_one(
+            sim=sim,
+            seed=seed,
+            steps=args.steps,
+            nz=nz,
+            sample_every=sample_every,
+        )
         rows.append(row)
+        ever_s = f" ever={int(row['born_ever'])}@t{row['first_born_t']}" if sample_every else ""
         print(
             f"{i + 1}/{len(families)} {seed.value}: "
             f"b0={int(row['gate0']['passed'])} b1={int(row['gate1']['passed'])} "
-            f"born={int(row['born'])} contrast {row['gate0']['contrast']:.3g}→{row['gate1']['contrast']:.3g} "
+            f"born={int(row['born'])}{ever_s} "
+            f"contrast {row['gate0']['contrast']:.3g}→{row['gate1']['contrast']:.3g} "
             f"|n|_auto {row['gate1']['winding_abs_max']:.3g} "
             f"(rel {row['gate1']['winding_rel_max']:.3g} u1 {row['gate1']['winding_u1_max']:.3g})",
             flush=True,
@@ -134,6 +182,7 @@ def main() -> int:
 
     elapsed = time.perf_counter() - t0
     born = [r for r in rows if r["born"]]
+    born_ever_rows = [r for r in rows if r["born_ever"]]
     hits = [r for r in rows if r["passed"]]
     persisted = [r for r in rows if r["persisted"]]
     lost = [r for r in rows if r["lost_plant"]]
@@ -145,11 +194,15 @@ def main() -> int:
         "size": args.size,
         "nz": nz,
         "steps": args.steps,
+        "sample_every": sample_every,
         "device": args.device,
         "scanned": len(rows),
         "seconds": round(elapsed, 3),
         "hits_final_b": len(hits),
         "born": len(born),
+        "born_ever": len(born_ever_rows),
+        "born_ever_keys": [r["seed"] for r in born_ever_rows],
+        "first_born_t": {r["seed"]: r["first_born_t"] for r in born_ever_rows},
         "planted_persisted": len(persisted),
         "planted_lost": len(lost),
         "born_keys": [r["seed"] for r in born],
@@ -173,10 +226,12 @@ def main() -> int:
             f"scanned={out['scanned']} in {out['seconds']}s"
         )
         print(
-            f"born={out['born']} hits_final={out['hits_final_b']} "
+            f"born_final={out['born']} born_ever={out['born_ever']} hits_final={out['hits_final_b']} "
             f"planted_ok={out['planted_persisted']} planted_lost={out['planted_lost']}"
         )
         print(f"born_keys={out['born_keys']}")
+        if sample_every:
+            print(f"born_ever_keys={out['born_ever_keys']} first_born_t={out['first_born_t']}")
         print(f"hit_keys={out['hit_keys']}")
     return 0
 

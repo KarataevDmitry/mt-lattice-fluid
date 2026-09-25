@@ -260,6 +260,98 @@ def boil_ocean_spinor_3d(
     return decode_spinor(f, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
 
 
+def vacuum_ice_phase_shift_fixed_3d(
+    nz: int,
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    base_class: int = 0,
+    shift_kind: str = "sphere",
+    center: tuple[int, int, int] | None = None,
+    radius: int = 12,
+    delta_class: int = 1,
+) -> torch.Tensor:
+    """3+1 IV→I: uniform ice + deterministic local class bump."""
+    _ = frac_bits
+    base = int(base_class) % n_phi
+    delta = int(delta_class) % n_phi
+    zz, yy, xx = torch.meshgrid(
+        torch.arange(nz, device=device, dtype=torch.int64),
+        torch.arange(ny, device=device, dtype=torch.int64),
+        torch.arange(nx, device=device, dtype=torch.int64),
+        indexing="ij",
+    )
+    pc = torch.full((nz, ny, nx), base, device=device, dtype=torch.int64)
+    if shift_kind == "sphere":
+        cz, cy, cx = center if center is not None else (nz // 2, ny // 2, nx // 2)
+        mask = (zz - cz) ** 2 + (yy - cy) ** 2 + (xx - cx) ** 2 <= int(radius) ** 2
+        pc = torch.where(mask, (pc + delta) % n_phi, pc)
+    elif shift_kind == "wall":
+        mask = xx >= nx // 2
+        pc = torch.where(mask, (pc + delta) % n_phi, pc)
+    elif shift_kind == "ripple":
+        pc = (pc + delta * ((xx + yy + zz) % n_phi)) % n_phi
+    else:
+        raise ValueError(f"Unknown shift_kind: {shift_kind}")
+    return _filled_brick_from_phase_class(
+        pc, device=device, mod_bits=mod_bits, phase_bits=phase_bits
+    )
+
+
+def ice_ocean_spinor_3d(
+    nz: int,
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    dtype: torch.dtype = torch.complex64,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    phase_class: int = 0,
+    shift_kind: str | None = None,
+    center: tuple[int, int, int] | None = None,
+    radius: int = 12,
+    delta_class: int = 1,
+) -> torch.Tensor:
+    """Decode 3+1 ice (+ optional deterministic shift) to ℂ²."""
+    if shift_kind is None:
+        f = vacuum_ice_fixed_3d(
+            nz,
+            ny,
+            nx,
+            device=device,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+            n_phi=n_phi,
+            phase_class=phase_class,
+        )
+    else:
+        f = vacuum_ice_phase_shift_fixed_3d(
+            nz,
+            ny,
+            nx,
+            device=device,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+            n_phi=n_phi,
+            base_class=phase_class,
+            shift_kind=shift_kind,
+            center=center,
+            radius=radius,
+            delta_class=delta_class,
+        )
+    return decode_spinor(f, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
+
+
 def vacuum_ice_phase_shift_fixed(
     ny: int,
     nx: int,
