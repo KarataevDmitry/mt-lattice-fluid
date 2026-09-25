@@ -930,6 +930,139 @@ def fig_field_neighbors() -> None:
     _save(fig, "carrier-field-z.pdf")
 
 
+_STATE_LEVELS = (LIGHT, FILL_ALT, "#999999", INK)
+
+
+def _grid_pos(row: int, col: int, dx: float, dy: float) -> tuple[float, float]:
+    return col * dx, row * dy
+
+
+def _draw_field_snapshot(
+    ax,
+    state: dict[tuple[int, int], int],
+    *,
+    dx: float,
+    dy: float,
+    rows: int,
+    cols: int,
+    focus: tuple[int, int] | None = None,
+    neighborhood: set[tuple[int, int]] | None = None,
+    changed: set[tuple[int, int]] | None = None,
+    title: str = "",
+) -> None:
+    ax.set_aspect("equal")
+    ax.axis("off")
+    pts = [_grid_pos(r, c, dx, dy) for r in range(rows) for c in range(cols)]
+
+    for x, y in pts:
+        for ddx, ddy in ((dx, 0), (-dx, 0), (0, dy)):
+            nx, ny = x + ddx, y + ddy
+            if any(abs(nx - px) < 0.01 and abs(ny - py) < 0.01 for px, py in pts):
+                ax.plot([x, nx], [y, ny], color=LIGHT, lw=0.7, zorder=1)
+
+    if neighborhood:
+        for r, c in neighborhood:
+            x, y = _grid_pos(r, c, dx, dy)
+            fc = CELL_CENTER if focus == (r, c) else CELL_NEIGHBOR
+            ax.add_patch(
+                Circle((x, y), dx * 0.34, facecolor=fc, edgecolor=MUTED, lw=LW_DIM, alpha=0.55, zorder=2)
+            )
+
+    for (r, c), level in state.items():
+        x, y = _grid_pos(r, c, dx, dy)
+        is_focus = focus == (r, c)
+        is_changed = changed is not None and (r, c) in changed
+        inner = _STATE_LEVELS[max(0, min(level, len(_STATE_LEVELS) - 1))]
+        ax.add_patch(Circle((x, y), dx * 0.17, facecolor=inner, edgecolor=INK, lw=LW_DIM, zorder=4))
+        ax.plot(x, y, "o", color=INK, ms=3.5 if not is_focus else 5.5, zorder=5, mew=LW_OBJECT * 0.35 if is_focus else 0)
+        if is_focus:
+            ax.add_patch(Circle((x, y), dx * 0.28, facecolor="none", edgecolor=INK, lw=LW_OBJECT * 0.55, zorder=6))
+        if is_changed:
+            ax.add_patch(Circle((x, y), dx * 0.24, facecolor="none", edgecolor=INK, lw=LW_DIM, ls=(0, (2.5, 1.5)), zorder=6))
+
+    if title:
+        ax.text(0.5 * (cols - 1) * dx, -0.55 * dy, title, ha="center", va="top", fontsize=11)
+    pad = dx * 0.55
+    ax.set_xlim(-pad, (cols - 1) * dx + pad)
+    ax.set_ylim(-0.85 * dy, (rows - 1) * dy + pad)
+
+
+def fig_sync_step() -> None:
+    """(c) Synchronous CA step: all nodes read Psi^t, write Psi^{t+1}."""
+    dx, dy = 0.72, 0.64
+    rows, cols = 4, 4
+    focus = (1, 1)
+    neighborhood = {(1, 0), (1, 2), (0, 1), (2, 1)}
+
+    state_t: dict[tuple[int, int], int] = {
+        (0, 0): 1, (0, 1): 2, (0, 2): 1, (0, 3): 0,
+        (1, 0): 2, (1, 1): 3, (1, 2): 1, (1, 3): 2,
+        (2, 0): 0, (2, 1): 2, (2, 2): 3, (2, 3): 1,
+        (3, 0): 1, (3, 1): 0, (3, 2): 2, (3, 3): 1,
+    }
+    state_t1: dict[tuple[int, int], int] = {
+        (0, 0): 1, (0, 1): 2, (0, 2): 2, (0, 3): 0,
+        (1, 0): 3, (1, 1): 1, (1, 2): 2, (1, 3): 2,
+        (2, 0): 0, (2, 1): 3, (2, 2): 2, (2, 3): 1,
+        (3, 0): 1, (3, 1): 1, (3, 2): 2, (3, 3): 1,
+    }
+    changed = {k for k in state_t if state_t[k] != state_t1[k]}
+
+    fig = plt.figure(figsize=(9.6, 3.0))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1.0, 0.42, 1.0], wspace=0.08)
+    ax_l = fig.add_subplot(gs[0, 0])
+    ax_m = fig.add_subplot(gs[0, 1])
+    ax_r = fig.add_subplot(gs[0, 2])
+
+    _draw_field_snapshot(
+        ax_l,
+        state_t,
+        dx=dx,
+        dy=dy,
+        rows=rows,
+        cols=cols,
+        focus=focus,
+        neighborhood=neighborhood | {focus},  # read stencil at t
+        title=r"$\Psi^t$",
+    )
+    leader(ax_l, _grid_pos(*focus, dx, dy), r"$x$", (_grid_pos(*focus, dx, dy)[0] - 0.35, _grid_pos(*focus, dx, dy)[1] + 0.42), fontsize=10)
+
+    ax_m.set_xlim(0, 1)
+    ax_m.set_ylim(0, 1)
+    ax_m.axis("off")
+    ax_m.annotate(
+        "",
+        xy=(0.92, 0.55),
+        xytext=(0.08, 0.55),
+        xycoords="axes fraction",
+        arrowprops=dict(arrowstyle="-|>", color=INK, lw=LW_OBJECT, mutation_scale=12),
+    )
+    ax_m.text(0.5, 0.68, r"$g$", ha="center", va="center", fontsize=14)
+    ax_m.text(0.5, 0.32, r"параллельно", ha="center", va="center", fontsize=9, color=MUTED)
+
+    _draw_field_snapshot(
+        ax_r,
+        state_t1,
+        dx=dx,
+        dy=dy,
+        rows=rows,
+        cols=cols,
+        focus=focus,
+        changed=changed,
+        title=r"$\Psi^{t+1}$",
+    )
+
+    fig.text(
+        0.5,
+        0.03,
+        r"(c) синхронный такт: каждый узел читает $\Psi^t$, все обновления пишутся в $\Psi^{t+1}$",
+        ha="center",
+        fontsize=10,
+    )
+    fig.subplots_adjust(left=0.03, right=0.97, top=0.94, bottom=0.14, wspace=0.25)
+    _save(fig, "carrier-sync-step.pdf")
+
+
 def _draw_worldlines_row(axes, *, kappa: float, row_title: str, t_lim: float = 1.45, x_lim: float = 1.8) -> None:
     a = 1.0
     ht = 1.0
