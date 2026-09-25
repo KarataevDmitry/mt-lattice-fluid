@@ -389,7 +389,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **N_c·137 path later rejected as α-input** |
 | 2026-09-23 | α FP analytic | bare **closed form** `α*=[N_φ/(N_a0√(π/2))]^{1/11}`; stack poly `(2/π)α²³+(1/8)α²²=RHS²`; exponent **11=8+2+1** · **`Alpha_fixed_point` PASS** |
 | 2026-09-23 | α fixed-point | **first FP in model**: `alpha_fixed_point_row` · **`Alpha_fixed_point` PASS** — α*=N_c(m_e(α*))/N_a0 (optical a₀); inv≈137.092 (~−408 ppm CODATA); seed-invariant; π-poly not α-input |
-| 2026-09-23 | α hop + H | `Alpha_hop_ladder` + Bohr rung: α=N_c/N_a0; α²=N_re/N_a0 (= power in m_e); v_Bohr/c₀=ακ; still identity, N_★/N_a0 from g OPEN |
+| 2026-09-23 | α hop + H | `Alpha_hop_ladder` + шаг шкалы (Бор): α=N_c/N_a0; α²=N_re/N_a0 (= power in m_e); v_Bohr/c₀=ακ; still identity, N_★/N_a0 from g OPEN |
 | 2026-09-23 | α hop ladder | `alpha_hop_ladder_row` · **`Alpha_hop_ladder` PASS** — α=κ·N_re/N_c0=N_★/N_c0 after ℓ_P⊄c; **identity rewrite**, N_★ from g OPEN; π-ansatz not replaced |
 | 2026-09-23 | §8.2 α bridges | verify **`Alpha_bridges`**: δλ=α_fs(α*−1), B_hV runner, N_φ=|N₁₂|+1, Coulomb carrier PASS; (α*)³ cascade OPEN (~4%); e₀/sim OPEN |
 | 2026-09-23 | META §3.0 | карточка «два времени»: A5-пена M (нет начала/конца) vs наблюдаемая UI (генезис есть); §0.6 · §2.3 · MODEL hub |

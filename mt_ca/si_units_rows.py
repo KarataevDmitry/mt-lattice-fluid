@@ -149,7 +149,7 @@ class SIUnitsRows:
             {
                 "id": "hop_alpha_Nc_over_Na0",
                 "ratio": n_c / n_a0_bohr,
-                "maps_to": "α = N_c/N_a0 (Bohr rung)",
+                "maps_to": "α = N_c/N_a0 (Bohr scale step)",
                 "status": "identity",
                 "mechanism": "definition once both hops exist; not yet from g alone",
             },

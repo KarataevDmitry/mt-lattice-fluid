@@ -19,7 +19,7 @@ class SIAlphaProbeRows:
     """α ask/row methods."""
 
     def alpha_hop_ladder_row(self) -> dict[str, float | int | str | bool]:
-        """Probe: α from hop ladder after ℓ_P⊄c (§7.2–7.4) + H-atom rung.
+        """Probe: α from hop ladder after ℓ_P⊄c (§7.2–7.4) + H-atom scale step.
 
         M-native Compton uses link speed c₀:
             N_c0 = ℏ/(m_e c₀ hL) = κ·(m_P/m_e)
@@ -30,7 +30,7 @@ class SIAlphaProbeRows:
         Equivalent mixed-energy form (one macro-c, one link-c₀):
             U(r_★)=e²/(4πϵ₀ r_★)=m_e c c₀  ⇒  α = N_★ / N_c0
 
-        Hydrogen (Bohr) — next rung on the same hL ladder:
+        Hydrogen (Bohr) — next scale step on the same hL ladder:
             N_a0 = a₀/hL = N_c/α
             N_re --α-- N_c --α-- N_a0
             α² = N_re/N_a0   (same power as m_e = α²·m_H/N_φ in §8.2)
@@ -52,7 +52,7 @@ class SIAlphaProbeRows:
         N_re = alpha_codata * N_c
         # classical balance against m·c·c₀ (detachment-native)
         N_star = alpha_codata * N_c0  # ≡ r_★/hL with U=m c c₀
-        # Bohr radius rungs
+        # Bohr radius scale steps
         N_a0 = N_c / alpha_codata
         N_a0_c0 = N_c0 / alpha_codata
         alpha_from_kappa_hops = kappa * N_re / N_c0

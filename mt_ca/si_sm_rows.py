@@ -297,7 +297,7 @@ class SISmRows:
         elec = self.electron_mass_row()
         m_p = float(prot["m_p_GeV"])
         m_e = float(elec["m_e_GeV"])
-        k = 2  # minimal integer rung with m_n > m_p + m_e
+        k = 2  # minimal integer k with m_n > m_p + m_e
         delta = float(k) * m_e
         m_n = m_p + delta
         threshold = m_p + m_e
