@@ -406,6 +406,44 @@ def fig_plane_tilings() -> None:
     _save(fig, "carrier-tilings.pdf")
 
 
+def _draw_spacetime_2d(
+    ax,
+    c0: float,
+    *,
+    t_lim: float = 1.25,
+    x_lim: float = 1.65,
+    show_past: bool = True,
+    cone_col: str = "#4fa9b8",
+) -> None:
+    """Classical $(x,t)$ diagram: observer at $(0,0)$, future up, past down."""
+    ax.set_aspect("equal")
+    ax.axhline(0, color="#bbbbbb", lw=0.8, zorder=0)
+    ax.axvline(0, color="#bbbbbb", lw=0.8, zorder=0)
+
+    t_f = np.linspace(0, t_lim, 80)
+    ax.fill_between(c0 * t_f, 0, t_f, color=cone_col, alpha=0.12, zorder=0)
+    ax.fill_between(-c0 * t_f, 0, t_f, color=cone_col, alpha=0.12, zorder=0)
+    ax.plot(c0 * t_f, t_f, color=cone_col, lw=1.5, zorder=1)
+    ax.plot(-c0 * t_f, t_f, color=cone_col, lw=1.5, zorder=1)
+
+    if show_past:
+        t_p = np.linspace(-t_lim, 0, 80)
+        ax.fill_between(c0 * t_p, t_p, 0, color=cone_col, alpha=0.08, zorder=0)
+        ax.fill_between(-c0 * t_p, t_p, 0, color=cone_col, alpha=0.08, zorder=0)
+        ax.plot(c0 * t_p, t_p, color=cone_col, lw=1.5, zorder=1)
+        ax.plot(-c0 * t_p, t_p, color=cone_col, lw=1.5, zorder=1)
+        ax.text(-0.08, -t_lim * 0.72, "прошлое", fontsize=9, ha="center", color="#2c6e7a")
+
+    ax.scatter([0], [0], color=COL["red"], s=55, zorder=5)
+    ax.text(0.06, -0.06, "наблюдатель", fontsize=9, color=COL["red"])
+    ax.text(-0.1, t_lim * 0.78, "будущее", fontsize=9, ha="center", color="#2c6e7a")
+    ax.text(x_lim * 0.82, 0.03, r"$t=0$", fontsize=9, color="#2d6a3e")
+    ax.set_xlabel(r"пространство $x$")
+    ax.set_ylabel(r"время $t$")
+    ax.set_xlim(-x_lim, x_lim)
+    ax.set_ylim(-t_lim if show_past else -0.08, t_lim)
+
+
 def _light_cone_surface(c0: float, t_max: float, n: int = 40) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     theta = np.linspace(0, 2 * np.pi, n)
     t = np.linspace(0, t_max, n // 2)
@@ -417,45 +455,39 @@ def _light_cone_surface(c0: float, t_max: float, n: int = 40) -> tuple[np.ndarra
 
 
 def fig_light_cone() -> None:
-    """3D past/future light cones with present hypersurface (Minkowski-style)."""
+    """2D classical $(x,t)$ slice + 3D light cones."""
     a = 1.0
     ht = 1.0
     c0 = a / ht
     cone_col = "#4fa9b8"
+    r2 = a * math.sqrt(2)
 
-    fig = plt.figure(figsize=(7.2, 6.4))
-    ax: Axes3D = fig.add_subplot(111, projection="3d")
+    fig = plt.figure(figsize=(10.8, 4.9))
 
+    ax2d = fig.add_subplot(1, 2, 1)
+    _draw_spacetime_2d(ax2d, c0, t_lim=1.2, x_lim=1.75)
+    ax2d.scatter([a], [ht], color=COL["blue"], s=48, zorder=6)
+    ax2d.plot([0, a], [0, ht], color=COL["blue"], lw=1.2, zorder=4)
+    ax2d.text(a + 0.05, ht * 0.45, r"$h_L$", fontsize=9, color=COL["blue"])
+    ax2d.scatter([r2], [ht], color=COL["red"], marker="x", s=70, linewidths=2, zorder=6)
+    ax2d.plot([0, r2], [0, ht], color=COL["red"], lw=1.0, ls="--", zorder=4)
+    ax2d.text(r2 + 0.04, ht + 0.04, r"$h_L\sqrt{2}$", fontsize=9, color=COL["red"])
+    ax2d.set_title(r"срез $(x,t)$: $c_0 h_T=h_L$", fontsize=10)
+
+    ax3d: Axes3D = fig.add_subplot(1, 2, 2, projection="3d")
     xf, yf, tf, _ = _light_cone_surface(c0, 1.15)
-    xp, yp, tp, _ = _light_cone_surface(c0, 1.15)
-    ax.plot_surface(xf, yf, tf, color=cone_col, alpha=0.38, linewidth=0, shade=True)
-    ax.plot_surface(xp, yp, -tp, color=cone_col, alpha=0.38, linewidth=0, shade=True)
-
+    ax3d.plot_surface(xf, yf, tf, color=cone_col, alpha=0.38, linewidth=0, shade=True)
+    ax3d.plot_surface(xf, yf, -tf, color=cone_col, alpha=0.38, linewidth=0, shade=True)
     lim = 1.15
     xx, yy = np.meshgrid(np.linspace(-lim, lim, 10), np.linspace(-lim, lim, 10))
-    ax.plot_surface(xx, yy, np.zeros_like(xx), color="#8fd4a6", alpha=0.22, linewidth=0, shade=False)
-    ax.plot([-lim, lim], [0, 0], [0, 0], color="#333333", lw=0.7, alpha=0.5)
-    ax.plot([0, 0], [-lim, lim], [0, 0], color="#333333", lw=0.7, alpha=0.5)
+    ax3d.plot_surface(xx, yy, np.zeros_like(xx), color="#8fd4a6", alpha=0.22, linewidth=0, shade=False)
+    ax3d.scatter([0], [0], [0], color=COL["red"], s=45, depthshade=True)
+    ax3d.scatter([a], [0], [ht], color=COL["blue"], s=40, depthshade=True)
+    ax3d.scatter([r2], [0], [ht], color=COL["red"], marker="x", s=60, linewidths=2)
+    _style_3d(ax3d, 1.35, elev=22, azim=-52)
+    ax3d.set_title(r"объём $(x,y,t)$", fontsize=10, pad=8)
 
-    ax.scatter([0], [0], [0], color=COL["red"], s=55, depthshade=True, zorder=10)
-    ax.text(0.05, 0.05, 0.04, "узел $x$", fontsize=10, color=COL["red"])
-
-    ax.scatter([a], [0], [ht], color=COL["blue"], s=48, depthshade=True, zorder=10)
-    ax.plot([0, a], [0, 0], [0, ht], color=COL["blue"], lw=1.2, alpha=0.8)
-    ax.text(a + 0.05, 0.0, ht * 0.55, r"$r=h_L$", fontsize=9, color=COL["blue"])
-
-    r2 = a * math.sqrt(2)
-    ax.scatter([r2], [0], [ht], color=COL["red"], marker="x", s=70, linewidths=2, zorder=10)
-    ax.plot([0, r2], [0, 0], [0, ht], color=COL["red"], lw=1.0, ls="--", alpha=0.85)
-    ax.text(r2 + 0.04, 0.0, ht + 0.06, r"$h_L\sqrt{2}$", fontsize=9, color=COL["red"])
-
-    ax.text(0.0, 0.0, 1.22, "будущий\nконус", fontsize=9, ha="center", color="#2c6e7a")
-    ax.text(0.0, 0.0, -1.22, "прошлый\nконус", fontsize=9, ha="center", color="#2c6e7a")
-    ax.text(lim * 0.72, lim * 0.72, 0.04, r"$t=0$", fontsize=9, color="#2d6a3e")
-    ax.text(0.02, -0.55, 0.65, "время $t$", fontsize=10, color="#333333")
-
-    _style_3d(ax, 1.35, elev=22, azim=-52)
-    ax.set_title(r"Световой конус $c_0$: $c_0 h_T = h_L$", fontsize=11, pad=10)
+    fig.suptitle("Световой конус: наблюдатель в $(0,0)$, будущее вверх", fontsize=11, y=1.02)
     _save(fig, "carrier-light-cone.pdf")
 
 
@@ -602,38 +634,34 @@ def fig_fcc_111_slice() -> None:
 
 
 def fig_two_speeds() -> None:
-    """Microscopic c0 vs macroscopic c = kappa c0."""
-    fig, axes = plt.subplots(1, 2, figsize=(8.4, 3.2))
+    """Two speeds in classical $(x,t)$ diagrams, observer at origin."""
+    a = 1.0
+    ht = 1.0
+    c0 = a / ht
+    kappa = 1 / math.sqrt(2)
+    c_macro = kappa * c0
+
+    fig, axes = plt.subplots(1, 2, figsize=(9.2, 4.2))
 
     ax = axes[0]
-    ax.set_aspect("equal")
-    ax.axis("off")
-    path = [(0, 0), (1, 0), (1, 1), (2, 1), (3, 1)]
-    xs, ys = zip(*path)
-    ax.plot(xs, ys, "o-", color=COL["blue"], lw=1.4, ms=6)
-    ax.annotate("", xy=(1, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="<->", color=COL["gray"], lw=1.0))
-    ax.text(0.5, -0.18, r"$h_L$", ha="center", fontsize=10)
-    ax.annotate("", xy=(1, 1), xytext=(1, 0), arrowprops=dict(arrowstyle="<->", color=COL["gray"], lw=1.0))
-    ax.text(1.18, 0.5, r"$h_L$", fontsize=10)
-    ax.text(1.5, -0.55, r"тактовая $c_0=h_L/h_T$", ha="center", fontsize=10)
-    ax.set_xlim(-0.3, 3.3)
-    ax.set_ylim(-0.7, 1.5)
-    ax.set_title("микро: зигзаг по рёбрам", fontsize=10)
+    _draw_spacetime_2d(ax, c0, t_lim=1.35, x_lim=1.55, show_past=False)
+    ticks = [(i * a, i * ht) for i in range(4)]
+    xs, ts = zip(*ticks)
+    ax.plot(xs, ts, "o-", color=COL["blue"], lw=1.5, ms=5, zorder=6)
+    ax.text(1.15, -0.12, r"тактовая $c_0$: один такт $h_T$, шаг $h_L$", ha="center", fontsize=9)
+    ax.set_title("микро: дискретный шаг по решётке", fontsize=10)
 
     ax = axes[1]
-    ax.set_aspect("equal")
-    ax.axis("off")
-    k = 1 / math.sqrt(2)
-    ax.plot([0, 3], [0, 3 * k], color=COL["red"], lw=2.0)
-    ax.plot([0, 3], [0, 3], color=COL["blue"], lw=1.0, ls="--", alpha=0.5)
-    ax.text(2.2, 2.35, r"$c=\kappa c_0$", color=COL["red"], fontsize=11)
-    ax.text(2.4, 2.75, r"$c_0$", color=COL["blue"], fontsize=10)
-    ax.text(1.5, -0.35, r"$\kappa=1/\sqrt{2}$ на FCC", ha="center", fontsize=10)
-    ax.set_xlim(-0.2, 3.3)
-    ax.set_ylim(-0.5, 3.3)
+    _draw_spacetime_2d(ax, c0, t_lim=1.35, x_lim=1.55, show_past=False)
+    x_end = 1.4
+    ax.plot([0, x_end], [0, x_end / c0], color=COL["blue"], lw=1.6, ls="--", zorder=4)
+    ax.plot([0, x_end], [0, x_end / c_macro], color=COL["red"], lw=2.0, zorder=5)
+    ax.text(x_end * 0.55, x_end / c0 + 0.06, r"$c_0$", color=COL["blue"], fontsize=10)
+    ax.text(x_end * 0.62, x_end / c_macro - 0.1, r"$c=\kappa c_0$", color=COL["red"], fontsize=10)
+    ax.text(0.75, -0.1, r"$\kappa=1/\sqrt{2}$", ha="center", fontsize=9)
     ax.set_title("макро: осреднённый фронт", fontsize=10)
 
-    fig.suptitle(r"Две скорости: $c_0$ на решётке, $c=\kappa c_0$ на $T$", fontsize=11, y=1.02)
+    fig.suptitle(r"Две скорости в плоскости $(x,t)$, наблюдатель в $(0,0)$", fontsize=11, y=1.02)
     _save(fig, "carrier-two-speeds.pdf")
 
 
