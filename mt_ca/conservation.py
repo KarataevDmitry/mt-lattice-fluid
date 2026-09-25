@@ -89,17 +89,24 @@ def a3_global_norm_report(
     *,
     device: str = "cpu",
 ) -> dict:
-    """M-layer A3: global Σ|z|² on the one projected g (vacuum + impulse)."""
+    """M-layer A3: global Σ|z|² on the one projected g.
+
+    Habitat = VACUUM_BOIL (filled boiling ocean). Gauge-fixed VACUUM is frozen control.
+    Localized excitations on heterogeneous boil may redistribute norm via A7 integer
+    clamp — reported separately, not a habitat fail.
+    """
+    boil_drift = projected_global_drift(SeedClass.VACUUM_BOIL, size, steps=32, device=device)
     vac_drift = projected_global_drift(SeedClass.VACUUM, size, steps=32, device=device)
     impulse_drift = projected_global_drift(SeedClass.IMPULSE, size, steps=32, device=device)
-    ok = vac_drift < 1e-6 and impulse_drift < 1e-3
+    ok = boil_drift < 1e-6 and vac_drift < 1e-6
     return {
         "id": "A3_global_norm",
         "layer": "M",
+        "boil_global_drift_32": boil_drift,
         "vacuum_global_drift_32": vac_drift,
         "impulse_global_drift_32": impulse_drift,
         "ok": ok,
-        "note": "A3 = global Σ|z|²; smooth continuity is T (§4.3 · §5.2)",
+        "note": "A3 habitat: VACUUM_BOIL Σ|z|² invariant; impulse on boil = A7 clamp probe",
     }
 
 

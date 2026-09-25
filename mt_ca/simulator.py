@@ -61,7 +61,7 @@ class LatticeFluidSimulator:
         self._sync_z_from_fixed()
         self.z_past = self.z.clone()
 
-    def reset(self, seed_class: SeedClass = SeedClass.VACUUM) -> None:
+    def reset(self, seed_class: SeedClass = SeedClass.VACUUM_BOIL) -> None:
         kw: dict = {
             "device": self.device,
             "dtype": self.dtype,

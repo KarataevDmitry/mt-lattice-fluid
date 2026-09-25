@@ -13,10 +13,9 @@ from mt_ca.z_ring import mod_lane
 class SeedClass(str, Enum):
     """Physical IC classes on the lattice (§0.5 · §5 · Seed taxonomy).
 
-    VACUUM — full ocean, every cell a brick, gauge-fixed class 0 (Φ=0 dead).
-    VACUUM_BOIL — full ocean, every cell a brick; NN Δclass=±1 ⇒ Δφ=Δφ_min (A5).
-    IMPULSE / PLANE_WAVE — energy packets on gauge-fixed ocean.
-    VORTEX_* — topological matter (n∈ℤ) on that ocean.
+    VACUUM — control only: gauge-fixed class 0 (Φ=0 frozen), not live habitat.
+    VACUUM_BOIL — live habitat: every cell a brick; NN Δclass=±1 ⇒ Δφ=Δφ_min (A5).
+    IMPULSE / PLANE_WAVE / VORTEX_* — excitations on VACUUM_BOIL (2D); no void, no dead ocean.
     """
 
     VACUUM = "vacuum"
@@ -293,23 +292,23 @@ def make_seed(
     frac_bits: int = HV.frac_bits,
     phase_bits: int = HV.phase_bits,
 ) -> torch.Tensor:
-    """Spinor field. Vacuum = full Z_N ocean (Heisenberg phase class); others = ocean + excitation.
+    """Spinor field on a filled lattice (§0.5 · A5 — no void).
 
-    ``amplitude`` kept for API compat; vacuum uses one brick quantum + N_φ class, not float Gaussian.
+    VACUUM = frozen gauge control (Φ=0). Habitat for physics sims = VACUUM_BOIL.
+    Excitations (2D) sit on boiling ocean, not on dead class-0 ocean.
     """
     _ = amplitude
     spatial = (nz, ny, nx) if nz is not None else (ny, nx)
-    ocean = vacuum_ocean_spinor(
-        *spatial,
-        device=device,
-        dtype=dtype,
-        mod_bits=mod_bits,
-        frac_bits=frac_bits,
-        phase_bits=phase_bits,
-        phase_class=0,
-    )
     if seed_class is SeedClass.VACUUM:
-        return ocean
+        return vacuum_ocean_spinor(
+            *spatial,
+            device=device,
+            dtype=dtype,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+            phase_class=0,
+        )
 
     if seed_class is SeedClass.VACUUM_BOIL:
         if nz is not None:
@@ -323,6 +322,27 @@ def make_seed(
             phase_bits=phase_bits,
         )
         return decode_spinor(f_boil, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
+
+    if nz is None:
+        f_boil = vacuum_boil_fixed(
+            ny,
+            nx,
+            device=device,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+        )
+        ocean = decode_spinor(f_boil, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
+    else:
+        ocean = vacuum_ocean_spinor(
+            *spatial,
+            device=device,
+            dtype=dtype,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+            phase_class=0,
+        )
 
     if nz is not None:
         exc = _excitation_3d(
