@@ -1,0 +1,21 @@
+\begin{tikzpicture}[carrier panel, x=2.05cm, y=2.05cm]
+  \def\tlim{1.2}
+  \def\xlim{1.25}
+
+  \newcommand{\WorldlineRow}[3]{%
+    \begin{scope}[shift={(0,#1)}]
+      \node[anchor=east, font=\footnotesize, align=right] at (-0.15,0.55) {#3};
+      \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
+      \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
+      \draw[carrier muted, line width=0.65pt]
+        (0,0) -- (0.22,0.18) -- (0.38,0.08) -- (0.55,0.22) -- (0.72,0.12);
+      \pgfmathsetmacro{\cmacro}{1.08/#2}
+      \draw[carrier object] (0,0) -- (\xlim,\xlim/\cmacro);
+      \node[anchor=west, font=\scriptsize, inner sep=1pt] at (0.45,0.35) {$c_0$};
+      \node[anchor=west, font=\scriptsize, inner sep=1pt] at (0.45,0.72) {$c=\kappa c_0$};
+    \end{scope}
+  }
+
+  \WorldlineRow{1.35}{0.7071}{FCC\\$\kappa=1/\sqrt{2}$}
+  \WorldlineRow{0}{0.8660}{$(2{+}1)$\\$\kappa_{\mathrm{hex}}=\sqrt{3}/2$}
+\end{tikzpicture}

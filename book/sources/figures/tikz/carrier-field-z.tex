@@ -1,0 +1,26 @@
+\begin{tikzpicture}[carrier panel, x=1.1cm, y=1.1cm]
+  % --- (i) spinor at node x ---
+  \begin{scope}
+    \filldraw[carrier object] (0,0) circle (2.2pt);
+    \node[anchor=east, inner sep=2pt] at (-0.06,0.02) {$x$};
+    \node[draw, carrier object, carrier fill, align=center, inner sep=4pt, anchor=west] (zbox) at (0.55,0.15)
+      {$z(x)=\binom{z_1}{z_2}\in\mathbb{C}^2$};
+    \draw[carrier arrow] (0.06,0.04) -- (zbox.west);
+  \end{scope}
+
+  % --- (ii) local law g on N(x) ---
+  \begin{scope}[shift={(4.8,0)}]
+    \CarrierHexRing{0.36}{0.62}
+    \filldraw[carrier object] (0,0) circle (2.2pt);
+    \node[anchor=south west, inner sep=1pt] at (-0.1,0.08) {$x$};
+    \node[anchor=south, inner sep=2pt] at (0,0.95) {$N(x)$};
+
+    \node[draw, carrier object, carrier fill, minimum width=0.9cm, minimum height=0.9cm] (g) at (2.35,0) {$g$};
+    \node[draw, carrier object, circle, minimum size=0.95cm, align=center, inner sep=1pt] (z1) at (4.05,0) {\scriptsize $z(x,t{+}1)$};
+
+    \foreach \a in {-60,0,60} {
+      \draw[carrier arrow, carrier muted] ({0.62*cos(\a)}, {0.62*sin(\a)}) -- (g.west);
+    }
+    \draw[carrier arrow] (g.east) -- (z1.west);
+  \end{scope}
+\end{tikzpicture}

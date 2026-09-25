@@ -1,0 +1,22 @@
+% Hand-drawn carrier / axiom figures (TikZ). No matplotlib pipeline.
+\tikzset{
+  carrier line/.style={line width=0.55pt},
+  carrier object/.style={line width=0.85pt},
+  carrier arrow/.style={-{Stealth[length=1.9mm,width=1.25mm]}, carrier line},
+  carrier muted/.style={color=gray!62},
+  carrier fill/.style={fill=gray!10},
+  carrier panel/.style={font=\small},
+}
+
+% Flat-top hexagon, circumradius #1, center #2 = (x,y) or coordinate
+\newcommand{\CarrierHex}[2]{%
+  \begin{scope}[shift={#2}]
+    \draw[carrier object] (0:#1) \foreach \a in {60,120,...,300} { -- (\a:#1) } -- cycle;
+  \end{scope}
+}
+
+% Hex grid: center cell + 6 neighbors, circumradius r, center-to-center d
+\newcommand{\CarrierHexRing}[2]{%
+  \CarrierHex{#1}{(0,0)}%
+  \foreach \a in {0,60,...,300} { \CarrierHex{#1}{(\a:#2)} }%
+}

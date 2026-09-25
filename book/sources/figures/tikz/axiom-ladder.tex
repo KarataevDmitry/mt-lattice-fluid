@@ -1,0 +1,19 @@
+\begin{tikzpicture}[carrier panel, x=1cm, y=0.72cm]
+  \def\xL{1.2}
+  \def\xR{8.4}
+  \def\LadderStep#1#2#3{%
+    \draw[carrier object] (\xL,#1) -- (\xR,#1);
+    \node[anchor=east] at (\xL-0.15,#1) {#2};
+    \node[anchor=west] at (\xR+0.15,#1) {#3};
+  }
+  \LadderStep{9}{$c=\infty$}{классическая механика}
+  \LadderStep{7.4}{$c\neq\infty$}{СТО}
+  \LadderStep{5.8}{$\hbar\neq 0$}{квантовая механика}
+  \LadderStep{4.2}{рождение частиц}{теория поля}
+  \LadderStep{2.6}{$\hbar,\,G,\,c$}{узлы на решётке}
+  \foreach \yA/\yB in {9/7.4, 7.4/5.8, 5.8/4.2, 4.2/2.6} {
+    \draw[carrier arrow, carrier muted] (4.9,\yB+0.15) -- (4.9,\yA-0.15);
+  }
+  \node[carrier muted, anchor=north, font=\footnotesize] at (4.9,1.6)
+    {спуск: снимается одна идеализация};
+\end{tikzpicture}

@@ -1,0 +1,32 @@
+\begin{tikzpicture}[carrier panel, x=2.1cm, y=2.1cm]
+  \def\tlim{1.25}
+  \def\xlim{1.35}
+  \def\czero{1.08}   % c0 in plot units (x per t)
+  \def\kappa{0.7071}
+  \pgfmathsetmacro{\cmacro}{\czero*\kappa}
+
+  % --- left: discrete hops ---
+  \begin{scope}
+    \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
+    \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
+    \draw[carrier object] (0,0) -- (\xlim,0) node[midway, below, inner sep=1pt] {$\hl$};
+    \draw[carrier object] (0,0) -- (0,\tlim) node[midway, left, inner sep=1pt] {$\htick$};
+    \foreach \i in {0,1,2,3} {
+      \filldraw[carrier object] ({0.33*\i}, {0.33*\i}) circle (1.6pt);
+    }
+    \node[anchor=north, font=\footnotesize] at (0.55,-0.18) {микро: шаг по решётке};
+  \end{scope}
+
+  % --- right: macro slopes ---
+  \begin{scope}[shift={(2.55,0)}]
+    \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
+    \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
+    \draw[carrier muted, dashed, line width=0.7pt] (0,0) -- (\xlim,\xlim/\czero);
+    \draw[carrier object] (0,0) -- (\xlim,\xlim/\cmacro);
+    \node[anchor=west, carrier muted, inner sep=1pt] at (0.55,0.62) {$c_0$};
+    \node[anchor=west, inner sep=1pt] at (0.55,0.88) {$c=\kappa c_0$};
+    \node[anchor=north west, carrier muted, font=\scriptsize, inner sep=1pt] at (0.05,0.95)
+      {$\kappa=1/\sqrt{2}$};
+    \node[anchor=north, font=\footnotesize] at (0.55,-0.18) {макро: осреднённый фронт};
+  \end{scope}
+\end{tikzpicture}
