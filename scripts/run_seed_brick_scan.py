@@ -17,101 +17,40 @@ import time
 
 import torch
 
+from mt_ca.app import BrickSpec, gate_b, brick_axis_configs
+from mt_ca.app.habitat import HabitatPreset
+from mt_ca.app.runner import apply_scenario
+from mt_ca.app.scenario import ScenarioSpec
 from mt_ca.config import MConfig
-from mt_ca.fixed_point import decode_spinor
-from mt_ca.seeds import HV, vacuum_boil_fixed
+from mt_ca.seeds import HV, SeedClass
 from mt_ca.simulator import LatticeFluidSimulator
-from mt_ca.spinor import spinor_density
-from mt_ca.topology import matter_occupancy_b, winding_channels, winding_nearest_int
-
-
-def gate_b(z: torch.Tensor, *, top_k: int = 4, contour_radius: int = 2) -> dict:
-    rho = spinor_density(z)
-    flat = rho.reshape(-1)
-    k = min(top_k, flat.numel())
-    _, idx = torch.topk(flat, k)
-    ny, nx = rho.shape
-    b_hits = 0
-    w_abs_max = 0.0
-    w_rel_max = 0.0
-    w_u1_max = 0.0
-    margin = contour_radius + 1
-    for i in range(k):
-        y = int(idx[i].item() // nx)
-        x = int(idx[i].item() % nx)
-        if y < margin or x < margin or y >= ny - margin or x >= nx - margin:
-            continue
-        ch = winding_channels(z, center=(y, x), radius=contour_radius)
-        w = ch["auto"]
-        if ch["rel"] == ch["rel"]:
-            w_rel_max = max(w_rel_max, abs(float(ch["rel"])))
-        if ch["u1"] == ch["u1"]:
-            w_u1_max = max(w_u1_max, abs(float(ch["u1"])))
-        if w == w:
-            w_abs_max = max(w_abs_max, abs(float(w)))
-            if abs(w) >= 0.75:
-                b_hits += min(1, abs(winding_nearest_int(w)))
-    b_argmax = matter_occupancy_b(z, contour_radius=contour_radius)
-    return {
-        "b_hits_topk": int(b_hits),
-        "b_argmax": int(b_argmax),
-        "passed": bool(b_hits > 0 or b_argmax > 0),
-        "rho_max": float(rho.max().item()),
-        "contrast": float((rho.max() / (rho.mean() + 1e-30)).item()),
-        "winding_abs_max": w_abs_max,
-        "winding_rel_max": w_rel_max,
-        "winding_u1_max": w_u1_max,
-    }
 
 
 def run_one(
     *,
     sim: LatticeFluidSimulator,
-    class_dy: int,
-    class_dx: int,
-    class_offset: int,
-    size: int,
+    brick: BrickSpec,
     steps: int,
-    cfg: MConfig,
 ) -> dict:
-    f = vacuum_boil_fixed(
-        size,
-        size,
-        device=sim.device,
-        mod_bits=cfg.mod_bits,
-        frac_bits=cfg.frac_bits,
-        phase_bits=cfg.phase_bits,
-        n_phi=HV.N_phi,
-        class_dy=class_dy,
-        class_dx=class_dx,
-        class_offset=class_offset,
+    scenario = ScenarioSpec(
+        id="brick_boil",
+        seed=SeedClass.VACUUM_BOIL,
+        habitat=HabitatPreset.VACUUM_BOIL,
+        brick=brick,
     )
-    z = decode_spinor(f, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits).to(
-        device=sim.device, dtype=sim.dtype
-    )
-    sim.set_field(z)
+    apply_scenario(sim, scenario)
     g0 = gate_b(sim.z)
     sim.step(steps)
     g1 = gate_b(sim.z)
     return {
-        "class_dy": int(class_dy),
-        "class_dx": int(class_dx),
-        "class_offset": int(class_offset),
+        "class_dy": brick.class_dy,
+        "class_dx": brick.class_dx,
+        "class_offset": brick.class_offset,
         "gate0": g0,
         "gate1": g1,
         "passed": bool(g1["passed"]),
         "born": bool(g1["passed"] and not g0["passed"]),
     }
-
-
-def brick_configs(n_phi: int) -> list[tuple[int, int, int]]:
-    """Axis NN |Δclass|=1 on filled lattice: slopes ±1, all offsets."""
-    slopes = ((1, 1), (1, -1), (-1, 1), (-1, -1))
-    out: list[tuple[int, int, int]] = []
-    for dy, dx in slopes:
-        for off in range(n_phi):
-            out.append((dy, dx, off))
-    return out
 
 
 def main() -> int:
@@ -125,24 +64,15 @@ def main() -> int:
     if args.device == "cuda" and not torch.cuda.is_available():
         args.device = "cpu"
 
-    n_phi = int(HV.N_phi)
-    configs = brick_configs(n_phi)
+    configs = brick_axis_configs(HV.N_phi)
     cfg = MConfig.for_stencil("hex")
 
     hits: list[dict] = []
     born: list[dict] = []
     sim = LatticeFluidSimulator(args.size, args.size, cfg, device=args.device)
     t0 = time.perf_counter()
-    for i, (dy, dx, off) in enumerate(configs):
-        row = run_one(
-            sim=sim,
-            class_dy=dy,
-            class_dx=dx,
-            class_offset=off,
-            size=args.size,
-            steps=args.steps,
-            cfg=cfg,
-        )
+    for i, brick in enumerate(configs):
+        row = run_one(sim=sim, brick=brick, steps=args.steps)
         if row["passed"]:
             hits.append(row)
         if row["born"]:

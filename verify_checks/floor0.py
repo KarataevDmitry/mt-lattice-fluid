@@ -10,7 +10,7 @@ def check_floor0_phase_space(device: str = "cpu") -> dict:
     core = row["planckon_core"]
     ok = (
         bool(row["checks_ok"])
-        and row["habitat"] == "VACUUM_BOIL"
+        and row["habitat"] == "vacuum_boil"
         and bool(row["ocean_contrast_grows"])
         and int(core["unique_points"]) > 1
         and bool(row["cap_below_naive_gamma"])

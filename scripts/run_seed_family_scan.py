@@ -20,11 +20,11 @@ import time
 
 import torch
 
+from mt_ca.app import RunSpec, gate_b, scenario_for_seed
+from mt_ca.app.runner import apply_scenario
 from mt_ca.config import MConfig
 from mt_ca.seeds import SeedClass
 from mt_ca.simulator import LatticeFluidSimulator
-from mt_ca.spinor import spinor_density
-from mt_ca.topology import matter_occupancy_b, winding_channels, winding_nearest_int
 
 # Seek birth here; vortices are planted controls.
 BIRTH_FAMILIES = (
@@ -41,52 +41,13 @@ PLANTED_FAMILIES = (
 ALL_FAMILIES = BIRTH_FAMILIES + PLANTED_FAMILIES
 
 
-def gate_b(z: torch.Tensor, *, top_k: int = 4, contour_radius: int = 2) -> dict:
-    rho = spinor_density(z)
-    flat = rho.reshape(-1)
-    k = min(top_k, flat.numel())
-    _, idx = torch.topk(flat, k)
-    ny, nx = rho.shape
-    b_hits = 0
-    w_abs_max = 0.0
-    w_rel_max = 0.0
-    w_u1_max = 0.0
-    margin = contour_radius + 1
-    for i in range(k):
-        y = int(idx[i].item() // nx)
-        x = int(idx[i].item() % nx)
-        if y < margin or x < margin or y >= ny - margin or x >= nx - margin:
-            continue
-        ch = winding_channels(z, center=(y, x), radius=contour_radius)
-        w = ch["auto"]
-        if ch["rel"] == ch["rel"]:
-            w_rel_max = max(w_rel_max, abs(float(ch["rel"])))
-        if ch["u1"] == ch["u1"]:
-            w_u1_max = max(w_u1_max, abs(float(ch["u1"])))
-        if w == w:
-            w_abs_max = max(w_abs_max, abs(float(w)))
-            if abs(w) >= 0.75:
-                b_hits += min(1, abs(winding_nearest_int(w)))
-    b_argmax = matter_occupancy_b(z, contour_radius=contour_radius)
-    return {
-        "b_hits_topk": int(b_hits),
-        "b_argmax": int(b_argmax),
-        "passed": bool(b_hits > 0 or b_argmax > 0),
-        "rho_max": float(rho.max().item()),
-        "contrast": float((rho.max() / (rho.mean() + 1e-30)).item()),
-        "winding_abs_max": w_abs_max,
-        "winding_rel_max": w_rel_max,
-        "winding_u1_max": w_u1_max,
-    }
-
-
 def run_one(
     *,
     sim: LatticeFluidSimulator,
     seed: SeedClass,
     steps: int,
 ) -> dict:
-    sim.reset(seed)
+    apply_scenario(sim, scenario_for_seed(seed))
     g0 = gate_b(sim.z)
     sim.step(steps)
     g1 = gate_b(sim.z)

@@ -12,6 +12,17 @@
 
 
 
+## 2026-09-25 · mt_ca.app — simulation application SSOT
+
+**DoD:** `mt_ca/app/` — habitat presets, `ScenarioSpec` registry, `RunSpec`/`RunResult`, `gate_b`/`peak_stats`, `runner.run()`, CLI `python -m mt_ca.app`.
+
+**Scenarios:** `habitat_boil` (default live), `habitat_frozen` (control), `floor0_planckon`, `birth_*`.
+
+**Wired:** `si_floor0_rows.floor0_phase_space_row` → `run_floor0_phase_space`; scripts `run_filled_bath_emergence`, `run_seed_family_scan`, `run_seed_brick_scan` use app gates/runner.
+
+**Habitat rule:** no void — 2D excitations on `VACUUM_BOIL`; `simulator.reset` default = boil.
+
+
 ## 2026-09-24 · §8.2·units·T_P — independent of k_B (closed)
 
 **DoD:** T_P:=E_P=ℏ/t_P; T_P_M:=E_0. No separate Θ on M. k_B/kelvin = T-export only.
