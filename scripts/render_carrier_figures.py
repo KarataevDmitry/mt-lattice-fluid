@@ -503,18 +503,26 @@ def fig_hex_kgeom() -> None:
     hex_patch = Polygon(verts, closed=True, fill=False, lw=1.6, ec=COL["blue"])
     ax.add_patch(hex_patch)
 
-    for i in range(6):
-        mid = 0.5 * (verts[i] + verts[(i + 1) % 6])
-        ax.plot(*mid, "o", color=COL["gray"], ms=5)
-        ax.plot([0, mid[0]], [0, mid[1]], color=COL["light"], lw=0.8, ls="--", zorder=0)
-
     ax.plot(0, 0, "o", color=COL["red"], ms=7, zorder=5)
-    v = verts[0]
-    ax.annotate("", xy=v, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.4))
-    ax.text(0.55 * v[0], 0.55 * v[1] + 0.06, r"$R_{\mathrm{out}}=a$", color=COL["red"], fontsize=12)
-    mid = 0.5 * (verts[0] + verts[1])
-    ax.annotate("", xy=mid, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=COL["green"], lw=1.4))
-    ax.text(0.35 * mid[0] - 0.05, 0.35 * mid[1] - 0.12, r"$R_{\mathrm{in}}$", color=COL["green"], fontsize=12)
+
+    # R_out — to vertex (top); R_in — to edge midpoint (right): 90° apart, visibly different lengths
+    v_top = verts[1]
+    mid_right = 0.5 * (verts[5] + verts[0])
+    ax.annotate("", xy=v_top, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=2.0))
+    ax.annotate("", xy=mid_right, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=COL["green"], lw=2.0))
+    ax.text(0.08, 0.62, r"$R_{\mathrm{out}}=a$", color=COL["red"], fontsize=12, ha="left")
+    ax.text(mid_right[0] * 0.55 + 0.06, -0.02, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=COL["green"], fontsize=11)
+
+    # edge length a on upper-right side
+    e0, e1 = verts[0], verts[1]
+    ax.annotate(
+        "",
+        xy=0.5 * (e0 + e1) + np.array([0.08, 0.05]),
+        xytext=0.5 * (e0 + e1) - np.array([0.08, 0.05]),
+        arrowprops=dict(arrowstyle="<->", color=COL["node"], lw=1.0),
+    )
+    ax.text(0.62, 0.38, r"$a$", fontsize=11, color=COL["node"])
+
     ax.text(0.02, -1.35, r"$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$", fontsize=12, ha="center")
     ax.text(0, 1.28, r"гексагональная ячейка Вороного, $|N|=6$", ha="center", fontsize=11)
     ax.set_xlim(-1.45, 1.45)
