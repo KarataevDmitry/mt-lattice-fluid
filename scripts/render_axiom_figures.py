@@ -9,7 +9,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Circle, FancyArrowPatch, Polygon, Rectangle, Wedge
+from matplotlib.patches import Arc, Circle, FancyArrowPatch, Polygon, Rectangle, Wedge
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -123,13 +123,27 @@ def fig_axiom_unitarity() -> None:
     phi0, phi1 = np.deg2rad(35), np.deg2rad(95)
     _draw_phasor(ax, 0, 0, phi0, r, COL["blue"], r"$z$")
     _draw_phasor(ax, 0, 0, phi1, r, COL["green"], r"$z\,e^{i\Phi}$", ls="--", lw=1.6)
+    arc_r = 0.38
+    ax.add_patch(
+        Arc(
+            (0, 0),
+            2 * arc_r,
+            2 * arc_r,
+            angle=0,
+            theta1=np.rad2deg(phi0),
+            theta2=np.rad2deg(phi1),
+            color=COL["red"],
+            lw=2.0,
+        )
+    )
+    phi_mid = 0.5 * (phi0 + phi1)
+    ax.text(1.55 * arc_r * np.cos(phi_mid), 1.55 * arc_r * np.sin(phi_mid), r"$\Phi$", color=COL["red"], fontsize=11)
     ax.annotate(
         "",
-        xy=(r * np.cos(phi1) * 0.78, r * np.sin(phi1) * 0.78),
-        xytext=(r * np.cos(phi0) * 0.78, r * np.sin(phi0) * 0.78),
-        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.5, connectionstyle="arc3,rad=0.35"),
+        xy=(r * np.cos(phi1), r * np.sin(phi1)),
+        xytext=(r * np.cos(phi0), r * np.sin(phi0)),
+        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=2.2, connectionstyle="arc3,rad=0.28"),
     )
-    ax.text(0.05, 0.95, r"$e^{i\Phi}$", color=COL["red"], fontsize=10)
     ax.text(0, -1.45, r"$A_3$: $|z|\mapsto|z|$, меняется фаза", ha="center", fontsize=10)
     ax.set_xlim(-1.55, 1.55)
     ax.set_ylim(-1.65, 1.55)
