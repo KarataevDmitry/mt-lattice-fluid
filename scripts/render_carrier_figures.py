@@ -766,17 +766,19 @@ def fig_field_neighbors() -> None:
 
 
 
-def fig_worldlines() -> None:
-    """World lines in (x,t): micro null hops, massive zigzag, macro photon."""
+def _draw_worldlines_row(
+    axes,
+    *,
+    kappa: float,
+    row_title: str,
+    t_lim: float = 1.45,
+    x_lim: float = 1.8,
+) -> None:
+    """One row: null hop, massive zigzag, macro photon for given kappa."""
     a = 1.0
     ht = 1.0
     c0 = a / ht
-    kappa = 1 / math.sqrt(2)
     c_macro = kappa * c0
-
-    fig, axes = plt.subplots(1, 3, figsize=(11.4, 3.95))
-    t_lim = 1.45
-    x_lim = 1.8
 
     ax = axes[0]
     _draw_spacetime_2d(ax, c0, t_lim=t_lim, x_lim=x_lim, show_past=False)
@@ -784,28 +786,44 @@ def fig_worldlines() -> None:
     xs = [i * a for i in range(n + 1)]
     ts = [i * ht for i in range(n + 1)]
     ax.plot(xs, ts, "o-", color=COL["blue"], lw=2.1, ms=6, zorder=6)
-    ax.text(1.05, 0.42, r"$|\Delta x|=h_L$", fontsize=9, color=COL["blue"])
-    ax.text(1.05, 0.58, r"$\Delta t=h_T$", fontsize=9, color=COL["blue"])
-    ax.set_title(r"null на $M$: один hop за такт", fontsize=10)
+    ax.text(-x_lim * 0.92, t_lim * 0.55, row_title, fontsize=9, color=COL["node"], rotation=90, va="center")
+    ax.text(1.05, 0.42, r"$|\Delta x|=h_L$", fontsize=8, color=COL["blue"])
+    ax.text(1.05, 0.58, r"$\Delta t=h_T$", fontsize=8, color=COL["blue"])
+    ax.set_title(r"null на $M$", fontsize=9)
 
     ax = axes[1]
     _draw_spacetime_2d(ax, c0, t_lim=t_lim, x_lim=x_lim, show_past=False)
     xs_mass = [0, 1, 2, 1, 2, 3, 2, 3, 4]
     ts_mass = [i * ht for i in range(len(xs_mass))]
     ax.plot(xs_mass, ts_mass, "o-", color=COL["green"], lw=2.1, ms=5, zorder=6)
-    ax.text(1.15, 0.95, r"зигзаг в $K_P$", fontsize=9, color=COL["green"])
-    ax.set_title(r"массивная: внутри конуса $c_0$", fontsize=10)
+    ax.text(1.15, 0.95, r"$K_P$", fontsize=8, color=COL["green"])
+    ax.set_title(r"массивная", fontsize=9)
 
     ax = axes[2]
     _draw_spacetime_2d(ax, c0, t_lim=t_lim, x_lim=x_lim, show_past=False)
     x_end = 1.35
     ax.plot([0, x_end], [0, x_end / c_macro], color=COL["red"], lw=2.3, zorder=6)
     ax.plot(xs, ts, color=COL["blue"], lw=1.3, ls=":", marker="o", ms=4, zorder=5)
-    ax.text(x_end * 0.52, x_end / c_macro + 0.07, r"$c=\kappa c_0$", color=COL["red"], fontsize=10)
-    ax.text(x_end * 0.52, x_end / c0 - 0.1, r"микро $c_0$", color=COL["blue"], fontsize=9)
-    ax.set_title(r"макро-фотон после readout", fontsize=10)
+    ax.text(x_end * 0.52, x_end / c_macro + 0.07, r"$c=\kappa c_0$", color=COL["red"], fontsize=9)
+    ax.text(x_end * 0.52, x_end / c0 - 0.1, r"$c_0$", color=COL["blue"], fontsize=8)
+    ax.set_title(r"макро-фотон", fontsize=9)
 
-    fig.suptitle(r"Мировые линии в плоскости $(x,t)$, $\kappa=1/\sqrt{2}$", fontsize=11, y=1.03)
+
+def fig_worldlines() -> None:
+    """World lines in (x,t): FCC and hex slice rows."""
+    fig, axes = plt.subplots(2, 3, figsize=(11.4, 7.0))
+    _draw_worldlines_row(
+        axes[0],
+        kappa=1 / math.sqrt(2),
+        row_title=r"FCC $(3{+}1)$\n$\kappa=1/\sqrt{2}$",
+    )
+    _draw_worldlines_row(
+        axes[1],
+        kappa=math.sqrt(3) / 2,
+        row_title=r"гекс $(2{+}1)$\n$\kappa=\sqrt{3}/2$",
+    )
+    fig.suptitle(r"Мировые линии в плоскости $(x,t)$: FCC и гекс-срез", fontsize=11, y=0.98)
+    fig.subplots_adjust(top=0.9, hspace=0.38)
     _save(fig, "carrier-worldlines.pdf")
 
 def main() -> None:
