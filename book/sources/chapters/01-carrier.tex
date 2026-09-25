@@ -8,7 +8,25 @@
 тактовая скорость $c_0=\hl/\htick$, окрестность одного такта и поле на узле
 появились в конце спуска (\cref{sec:planck-floor}).
 Абсолютные условия $A_1$--$A_{16}$ (гл.~\ref{ch:axiom-rationale}, \ref{ch:axioms})
-ограничивают класс локальных законов на этом носителе.
+ограничивают класс локальных законов на этом носителе
+(\cref{fig:carrier-lattice-field,fig:carrier-field-z}).
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[t]{0.72\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-lattice-field.pdf}
+    \caption{Носитель $\Lambda$, шаг $\hl$, такт $\htick$.}
+    \label{fig:carrier-lattice-field}
+  \end{subfigure}\\[0.5em]
+  \begin{subfigure}[t]{0.52\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-field-z.pdf}
+    \caption{Состояние узла $z(x)\in\mathbb{C}^2$.}
+    \label{fig:carrier-field-z}
+  \end{subfigure}
+  \caption{Решётка и поле на узле.}
+\end{figure}
 
 \section{Световая окрестность}
 \label{sec:epsilon}
@@ -21,6 +39,13 @@
 \]
 \end{definition}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.48\linewidth]{carrier-epsilon.pdf}
+  \caption{Световая $\varepsilon$-окрестность $N(x)$: узлы на расстоянии~$\hl$ за один такт~$\htick$.}
+  \label{fig:carrier-epsilon}
+\end{figure}
+
 \section{Гексагональный срез $(2{+}1)$}
 \label{sec:hex-slice}
 
@@ -28,17 +53,26 @@
 
 Локальный закон на плоскости требует замощения без разрывов.
 На плоскости существуют ровно три регулярных типа: треугольник (три соседа),
-квадрат (четыре) и шестиугольник (шесть).
+квадрат (четыре) и шестиугольник (шесть) (\cref{fig:carrier-tilings}).
 Равная длина рёбер~$\hl$ исключает диагональ за один такт квадратной решётки.
 Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
 (\cref{fig:carrier-hex-kgeom}).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.62\linewidth]{carrier-hex-kgeom.pdf}
-  \caption{Гексагональный срез: ячейка Вороного, шесть соседей на расстоянии~$a=\hl$,
-    апофема $R_{\mathrm{in}}$ и радиус до вершины $R_{\mathrm{out}}$.}
-  \label{fig:carrier-hex-kgeom}
+  \begin{subfigure}[t]{\linewidth}
+    \centering
+    \includegraphics[width=0.92\linewidth]{carrier-tilings.pdf}
+    \caption{Три регулярных замощения плоскости.}
+    \label{fig:carrier-tilings}
+  \end{subfigure}\\[0.5em]
+  \begin{subfigure}[t]{0.62\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-hex-kgeom.pdf}
+    \caption{Гексагональный срез: $R_{\mathrm{in}}$, $R_{\mathrm{out}}$, $\kgeom_{\mathrm{hex}}$.}
+    \label{fig:carrier-hex-kgeom}
+  \end{subfigure}
+  \caption{Замощения плоскости и гексагональная ячейка Вороного.}
 \end{figure}
 
 \subsection{Константы на гексагональном слое}
@@ -81,7 +115,15 @@ $\kappa_{\mathrm{link}}=1/12$.
 Ячейку представляем шаром радиуса $\hl/2$: касание двух шаров есть ребро длины~$\hl$.
 В трёх измерениях плотнейшая упаковка равных шаров --- гранецентрированная кубическая или гексагональная плотная (теорема Кеплера).
 У каждого шара тогда ровно двенадцать соседей на расстоянии~$\hl$.
-Простая кубическая решётка имеет шесть соседей, объёмно-центрированная --- восемь; обе реже и отпадают, раз требуется максимальная плотность при одной длине ребра.
+Простая кубическая решётка имеет шесть соседей, объёмно-центрированная --- восемь; обе реже и отпадают, раз требуется максимальная плотность при одной длине ребра
+(\cref{fig:carrier-packing}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.88\linewidth]{carrier-packing.pdf}
+  \caption{Координационные числа кубических упаковок (проекция): SC, BCC и FCC.}
+  \label{fig:carrier-packing}
+\end{figure}
 
 Плотность и число соседей у FCC и HCP одинаковы.
 Их различает симметрия.
@@ -103,15 +145,25 @@ $\kappa_{\mathrm{link}}=1/12$.
 \[
   c_0^2\htick^2-(\hl\sqrt{2})^2=\hl^2-2\hl^2=-\hl^2<0.
 \]
-Интервал пространственноподобен: узел второй оболочки за этот такт недостижим.
+Интервал пространственноподобен: узел второй оболочки за этот такт недостижим
+(\cref{fig:carrier-light-cone}).
 Остаётся первая оболочка: $|N(x)|=12$ (\cref{fig:carrier-fcc-shell}).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.58\linewidth]{carrier-fcc-shell.pdf}
-  \caption{Первая координационная оболочка FCC: двенадцать соседей на расстоянии~$\hl$;
-    выпуклая оболочка --- кубооктаэдр.}
-  \label{fig:carrier-fcc-shell}
+  \begin{subfigure}[t]{\linewidth}
+    \centering
+    \includegraphics[width=0.88\linewidth]{carrier-light-cone.pdf}
+    \caption{Световой конус и вторая оболочка.}
+    \label{fig:carrier-light-cone}
+  \end{subfigure}\\[0.4em]
+  \begin{subfigure}[t]{0.55\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-fcc-shell.pdf}
+    \caption{Первая оболочка FCC, кубооктаэдр.}
+    \label{fig:carrier-fcc-shell}
+  \end{subfigure}
+  \caption{Каузальность на решётке и $|N|=12$.}
 \end{figure}
 
 \emph{Связь.}
@@ -143,7 +195,15 @@ $\kappa_{\mathrm{link}}=1/12$.
 ещё не использует скорость света: это геометрия оболочки.
 Треугольная грань через $(a/\sqrt{2},a/\sqrt{2},0)$, $(a/\sqrt{2},0,a/\sqrt{2})$ и $(0,a/\sqrt{2},a/\sqrt{2})$ лежит в плоскости $x+y+z=a\sqrt{2}$ и отстоит от центра на $a\sqrt{2/3}$.
 Квадратные и треугольные грани лежат на разных расстояниях, поэтому одной вписанной сферы, касающейся всех граней, нет.
-В мост $c=\kgeom c_0$ входит расстояние до квадратной грани.
+В мост $c=\kgeom c_0$ входит расстояние до квадратной грани
+(\cref{fig:carrier-cubocta-faces}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.55\linewidth]{carrier-cubocta-faces.pdf}
+  \caption{Кубооктаэдр: квадратная и треугольная грани лежат на разных расстояниях от центра.}
+  \label{fig:carrier-cubocta-faces}
+\end{figure}
 
 Объём ячейки Вороного считается отдельно.
 Кубическая ячейка со стороной $A=a\sqrt{2}$ имеет объём $A^3=2\sqrt{2}\,a^3$ и содержит четыре узла FCC, поэтому на один узел
@@ -155,16 +215,24 @@ $\kappa_{\mathrm{link}}=1/12$.
 \[
   R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2=\kgeom\, R_{\mathrm{in}}^{\mathrm{hull}}.
 \]
-(\Cref{fig:carrier-hull-voronoi} сравнивает три радиуса на одном узле.)
+(\cref{fig:carrier-hull-voronoi,fig:carrier-voronoi-cell}).
 Двенадцать соседей двойственны двенадцати ромбам этой ячейки.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.78\linewidth]{carrier-hull-voronoi.pdf}
-  \caption{Однотактовое тело и ячейка Вороного: $R_{\mathrm{out}}$ до соседа,
-    $R_{\mathrm{in}}^{\mathrm{hull}}$ до квадратной грани оболочки,
-    $R_{\mathrm{in}}^{\mathrm{Voronoi}}$ до стены ячейки.}
-  \label{fig:carrier-hull-voronoi}
+  \begin{subfigure}[t]{0.72\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-hull-voronoi.pdf}
+    \caption{Три радиуса на одном узле.}
+    \label{fig:carrier-hull-voronoi}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.50\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{carrier-voronoi-cell.pdf}
+    \caption{Ячейка Вороного (ромбододекаэдр).}
+    \label{fig:carrier-voronoi-cell}
+  \end{subfigure}
+  \caption{Однотактовое тело и ячейка Вороного.}
 \end{figure}
 
 Объём самой оболочки находится вычитанием.
@@ -198,12 +266,19 @@ $\kappa_{\mathrm{link}}=1/12$.
 \label{def:planck-lattice}
 Носитель $\Lambda$ --- FCC-подрешётка $\mathbb{R}^3$
 (теорема~\ref{thm:fcc-choice}).
-Срез плоскостью $\{111\}$ даёт гексагональный слой $(2{+}1)$ (\cref{sec:hex-slice}).
+Срез плоскостью $\{111\}$ даёт гексагональный слой $(2{+}1)$ (\cref{sec:hex-slice}, \cref{fig:carrier-fcc-111-slice}).
 Объём элементарной ячейки Вороного
 \[
   v_{\hv}=\hl^3/\sqrt{2}.
 \]
 \end{definition}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.58\linewidth]{carrier-fcc-111-slice.pdf}
+  \caption{FCC-носитель и срез плоскостью $\{111\}$: вложенный гексагональный слой.}
+  \label{fig:carrier-fcc-111-slice}
+\end{figure}
 
 Для этого носителя $\htick=\kgeom\, t_P$ при $\kgeom=1/\sqrt{2}$,
 где $t_P=\hl/c$ --- планковское время в учебниковой нормировке; тогда $c_0=\sqrt{2}\,c$.
@@ -225,7 +300,14 @@ $\kappa_{\mathrm{link}}=1/12$.
 (\cref{sec:fcc-kappa}).
 Величина $\kgeom$ --- отношение радиусов вписанной и описанной сфер однотактового тела.
 Тождество $c=\kgeom c_0$ служит проверкой согласованности макроописания
-после фиксации $\htick=\kgeom t_P$.
+после фиксации $\htick=\kgeom t_P$ (\cref{fig:carrier-two-speeds}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.88\linewidth]{carrier-two-speeds.pdf}
+  \caption{Тактовая скорость $c_0$ на рёбрах решётки и макроскопическая $c=\kgeom c_0$ после осреднения.}
+  \label{fig:carrier-two-speeds}
+\end{figure}
 
 \section{Отказ от континуума на микроуровне}
 \label{sec:no-continuum-carrier}
@@ -261,9 +343,17 @@ $\hl$ --- минимальный квант длины.
 
 \section{Связь $(3{+}1)$ и $(2{+}1)$}
 
-Гексагональный слой $(2{+}1)$ --- срез пространства Минковского $(3{+}1)$ с FCC.
+Гексагональный слой $(2{+}1)$ --- срез пространства Минковского $(3{+}1)$ с FCC
+(\cref{fig:carrier-slice-bridge}).
 Мост $c=\kgeom c_0$ с $\kgeom=1/\sqrt{2}$ якорится на полном трёхмерном носителе;
 чистый $(2{+}1)$ без объёма несёт $\kgeom=\sqrt{3}/2$.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.88\linewidth]{carrier-slice-bridge.pdf}
+  \caption{Связь среза $(2{+}1)$ и носителя $(3{+}1)$: разные $\kgeom$ и $|N|$, одна скорость~$c$.}
+  \label{fig:carrier-slice-bridge}
+\end{figure}
 
 \section{Соседство среза и объёма}
 
