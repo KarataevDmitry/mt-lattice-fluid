@@ -175,14 +175,14 @@
 ```
 S = Σ_{links} Re[ conj(z_x)(z_y - z_x) ] + Σ_x V(|z|²)
 z* = local_ca(z; γ)
-φ  = 2π · ( α* / (|z*|² + ε) - 1 ) · w(ρ)
+φ  = 2π · ( (1+r) / (|z*|² + ε) - 1 ) · w(ρ)
 z' = z* · exp(i φ)
 ```
 
 **§3.4 isotropic scalar gate:**
 ```
 ζ = (Σ_N z) · z*
-φ = 2π · ( α*/(|z|²+ε) · Δφ − 1 ) · w(ρ)
+φ = 2π · ( (1+r)/(|z|²+ε) · Δφ − 1 ) · w(ρ)
 z' = z · exp(iφ)
 ```
 
@@ -385,15 +385,15 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·α·Arg-try | Arg identity Δm=m_arg/(2MN_a0) closed; best int M=97 ~−2080ppm; reject 137² / 1/(4π·11) / mass-cascade; derivation OPEN · Alpha_arg_binding_try PASS |
 | 2026-09-23 | §8.2·α·mass-defect | QM floor: α=√(2Δm/m_e); U/BE=2; E_coul_NN/E₀=α/κ; BE/E₀~1.58e-27 soft Arg; DoD Arg→Δm OPEN · Alpha_mass_defect_optics PASS |
 | 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; phase residue≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent` PASS |
-| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning` PASS |
+| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток r=1/(4π); число=π-tower (removed); F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning` PASS |
 | 2026-09-23 | §8.2·F | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice` PASS |
 | 2026-09-23 | §8.2·H | `N_a0` (размер H): Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); отвергнуто `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier` PASS |
 | 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **N_c·137 path later rejected as α-input** |
-| 2026-09-23 | α FP analytic | bare **closed form** `α*=[N_φ/(N_a0√(π/2))]^{1/11}`; stack poly `(2/π)α²³+(1/8)α²²=RHS²`; exponent **11=8+2+1** · **`Alpha_fixed_point` PASS** |
-| 2026-09-23 | α fixed-point | **first FP in model**: `alpha_fixed_point_row` · **`Alpha_fixed_point` PASS** — α*=N_c(m_e(α*))/N_a0 (optical a₀); inv≈137.092 (~−408 ppm CODATA); seed-invariant; π-poly not α-input |
+| 2026-09-23 | α FP analytic | bare **closed form** `α_fp=[N_φ/(N_a0√(π/2))]^{1/11}`; stack poly `(2/π)α²³+(1/8)α²²=RHS²`; exponent **11=8+2+1** · **`Alpha_fixed_point` PASS** |
+| 2026-09-23 | α fixed-point | **first FP in model**: `alpha_fixed_point_row` · **`Alpha_fixed_point` PASS** — α_fp=N_c(m_e(α_fp))/N_a0 (optical a₀); inv≈137.092 (~−408 ppm CODATA); seed-invariant; π-poly not α-input |
 | 2026-09-23 | α hop + H | `Alpha_hop_ladder` + шаг шкалы (Бор): α=N_c/N_a0; α²=N_re/N_a0 (= power in m_e); v_Bohr/c₀=ακ; still identity, N_★/N_a0 from g OPEN |
 | 2026-09-23 | α hop ladder | `alpha_hop_ladder_row` · **`Alpha_hop_ladder` PASS** — α=κ·N_re/N_c0=N_★/N_c0 after ℓ_P⊄c; **identity rewrite**, N_★ from g OPEN; π-ansatz not replaced |
-| 2026-09-23 | §8.2 α bridges | verify **`Alpha_bridges`**: δλ=α_fs(α*−1), B_hV runner, N_φ=|N₁₂|+1, Coulomb carrier PASS; (α*)³ cascade OPEN (~4%); e₀/sim OPEN |
+| 2026-09-23 | §8.2 α bridges | verify **`Alpha_bridges`**: δλ=α·r, B_hV runner, N_φ=|N₁₂|+1, Coulomb carrier PASS; r³ cascade OPEN (~4%); e₀/sim OPEN |
 | 2026-09-23 | META §3.0 | карточка «два времени»: A5-пена M (нет начала/конца) vs наблюдаемая UI (генезис есть); §0.6 · §2.3 · MODEL hub |
 | 2026-09-23 | META §3.0.1 | наш пузырь: CMB→`N_tick` ✅; full `Ψ` via `g⁻¹` ✕ (ℬ); realistic = seed §3.6 + constraints |
 | 2026-09-23 | META §3.0.1 fix | `t_SI=N·hT` exact on M (no readout); open = infer N + anchor N=0; N_today~10⁶¹ |
