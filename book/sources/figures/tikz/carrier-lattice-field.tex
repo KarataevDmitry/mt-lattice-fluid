@@ -1,28 +1,30 @@
-\begin{tikzpicture}[carrier panel, x=1.05cm, y=0.92cm]
-  \foreach \r in {0,...,3} {
-    \foreach \c in {0,...,4} {
-      \ifnum\r=1
-        \ifnum\c=2
-          \node[carrier site, minimum size=5pt] at (\c,\r) {};
-        \else
-          \node[carrier site, minimum size=3pt] at (\c,\r) {};
-        \fi
-      \else
-        \node[carrier site, minimum size=3pt] at (\c,\r) {};
-      \fi
+\begin{tikzpicture}[carrier panel, x=1.1cm, y=1.0cm]
+  % --- пространственная решётка Λ ---
+  \foreach \r in {0,...,2} {
+    \foreach \c in {0,...,3} {
+      \node[carrier site, minimum size=3pt] at (\c,\r) {};
     }
   }
-  \foreach \r in {0,...,3} \foreach \c in {0,...,3} {
-    \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c+1,\r);
-    \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c,\r+1);
+  \foreach \r in {0,...,2} {
+    \foreach \c in {0,...,2} {
+      \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c+1,\r);
+      \draw[carrier muted, line width=0.35pt] (\c,\r) -- (\c,\r+1);
+    }
   }
-  \CarrierDimH{2}{3}{1}{$\hl$}
-  \node[anchor=west, inner sep=2pt] at (2.06,1.04) {$x\in\Lambda$};
-  \draw[carrier object] (3.05,-0.42) -- (4.05,-0.42);
-  \draw[carrier line] (3.05,-0.47) -- (3.05,-0.37) (4.05,-0.47) -- (4.05,-0.37);
-  \node at (3.05,-0.58) {\scriptsize $t$};
-  \node at (4.05,-0.58) {\scriptsize $t{+}1$};
-  \CarrierDimH{3.05}{4.05}{-0.42}{$\htick$}
-  \node[anchor=west, font=\footnotesize] at (0.05,3.35) {$\Lambda$ --- счётное множество узлов};
-  \node at (1.55,-0.05) {\footnotesize $c_0=\hl/\htick$};
+  \node[carrier site, minimum size=5pt] at (1,1) {};
+  \node[anchor=south west, inner sep=2pt] at (1.1,1.12) {$x$};
+  \CarrierDimH{1}{2}{0.42}{$\hl$}
+  \node[anchor=north west, font=\footnotesize] at (-0.05,2.55) {$\Lambda$};
+
+  % --- такт: стрелка скорости c₀ в плоскости (x,t) ---
+  \begin{scope}[shift={(4.0,0.2)}, x=1.05cm, y=1.05cm]
+    \draw[carrier muted, -{Stealth[length=1.6mm]}] (0,0) -- (0,1.2)
+      node[anchor=east, inner sep=2pt, font=\scriptsize] {$t$};
+    \draw[carrier muted, -{Stealth[length=1.6mm]}] (0,0) -- (1.3,0)
+      node[anchor=north, inner sep=2pt, font=\scriptsize] {$x$};
+    \draw[carrier arrow, line width=0.95pt] (0,0) -- (1,1);
+    \node[anchor=south west, inner sep=1pt] at (0.48,0.62) {$c_0$};
+    \CarrierDimH{0}{1}{-0.12}{$\hl$}
+    \CarrierDimV{0}{1}{-0.12}{$\htick$}
+  \end{scope}
 \end{tikzpicture}
