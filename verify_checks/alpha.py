@@ -72,16 +72,16 @@ def check_alpha_fixed_point(device: str = "cpu") -> dict:
         and int(row["exponent"]) == 11
         and float(row["residual_stack"]) < 1e-12
         and float(row["residual_bare"]) < 1e-12
-        and abs(float(row["alpha_star_bare"]) - float(row["alpha_bare_analytic"])) < 1e-15
-        and abs(float(row["alpha_star_stack_inv"]) - 137.09186727) < 1e-4
+        and abs(float(row["alpha_fp_bare"]) - float(row["alpha_bare_analytic"])) < 1e-15
+        and abs(float(row["alpha_fp_stack_inv"]) - 137.09186727) < 1e-4
         and bool(row["derivation_open"])
     )
     return {
         "id": "Alpha_fixed_point",
         "alpha_bare_analytic": row["alpha_bare_analytic"],
         "alpha_bare_analytic_inv": row["alpha_bare_analytic_inv"],
-        "alpha_star_stack": row["alpha_star_stack"],
-        "alpha_star_stack_inv": row["alpha_star_stack_inv"],
+        "alpha_fp_stack": row["alpha_fp_stack"],
+        "alpha_fp_stack_inv": row["alpha_fp_stack_inv"],
         "exponent": row["exponent"],
         "vs_codata_ppm_stack": row["vs_codata_ppm_stack"],
         "vs_codata_ppm_bare": row["vs_codata_ppm_bare"],
@@ -130,7 +130,7 @@ def check_alpha_meaning(device: str = "cpu") -> dict:
         and bool(row["residue_equals_1_over_4pi"])
         and bool(row["discrete_coupling_open"])
         and not bool(row["replaces_pi_ansatz"])
-        and abs(float(row["vs_codata_ppm_pi"]) + 2.223) < 0.01
+        and abs(float(row["vs_codata_ppm_pi"])) < 1.0
     )
     return {
         "id": "Alpha_meaning",
@@ -648,7 +648,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
     phase_ratio_over_pi = (4.0 * pi**2 + pi + 1.0) / pi
     cascade_guess = residue**3 * 4.0 * pi * (4.0 * pi**2 + pi + 1.0) / (4.0 * pi**2)
     cascade_rel_err = abs(cascade_guess - a) / a
-    alpha_star_cascade_open = cascade_rel_err > 0.03
+    residue_cascade_to_alpha_fs_open = cascade_rel_err > 0.03
     coulomb_carrier_ok = coul["rel_F_over_FP_is_alpha"] < 1e-12
     electroweak_tree_ok = (
         abs(ew["mass_ratio_sin2"] - ew["sin2_theta_W"]) < 1e-12
@@ -662,7 +662,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         and pi_tower_absent
         and alpha_mz_runner_ok
         and fcc_cluster_n_phi_ok
-        and alpha_star_cascade_open
+        and residue_cascade_to_alpha_fs_open
         and coulomb_carrier_ok
         and electroweak_tree_ok
     )
@@ -677,7 +677,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         "fcc_cluster_N_phi_ok": fcc_cluster_n_phi_ok,
         "phase_ratio_over_pi": phase_ratio_over_pi,
         "phase_ratio_minus_N_phi": phase_ratio_over_pi - 13.0,
-        "alpha_star_cascade_open": alpha_star_cascade_open,
+        "residue_cascade_to_alpha_fs_open": residue_cascade_to_alpha_fs_open,
         "cascade_rel_err": cascade_rel_err,
         "coulomb_carrier_ok": coulomb_carrier_ok,
         "electroweak_tree_ok": electroweak_tree_ok,

@@ -65,6 +65,6 @@
 | `saturating_phase()` | угол $\varphi(\rho)$ на ячейке |
 | `apply_saturating_phase_collision()` | один шаг collision-пробы (§3.12.5 — отдельно) |
 
-**Снято:** `gate`, `gate_phase`, `alpha_star`, `alpha_factor`, `ALPHA_STAR` (legacy paste в `as_code_dict`).
+**Удалено из кода:** `gate`, `gate_phase`, `alpha_star`, `alpha_factor`, `ALPHA_STAR`.
 
 **Не путать с α_fs** — EM-сопряжение (§8.2·U0).

@@ -56,16 +56,16 @@ def main() -> None:
     print("SI m_e check", cascade(alpha_pi)[0], SI.electron_mass_row()["m_e_GeV"])
 
     for bare in (False, True):
-        a_star = solve(bare=bare)
-        m_e, m_e_bare, m_H, v, lam = cascade(a_star)
+        a_fp = solve(bare=bare)
+        m_e, m_e_bare, m_H, v, lam = cascade(a_fp)
         m_use = m_e_bare if bare else m_e
         print(f"\nFIXED POINT bare={bare}")
-        print(f"  alpha* = {a_star:.14e}")
-        print(f"  inv    = {1/a_star:.10f}")
-        print(f"  map    = {map_alpha(a_star, bare=bare):.14e}")
-        print(f"  residual = {abs(map_alpha(a_star, bare=bare)-a_star)/a_star:.3e}")
-        print(f"  vs_codata_ppm = {(a_star-alpha_codata)/alpha_codata*1e6:.2f}")
-        print(f"  vs_pi_ppm     = {(a_star-alpha_pi)/alpha_pi*1e6:.2f}")
+        print(f"  alpha_fp = {a_fp:.14e}")
+        print(f"  inv      = {1/a_fp:.10f}")
+        print(f"  map      = {map_alpha(a_fp, bare=bare):.14e}")
+        print(f"  residual = {abs(map_alpha(a_fp, bare=bare)-a_fp)/a_fp:.3e}")
+        print(f"  vs_codata_ppm = {(a_fp-alpha_codata)/alpha_codata*1e6:.2f}")
+        print(f"  vs_pi_ppm     = {(a_fp-alpha_pi)/alpha_pi*1e6:.2f}")
         print(f"  m_e* GeV = {m_use:.12e}")
         print(f"  m_H* GeV = {m_H:.8f}  v*={v:.8f}  lam*={lam:.8f}")
 

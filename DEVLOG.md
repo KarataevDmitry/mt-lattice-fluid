@@ -538,7 +538,7 @@ x+N ≡ x ,   y+N ≡ y
 
 ### 10.4 Literals → §0.10 / SI
 
-`DX, DT, K_P, ALPHA_STAR, …` = `as_code_dict()` paste. Округление ≠ другая физика.
+`DX, DT, K_P, PHASE_SATURATION, …` = `as_code_dict()` paste. Округление ≠ другая физика.
 
 **Код:** `python -c "from mt_ca.si_constants import as_code_dict; print(as_code_dict())"`.
 

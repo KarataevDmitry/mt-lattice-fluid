@@ -194,7 +194,6 @@ class SICarrierRows:
             and abs(float(code["DT"]) - float(self.hT)) / float(self.hT) < 1e-15
             and abs(float(code["K_P_J_m3"]) - float(self.K_P)) / float(self.K_P) < 1e-12
             and abs(float(code["PHASE_SATURATION"]) - phase_sat) < 1e-12
-            and abs(float(code["ALPHA_STAR"]) - phase_sat) < 1e-12
             and abs(float(code["PHASE_SATURATION"]) - PHASE_SATURATION) < 1e-12
         )
         floor_ok = hv.frac_bits == 6 and abs(z_min - 1.0 / 64.0) < 1e-15
@@ -213,7 +212,6 @@ class SICarrierRows:
             "z_min": z_min,
             "frac_bits": hv.frac_bits,
             "PHASE_SATURATION": float(code["PHASE_SATURATION"]),
-            "ALPHA_STAR": float(code["ALPHA_STAR"]),
             "DX": float(code["DX"]),
             "DT": float(code["DT"]),
             "K_P": float(code["K_P_J_m3"]),

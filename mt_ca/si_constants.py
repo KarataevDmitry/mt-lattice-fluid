@@ -524,7 +524,6 @@ def as_code_dict() -> dict[str, float]:
 
         "PHASE_SATURATION": SI.phase_saturation,
         "PHASE_RESIDUE": SI.planck_hole_phase_residue,
-        "ALPHA_STAR": SI.phase_saturation,  # legacy paste key
 
         "ALPHA_SI_J_m3": SI.alpha_SI,
 
@@ -727,14 +726,6 @@ class SIConstants(SIAlphaRows, SIFloor0Rows, SIFloor1Rows, SIUnitsRows, SICarrie
         return PHASE_SATURATION
 
     @property
-    def alpha_star(self) -> float:
-        """Deprecated alias for phase_saturation (legacy misname)."""
-        return PHASE_SATURATION
-
-
-
-    @property
-
     def alpha_SI(self) -> float:
 
         """α in SI [J/m³] before density normalization: (2π + ½)·u_P."""

@@ -34,7 +34,7 @@ def check_na0_from_carrier(device: str = "cpu") -> dict:
     ok = (
         bool(row["carrier_na0_ok"])
         and abs(float(row["N_a0_carrier_over_optical"]) - 1.0) < 5e-4
-        and abs(float(row["alpha_star_stack_inv"]) - 137.088598) < 1e-3
+        and abs(float(row["alpha_fp_stack_inv"]) - 137.088598) < 1e-3
         and bool(row["monomial_stack_open"])
         and bool(row.get("ask_rejected_as_alpha_input", False))
     )
@@ -42,7 +42,7 @@ def check_na0_from_carrier(device: str = "cpu") -> dict:
         "id": "Na0_from_carrier",
         "N_a0_carrier": row["N_a0_carrier"],
         "N_a0_carrier_over_optical": row["N_a0_carrier_over_optical"],
-        "alpha_star_stack_inv": row["alpha_star_stack_inv"],
+        "alpha_fp_stack_inv": row["alpha_fp_stack_inv"],
         "vs_codata_ppm_stack": row["vs_codata_ppm_stack"],
         "monomial_stack_open": row["monomial_stack_open"],
         "ask_rejected_as_alpha_input": row.get("ask_rejected_as_alpha_input", False),
