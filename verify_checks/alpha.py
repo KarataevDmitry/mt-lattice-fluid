@@ -214,7 +214,7 @@ def check_alpha_arg_binding_try(device: str = "cpu") -> dict:
     }
 
 def check_alpha_schwinger_ask(device: str = "cpu") -> dict:
-    """§8.2·α·Schwinger — lab door ae; foot explains 1/(2π)."""
+    """§8.2·α·Schwinger — lab door ae; phase residue explains 1/(2π)."""
     from mt_ca.si_constants import SI
 
     del device
@@ -227,7 +227,7 @@ def check_alpha_schwinger_ask(device: str = "cpu") -> dict:
     return {
         "id": "Alpha_schwinger_ask",
         "ae_Schwinger_1loop": row["ae_Schwinger_1loop"],
-        "vacuum_foot_r": row["vacuum_foot_r"],
+        "vacuum_phase_residue_r": row["vacuum_phase_residue_r"],
         "one_loop_vs_ae_ppm": row["one_loop_vs_ae_ppm"],
         "derivation_closed": row["derivation_closed"],
         "ok": ok,
@@ -282,7 +282,7 @@ def check_alpha_ae_cloud_ask(device: str = "cpu") -> dict:
     }
 
 def check_alpha_rydberg_hall_ask(device: str = "cpu") -> dict:
-    """§8.2·α·Rydberg·Hall — lab doors; R_∞ foot identity; same coupling OPEN."""
+    """§8.2·α·Rydberg·Hall — lab doors; R_∞ phase-residue identity; same coupling OPEN."""
     from mt_ca.si_constants import SI
 
     del device
@@ -293,7 +293,7 @@ def check_alpha_rydberg_hall_ask(device: str = "cpu") -> dict:
         and not bool(row["hall_is_alpha_source_post2019"])
         and not bool(row["derivation_closed"])
         and not bool(row["bypasses_coupling_open"])
-        and abs(float(row["rel_Rinf_foot_vs_classic"])) < 1e-15
+        and abs(float(row["rel_Rinf_phase_residue_vs_classic"])) < 1e-15
     )
     return {
         "id": "Alpha_rydberg_hall_ask",
@@ -425,7 +425,7 @@ def check_alpha_nF_kick_census(device: str = "cpu") -> dict:
     }
 
 def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
-    """§8.2·α·full-quant — α=κ/M from full quantization; π-tower demoted as descent."""
+    """§8.2·α·full-quant — α=κ/M from full quantization; pi-tower removed; alpha=fundamentals."""
     from mt_ca.si_constants import SI
 
     del device
@@ -434,7 +434,7 @@ def check_alpha_full_quantization_bridge(device: str = "cpu") -> dict:
         bool(row["ask_ok"])
         and bool(row["discrete_path_shipped"])
         and bool(row["M_combinatorial_closed"])
-        and bool(row["pi_tower_demoted_as_descent"])
+        and bool(row["pi_tower_absent"])
         and bool(row["soft_residual_open"])
         and not bool(row["derivation_closed"])
         and int(row["M"]) == 97
@@ -616,8 +616,8 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
 
     del device
     pi = math.pi
-    a = SI.alpha_fs  # π-tower T-label
-    a_struct = SI.alpha_preferred  # upstairs structural feed
+    a = SI.alpha_preferred
+    a_struct = a
     a_star = SI.alpha_star
     residue = a_star - 1.0
 
@@ -636,7 +636,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         abs(delta_lam - a_struct / (4.0 * pi)) < 1e-15
         and abs(delta_lam - a_struct * residue) < 1e-15
     )
-    phase_tower_ok = abs(SI.alpha_fs_inv - pi * (4.0 * pi**2 + pi + 1.0)) < 1e-9
+    pi_tower_absent = abs(SI.alpha_fs - SI.alpha_preferred) < 1e-18
     alpha_mz_runner_ok = runner["alpha_MZ_inv_rel_err"] < 2e-4
     fcc_cluster_n_phi_ok = (
         wein["N_cluster"] == 13.0
@@ -659,7 +659,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
     ok = (
         gate_residue_ok
         and delta_lambda_link_ok
-        and phase_tower_ok
+        and pi_tower_absent
         and alpha_mz_runner_ok
         and fcc_cluster_n_phi_ok
         and alpha_star_cascade_open
@@ -671,7 +671,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         "ok": ok,
         "gate_residue_ok": gate_residue_ok,
         "delta_lambda_alpha_star_ok": delta_lambda_link_ok,
-        "phase_tower_ok": phase_tower_ok,
+        "pi_tower_absent": pi_tower_absent,
         "alpha_MZ_runner_ok": alpha_mz_runner_ok,
         "alpha_MZ_inv_rel_err": runner["alpha_MZ_inv_rel_err"],
         "fcc_cluster_N_phi_ok": fcc_cluster_n_phi_ok,

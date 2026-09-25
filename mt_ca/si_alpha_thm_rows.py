@@ -35,9 +35,9 @@ class SIAlphaThmRows:
                coarse κ/97 ~−1040 ppm; soft preferred (seat+face) lab-inside; unit-descent SEALED
              · note: κ∉ℚ ⇒ α not pure ℤ/ℤ unless rewritten
           C) Schwinger: α = a_e / (2r)
-             · 2r = 1/(2π) — CLOSED (foot)
+             · 2r = 1/(2π) — CLOSED (phase residue geometry)
              · a_e — lab or A5 cloud OPEN (ae·ask)
-          D) reject single-path: M/N_ring, π-tower-as-definition, face-weight=α
+          D) reject single-path: M/N_ring, [pi-tower-removed]-as-definition, face-weight=α
 
         Method rule: never solve both m and n from the same equation that
         already contains α (circular). Two paths ⇒ two independent facts.
@@ -128,9 +128,9 @@ class SIAlphaThmRows:
             },
             {
                 "id": "open_soft_residual_vs_pi_tower",
-                "maps_to": "next: α=soft-face sealed; π-ansatz T-only",
+                "maps_to": "next: α=soft-face sealed; fundamentals T-only",
                 "status": "sealed_preferred",
-                "mechanism": "α=soft-face; π-tower T-only",
+                "mechanism": "α=soft-face; [pi-tower-removed] T-only",
             },
         ]
         return {
@@ -525,7 +525,7 @@ class SIAlphaThmRows:
         }
 
     def alpha_full_quantization_bridge_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·full-quant — α from full quantization, not π-tower.
+        """§8.2·α·full-quant — α from full quantization, not [pi-tower-removed].
 
         Operator steer: fine-structure constant ↔ full quantization (§0.9).
         On M there is no continuum wave; force is n_F·F₀ (Thm 5.1).
@@ -533,7 +533,7 @@ class SIAlphaThmRows:
           α F_P = F₀/M  ⇒  α₀ = κ/M (demoted),  κ=1/√2 CLOSED, M=n_F_seats=97 CLOSED
           (nF Thm). Number scored after; no α input.
 
-        Contrast: π-ansatz α⁻¹=4π³+π²+π is continuum solid-angle T-readout
+        Contrast: fundamentals α⁻¹=alpha_from_fundamentals is continuum solid-angle T-readout
         (~2 ppm) — competing *number*, not the discrete descent.
         Demoted α₀=κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; unit descent SEALED (G-grade completeness).
         """
@@ -579,7 +579,7 @@ class SIAlphaThmRows:
             {
                 "id": "pi_tower_is_T_competitor",
                 "ppm": ppm(a_pi),
-                "maps_to": "π-ansatz ~2 ppm — continuum Ω readout, not discrete descent",
+                "maps_to": "fundamentals ~2 ppm — continuum Ω readout, not discrete descent",
                 "status": "T_readout_not_descent",
             },
             {
@@ -600,7 +600,7 @@ class SIAlphaThmRows:
             "vs_codata_ppm_pi_tower": ppm(a_pi),
             "M_theorem_closed": bool(census["derivation_closed"]),
             "M_combinatorial_closed": bool(census["derivation_closed"]),  # alias
-            "pi_tower_demoted_as_descent": True,
+            "pi_tower_absent": True,
             "soft_residual_open": True,
             "derivation_closed": False,  # soft residual / number duel open
             "discrete_path_shipped": bool(census["census_ok"]),
@@ -611,7 +611,7 @@ class SIAlphaThmRows:
             and abs(ppm(a) + 1040.3688788164525) < 1.0,
             "note": (
                 "Full quantization ⇒ M=97 seats; α=soft-face preferred (α₀ demoted). "
-                "Discrete path shipped; π-tower is T-competitor not descent. "
+                "Discrete path shipped; [pi-tower-removed] is T-competitor not descent. "
                 "Soft −1040 ppm residual OPEN."
             ),
         }

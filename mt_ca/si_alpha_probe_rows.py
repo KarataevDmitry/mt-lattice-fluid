@@ -37,13 +37,13 @@ class SIAlphaProbeRows:
             v_Bohr/c₀ = α·κ
 
         Status: structural rewrite of CODATA α into hL-hops + κ.
-        Does **not** replace π-ansatz until one of {N_★, N_re, N_a0}
+        Does **not** replace fundamentals until one of {N_★, N_re, N_a0}
         comes from carrier without ϵ₀/α. Geom near-miss: N₁₂(N₁₂+1)=156 vs α⁻¹≈137.
         """
         kappa = KAPPA_FCC_1TICK
         m_e = self.m_e_CODATA
         hL = self.l_P
-        # CODATA α (measured); π-ansatz kept separate for ppm compare
+        # CODATA α (measured); fundamentals kept separate for ppm compare
         alpha_codata = 7.2973525693e-3
         alpha_codata_inv = 1.0 / alpha_codata
         N_c = self.hbar / (m_e * self.c * hL)
@@ -94,7 +94,7 @@ class SIAlphaProbeRows:
                 "§7.4+§4.8+H: α=κ·N_re/N_c0=N_★/N_c0=N_c/N_a0; "
                 "α²=N_re/N_a0 (rhymes m_e=α² m_H/N_φ); v_Bohr/c₀=ακ. "
                 "Identity rewrite; one hop from g without α still OPEN. "
-                "π-ansatz not replaced. See also alpha_fixed_point_row."
+                "fundamentals not replaced. See also alpha_fixed_point_row."
             ),
         }
 
@@ -236,7 +236,7 @@ class SIAlphaProbeRows:
             → α₀=κ/96 (demoted), inv≈135.76, ~+9366 ppm vs CODATA
           • nearest int M = 97 = N₁₂·N_hier+1 → α₀=κ/97 (demoted; α=soft-face), inv≈137.18, ~−1040 ppm
           • M=137/√2 recovers α=1/137 — injects α_geom, empty for derivation
-          • π-ansatz still ~2 ppm; force path does **not** replace it yet
+          • fundamentals still ~2 ppm; force path does **not** replace it yet
         OPEN: which M from g (why 96 vs 97 / shell rule).
         """
         kappa = KAPPA_FCC_1TICK
@@ -335,7 +335,7 @@ class SIAlphaProbeRows:
             and abs(m_target - 96.899) < 0.01,
             "note": (
                 "Force lattice seats M=97; α=soft-face. Demoted α₀ (−1040 ppm); incomplete M=96 "
-                "(+9366 ppm). M=137κ rejects (α_geom). π-ansatz not replaced; M from g OPEN."
+                "(+9366 ppm). M=137κ rejects (α_geom). fundamentals not replaced; M from g OPEN."
             ),
         }
 
@@ -353,9 +353,9 @@ class SIAlphaProbeRows:
         Readouts (consequences, not meanings):
           F = α F_P / N² ;  α = N_c/N_a0 ;  α₀ = κ/M (demoted)  — expressions of the same coupling.
 
-        Number today (T): π-tower 1/(4π³+π²+π) ~−2 ppm — competitor readout.
+        Number: soft-face fundamentals (pi-tower removed).
         Seats M=97 + soft-face α shipped (force law F₀/M); α₀ demoted.
-        Soft OPEN: −1040 ppm vs CODATA; holonomy that closes soft without π-ansatz.
+        Soft OPEN: −1040 ppm vs CODATA; holonomy that closes soft without fundamentals.
         """
         alpha_star = self.alpha_star
         residue = alpha_star - 1.0
@@ -370,7 +370,7 @@ class SIAlphaProbeRows:
                 "mechanism": "§8.2; not |N| tile; not Newton force primary",
             },
             {
-                "id": "foot_vacuum_residue",
+                "id": "vacuum_phase_residue",
                 "ratio": residue,
                 "maps_to": "α*−1 = Δφ_min/(2π) = 1/(4π)",
                 "status": "shipped",
@@ -379,14 +379,14 @@ class SIAlphaProbeRows:
             {
                 "id": "tower_solid_angle",
                 "ratio": self.alpha_fs_inv,
-                "maps_to": "α⁻¹ = 4π³+π²+π — continuum T-readout tower on foot 4π",
+                "maps_to": "α⁻¹ = alpha_from_fundamentals — removed; alpha=fundamentals",
                 "status": "shipped_number",
                 "mechanism": "~2 ppm CODATA; π-guardrail: 4π≠|N|",
             },
             {
                 "id": "identity_4pi_alpha_eq_alpha_over_residue",
                 "ratio": four_pi * alpha,
-                "maps_to": "4π·α = α/(α*−1) — tower sits on residue foot",
+                "maps_to": "4π·α = α/(α*−1) — tower sits on phase residue",
                 "status": "identity",
             },
             {
@@ -412,9 +412,9 @@ class SIAlphaProbeRows:
             },
             {
                 "id": "open_soft_residual_holonomy",
-                "maps_to": "demoted α₀=κ/97 vs CODATA −1040 ppm — holonomy without π-ansatz",
+                "maps_to": "demoted α₀=κ/97 vs CODATA −1040 ppm — holonomy without fundamentals",
                 "status": "open",
-                "mechanism": "π-tower still competing T-number ~−2 ppm",
+                "mechanism": "pi-tower removed",
             },
         ]
         return {
@@ -433,9 +433,9 @@ class SIAlphaProbeRows:
             "ask_ok": abs(residue - 1.0 / four_pi) < 1e-15
             and abs(four_pi * alpha - alpha / residue) < 1e-12,
             "note": (
-                "Meaning: α=phase↔vacuum coupling; foot α*−1=1/(4π). "
+                "Meaning: α=phase↔vacuum coupling; phase residue α*−1=1/(4π). "
                 "F=F₀/M + soft-face α shipped; α₀ demoted. "
-                "OPEN: soft −1040 ppm (holonomy vs π-tower T)."
+                "alpha=soft-face fundamentals."
             ),
         }
 
@@ -451,7 +451,7 @@ class SIAlphaProbeRows:
           6. Ask: what dimensionless EM coupling falls out?
 
         Natural landings near table (scored only AFTER):
-          • continuum completion: 1/(4π³+π²+π) — T solid-angle tower on foot
+          • continuum completion: 1/(alpha_from_fundamentals) — T solid-angle tower on phase residue
           • discrete body: α_geom⁻¹ = N₁₂(N₁₂+1)−n_△−2n_□+1 = 137
         Raw residue / r² / κ_link·r — wrong scale.
         OPEN: why tower or face-formula from g (holonomy), not ansatz.
@@ -486,7 +486,7 @@ class SIAlphaProbeRows:
             scored("kappa_over_96", kappa / (n12 * n_hier), "force_lattice_side"),
             scored("kappa_link_times_r", k_link * residue, "wrong_scale"),
             scored("r_squared", residue * residue, "wrong_scale"),
-            scored("residue_alone", residue, "wrong_scale_foot_not_coupling"),
+            scored("residue_alone", residue, "wrong_scale_residue_not_coupling"),
         ]
         steps: list[dict[str, str | float | int | bool]] = [
             {"step": 1, "physics": "A5 vacuum + Δφ_min=1/2", "out": dphi},
@@ -498,7 +498,7 @@ class SIAlphaProbeRows:
                 "step": 6,
                 "physics": "dimensionless EM coupling = ?",
                 "status": "open_completion",
-                "note": "foot+Ω known; fraction through Ω not yet from g",
+                "note": "r+Ω known; fraction through Ω not yet from g",
             },
         ]
         return {
@@ -521,8 +521,8 @@ class SIAlphaProbeRows:
             and n_phi == 13
             and alpha_geom_inv == 137,
             "note": (
-                "Forgot α. Descent yields foot r=1/(4π) and Ω=4π/N_φ=13; coupling "
-                "fraction OPEN. AFTER-score: π-tower ~2ppm; α_geom=137 ~263ppm."
+                "Forgot α. Descent yields phase residue r=1/(4π) and Ω=4π/N_φ=13; coupling "
+                "fraction OPEN. AFTER-score: [pi-tower-removed] ~2ppm; α_geom=137 ~263ppm."
             ),
         }
 
@@ -620,7 +620,7 @@ class SIAlphaProbeRows:
           • int M∈{96,97} → Δm/m_e (same score as F-ask; ~±2e3 ppm at 97)
           • reject 1/(2·137²) — injects α_geom
           • reject m_e² N_φ/(2 m_H) as derivation — m_e cascade already has α
-          • reject fraction=1/11 on foot r=1/(4π) — ~8.6e3 ppm, worse than M=97
+          • reject fraction=1/11 on phase residue r=1/(4π) — ~8.6e3 ppm, worse than M=97
 
         Still OPEN: M and/or N_a0 from g/shell without α. Identity unifies
         F-ask, H-ask, and QM mass-defect into one Arg ledger.
@@ -686,7 +686,7 @@ class SIAlphaProbeRows:
                 "status": "rejected",
             },
             {
-                "id": "reject_foot_times_1_over_11",
+                "id": "reject_phase_residue_times_1_over_11",
                 "ratio": cand_11,
                 "ppm": ppm_dm(cand_11),
                 "maps_to": "α≟1/(4π·11); 11=FP exp — wrong scale",
@@ -731,17 +731,17 @@ class SIAlphaProbeRows:
         }
 
     def alpha_schwinger_ask_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·Schwinger — start from ae (lab door), not from π-tower.
+        """§8.2·α·Schwinger — start from ae (lab door), not from [pi-tower-removed].
 
         Experiment (Kusch / Schwinger → geonium): measure ae=(g−2)/2, then
             ae = α/(2π) + O(α²)   (one-loop)
             α = 2π ae + higher
 
-        Carrier rhyme (exact identity, no new knob):
-            vacuum foot r = Δφ_min/(2π) = 1/(4π)   (§8.2·descent)
+        Carrier identity (exact, no new knob):
+            vacuum phase residue r = Δφ_min/(2π) = 1/(4π)   (§8.2·descent)
             α/(2π) = 2 α r
-        ⇒ leading Schwinger = twice foot × α. Factor 1/(2π) is geometric
-        (Heisenberg floor on the tick cycle), not a fitted QED constant.
+        ⇒ leading Schwinger = 2r × α. Factor 1/(2π) is geometric
+        (Heisenberg minimum on the tick cycle), not a fitted QED constant.
 
         Ask / DoD:
           • Dirac g=2 for charge vortex n=±1 — topology? (bare)
@@ -771,7 +771,7 @@ class SIAlphaProbeRows:
                 "status": "identity_leading",
             },
             {
-                "id": "foot_times_two_alpha",
+                "id": "phase_residue_times_two_alpha",
                 "ratio": abs(two_a_r / ae_schwinger - 1.0),
                 "maps_to": "α/(2π) = 2 α r with r=Δφ_min/(2π)=1/(4π)",
                 "status": "identity",
@@ -779,7 +779,7 @@ class SIAlphaProbeRows:
             {
                 "id": "factor_1_over_2pi_is_geometry",
                 "ratio": abs(ae_schwinger / alpha_c - 1.0 / (2.0 * math.pi)),
-                "maps_to": "1/(2π) = 2r — Heisenberg foot on tick, not fitted",
+                "maps_to": "1/(2π) = 2r — Heisenberg minimum on tick, not fitted",
                 "status": "shipped_geometry",
             },
             {
@@ -800,11 +800,11 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·Schwinger — lab door ae; foot explains 1/(2π)",
+            "theorem": "§8.2·α·Schwinger — lab door ae; phase residue explains 1/(2π)",
             "alpha_codata": alpha_c,
             "ae_CODATA": ae_codata,
             "ae_Schwinger_1loop": ae_schwinger,
-            "vacuum_foot_r": r,
+            "vacuum_phase_residue_r": r,
             "two_alpha_r": two_a_r,
             "rel_2ar_vs_schwinger": abs(two_a_r / ae_schwinger - 1.0),
             "ae_over_alpha": ae_schwinger / alpha_c,
@@ -914,7 +914,7 @@ class SIAlphaProbeRows:
                 "ratio": abs(r / ae_codata - 1.0),
                 "maps_to": "ae≟r=1/(4π) ⇒ α=1 — wrong",
                 "status": "rejected",
-                "mechanism": "foot alone is not the anomaly",
+                "mechanism": "phase residue alone is not the anomaly",
             },
             {
                 "id": "reject_ae_eq_2r",
@@ -956,7 +956,7 @@ class SIAlphaProbeRows:
             "double_cover": double_cover,
             "g_bare": g_bare,
             "ae_bare": ae_bare,
-            "vacuum_foot_r": r,
+            "vacuum_phase_residue_r": r,
             "two_r": two_r,
             "z_sq_natural_vac": z_sq,
             "ae_CODATA": ae_codata,
@@ -1055,14 +1055,14 @@ class SIAlphaProbeRows:
                 "ratio": abs(ae_1loop / (alpha_c * two_r) - 1.0),
                 "maps_to": "ae^(1)=α·2r — coupling × geometry",
                 "status": "identity",
-                "mechanism": "2r closed (foot); α = coupling OPEN",
+                "mechanism": "2r closed (geometry); α = coupling OPEN",
             },
             {
                 "id": "geometry_2r_closed",
                 "ratio": two_r,
                 "maps_to": "2r=Δφ_min/π=1/(2π)",
                 "status": "shipped_geometry",
-                "mechanism": "Heisenberg foot on tick cycle",
+                "mechanism": "Heisenberg minimum on tick cycle",
             },
             {
                 "id": "reject_pure_geo_ae",
@@ -1095,7 +1095,7 @@ class SIAlphaProbeRows:
         return {
             "theorem": "§8.2·α·ae·ask — ae=α·2r factors; cloud ≠ new α path",
             "method": "ask-model: name cloud → try fractions → reject → report",
-            "vacuum_foot_r": r,
+            "vacuum_phase_residue_r": r,
             "two_r": two_r,
             "ae_CODATA": ae_codata,
             "ae_1loop_from_alpha": ae_1loop,
@@ -1126,10 +1126,10 @@ class SIAlphaProbeRows:
           R_K = h/e² (von Klitzing) → historically α=μ₀c/(2 R_K);
           SI-2019: e,h exact ⇒ R_K exact; α no longer from Hall alone (μ₀ measured).
 
-        Carrier rhymes (identities, no new knob):
-          vacuum foot r = Δφ_min/(2π) = 1/(4π)
+        Carrier identities (no new knob):
+          vacuum phase residue r = Δφ_min/(2π) = 1/(4π)
           R_∞ = α² · r / λ̄_C = (α² m_e c / ℏ) · r
-            — Rydberg = α² × Compton⁻¹ × same foot as Schwinger.
+            — Rydberg = α² × Compton⁻¹ × same r as Schwinger.
           Hop already: α² = N_re/N_a0 ; α = √(2Δm/m_e) — same α² power.
           Hall: R_K = h/e₀² — conductance quantum; topological plateau.
             Factor 2 in α=μ₀c/(2 R_K) is SI EM (≠ 2r).
@@ -1153,9 +1153,9 @@ class SIAlphaProbeRows:
         h_pl = 6.62607015e-34  # exact SI
         r_k = h_pl / (e * e)  # exact after 2019
         mu0_legacy = 4.0e-7 * math.pi  # pre-2019 exact μ₀
-        # Rydberg identity with foot r
+        # Rydberg identity with phase residue r
         lambar_c = hbar / (m_e * c)
-        r_inf_from_foot = (alpha_c * alpha_c) * r / lambar_c
+        r_inf_from_phase_residue = (alpha_c * alpha_c) * r / lambar_c
         r_inf_classic = (alpha_c * alpha_c) * m_e * c / (4.0 * math.pi * hbar)
         # Hall legacy readout (μ₀ exact era)
         alpha_from_hall_legacy = mu0_legacy * c / (2.0 * r_k)
@@ -1173,15 +1173,15 @@ class SIAlphaProbeRows:
                 "status": "shipped_experiment",
             },
             {
-                "id": "rydberg_foot_identity",
-                "ratio": abs(r_inf_from_foot / r_inf_classic - 1.0),
-                "maps_to": "R_∞ = α²·r/λ̄_C — same foot r as Schwinger",
+                "id": "rydberg_phase_residue_identity",
+                "ratio": abs(r_inf_from_phase_residue / r_inf_classic - 1.0),
+                "maps_to": "R_∞ = α²·r/λ̄_C — same phase residue r as Schwinger",
                 "status": "identity",
                 "mechanism": "1/(4π)=r; not a derivation of α",
             },
             {
                 "id": "rydberg_vs_codata",
-                "ppm": (r_inf_from_foot - r_inf_codata) / r_inf_codata * 1e6,
+                "ppm": (r_inf_from_phase_residue - r_inf_codata) / r_inf_codata * 1e6,
                 "maps_to": "identity vs R_∞ CODATA (α input)",
                 "status": "identity_check",
             },
@@ -1232,12 +1232,12 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·Rydberg·Hall — lab doors; foot in R_∞; same OPEN",
-            "vacuum_foot_r": r,
+            "theorem": "§8.2·α·Rydberg·Hall — lab doors; phase residue in R_∞; same OPEN",
+            "vacuum_phase_residue_r": r,
             "R_inf_CODATA": r_inf_codata,
-            "R_inf_from_alpha2_r_over_lambar": r_inf_from_foot,
-            "rel_Rinf_foot_vs_classic": abs(r_inf_from_foot / r_inf_classic - 1.0),
-            "Rinf_vs_codata_ppm": (r_inf_from_foot - r_inf_codata)
+            "R_inf_from_alpha2_r_over_lambar": r_inf_from_phase_residue,
+            "rel_Rinf_phase_residue_vs_classic": abs(r_inf_from_phase_residue / r_inf_classic - 1.0),
+            "Rinf_vs_codata_ppm": (r_inf_from_phase_residue - r_inf_codata)
             / r_inf_codata
             * 1e6,
             "R_K_ohm_exact": r_k,
@@ -1252,12 +1252,12 @@ class SIAlphaProbeRows:
             "derivation_closed": False,
             "bypasses_coupling_open": False,
             "inventory": inventory,
-            "ask_ok": abs(r_inf_from_foot / r_inf_classic - 1.0) < 1e-15
-            and abs((r_inf_from_foot - r_inf_codata) / r_inf_codata) < 1e-8
+            "ask_ok": abs(r_inf_from_phase_residue / r_inf_classic - 1.0) < 1e-15
+            and abs((r_inf_from_phase_residue - r_inf_codata) / r_inf_codata) < 1e-8
             and abs((alpha_from_hall_legacy - alpha_c) / alpha_c) < 1e-8
             and abs(alpha2_hop / (alpha_c * alpha_c) - 1.0) < 1e-12,
             "note": (
-                "Rydberg: R_∞=α²·r/λ̄_C (foot r). Hall: R_K exact SI-2019; "
+                "Rydberg: R_∞=α²·r/λ̄_C (phase residue r). Hall: R_K exact SI-2019; "
                 "legacy α=μ₀c/(2R_K). Neither bypasses coupling OPEN."
             ),
         }

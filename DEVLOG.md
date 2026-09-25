@@ -376,13 +376,13 @@ z' = z · exp(iφ)
 | 2026-09-24 | §8.2·α·√2·descent | lemma: α=κ/M ⇒ α∉ℚ; reject exact p/q under force dual; fraction=κ/M not ℚ · Alpha_sqrt2_descent_ask PASS |
 | 2026-09-24 | §8.2·α·dual | method α=m/n two paths; alive: κ/M (M open), ae/(2r); reject M/512 single-path · Alpha_dual_fraction_ask PASS |
 | 2026-09-24 | §8.2·α·EM·faces | w_□/w_△/dihedral/V/S body ok but ≠α (wrong scale); α_geom=counts≠areas; OPEN Φ_□ · Alpha_em_face_weight_ask PASS |
-| 2026-09-24 | §8.2·α·Rydberg·Hall | R_∞=α²·r/λ̄_C (same foot); R_K exact SI-2019 ≠ α source; same coupling OPEN · Alpha_rydberg_hall_ask PASS |
+| 2026-09-24 | §8.2·α·Rydberg·Hall | R_∞=α²·r/λ̄_C (same phase residue r); R_K exact SI-2019 ≠ α source; same coupling OPEN · Alpha_rydberg_hall_ask PASS |
 | 2026-09-24 | §8.2·α·ae·ask | ae=α·2r factors (2r closed, α open); pure-geo ae reject; door ≠ bypass coupling OPEN · Alpha_ae_cloud_ask PASS |
 | 2026-09-24 | §8.2·α·g2·ask | bare g=2 from A16×g_orb; ae_bare=0; reject r/2r/z_vac/α-input; OPEN A5 holonomy→ae · Alpha_dirac_g2_ask PASS |
 | 2026-09-23 | §8.2·α·Schwinger | lab door ae; identity ae^(1)=2αr with r=1/(4π); 1/(2π)=2r geometry; open Dirac g=2 + A5→ae · Alpha_schwinger_ask PASS |
 | 2026-09-23 | §8.2·α·Arg-try | Arg identity Δm=m_arg/(2MN_a0) closed; best int M=97 ~−2080ppm; reject 137² / 1/(4π·11) / mass-cascade; derivation OPEN · Alpha_arg_binding_try PASS |
 | 2026-09-23 | §8.2·α·mass-defect | QM floor: α=√(2Δm/m_e); U/BE=2; E_coul_NN/E₀=α/κ; BE/E₀~1.58e-27 soft Arg; DoD Arg→Δm OPEN · Alpha_mass_defect_optics PASS |
-| 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; foot≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent_ask` PASS |
+| 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; phase residue≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent_ask` PASS |
 | 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток α*−1=1/(4π); число=π-tower; F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning_ask` PASS |
 | 2026-09-23 | §8.2·F·ask | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice_ask` PASS |
 | 2026-09-23 | §8.2·H·ask | **спросили носитель** `N_a0`: Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); **reject** `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier_ask` PASS |
