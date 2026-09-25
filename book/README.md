@@ -41,8 +41,13 @@ book/
 | 6 | `chapters/03-evolution.tex` | Закон $g$ |
 | 7 | `chapters/04-macro.tex` | Переход $M\to T$, теорема T-CR |
 | 8 | `chapters/05-matter.tex` | Механика ячейки, материя |
-| **9** | **`chapters/07-alpha.tex`** | **Постоянная тонкой структуры** (журнал поиска $\alpha$) |
-| 10 | `chapters/06-si-sm.tex` | Лестница $M\to T$, SI, массы, SM |
+| — | **часть «Этажи вверх»** | |
+| 9 | `chapters/09-floors-preface.tex` | От пола к трём этажам |
+| 10 | `chapters/10-floor0.tex` | Этаж 0: планковский пол |
+| 11 | `chapters/11-floor1.tex` | Этаж 1: облако $\rho_\Theta$, $\varepsilon$-оболочки |
+| 12 | `chapters/12-floor2.tex` | Этаж 2: составной узел, кварки (схема) |
+| **13** | **`chapters/07-alpha.tex`** | **Постоянная тонкой структуры** |
+| 14 | `chapters/06-si-sm.tex` | Лестница $M\to T$, SI, массы, SM |
 | A | `appendix/00-background.tex` | CA, Тоффоли/Фредкин, Маделунг |
 
 Текст — связная русская проза; `model/` остаётся SSOT для кода и verify.
