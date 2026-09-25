@@ -100,9 +100,20 @@ def fig_axiom_locality() -> None:
     _save(fig, "axiom-locality.pdf")
 
 
+def _draw_phasor(ax, cx: float, cy: float, phi: float, length: float, color: str, label: str, *, ls: str = "-", lw: float = 2.0) -> None:
+    x, y = cx + length * np.cos(phi), cy + length * np.sin(phi)
+    ax.annotate(
+        "",
+        xy=(x, y),
+        xytext=(cx, cy),
+        arrowprops=dict(arrowstyle="-|>", color=color, lw=lw, linestyle=ls),
+    )
+    ax.text(1.1 * (x - cx) + cx, 1.1 * (y - cy) + cy, label, color=color, fontsize=10)
+
+
 def fig_axiom_unitarity() -> None:
-    """A3–A4: norm preservation and spinor on C^2."""
-    fig, axes = plt.subplots(1, 2, figsize=(9.0, 4.0))
+    """A3–A4: norm preservation and spinor on C^2, with explicit before→after."""
+    fig, axes = plt.subplots(1, 2, figsize=(9.4, 4.1))
 
     ax = axes[0]
     ax.set_aspect("equal")
@@ -110,35 +121,48 @@ def fig_axiom_unitarity() -> None:
     r = 1.0
     ax.add_patch(Circle((0, 0), r, fill=False, ec=COL["gray"], lw=1.0, ls="--"))
     phi0, phi1 = np.deg2rad(35), np.deg2rad(95)
-    for phi, col, lab in ((phi0, COL["blue"], r"$z$"), (phi1, COL["green"], r"$z\,e^{i\Phi}$")):
-        ax.annotate("", xy=(r * np.cos(phi), r * np.sin(phi)), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=2.0))
-        ax.text(1.15 * r * np.cos(phi), 1.15 * r * np.sin(phi), lab, color=col, fontsize=11)
-    ax.text(0, -1.45, r"$A_3$: $|z|$ не меняется, только фаза", ha="center", fontsize=10)
+    _draw_phasor(ax, 0, 0, phi0, r, COL["blue"], r"$z$")
+    _draw_phasor(ax, 0, 0, phi1, r, COL["green"], r"$z\,e^{i\Phi}$", ls="--", lw=1.6)
+    ax.annotate(
+        "",
+        xy=(r * np.cos(phi1) * 0.78, r * np.sin(phi1) * 0.78),
+        xytext=(r * np.cos(phi0) * 0.78, r * np.sin(phi0) * 0.78),
+        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.5, connectionstyle="arc3,rad=0.35"),
+    )
+    ax.text(0.05, 0.95, r"$e^{i\Phi}$", color=COL["red"], fontsize=10)
+    ax.text(0, -1.45, r"$A_3$: $|z|\mapsto|z|$, меняется фаза", ha="center", fontsize=10)
     ax.set_xlim(-1.55, 1.55)
     ax.set_ylim(-1.65, 1.55)
 
     ax = axes[1]
     ax.set_aspect("equal")
     ax.axis("off")
-    r = 1.0
-    ax.add_patch(Circle((0, 0), r, fill=False, ec=COL["gray"], lw=1.0, ls="--"))
-    phi1, phi2 = np.deg2rad(28), np.deg2rad(108)
-    lens = (0.92, 0.72)
-    for phi, ln, col, lab in ((phi1, lens[0], COL["blue"], r"$z_1$"), (phi2, lens[1], COL["green"], r"$z_2$")):
-        x, y = ln * np.cos(phi), ln * np.sin(phi)
-        ax.annotate("", xy=(x, y), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=2.0))
-        ax.text(1.12 * x, 1.12 * y, lab, color=col, fontsize=11)
+    cx_before, cx_after = -1.15, 1.15
+    rad = 0.5
+    phi1, phi2 = np.deg2rad(30), np.deg2rad(112)
+    dphi = np.deg2rad(24)
+    ln1, ln2 = 0.42, 0.33
+
+    for cx in (cx_before, cx_after):
+        ax.add_patch(Circle((cx, 0), rad, fill=False, ec=COL["gray"], lw=0.9, ls="--"))
+
+    _draw_phasor(ax, cx_before, 0, phi1, ln1, COL["blue"], r"$z_1$")
+    _draw_phasor(ax, cx_before, 0, phi2, ln2, COL["green"], r"$z_2$")
+    _draw_phasor(ax, cx_after, 0, phi1 + dphi, ln1, COL["blue"], r"$z'_1$", ls="--", lw=1.6)
+    _draw_phasor(ax, cx_after, 0, phi2 + dphi, ln2, COL["green"], r"$z'_2$", ls="--", lw=1.6)
+
     ax.annotate(
         "",
-        xy=(0.42, 0.34),
-        xytext=(0.42, -0.34),
-        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.6, connectionstyle="arc3,rad=0.55"),
+        xy=(cx_after - rad - 0.05, 0),
+        xytext=(cx_before + rad + 0.05, 0),
+        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=2.0),
     )
-    ax.text(0.72, 0.02, r"$R(\Phi)$", color=COL["red"], fontsize=10)
-    ax.text(0, 1.18, r"$SU(2)$ на $\mathbb{C}^2$", ha="center", color=COL["red"], fontsize=10)
-    ax.text(0, -1.45, r"$A_4$: $z=(z_1,z_2)^\top$, не скаляр", ha="center", fontsize=10)
-    ax.set_xlim(-1.55, 1.55)
-    ax.set_ylim(-1.65, 1.35)
+    ax.text(0, 0.28, r"$R(\Phi)$", ha="center", color=COL["red"], fontsize=11)
+    ax.text(cx_before, -0.95, r"$z=(z_1,z_2)^\top$", ha="center", fontsize=10)
+    ax.text(cx_after, -0.95, r"$R(\Phi)z$", ha="center", fontsize=10)
+    ax.text(0, -1.42, r"$A_4$: $SU(2)$ на $\mathbb{C}^2$, не скаляр", ha="center", fontsize=10)
+    ax.set_xlim(-2.05, 2.05)
+    ax.set_ylim(-1.65, 1.25)
 
     fig.suptitle("Унитарность и спинор", fontsize=11, y=1.02)
     _save(fig, "axiom-unitarity.pdf")
