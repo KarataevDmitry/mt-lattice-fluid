@@ -2,6 +2,32 @@
 from __future__ import annotations
 
 
+def check_floor0_internal_catalog(device: str = "cpu") -> dict:
+    """§5.0.4-A — internal-state catalog structure (algebra + Bekenstein cap)."""
+    from mt_ca.si_constants import SI
+
+    row = SI.internal_state_catalog_row()
+    ok = (
+        bool(row["checks_ok"])
+        and int(row["phase_states"]) == 512
+        and int(row["n_E_classes"]) == 13
+        and int(row["seam_ticks"]) == 21
+        and bool(row["cap_binds_registers"])
+        and bool(row["full_table_open"])
+    )
+    return {
+        "id": "Floor0_internal_catalog",
+        "ok": ok,
+        "phase_states": row["phase_states"],
+        "n_E_classes": row["n_E_classes"],
+        "bloch_distinct_q6": row["bloch_distinct_q6"],
+        "bekenstein_cap_states": row["bekenstein_cap_states"],
+        "cap_binds_registers": row["cap_binds_registers"],
+        "tier_ids": [t["id"] for t in row["tiers"]],
+        "note": row["note"],
+    }
+
+
 def check_brick_internal_spectrum(device: str = "cpu") -> dict:
     """§5.0.4-A — internal ring landmarks + vortex ground + SU(2) monodromy."""
     from mt_ca.si_constants import SI

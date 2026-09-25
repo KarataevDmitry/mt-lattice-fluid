@@ -6,8 +6,107 @@ import math
 import torch
 
 
+# Q(frac_bits=6) grid: distinct Bloch directions after decode_spinor (probe 2026-09).
+_BLOCH_DISTINCT_Q6 = 2_967_474
+
+
 class SIFloor0Rows:
     """Ask/row probes for floor-0 planckon internal spectrum."""
+
+    def internal_state_catalog_row(self) -> dict[str, float | int | str | bool | list]:
+        """§5.0.4-A — structure of the finite internal-state catalog (one hV).
+
+        Algebra tier (closed): phase ring Z_512, (k_phi, phi_f) bijection, n_E ladder.
+        Amplitude tier: mu in Z_{2^frac_bits}; spinor orientation = Bloch on S^2.
+        Bekenstein cap 2^B_hV binds total distinguishable cell states — registers are
+        not independent (naive product >> cap).
+        """
+        from mt_ca.si_constants import (
+            elementary_quanta_row,
+            hv_bit_budget,
+            internal_phase_coords_row,
+        )
+
+        bb = hv_bit_budget()
+        ipc = internal_phase_coords_row()
+        eq = elementary_quanta_row()
+        ticks = int(eq["energy_ticks_per_E0"])
+        n_e_max = int(bb.N_ring) // ticks
+        n_e_classes = n_e_max + 1
+        amp_levels = 1 << int(bb.frac_bits)
+        q_configs = amp_levels**4 - 1
+        phase_states = int(bb.N_ring)
+        cap = int(round(bb.n_states))
+        bloch = _BLOCH_DISTINCT_Q6
+        naive_phase_n_e = phase_states * n_e_classes
+        naive_phase_bloch = phase_states * bloch
+        tiers: list[dict[str, str | int]] = [
+            {
+                "id": "landmarks",
+                "status": "closed",
+                "count": 4,
+                "note": "E0_1, E0_2, pauli_pi, ring_2pi on Z_512",
+            },
+            {
+                "id": "phase_ring",
+                "status": "closed",
+                "count": phase_states,
+                "note": "phi_disc bijection (k_phi, phi_f); seam=21 ticks",
+            },
+            {
+                "id": "n_E_ladder",
+                "status": "closed_algebra",
+                "count": n_e_classes,
+                "note": f"n_E=0..{n_e_max} from floor(|Phi|/{ticks})",
+            },
+            {
+                "id": "amplitude_mu",
+                "status": "closed_width",
+                "count": amp_levels,
+                "note": "Q(2^-frac_bits) per spinor lane",
+            },
+            {
+                "id": "bloch_orientation",
+                "status": "partial",
+                "count": bloch,
+                "note": "distinct Bloch directions on Q6 grid (not full orbit catalog)",
+            },
+            {
+                "id": "bekenstein_cap",
+                "status": "closed_bound",
+                "count": cap,
+                "note": "2^B_hV upper bound on distinguishable hV states",
+            },
+        ]
+        cap_binds = cap < bloch and cap < naive_phase_n_e
+        return {
+            "phase_states": phase_states,
+            "k_phi_sectors": int(ipc["N_phi"]),
+            "phi_f_steps": int(ipc["delta_phi_disc"]),
+            "seam_ticks": int(ipc["seam_ticks"]),
+            "n_E_max": n_e_max,
+            "n_E_classes": n_e_classes,
+            "amplitude_levels": amp_levels,
+            "q_grid_spinor_configs": q_configs,
+            "bloch_distinct_q6": bloch,
+            "bekenstein_cap_states": cap,
+            "naive_phase_times_n_E": naive_phase_n_e,
+            "naive_phase_times_bloch": naive_phase_bloch,
+            "cap_binds_registers": cap_binds,
+            "tiers": tiers,
+            "full_table_open": True,
+            "checks_ok": (
+                phase_states == 512
+                and n_e_classes == 13
+                and int(ipc["seam_ticks"]) == 21
+                and ipc["canonical_bijection_ok"]
+                and cap_binds
+            ),
+            "note": (
+                "§5.0.4-A catalog probe: algebra closed; Bloch count on Q6 pinned; "
+                "full state list + g-orbits still open."
+            ),
+        }
 
     def brick_internal_spectrum_row(
         self,
