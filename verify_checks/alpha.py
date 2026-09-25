@@ -16,8 +16,8 @@ from mt_ca.linear import linear_step, linear_step_local_ca
 from mt_ca.reversible import evolve_canonical
 from mt_ca.spinor import (
     arg_phase_defect,
-    apply_gate_collision,
-    gate_phase,
+    apply_saturating_phase_collision,
+    saturating_phase,
     holonomy_zeta,
     spinor_neighbor_sum,
     su2_apply,
@@ -134,7 +134,7 @@ def check_alpha_meaning(device: str = "cpu") -> dict:
     )
     return {
         "id": "Alpha_meaning",
-        "vacuum_residue": row["vacuum_residue"],
+        "planck_hole_phase_residue": row["planck_hole_phase_residue"],
         "four_pi_times_alpha": row["four_pi_times_alpha"],
         "alpha_fs_inv": row["alpha_fs_inv"],
         "discrete_coupling_open": row["discrete_coupling_open"],
@@ -159,7 +159,7 @@ def check_alpha_descent(device: str = "cpu") -> dict:
     )
     return {
         "id": "Alpha_descent",
-        "vacuum_residue": row["vacuum_residue"],
+        "planck_hole_phase_residue": row["planck_hole_phase_residue"],
         "N_phi": row["N_phi"],
         "alpha_geom_inv": row["alpha_geom_inv"],
         "vs_codata_ppm_pi_AFTER": row["vs_codata_ppm_pi_AFTER"],
@@ -618,8 +618,8 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
     pi = math.pi
     a = SI.alpha_preferred
     a_struct = a
-    a_star = SI.alpha_star
-    residue = a_star - 1.0
+    phase_sat = SI.phase_saturation
+    residue = SI.planck_hole_phase_residue
 
     higgs = SI.higgs_mass_row()
     runner = SI.alpha_runner_row()
@@ -670,7 +670,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         "id": "Alpha_bridges",
         "ok": ok,
         "gate_residue_ok": gate_residue_ok,
-        "delta_lambda_alpha_star_ok": delta_lambda_link_ok,
+        "delta_lambda_phase_residue_ok": delta_lambda_link_ok,
         "pi_tower_absent": pi_tower_absent,
         "alpha_MZ_runner_ok": alpha_mz_runner_ok,
         "alpha_MZ_inv_rel_err": runner["alpha_MZ_inv_rel_err"],

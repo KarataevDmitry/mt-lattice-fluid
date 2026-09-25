@@ -14,8 +14,8 @@ def macro_suppression(rho: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
 
 def vacuum_phase(rho: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """A5 + A7 vacuum gate; A8 via macro_suppression."""
-    phi_base = cfg.phase_scale * (cfg.alpha_factor / (rho + cfg.epsilon) - 1.0)
+    """A5 + A7 saturating phase response; A8 via macro_suppression."""
+    phi_base = cfg.phase_scale * (cfg.phase_saturation / (rho + cfg.epsilon) - 1.0)
     return phi_base * macro_suppression(rho, cfg)
 
 

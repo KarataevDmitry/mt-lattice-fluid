@@ -38,7 +38,7 @@ class SIFloor0Rows:
         from mt_ca.spinor import (
             arg_phase_defect,
             bloch_vector,
-            gate_phase,
+            saturating_phase,
             su2_apply,
         )
         from mt_ca.topology import matter_occupancy_b, winding_channels
@@ -94,7 +94,7 @@ class SIFloor0Rows:
 
         z = sim.z
         dphi = arg_phase_defect(z, cfg, apply_floor=False)
-        phi = gate_phase(z, cfg)
+        phi = saturating_phase(z, cfg)
         n_e = n_E_field(phi, cfg)
         ch = winding_channels(z, center=(cy, cx), radius=2)
         b = matter_occupancy_b(z)

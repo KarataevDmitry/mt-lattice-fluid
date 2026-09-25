@@ -76,18 +76,19 @@ def su2_apply(z: torch.Tensor, phi: torch.Tensor, axis: torch.Tensor) -> torch.T
     return torch.cat([out1, out2], dim=-1)
 
 
-def gate_phase(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+def saturating_phase(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """Local saturating-phase rotation angle φ(ρ) (§5.1.1 · §7.1)."""
     rho = spinor_density(z)
     phase_diff = arg_phase_defect(z, cfg, apply_floor=True)
-    phi_base = cfg.phase_scale * (cfg.alpha_factor / (rho + cfg.epsilon) * phase_diff - 1.0)
+    phi_base = cfg.phase_scale * (cfg.phase_saturation / (rho + cfg.epsilon) * phase_diff - 1.0)
     phi = phi_base * macro_suppression(rho, cfg)
     phi = phi + cr_phase_drive(z, cfg) + pauli_phi(z, cfg)
     return phi
 
 
-def apply_gate_collision(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """One collision map on ℂ² (gate formula probe — not a tick of g; §3.12.5 is Z_N[i])."""
-    phi = gate_phase(z, cfg)
+def apply_saturating_phase_collision(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """One collision map on ℂ² (saturating-phase probe — not a tick of g; §3.12.5 is Z_N[i])."""
+    phi = saturating_phase(z, cfg)
     sum_n = spinor_neighbor_sum(z, cfg)
     axis = defect_axis(z, sum_n)
     z = su2_apply(z, phi, axis)

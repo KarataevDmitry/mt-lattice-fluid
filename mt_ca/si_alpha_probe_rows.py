@@ -357,8 +357,8 @@ class SIAlphaProbeRows:
         Seats M=97 + soft face α derived (force law F₀/M); α₀ coarse.
         Soft OPEN: −1040 ppm vs CODATA; holonomy that closes soft without fundamentals.
         """
-        alpha_star = self.alpha_star
-        residue = alpha_star - 1.0
+        phase_sat = self.phase_saturation
+        residue = self.planck_hole_phase_residue
         alpha = self.alpha_fs
         alpha_c = 7.2973525693e-3
         four_pi = 4.0 * math.pi
@@ -372,9 +372,9 @@ class SIAlphaProbeRows:
             {
                 "id": "vacuum_phase_residue",
                 "ratio": residue,
-                "maps_to": "α*−1 = Δφ_min/(2π) = 1/(4π)",
+                "maps_to": "r = Δφ_min/(2π) = 1/(4π) planck-hole residue",
                 "status": "derived",
-                "mechanism": "empty cell gate §7.1; occupancy bit separate (§8.4.1)",
+                "mechanism": "saturating phase §7.1; occupancy bit separate (§8.4.1)",
             },
             {
                 "id": "tower_solid_angle",
@@ -419,8 +419,8 @@ class SIAlphaProbeRows:
         ]
         return {
             "theorem": "§8.2·α·meaning — α is phase↔vacuum coupling",
-            "alpha_star": alpha_star,
-            "vacuum_residue": residue,
+            "phase_saturation": phase_sat,
+            "planck_hole_phase_residue": residue,
             "residue_equals_1_over_4pi": abs(residue - 1.0 / four_pi) < 1e-15,
             "alpha_fs": alpha,
             "alpha_fs_inv": self.alpha_fs_inv,
@@ -504,7 +504,7 @@ class SIAlphaProbeRows:
         return {
             "theorem": "§8.2·α·descent — amnesia path vacuum→coupling",
             "delta_phi_min": dphi,
-            "vacuum_residue": residue,
+            "planck_hole_phase_residue": residue,
             "Omega": omega,
             "N_phi": n_phi,
             "alpha_geom_inv": alpha_geom_inv,

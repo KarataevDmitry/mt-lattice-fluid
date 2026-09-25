@@ -55,6 +55,10 @@ KAPPA = 1.0 / math.sqrt(2.0)
 
 DELTA_PHI_MIN = 0.5
 
+# Planck-hole phase residue r = Δφ_min/(2π) = 1/(4π); gate numerator 1+r (§7.1, not α_fs).
+PLANCK_HOLE_PHASE_RESIDUE = DELTA_PHI_MIN / (2.0 * math.pi)
+PHASE_SATURATION = 1.0 + PLANCK_HOLE_PHASE_RESIDUE
+
 
 
 # Elementary charge scale for eV reporting
@@ -259,7 +263,8 @@ def hex_bridge_row() -> dict[str, float]:
         "E0_over_E_P": e0 / e_P,
         "kappa_link": kappa_link(n_links=N6_CAUSAL_LINKS),
         "nu_CA_natural": kappa_link(n_links=N6_CAUSAL_LINKS),
-        "alpha_star": 1.0 + 1.0 / (4.0 * math.pi),
+        "phase_saturation": PHASE_SATURATION,
+        "planck_hole_phase_residue": PLANCK_HOLE_PHASE_RESIDUE,
         "alpha_fs_inv": 1.0 / alpha_from_fundamentals(),
         "cell_area_over_lP2": math.sqrt(3.0) / 2.0,
     }
@@ -284,7 +289,8 @@ def fcc_bridge_row() -> dict[str, float]:
         "kappa_link": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
         "nu_CA_natural": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
         "v_hV_over_lP3": 1.0 / math.sqrt(2.0),
-        "alpha_star": 1.0 + 1.0 / (4.0 * math.pi),
+        "phase_saturation": PHASE_SATURATION,
+        "planck_hole_phase_residue": PLANCK_HOLE_PHASE_RESIDUE,
         "alpha_fs_inv": 1.0 / alpha_from_fundamentals(),
         "note": "asymptotic FCC graph-ball κ — open leaf",
     }
@@ -516,7 +522,9 @@ def as_code_dict() -> dict[str, float]:
 
         "OMEGA_rad_s": SI.omega,
 
-        "ALPHA_STAR": SI.alpha_star,
+        "PHASE_SATURATION": SI.phase_saturation,
+        "PHASE_RESIDUE": SI.planck_hole_phase_residue,
+        "ALPHA_STAR": SI.phase_saturation,  # legacy paste key
 
         "ALPHA_SI_J_m3": SI.alpha_SI,
 
@@ -709,12 +717,19 @@ class SIConstants(SIAlphaRows, SIFloor0Rows, SIFloor1Rows, SIUnitsRows, SICarrie
 
 
     @property
+    def planck_hole_phase_residue(self) -> float:
+        """r = Δφ_min/(2π) — planck-hole phase residue per tick (§7.1)."""
+        return PLANCK_HOLE_PHASE_RESIDUE
 
+    @property
+    def phase_saturation(self) -> float:
+        """1+r — saturating-phase numerator after |z|² = ρ_E/u_P (§7.1)."""
+        return PHASE_SATURATION
+
+    @property
     def alpha_star(self) -> float:
-
-        """ALPHA* — dimensionless gate numerator after |z|² = ρ_E/u_P."""
-
-        return 1.0 + 1.0 / (4.0 * math.pi)
+        """Deprecated alias for phase_saturation (legacy misname)."""
+        return PHASE_SATURATION
 
 
 

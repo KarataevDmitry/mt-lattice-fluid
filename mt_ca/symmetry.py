@@ -8,7 +8,7 @@ from mt_ca.chiral import chirality_flip_boost, chirality_imbalance, project_left
 from mt_ca.config import MConfig
 from mt_ca.seeds import SeedClass, make_seed
 from mt_ca.reversible import evolve_canonical
-from mt_ca.spinor import arg_phase_defect, gate_phase, holonomy_zeta, spinor_neighbor_sum
+from mt_ca.spinor import arg_phase_defect, holonomy_zeta, saturating_phase, spinor_neighbor_sum
 from mt_ca.topology import winding_nearest_int, winding_robust
 
 
@@ -199,8 +199,8 @@ def u1_gate_invariants(z: torch.Tensor, cfg: MConfig, theta: float = 0.73) -> di
     zeta1 = holonomy_zeta(z_rot, sum1)
     dphi0 = arg_phase_defect(z, cfg, apply_floor=False)
     dphi1 = arg_phase_defect(z_rot, cfg, apply_floor=False)
-    phi0 = gate_phase(z, cfg)
-    phi1 = gate_phase(z_rot, cfg)
+    phi0 = saturating_phase(z, cfg)
+    phi1 = saturating_phase(z_rot, cfg)
     chi0 = chirality_imbalance(z)
     chi1 = chirality_imbalance(z_rot)
     return {

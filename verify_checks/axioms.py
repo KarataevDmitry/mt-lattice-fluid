@@ -16,8 +16,8 @@ from mt_ca.linear import linear_step, linear_step_local_ca
 from mt_ca.reversible import evolve_canonical
 from mt_ca.spinor import (
     arg_phase_defect,
-    apply_gate_collision,
-    gate_phase,
+    apply_saturating_phase_collision,
+    saturating_phase,
     holonomy_zeta,
     spinor_neighbor_sum,
     su2_apply,
@@ -100,7 +100,7 @@ def check_a4_phase_preserves_modulus(device: str = "cpu") -> dict:
 def check_impl_zero_frozen(size: int = 32, device: str = "cpu") -> dict:
     cfg = MConfig.for_stencil('hex')
     z = torch.zeros(size, size, 2, device=device, dtype=torch.complex64)
-    z1 = apply_gate_collision(z, cfg)
+    z1 = apply_saturating_phase_collision(z, cfg)
     frozen = float(field_amplitude(z1).max().item()) == 0.0
     return {
         "id": "I2_zero",
@@ -221,7 +221,7 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
         preserved = float((pd_floor[large] - pd[large]).abs().max().item()) < 1e-12
     else:
         preserved = True
-    phi_gate = gate_phase(z, cfg)
+    phi_gate = saturating_phase(z, cfg)
 
     f = canonical_fixed(z, cfg)
     fb = cfg.frac_bits
@@ -356,7 +356,7 @@ def check_arg_mass_carrier(size: int = 64, device: str = "cpu") -> dict:
     naive_scalar = (naive_scalar + torch.pi) % (2.0 * torch.pi) - torch.pi
     wrap_beats_naive = float((wrapped_scalar - naive_scalar).abs().item()) > 0.5
 
-    phi = gate_phase(z, MConfig.for_stencil('hex', heisenberg_floor=True))
+    phi = saturating_phase(z, MConfig.for_stencil('hex', heisenberg_floor=True))
     dphi = arg_phase_defect(z, cfg, apply_floor=False)
     active_mean = float(dphi.abs().mean().item())
     active_max = float(dphi.abs().max().item())

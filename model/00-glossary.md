@@ -51,3 +51,20 @@
 ## Вакуум
 
 Фон $z(x)$ на решётке: $\rho_{\mathrm{matter}}=0$ **в среднем** по macro-объёму, $\rho_{\mathrm{field}}>0$ (A5). Состоит из **планковских дырок** с кипящим $z$, плюс редкие планконы. Не путать с планконом и не с «пространством без сетки».
+
+---
+
+## Насыщающая фаза (saturating phase)
+
+**Насыщающая фаза** — локальная **фазовая нелинейность** в законе $g$: отклонение $|z|^2$ от фона → упругий фазовый доворот $z\mapsto z\,e^{i\varphi}$, без затухания модуля (A4). Роль модуля упругости $K_P$ на M (§5.1.1).
+
+| код | смысл |
+|-----|--------|
+| `planck_hole_phase_residue` / `PLANCK_HOLE_PHASE_RESIDUE` | $r=\Delta\varphi_{\min}/(2\pi)$ — остаток планковской дырки |
+| `phase_saturation` / `PHASE_SATURATION` | $1+r$ — числитель насыщающей фазы (§7.1) |
+| `saturating_phase()` | угол $\varphi(\rho)$ на ячейке |
+| `apply_saturating_phase_collision()` | один шаг collision-пробы (§3.12.5 — отдельно) |
+
+**Снято:** `gate`, `gate_phase`, `alpha_star`, `alpha_factor`, `ALPHA_STAR` (legacy paste в `as_code_dict`).
+
+**Не путать с α_fs** — EM-сопряжение (§8.2·U0).

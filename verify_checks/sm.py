@@ -16,8 +16,8 @@ from mt_ca.linear import linear_step, linear_step_local_ca
 from mt_ca.reversible import evolve_canonical
 from mt_ca.spinor import (
     arg_phase_defect,
-    apply_gate_collision,
-    gate_phase,
+    apply_saturating_phase_collision,
+    saturating_phase,
     holonomy_zeta,
     spinor_neighbor_sum,
     su2_apply,

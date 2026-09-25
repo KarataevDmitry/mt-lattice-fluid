@@ -7,6 +7,7 @@ from decimal import Decimal
 from mt_ca.si_constants import (
     DELTA_PHI_MIN,
     KAPPA,
+    PHASE_SATURATION,
     KAPPA_FCC_1TICK,
     KAPPA_HEX,
     LN2,
@@ -133,7 +134,7 @@ class SICarrierRows:
         """
         hv = hv_bit_budget()
         z_min = 2.0 ** (-hv.frac_bits)
-        alpha_star = 1.0 + 1.0 / (4.0 * math.pi)
+        phase_sat = PHASE_SATURATION
         code = as_code_dict()
         inventory: list[dict[str, str | float | bool]] = [
             {
@@ -155,7 +156,7 @@ class SICarrierRows:
             },
             {
                 "id": "closed_gpu_literals_are_SI_paste",
-                "maps_to": "DX=l_P DT=hT K_P α*=1+1/(4π) via as_code_dict",
+                "maps_to": "DX=l_P DT=hT K_P phase_saturation=1+r via as_code_dict",
                 "status": "closed",
             },
             {
@@ -192,8 +193,9 @@ class SICarrierRows:
             abs(float(code["DX"]) - float(self.l_P)) / float(self.l_P) < 1e-15
             and abs(float(code["DT"]) - float(self.hT)) / float(self.hT) < 1e-15
             and abs(float(code["K_P_J_m3"]) - float(self.K_P)) / float(self.K_P) < 1e-12
-            and abs(float(code["ALPHA_STAR"]) - alpha_star) < 1e-12
-            and abs(float(code["ALPHA_STAR"]) - float(self.alpha_star)) < 1e-12
+            and abs(float(code["PHASE_SATURATION"]) - phase_sat) < 1e-12
+            and abs(float(code["ALPHA_STAR"]) - phase_sat) < 1e-12
+            and abs(float(code["PHASE_SATURATION"]) - PHASE_SATURATION) < 1e-12
         )
         floor_ok = hv.frac_bits == 6 and abs(z_min - 1.0 / 64.0) < 1e-15
         ok = (
@@ -210,6 +212,7 @@ class SICarrierRows:
             "theorem": "§0.10 GPU eng-tail — floor/step/literals = MODEL readout",
             "z_min": z_min,
             "frac_bits": hv.frac_bits,
+            "PHASE_SATURATION": float(code["PHASE_SATURATION"]),
             "ALPHA_STAR": float(code["ALPHA_STAR"]),
             "DX": float(code["DX"]),
             "DT": float(code["DT"]),

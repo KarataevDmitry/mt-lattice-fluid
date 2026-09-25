@@ -33,11 +33,11 @@ class MConfig:
     # Kinetic coupling: γ = κ_link = 1/|N| (§5.2.2 · §1.6 canon |N|=12)
     gamma: float = kappa_link(n_links=N12_FCC_CAUSAL_LINKS)
 
-    # Vacuum gate (§7.1): ε=1 ↔ u_P; α*=1+1/(4π) from ω·hT=2π + zero-point ½ℏω
+    # Saturating phase (§7.1): ε=1 ↔ u_P; numerator 1+r from tick budget
     epsilon: float = SI.epsilon
-    alpha_factor: float = SI.alpha_star
+    phase_saturation: float = SI.phase_saturation
 
-    # A8: extra macro suppression w(ρ)=1/(1+ρ/ρ_macro); 0 = gate asymptotics only
+    # A8: extra macro suppression w(ρ)=1/(1+ρ/ρ_macro); 0 = saturating-phase asymptotics only
     macro_rho: float = 1.0
     macro_weight: bool = True
 
