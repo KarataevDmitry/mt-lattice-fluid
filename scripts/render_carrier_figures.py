@@ -15,7 +15,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 from scipy.spatial import ConvexHull, Voronoi
 
-from figure_draft import dim_axis_h, dim_axis_v, dim_linear, dim_radius, leader
+from figure_draft import LW_OBJECT, centerline, dim_axis_h, dim_axis_v, dim_linear, dim_radius, leader
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "book" / "sources" / "figures"
@@ -547,9 +547,9 @@ def fig_hex_radii() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
 
-    ax.add_patch(plt.Circle((0, 0), a, fill=False, ec=INK, lw=2.0, zorder=1))
-    ax.add_patch(plt.Circle((0, 0), r_in, fill=False, ec=MUTED, lw=2.0, ls="--", zorder=1))
-    ax.add_patch(Polygon(verts, closed=True, facecolor=FILL, edgecolor=INK, lw=2.0, zorder=2))
+    ax.add_patch(plt.Circle((0, 0), a, fill=False, ec=INK, lw=LW_OBJECT, zorder=1))
+    ax.add_patch(plt.Circle((0, 0), r_in, fill=False, ec=MUTED, lw=LW_OBJECT, ls="--", zorder=1))
+    ax.add_patch(Polygon(verts, closed=True, facecolor=FILL, edgecolor=INK, lw=LW_OBJECT, zorder=2))
 
     ax.plot(0, 0, "o", color=INK, ms=8, zorder=6)
 
@@ -609,8 +609,9 @@ def _draw_cubocta_section(ax, a: float) -> None:
     ax.set_aspect("equal")
     ax.axis("off")
 
+    centerline(ax, (-0.05, 0), (1.25, 0))
     ax.plot(0, 0, "o", color=INK, ms=6, zorder=6)
-    ax.plot([r_hull, r_hull], [-0.38, 0.38], color=INK, lw=2.0, zorder=2)
+    ax.plot([r_hull, r_hull], [-0.38, 0.38], color=INK, lw=LW_OBJECT, zorder=2)
 
     ang_v = math.radians(36)
     vx, vy = r_out * math.cos(ang_v), r_out * math.sin(ang_v)
@@ -667,7 +668,7 @@ def fig_hull_voronoi() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     for r, col, lw, ls in ((r_out, INK, 1.8, "-"), (r_hull, MUTED, 1.6, "-"), (r_vor, MUTED, 1.6, "--")):
-        ax.add_patch(plt.Circle((0, 0), r, fill=False, ec=col, lw=lw, ls=ls, zorder=1))
+        ax.add_patch(plt.Circle((0, 0), r, fill=False, ec=col, lw=LW_OBJECT if lw >= 1.5 else lw, ls=ls, zorder=1))
     ax.plot(0, 0, "o", color=INK, ms=6, zorder=6)
 
     dim_radius(ax, r_vor, 118, r"$R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2$", color=MUTED, ls="--")

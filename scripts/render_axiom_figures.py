@@ -14,7 +14,7 @@ from matplotlib.patches import Arc, Circle, Rectangle, Wedge
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from render_carrier_figures import _save
-from figure_draft import dim_linear, dim_radius, leader
+from figure_draft import LW_OBJECT, dim_linear, dim_radius, leader
 
 # Book palette: black/gray + line style, not rainbow.
 INK = "#222222"
