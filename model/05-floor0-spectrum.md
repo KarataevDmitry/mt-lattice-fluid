@@ -69,4 +69,6 @@ $$
 
 ---
 
+**Книга:** часть «Этажи вверх» — гл. этаж 0–2 (`book/sources/chapters/09-floors-preface.tex` … `12-floor2.tex`).
+
 **Сюда:** физика. Impl → [`DEVLOG.md`](../DEVLOG.md).
