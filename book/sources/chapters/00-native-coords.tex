@@ -8,6 +8,14 @@
 Это не новая решётка и не замена FCC --- только смена записи, как в аналитической механике
 при переходе от декартовых координат к обобщённым $(q,\dot q)$.
 
+\begin{remark}[Фаза: $\varphi$, $\omega$, $\Phi$]
+\label{rem:phi-omega-Phi}
+\textbf{$\varphi_{\mathrm{disc}}\in\mathbb{Z}_{N_{\mathrm{ring}}}$} --- дискретная фаза на кольце (аддитивный индекс $0,\ldots,N_{\mathrm{ring}}-1$).
+\textbf{$\omega=e^{i2\pi/N_{\mathrm{ring}}}$} --- генератор вращения (\cref{ch:evolution}); состояние на $S^1$ пишут \emph{мультипликативно} $\omega^{\varphi_{\mathrm{disc}}}$, но координата --- $\varphi_{\mathrm{disc}}$, не $\omega$.
+\textbf{$\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$} --- фазовый \emph{kick} за такт ($R(\Phi)=\omega^{\Phi}$), не путать с регистром $\varphi_{\mathrm{disc}}$.
+В мосте~$T$: $\varphi=\varphi_{\mathrm{disc}}\cdot(2\pi/N_{\mathrm{ring}})$ [рад]; частота $\omega_{\mathrm{SI}}=2\pi/\htick$ --- другое $\omega$.
+\end{remark}
+
 \section{Внешние координаты \texorpdfstring{$(dh,dt)$}{(dh,dt)}}
 \label{sec:coords-dh-dt}
 
@@ -59,8 +67,8 @@ $\nu_0$ & $1/dt$ & $1/\htick$ \\
   \qquad
   N_{\mathrm{ring}}=512.
 \]
-Один тик кольца --- приращение $\tau$ на единицу по модулю~$N_{\mathrm{ring}}$;
-Heisenberg-пол $\Delta\phi_{\mathrm{disc}}=41$ тиков соответствует
+Один шаг по кольцу --- $\varphi_{\mathrm{disc}}\mapsto\varphi_{\mathrm{disc}}+1\pmod{N_{\mathrm{ring}}}$;
+Heisenberg-пол $\Delta\phi_{\mathrm{disc}}=41$ шагов соответствует
 $\Delta\phi_{\min}=\tfrac12$ в мосте~$T$.
 
 \begin{remark}[Без $\pi$ в ядре]
@@ -69,7 +77,7 @@ $\Delta\phi_{\min}=\tfrac12$ в мосте~$T$.
   \alpha_*-1=\frac{\Delta\phi_{\mathrm{disc}}}{N_{\mathrm{ring}}}
   =\frac{41}{512};
 \]
-половина кольца (Паули) --- $N_{\mathrm{ring}}/2=256$ тиков.
+половина кольца (Паули) --- $N_{\mathrm{ring}}/2=256$ шагов $\varphi_{\mathrm{disc}}$.
 Величина $\alpha_*-1\approx 1/(4\pi)$ --- \emph{имя} в мосте~$T$, не определение на~$M$.
 \end{remark}
 
@@ -89,7 +97,7 @@ $\Delta\phi_{\min}=\tfrac12$ в мосте~$T$.
 \]
 где $\nu_{\mathrm{CA}}=\kappa_{\mathrm{link}}\,dh^2/dt$.
 
-\section{Внутренние координаты ячейки \texorpdfstring{$(k_\phi,\rho_{\mathrm{f}},\mu)$}{(kphi,rhof,mu)}}
+\section{Внутренние координаты ячейки \texorpdfstring{$(k_\phi,\varphi_{\mathrm{f}},\mu)$}{(kphi,phif,mu)}}
 \label{sec:coords-internal}
 
 Регистр $Z=U+iV\in\mathbb{Z}_{N_{\mathrm{ring}}}[i]$ несёт фазу и амплитуду спинора~$\mathbb{C}^2$.
@@ -99,22 +107,23 @@ $\Delta\phi_{\min}=\tfrac12$ в мосте~$T$.
 
 \begin{definition}[Аддитивные внутренние координаты]
 \label{def:internal-coords}
-Фазовый тик $\tau\in\mathbb{Z}_{N_{\mathrm{ring}}}$ раскладывается по Heisenberg-кванту
+Дискретная фаза $\varphi_{\mathrm{disc}}\in\mathbb{Z}_{N_{\mathrm{ring}}}$ раскладывается по Heisenberg-кванту
 $\Delta\phi_{\mathrm{disc}}=41$:
 \[
-  \tau \equiv k_\phi\cdot\Delta\phi_{\mathrm{disc}}+\rho_{\mathrm{f}}
+  \varphi_{\mathrm{disc}} \equiv k_\phi\cdot\Delta\phi_{\mathrm{disc}}+\varphi_{\mathrm{f}}
   \pmod{N_{\mathrm{ring}}},
 \]
 где $k_\phi\in\mathbb{Z}_{N_\phi}$ --- сектор ($0,\ldots,12$),
-$\rho_{\mathrm{f}}\in\mathbb{Z}_{\Delta\phi_{\mathrm{disc}}}$ --- тонкая фаза ($0,\ldots,40$).
+$\varphi_{\mathrm{f}}\in\mathbb{Z}_{\Delta\phi_{\mathrm{disc}}}$ --- тонкая фаза ($0,\ldots,40$).
+Эквивалентно на $S^1$: $\omega^{\varphi_{\mathrm{disc}}}$ при $\omega=e^{i2\pi/N_{\mathrm{ring}}}$ (\cref{rem:phi-omega-Phi}).
 Амплитуда на решётке $Q(2^{-B_{\mathrm{amp}}})$, $B_{\mathrm{amp}}=6$:
 $\mu\in\mathbb{Z}_{64}$ --- наименьший ненулевой квант $|z|$ на ячейке.
 \end{definition}
 
-\begin{proposition}[Каноническая пара $(k_\phi,\rho_{\mathrm{f}})$]
+\begin{proposition}[Каноническая пара $(k_\phi,\varphi_{\mathrm{f}})$]
 \label{prop:canonical-phase}
-Для каждого $\tau\in\mathbb{Z}_{512}$ существует единственная каноническая пара
-с минимальным $k_\phi$ при $0\le\rho_{\mathrm{f}}<41$, восстанавливающая $\tau$.
+Для каждого $\varphi_{\mathrm{disc}}\in\mathbb{Z}_{512}$ существует единственная каноническая пара
+с минимальным $k_\phi$ при $0\le\varphi_{\mathrm{f}}<41$, восстанавливающая $\varphi_{\mathrm{disc}}$.
 Наивое отображение $\mathbb{Z}_{13}\times\mathbb{Z}_{41}\to\mathbb{Z}_{512}$
 имеет ровно $21$ коллизию; шов (seam) удовлетворяет
 \[
@@ -122,26 +131,26 @@ $\mu\in\mathbb{Z}_{64}$ --- наименьший ненулевой квант $
   =N_\phi\cdot\Delta\phi_{\mathrm{disc}}-(N_\phi+N_{\mathrm{hier}})
   =13\cdot 41-21.
 \]
-Пары $(k_\phi=0,\,\rho_{\mathrm{f}}<21)$ и $(k_\phi=12,\,\rho_{\mathrm{f}}\ge 21)$
-описывают один и тот же тик кольца.
+Пары $(k_\phi=0,\,\varphi_{\mathrm{f}}<21)$ и $(k_\phi=12,\,\varphi_{\mathrm{f}}\ge 21)$
+описывают одну и ту же $\varphi_{\mathrm{disc}}$.
 \end{proposition}
 
 \begin{proof}
-Прямой перебор $512$ значений $\tau$ и проверка биекции канонической формы
+Прямой перебор $512$ значений $\varphi_{\mathrm{disc}}$ и проверка биекции канонической формы
 (реализация: \texttt{Internal\_phase\_coords}).
 Тождество для шва: $13\cdot 41=533=512+21$, $21=13+8=N_\phi+N_{\mathrm{hier}}$.
 \end{proof}
 
 \begin{remark}[Секция вакуума]
 Начальное состояние океана (\cref{ch:matter}) сидит на вложении
-$\rho_{\mathrm{f}}=0$, $\tau=k_\phi\cdot 41$ --- тринадцать ориентаций кирпича,
+$\varphi_{\mathrm{f}}=0$, $\varphi_{\mathrm{disc}}=k_\phi\cdot 41$ --- тринадцать ориентаций кирпича,
 а не произвольная фаза на кольце.
 Эволюция~$g$ заполняет весь $\mathbb{Z}_{512}$.
 \end{remark}
 
-Полный спинор: две компоненты $j=1,2$, каждая $(\mu_j,k_{\phi,j},\rho_{\mathrm{f},j})$
-или $(\mu_j,\tau_j)$; в вакууме $k_{\phi,1}=k_{\phi,2}$, $\rho_{\mathrm{f},1}=\rho_{\mathrm{f},2}=0$.
-Относительная фаза SU(2) --- $\tau_1-\tau_2$; динамика на шве из $21$ тика остаётся открытой
+Полный спинор: две компоненты $j=1,2$, каждая $(\mu_j,k_{\phi,j},\varphi_{\mathrm{f},j})$
+или $(\mu_j,\varphi_{\mathrm{disc},j})$; в вакууме $k_{\phi,1}=k_{\phi,2}$, $\varphi_{\mathrm{f},1}=\varphi_{\mathrm{f},2}=0$.
+Относительная фаза SU(2) --- $\varphi_{\mathrm{disc},1}-\varphi_{\mathrm{disc},2}$; динамика на шве из $21$ шага остаётся открытой
 (CL-O4, \cref{sec:congruence}).
 
 \section{Мост \texorpdfstring{$M\to T$}{M to T}}
@@ -155,19 +164,20 @@ $\rho_{\mathrm{f}}=0$, $\tau=k_\phi\cdot 41$ --- тринадцать ориен
 \toprule
 Ядро $M$ & Только мост $T$ \\
 \midrule
-$\tau$, $k_\phi$, $\rho_{\mathrm{f}}$, $\mu$; $dh$, $dt$; $s_0$ & $\hbar$, $t_P$, $\ell_P$, $c$ \\
+$\varphi_{\mathrm{disc}}$, $k_\phi$, $\varphi_{\mathrm{f}}$, $\mu$; $dh$, $dt$; $s_0$ & $\hbar$, $t_P$, $\ell_P$, $c$ \\
+$\omega^{\varphi_{\mathrm{disc}}}$, $R(\Phi)=\omega^{\Phi}$ & $e^{i\varphi}$, kick $\Phi$ [рад] \\
 $\Delta\phi_{\mathrm{disc}}/N_{\mathrm{ring}}$ & $\alpha_*-1=1/(4\pi)$ \\
-$N_{\mathrm{ring}}/2$ тиков & угол $\pi$ \\
+$N_{\mathrm{ring}}/2$ шагов $\varphi_{\mathrm{disc}}$ & угол $\pi$ \\
 $\log_2 N_{\mathrm{ring}}+\varepsilon_B$ & $B_{\hv}=2\pi/\ln 2$ \\
 $N_\phi=13$ & $N_\phi=\lceil 4\pi\rceil$ \\
-$k=\Delta x/dh$, $\omega=2\pi/\htick$ & волновой вектор и частота в СИ \\
+$k=\Delta x/dh$, $\omega_{\mathrm{SI}}=2\pi/\htick$ & волновой вектор и частота в СИ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{remark}
 Остаток $\varepsilon_B\approx\{B_{\hv}\}$ --- хвост при записи ёмкости в двоичных координатах
-(CR, \cref{ch:evolution}); шов из $21$ тика --- геометрия фазовой фибрации
+(CR, \cref{ch:evolution}); шов из $21$ шага $\varphi_{\mathrm{disc}}$ --- геометрия фазовой фибрации
 (\cref{prop:canonical-phase}). Это разные объекты.
 \end{remark}
 

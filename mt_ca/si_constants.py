@@ -1365,10 +1365,11 @@ def internal_phase_decode(
     n_phi: int | None = None,
     delta_phi_disc: int | None = None,
 ) -> tuple[int, int]:
-    """§3.12.6c — canonical (κ, ρ) for τ ∈ ℤ_{N_ring}.
+    """§3.12.6c — canonical (k_phi, phi_f) for phi_disc ∈ ℤ_{N_ring}.
 
-    κ ∈ ℤ_{N_φ} (Heisenberg sector), ρ ∈ ℤ_{Δφ_disc} (fine ticks).
-    Canonical = smallest κ with ρ < Δφ_disc and τ ≡ κ·Δφ_disc + ρ (mod N_ring).
+    k_phi ∈ ℤ_{N_φ} (Heisenberg sector), phi_f ∈ ℤ_{Δφ_disc} (fine phase).
+    Canonical = smallest k_phi with phi_f < Δφ_disc and
+    phi_disc ≡ k_phi·Δφ_disc + phi_f (mod N_ring).
     """
     n_ring = HV.N_ring if n_ring is None else n_ring
     n_phi = HV.N_phi if n_phi is None else n_phi
@@ -1385,7 +1386,7 @@ def internal_phase_decode(
             if best is None or kappa < best[0]:
                 best = (kappa, rho)
     if best is None:
-        raise ValueError(f"no canonical (kappa, rho) for tau={tau_i}")
+        raise ValueError(f"no canonical (k_phi, phi_f) for phi_disc={tau_i}")
     return best
 
 
@@ -1439,7 +1440,7 @@ def internal_phase_coords_row() -> dict[str, float | int | str | bool]:
         for k in range(n_phi)
     )
     return {
-        "theorem": "§3.12.6c: tau <-> (kappa, rho) canonical; mu in Z_{2^frac_bits}",
+        "theorem": "§3.12.6c: phi_disc <-> (k_phi, phi_f) canonical; mu in Z_{2^frac_bits}",
         "N_ring": n_ring,
         "N_phi": n_phi,
         "delta_phi_disc": delta,
@@ -1453,7 +1454,7 @@ def internal_phase_coords_row() -> dict[str, float | int | str | bool]:
         "heisenberg_section_rho_zero_ok": section_ok,
         "delta_inv_mod_N_phi": pow(delta % n_phi, -1, n_phi),
         "note": (
-            "CL-O4 partial: additive coords (kappa,rho) close; "
+            "CL-O4 partial: phi_disc=(k_phi,phi_f); omega=rotor; "
             "not multiplicative 2^9 x Z_13; seam=21=N_phi+N_hier"
         ),
     }
