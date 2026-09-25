@@ -15,8 +15,8 @@ $$
 E_0 &= E_P/\sqrt{2}, &
  m_{\mathrm{arg}} &= m_P/\sqrt{2}, &
  \kappa &= 1/\sqrt{2}, \\
-\alpha_{\mathrm{fs}}^{-1}
- &= 4\pi^{3}+\pi^{2}+\pi, &
+\alpha_{\mathrm{fs}}
+ &= \texttt{alpha\_from\_fundamentals()} \;(\hat M{=}97,\ \S8.2\cdot\mathrm{U0}), &
  N_\varphi &= \lceil 4\pi\rceil = 13, &
  N_{\mathrm{hier}} &= 8, \\
 a_Q &= 2^{-F}, &
