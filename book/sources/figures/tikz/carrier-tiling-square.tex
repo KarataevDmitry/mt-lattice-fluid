@@ -1,0 +1,9 @@
+\begin{tikzpicture}[carrier panel]
+  \foreach \i in {0,...,2} {
+    \foreach \j in {0,...,2} {
+      \draw[carrier object, carrier fill] (\i,\j) rectangle ++(1,1);
+    }
+  }
+  \draw[carrier object, carrier hifill] (1,1) rectangle ++(1,1);
+  \CarrierDimH{1}{2}{-0.35}{$a$}
+\end{tikzpicture}

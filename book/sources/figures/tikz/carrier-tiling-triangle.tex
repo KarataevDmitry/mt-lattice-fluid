@@ -1,0 +1,11 @@
+\begin{tikzpicture}[carrier panel]
+  \foreach \i in {-1,...,1} {
+    \foreach \j in {-1,...,1} {
+      \pgfmathsetmacro{\x}{\i*0.55 + mod(\j,2)*0.275}
+      \pgfmathsetmacro{\y}{\j*0.48}
+      \draw[carrier object, carrier fill]
+        (\x,\y) -- ++(1,0) -- ++(-0.5,0.866) -- cycle;
+    }
+  }
+  \draw[carrier object, carrier hifill] (0,0) -- (1,0) -- (0.5,0.866) -- cycle;
+\end{tikzpicture}

@@ -1,0 +1,7 @@
+\begin{tikzpicture}[carrier panel]
+  \filldraw[carrier object] (0,0) circle (2.2pt);
+  \node[anchor=east, inner sep=2pt] at (-0.06,0.02) {$x$};
+  \node[draw, carrier object, carrier fill, align=center, inner sep=4pt, anchor=west] (zbox) at (0.55,0.15)
+    {$z(x)=\binom{z_1}{z_2}\in\mathbb{C}^2$};
+  \draw[carrier arrow] (0.06,0.04) -- (zbox.west);
+\end{tikzpicture}

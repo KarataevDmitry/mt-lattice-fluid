@@ -32,9 +32,16 @@ $N(x)$ --- узлы, до которых он доходит за этот та�
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/axiom-locality.tex}
-  \caption{Условия $A_1$--$A_2$: световая окрестность $N(x)$ и локальный закон $g$.}
-  \label{fig:axiom-locality}
+  \input{figures/tikz/axiom-a1-neighborhood.tex}
+  \caption{$A_1$: световая окрестность $N(x)$, $c_0\htick=\hl$.}
+  \label{fig:axiom-a1-neighborhood}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a2-local-law.tex}
+  \caption{$A_2$: локальный закон $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$.}
+  \label{fig:axiom-a2-local-law}
 \end{figure}
 
 \begin{axiom}[A3 · Унитарность / сохранение информации]
@@ -56,9 +63,16 @@ N(t+1)=N(t)\quad\text{для всех }t.
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/axiom-unitarity.tex}
-  \caption{Условия $A_3$--$A_4$: сохранение нормы и $SU(2)$ на $\mathbb{C}^2$.}
-  \label{fig:axiom-unitarity}
+  \input{figures/tikz/axiom-a3-phase.tex}
+  \caption{$A_3$: сохранение нормы $|z|$, меняется только фаза.}
+  \label{fig:axiom-a3-phase}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a4-su2.tex}
+  \caption{$A_4$: $SU(2)$-вращатель $R(\Phi)$ на $\mathbb{C}^2$.}
+  \label{fig:axiom-a4-su2}
 \end{figure}
 
 \section{Термодинамика микроуровня}
@@ -102,9 +116,16 @@ N(t+1)=N(t)\quad\text{для всех }t.
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/axiom-thermo.tex}
-  \caption{Условия $A_5$--$A_6$: недостижимый ноль амплитуды и рост фазовой энтропии при фиксированном $N$.}
-  \label{fig:axiom-thermo}
+  \input{figures/tikz/axiom-a5-vacuum.tex}
+  \caption{$A_5$: недостижимый ноль амплитуды, осциллирующий вакуум $z_{\min}>0$.}
+  \label{fig:axiom-a5-vacuum}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a6-entropy.tex}
+  \caption{$A_6$: рост фазовой энтропии при фиксированном $N$.}
+  \label{fig:axiom-a6-entropy}
 \end{figure}
 
 \section{Аналитичность и топология}
@@ -132,9 +153,23 @@ CR-единственность на связном $\Lambda$ задаёт гл�
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/axiom-defects.tex}
-  \caption{Условия $A_9$--$A_{11}$: голономия $\zeta$, квантование намотки и anti-smear вихря.}
-  \label{fig:axiom-defects}
+  \input{figures/tikz/axiom-a9-holonomy.tex}
+  \caption{$A_9$: дискретная голономия $\zeta$.}
+  \label{fig:axiom-a9-holonomy}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a10-winding.tex}
+  \caption{$A_{10}$: квантование намотки $\oint d\arg z=2\pi n$.}
+  \label{fig:axiom-a10-winding}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a11-vortex.tex}
+  \caption{$A_{11}$: устойчивый полюс (anti-smear), не размазанное состояние.}
+  \label{fig:axiom-a11-vortex}
 \end{figure}
 
 \section{Изотропия, обратимость, симметрии}
@@ -208,13 +243,20 @@ $g$ обратим на дискретном алфавите: $\exists g^{-1}$,
 \end{proof}
 
 На $\Tlayer$ частота исхода есть квадрат модуля амплитуды \eqref{eq:born};
-она возникает из динамического хаоса фаз и грубости прибора (\cref{fig:axiom-m-t}).
+она возникает из динамического хаоса фаз и грубости прибора (\cref{fig:axiom-layer-m,fig:axiom-layer-t}).
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/axiom-m-t.tex}
-  \caption{Детерминированное микрополе $z$ и грубый макро-readout $\Phi=\mathcal{B}z$.}
-  \label{fig:axiom-m-t}
+  \input{figures/tikz/axiom-layer-m.tex}
+  \caption{$\mathcal{M}$: детерминированное микрополе $z(x,t)$.}
+  \label{fig:axiom-layer-m}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-layer-t.tex}
+  \caption{$\mathcal{T}$: грубый макро-readout $\Phi=\mathcal{B}z$.}
+  \label{fig:axiom-layer-t}
 \end{figure}
 
 \section{Теорема о невозможности тепловой смерти \texorpdfstring{$\Mlayer$}{M}}

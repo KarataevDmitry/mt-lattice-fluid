@@ -1,0 +1,10 @@
+\begin{tikzpicture}[carrier panel]
+  \draw[carrier object, domain=0:1.15, samples=60] plot (\x, {(\x-0.35)^2+0.05});
+  \draw[carrier muted, dashed] (0.35,0) -- (0.35,1.0);
+  \node at (0,1.05) {$\times$};
+  \node[anchor=west, font=\scriptsize] at (0.05,0.85) {deadlock};
+  \fill[carrier object] (0.35,0.05) circle (1.5pt);
+  \node[anchor=west, font=\scriptsize] at (0.48,0.18) {вакуум $z_{\min}>0$};
+  \node[carrier muted, font=\scriptsize] at (0.55,-0.45) {$|z|$};
+  \node[carrier muted, font=\scriptsize, rotate=90] at (-0.25,0.55) {отклик $\Phi$};
+\end{tikzpicture}

@@ -1,0 +1,9 @@
+\begin{tikzpicture}[carrier panel]
+  \draw[carrier object] (0,0) circle (0.95);
+  \foreach \a in {0,72,...,288} {
+    \filldraw[carrier object, carrier fill] ({0.95*cos(\a)},{0.95*sin(\a)}) circle (2pt);
+  }
+  \filldraw[carrier object] (0,0) circle (2.5pt);
+  \draw[carrier muted, dashed, line width=0.7pt] (-1.15,-0.55) -- (1.15,0.55);
+  \node[anchor=south west, font=\scriptsize, carrier muted] at (-1.0,0.45) {$\{111\}$};
+\end{tikzpicture}

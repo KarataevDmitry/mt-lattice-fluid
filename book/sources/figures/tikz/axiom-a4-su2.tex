@@ -1,0 +1,14 @@
+\begin{tikzpicture}[carrier panel]
+  \draw[carrier muted, dashed] (-1.1,0) circle (0.5);
+  \draw[carrier muted, dashed] (1.1,0) circle (0.5);
+  \draw[carrier arrow] (-1.1,0) -- (-35:0.42);
+  \node at (-35:0.58) {$z_1$};
+  \draw[carrier arrow] (-1.1,0) -- (112:0.33);
+  \node at (112:0.48) {$z_2$};
+  \draw[carrier arrow, carrier muted, dashed] (1.1,0) -- (-11:0.42);
+  \node[carrier muted] at (-11:0.58) {$z'_1$};
+  \draw[carrier arrow, carrier muted, dashed] (1.1,0) -- (136:0.33);
+  \node[carrier muted] at (136:0.48) {$z'_2$};
+  \draw[carrier arrow] (-0.55,0) -- (0.55,0);
+  \node[anchor=south] at (0,0.12) {$R(\Phi)$};
+\end{tikzpicture}

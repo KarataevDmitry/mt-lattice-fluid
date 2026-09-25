@@ -9,29 +9,41 @@
 появились в конце спуска (\cref{sec:planck-floor}).
 Абсолютные условия $A_1$--$A_{16}$ (гл.~\ref{ch:axiom-rationale}, \ref{ch:axioms})
 ограничивают класс локальных законов на этом носителе
-(\cref{fig:carrier-lattice-field,fig:carrier-field-z}).
+(\cref{fig:carrier-lattice-field,fig:carrier-field-z-spinor,fig:carrier-field-z-law}).
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.72\linewidth}
-    \centering
-    \input{figures/tikz/carrier-lattice-field.tex}
-    \caption{Носитель $\Lambda$, шаг $\hl$, такт $\htick$.}
-    \label{fig:carrier-lattice-field}
-  \end{subfigure}\\[0.5em]
-  \begin{subfigure}[t]{0.92\linewidth}
-    \centering
-    \input{figures/tikz/carrier-field-z.tex}
-    \caption{Состояние узла $z(x)\in\mathbb{C}^2$ и локальный закон $g$ на $N(x)$.}
-    \label{fig:carrier-field-z}
-  \end{subfigure}\\[0.5em]
-  \begin{subfigure}[t]{0.88\linewidth}
-    \centering
-    \input{figures/tikz/carrier-sync-step.tex}
-    \caption{Синхронный такт: $\Psi^t\to\Psi^{t+1}$.}
-    \label{fig:carrier-sync-step}
-  \end{subfigure}
-  \caption{Решётка, поле на узле и локальная эволюция.}
+  \input{figures/tikz/carrier-lattice-field.tex}
+  \caption{Носитель $\Lambda$, шаг $\hl$, такт $\htick$.}
+  \label{fig:carrier-lattice-field}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-field-z-spinor.tex}
+  \caption{Состояние узла: спинор $z(x)\in\mathbb{C}^2$.}
+  \label{fig:carrier-field-z-spinor}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-field-z-law.tex}
+  \caption{Локальный закон $g$ на окрестности $N(x)$.}
+  \label{fig:carrier-field-z-law}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-sync-psi-t.tex}
+  \caption{Синхронный такт: поле $\Psi^t$ (окрестность чтения выделена).}
+  \label{fig:carrier-sync-psi-t}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-sync-psi-t1.tex}
+  \caption{Синхронный такт: поле $\Psi^{t+1}$ после параллельного применения $g$.}
+  \label{fig:carrier-sync-psi-t1}
 \end{figure}
 
 \section{Световая окрестность}
@@ -59,25 +71,53 @@
 
 Локальный закон на плоскости требует замощения без разрывов.
 На плоскости существуют ровно три регулярных типа: треугольник, квадрат и шестиугольник
-(\cref{fig:carrier-tilings}).
+(\cref{fig:carrier-tiling-triangle,fig:carrier-tiling-square,fig:carrier-tiling-hex}).
 Число соседей $|N(x)|$ на одном такте --- отдельный вопрос: узлы стоят в центрах плиток
 или в вершинах, и квадратная решётка допускает диагональ $h_L\sqrt{2}$, недостижимую за один~$\htick$
-(\cref{fig:carrier-neighbors-2d}).
+(\cref{fig:carrier-neighbors-tri,fig:carrier-neighbors-sq,fig:carrier-neighbors-hex}).
 Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
 (\cref{fig:carrier-hex-neighbors}).
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/carrier-tilings.tex}
-  \caption{Три регулярных замощения плоскости (выделена одна плитка).}
-  \label{fig:carrier-tilings}
+  \input{figures/tikz/carrier-tiling-triangle.tex}
+  \caption{Треугольное замощение (выделена одна плитка).}
+  \label{fig:carrier-tiling-triangle}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/carrier-neighbors-2d.tex}
-  \caption{Соседство $N(x)$ на трёх регулярных решётках: $|N|=3$, $4$ и $6$.}
-  \label{fig:carrier-neighbors-2d}
+  \input{figures/tikz/carrier-tiling-square.tex}
+  \caption{Квадратное замощение (выделена одна плитка).}
+  \label{fig:carrier-tiling-square}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-tiling-hex.tex}
+  \caption{Шестиугольное замощение (выделена одна плитка).}
+  \label{fig:carrier-tiling-hex}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-neighbors-tri.tex}
+  \caption{Треугольная решётка: $|N(x)|=3$.}
+  \label{fig:carrier-neighbors-tri}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-neighbors-sq.tex}
+  \caption{Квадратная решётка: $|N(x)|=4$; диагональ $\hl\sqrt{2}$ недостижима за один такт.}
+  \label{fig:carrier-neighbors-sq}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-neighbors-hex.tex}
+  \caption{Гексагональная решётка: $|N(x)|=6$.}
+  \label{fig:carrier-neighbors-hex}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -142,26 +182,23 @@ $\kappa_{\mathrm{link}}=1/12$.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.32\linewidth}
-    \centering
-    \input{figures/tikz/carrier-packing-sc.tex}
-    \caption{SC, $|N|=6$.}
-    \label{fig:carrier-packing-sc}
-  \end{subfigure}\hfill
-  \begin{subfigure}[t]{0.32\linewidth}
-    \centering
-    \input{figures/tikz/carrier-packing-bcc.tex}
-    \caption{BCC, $|N|=8$.}
-    \label{fig:carrier-packing-bcc}
-  \end{subfigure}\hfill
-  \begin{subfigure}[t]{0.32\linewidth}
-    \centering
-    \input{figures/tikz/carrier-packing-fcc.tex}
-    \caption{FCC, $|N|=12$.}
-    \label{fig:carrier-packing-fcc}
-  \end{subfigure}
-  \caption{Три кубические упаковки равных сфер (первая координационная оболочка).}
-  \label{fig:carrier-packing}
+  \input{figures/tikz/carrier-packing-sc.tex}
+  \caption{Простая кубическая упаковка (SC): $|N|=6$.}
+  \label{fig:carrier-packing-sc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-packing-bcc.tex}
+  \caption{Объёмно-центрированная упаковка (BCC): $|N|=8$.}
+  \label{fig:carrier-packing-bcc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-packing-fcc.tex}
+  \caption{Гранецентрированная упаковка (FCC): $|N|=12$.}
+  \label{fig:carrier-packing-fcc}
 \end{figure}
 
 Плотность и число соседей у FCC и HCP одинаковы.
@@ -185,24 +222,28 @@ $\kappa_{\mathrm{link}}=1/12$.
   c_0^2\htick^2-(\hl\sqrt{2})^2=\hl^2-2\hl^2=-\hl^2<0.
 \]
 Интервал пространственноподобен: узел второй оболочки за этот такт недостижим
-(\cref{fig:carrier-light-cone}).
+(\cref{fig:carrier-light-cone-2d,fig:carrier-light-cone-3d}).
 Остаётся первая оболочка: $|N(x)|=12$ (\cref{fig:carrier-fcc-shell}).
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{\linewidth}
-    \centering
-    \input{figures/tikz/carrier-light-cone.tex}
-    \caption{Световой конус $c_0$: первая оболочка на конусе, вторая ($h_L\sqrt{2}$) --- вне.}
-    \label{fig:carrier-light-cone}
-  \end{subfigure}\\[0.4em]
-  \begin{subfigure}[t]{0.55\linewidth}
-    \centering
-    \input{figures/tikz/carrier-fcc-shell.tex}
-    \caption{Плотнейшая FCC-упаковка: $|N|=12$ касающихся сфер.}
-    \label{fig:carrier-fcc-shell}
-  \end{subfigure}
-  \caption{Каузальность на решётке и $|N|=12$.}
+  \input{figures/tikz/carrier-light-cone-2d.tex}
+  \caption{Световой конус $c_0$ в срезе $(x,t)$: первая оболочка на конусе, вторая ($\hl\sqrt{2}$) --- вне.}
+  \label{fig:carrier-light-cone-2d}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-light-cone-3d.tex}
+  \caption{Световой конус в объёме $(x,y,t)$.}
+  \label{fig:carrier-light-cone-3d}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-fcc-shell.tex}
+  \caption{Плотнейшая FCC-упаковка: $|N|=12$ касающихся сфер.}
+  \label{fig:carrier-fcc-shell}
 \end{figure}
 
 \emph{Связь.}
@@ -235,13 +276,20 @@ $\kappa_{\mathrm{link}}=1/12$.
 Треугольная грань через $(a/\sqrt{2},a/\sqrt{2},0)$, $(a/\sqrt{2},0,a/\sqrt{2})$ и $(0,a/\sqrt{2},a/\sqrt{2})$ лежит в плоскости $x+y+z=a\sqrt{2}$ и отстоит от центра на $a\sqrt{2/3}$.
 Квадратные и треугольные грани лежат на разных расстояниях, поэтому одной вписанной сферы, касающейся всех граней, нет.
 В мост $c=\kgeom c_0$ входит расстояние до квадратной грани
-(\cref{fig:carrier-cubocta-faces}).
+(\cref{fig:carrier-cuboctahedron,fig:carrier-cubocta-meridian}).
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/carrier-cubocta-faces.tex}
-  \caption{Кубооктаэдр: квадратная и треугольная грани лежат на разных расстояниях от центра.}
-  \label{fig:carrier-cubocta-faces}
+  \input{figures/tikz/carrier-cuboctahedron.tex}
+  \caption{Кубооктаэдр --- выпуклая оболочка двенадцати соседей FCC.}
+  \label{fig:carrier-cuboctahedron}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-cubocta-meridian.tex}
+  \caption{Меридиан: квадратная и треугольная грани на разных расстояниях от центра.}
+  \label{fig:carrier-cubocta-meridian}
 \end{figure}
 
 Объём ячейки Вороного считается отдельно.
@@ -259,19 +307,16 @@ $\kappa_{\mathrm{link}}=1/12$.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.72\linewidth}
-    \centering
-    \input{figures/tikz/carrier-hull-voronoi.tex}
-    \caption{Три радиуса на одном узле.}
-    \label{fig:carrier-hull-voronoi}
-  \end{subfigure}\hfill
-  \begin{subfigure}[t]{0.50\linewidth}
-    \centering
-    \input{figures/tikz/carrier-voronoi-cell.tex}
-    \caption{Замощение $\mathbb{R}^3$ ячейками Вороного (ромбододекаэдры).}
-    \label{fig:carrier-voronoi-cell}
-  \end{subfigure}
-  \caption{Однотактовое тело и ячейка Вороного.}
+  \input{figures/tikz/carrier-hull-voronoi.tex}
+  \caption{Три радиуса однотактового тела на одном узле.}
+  \label{fig:carrier-hull-voronoi}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-voronoi-cell.tex}
+  \caption{Замощение $\mathbb{R}^3$ ячейками Вороного (ромбододекаэдры).}
+  \label{fig:carrier-voronoi-cell}
 \end{figure}
 
 Объём самой оболочки находится вычитанием.
@@ -339,13 +384,20 @@ $\kappa_{\mathrm{link}}=1/12$.
 (\cref{sec:fcc-kappa}).
 Величина $\kgeom$ --- отношение радиусов вписанной и описанной сфер однотактового тела.
 Тождество $c=\kgeom c_0$ служит проверкой согласованности макроописания
-после фиксации $\htick=\kgeom t_P$ (\cref{fig:carrier-two-speeds}).
+после фиксации $\htick=\kgeom t_P$ (\cref{fig:carrier-two-speeds-micro,fig:carrier-two-speeds-macro}).
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/carrier-two-speeds.tex}
-  \caption{Тактовая скорость $c_0$ на рёбрах решётки и макроскопическая $c=\kgeom c_0$ после осреднения.}
-  \label{fig:carrier-two-speeds}
+  \input{figures/tikz/carrier-two-speeds-micro.tex}
+  \caption{Микро: дискретный шаг по решётке, тактовая скорость $c_0$.}
+  \label{fig:carrier-two-speeds-micro}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-two-speeds-macro.tex}
+  \caption{Макро: осреднённый фронт, $c=\kgeom c_0$.}
+  \label{fig:carrier-two-speeds-macro}
 \end{figure}
 
 \section{Отказ от континуума на микроуровне}
@@ -362,7 +414,7 @@ $\hl$ --- минимальный квант длины.
 
 По решётке сигнал проходит за такт не дальше~$c_0\htick=\hl$.
 На микроуровне мировая линия --- ломаная по рёбрам $N(x)$ со скоростью звена~$c_0$;
-массивная частица --- зигзаг внутри того же конуса (\cref{fig:carrier-worldlines}).
+массивная частица --- зигзаг внутри того же конуса (\cref{fig:carrier-worldlines-fcc,fig:carrier-worldlines-hex}).
 Макроскопический наблюдатель, осредняя поле на масштабах $\gg\hl$,
 восстанавливает null-линию со скоростью $c=\kgeom c_0$ на FCC.
 Локальная структура размера порядка~$\hl$ несёт конус~$c_0$;
@@ -372,9 +424,16 @@ $\hl$ --- минимальный квант длины.
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/carrier-worldlines.tex}
-  \caption{Мировые линии в $(x,t)$: верхний ряд --- FCC ($\kgeom=1/\sqrt{2}$), нижний --- гекс-срез $(2{+}1)$ ($\kgeom_{\mathrm{hex}}=\sqrt{3}/2$); микро-null, массивный зигзаг и макро-фотон $c=\kgeom c_0$.}
-  \label{fig:carrier-worldlines}
+  \input{figures/tikz/carrier-worldlines-fcc.tex}
+  \caption{Мировые линии на FCC ($\kgeom=1/\sqrt{2}$): микро-null, зигзаг и макро-фотон $c=\kgeom c_0$.}
+  \label{fig:carrier-worldlines-fcc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-worldlines-hex.tex}
+  \caption{Мировые линии на гекс-срезе $(2{+}1)$ ($\kgeom_{\mathrm{hex}}=\sqrt{3}/2$).}
+  \label{fig:carrier-worldlines-hex}
 \end{figure}
 
 \section{Аналогия с физикой твёрдого тела}
@@ -392,15 +451,22 @@ $\hl$ --- минимальный квант длины.
 \section{Связь $(3{+}1)$ и $(2{+}1)$}
 
 Гексагональный слой $(2{+}1)$ --- срез пространства Минковского $(3{+}1)$ с FCC
-(\cref{fig:carrier-slice-bridge}).
+(\cref{fig:carrier-slice-hex-layer,fig:carrier-slice-fcc-layer}).
 Мост $c=\kgeom c_0$ с $\kgeom=1/\sqrt{2}$ якорится на полном трёхмерном носителе;
 чистый $(2{+}1)$ без объёма несёт $\kgeom=\sqrt{3}/2$.
 
 \begin{figure}[htbp]
   \centering
-  \input{figures/tikz/carrier-slice-bridge.tex}
-  \caption{Связь среза $(2{+}1)$ и носителя $(3{+}1)$: разные $\kgeom$ и $|N|$, одна скорость~$c$.}
-  \label{fig:carrier-slice-bridge}
+  \input{figures/tikz/carrier-slice-hex-layer.tex}
+  \caption{Гексагональный срез $(2{+}1)$: $\kgeom_{\mathrm{hex}}=\sqrt{3}/2$, $|N|=6$.}
+  \label{fig:carrier-slice-hex-layer}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-slice-fcc-layer.tex}
+  \caption{Носитель $(3{+}1)$ FCC и срез $\{111\}$: $\kgeom=1/\sqrt{2}$, $|N|=12$.}
+  \label{fig:carrier-slice-fcc-layer}
 \end{figure}
 
 \section{Соседство среза и объёма}

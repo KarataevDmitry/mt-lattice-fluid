@@ -1,0 +1,11 @@
+\begin{tikzpicture}[carrier panel]
+  \foreach \r in {-1,...,1} {
+    \foreach \c in {-1,...,1} {
+      \pgfmathsetmacro{\cx}{\c*0.75 + mod(\r,2)*0.375}
+      \pgfmathsetmacro{\cy}{\r*0.65}
+      \CarrierHex{0.32}{(\cx,\cy)}
+    }
+  }
+  \draw[carrier object, carrier hifill]
+    (30:0.32) \foreach \a in {90,150,...,330} { -- (\a:0.32) } -- cycle;
+\end{tikzpicture}

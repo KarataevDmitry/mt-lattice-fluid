@@ -1,0 +1,9 @@
+\begin{tikzpicture}[carrier panel, iso view, scale=1.15]
+  \foreach \x/\y/\z in {1,1,0/1,-1,0/-1,1,0/-1,-1,0/1,0,1/1,0,-1/-1,0,1/-1,0,-1/0,1,1/0,1,-1/0,-1,1/0,-1,-1} {
+    \fill[carrier fill] (\x,\y,\z) circle (1.8pt);
+  }
+  \node[carrier site] at (0,0,0) {};
+  \draw[carrier object] (1,1,0)--(1,0,1)--(0,1,1)--(-1,1,0)--(-1,0,1)--(0,-1,1)--(1,-1,0)--(1,0,-1)--(0,1,-1)--(-1,1,0);
+  \draw[carrier muted, dashed] (1,1,0)--(0,1,1)--(-1,1,0);
+  \fill[carrier hifill, opacity=0.5] (1,1,0)--(1,0,1)--(0,1,1)--cycle;
+\end{tikzpicture}

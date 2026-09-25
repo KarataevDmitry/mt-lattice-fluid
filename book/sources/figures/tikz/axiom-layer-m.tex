@@ -1,0 +1,9 @@
+\begin{tikzpicture}[carrier panel, x=0.32cm, y=0.32cm]
+  \foreach \r in {0,...,15} {
+    \foreach \c in {0,...,15} {
+      \pgfmathsetmacro{\v}{cos(12*\r + 7*\c)}
+      \pgfmathsetmacro{\g}{int(50 + 40*\v)}
+      \fill[gray!\g] (\c,15-\r) rectangle ++(1,1);
+    }
+  }
+\end{tikzpicture}

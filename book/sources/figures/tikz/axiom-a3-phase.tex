@@ -1,0 +1,9 @@
+\begin{tikzpicture}[carrier panel]
+  \draw[carrier muted, dashed] (0,0) circle (1);
+  \draw[carrier arrow] (0,0) -- (35:1);
+  \node at (35:1.15) {$z$};
+  \draw[carrier arrow, carrier muted, dashed] (0,0) -- (95:1);
+  \node[carrier muted] at (95:1.2) {$z\,e^{i\Phi}$};
+  \draw[carrier object] (35:0.38) arc (35:95:0.38);
+  \node at (65:0.55) {$\Phi$};
+\end{tikzpicture}

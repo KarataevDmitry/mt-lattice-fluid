@@ -1,8 +1,8 @@
 # TikZ figures (hand-edited)
 
-All book figures for carrier geometry and axioms live here as `.tex` fragments.
-Chapters include them via `\input{figures/tikz/...}`.
+One conceptual diagram per `.tex` file — one `\begin{figure}` in the chapter.
+No multi-panel composites; edit a single file when a drawing needs a fix.
 
-Edit coordinates, arrows and labels directly in TikZ — no matplotlib render step.
+Chapters include via `\input{figures/tikz/<name>.tex}`.
 
-`scripts/render_*_figures.py` are **legacy** (kept for reference only). `book/build.ps1` does not call them by default.
+`scripts/render_*_figures.py` are legacy; `book/build.ps1` does not call them.

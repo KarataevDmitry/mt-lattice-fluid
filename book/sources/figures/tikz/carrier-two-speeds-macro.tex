@@ -1,0 +1,15 @@
+\begin{tikzpicture}[carrier panel, x=2.1cm, y=2.1cm]
+  \def\tlim{1.25}
+  \def\xlim{1.35}
+  \def\czero{1.08}
+  \def\kappa{0.7071}
+  \pgfmathsetmacro{\cmacro}{\czero*\kappa}
+  \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
+  \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
+  \draw[carrier muted, dashed, line width=0.7pt] (0,0) -- (\xlim,\xlim/\czero);
+  \draw[carrier object] (0,0) -- (\xlim,\xlim/\cmacro);
+  \node[anchor=west, carrier muted, inner sep=1pt] at (0.55,0.62) {$c_0$};
+  \node[anchor=west, inner sep=1pt] at (0.55,0.88) {$c=\kappa c_0$};
+  \node[anchor=north west, carrier muted, font=\scriptsize, inner sep=1pt] at (0.05,0.95)
+    {$\kappa=1/\sqrt{2}$};
+\end{tikzpicture}

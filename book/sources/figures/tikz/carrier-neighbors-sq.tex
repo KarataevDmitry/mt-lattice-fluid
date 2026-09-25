@@ -1,0 +1,13 @@
+\begin{tikzpicture}[carrier panel]
+  \foreach \i in {0,...,2} {
+    \foreach \j in {0,...,2} {
+      \draw[carrier object, carrier fill] (\i,\j) rectangle ++(1,1);
+    }
+  }
+  \foreach \i/\j in {1/1,2/1,0/1,1/2,1/0} {
+    \draw[carrier object, carrier hifill] (\i,\j) rectangle ++(1,1);
+  }
+  \node[carrier site] at (1.5,1.5) {};
+  \draw[carrier muted, dashed] (1.5,1.5) -- (2.71,2.71);
+  \node[carrier muted, font=\scriptsize] at (2.35,2.45) {$\hl\sqrt{2}$};
+\end{tikzpicture}

@@ -1,0 +1,11 @@
+\begin{tikzpicture}[carrier panel]
+  \foreach \i in {0,...,11} {
+    \pgfmathsetmacro{\ph}{30*\i}
+    \pgfmathsetmacro{\x}{1.05*cos(\ph)}
+    \pgfmathsetmacro{\y}{1.05*sin(\ph)}
+    \draw[carrier object, carrier fill]
+      (\x-0.08,\y-0.22) rectangle (\x+0.08,\y+0.22);
+  }
+  \draw[carrier object, dashed] (-1.1,0) -- (1.1,0);
+  \node[carrier muted, font=\scriptsize] at (0.55,0.75) {$N=\sum|z|^2$};
+\end{tikzpicture}
