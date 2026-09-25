@@ -9,11 +9,17 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Arc, Circle, FancyArrowPatch, Polygon, Rectangle, Wedge
+from matplotlib.patches import Arc, Circle, Rectangle, Wedge
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from render_carrier_figures import COL, _draw_hex_tiling, _save
+from render_carrier_figures import _save
+
+# Book palette: black/gray + line style, not rainbow.
+INK = "#222222"
+MUTED = "#666666"
+LIGHT = "#aaaaaa"
+FILL = "#f0f0f0"
 
 plt.rcParams.update(
     {
@@ -43,7 +49,7 @@ def fig_axiom_ladder() -> None:
     ]
     x0, x1 = 2.0, 8.0
     for y, label, title in steps:
-        ax.plot([x0, x1], [y, y], color=COL["blue"], lw=2.0)
+        ax.plot([x0, x1], [y, y], color=INK, lw=1.8)
         ax.text(1.2, y, label, ha="right", va="center", fontsize=10)
         ax.text(8.2, y, title, ha="left", va="center", fontsize=10)
 
@@ -52,10 +58,10 @@ def fig_axiom_ladder() -> None:
             "",
             xy=(4.9, y2 + 0.18),
             xytext=(4.9, y1 - 0.18),
-            arrowprops=dict(arrowstyle="-|>", color=COL["gray"], lw=1.2),
+            arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.2),
         )
 
-    ax.text(5.0, 0.7, "спуск: снимается одна идеализация", ha="center", fontsize=10, color=COL["gray"])
+    ax.text(5.0, 0.7, "спуск: снимается одна идеализация", ha="center", fontsize=10, color=MUTED)
     ax.set_title("Лестница физических идеализаций", fontsize=11, pad=10)
     _save(fig, "axiom-ladder.pdf")
 
@@ -69,12 +75,12 @@ def fig_axiom_locality() -> None:
     ax.axis("off")
     a = 1.0
     angles = np.linspace(0, 2 * np.pi, 7)[:-1] + np.pi / 6
-    ax.plot(0, 0, "o", color=COL["red"], ms=10, zorder=6)
+    ax.plot(0, 0, "o", color=INK, ms=9, zorder=6)
     for t in angles:
         p = a * np.array([np.cos(t), np.sin(t)])
-        ax.plot([0, p[0]], [0, p[1]], color=COL["blue"], lw=1.5, zorder=2)
-        ax.plot(p[0], p[1], "o", color=COL["node"], ms=6, zorder=4)
-    wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=COL["green"], alpha=0.22, zorder=1)
+        ax.plot([0, p[0]], [0, p[1]], color=INK, lw=1.3, zorder=2)
+        ax.plot(p[0], p[1], "o", color=MUTED, ms=5, zorder=4)
+    wedge = Wedge((0, 0), a * 1.05, 0, 360, width=0.08, facecolor=FILL, edgecolor=LIGHT, lw=0.8, zorder=1)
     ax.add_patch(wedge)
     ax.text(0, -1.45, r"$A_1$: $c_0 h_T=h_L$, окрестность $N(x)$", ha="center", fontsize=10)
     ax.set_xlim(-1.45, 1.45)
@@ -85,22 +91,33 @@ def fig_axiom_locality() -> None:
     ax.set_ylim(0, 6)
     ax.axis("off")
     for i, (x, y) in enumerate([(1.2, 3.0), (1.2, 1.0), (1.2, 5.0), (3.0, 2.0), (3.0, 4.0)]):
-        ax.add_patch(Circle((x, y), 0.35, facecolor="#eef4fb", edgecolor=COL["blue"], lw=1.2))
+        ax.add_patch(Circle((x, y), 0.35, facecolor=FILL, edgecolor=MUTED, lw=1.0))
         ax.text(x, y, rf"$z_{i+1}$", ha="center", va="center", fontsize=9)
-    ax.add_patch(Rectangle((5.0, 2.2), 1.6, 1.6, facecolor="#fff4e8", edgecolor=COL["node"], lw=1.4))
+    ax.add_patch(Rectangle((5.0, 2.2), 1.6, 1.6, facecolor=FILL, edgecolor=INK, lw=1.2))
     ax.text(5.8, 3.0, r"$g$", ha="center", va="center", fontsize=14)
-    ax.add_patch(Circle((8.2, 3.0), 0.45, facecolor="#fdecea", edgecolor=COL["red"], lw=1.6))
-    ax.text(8.2, 3.0, r"$z(x)$", ha="center", va="center", fontsize=10, color=COL["red"])
+    ax.add_patch(Circle((8.2, 3.0), 0.45, facecolor="white", edgecolor=INK, lw=1.4))
+    ax.text(8.2, 3.0, r"$z(x)$", ha="center", va="center", fontsize=10)
     for x, y in [(1.2, 3.0), (1.2, 1.0), (1.2, 5.0), (3.0, 2.0), (3.0, 4.0)]:
-        ax.annotate("", xy=(5.0, 3.0), xytext=(x + 0.35, y), arrowprops=dict(arrowstyle="-|>", color=COL["gray"], lw=1.0))
-    ax.annotate("", xy=(7.75, 3.0), xytext=(6.6, 3.0), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.4))
+        ax.annotate("", xy=(5.0, 3.0), xytext=(x + 0.35, y), arrowprops=dict(arrowstyle="-|>", color=LIGHT, lw=0.9))
+    ax.annotate("", xy=(7.75, 3.0), xytext=(6.6, 3.0), arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
     ax.text(5.0, 0.55, r"$A_2$: $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$", ha="center", fontsize=10)
 
     fig.suptitle("Каузальность и локальность", fontsize=11, y=1.02)
     _save(fig, "axiom-locality.pdf")
 
 
-def _draw_phasor(ax, cx: float, cy: float, phi: float, length: float, color: str, label: str, *, ls: str = "-", lw: float = 2.0) -> None:
+def _draw_phasor(
+    ax,
+    cx: float,
+    cy: float,
+    phi: float,
+    length: float,
+    color: str,
+    label: str,
+    *,
+    ls: str = "-",
+    lw: float = 2.0,
+) -> None:
     x, y = cx + length * np.cos(phi), cy + length * np.sin(phi)
     ax.annotate(
         "",
@@ -108,7 +125,7 @@ def _draw_phasor(ax, cx: float, cy: float, phi: float, length: float, color: str
         xytext=(cx, cy),
         arrowprops=dict(arrowstyle="-|>", color=color, lw=lw, linestyle=ls),
     )
-    ax.text(1.1 * (x - cx) + cx, 1.1 * (y - cy) + cy, label, color=color, fontsize=10)
+    ax.text(1.1 * (x - cx) + cx, 1.1 * (y - cy) + cy, label, color=INK, fontsize=10)
 
 
 def fig_axiom_unitarity() -> None:
@@ -119,10 +136,10 @@ def fig_axiom_unitarity() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     r = 1.0
-    ax.add_patch(Circle((0, 0), r, fill=False, ec=COL["gray"], lw=1.0, ls="--"))
+    ax.add_patch(Circle((0, 0), r, fill=False, ec=LIGHT, lw=1.0, ls="--"))
     phi0, phi1 = np.deg2rad(35), np.deg2rad(95)
-    _draw_phasor(ax, 0, 0, phi0, r, COL["blue"], r"$z$")
-    _draw_phasor(ax, 0, 0, phi1, r, COL["green"], r"$z\,e^{i\Phi}$", ls="--", lw=1.6)
+    _draw_phasor(ax, 0, 0, phi0, r, INK, r"$z$")
+    _draw_phasor(ax, 0, 0, phi1, r, MUTED, r"$z\,e^{i\Phi}$", ls="--", lw=1.6)
     arc_r = 0.38
     ax.add_patch(
         Arc(
@@ -132,17 +149,17 @@ def fig_axiom_unitarity() -> None:
             angle=0,
             theta1=np.rad2deg(phi0),
             theta2=np.rad2deg(phi1),
-            color=COL["red"],
-            lw=2.0,
+            color=INK,
+            lw=1.8,
         )
     )
     phi_mid = 0.5 * (phi0 + phi1)
-    ax.text(1.55 * arc_r * np.cos(phi_mid), 1.55 * arc_r * np.sin(phi_mid), r"$\Phi$", color=COL["red"], fontsize=11)
+    ax.text(1.55 * arc_r * np.cos(phi_mid), 1.55 * arc_r * np.sin(phi_mid), r"$\Phi$", fontsize=11)
     ax.annotate(
         "",
         xy=(r * np.cos(phi1), r * np.sin(phi1)),
         xytext=(r * np.cos(phi0), r * np.sin(phi0)),
-        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=2.2, connectionstyle="arc3,rad=0.28"),
+        arrowprops=dict(arrowstyle="-|>", color=INK, lw=2.0, connectionstyle="arc3,rad=0.28"),
     )
     ax.text(0, -1.45, r"$A_3$: $|z|\mapsto|z|$, меняется фаза", ha="center", fontsize=10)
     ax.set_xlim(-1.55, 1.55)
@@ -158,20 +175,20 @@ def fig_axiom_unitarity() -> None:
     ln1, ln2 = 0.42, 0.33
 
     for cx in (cx_before, cx_after):
-        ax.add_patch(Circle((cx, 0), rad, fill=False, ec=COL["gray"], lw=0.9, ls="--"))
+        ax.add_patch(Circle((cx, 0), rad, fill=False, ec=LIGHT, lw=0.9, ls="--"))
 
-    _draw_phasor(ax, cx_before, 0, phi1, ln1, COL["blue"], r"$z_1$")
-    _draw_phasor(ax, cx_before, 0, phi2, ln2, COL["green"], r"$z_2$")
-    _draw_phasor(ax, cx_after, 0, phi1 + dphi, ln1, COL["blue"], r"$z'_1$", ls="--", lw=1.6)
-    _draw_phasor(ax, cx_after, 0, phi2 + dphi, ln2, COL["green"], r"$z'_2$", ls="--", lw=1.6)
+    _draw_phasor(ax, cx_before, 0, phi1, ln1, INK, r"$z_1$")
+    _draw_phasor(ax, cx_before, 0, phi2, ln2, INK, r"$z_2$")
+    _draw_phasor(ax, cx_after, 0, phi1 + dphi, ln1, MUTED, r"$z'_1$", ls="--", lw=1.6)
+    _draw_phasor(ax, cx_after, 0, phi2 + dphi, ln2, MUTED, r"$z'_2$", ls="--", lw=1.6)
 
     ax.annotate(
         "",
         xy=(cx_after - rad - 0.05, 0),
         xytext=(cx_before + rad + 0.05, 0),
-        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=2.0),
+        arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.8),
     )
-    ax.text(0, 0.28, r"$R(\Phi)$", ha="center", color=COL["red"], fontsize=11)
+    ax.text(0, 0.28, r"$R(\Phi)$", ha="center", fontsize=11)
     ax.text(cx_before, -0.95, r"$z=(z_1,z_2)^\top$", ha="center", fontsize=10)
     ax.text(cx_after, -0.95, r"$R(\Phi)z$", ha="center", fontsize=10)
     ax.text(0, -1.42, r"$A_4$: $SU(2)$ на $\mathbb{C}^2$, не скаляр", ha="center", fontsize=10)
@@ -189,12 +206,12 @@ def fig_axiom_thermo() -> None:
     ax = axes[0]
     z = np.linspace(0, 1.2, 200)
     v = (z - 0.35) ** 2 + 0.05
-    ax.plot(z, v, color=COL["blue"], lw=2.0)
-    ax.axvline(0.35, color=COL["green"], ls="--", lw=1.2)
-    ax.plot(0, 2.5, marker="x", color=COL["red"], ms=12, mew=2)
-    ax.text(0.04, 2.2, r"$z=0$: deadlock", color=COL["red"], fontsize=9)
-    ax.scatter([0.35], [0.05], color=COL["green"], s=50, zorder=5)
-    ax.text(0.42, 0.22, r"вакуум $z_{\min}>0$", color=COL["green"], fontsize=9)
+    ax.plot(z, v, color=INK, lw=1.8)
+    ax.axvline(0.35, color=MUTED, ls="--", lw=1.2)
+    ax.plot(0, 2.5, marker="x", color=INK, ms=10, mew=1.8)
+    ax.text(0.04, 2.2, r"$z=0$: deadlock", fontsize=9)
+    ax.scatter([0.35], [0.05], color=INK, s=40, zorder=5)
+    ax.text(0.42, 0.22, r"вакуум $z_{\min}>0$", fontsize=9)
     ax.set_xlabel(r"$|z|$")
     ax.set_ylabel(r"отклик $\Phi$")
     ax.set_title(r"$A_5$: третье начало", fontsize=10)
@@ -204,11 +221,9 @@ def fig_axiom_thermo() -> None:
     ax = axes[1]
     n = 12
     phases = np.linspace(0, 2 * np.pi, n, endpoint=False)
-    bars = np.ones(n)
-    colors = [plt.cm.twilight(p / (2 * np.pi)) for p in phases]
-    ax.bar(phases, bars, width=0.45, color=colors, edgecolor=COL["node"], lw=0.6)
-    ax.axhline(1.0, color=COL["red"], ls="--", lw=1.2)
-    ax.text(1.0, 1.08, r"$N=\sum|z|^2$", color=COL["red"], fontsize=10)
+    ax.bar(phases, np.ones(n), width=0.45, color=FILL, edgecolor=INK, lw=0.7)
+    ax.axhline(1.0, color=INK, ls="--", lw=1.1)
+    ax.text(1.0, 1.08, r"$N=\sum|z|^2$", fontsize=10)
     ax.set_xlabel(r"фазы в $\varepsilon$-окрестности")
     ax.set_ylabel("вес")
     ax.set_title(r"$A_6$: энтропия фаз $\uparrow$, $N$ фикс.", fontsize=10)
@@ -227,10 +242,15 @@ def fig_axiom_defects() -> None:
     ax.set_aspect("equal")
     ax.axis("off")
     sq = np.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]])
-    ax.plot(sq[:, 0], sq[:, 1], color=COL["blue"], lw=1.5)
+    ax.plot(sq[:, 0], sq[:, 1], color=INK, lw=1.4)
     for k, (x, y) in enumerate([(0, 0), (1, 0), (1, 1), (0, 1)]):
         ang = np.deg2rad(45 + 90 * k)
-        ax.annotate("", xy=(x + 0.18 * np.cos(ang), y + 0.18 * np.sin(ang)), xytext=(x, y), arrowprops=dict(arrowstyle="-|>", color=COL["green"], lw=1.2))
+        ax.annotate(
+            "",
+            xy=(x + 0.18 * np.cos(ang), y + 0.18 * np.sin(ang)),
+            xytext=(x, y),
+            arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.1),
+        )
     ax.text(0.5, -0.22, r"$A_9$: $\zeta=(\sum_N z)\cdot z^*$", ha="center", fontsize=9)
     ax.set_xlim(-0.2, 1.2)
     ax.set_ylim(-0.35, 1.15)
@@ -238,25 +258,28 @@ def fig_axiom_defects() -> None:
     ax = axes[1]
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.add_patch(Circle((0, 0), 1.0, fill=False, ec=COL["gray"], lw=1.0))
+    ax.add_patch(Circle((0, 0), 1.0, fill=False, ec=LIGHT, lw=1.0))
     th = np.linspace(0, 2 * np.pi, 80)
-    ax.plot(np.cos(th), np.sin(th), color=COL["blue"], lw=2.0)
-    ax.annotate("", xy=(1.0, 0), xytext=(0.85, 0.52), arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.8, connectionstyle="arc3,rad=0.5"))
-    ax.plot(0, 0, "o", color=COL["red"], ms=6)
+    ax.plot(np.cos(th), np.sin(th), color=INK, lw=1.8)
+    ax.annotate(
+        "",
+        xy=(1.0, 0),
+        xytext=(0.85, 0.52),
+        arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.6, connectionstyle="arc3,rad=0.5"),
+    )
+    ax.plot(0, 0, "o", color=INK, ms=5)
     ax.text(0, -1.28, r"$A_{10}$: $\oint d\arg z=2\pi n$", ha="center", fontsize=9)
     ax.set_xlim(-1.35, 1.35)
     ax.set_ylim(-1.45, 1.25)
 
     ax = axes[2]
-    ax.set_aspect("equal")
-    ax.axis("off")
     r = np.linspace(0.05, 1.2, 120)
     wide = np.exp(-((r - 0.7) ** 2) / 0.25)
     tight = np.exp(-(r ** 2) / 0.03)
-    ax.plot(r, wide, color=COL["gray"], lw=1.6, ls="--", label="smear")
-    ax.plot(r, tight, color=COL["red"], lw=2.0, label="vortex")
-    ax.text(0.15, 0.85, "размазано", color=COL["gray"], fontsize=9)
-    ax.text(0.05, 0.55, "полюс", color=COL["red"], fontsize=9)
+    ax.plot(r, wide, color=MUTED, lw=1.5, ls="--")
+    ax.plot(r, tight, color=INK, lw=1.8)
+    ax.text(0.15, 0.85, "размазано", color=MUTED, fontsize=9)
+    ax.text(0.05, 0.55, "полюс", fontsize=9)
     ax.set_xlabel(r"$r$")
     ax.set_ylabel(r"$|\nabla\arg z|$")
     ax.set_title(r"$A_{11}$: anti-smear", fontsize=10)
@@ -275,7 +298,7 @@ def fig_axiom_m_t() -> None:
     phase = rng.uniform(0, 2 * np.pi, (n, n))
 
     ax = axes[0]
-    ax.imshow(np.cos(phase), cmap="twilight", vmin=-1, vmax=1, interpolation="nearest")
+    ax.imshow(np.cos(phase), cmap="gray", vmin=-1, vmax=1, interpolation="nearest")
     ax.set_title(r"$\mathcal{M}$: детерминированный $z(x,t)$", fontsize=10)
     ax.set_xticks([])
     ax.set_yticks([])
@@ -284,7 +307,7 @@ def fig_axiom_m_t() -> None:
     k = np.array([0.25, 0.5, 0.25])
     smooth = np.apply_along_axis(lambda v: np.convolve(v, k, mode="same"), 0, np.cos(phase))
     smooth = np.apply_along_axis(lambda v: np.convolve(v, k, mode="same"), 1, smooth)
-    ax.imshow(smooth, cmap="twilight", vmin=-1, vmax=1, interpolation="bilinear")
+    ax.imshow(smooth, cmap="gray", vmin=-1, vmax=1, interpolation="bilinear")
     ax.set_title(r"$\mathcal{T}$: $\Phi=\mathcal{B}z$, Born $|\Phi|^2$", fontsize=10)
     ax.set_xticks([])
     ax.set_yticks([])
@@ -299,13 +322,13 @@ def fig_axiom_heat_death() -> None:
     t = np.linspace(0, 10, 200)
     n0 = 1.0
     var = 0.8 * np.exp(-0.25 * t) + 0.05 * np.sin(2.5 * t) + 0.08
-    ax.plot(t, np.full_like(t, n0), color=COL["red"], lw=2.2, label=r"$N(t)$ на $\mathcal{M}$")
-    ax.plot(t, var, color=COL["blue"], lw=2.0, ls="--", label=r"$\mathrm{Var}(\Phi)$ на $\mathcal{T}$")
+    ax.plot(t, np.full_like(t, n0), color=INK, lw=2.0, label=r"$N(t)$ на $\mathcal{M}$")
+    ax.plot(t, var, color=MUTED, lw=1.8, ls="--", label=r"$\mathrm{Var}(\Phi)$ на $\mathcal{T}$")
     ax.set_xlabel(r"время $t$")
     ax.set_ylabel("нормированная величина")
     ax.legend(loc="upper right", fontsize=9)
     ax.set_title(r"Нет тепловой смерти на $\mathcal{M}$", fontsize=10)
-    ax.text(5.0, 0.15, r"$g^{-1}$ существует; $\mathcal{B}$ необратима", ha="center", fontsize=9, color=COL["gray"])
+    ax.text(5.0, 0.15, r"$g^{-1}$ существует; $\mathcal{B}$ необратима", ha="center", fontsize=9, color=MUTED)
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 1.15)
     _save(fig, "axiom-heat-death.pdf")
