@@ -198,7 +198,7 @@ def fig_axiom_unitarity() -> None:
     leader(ax, (0.0, 0.12), r"$R(\Phi)$", (0.0, 0.55), fontsize=11)
     leader(ax, (cx_before, -0.55), r"$z=(z_1,z_2)^\top$", (cx_before, -0.95), fontsize=10)
     leader(ax, (cx_after, -0.55), r"$R(\Phi)z$", (cx_after, -0.95), fontsize=10)
-    ax.text(0, -1.42, r"$A_4$: $SU(2)$ на $\mathbb{C}^2$, не скаляр", ha="center", fontsize=10)
+    ax.text(0, -1.42, r"$A_4$: $SU(2)$ на $\mathbb{C}^2$", ha="center", fontsize=10)
     ax.set_xlim(-2.05, 2.05)
     ax.set_ylim(-1.65, 1.25)
 
