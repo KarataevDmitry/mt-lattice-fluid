@@ -1,0 +1,175 @@
+\chapter{Обобщённые координаты микромира}
+\label{ch:native-coords}
+
+Геометрия носителя (\cref{ch:carrier}) задаёт узлы~$\Lambda$, шаг~$\hl$ и такт~$\htick$.
+Закон~$g$ (\cref{ch:evolution}) действует на регистр ячейки~$\hv$.
+Ниже фиксируется \emph{словарь}~$M$: в каких координатах пишется ядро теории
+и где заканчивается микромир и начинается мост к~$T$ (CODATA, радианы, $\pi$).
+Это не новая решётка и не замена FCC --- только смена записи, как в аналитической механике
+при переходе от декартовых координат к обобщённым $(q,\dot q)$.
+
+\section{Внешние координаты \texorpdfstring{$(dh,dt)$}{(dh,dt)}}
+\label{sec:coords-dh-dt}
+
+\begin{definition}[Внешние обобщённые координаты]
+\label{def:dh-dt}
+На слое~$M$ вводятся счётчики приращений
+\[
+  dh := \hl := \ell_P,
+  \qquad
+  dt := \htick.
+\]
+Позиция узла --- целое число скачков~$dh$ по~$\Lambda$;
+время --- счётчик тактов~$dt$.
+В натуральных единицах симуляции $dh=dt=1$, $\czero=dh/dt=1$.
+\end{definition}
+
+Конфигурация одного узла с внутренним регистром (детали --- \cref{sec:coords-internal}):
+\[
+  x\in\Lambda,\quad t\in\mathbb{Z},\quad
+  Z\in\mathbb{Z}_{N_{\mathrm{ring}}}[i],\quad
+  b\in\{0,1\}.
+\]
+
+Одна ступень действия~$s_0$ на ячейке за такт порождает механическую лестницу
+(\cref{sec:theorem-51}) без трёх независимых подгоняемых параметров:
+
+\begin{table}[ht]
+\centering
+\caption{Лестница $s_0$ в координатах $(dh,dt)$ и мост к~$T$.}
+\label{tab:dh-dt-bridge}
+\begin{tabular}{@{}lll@{}}
+\toprule
+На $M$ & В $(dh,dt)$ & Мост $T$/СИ \\
+\midrule
+$s_0$ & единица на $(\hv,1\,dt)$ & $\hbar/2$ \\
+$p_0$ & $s_0/dh$ & $\hbar/(2\hl)$ \\
+$E_0$ & $s_0/dt$ & $\hbar/(2\htick)$ \\
+$L_0$ & $s_0$ & $\hbar/2$ \\
+$\czero$ & $dh/dt$ & $\hl/\htick$ \\
+$F_0$ & $s_0/(dh\cdot dt)$ & $m_{\mathrm{arg}}\,g_M$ \\
+$\nu_0$ & $1/dt$ & $1/\htick$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Полный оборот фазового кольца за один такт (\cref{sec:bit-budget}):
+\[
+  1\,dt \;\Longleftrightarrow\; \text{оборот }\mathbb{Z}_{N_{\mathrm{ring}}},
+  \qquad
+  N_{\mathrm{ring}}=512.
+\]
+Один тик кольца --- приращение $\tau$ на единицу по модулю~$N_{\mathrm{ring}}$;
+Heisenberg-пол $\Delta\phi_{\mathrm{disc}}=41$ тиков соответствует
+$\Delta\phi_{\min}=\tfrac12$ в мосте~$T$.
+
+\begin{remark}[Без $\pi$ в ядре]
+На $M$ фазовый остаток пустой ячейки записывается тиками:
+\[
+  \alpha_*-1=\frac{\Delta\phi_{\mathrm{disc}}}{N_{\mathrm{ring}}}
+  =\frac{41}{512};
+\]
+половина кольца (Паули) --- $N_{\mathrm{ring}}/2=256$ тиков.
+Величина $\alpha_*-1\approx 1/(4\pi)$ --- \emph{имя} в мосте~$T$, не определение на~$M$.
+\end{remark}
+
+Информационный бюджет ячейки в нативных битах (\cref{sec:bit-budget}):
+\[
+  B_{\hv}=\log_2 N_{\mathrm{ring}}+\varepsilon_B,
+  \qquad
+  \varepsilon_B=\{B_{\hv}\}\approx 0{,}065,
+  \qquad
+  N_{\mathrm{hier}}=\lfloor B_{\hv}\rfloor-1=8.
+\]
+Пороги CR-энергии (\cref{ch:evolution}) в $(dh,dt)$ при $\czero=1$:
+\[
+  E_{\mathrm{CR,seed}}=\nu_{\mathrm{CA}}\,\varepsilon_B^2,
+  \qquad
+  E_{\mathrm{CR,stab}}=\nu_{\mathrm{CA}}\,(1+\varepsilon_B),
+\]
+где $\nu_{\mathrm{CA}}=\kappa_{\mathrm{link}}\,dh^2/dt$.
+
+\section{Внутренние координаты ячейки \texorpdfstring{$(k_\phi,\rho_{\mathrm{f}},\mu)$}{(kphi,rhof,mu)}}
+\label{sec:coords-internal}
+
+Регистр $Z=U+iV\in\mathbb{Z}_{N_{\mathrm{ring}}}[i]$ несёт фазу и амплитуду спинора~$\mathbb{C}^2$.
+Число $N_\phi=13=\lceil 4\pi\rceil$ на~$M$ --- целый секторный индекс ($N_{12}+1$),
+а не радианная дробь; $13$ не делит $512$, поэтому \emph{мультипликативная}
+факторизация $2^9\times 13$ не задаёт естественную решётку.
+
+\begin{definition}[Аддитивные внутренние координаты]
+\label{def:internal-coords}
+Фазовый тик $\tau\in\mathbb{Z}_{N_{\mathrm{ring}}}$ раскладывается по Heisenberg-кванту
+$\Delta\phi_{\mathrm{disc}}=41$:
+\[
+  \tau \equiv k_\phi\cdot\Delta\phi_{\mathrm{disc}}+\rho_{\mathrm{f}}
+  \pmod{N_{\mathrm{ring}}},
+\]
+где $k_\phi\in\mathbb{Z}_{N_\phi}$ --- сектор ($0,\ldots,12$),
+$\rho_{\mathrm{f}}\in\mathbb{Z}_{\Delta\phi_{\mathrm{disc}}}$ --- тонкая фаза ($0,\ldots,40$).
+Амплитуда на решётке $Q(2^{-B_{\mathrm{amp}}})$, $B_{\mathrm{amp}}=6$:
+$\mu\in\mathbb{Z}_{64}$ --- наименьший ненулевой квант $|z|$ на ячейке.
+\end{definition}
+
+\begin{proposition}[Каноническая пара $(k_\phi,\rho_{\mathrm{f}})$]
+\label{prop:canonical-phase}
+Для каждого $\tau\in\mathbb{Z}_{512}$ существует единственная каноническая пара
+с минимальным $k_\phi$ при $0\le\rho_{\mathrm{f}}<41$, восстанавливающая $\tau$.
+Наивое отображение $\mathbb{Z}_{13}\times\mathbb{Z}_{41}\to\mathbb{Z}_{512}$
+имеет ровно $21$ коллизию; шов (seam) удовлетворяет
+\[
+  N_{\mathrm{ring}}
+  =N_\phi\cdot\Delta\phi_{\mathrm{disc}}-(N_\phi+N_{\mathrm{hier}})
+  =13\cdot 41-21.
+\]
+Пары $(k_\phi=0,\,\rho_{\mathrm{f}}<21)$ и $(k_\phi=12,\,\rho_{\mathrm{f}}\ge 21)$
+описывают один и тот же тик кольца.
+\end{proposition}
+
+\begin{proof}
+Прямой перебор $512$ значений $\tau$ и проверка биекции канонической формы
+(реализация: \texttt{Internal\_phase\_coords}).
+Тождество для шва: $13\cdot 41=533=512+21$, $21=13+8=N_\phi+N_{\mathrm{hier}}$.
+\end{proof}
+
+\begin{remark}[Секция вакуума]
+Начальное состояние океана (\cref{ch:matter}) сидит на вложении
+$\rho_{\mathrm{f}}=0$, $\tau=k_\phi\cdot 41$ --- тринадцать ориентаций кирпича,
+а не произвольная фаза на кольце.
+Эволюция~$g$ заполняет весь $\mathbb{Z}_{512}$.
+\end{remark}
+
+Полный спинор: две компоненты $j=1,2$, каждая $(\mu_j,k_{\phi,j},\rho_{\mathrm{f},j})$
+или $(\mu_j,\tau_j)$; в вакууме $k_{\phi,1}=k_{\phi,2}$, $\rho_{\mathrm{f},1}=\rho_{\mathrm{f},2}=0$.
+Относительная фаза SU(2) --- $\tau_1-\tau_2$; динамика на шве из $21$ тика остаётся открытой
+(CL-O4, \cref{sec:congruence}).
+
+\section{Мост \texorpdfstring{$M\to T$}{M to T}}
+\label{sec:coords-bridge}
+
+\begin{table}[ht]
+\centering
+\caption{Где живут $\pi$, $\ln 2$ и CODATA.}
+\label{tab:m-t-bridge}
+\begin{tabular}{@{}p{0.42\linewidth}p{0.48\linewidth}@{}}
+\toprule
+Ядро $M$ & Только мост $T$ \\
+\midrule
+$\tau$, $k_\phi$, $\rho_{\mathrm{f}}$, $\mu$; $dh$, $dt$; $s_0$ & $\hbar$, $t_P$, $\ell_P$, $c$ \\
+$\Delta\phi_{\mathrm{disc}}/N_{\mathrm{ring}}$ & $\alpha_*-1=1/(4\pi)$ \\
+$N_{\mathrm{ring}}/2$ тиков & угол $\pi$ \\
+$\log_2 N_{\mathrm{ring}}+\varepsilon_B$ & $B_{\hv}=2\pi/\ln 2$ \\
+$N_\phi=13$ & $N_\phi=\lceil 4\pi\rceil$ \\
+$k=\Delta x/dh$, $\omega=2\pi/\htick$ & волновой вектор и частота в СИ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{remark}
+Остаток $\varepsilon_B\approx\{B_{\hv}\}$ --- хвост при записи ёмкости в двоичных координатах
+(CR, \cref{ch:evolution}); шов из $21$ тика --- геометрия фазовой фибрации
+(\cref{prop:canonical-phase}). Это разные объекты.
+\end{remark}
+
+Далее формулы в главах об эволюции, материи и $\alpha$ можно читать в двух колонках
+\cref{tab:dh-dt-bridge,tab:m-t-bridge}: слева --- закон на решётке, справа --- имя наблюдателя.
