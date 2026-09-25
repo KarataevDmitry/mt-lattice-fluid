@@ -14,6 +14,7 @@ import torch
 
 from verify_checks.axioms import *  # noqa: F403
 from verify_checks.alpha import *  # noqa: F403
+from verify_checks.floor0 import *  # noqa: F403
 from verify_checks.floor1 import *  # noqa: F403
 from verify_checks.units import *  # noqa: F403
 from verify_checks.carrier import *  # noqa: F403
@@ -66,6 +67,7 @@ def run_all(device: str) -> list[dict]:
         check_time_dim_from_tP(device=device),
         check_units_time_first_cascade(device=device),
         check_planck_temperature_independent(device=device),
+        check_brick_internal_spectrum(device=device),
         check_floor1_leptonic(device=device),
         check_floor1_B0_census(device=device),
         check_floor1_dressing(device=device),

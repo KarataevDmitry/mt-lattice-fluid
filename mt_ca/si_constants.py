@@ -566,6 +566,7 @@ def as_code_dict() -> dict[str, float]:
 
 
 from mt_ca.si_alpha_rows import SIAlphaRows
+from mt_ca.si_floor0_rows import SIFloor0Rows
 from mt_ca.si_floor1_rows import SIFloor1Rows
 from mt_ca.si_units_rows import SIUnitsRows
 from mt_ca.si_carrier_rows import SICarrierRows
@@ -573,7 +574,7 @@ from mt_ca.si_sm_rows import SISmRows
 
 
 @dataclass(frozen=True)
-class SIConstants(SIAlphaRows, SIFloor1Rows, SIUnitsRows, SICarrierRows, SISmRows):
+class SIConstants(SIAlphaRows, SIFloor0Rows, SIFloor1Rows, SIUnitsRows, SICarrierRows, SISmRows):
 
     """Planck lattice steps and gate parameters in SI."""
 

@@ -1,7 +1,8 @@
 \chapter{Элементарный объём и материя}
 \label{ch:matter}
 
-\section{Бинарная занятость и первичный дефект}
+\section{Бинарная занятость и планкон}
+\label{sec:planckon-floor0}
 
 На каждой ячейке~$\PlanckCell$ вводится бинарная занятость $b(x)\in\{0,1\}$:
 фон вакуума ($b=0$) или локализованный узел ($b=1$).
@@ -235,6 +236,32 @@ $\mathcal{F}_{\mathrm{GL}}[\Phi]$ для неоднородного $\Phi(X)$, �
 \item топологический заряд: $n\in\mathbb{Z}$.
 \end{itemize}
 \end{proposition}
+
+\section{Внутренний спектр планкона}
+\label{sec:planckon-internal-spectrum}
+
+На одном~$\hv$ (\cref{sec:planckon-floor0}, этаж~0) два внутренних регистра,
+не отдельные поля Стандартной модели:
+фазовое кольцо $\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$ ($N_{\mathrm{ring}}=512$)
+и спинор~$SU(2)$ на ядре.
+
+\begin{proposition}[Лестница $n_E$ на кольце]
+\label{prop:brick-ne-ladder}
+Минимальный скачок $\Delta\varphi_{\min}$ соответствует одному кванту~$E_0$:
+41~тик $\Rightarrow$ $n_E=1$; Pauli-kick $=256=N_{\mathrm{ring}}/2$;
+полный оборот $512$ тик $\Rightarrow$ $n_E=12$.
+\end{proposition}
+
+\begin{proposition}[Основное состояние планкон]
+\label{prop:brick-vortex-ground}
+Устойчивый vortex с $n=\pm1$ после релаксации:
+$b=1$, $|\Delta\varphi|_{\mathrm{core}}<\Delta\varphi_{\min}$,
+$n_E=0$ в gate-ledger, устойчивый вектор Блоха на ядре.
+Вращение вокруг оси Блоха: $2\pi\to-1$, $4\pi\to+1$ (спин~$\tfrac12$).
+\end{proposition}
+
+Возбуждения с $n_E\ge 1$ в свободной эволюции стандартных seeds
+пока не закрыты sim'ом --- отдельный под-leaf этажа~0.
 
 \section{Геометрический квант связи \texorpdfstring{$\kappa_{\mathrm{link}}=1/|N|$}{kappa=1/|N|}}
 
