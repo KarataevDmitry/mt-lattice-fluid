@@ -486,6 +486,31 @@ def check_bubble_tick(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
+def check_internal_phase_coords(device: str = "cpu") -> dict:
+    """§3.12.6c — CL-O4 probe: canonical (kappa, rho) coords on Z_N_ring."""
+    from mt_ca.si_constants import internal_phase_coords_row
+
+    row = internal_phase_coords_row()
+    ok = (
+        row["N_ring"] == 512
+        and row["N_phi"] == 13
+        and row["delta_phi_disc"] == 41
+        and row["frac_bits"] == 6
+        and row["seam_ticks"] == 21
+        and row["seam_eq_N_phi_plus_N_hier"]
+        and row["naive_kappa_rho_collisions"] == 21
+        and row["canonical_bijection_ok"]
+        and row["heisenberg_section_rho_zero_ok"]
+        and row["delta_inv_mod_N_phi"] == 7
+    )
+    return {
+        "id": "Internal_phase_coords",
+        "ok": ok,
+        **{k: v for k, v in row.items() if k != "theorem"},
+        "note": row["note"],
+    }
+
+
 def check_congruence_ladder(device: str = "cpu") -> dict:
     """§3.12.7 — Z_512 congruence ladder: gcd, half-ring Pauli, n_E ledger."""
     from mt_ca.si_constants import congruence_ladder_row, n_E_from_phi_ticks

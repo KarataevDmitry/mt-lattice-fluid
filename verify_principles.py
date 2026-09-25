@@ -80,6 +80,7 @@ def run_all(device: str) -> list[dict]:
         check_nu_CA_exact(device=device),
         check_hv_bit_budget(device=device),
         check_congruence_ladder(device=device),
+        check_internal_phase_coords(device=device),
         check_rho_P_binary(device=device),
         check_vdw_algebra(device=device),
         check_arg_quantum(device=device),

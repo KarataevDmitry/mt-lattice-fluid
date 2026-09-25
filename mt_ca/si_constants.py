@@ -1358,6 +1358,107 @@ def congruence_ladder_row(
 
 
 
+def internal_phase_decode(
+    tau: int,
+    *,
+    n_ring: int | None = None,
+    n_phi: int | None = None,
+    delta_phi_disc: int | None = None,
+) -> tuple[int, int]:
+    """§3.12.6c — canonical (κ, ρ) for τ ∈ ℤ_{N_ring}.
+
+    κ ∈ ℤ_{N_φ} (Heisenberg sector), ρ ∈ ℤ_{Δφ_disc} (fine ticks).
+    Canonical = smallest κ with ρ < Δφ_disc and τ ≡ κ·Δφ_disc + ρ (mod N_ring).
+    """
+    n_ring = HV.N_ring if n_ring is None else n_ring
+    n_phi = HV.N_phi if n_phi is None else n_phi
+    delta = (
+        heisenberg_phi_min_disc(phase_bits=int(math.log2(n_ring)))
+        if delta_phi_disc is None
+        else delta_phi_disc
+    )
+    tau_i = int(tau) % n_ring
+    best: tuple[int, int] | None = None
+    for kappa in range(n_phi):
+        rho = (tau_i - kappa * delta) % n_ring
+        if rho < delta:
+            if best is None or kappa < best[0]:
+                best = (kappa, rho)
+    if best is None:
+        raise ValueError(f"no canonical (kappa, rho) for tau={tau_i}")
+    return best
+
+
+def internal_phase_encode(
+    kappa: int,
+    rho: int,
+    *,
+    n_ring: int | None = None,
+    n_phi: int | None = None,
+    delta_phi_disc: int | None = None,
+) -> int:
+    """§3.12.6c — τ = κ·Δφ_disc + ρ (mod N_ring); ρ need not be canonical."""
+    n_ring = HV.N_ring if n_ring is None else n_ring
+    n_phi = HV.N_phi if n_phi is None else n_phi
+    delta = (
+        heisenberg_phi_min_disc(phase_bits=int(math.log2(n_ring)))
+        if delta_phi_disc is None
+        else delta_phi_disc
+    )
+    kappa_i = int(kappa) % n_phi
+    rho_i = int(rho) % delta
+    return (kappa_i * delta + rho_i) % n_ring
+
+
+def internal_phase_coords_row() -> dict[str, float | int | str | bool]:
+    """§3.12.6c — CL-O4 probe: natural internal coords (κ, ρ, μ) on one hV brick."""
+    hv = hv_bit_budget()
+    n_ring = hv.N_ring
+    n_phi = hv.N_phi
+    delta = heisenberg_phi_min_disc(phase_bits=hv.phase_bits)
+    seam = n_phi * delta - n_ring
+    n_hier = N_HIER_CHANNELS
+    naive_collisions = 0
+    seen: dict[int, tuple[int, int]] = {}
+    for kappa in range(n_phi):
+        for rho in range(delta):
+            tau = (kappa * delta + rho) % n_ring
+            if tau in seen:
+                naive_collisions += 1
+            else:
+                seen[tau] = (kappa, rho)
+    canon_ok = True
+    for tau in range(n_ring):
+        kappa, rho = internal_phase_decode(tau, n_ring=n_ring, n_phi=n_phi, delta_phi_disc=delta)
+        if internal_phase_encode(kappa, rho, n_ring=n_ring, n_phi=n_phi, delta_phi_disc=delta) != tau:
+            canon_ok = False
+            break
+    section_ok = all(
+        internal_phase_encode(k, 0, n_ring=n_ring, n_phi=n_phi, delta_phi_disc=delta)
+        == (k * delta) % n_ring
+        for k in range(n_phi)
+    )
+    return {
+        "theorem": "§3.12.6c: tau <-> (kappa, rho) canonical; mu in Z_{2^frac_bits}",
+        "N_ring": n_ring,
+        "N_phi": n_phi,
+        "delta_phi_disc": delta,
+        "frac_bits": hv.frac_bits,
+        "amplitude_levels": 1 << hv.frac_bits,
+        "seam_ticks": seam,
+        "seam_eq_N_phi_plus_N_hier": seam == n_phi + n_hier,
+        "N_phi_times_delta_minus_N_ring": n_phi * delta - n_ring,
+        "naive_kappa_rho_collisions": naive_collisions,
+        "canonical_bijection_ok": canon_ok,
+        "heisenberg_section_rho_zero_ok": section_ok,
+        "delta_inv_mod_N_phi": pow(delta % n_phi, -1, n_phi),
+        "note": (
+            "CL-O4 partial: additive coords (kappa,rho) close; "
+            "not multiplicative 2^9 x Z_13; seam=21=N_phi+N_hier"
+        ),
+    }
+
+
 def hv_bit_budget_row() -> dict[str, float | int]:
 
     """§3.12.6 — Planck-derived hV bit budget for verify / configs."""
