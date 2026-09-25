@@ -97,8 +97,8 @@ def _filled_brick_from_phase_class(
     phase_bits: int = HV.phase_bits,
 ) -> torch.Tensor:
     """Encode a per-cell Heisenberg class grid into Z_N[i] (filled lattice, no void)."""
-    if phase_class.dim() != 2:
-        raise ValueError("phase_class must be 2D (ny, nx)")
+    if phase_class.dim() not in (2, 3):
+        raise ValueError("phase_class must be 2D (ny,nx) or 3D (nz,ny,nx)")
     n_ring = 1 << phase_bits
     delta = heisenberg_phi_min_disc(phase_bits=phase_bits)
     tick = (phase_class.to(torch.int64) * int(delta)) % n_ring
@@ -173,6 +173,91 @@ def vacuum_ice_fixed(
     return _filled_brick_from_phase_class(
         pc, device=device, mod_bits=mod_bits, phase_bits=phase_bits
     )
+
+
+def vacuum_boil_fixed_3d(
+    nz: int,
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    class_dz: int = 1,
+    class_dy: int = 1,
+    class_dx: int = 1,
+    class_offset: int = 0,
+) -> torch.Tensor:
+    """3+1 FCC habitat — filled brick ocean (§1.6 · §0.5)."""
+    _ = frac_bits
+    dz = int(class_dz) % n_phi
+    dy = int(class_dy) % n_phi
+    dx = int(class_dx) % n_phi
+    off = int(class_offset) % n_phi
+    zz, yy, xx = torch.meshgrid(
+        torch.arange(nz, device=device, dtype=torch.int64),
+        torch.arange(ny, device=device, dtype=torch.int64),
+        torch.arange(nx, device=device, dtype=torch.int64),
+        indexing="ij",
+    )
+    phase_class = (dz * zz + dy * yy + dx * xx + off) % n_phi
+    return _filled_brick_from_phase_class(
+        phase_class, device=device, mod_bits=mod_bits, phase_bits=phase_bits
+    )
+
+
+def vacuum_ice_fixed_3d(
+    nz: int,
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    phase_class: int = 0,
+) -> torch.Tensor:
+    """3+1 synchronous ice — uniform Heisenberg class on filled FCC lattice."""
+    _ = frac_bits
+    base = int(phase_class) % n_phi
+    pc = torch.full((nz, ny, nx), base, device=device, dtype=torch.int64)
+    return _filled_brick_from_phase_class(
+        pc, device=device, mod_bits=mod_bits, phase_bits=phase_bits
+    )
+
+
+def boil_ocean_spinor_3d(
+    nz: int,
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    dtype: torch.dtype = torch.complex64,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    class_dz: int = 1,
+    class_dy: int = 1,
+    class_dx: int = 1,
+    class_offset: int = 0,
+) -> torch.Tensor:
+    f = vacuum_boil_fixed_3d(
+        nz,
+        ny,
+        nx,
+        device=device,
+        mod_bits=mod_bits,
+        frac_bits=frac_bits,
+        phase_bits=phase_bits,
+        class_dz=class_dz,
+        class_dy=class_dy,
+        class_dx=class_dx,
+        class_offset=class_offset,
+    )
+    return decode_spinor(f, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
 
 
 def vacuum_ice_phase_shift_fixed(
@@ -445,7 +530,16 @@ def make_seed(
 
     if seed_class is SeedClass.VACUUM_BOIL:
         if nz is not None:
-            raise ValueError("VACUUM_BOIL is 2D-only in this leaf")
+            return boil_ocean_spinor_3d(
+                nz,
+                ny,
+                nx,
+                device=device,
+                dtype=dtype,
+                mod_bits=mod_bits,
+                frac_bits=frac_bits,
+                phase_bits=phase_bits,
+            )
         f_boil = vacuum_boil_fixed(
             ny,
             nx,
@@ -467,14 +561,15 @@ def make_seed(
         )
         ocean = decode_spinor(f_boil, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
     else:
-        ocean = vacuum_ocean_spinor(
-            *spatial,
+        ocean = boil_ocean_spinor_3d(
+            nz,
+            ny,
+            nx,
             device=device,
             dtype=dtype,
             mod_bits=mod_bits,
             frac_bits=frac_bits,
             phase_bits=phase_bits,
-            phase_class=0,
         )
 
     if nz is not None:

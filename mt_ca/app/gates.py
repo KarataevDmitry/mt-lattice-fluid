@@ -4,7 +4,13 @@ from __future__ import annotations
 import torch
 
 from mt_ca.spinor import spinor_density
-from mt_ca.topology import matter_occupancy_b, winding_channels, winding_nearest_int
+from mt_ca.topology import (
+    gate_plane_z,
+    matter_occupancy_b,
+    unravel_peak_index,
+    winding_channels,
+    winding_nearest_int,
+)
 
 
 def gate_b(
@@ -18,18 +24,19 @@ def gate_b(
     flat = rho.reshape(-1)
     k = min(top_k, flat.numel())
     _, idx = torch.topk(flat, k)
-    ny, nx = rho.shape
+    plane_shape = rho.shape[-2:]
+    ny, nx = plane_shape
     b_hits = 0
     w_abs_max = 0.0
     w_rel_max = 0.0
     w_u1_max = 0.0
     margin = contour_radius + 1
     for i in range(k):
-        y = int(idx[i].item() // nx)
-        x = int(idx[i].item() % nx)
+        iz, y, x = unravel_peak_index(rho, int(idx[i].item()))
+        z_plane = gate_plane_z(z, iz) if iz is not None else z
         if y < margin or x < margin or y >= ny - margin or x >= nx - margin:
             continue
-        ch = winding_channels(z, center=(y, x), radius=contour_radius)
+        ch = winding_channels(z_plane, center=(y, x), radius=contour_radius)
         w = ch["auto"]
         if ch["rel"] == ch["rel"]:
             w_rel_max = max(w_rel_max, abs(float(ch["rel"])))
@@ -71,15 +78,15 @@ def peak_stats(
     flat = rho.reshape(-1)
     k = min(top_k, flat.numel())
     _, idx = torch.topk(flat, k)
-    ny, nx = rho.shape
+    ny, nx = rho.shape[-2:]
     windings: list[float] = []
     margin = contour_radius + 1
     for i in range(k):
-        y = int(idx[i].item() // nx)
-        x = int(idx[i].item() % nx)
+        iz, y, x = unravel_peak_index(rho, int(idx[i].item()))
+        z_plane = gate_plane_z(z, iz) if iz is not None else z
         if y < margin or x < margin or y >= ny - margin or x >= nx - margin:
             continue
-        w = winding_number(z, center=(y, x), radius=contour_radius)
+        w = winding_number(z_plane, center=(y, x), radius=contour_radius)
         if w == w:
             windings.append(float(w))
     return {

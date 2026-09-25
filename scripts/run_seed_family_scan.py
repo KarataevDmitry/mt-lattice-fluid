@@ -23,7 +23,7 @@ import torch
 from mt_ca.app import RunSpec, gate_b, scenario_for_seed
 from mt_ca.app.runner import apply_scenario
 from mt_ca.config import MConfig
-from mt_ca.seeds import SeedClass
+from mt_ca.seeds import SeedClass, make_seed
 from mt_ca.simulator import LatticeFluidSimulator
 
 # Seek birth here; vortices are planted controls.
@@ -46,8 +46,23 @@ def run_one(
     sim: LatticeFluidSimulator,
     seed: SeedClass,
     steps: int,
+    nz: int | None = None,
 ) -> dict:
-    apply_scenario(sim, scenario_for_seed(seed))
+    if nz is None:
+        apply_scenario(sim, scenario_for_seed(seed))
+    else:
+        z = make_seed(
+            seed,
+            sim.ny,
+            sim.nx,
+            nz=nz,
+            device=sim.device,
+            dtype=sim.dtype,
+            mod_bits=sim.cfg.mod_bits,
+            frac_bits=sim.cfg.frac_bits,
+            phase_bits=sim.cfg.phase_bits,
+        )
+        sim.set_field(z)
     g0 = gate_b(sim.z)
     sim.step(steps)
     g1 = gate_b(sim.z)
@@ -76,18 +91,37 @@ def main() -> int:
         action="store_true",
         help="only birth candidates (skip VORTEX_* controls)",
     )
+    p.add_argument(
+        "--fcc",
+        action="store_true",
+        help="3+1 FCC stencil (canon §1.6); default 2+1 hex slice",
+    )
+    p.add_argument(
+        "--nz",
+        type=int,
+        default=0,
+        help="FCC depth (default: same as --size when --fcc)",
+    )
     args = p.parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         args.device = "cpu"
 
     families = BIRTH_FAMILIES if args.skip_planted else ALL_FAMILIES
-    cfg = MConfig.for_stencil("hex")
-    sim = LatticeFluidSimulator(args.size, args.size, cfg, device=args.device)
+    stencil = "fcc" if args.fcc else "hex"
+    nz = (args.nz if args.nz > 0 else args.size) if args.fcc else None
+    cfg = MConfig.for_stencil(stencil)
+    sim = LatticeFluidSimulator(
+        args.size,
+        args.size,
+        cfg,
+        nz=nz,
+        device=args.device,
+    )
 
     rows: list[dict] = []
     t0 = time.perf_counter()
     for i, seed in enumerate(families):
-        row = run_one(sim=sim, seed=seed, steps=args.steps)
+        row = run_one(sim=sim, seed=seed, steps=args.steps, nz=nz)
         rows.append(row)
         print(
             f"{i + 1}/{len(families)} {seed.value}: "
@@ -106,7 +140,10 @@ def main() -> int:
     out = {
         "id": "seed_family_scan",
         "families": [s.value for s in families],
+        "stencil": stencil,
+        "dims": f"{nz}x{args.size}x{args.size}" if nz else f"{args.size}x{args.size}",
         "size": args.size,
+        "nz": nz,
         "steps": args.steps,
         "device": args.device,
         "scanned": len(rows),
@@ -132,7 +169,7 @@ def main() -> int:
     else:
         gpu = torch.cuda.get_device_name(0) if args.device == "cuda" else "cpu"
         print(
-            f"device={args.device} ({gpu}) size={args.size} steps={args.steps} "
+            f"device={args.device} ({gpu}) stencil={stencil} dims={out['dims']} steps={args.steps} "
             f"scanned={out['scanned']} in {out['seconds']}s"
         )
         print(

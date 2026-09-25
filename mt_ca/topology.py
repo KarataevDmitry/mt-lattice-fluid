@@ -74,6 +74,28 @@ def phase_field_rel(z: torch.Tensor) -> torch.Tensor:
     return torch.angle(z[..., 1] / (z[..., 0] + 1e-12))
 
 
+def gate_plane_z(z: torch.Tensor, iz: int) -> torch.Tensor:
+    """2D (ny,nx,2) slice for A10 contour readout in 3+1 (winding in a plane)."""
+    if z.ndim == 3:
+        return z
+    return z[iz]
+
+
+def unravel_peak_index(rho: torch.Tensor, flat_idx: int) -> tuple[int | None, int, int]:
+    """Map flat density index → (iz?, iy, ix). iz is None in 2+1."""
+    if rho.ndim == 2:
+        _, nx = rho.shape
+        iy = flat_idx // nx
+        ix = flat_idx % nx
+        return None, iy, ix
+    _, ny, nx = rho.shape
+    iz = flat_idx // (ny * nx)
+    rem = flat_idx % (ny * nx)
+    iy = rem // nx
+    ix = rem % nx
+    return iz, iy, ix
+
+
 def phase_field_u1(z: torch.Tensor) -> torch.Tensor:
     """U(1) ocean phase Arg(z₁+z₂) — sees locked equal-lane boil (§5.0 · A10).
 
@@ -223,12 +245,19 @@ def matter_occupancy_b(
     from mt_ca.config import MConfig
     from mt_ca.spinor import spinor_density
 
-    if y is None or x is None:
-        cy, cx = torch.unravel_index(spinor_density(z).argmax(), z.shape[:2])
-        y, x = int(cy.item()), int(cx.item())
-
     rho = spinor_density(z)
-    if float(rho[y, x].item()) < rho_frac * MConfig.for_stencil("hex").rho_max:
+    if y is None or x is None:
+        flat_idx = int(rho.reshape(-1).argmax().item())
+        iz, y, x = unravel_peak_index(rho, flat_idx)
+        if iz is not None:
+            z = gate_plane_z(z, iz)
+            rho_peak = float(rho[iz, y, x].item())
+        else:
+            rho_peak = float(rho[y, x].item())
+    else:
+        rho_peak = float(rho[y, x].item()) if rho.ndim == 2 else float(rho[:, y, x].max().item())
+
+    if rho_peak < rho_frac * MConfig.for_stencil("hex").rho_max:
         return 0
 
     w = winding_number(z, center=(y, x), radius=contour_radius)
