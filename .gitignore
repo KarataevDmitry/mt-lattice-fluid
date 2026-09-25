@@ -14,3 +14,9 @@ venv/
 htmlcov/
 dist/
 build/
+book/sources/*.aux
+book/sources/*.log
+book/sources/*.out
+book/sources/*.toc
+book/sources/main.pdf
+book/out/
