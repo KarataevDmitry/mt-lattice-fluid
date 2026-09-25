@@ -1,0 +1,144 @@
+\xpg@aux {}{russian}
+\contentsline {chapter}{Предисловие}{3}{chapter*.1}%
+\contentsline {chapter}{\numberline {1}От требований физики к планковскому миру}{9}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Требования физики}{9}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Макромир}{10}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Микромир}{10}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Квантовая механика}{11}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Теория поля}{12}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Планковский мир}{13}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Дискретизация фазы}{14}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Обобщённые координаты}{14}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Локальный обратимый автомат}{15}{section.1.9}%
+\contentsline {subsection}{\numberline {1.9.1}Словарь: термины клеточного автомата и слой~$M$}{15}{subsection.1.9.1}%
+\contentsline {section}{\numberline {1.10}Сводка моста}{16}{section.1.10}%
+\contentsline {chapter}{\numberline {2}Физическое обоснование абсолютных условий}{17}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Лестница}{17}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Каузальность, локальность, изотропия}{17}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Квантовая механика как сохранение информации}{18}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Термодинамика микроуровня}{18}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Аналитичность, заряд, устойчивость дефектов}{19}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Симметрии и геометрия констант связи}{19}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Сводная схема}{19}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Что остаётся за рамками условий}{19}{section.2.8}%
+\contentsline {chapter}{\numberline {3}Абсолютные условия $A_1$--$A_{16}$}{21}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Введение}{21}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Каузальность, локальность, унитарность}{21}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Термодинамика микроуровня}{22}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Аналитичность и топология}{23}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Изотропия, обратимость, симметрии}{23}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Детерминизм и «квантовая случайность''}{24}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Теорема о невозможности тепловой смерти $M$}{25}{section.3.7}%
+\contentsline {chapter}{\numberline {4}Геометрия носителя}{29}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Что уже введено}{29}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Световая окрестность}{29}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Гексагональный срез $(2{+}1)$}{30}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Регулярные замощения плоскости}{30}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Константы на гексагональном слое}{30}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}Выбор FCC с двенадцатью соседями}{32}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Геометрия однотактового тела на FCC}{33}{subsection.4.4.1}%
+\contentsline {section}{\numberline {4.5}Планковская решётка}{35}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Две скорости и мост $c=\kappa c_0$}{36}{section.4.6}%
+\contentsline {section}{\numberline {4.7}Отказ от континуума на микроуровне}{36}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Каузальность и наблюдаемая скорость света}{37}{section.4.8}%
+\contentsline {section}{\numberline {4.9}Аналогия с физикой твёрдого тела}{37}{section.4.9}%
+\contentsline {section}{\numberline {4.10}Связь $(3{+}1)$ и $(2{+}1)$}{37}{section.4.10}%
+\contentsline {section}{\numberline {4.11}Соседство среза и объёма}{38}{section.4.11}%
+\contentsline {chapter}{\numberline {5}Дискретность микроуровня}{39}{chapter.5}%
+\contentsline {section}{\numberline {5.1}От постулата к теореме}{39}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Состояние, континуум, вакуум}{40}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Замыкание закона, механика, кванты}{40}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Закон эволюции}{41}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Общая структура}{41}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Ограничения шага}{41}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Фазовый инвариант $\zeta $}{41}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Спин и группа $SU(2)$}{41}{section.6.4}%
+\contentsline {section}{\numberline {6.5}$U(1)_{\mathrm {vac}}$ и хиральность}{42}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Замыкание $g$ на $\mathbb {Z}_N[i]$}{42}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Информационный бюджет ячейки}{43}{subsection.6.6.1}%
+\contentsline {subsection}{\numberline {6.6.2}Лестница согласованности}{43}{subsection.6.6.2}%
+\contentsline {chapter}{\numberline {7}От микроуровня к макроописанию}{45}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Необходимость перехода}{45}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Электрон как составная структура}{45}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Оператор осреднения $\mathcal {B}$}{45}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Теорема T-CR: континуум как следствие осреднения}{45}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Свободная энергия Ginzburg--Landau}{46}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Нелинейное уравнение Шрёдингера и гидродинамика}{47}{section.7.6}%
+\contentsline {paragraph}{Диссипация осреднения.}{47}{section*.51}%
+\contentsline {section}{\numberline {7.7}Туннелирование и правило Бorn}{47}{section.7.7}%
+\contentsline {chapter}{\numberline {8}Элементарный объём и материя}{49}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Бинарная занятость и планкон}{49}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Несжимаемая решёточная жидкость}{49}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Теорема о механической лестнице}{49}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Термодинамические потенциалы на $T$}{51}{section.8.4}%
+\contentsline {paragraph}{Внутренняя энергия.}{51}{section*.52}%
+\contentsline {paragraph}{Давление и модуль.}{51}{section*.53}%
+\contentsline {paragraph}{Энтропия.}{51}{section*.54}%
+\contentsline {paragraph}{Функции Гельмгольца и Гиббса.}{51}{section*.55}%
+\contentsline {section}{\numberline {8.5}Симметрии и дискретные заряды}{52}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Внутренний спектр и запрещёнка}{52}{section.8.6}%
+\contentsline {section}{\numberline {8.7}Геометрический квант связи $\kappa _{\mathrm {link}}=1/|N|$}{52}{section.8.7}%
+\contentsline {section}{\numberline {8.8}Фононы и спектр}{52}{section.8.8}%
+\contentsline {part}{I\hspace {1em}Этажи вверх}{53}{part.1}%
+\contentsline {chapter}{\numberline {9}С планковского пола вверх}{55}{chapter.9}%
+\contentsline {paragraph}{Три этажа.}{55}{section*.56}%
+\contentsline {paragraph}{Что не смешивать.}{55}{section*.57}%
+\contentsline {paragraph}{Порядок чтения.}{55}{section*.58}%
+\contentsline {chapter}{\numberline {10}Этаж~0. Планковский пол}{57}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Один планкон в одной ячейке}{57}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Два внутренних регистра}{57}{section.10.2}%
+\contentsline {paragraph}{Фазовое кольцо.}{57}{section*.60}%
+\contentsline {paragraph}{Спинор на ядре.}{57}{section*.61}%
+\contentsline {section}{\numberline {10.3}Лестница $n_E$ на кольце}{58}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Основное состояние}{58}{section.10.4}%
+\contentsline {section}{\numberline {10.5}Монодромия $SU(2)$ на ядре}{58}{section.10.5}%
+\contentsline {section}{\numberline {10.6}Что ещё не закрыто}{59}{section.10.6}%
+\contentsline {paragraph}{Связь с электроном.}{59}{section*.64}%
+\contentsline {paragraph}{Связь с кварками и квантовыми числами.}{59}{section*.65}%
+\contentsline {chapter}{\numberline {11}Этаж~1. Чуть выше: облако и $\varepsilon $-оболочки}{61}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Радиус этажа}{61}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Три слоя плотности}{61}{section.11.2}%
+\contentsline {section}{\numberline {11.3}Минимальный ореол: $R_{\mathrm {dress}}=hL$}{62}{section.11.3}%
+\contentsline {section}{\numberline {11.4}Кто устойчив на этаже~1}{62}{section.11.4}%
+\contentsline {section}{\numberline {11.5}Связь с электроном}{62}{section.11.5}%
+\contentsline {section}{\numberline {11.6}Открыто на этаже~1}{63}{section.11.6}%
+\contentsline {chapter}{\numberline {12}Этаж~2. Составной узел: кварки и квантовые числа}{65}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Радиус и объект}{65}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Конфайнмент без нового поля}{65}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Квантовые числа}{65}{section.12.3}%
+\contentsline {section}{\numberline {12.4}Связь с сильным взаимодействием}{66}{section.12.4}%
+\contentsline {section}{\numberline {12.5}Открыто на этаже~2}{66}{section.12.5}%
+\contentsline {paragraph}{Что читать дальше.}{66}{section*.69}%
+\contentsline {chapter}{\numberline {13}Постоянная тонкой структуры}{67}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Что искали}{67}{section.13.1}%
+\contentsline {section}{\numberline {13.2}Ложный след: $\alpha ^*$ и $\pi $-башня}{67}{section.13.2}%
+\contentsline {section}{\numberline {13.3}Спуск без памяти лаборатории}{68}{section.13.3}%
+\contentsline {section}{\numberline {13.4}Лабораторные двери (читают, не выводят)}{68}{section.13.4}%
+\contentsline {paragraph}{Швингер / аномальный момент.}{68}{section*.70}%
+\contentsline {paragraph}{Ридберг и квантовый дефект массы водорода.}{68}{section*.71}%
+\contentsline {paragraph}{Холл и квант сопротивления.}{68}{section*.72}%
+\contentsline {paragraph}{Hop-лестница.}{68}{section*.73}%
+\contentsline {section}{\numberline {13.5}Сила на решётке}{68}{section.13.5}%
+\contentsline {section}{\numberline {13.6}Теорема о $M=97$}{69}{section.13.6}%
+\contentsline {section}{\numberline {13.7}Мягкая грань: закрытие числа}{69}{section.13.7}%
+\contentsline {section}{\numberline {13.8}Вверх по лестнице}{69}{section.13.8}%
+\contentsline {section}{\numberline {13.9}Карта пути и открытые хвосты}{69}{section.13.9}%
+\contentsline {paragraph}{Ещё открыто.}{69}{section*.76}%
+\contentsline {chapter}{\numberline {14}Система SI и Стандартная модель}{71}{chapter.14}%
+\contentsline {section}{\numberline {14.1}Полная лестница масштабов до макромира}{71}{section.14.1}%
+\contentsline {paragraph}{Геометрия каузальной звезды.}{71}{section*.77}%
+\contentsline {paragraph}{Инфракрасная hop-лестница.}{71}{section*.78}%
+\contentsline {paragraph}{Массы и степени~$\alpha $.}{71}{section*.79}%
+\contentsline {section}{\numberline {14.2}Мост к системе SI}{72}{section.14.2}%
+\contentsline {section}{\numberline {14.3}Постоянная тонкой структуры}{72}{section.14.3}%
+\contentsline {section}{\numberline {14.4}Электрослабый сектор}{72}{section.14.4}%
+\contentsline {section}{\numberline {14.5}Массы частиц}{73}{section.14.5}%
+\contentsline {section}{\numberline {14.6}Четыре взаимодействия}{73}{section.14.6}%
+\contentsline {chapter}{\numberline {A}Клеточные автоматы, обратимость и представление Маделунга}{75}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Зачем это приложение}{75}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Исторические клеточные автоматы}{75}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Тьюринг-полнота}{75}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Обратимость: Тоффоли и Фредкин}{75}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Представление Маделунга}{76}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Сводная таблица}{76}{section.A.6}%
+\contentsline {section}{\numberline {A.7}Литература для первого чтения}{76}{section.A.7}%
