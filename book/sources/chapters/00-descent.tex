@@ -382,9 +382,154 @@ $\PlanckCell$ --- этот узел.
 \]
 \end{definition}
 
-Этим спуск заканчивается.
-Узлы, шаг, такт, окрестность одного такта и поле на узле
-появились как то, что остаётся от уже названных требований,
-когда их перестало выполнять поле в каждой точке.
-Макромир, с которого начался спуск, далее обозначается~$T$:
-это осреднение по~$M$.
+Дальше --- не новый «язык'', а те же требования, записанные без континуума:
+дискретная фаза, конечный регистр на узле, обратимый локальный шаг.
+Геометрия~$\Lambda$ (FCC) и конкретный закон~$g$ выбираются в следующих главах;
+здесь фиксируется, \emph{что} осталось после QED и планковского счёта.
+
+\section{Дискретизация фазы}
+\label{sec:descent-phase-disc}
+\label{sec:coords-internal}
+
+На макроэтаже волновая функция допускает запись Маделунга,
+\[
+  \psi=\sqrt{\rho}\,e^{i\varphi/\hbar},
+\]
+с плотностью $\rho=|\psi|^2$ и фазой~$\varphi$.
+На узле~$\PlanckCell$ тот же смысл несут $|z|^2$ и аргументы компонент $z_k$.
+Континуумная фаза $\varphi\in\mathbb{R}$ на одном кирпиче не определена бесконечно точно:
+требование обратимости и конечного числа различимых состояний
+(\eqref{eq:state-count}) задаёт \emph{конечное кольцо фаз}.
+
+Счёт \eqref{eq:state-count} на ячейке объёма~$v_{\hv}\sim\hl^3$ даёт информационный бюджет
+\[
+  B_{\hv}=\frac{2\pi}{\ln 2}\quad\text{(мост $T$)},\qquad
+  N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512,\qquad
+  B_{\hv}=\log_2 N_{\mathrm{ring}}+\varepsilon_B,\quad \varepsilon_B\approx 0{,}065.
+\]
+Минимальный фазовый шаг, уже видимый в квантовой механике как $\Delta\phi_{\min}=\tfrac12$,
+на кольце есть целое число тиков:
+\[
+  \Delta\phi_{\mathrm{disc}}=41,\qquad
+  N_\phi=\lceil 2\pi/\Delta\phi_{\min}\rceil=13.
+\]
+Один такт~$\htick$ --- полный оборот $\mathbb{Z}_{N_{\mathrm{ring}}}$;
+генератор вращения $\omega=e^{i2\pi/N_{\mathrm{ring}}}$, состояние на $S^1$ --- $\omega^{\varphi_{\mathrm{disc}}}$.
+
+\begin{remark}[Фаза, $\omega$ и kick $\Phi$]
+\label{rem:phi-omega-Phi}
+$\varphi_{\mathrm{disc}}\in\mathbb{Z}_{N_{\mathrm{ring}}}$ --- \emph{координата} фазы (аддитивный индекс).
+$\omega$ --- генератор, не вторая координата.
+$\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$ --- фазовый \emph{kick} за такт ($R(\Phi)=\omega^{\Phi}$), не регистр $\varphi_{\mathrm{disc}}$.
+В мосте~$T$: $\varphi=\varphi_{\mathrm{disc}}\cdot(2\pi/N_{\mathrm{ring}})$;
+поправка Швингера $a_e\sim\alpha_{\mathrm{fs}}/(2\pi)$ читается там же, на~$M$ --- в тиках кольца.
+\end{remark}
+
+Спинор на узле кодируется в конечном кольце Гауссовых целых
+\[
+  Z=U+iV\in\mathbb{Z}_{N_{\mathrm{ring}}}[i],
+\]
+амплитуда --- на сетке $Q(2^{-6})$, $\mu\in\mathbb{Z}_{64}$.
+Дискретная фаза раскладывается по Heisenberg-кванту:
+\[
+  \varphi_{\mathrm{disc}} \equiv k_\phi\cdot\Delta\phi_{\mathrm{disc}}+\varphi_{\mathrm{f}}
+  \pmod{N_{\mathrm{ring}}},
+\]
+$k_\phi\in\mathbb{Z}_{13}$ --- сектор, $\varphi_{\mathrm{f}}\in\{0,\ldots,40\}$ --- тонкая фаза.
+
+\begin{proposition}[Каноническая фаза и шов]
+\label{prop:canonical-phase}
+Каждому $\varphi_{\mathrm{disc}}\in\mathbb{Z}_{512}$ сопоставляется единственная каноническая пара
+$(k_\phi,\varphi_{\mathrm{f}})$ с минимальным $k_\phi$.
+Наивная карта $\mathbb{Z}_{13}\times\mathbb{Z}_{41}\to\mathbb{Z}_{512}$ имеет $21$ коллизию;
+\[
+  N_{\mathrm{ring}}=N_\phi\cdot\Delta\phi_{\mathrm{disc}}-(N_\phi+N_{\mathrm{hier}})=13\cdot 41-21.
+\]
+\end{proposition}
+
+Фазовый остаток пустой ячейки на~$M$: $\alpha_*-1=\Delta\phi_{\mathrm{disc}}/N_{\mathrm{ring}}=41/512$;
+в мосте~$T$ то же число носит имя $1/(4\pi)$ и не совпадает с $\alpha_{\mathrm{fs}}$ из \eqref{eq:alpha-fs}.
+
+\section{Обобщённые координаты}
+\label{sec:coords-dh-dt}
+\label{ch:native-coords}
+
+\begin{definition}[Внешние координаты $(dh,dt)$]
+\label{def:dh-dt}
+\[
+  dh:=\hl,\qquad dt:=\htick,\qquad c_0=dh/dt.
+\]
+В натуральных единицах симуляции $dh=dt=1$.
+Одна ступень действия~$s_0$ на $(\hv,1\,dt)$ порождает лестницу
+$p_0=s_0/dh$, $E_0=s_0/dt$, $F_0=s_0/(dh\cdot dt)$ без трёх независимых подгонок.
+\end{definition}
+
+\begin{definition}[Внутренние координаты]
+\label{def:internal-coords}
+Регистр ячейки: $(\mu,k_\phi,\varphi_{\mathrm{f}})$ или $(\mu,\varphi_{\mathrm{disc}})$;
+спинор~$\mathbb{C}^2$ --- две копии; вакуум: $\varphi_{\mathrm{f}}=0$, $\varphi_{\mathrm{disc}}=k_\phi\cdot 41$.
+\end{definition}
+
+\begin{table}[ht]
+\centering
+\caption{Лестница $s_0$ и мост $M\to T$.}
+\label{tab:dh-dt-bridge}
+\begin{tabular}{@{}lll@{}}
+\toprule
+На $M$ & $(dh,dt)$ & Мост $T$ \\
+\midrule
+$s_0$ & на $(\hv,1\,dt)$ & $\hbar/2$ \\
+$p_0$ & $s_0/dh$ & $\hbar/(2\hl)$ \\
+$E_0$ & $s_0/dt$ & $\hbar/(2\htick)$ \\
+$c_0$ & $dh/dt$ & $\hl/\htick$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Локальный обратимый автомат}
+\label{sec:descent-ca}
+
+Когда на каждом узле конечный алфавит, время дискретно, а обновление локально,
+микроуровень~$M$ есть \emph{клеточный автомат}:
+\[
+  s(x,t+1)=f\bigl(\{s(y,t)\}_{y\in N(x)}\bigr),
+\]
+но с физическими ограничениями из спуска: сохранение нормы, обратимость, спин~$1/2$, заряд~$\in\mathbb{Z}$.
+
+\begin{definition}[Закон эволюции]
+\label{def:g-ca}
+Глобальная конфигурация $\Psi^t=\{z(x,t)\}_{x\in\Lambda}$ обновляется локальным обратимым правилом
+\[
+  \Psi^{t+1}=g(\Psi^t),\qquad g^{-1}\circ g=\mathrm{id},
+\]
+с конечным регистром $Z\in\mathbb{Z}_{N_{\mathrm{ring}}}[i]$ на узле.
+Исторические примеры (Конвей, Rule~110) иллюстрируют класс CA, но не задают~$g$;
+см. приложение~\ref{app:background}.
+\end{definition}
+
+Закон~$g$ не подбирается под таблицу Rule~110: он \emph{замыкается} из абсолютных условий
+и геометрии носителя (гл.~\ref{ch:axioms}, \ref{ch:carrier}, \ref{ch:evolution}).
+Макромир~$T$, с которого начался спуск, --- осреднение $\mathcal{B}$ по~$M$;
+гладкие уравнения QED и Маделунга --- его имена, не ядро автомата.
+
+\section{Сводка моста}
+\label{sec:coords-bridge}
+
+\begin{table}[ht]
+\centering
+\caption{Где живут $\pi$, $\ln 2$ и CODATA.}
+\label{tab:m-t-bridge}
+\begin{tabular}{@{}p{0.42\linewidth}p{0.48\linewidth}@{}}
+\toprule
+Ядро $M$ & Только мост $T$ \\
+\midrule
+$\varphi_{\mathrm{disc}}$, $k_\phi$, $\mu$; $dh$, $dt$ & $\hbar$, $t_P$, $\ell_P$, $c$ \\
+$\Delta\phi_{\mathrm{disc}}/N_{\mathrm{ring}}$ & $\alpha_*-1=1/(4\pi)$ \\
+$\log_2 N_{\mathrm{ring}}+\varepsilon_B$ & $B_{\hv}=2\pi/\ln 2$ \\
+$N_\phi=13$ & $\lceil 4\pi\rceil$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Спуск с макроскопической физики на~$T$ к обратимому автомату на~$M$ завершён.
+Далее: выбор геометрии~$\Lambda$ (FCC), теорема дискретности и явный закон~$g$.
