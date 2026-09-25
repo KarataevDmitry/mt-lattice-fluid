@@ -69,6 +69,7 @@ def run_all(device: str) -> list[dict]:
         check_planck_temperature_independent(device=device),
         check_brick_internal_spectrum(device=device),
         check_floor0_internal_catalog(device=device),
+        check_floor0_phase_space(device=device),
         check_floor1_leptonic(device=device),
         check_floor1_B0_census(device=device),
         check_floor1_dressing(device=device),

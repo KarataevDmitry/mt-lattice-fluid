@@ -2,6 +2,33 @@
 from __future__ import annotations
 
 
+def check_floor0_phase_space(device: str = "cpu") -> dict:
+    """§5.0.4-A — discrete phase space (q,p) on one hV; ground fixed under g."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor0_phase_space_row(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["ground_fixed_point"])
+        and int(row["iteration_unique_points"]) == 1
+        and bool(row["ground_n_E_zero"])
+        and bool(row["ground_kick_zero"])
+        and bool(row["cap_below_naive_gamma"])
+    )
+    return {
+        "id": "Floor0_phase_space",
+        "ok": ok,
+        "ground_phi_disc": row["ground_phi_disc"],
+        "ground_k_phi": row["ground_k_phi"],
+        "ground_phi_f": row["ground_phi_f"],
+        "ground_n_E": row["ground_n_E"],
+        "iteration_unique_points": row["iteration_unique_points"],
+        "bekenstein_cap_states": row["bekenstein_cap_states"],
+        "naive_q_times_p": row["naive_q_times_p"],
+        "note": row["note"],
+    }
+
+
 def check_floor0_internal_catalog(device: str = "cpu") -> dict:
     """§5.0.4-A — internal-state catalog structure (algebra + Bekenstein cap)."""
     from mt_ca.si_constants import SI

@@ -55,12 +55,32 @@ def count_bloch_q_grid(frac_bits: int = 6) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--bloch-only", action="store_true")
+    parser.add_argument("--phase-space", action="store_true")
     parser.add_argument("--frac-bits", type=int, default=6)
     args = parser.parse_args()
 
     if args.bloch_only:
         n = count_bloch_q_grid(frac_bits=args.frac_bits)
         print(f"bloch_distinct_q{args.frac_bits} = {n}")
+        return
+
+    if args.phase_space:
+        row = SI.floor0_phase_space_row()
+        for key in (
+            "ground_phi_disc",
+            "ground_k_phi",
+            "ground_phi_f",
+            "ground_n_E",
+            "ground_Phi_kick",
+            "ground_pi_p0_x",
+            "ground_pi_p0_y",
+            "ground_bloch",
+            "iteration_unique_points",
+            "ground_fixed_point",
+            "bekenstein_cap_states",
+            "naive_q_times_p",
+        ):
+            print(f"{key}: {row[key]}")
         return
 
     row = SI.internal_state_catalog_row()
