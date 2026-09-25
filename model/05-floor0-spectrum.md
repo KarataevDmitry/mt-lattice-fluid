@@ -2,6 +2,8 @@
 
 **Объект:** один `v_p` — планкон с $b=1$, $n=\pm1$. Не орбитали $r<\ell_P$; не кварки (этаж 2).
 
+**Среда симуляции (обязательно):** пустоты нет — все `hV` заполнены; фон = **кипящий океан** `VACUUM_BOIL` (A5). Планкон = возбуждение **на** этом океане (`VORTEX_*`), не в «мёртвом» gauge-fixed `VACUUM` (Φ=0 control).
+
 **Связь:** родитель §5.0.4 в [`05-matter.md`](05-matter.md); внешние оболочки ε — §5.0.5 / этаж 1; BZ вакуума — §5.2.4 (отдельный leaf).
 
 ---
@@ -32,14 +34,14 @@
 
 ---
 
-## Основное состояние vortex (sim · частично закрыто)
+## Планкон на кипящем океане (sim · частично закрыто)
 
-Для `VORTEX_P` после релаксации на одном `v_p`:
+Для `VORTEX_P` на `VACUUM_BOIL` после релаксации на ядре:
 
-- $b=1$, $|n|_{\mathrm{auto}}\ge \tfrac34$ на контуре;
-- $|\Delta\varphi|_{\mathrm{core}} < \Delta\varphi_{\min}$ — сидит в дне Гейзенберга;
-- $n_E=0$ в gate-ledger (нет накопленных kick $\ge 41$ тиков);
-- вектор Блоха на ядре **устойчив** под $g$ (внутренняя ориентация SU(2)).
+- $b=1$, $|n|\ge \tfrac34$ в snapshot;
+- $n_E=0$ в gate-ledger на ядре;
+- SU(2) монодромия 2π/4π на snapshot ядра;
+- под продолжающимся $g$ ядро **итерирует** в $\Gamma_{hV}$ (не dead-ocean fixed point): планкон периодически читается ($b_{\mathrm{core}}$-rate $\ge 15\%$ на track).
 
 ---
 
@@ -106,8 +108,8 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 Наивное $q\times p$ $\gg 2^{B_{hV}}\approx 535$ — $\Gamma_{hV}$ **сжато** бит-бюджетом, как и каталог конфигураций.
 
-**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ считается одним тиком leapfrog + ledger.
-Для `VORTEX_P` после релаксации: **одна неподвижная точка** ($n_E=0$, $\Phi=0$, $\pi/p_0=0$, устойчивый Блох) — verify **`Floor0_phase_space`**.
+**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик leapfrog + ledger на **заполненном кипящем** океане.
+Для `VORTEX_P`/`VACUUM_BOIL`: ядро планкона проходит **$\sim 30$** различных точек $\Gamma$ за 32 тика, с ненулевыми kick $\Phi$ — verify **`Floor0_phase_space`**.
 
 Код: `SI.floor0_phase_space_row()` · probe `tools/floor0_catalog_probe.py --phase-space`.
 
