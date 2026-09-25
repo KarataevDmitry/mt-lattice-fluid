@@ -4,7 +4,7 @@
 
 | файл | содержание |
 |------|------------|
-| [`model/06-ladder.md`](06-ladder.md) | §6 · Иерархия M → SM (~70 строк) |
+| [`model/06-ladder.md`](06-ladder.md) | §6 · Иерархия M → SM · **§6.0 полная лестница M→T** |
 | [`model/07-si-bridge.md`](07-si-bridge.md) | §7 · SI-мост (размерные линейки) (~135 строк) |
 | [`model/08-alpha.md`](08-alpha.md) | §8.1–8.2 · SM-константы и α (~678 строк) |
 | [`model/08-units.md`](08-units.md) | §8.2 · meter / units / geo (~109 строк) |
