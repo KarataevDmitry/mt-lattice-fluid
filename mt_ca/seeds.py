@@ -89,6 +89,29 @@ def vacuum_ocean_fixed(
     return mod_lane(f, mod_bits).to(torch.int32)
 
 
+def _filled_brick_from_phase_class(
+    phase_class: torch.Tensor,
+    *,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    phase_bits: int = HV.phase_bits,
+) -> torch.Tensor:
+    """Encode a per-cell Heisenberg class grid into Z_N[i] (filled lattice, no void)."""
+    if phase_class.dim() != 2:
+        raise ValueError("phase_class must be 2D (ny, nx)")
+    n_ring = 1 << phase_bits
+    delta = heisenberg_phi_min_disc(phase_bits=phase_bits)
+    tick = (phase_class.to(torch.int64) * int(delta)) % n_ring
+    q = 1
+    ang = tick.to(torch.float64) * (2.0 * math.pi / n_ring)
+    re = torch.round(q * torch.cos(ang)).to(torch.int64)
+    im = torch.round(q * torch.sin(ang)).to(torch.int64)
+    dead = (re == 0) & (im == 0)
+    re = torch.where(dead, torch.ones_like(re), re)
+    f = torch.stack([re, im, re, im], dim=-1)
+    return mod_lane(f, mod_bits).to(torch.int32)
+
+
 def vacuum_boil_fixed(
     *spatial: int,
     device: torch.device,
@@ -115,8 +138,6 @@ def vacuum_boil_fixed(
         raise ValueError("vacuum_boil_fixed currently 2D (ny, nx) only")
     _ = frac_bits
     ny, nx = spatial
-    n_ring = 1 << phase_bits
-    delta = heisenberg_phi_min_disc(phase_bits=phase_bits)
     dy = int(class_dy) % n_phi
     dx = int(class_dx) % n_phi
     off = int(class_offset) % n_phi
@@ -126,15 +147,127 @@ def vacuum_boil_fixed(
         indexing="ij",
     )
     phase_class = (dy * yy + dx * xx + off) % n_phi
-    tick = (phase_class * int(delta)) % n_ring
-    q = 1
-    ang = tick.to(torch.float64) * (2.0 * math.pi / n_ring)
-    re = torch.round(q * torch.cos(ang)).to(torch.int64)
-    im = torch.round(q * torch.sin(ang)).to(torch.int64)
-    dead = (re == 0) & (im == 0)
-    re = torch.where(dead, torch.ones_like(re), re)
-    f = torch.stack([re, im, re, im], dim=-1)
-    return mod_lane(f, mod_bits).to(torch.int32)
+    return _filled_brick_from_phase_class(
+        phase_class, device=device, mod_bits=mod_bits, phase_bits=phase_bits
+    )
+
+
+def vacuum_ice_fixed(
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    phase_class: int = 0,
+) -> torch.Tensor:
+    """META §3.2 phase III — synchronous ω, uniform Heisenberg brick (filled, no void).
+
+    Macro-T: «лёд» / пустота. Micro-M: every hV occupied, NN Δclass=0 (not boil).
+    """
+    _ = frac_bits
+    base = int(phase_class) % n_phi
+    pc = torch.full((ny, nx), base, device=device, dtype=torch.int64)
+    return _filled_brick_from_phase_class(
+        pc, device=device, mod_bits=mod_bits, phase_bits=phase_bits
+    )
+
+
+def vacuum_ice_phase_shift_fixed(
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    base_class: int = 0,
+    shift_kind: str = "disk",
+    center: tuple[int, int] | None = None,
+    radius: int = 12,
+    delta_class: int = 1,
+) -> torch.Tensor:
+    """META §3.2 IV→I: uniform ice + deterministic local class bump (no RNG).
+
+    shift_kind:
+      disk — bump class in a disk (domain nucleation)
+      wall — half-plane offset (domain wall)
+      ripple — minimal coherent k·r on top of ice (not full PLANE_WAVE seed)
+    """
+    _ = frac_bits
+    base = int(base_class) % n_phi
+    delta = int(delta_class) % n_phi
+    yy, xx = torch.meshgrid(
+        torch.arange(ny, device=device, dtype=torch.int64),
+        torch.arange(nx, device=device, dtype=torch.int64),
+        indexing="ij",
+    )
+    pc = torch.full((ny, nx), base, device=device, dtype=torch.int64)
+    if shift_kind == "disk":
+        cy, cx = center if center is not None else (ny // 2, nx // 2)
+        mask = (yy - cy) ** 2 + (xx - cx) ** 2 <= int(radius) ** 2
+        pc = torch.where(mask, (pc + delta) % n_phi, pc)
+    elif shift_kind == "wall":
+        mask = xx >= nx // 2
+        pc = torch.where(mask, (pc + delta) % n_phi, pc)
+    elif shift_kind == "ripple":
+        kx, ky = 1, 1
+        ripple = ((kx * xx + ky * yy) % n_phi).to(torch.int64)
+        pc = (pc + delta * ripple) % n_phi
+    else:
+        raise ValueError(f"Unknown shift_kind: {shift_kind}")
+    return _filled_brick_from_phase_class(
+        pc, device=device, mod_bits=mod_bits, phase_bits=phase_bits
+    )
+
+
+def ice_ocean_spinor(
+    ny: int,
+    nx: int,
+    *,
+    device: torch.device,
+    dtype: torch.dtype = torch.complex64,
+    mod_bits: int = HV.mod_bits,
+    frac_bits: int = HV.frac_bits,
+    phase_bits: int = HV.phase_bits,
+    n_phi: int = HV.N_phi,
+    phase_class: int = 0,
+    shift_kind: str | None = None,
+    center: tuple[int, int] | None = None,
+    radius: int = 12,
+    delta_class: int = 1,
+) -> torch.Tensor:
+    """Decode ice (+ optional deterministic shift) to ℂ²."""
+    if shift_kind is None:
+        f = vacuum_ice_fixed(
+            ny,
+            nx,
+            device=device,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+            n_phi=n_phi,
+            phase_class=phase_class,
+        )
+    else:
+        f = vacuum_ice_phase_shift_fixed(
+            ny,
+            nx,
+            device=device,
+            mod_bits=mod_bits,
+            frac_bits=frac_bits,
+            phase_bits=phase_bits,
+            n_phi=n_phi,
+            base_class=phase_class,
+            shift_kind=shift_kind,
+            center=center,
+            radius=radius,
+            delta_class=delta_class,
+        )
+    return decode_spinor(f, frac_bits=frac_bits, mod_bits=mod_bits).to(dtype)
 
 
 def vacuum_ocean_spinor(
