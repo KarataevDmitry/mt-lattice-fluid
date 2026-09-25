@@ -1,0 +1,219 @@
+\chapter{Постоянная тонкой структуры}
+\label{ch:alpha}
+
+Эта глава --- не только формула, а \emph{журнал спуска}:
+как из уже зафиксированного носителя и закона~$g$ искали число~$1/137$,
+какие тропы оказались тупиками, и где путь закрылся без подгонки по CODATA.
+
+\section{Что искали}
+
+На~$\Tlayer$ константа тонкой структуры --- сила электромагнитного сопряжения
+$e^2/(4\pi\varepsilon_0\hbar c)$.
+На~$\Mlayer$ тот же объект --- безразмерная доля, на которую заряд
+\emph{сцепляется} с вакуумной фазой при переносе импульса и энергии
+(\cref{def:alpha-meaning}).
+Задача: получить это число из дна
+($\hl$, $\htick$, $\kgeom$, $N_{12}$, $N_4$, $SU(2)$, $\Delta\phi_{\min}$)
+--- не объявить его входом и не подменить лабораторным якорем на~$M$.
+
+\section{Ложный след: $\alpha^*$ и $\pi$-башня}
+
+Первый соблазн --- спутать тонкую структуру с \emph{ногой вакуума}.
+
+\begin{lemma}[Нога вакуума]
+\label{lem:alpha-star-foot}
+Минимальный фазовый шаг $\Delta\phi_{\min}=\tfrac12$ на такт
+(\cref{lem:51a}) даёт долю пустой ячейки в обороте $2\pi$:
+\[
+  r=\frac{\Delta\phi_{\min}}{2\pi}=\frac{1}{4\pi}.
+\]
+В saturating gate при $\rho_E\to 0$:
+\[
+  \alpha^*-1=\frac{1}{4\pi},\qquad \alpha^*=1+\frac{1}{4\pi}\approx 1.08.
+\]
+\end{lemma}
+
+Порядок единицы, не $1/137$: \emph{не} $\alpha_{\mathrm{fs}}$.
+
+Второй соблазн --- $\pi$-башня
+\[
+  \alpha^{-1}=4\pi^3+\pi^2+\pi\approx 137.036,
+\]
+близкая к CODATA ($\sim 2$\,ppm).
+Она выглядит как «фазовый объём'' emergent $d=3$,
+но \emph{не} выводится из $\Delta\phi_{\min}$:
+тот шаг останавливается на $\alpha^*$.
+
+\begin{remark}[Отвергнутая $\pi$-башня]
+\label{rem:pi-tower}
+$\pi$-башня снята с роли определения $\alpha_{\mathrm{fs}}$:
+оставлена как отчёт о T-конкуренте, не как онтология~$M$.
+\end{remark}
+
+\begin{remark}[Комбинаторика $137$]
+Отдельно проверяли $\alpha^{-1}_{\mathrm{geom}}=N_{12}(N_{12}+1)-n_\triangle-2n_{\square}+1=137$
+из счёта граней кубооктаэдра.
+Зазор $\sim 260$\,ppm --- хуже $\pi$-башни и не заменяет вывод силы на $F_0$.
+\end{remark}
+
+\section{Спуск без памяти лаборатории}
+
+Метод \emph{амнезии}: запретить CODATA, оптический $a_0$ и готовое $1/137$ как вход.
+Цепочка, которая \emph{закрывается} без $\alpha$:
+
+\begin{enumerate}[label=\arabic*.]
+\item A5 + Heisenberg $\Rightarrow$ $\Delta\phi_{\min}=\tfrac12$, $r=1/(4\pi)$, $\alpha^*$.
+\item Полный оборот $\Rightarrow$ телесный угол $\Omega=1/r=4\pi$,
+      $N_\phi=\lceil\Omega\rceil=13$.
+\item FCC $\Rightarrow$ $\kgeom=1/\sqrt{2}$, $N_{12}=12$, грани $6\sqcup+8\triangle$.
+\item A10 $\Rightarrow$ заряд $n\in\mathbb{Z}$.
+\item \textbf{Шестой шаг открыт:} безразмерная доля EM-сопряжения заряда с вакуумом.
+\end{enumerate}
+
+Сырые кандидаты $r$, $r^2$, $\kgeom r$, $\kgeom^2/N_{12}$ --- неверный масштаб
+($|\mathrm{ppm}|\gg 10^3$).
+Нога вакуума задаёт \emph{масштаб ошибки}, не саму константу.
+
+\section{Лабораторные двери (читают, не выводят)}
+
+Параллельно проверяли, \emph{куда} на~$\Tlayer$ смотрит прибор, если $\alpha$ уже есть.
+
+\paragraph{Швингер / аномальный момент.}
+$a_e=(g-2)/2$, $a_e^{(1)}=\alpha/(2\pi)$.
+На носителе $2\pi$ --- не посторонняя константа:
+$2r=\Delta\phi_{\min}/\pi=1/(2\pi)$, и тождество
+$a_e^{(1)}=2\alpha r$ разлагает дверь на \emph{закрытую} геометрию тика
+и \emph{открытую} долю сопряжения $\alpha$.
+Bare $g=2$ для вихря $n=\pm1$ следует из A16 и орбитального baseline;
+аномалия $a_e$ --- одевание A5-ванной, не топология.
+
+\paragraph{Ридберг и квантовый дефект массы водорода.}
+$R_\infty=\alpha^2 m_e c/(4\pi\hbar)$, $BE=\tfrac12\alpha^2 m_e c^2$
+$\Rightarrow$ $\alpha=\sqrt{2\Delta m/m_e}$ на предыдущем этаже КМ.
+На~$M$ те же тождества связывают $U(a_0)$, $BE$ и $F_0$ --- одно $\alpha$,
+но Arg-связь $p$--$e$ без вставки $\alpha$ ещё не выведена.
+
+\paragraph{Холл и квант сопротивления.}
+После SI-2019 $h$ и $e$ точны: $R_K=h/e^2$ не даёт независимого $\alpha$.
+Дверь остаётся проверкой согласованности, не источником на~$M$.
+
+\paragraph{Hop-лестница.}
+$\alpha=N_c/N_{a0}$, $\alpha^2=N_{re}/N_{a0}$ --- тождества длин в шагах $\hl$
+при уже известном $\alpha$; целое $N_{a0}$ из структуры H без $\alpha$ --- открыто.
+
+\section{Сила на решётке}
+
+Поворот --- спросить носитель о \emph{Кулоне на $F_0$},
+а не о $\pi$-степенях.
+По \cref{sec:theorem-51} сила --- целые пакеты $F=n_F F_0$.
+На~$\Mlayer$ без continuum-Maxwell:
+\[
+  F_{12}=n_1 n_2\,\frac{F_0}{M\,N^{2}}\,\hat{\mathbf{r}},
+  \qquad N\in\mathbb{N},\ n_i\in\mathbb{Z}.
+\]
+На ближайшем соседе ($N=1$): $F=F_0/M$.
+Грубый readout $\alpha_0=\kgeom/M$ даёт $\alpha^{-1}\approx 97\sqrt{2}\approx 137.2$
+при $M\approx 97$ --- порядок верный, зазор $\sim 10^3$\,ppm.
+
+\begin{table}[ht]
+\centering
+\caption{Кандидаты $M$ для $\alpha_0=\kgeom/M$}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+$M$ & откуда & $\alpha^{-1}$ & вердикт \\
+\midrule
+$96=N_{12}N_{\mathrm{hier}}$ & звезда $\times$ иерархия & $\approx 135.8$ & неполная перепись \\
+$\mathbf{97}=N_{12}N_{\mathrm{hier}}+1$ & + ядро kick-ledger & $\approx 137.2$ & \textbf{теорема} \\
+$137/\sqrt{2}$ & инъекция ``геом. 137'' & $137$ & отвергнуто \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Теорема о $M=97$}
+
+\begin{theorem}[Места kick-ledger]
+\label{thm:M97}
+Число $M=97$ --- не подобранное целое, а полная перепись мест передачи силы:
+одно ядро ($b=1$ на $\hv$) плюс $N_{12}$ связей на каждой из
+$N_{\mathrm{hier}}=\lfloor B_{\hv}\rfloor-1=8$ иерархических ступеней:
+\[
+  M = 1 + N_{12}\,N_{\mathrm{hier}} = 97.
+\]
+\end{theorem}
+
+На NN тогда $F=F_0/97$.
+Одного $\kgeom/M$ мало: нужна поправка симметрии грани.
+
+\section{Soft-face: закрытие числа}
+
+Семёрка $d=N_4+3$ --- каузальный крест плюс три генератора $SU(2)$.
+Soft-unit из изотропии квадратной грани кубооктаэдра:
+$U=d/(d+1)=7/8$ в знаменателе (не fitted по CODATA).
+
+\begin{theorem}[Константа $\alpha_{\mathrm{fs}}$]
+\label{thm:alpha}
+\[
+  \alpha_{\mathrm{fs}}
+  =
+  \frac{7M^{2}\kgeom\,(7M+\kgeom)}
+       {49M^{4}-7M\kgeom^{3}-8},
+  \qquad M=97,\ \kgeom=\frac{1}{\sqrt{2}}.
+\]
+Значение --- точный элемент $\mathbb{Q}(\sqrt{2})$;
+сравнение с CODATA --- только на~$\Tlayer$ ($\sim -0.00007$\,ppm на предпочтительной форме).
+\end{theorem}
+
+\begin{proof}[Схема]
+Посадка Кулона на $F_0$ с $M=97$ (\cref{thm:M97});
+единственная безразмерная поправка знаменателя из $d=7$ и $U=8/7$;
+алгебра даёт формулу теоремы.
+Нога $\alpha^*$ и $\pi$-башня в числитель не входят.
+\end{proof}
+
+\begin{definition}[Смысл $\alpha_{\mathrm{fs}}$]
+\label{def:alpha-meaning}
+$\alpha_{\mathrm{fs}}$ --- сила фазового сопряжения единичного заряда с вакуумом.
+Не $|N_{12}|$, не hop-счёт, не $\alpha^*$.
+\end{definition}
+
+\section{Вверх по лестнице}
+
+После seal $\alpha_{\mathrm{fs}}$ каскад масс --- \emph{закон}, не подгонка:
+\[
+  v=\alpha_{\mathrm{fs}}^{8} E_P\sqrt{2\pi},\quad
+  m_H=\sqrt{2\lambda}\,v,\quad
+  m_p=\alpha_{\mathrm{fs}}\,\frac{v}{2}\Bigl(1+\frac{\kgeom^2}{N_{12}}\Bigr),\quad
+  m_e=\alpha_{\mathrm{fs}}^{2}\,\frac{m_H}{N_\phi},\quad
+  m_n=m_p+2m_e.
+\]
+Вход --- одно $\alpha_{\mathrm{fs}}$; расхождения с PDG на хвостах $\sim 10^{-3}$
+--- тот же класс FCC/binomial, что у packing и empty-cell, не дыра в $\alpha$.
+
+\section{Карта пути и открытые хвосты}
+
+\begin{table}[ht]
+\centering
+\caption{Журнал поиска $\alpha_{\mathrm{fs}}$}
+\footnotesize
+\begin{tabular}{@{}p{0.22\linewidth}p{0.38\linewidth}p{0.28\linewidth}@{}}
+\toprule
+этап & что проверяли & итог \\
+\midrule
+нога $\alpha^*$ & $\Delta\phi_{\min}\to 1/(4\pi)$ & закрыто; \textbf{не} $\alpha_{\mathrm{fs}}$ \\
+$\pi$-башня & $4\pi^3+\pi^2+\pi$ & $\sim 2$\,ppm; \textbf{отвергнуто} как определение \\
+$\alpha_{\mathrm{geom}}=137$ & счёт граней & $\sim 260$\,ppm; exploratory \\
+спуск/amnesia & $r\to\Omega\to N_\phi\to$ заряд & шаг 6 открыт \\
+лаб. двери & $a_e$, $R_\infty$, $R_K$, hops & читают $\alpha$, не рождают \\
+$F_0/(MN^2)$ & $\alpha_0=\kgeom/M$ & живой путь; $M=97$ \\
+soft-face & $d=7$, $U=8/7$ & \textbf{sealed} \\
+вверх & $v$, $m_H$, $m_p$, $m_e$ & каскад на preferred $\alpha$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Ещё открыто.}
+Целое $N_{a0}$ из структуры водорода без оптического $a_0$;
+holonomy A5-облака $\to a_e$ без вставки $\alpha$;
+дискретная доля сопряжения $\Phi_\square$ на FCC без continuum-$\pi$.
+Эти листья не ослабляют теорему~\ref{thm:alpha}: число уже sealed снизу;
+двери сверху --- проверки и уточнения readout'а.

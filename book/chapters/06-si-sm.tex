@@ -127,96 +127,11 @@ $\ell_P:=\hl$, $a=\hl$, $\kgeom$ из однотактового тела (гл.
 $\kgeom$ выводится из геометрии, после чего $c=\kgeom c_0$ --- проверка согласованности.
 
 \section{Постоянная тонкой структуры}
-\label{sec:alpha-fs}
 
-\begin{definition}[Смысл $\alpha_{\mathrm{fs}}$]
-\label{def:alpha-meaning}
-Константа тонкой структуры --- безразмерная сила \emph{фазового сопряжения}
-единичного заряда с вакуумом (электромагнитный канал на~$\Tlayer$).
-Это не сила Ньютона, не hop-счёт сам по себе и не число соседей $|N_{12}|$.
-\end{definition}
-
-\begin{lemma}[Нога вакуума --- не $\alpha_{\mathrm{fs}}$]
-\label{lem:alpha-star-foot}
-Минимальный фазовый шаг на такт $\Delta\phi_{\min}=\tfrac12$
-(\cref{lem:51a}) даёт долю пустой ячейки в полном обороте $2\pi$:
-\[
-  \frac{\Delta\phi_{\min}}{2\pi}=\frac{1}{4\pi}.
-\]
-В saturating gate при $\rho_E\to 0$:
-\[
-  \alpha^*-1=\frac{1}{4\pi},\qquad \alpha^*=1+\frac{1}{4\pi}\approx 1.08.
-\]
-Число $\alpha^*$ --- поправка \emph{одного такта} на~$\Mlayer$;
-порядок единицы ($\sim 1.08$), не $1/137$.
-\end{lemma}
-
-\begin{proof}
-Прямая подстановка $\Delta\phi_{\min}=\tfrac12$ в долю оборота и в определение
-$\alpha^*$ из gate (\cref{ch:evolution}).
-\end{proof}
-
-Смешивать $\alpha^*$ и $\alpha_{\mathrm{fs}}$ --- ошибка: нога вакуума закрыта,
-а тонкая структура --- отдельный вывод из дна носителя.
-
-\begin{theorem}[Константа $\alpha_{\mathrm{fs}}$ из дна носителя]
-\label{thm:alpha}
-Пусть $\kgeom=1/\sqrt{2}$ --- геометрия однотактового FCC-тела (\cref{ch:carrier}),
-$M=97$ --- число мест kick-ledger для посадки кулоновской силы на $F_0$
-(\cref{sec:theorem-51}),
-$d=7=N_4+3$ --- каузальный крест плюс три генератора $SU(2)$.
-Тогда
-\[
-  \alpha_{\mathrm{fs}}
-  =
-  \frac{M^{2}\,\kgeom\,\bigl(dM+\kgeom\bigr)}
-       {dM^{4}-M\kgeom^{3}-\dfrac{d+1}{d}}
-  =
-  \frac{7M^{2}\kgeom\,(7M+\kgeom)}
-       {49M^{4}-7M\kgeom^{3}-8},
-\]
-где $M=97$, $\kgeom=1/\sqrt{2}$.
-Значение --- элемент $\mathbb{Q}(\sqrt{2})$; сравнение с CODATA --- на~$\Tlayer$.
-\end{theorem}
-
-\begin{proof}[Схема вывода]
-\emph{1. Сила на решётке.}
-По теореме~\ref{thm:51} $F=n_F F_0$ с целыми пакетами.
-Кулонов закон на~$\Mlayer$ без continuum-$\pi$:
-\[
-  F_{12}=n_1 n_2\,\frac{F_0}{M\,N^{2}}\,\hat{\mathbf{r}},
-  \qquad N\in\mathbb{N}.
-\]
-На ближайшем соседе ($N=1$, $|n_i|=1$): $F=F_0/M$.
-Грубая оценка $\alpha_0=\kgeom/M$ --- лишь demoted readout, не определение.
-
-\smallskip
-\emph{2. Места $M$.}
-Перепись kick-ledger на FCC с иерархией $N_{\mathrm{hier}}=8$ даёт
-$N_{12}N_{\mathrm{hier}}=96$ без учёта ядра; полная запись ---
-$M=N_{12}N_{\mathrm{hier}}+1=97$.
-
-\smallskip
-\emph{3. Soft-face unit.}
-Единственная безразмерная поправка к знаменателю из симметрии грани
-кубооктаэдра и $SU(2)$:
-$d/(d+1)=7/8$ в знаменателе (не подгонка по лаборатории).
-Подстановка $M=97$, $\kgeom=1/\sqrt{2}$ даёт формулу теоремы.
-
-\smallskip
-\emph{4. Что \emph{не} входит.}
-Нога $\alpha^*$ из \cref{lem:alpha-star-foot} не участвует в числителе.
-Выражение $4\pi^3+\pi^2+\pi$ --- отвергнутый T-конкурент (см.~\cref{rem:pi-tower}).
-\end{proof}
-
-\begin{remark}[Отвергнутая $\pi$-башня]
-\label{rem:pi-tower}
-Ранее обсуждалось $\alpha^{-1}=4\pi^3+\pi^2+\pi\approx 137.036$ как «фазовый объём''.
-Оно близко к CODATA ($\sim 2$\,ppm), но \emph{не} следует из $\Delta\phi_{\min}$:
-тот шаг даёт только $\alpha^*\approx 1.08$.
-$\pi$-башня снята с роли определения: $\alpha_{\mathrm{fs}}$ sealed формулой
-теоремы~\ref{thm:alpha} (soft-face fundamentals, $M=97$).
-\end{remark}
+Полный журнал поиска $\alpha_{\mathrm{fs}}$ --- от ложных следов ($\alpha^*$, $\pi$-башня)
+до sealed soft-face формулы с $M=97$ --- вынесен в отдельную
+главу~\ref{ch:alpha}.
+Здесь используем итог (\cref{thm:alpha}, \cref{def:alpha-meaning}).
 
 \section{Электрослабый сектор}
 
