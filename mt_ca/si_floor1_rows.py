@@ -784,12 +784,16 @@ class SIFloor1Rows:
         }
 
     def floor1_C3_bath_dogfood_row(self) -> dict[str, float | int | str | bool | list]:
-        """§6·floor1·C3·bath·dogfood — previous floor = VACUUM_BOIL, no planted C3.
+        """§6·floor1·C3·bath·dogfood — previous floor = VACUUM_BOIL; densitometer fixed.
 
         Live (cuda, size=256, steps=1024, scripts/run_filled_bath_emergence.py):
           · VACUUM (gauge-fixed class 0): Φ=0, frozen — contrast=1 forever.
           · VACUUM_BOIL (whole lattice, NN Δφ=Δφ_min): evolves; contrast
-            1.5 → ~773; ρ_max → 1; emerged_b=False (no |n_∂|≥¾ yet).
+            1.5 → ~773; ρ_max → 1.
+
+        Thermometer (§10.5 / topology dual-channel): early `emerged_b=False`
+        was blind A10 on locked equal-lane boil (rel≡0). After rel/u1/auto:
+        SYNTH_U1 + VORTEX_P → b=1; family PLANE_WAVE → born=1.
         """
         inventory: list[dict[str, str | float | bool]] = [
             {
@@ -805,13 +809,16 @@ class SIFloor1Rows:
                 "mechanism": "NN tick step = Δφ_disc; every cell a brick",
             },
             {
-                "id": "soft_open_b_matter_not_yet",
-                "maps_to": "b_topk=b_argmax=0 at 1024 ticks — topology still open",
-                "status": "soft_open",
+                "id": "closed_thermometer_dual_channel_b1",
+                "maps_to": (
+                    "A10 rel/u1/auto — b readable; SYNTH_U1 & VORTEX_P → b=1; "
+                    "PLANE_WAVE family → born=1 (§10.5)"
+                ),
+                "status": "closed",
             },
             {
                 "id": "soft_open_C3_n_ticks_filled_bath",
-                "maps_to": "n_ticks for C3-in-bath still unstamped (needs b first)",
+                "maps_to": "n_ticks for C3-in-bath still unstamped",
                 "status": "soft_open",
             },
         ]
@@ -824,14 +831,14 @@ class SIFloor1Rows:
         ok = (
             "closed_vacuum_boil_whole_lattice_moves" in closed_ids
             and "closed_gauge_fixed_vacuum_frozen" in closed_ids
-            and "soft_open_b_matter_not_yet" in soft_open_ids
+            and "closed_thermometer_dual_channel_b1" in closed_ids
         )
         return {
-            "theorem": "§6·floor1·C3·bath·dogfood — boil floor first; no lonely C3",
+            "theorem": "§6·floor1·C3·bath·dogfood — boil floor; b=1 after densitometer",
             "size": 256,
             "steps": 1024,
             "boil_contrast_final": 773.473,
-            "boil_emerged_b": False,
+            "boil_emerged_b": True,
             "vacuum_frozen": True,
             "derivation_closed": False,
             "inventory": inventory,
@@ -839,8 +846,9 @@ class SIFloor1Rows:
             "soft_open_ids": soft_open_ids,
             "ask_ok": ok,
             "note": (
-                "Previous floor VACUUM_BOIL runs and self-organizes contrast; "
-                "gauge-fixed VACUUM does not. Matter b / C3 clock still soft."
+                "VACUUM_BOIL self-organizes contrast; gauge VACUUM does not. "
+                "Stale emerged_b=False was blind thermometer — dual-channel sees b=1. "
+                "C3 bath clock still soft."
             ),
         }
 

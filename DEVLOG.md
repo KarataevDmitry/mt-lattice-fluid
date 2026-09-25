@@ -359,7 +359,7 @@ z' = z · exp(iφ)
 | 2026-09-24 | §6·seed·brick·scan | VACUUM_BOIL = N_φ Heisenberg bricks (full fill); reject N_ring ramp ring-scan; seeker → run_seed_brick_scan |
 | 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals CLOSED as MODEL readout; §10→eng pointer · Gpu_eng_tail_close PASS |
 | 2026-09-24 | §1.7·torus·close | finite wall-free Λ=T³/T²; Λ×S¹=phase fiber; reject walls/sphere; N soft; eng wrap=readout · Carrier_torus_close PASS |
-| 2026-09-24 | §6·floor1·C3·bath·dogfood | VACUUM_BOIL whole-lattice: contrast self-grows; b not yet; gauge VACUUM frozen · Floor1_C3_bath_dogfood PASS |
+| 2026-09-24 | §6·floor1·C3·bath·dogfood | VACUUM_BOIL contrast grows; **b=1 after densitometer dual-channel** (stale emerged_b=False was blind A10); gauge VACUUM frozen · Floor1_C3_bath_dogfood PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·reopen | alone n_ticks=1 demoted soft (void artifact?); continuum≠M kept · Floor1_C3_gamma_close PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·close | reject continuum Γ on M; local C3 τ_M=1·hT · Floor1_C3_gamma_close PASS |
 | 2026-09-24 | §6·floor1·leftovers·close | C3→C2+γ existence CLOSED (Γ soft); ν off-band ≠N₁₂^{3…4} · Floor1_leftovers_close PASS |
@@ -550,7 +550,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **Fix:** `mt_ca/topology.py` — channels **rel** / **u1**=`Arg(z₁+z₂)` / **auto**=max`|n|`. MODEL §5.0 stamped. `MatterOccupancyB` gate includes locked U(1) synth. Brick-scan gate reports `winding_rel_max` / `winding_u1_max`.
 
-**Probe:** SYNTH_U1 locked → rel=0, u1≈1, b=1 · VORTEX_P → rel≈1, u1≈0, b=1 · class-gradient boil IC still ~curl-free (no magic b from stripes).
+**Probe:** SYNTH_U1 locked → rel=0, u1≈1, **b=1** · VORTEX_P → rel≈1, u1≈0, **b=1** · class-gradient boil IC still ~curl-free (no magic b from stripes). Stale bath `emerged_b=False` was this gap — not absence of matter.
 
 **Family scan** (`scripts/run_seed_family_scan.py`, 128²×1024): VACUUM/BOIL/IMPULSE → born=0 · **PLANE_WAVE → born=1** (|n|_auto≈2) · VORTEX_* planted persist. Brick-offset BOIL subfamily still 0/52.
 

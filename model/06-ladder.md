@@ -34,7 +34,8 @@ $$
 **Не здесь:** PDG-время жизни $\mu$ (нужен лист массы/композита).
 **Код:** `SI.floor1_C3_gamma_close_row()` · verify **`Floor1_C3_gamma_close`** (continuum reject + soft bath clock).
 #### §6·floor1·C3·bath·dogfood · предыдущий этаж целиком
-**Не один C3.** Gauge-fixed `VACUUM` (class 0) — Φ=0, мёртвый. `VACUUM_BOIL` — вся решётка кирпичами, NN Δφ=Δφ_min: live, контраст сам ~1.5→773, ρ_max→1 за 1024 тика; **b-matter пока нет** (`emerged_b=False`).
+**Не один C3.** Gauge-fixed `VACUUM` (class 0) — Φ=0, мёртвый. `VACUUM_BOIL` — вся решётка кирпичами, NN Δφ=Δφ_min: live, контраст сам ~1.5→773, ρ_max→1 за 1024 тика.
+**Денсометр (§10.5):** старый A10 (`∮ d arg(z₂/z₁)`) на locked boil был слеп → ложный `emerged_b=False`. Dual-channel rel / u1=`Arg(z₁+z₂)` / auto — **b читается**. Probes: `SYNTH_U1`, `VORTEX_P` → **`b=1`**; family `PLANE_WAVE` → `born=1`.
 **Код:** `SeedClass.VACUUM_BOIL` · `scripts/run_filled_bath_emergence.py` · `SI.floor1_C3_bath_dogfood_row()` · verify **`Floor1_C3_bath_dogfood`**.
 **Код:** `SI.floor1_B0_census_ask_row()` · verify **`Floor1_B0_census_ask`**.
 #### §6·floor1·dressing·ask · Что за обёртка электрона

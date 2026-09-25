@@ -199,7 +199,7 @@ def check_floor1_C3_gamma_close(device: str = "cpu") -> dict:
     }
 
 def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
-    """§6·floor1·C3·bath·dogfood — VACUUM_BOIL moves; b matter still soft."""
+    """§6·floor1·C3·bath·dogfood — VACUUM_BOIL moves; densitometer sees b=1."""
     from mt_ca.si_constants import SI
 
     del device
@@ -207,10 +207,11 @@ def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
     ok = (
         bool(row["ask_ok"])
         and bool(row["vacuum_frozen"])
-        and not bool(row["boil_emerged_b"])
+        and bool(row["boil_emerged_b"])
         and float(row["boil_contrast_final"]) > 10.0
         and "closed_vacuum_boil_whole_lattice_moves" in row["closed_ids"]
-        and "soft_open_b_matter_not_yet" in row["soft_open_ids"]
+        and "closed_thermometer_dual_channel_b1" in row["closed_ids"]
+        and "soft_open_b_matter_not_yet" not in row["soft_open_ids"]
     )
     return {
         "id": "Floor1_C3_bath_dogfood",
