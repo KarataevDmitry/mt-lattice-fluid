@@ -43,6 +43,44 @@ def _save(fig: plt.Figure, name: str) -> None:
     print(f"wrote {path}")
 
 
+def _dim_radius(
+    ax,
+    r: float,
+    angle_deg: float,
+    label: str,
+    *,
+    color: str = INK,
+    ls: str = "-",
+    lw: float = 1.25,
+    tick: float = 0.04,
+    label_gap: float = 0.14,
+) -> None:
+    """Radial dimension from origin — extension line + arrow + label outside."""
+    th = math.radians(angle_deg)
+    ux, uy = math.cos(th), math.sin(th)
+    px, py = r * ux, r * uy
+    ax.plot([0, px], [0, py], color=color, lw=lw, ls=ls, zorder=4, solid_capstyle="butt")
+    nx, ny = -uy, ux
+    ax.plot(
+        [px - tick * nx, px + tick * nx],
+        [py - tick * ny, py + tick * ny],
+        color=color,
+        lw=lw,
+        zorder=5,
+        solid_capstyle="round",
+    )
+    ax.annotate(
+        "",
+        xy=(px, py),
+        xytext=(0, 0),
+        arrowprops=dict(arrowstyle="-|>", color=color, lw=lw, linestyle=ls),
+    )
+    lx, ly = (r + label_gap) * ux, (r + label_gap) * uy
+    ha = "left" if ux > 0.2 else ("right" if ux < -0.2 else "center")
+    va = "bottom" if uy > 0.2 else ("top" if uy < -0.2 else "center")
+    ax.text(lx, ly, label, fontsize=10, color=color, ha=ha, va=va, zorder=6)
+
+
 def _fcc_vertices(a: float = 1.0) -> np.ndarray:
     s = a / math.sqrt(2)
     uniq: list[tuple[float, float, float]] = []
@@ -561,22 +599,13 @@ def fig_hex_radii() -> None:
     ax.add_patch(Polygon(verts, closed=True, facecolor=FILL, edgecolor=INK, lw=2.0, zorder=2))
 
     ax.plot(0, 0, "o", color=INK, ms=8, zorder=6)
-    ax.plot([0, 0], [0, a], color=INK, lw=2.0, zorder=5)
-    ax.plot([0, r_in], [0, 0], color=MUTED, lw=2.0, ls="--", zorder=5)
-    ax.plot([r_in, r_in], [-0.04, 0.04], color=MUTED, lw=1.2, zorder=5)
 
-    ax.text(0.07, a * 0.52, r"$R_{\mathrm{out}}=a$", fontsize=13)
-    ax.text(r_in * 0.45, -0.14, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=MUTED, fontsize=12)
-
-    bx, by = 1.45, -0.55
-    ax.plot([bx, bx + a], [by, by], color=INK, lw=3.0, solid_capstyle="round")
-    ax.plot([bx, bx + r_in], [by - 0.22, by - 0.22], color=MUTED, lw=3.0, solid_capstyle="round")
-    ax.text(bx + a * 0.5, by + 0.1, r"$R_{\mathrm{out}}$", fontsize=10, ha="center")
-    ax.text(bx + r_in * 0.5, by - 0.34, r"$R_{\mathrm{in}}$", color=MUTED, fontsize=10, ha="center")
+    _dim_radius(ax, a, 90, r"$R_{\mathrm{out}}=a$", color=INK, label_gap=0.12)
+    _dim_radius(ax, r_in, 0, r"$R_{\mathrm{in}}=\frac{\sqrt{3}}{2}a$", color=MUTED, ls="--", label_gap=0.12)
 
     ax.text(-0.05, -1.42, r"$\kappa_{\mathrm{hex}}=R_{\mathrm{in}}/R_{\mathrm{out}}=\sqrt{3}/2$", fontsize=12, ha="center")
     ax.text(0, 1.32, r"однотактовое тело: вписанная и описанная сферы", ha="center", fontsize=11)
-    ax.set_xlim(-1.35, 2.55)
+    ax.set_xlim(-1.35, 1.45)
     ax.set_ylim(-1.55, 1.55)
     _save(fig, "carrier-hex-radii.pdf")
 
@@ -640,19 +669,20 @@ def fig_hull_voronoi() -> None:
     a = 1.0
     r_out, r_hull, r_vor = a, a / math.sqrt(2), a / 2
 
-    fig, ax = plt.subplots(figsize=(6.2, 3.6))
+    fig, ax = plt.subplots(figsize=(7.2, 4.2))
     ax.set_aspect("equal")
     ax.axis("off")
     for r, col, lw, ls in ((r_out, INK, 1.8, "-"), (r_hull, MUTED, 1.6, "-"), (r_vor, MUTED, 1.6, "--")):
-        ax.add_patch(plt.Circle((0, 0), r, fill=False, ec=col, lw=lw, ls=ls))
-    ax.plot(0, 0, "o", color=INK, ms=6)
-    ax.plot([r_out], [0], "o", color=INK, ms=6)
-    ax.annotate(r"$R_{\mathrm{out}}=a$", xy=(0.72 * r_out, 0.05), fontsize=12)
-    ax.annotate(r"$R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", xy=(0.55 * r_hull, -0.22), fontsize=11, color=MUTED)
-    ax.annotate(r"$R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2$", xy=(0.38 * r_vor, 0.18), fontsize=11, color=MUTED)
-    ax.text(0, -1.15, r"$\kappa_{\mathrm{FCC}}=1/\sqrt{2}$;\quad $R_{\mathrm{in}}^{\mathrm{Voronoi}}=\kappa\, R_{\mathrm{in}}^{\mathrm{hull}}$", ha="center", fontsize=11)
-    ax.set_xlim(-1.25, 1.55)
-    ax.set_ylim(-1.35, 1.15)
+        ax.add_patch(plt.Circle((0, 0), r, fill=False, ec=col, lw=lw, ls=ls, zorder=1))
+    ax.plot(0, 0, "o", color=INK, ms=6, zorder=6)
+
+    _dim_radius(ax, r_vor, 118, r"$R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2$", color=MUTED, ls="--")
+    _dim_radius(ax, r_hull, -28, r"$R_{\mathrm{in}}^{\mathrm{hull}}=a/\sqrt{2}$", color=MUTED)
+    _dim_radius(ax, r_out, 22, r"$R_{\mathrm{out}}=a$", color=INK)
+
+    ax.text(0, -1.22, r"$\kappa_{\mathrm{FCC}}=1/\sqrt{2}$;\quad $R_{\mathrm{in}}^{\mathrm{Voronoi}}=\kappa\, R_{\mathrm{in}}^{\mathrm{hull}}$", ha="center", fontsize=11)
+    ax.set_xlim(-1.15, 1.65)
+    ax.set_ylim(-1.42, 1.35)
     _save(fig, "carrier-hull-voronoi.pdf")
 
 
