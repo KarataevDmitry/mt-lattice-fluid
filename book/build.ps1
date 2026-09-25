@@ -206,6 +206,12 @@ if (-not (Test-Path (Join-Path $Sources 'main.tex'))) {
 }
 
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
+$figScript = Join-Path (Split-Path $Root -Parent) 'scripts' 'render_carrier_figures.py'
+if (Test-Path -LiteralPath $figScript) {
+    Write-Host 'render carrier figures ...'
+    & python $figScript
+    if ($LASTEXITCODE -ne 0) { throw "render_carrier_figures.py failed (exit $LASTEXITCODE)" }
+}
 $pdf = Join-Path $Out "$JobName.pdf"
 Stop-ProcessesLockingPdf -PdfPath $pdf
 

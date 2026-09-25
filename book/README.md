@@ -21,6 +21,7 @@ book/
     preamble.tex
     frontmatter.tex
     chapters/
+    figures/         # PDF-иллюстрации (генерятся scripts/render_carrier_figures.py)
     appendix/
   out/               # артефакты сборки (gitignore, кроме .gitkeep)
 ```

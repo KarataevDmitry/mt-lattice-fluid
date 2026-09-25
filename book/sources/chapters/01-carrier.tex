@@ -30,7 +30,16 @@
 На плоскости существуют ровно три регулярных типа: треугольник (три соседа),
 квадрат (четыре) и шестиугольник (шесть).
 Равная длина рёбер~$\hl$ исключает диагональ за один такт квадратной решётки.
-Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$.
+Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
+(\cref{fig:carrier-hex-kgeom}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.62\linewidth]{carrier-hex-kgeom.pdf}
+  \caption{Гексагональный срез: ячейка Вороного, шесть соседей на расстоянии~$a=\hl$,
+    апофема $R_{\mathrm{in}}$ и радиус до вершины $R_{\mathrm{out}}$.}
+  \label{fig:carrier-hex-kgeom}
+\end{figure}
 
 \subsection{Константы на гексагональном слое}
 
@@ -95,7 +104,15 @@ $\kappa_{\mathrm{link}}=1/12$.
   c_0^2\htick^2-(\hl\sqrt{2})^2=\hl^2-2\hl^2=-\hl^2<0.
 \]
 Интервал пространственноподобен: узел второй оболочки за этот такт недостижим.
-Остаётся первая оболочка: $|N(x)|=12$.
+Остаётся первая оболочка: $|N(x)|=12$ (\cref{fig:carrier-fcc-shell}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.58\linewidth]{carrier-fcc-shell.pdf}
+  \caption{Первая координационная оболочка FCC: двенадцать соседей на расстоянии~$\hl$;
+    выпуклая оболочка --- кубооктаэдр.}
+  \label{fig:carrier-fcc-shell}
+\end{figure}
 
 \emph{Связь.}
 Изотропия микрошага даёт равные веса на этих двенадцати рёбрах, поэтому
@@ -138,7 +155,17 @@ $\kappa_{\mathrm{link}}=1/12$.
 \[
   R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2=\kgeom\, R_{\mathrm{in}}^{\mathrm{hull}}.
 \]
+(\Cref{fig:carrier-hull-voronoi} сравнивает три радиуса на одном узле.)
 Двенадцать соседей двойственны двенадцати ромбам этой ячейки.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.78\linewidth]{carrier-hull-voronoi.pdf}
+  \caption{Однотактовое тело и ячейка Вороного: $R_{\mathrm{out}}$ до соседа,
+    $R_{\mathrm{in}}^{\mathrm{hull}}$ до квадратной грани оболочки,
+    $R_{\mathrm{in}}^{\mathrm{Voronoi}}$ до стены ячейки.}
+  \label{fig:carrier-hull-voronoi}
+\end{figure}
 
 Объём самой оболочки находится вычитанием.
 Многогранник с вершинами всех перестановок $(\pm 1,\pm 1,0)$ есть пересечение октаэдра $|x|+|y|+|z|\le 2$ и куба $|x|,|y|,|z|\le 1$.
