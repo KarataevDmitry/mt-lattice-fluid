@@ -120,20 +120,25 @@ def fig_axiom_unitarity() -> None:
     ax = axes[1]
     ax.set_aspect("equal")
     ax.axis("off")
-    for cx, col, lab in ((-0.55, COL["blue"], r"$z_1$"), (0.55, COL["green"], r"$z_2$")):
-        ax.add_patch(Circle((cx, 0), 0.55, fill=False, ec=col, lw=1.0))
-        ax.annotate("", xy=(cx + 0.38, 0.22), xytext=(cx, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=1.6))
-        ax.text(cx, -0.85, lab, ha="center", color=col, fontsize=11)
+    r = 1.0
+    ax.add_patch(Circle((0, 0), r, fill=False, ec=COL["gray"], lw=1.0, ls="--"))
+    phi1, phi2 = np.deg2rad(28), np.deg2rad(108)
+    lens = (0.92, 0.72)
+    for phi, ln, col, lab in ((phi1, lens[0], COL["blue"], r"$z_1$"), (phi2, lens[1], COL["green"], r"$z_2$")):
+        x, y = ln * np.cos(phi), ln * np.sin(phi)
+        ax.annotate("", xy=(x, y), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=2.0))
+        ax.text(1.12 * x, 1.12 * y, lab, color=col, fontsize=11)
     ax.annotate(
         "",
-        xy=(0.9, 0.55),
-        xytext=(-0.9, 0.55),
-        arrowprops=dict(arrowstyle="<->", color=COL["red"], lw=1.2),
+        xy=(0.42, 0.34),
+        xytext=(0.42, -0.34),
+        arrowprops=dict(arrowstyle="-|>", color=COL["red"], lw=1.6, connectionstyle="arc3,rad=0.55"),
     )
-    ax.text(0, 0.82, r"$SU(2)$", ha="center", color=COL["red"], fontsize=11)
-    ax.text(0, -1.35, r"$A_4$: $z\in\mathbb{C}^2$, не скаляр", ha="center", fontsize=10)
+    ax.text(0.72, 0.02, r"$R(\Phi)$", color=COL["red"], fontsize=10)
+    ax.text(0, 1.18, r"$SU(2)$ на $\mathbb{C}^2$", ha="center", color=COL["red"], fontsize=10)
+    ax.text(0, -1.45, r"$A_4$: $z=(z_1,z_2)^\top$, не скаляр", ha="center", fontsize=10)
     ax.set_xlim(-1.55, 1.55)
-    ax.set_ylim(-1.55, 1.15)
+    ax.set_ylim(-1.65, 1.35)
 
     fig.suptitle("Унитарность и спинор", fontsize=11, y=1.02)
     _save(fig, "axiom-unitarity.pdf")
