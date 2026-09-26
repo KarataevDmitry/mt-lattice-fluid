@@ -9,7 +9,7 @@ Winding is always measured on a 2D plane: xy slice at iz (3+1) or the field itse
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 import torch
@@ -22,6 +22,13 @@ from mt_ca.topology import (
     winding_channels,
     winding_nearest_int,
 )
+
+
+def plane_mconfig(z_plane: torch.Tensor, cfg: MConfig) -> MConfig:
+    """Gate-plane readout uses 2D hex neighbors even in 3+1 FCC (A10 contour)."""
+    if z_plane.ndim == 3 and cfg.stencil != "hex":
+        return replace(cfg, stencil="hex")
+    return cfg
 
 
 @dataclass(frozen=True, slots=True)

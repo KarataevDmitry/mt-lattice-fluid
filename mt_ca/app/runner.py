@@ -14,11 +14,25 @@ from mt_ca.app.scenario import ScenarioSpec
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor
 from mt_ca.ledger import ledger_step_probe, momentum_density, n_E_field
+from mt_ca.matter_readout import MatterSite, default_anchor, plane_mconfig, snap_column_peak, spinor_plane
 from mt_ca.metrics import coarse_amplitude, field_amplitude, has_nan, norm_drift
 from mt_ca.seeds import SeedClass, make_seed, vacuum_boil_fixed
 from mt_ca.si_constants import internal_phase_decode, kappa_link
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.spinor import bloch_vector, spinor_density, saturating_phase
+
+
+def _site_key(site: MatterSite) -> str:
+    if site.iz is None:
+        return f"{site.y},{site.x}"
+    return f"{site.iz},{site.y},{site.x}"
+
+
+def _phi_int_at(phi: torch.Tensor, site: MatterSite) -> torch.Tensor:
+    if phi.ndim == 2:
+        return phi[site.y, site.x]
+    iz = site.iz if site.iz is not None else 0
+    return phi[iz, site.y, site.x]
 
 
 def apply_scenario(sim: LatticeFluidSimulator, scenario: ScenarioSpec) -> None:
@@ -145,26 +159,30 @@ def run(spec: RunSpec) -> RunResult:
 def track_gamma_points(
     sim: LatticeFluidSimulator,
     *,
-    cells: list[tuple[int, int]],
+    cells: list[MatterSite],
     track: int,
     n_ring: int,
     p0_nat: float,
 ) -> dict[str, dict[str, int | list]]:
-    """Sample (q,p) Γ points at lattice cells over ``track`` ticks of g."""
+    """Sample (q,p) Γ points at lattice cells over ``track`` ticks of g (2+1 plane or 3+1 slice)."""
     cfg = sim.cfg
 
-    def _sample(z: torch.Tensor, z_past: torch.Tensor, y: int, x: int) -> tuple:
-        phi = saturating_phase(z, cfg)
+    def _sample(z: torch.Tensor, z_past: torch.Tensor, site: MatterSite) -> tuple:
+        plane = spinor_plane(z, site)
+        zpp = spinor_plane(z_past, site)
+        y, x = site.y, site.x
+        plane_cfg = plane_mconfig(plane, cfg)
+        phi = saturating_phase(plane, plane_cfg)
         phi_ticks = int(phi[y, x].round().item()) % n_ring
         k_phi, phi_f = internal_phase_decode(phi_ticks)
-        n_e = int(n_E_field(phi, cfg)[y, x].item())
-        bv = bloch_vector(z[y : y + 1, x : x + 1])[0, 0]
+        n_e = int(n_E_field(phi, plane_cfg)[y, x].item())
+        bv = bloch_vector(plane[y : y + 1, x : x + 1])[0, 0]
         bloch_key = tuple(round(float(bv[i].item()), 3) for i in range(3))
-        rho = float(spinor_density(z[y : y + 1, x : x + 1])[0, 0].item())
-        px, py = momentum_density(z)
+        rho = float(spinor_density(plane)[y, x].item())
+        px, py = momentum_density(plane)
         pi_x = int(round(float(px[y, x].item()) / p0_nat))
         pi_y = int(round(float(py[y, x].item()) / p0_nat))
-        kick = int(ledger_step_probe(z, z_past, cfg)["phi"][y, x].item())
+        kick = int(ledger_step_probe(plane, zpp, plane_cfg)["phi"][y, x].item())
         return (phi_ticks, k_phi, phi_f, n_e, kick, pi_x, pi_y, bloch_key, round(rho, 4))
 
     def _summarize(samples: list[tuple]) -> dict[str, int | list]:
@@ -185,40 +203,40 @@ def track_gamma_points(
 
     z = sim.z
     z_past = sim.z_past.clone() if sim.z_past is not None else z.clone()
-    per_cell: dict[str, list[tuple]] = {f"{y},{x}": [_sample(z, z_past, y, x)] for y, x in cells}
+    per_cell: dict[str, list[tuple]] = {
+        _site_key(site): [_sample(z, z_past, site)] for site in cells
+    }
     for _ in range(track):
         z_past = z.clone()
         sim.step(1)
         z = sim.z
-        for y, x in cells:
-            per_cell[f"{y},{x}"].append(_sample(z, z_past, y, x))
+        for site in cells:
+            per_cell[_site_key(site)].append(_sample(z, z_past, site))
 
     return {key: _summarize(vals) for key, vals in per_cell.items()}
 
 
 def run_floor0_phase_space(
     *,
-    size: int = 64,
-    settle: int = 64,
+    size: int = 32,
+    settle: int = 32,
     track: int = 32,
     device: str = "cpu",
 ) -> dict[str, Any]:
-    """§5.0.4-A — Γ_hV probe on boiling ocean + planckon (uses app runner)."""
-    from mt_ca.app.scenario import get_scenario
+    """§5.0.4-A — Γ_hV probe on boiling ocean + planckon (3+1 FCC via app SSOT)."""
+    from mt_ca.app.grid import open_simulator, run_spec_cube
     from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
+    from mt_ca.spinor import spinor_density
 
-    spec = RunSpec(
-        scenario=get_scenario("floor0_planckon"),
-        ny=size,
-        nx=size,
-        steps=0,
+    spec = run_spec_cube(
+        "floor0_planckon",
+        size,
         device=device,
+        steps=0,
         settle=settle,
         track=track,
     )
-    cfg = MConfig.for_stencil(spec.scenario.stencil)
-    sim = LatticeFluidSimulator(size, size, cfg, device=device)
-    apply_scenario(sim, spec.scenario)
+    sim = open_simulator(spec)
 
     from mt_ca.si_floor0_rows import _BLOCH_DISTINCT_Q6
 
@@ -233,21 +251,22 @@ def run_floor0_phase_space(
     naive_gamma = (
         n_ring * int(bb.N_phi) * dphi_disc * _BLOCH_DISTINCT_Q6 * n_ring * n_e_classes
     )
-    cy = cx = size // 2
     amp0 = float(field_amplitude(sim.z).max().item())
     for _ in range(settle):
         sim.step(1)
     amp_settled = float(field_amplitude(sim.z).max().item())
 
+    anchor = default_anchor(sim.z)
+    bath = snap_column_peak(spinor_density(sim.z), 10, 10)
     tracks = track_gamma_points(
         sim,
-        cells=[(cy, cx), (10, 10)],
+        cells=[anchor, bath],
         track=track,
         n_ring=n_ring,
         p0_nat=p0_nat,
     )
-    core = tracks[f"{cy},{cx}"]
-    bath = tracks["10,10"]
+    core = tracks[_site_key(anchor)]
+    bath_track = tracks[_site_key(bath)]
     ocean_moves = amp_settled > amp0 * 1.01 or core["unique_points"] > 1
 
     q_axes = [
@@ -277,7 +296,7 @@ def run_floor0_phase_space(
         "rho_max_after_settle": amp_settled,
         "ocean_contrast_grows": ocean_moves,
         "planckon_core": core,
-        "bath_brick": bath,
+        "bath_brick": bath_track,
         "planckon_iteration_unique": core["unique_points"],
         "planckon_nonzero_kicks": core["nonzero_kicks"],
         "checks_ok": (
@@ -296,8 +315,8 @@ def run_floor0_phase_space(
 
 def run_floor0_nE_excitation_harness(
     *,
-    size: int = 64,
-    settle: int = 64,
+    size: int = 32,
+    settle: int = 32,
     track: int = 32,
     device: str = "cpu",
     min_n_E: int = 1,
@@ -309,29 +328,19 @@ def run_floor0_nE_excitation_harness(
     read integer Φ and n_E from ``projected_phi_int`` at the planted core (not the
     settled snapshot alone, which stays n_E=0).
     """
-    from mt_ca.app.scenario import get_scenario
+    from mt_ca.app.grid import open_simulator, run_spec_cube
     from mt_ca.projected_collision import projected_phi_int
     from mt_ca.reversible import canonical_fixed
     from mt_ca.si_constants import elementary_quanta_row, energy_ledger_ticks_per_E0
     from mt_ca.topology import matter_occupancy_b, winding_channels
 
-    spec = RunSpec(
-        scenario=get_scenario("floor0_planckon"),
-        ny=size,
-        nx=size,
-        steps=0,
-        device=device,
-        settle=0,
-        track=0,
-    )
-    cfg = MConfig.for_stencil(spec.scenario.stencil)
-    sim = LatticeFluidSimulator(size, size, cfg, device=device)
-    apply_scenario(sim, spec.scenario)
-    cy = cx = size // 2
-    ticks_per_e0 = energy_ledger_ticks_per_E0(phase_bits=cfg.phase_bits)
+    spec = run_spec_cube("floor0_planckon", size, device=device, steps=0)
+    sim = open_simulator(spec)
+    ticks_per_e0 = energy_ledger_ticks_per_E0(phase_bits=sim.cfg.phase_bits)
 
     for _ in range(settle):
         sim.step(1)
+    site = default_anchor(sim.z)
 
     hits: list[dict[str, int | float | bool]] = []
     peak_n_e = 0
@@ -340,12 +349,15 @@ def run_floor0_nE_excitation_harness(
 
     for tick in range(1, track + 1):
         sim.step(1)
-        f = canonical_fixed(sim.z, cfg)
-        phi = projected_phi_int(f, cfg)
-        n_e = int(n_E_field(phi, cfg)[cy, cx].item())
-        phi_core = int(phi[cy, cx].abs().item())
-        b_core = int(matter_occupancy_b(sim.z, y=cy, x=cx))
-        w_abs = abs(float(winding_channels(sim.z, center=(cy, cx), radius=2)["auto"]))
+        f = canonical_fixed(sim.z, sim.cfg)
+        phi = projected_phi_int(f, sim.cfg)
+        n_e = int(n_E_field(phi, sim.cfg)[site.y, site.x].item()) if phi.ndim == 2 else int(
+            n_E_field(phi, sim.cfg)[site.iz, site.y, site.x].item()
+        )
+        phi_core = int(_phi_int_at(phi, site).abs().item())
+        b_core = int(matter_occupancy_b(sim.z, y=site.y, x=site.x, iz=site.iz))
+        plane = spinor_plane(sim.z, site)
+        w_abs = abs(float(winding_channels(plane, center=(site.y, site.x), radius=2)["auto"]))
         if n_e > peak_n_e or (n_e == peak_n_e and phi_core > peak_phi):
             peak_n_e = n_e
             peak_phi = phi_core

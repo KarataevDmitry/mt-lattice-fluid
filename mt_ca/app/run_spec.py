@@ -29,6 +29,13 @@ class RunSpec:
         ny: int,
         nx: int | None = None,
         steps: int,
+        nz: int | None = None,
         **kwargs: object,
     ) -> RunSpec:
-        return cls(scenario=get_scenario(scenario_id), ny=ny, nx=nx if nx is not None else ny, steps=steps, **kwargs)
+        scenario = get_scenario(scenario_id)
+        nx = nx if nx is not None else ny
+        if scenario.stencil == "fcc" and nz is None:
+            nz = ny
+        if scenario.stencil != "fcc":
+            nz = None
+        return cls(scenario=scenario, ny=ny, nx=nx, nz=nz, steps=steps, **kwargs)

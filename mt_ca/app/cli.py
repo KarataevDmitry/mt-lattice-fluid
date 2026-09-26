@@ -19,7 +19,10 @@ def _device_default() -> str:
 
 def cmd_list(_: argparse.Namespace) -> int:
     for sid, spec in sorted(SCENARIOS.items()):
-        print(f"{sid:24}  {spec.habitat.value:16}  {spec.seed.value:12}  {spec.description}")
+        print(
+            f"{sid:28}  {spec.stencil:4}  {spec.habitat.value:16}  "
+            f"{spec.seed.value:12}  {spec.description}"
+        )
     return 0
 
 
@@ -27,10 +30,13 @@ def cmd_run(args: argparse.Namespace) -> int:
     device = args.device
     if device == "cuda" and not torch.cuda.is_available():
         device = "cpu"
+    scenario = get_scenario(args.scenario)
+    nz = args.size if scenario.stencil == "fcc" else None
     spec = RunSpec(
-        scenario=get_scenario(args.scenario),
+        scenario=scenario,
         ny=args.size,
         nx=args.size,
+        nz=nz,
         steps=args.steps,
         device=device,
         block=args.block,
@@ -56,7 +62,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_p = sub.add_parser("run", help="Run one scenario")
     run_p.add_argument("scenario", choices=sorted(SCENARIOS))
-    run_p.add_argument("--size", type=int, default=64)
+    run_p.add_argument("--size", type=int, default=32, help="cube edge (FCC) or 2D side (hex slice)")
     run_p.add_argument("--steps", type=int, default=128)
     run_p.add_argument("--settle", type=int, default=0)
     run_p.add_argument("--track", type=int, default=0)

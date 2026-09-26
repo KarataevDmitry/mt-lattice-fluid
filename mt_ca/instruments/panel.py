@@ -16,7 +16,7 @@ from mt_ca.ledger import (
     momentum_density,
     n_E_field,
 )
-from mt_ca.matter_readout import MatterSite, default_anchor, readout_at_site, spinor_plane
+from mt_ca.matter_readout import MatterSite, default_anchor, plane_mconfig, readout_at_site, spinor_plane
 from mt_ca.metrics import total_norm_squared
 from mt_ca.spinor import arg_phase_defect, saturating_phase, spinor_density
 from mt_ca.topology import winding_nearest_int
@@ -44,9 +44,10 @@ def sample_site(
         spinor_density(z)[y, x].item()
     )
     matter = readout_at_site(z, site, contour_radius=contour_radius, cfg=cfg)
-    phi = saturating_phase(plane, cfg)
-    dphi = arg_phase_defect(plane, cfg, apply_floor=False)
-    n_e = int(n_E_field(phi, cfg)[y, x].item())
+    plane_cfg = plane_mconfig(plane, cfg)
+    phi = saturating_phase(plane, plane_cfg)
+    dphi = arg_phase_defect(plane, plane_cfg, apply_floor=False)
+    n_e = int(n_E_field(phi, plane_cfg)[y, x].item())
 
     row: dict[str, Any] = {
         "schema": PANEL_SCHEMA,
@@ -83,7 +84,7 @@ def sample_site(
 
     if z_past is not None:
         zpp, _, _ = _site_on_plane(z_past, site)
-        probe = ledger_step_probe(plane, zpp, cfg)
+        probe = ledger_step_probe(plane, zpp, plane_cfg)
         row[InstrumentId.PHI_KICK_TICK.value] = int(probe["phi"][y, x].item())
         row[InstrumentId.ENERGY_STAR.value] = float(probe["energy_star"][y, x].item())
         row[InstrumentId.MOMENTUM_STAR_X.value] = float(probe["momentum_star_x"][y, x].item())

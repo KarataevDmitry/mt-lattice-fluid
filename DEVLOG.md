@@ -12,6 +12,19 @@
 
 
 
+## 2026-09-26 · mt_ca.app · 3+1 FCC SSOT (floor0 + boil)
+
+**DoD:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после settle; gate-plane readout `plane_mconfig`.
+
+**Verify:** `Brick_internal_spectrum`, `Floor0_phase_space`, `Floor0_nE_excitation` PASS on FCC 32³ (CPU).
+
+## 2026-09-26 · §5.0.4-A · n_E≥1 kick-harness (floor 0)
+
+**DoD:** `run_floor0_nE_excitation_harness` — planckon on `VACUUM_BOIL`, settle 64, track 32; ledger `projected_phi_int` at core hits `n_E≥1` under free `g` (settled snapshot stays `n_E=0`).
+
+**Verify:** `Floor0_nE_excitation` PASS · probe `tools/floor0_catalog_probe.py --excitation`.
+
+
 ## 2026-09-25 · mt_ca.app — simulation application SSOT
 
 **DoD:** `mt_ca/app/` — habitat presets, `ScenarioSpec` registry, `RunSpec`/`RunResult`, `gate_b`/`peak_stats`, `runner.run()`, CLI `python -m mt_ca.app`.

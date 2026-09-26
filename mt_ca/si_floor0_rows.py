@@ -111,8 +111,8 @@ class SIFloor0Rows:
     def floor0_phase_space_row(
         self,
         *,
-        size: int = 64,
-        settle: int = 64,
+        size: int = 32,
+        settle: int = 32,
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
@@ -124,8 +124,8 @@ class SIFloor0Rows:
     def floor0_nE_excitation_row(
         self,
         *,
-        size: int = 64,
-        settle: int = 64,
+        size: int = 32,
+        settle: int = 32,
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list | dict | None]:
@@ -139,8 +139,8 @@ class SIFloor0Rows:
     def brick_internal_spectrum_row(
         self,
         *,
-        size: int = 64,
-        settle: int = 64,
+        size: int = 32,
+        settle: int = 32,
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
@@ -153,21 +153,14 @@ class SIFloor0Rows:
 
         Open (explicit): n_E≥1 kick-harness on boiling floor.
         """
-        from mt_ca.config import MConfig
+        from mt_ca.app.grid import open_simulator, run_spec_cube
+        from mt_ca.app.scenario import get_scenario
         from mt_ca.ledger import n_E_field
-        from mt_ca.seeds import SeedClass
-        from mt_ca.simulator import LatticeFluidSimulator
-        from mt_ca.si_constants import (
-            elementary_quanta_row,
-            hv_bit_budget,
-            n_E_from_phi_ticks,
-        )
-        from mt_ca.spinor import (
-            arg_phase_defect,
-            bloch_vector,
-            saturating_phase,
-            su2_apply,
-        )
+        from mt_ca.matter_readout import default_anchor, plane_mconfig, spinor_plane
+        from mt_ca.projected_collision import projected_phi_int
+        from mt_ca.reversible import canonical_fixed
+        from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget, n_E_from_phi_ticks
+        from mt_ca.spinor import arg_phase_defect, bloch_vector, su2_apply
         from mt_ca.topology import matter_occupancy_b, winding_channels
 
         eq = elementary_quanta_row()
@@ -212,23 +205,33 @@ class SIFloor0Rows:
         )
 
         dev = torch.device(device)
-        cfg = MConfig.for_stencil("hex")
-        cy = cx = size // 2
-        sim = LatticeFluidSimulator(size, size, cfg, device=dev)
-        sim.reset(SeedClass.VORTEX_P)
+        scenario = get_scenario("floor0_planckon")
+        spec = run_spec_cube("floor0_planckon", size, device=str(dev), steps=0)
+        sim = open_simulator(spec)
+        cfg = sim.cfg
         for _ in range(settle):
             sim.step(1)
 
+        site = default_anchor(sim.z)
         z = sim.z
-        phi = saturating_phase(z, cfg)
+        plane = spinor_plane(z, site)
+        y, x = site.y, site.x
+        f = canonical_fixed(z, cfg)
+        phi = projected_phi_int(f, cfg)
         n_e = n_E_field(phi, cfg)
-        ch = winding_channels(z, center=(cy, cx), radius=2)
-        b_core = matter_occupancy_b(z, y=cy, x=cx)
-        dphi_core = float(arg_phase_defect(z, cfg, apply_floor=False)[cy, cx].abs().item())
-        phi_core = float(phi[cy, cx].abs().item())
-        n_e_core = int(n_e[cy, cx].item())
+        ch = winding_channels(plane, center=(y, x), radius=2)
+        b_core = matter_occupancy_b(z, y=y, x=x, iz=site.iz)
+        plane_cfg = plane_mconfig(plane, cfg)
+        dphi = arg_phase_defect(plane, plane_cfg, apply_floor=False)
+        dphi_core = float(dphi[y, x].abs().item())
+        if site.iz is None:
+            n_e_core = int(n_e[y, x].item())
+            phi_core = float(phi[y, x].abs().item())
+        else:
+            n_e_core = int(n_e[site.iz, y, x].item())
+            phi_core = float(phi[site.iz, y, x].abs().item())
 
-        z_core = z[cy, cx]
+        z_core = plane[y, x] if plane.ndim == 3 else z[y, x]
         axis = bloch_vector(z_core.unsqueeze(0).unsqueeze(0))[0, 0]
 
         def su2_overlap(phi_rad: float) -> float:
@@ -255,10 +258,11 @@ class SIFloor0Rows:
         for _ in range(track):
             sim.step(1)
             z = sim.z
-            if matter_occupancy_b(z, y=cy, x=cx) == 1:
+            if matter_occupancy_b(z, y=y, x=x, iz=site.iz) == 1:
                 b_hits += 1
-            w_abs.append(abs(float(winding_channels(z, center=(cy, cx), radius=2)["auto"])))
-            bv = bloch_vector(z[cy : cy + 1, cx : cx + 1])[0, 0]
+            pl = spinor_plane(z, site)
+            w_abs.append(abs(float(winding_channels(pl, center=(y, x), radius=2)["auto"])))
+            bv = bloch_vector(pl[y : y + 1, x : x + 1])[0, 0]
             bloch_tail.append([float(bv[i].item()) for i in range(3)])
 
         b_core_rate = b_hits / max(track, 1)
@@ -272,7 +276,7 @@ class SIFloor0Rows:
         ground_ok = snapshot_ok and su2_ok and b_core_rate >= 0.15 and w_mean >= 0.5
 
         return {
-            "habitat": "VACUUM_BOIL",
+            "habitat": scenario.habitat_label,
             "N_ring": n_ring,
             "N_phi": int(bb.N_phi),
             "B_hV": float(bb.B_hV),
