@@ -1,8 +1,8 @@
 # DEVLOG — журнал разработки
 
-**Не спецификация MODEL.** Хронология сессий, статус реализации, открытые задачи, снимки верификации.
+**Не SSOT физики.** Хронология сессий, статус реализации, открытые задачи, снимки верификации.
 
-Спецификация: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) · протокол: [`BUILD.md`](BUILD.md)
+SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) · протокол: [`BUILD.md`](BUILD.md)
 
 ---
 
@@ -20,7 +20,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 **Fix:** сценарий = только условия (habitat/seed); **2+1 / 3+1** — поле ``RunSpec.embedding``, не отдельный «hex scenario». Алиасы ``*_hex_slice`` → тот же scenario + embedding 2+1.
 
-## 2026-09-26 · mt_ca.app · lattice + lab (2+1 vs 3+1, instruments спецификация)
+## 2026-09-26 · mt_ca.app · lattice + lab (2+1 vs 3+1, instruments SSOT)
 
 **Критерий готовности:** `dimension.py` (`LatticeDimension`), `lattice.py` (`build_run_spec`, `open_lattice`), `lab.py` (`LabSession`, `open_lab`, `planckon_lab_report`). CLI: `list` (dim column), `panel`. Verify: `Instrument_panel_*` canon vs hex_slice; `Planckon_instrument_fcc` → lab. Tools/probes via `open_lab`.
 
@@ -38,7 +38,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 **Verify:** `Floor0_nE_excitation` PASS · probe `tools/floor0_catalog_probe.py --excitation`.
 
 
-## 2026-09-25 · mt_ca.app — simulation application спецификация
+## 2026-09-25 · mt_ca.app — SSOT simulation application
 
 **Критерий готовности:** `mt_ca/app/` — habitat presets, `ScenarioSpec` registry, `RunSpec`/`RunResult`, `gate_b`/`peak_stats`, `runner.run()`, CLI `python -m mt_ca.app`.
 
@@ -104,7 +104,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 | | **MODEL** | **DEVLOG** | **META** | **BUILD** |
 |---|-----------|------------|----------|-----------|
-| Роль | спецификация `g` — MODEL + `model/00`…`06` | реализация / верификация / открытое | космология | протокол сборки |
+| Роль | SSOT `g` — MODEL + `model/00`…`06` | реализация / верификация / открытое | космология | протокол сборки |
 | Спор «что делает g?» | MODEL | — | — | — |
 | «догнали ли код?» | — | **DEVLOG** | — | BUILD |
 | «что видит мозг?» | — | — | META | — |
@@ -128,7 +128,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 | # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
-| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; спецификация **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, **HF ON**) | `laplacian` fcc · default | — |
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, **HF ON**) | `laplacian` fcc · default | — |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
 | **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | — | **`Leapfrog`** · **`A3`** · **`A3_global_norm`** PASS | `reversible` · `z_ring` | гладкая непрерывность → **T** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
@@ -142,7 +142,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
 | **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
 | **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | — | **`A14`** · **`U1_vac`** · **`SO2_C4`** PASS · **`Chiral_SU2`** PASS | `symmetry` · `chiral` | g·e^{iθ} on Z_N Q-gap (invariants OK) |
-| **A15** | **Геометрия / kappa_link** | kappa из многогранника; gamma = 1/N; спецификация N=12 | §1.6 · §5.2.2 | sim | **QuarterQuantum** PASS (MVP 1/4) | `si_constants` | FCC 1/12 row |
+| **A15** | **Геометрия / kappa_link** | kappa из многогранника; gamma = 1/N; канон N=12 | §1.6 · §5.2.2 | sim | **QuarterQuantum** PASS (MVP 1/4) | `si_constants` | FCC 1/12 row |
 | **A16** | **Pauli / 720°** | **`2π→−1`**, repulsion | §2 · §3.10.4 | sim | **`A16`** · **`Pauli`** PASS | `pauli_phi` | — |
 
 **§2.3 (блок):** ¬heat death · fixed points · Planck floor — MODEL §2.3 · **`NoMHeatDeath`** · **`Theorem_2_3_8`** · **`PlanckVacuumFloor`** PASS.
@@ -235,7 +235,7 @@ z' = z · exp(iφ)
 
 **Хронология (2026-09-22):** дилемма «чернила в воде» закрыта на M (§3.7.2); impl/sim — backlog ниже.
 
-**§3.7.4 Impl/sim v3 backlog (не спецификация):**
+**§3.7.4 Impl/sim v3 backlog (не SSOT):**
 
 | probe | метрика | isotropic | local_ca |
 |-------|---------|-----------|----------|
@@ -351,7 +351,7 @@ z' = z · exp(iφ)
 | 2026-09-22 | §3.12 | float32 1st order на 4070 → chirality dance `n` |
 | 2026-09-22 | night canon | split MODEL/META; canonical Z_N[i]; quantization ladder |
 | 2026-09-22 | §3.10.3 | `exp(i·Θ·σ/2)` → discrete `R(Φ)=ω^Φ` on Z_N[i] |
-| 2026-09-22 | §1.6.1 | теорема выбора: упаковка∧конус ⇒ FCC N₁₂ (обоснованный спецификация ε) |
+| 2026-09-22 | §1.6.1 | теорема выбора: упаковка∧конус ⇒ FCC N₁₂ (обоснованный канон ε) |
 | 2026-09-22 | §8.4.2-D · §8.4.4 | $G_{\mu\nu}$ из strain+$8\pi\ell_P^{2}$ · CKM $N_{gen}=d$, $\lambda=3/13$ |
 | 2026-09-22 | §8.4.3-D/E | бегунок α: $1/\alpha(M_Z)=1/\alpha_{fs}-B_{hV}$ · дерево $m_W,m_Z$ |
 | 2026-09-22 | §8.2 Кулон | $F=\alpha_{fs} F_P n_1 n_2/N^{2}$ из носителя · `SI.coulomb_row` |
@@ -457,7 +457,7 @@ z' = z · exp(iφ)
 
 ## §7. Genesis (диалог → M)
 
-**Не спецификация.** Как пришли к каркасу — история разработки; физика — **MODEL §0–§8**.
+**Не SSOT физики.** Как пришли к каркасу — история разработки; физика — **MODEL §0–§8**.
 
 **Вход:** **красное смещение (redshift)** — частота/длина волны не инвариантны → мотивация дискретного времени и «ходов».
 
@@ -487,18 +487,18 @@ python scripts/run_symmetry_probe.py
 ---
 ## §8. Вынесено из MODEL (split hub)
 
-**Не спецификация.** При разбиении монолита MODEL → `MODEL.md` + `model/` сюда ушли сессионные/инженерные куски.
+**Не SSOT физики.** При разбиении монолита MODEL → `MODEL.md` + `model/` сюда ушли сессионные/инженерные куски.
 
-### Ночной спецификация (снимок, был в MODEL)
+### Ночной канон (снимок, был в MODEL)
 
-### Ночной спецификация M (2026-09-22) — принято
+### Ночной канон M (2026-09-22) — принято
 
 | # | Тезис | § |
 |---|--------|---|
 | 1 | Изотропное **`g`**, **`ζ=(Σz)·z*`**, phase wrap | §3.4 |
 | 2 | Лучи/sweeps → micro-aniso; default isotropic | §3.6 |
 | 3 | Smear → Гейзенберг Δφ≥½ + K_P триггер → anti-smear | §3.7 |
-| 4 | Слабые волны на спецификацияе носителя; тяжёлый vortex → контрольный расчёт на гекс-срезе **если** тест | §3.8 · §1.6 |
+| 4 | Слабые волны на каноне носителя; тяжёлый vortex → контрольный расчёт на гекс-срезе **если** тест | §3.8 · §1.6 |
 | 5 | **ДА:** голоморфная среда, **`g`** = удержание аналитичности | §3.9 |
 | 6 | Полюс **`hV`**, вычет **`2πn`**, заряд | §3.9 |
 | 7 | CR-единственность → **единое поле Λ**, запутанность **на том же Δt** | §3.9 |
@@ -518,7 +518,7 @@ python scripts/run_symmetry_probe.py
 | 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
 | 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; A3 + discrete ledgers на M; гладкий **`div j`** = **T** | §5.2.1 · §4.3 · §1.6 |
-| 24 | **`κ_link = 1/|N|`:** FCC **`1/12`** (спецификация 3+1); гекс-срез **`1/6`**; **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 · §1.6 |
+| 24 | **`κ_link = 1/|N|`:** FCC **`1/12`** (канон 3+1); гекс-срез **`1/6`**; **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 · §1.6 |
 | 25 | **Gate M = `ω^Φ`:** **`exp(i·Θ·σ/2)`** — T-нотация; tick = **`R(Φ)`** / Rot_LUT на **`Z_N[i]`**, не matrix exp | §3.10.3 · §3.12.5 |
 | 26 | **Theorem 2.3:** ¬M heat death, ¬shutdown — Lemmas 2.3.1–2.3.8 | §2.3 |
 
@@ -616,4 +616,4 @@ x+N ≡ x ,   y+N ≡ y
 
 ### Wave: N₄/MVP purge из `model/` (после split)
 
-Квадрат N₄ / Genese Moore / Impl-строки / Sim notes вычищены из `model/*`. Окрестность пишется как **`N` / `|N|`** (FCC 12 · гекс 6). Исторический ромб κ на N₄ — только здесь как архив: κ=1/√2 совпал с FCC 1-tick, но носитель спецификацияа — кубооктаэдр, не квадрат.
+Квадрат N₄ / Genese Moore / Impl-строки / Sim notes вычищены из `model/*`. Окрестность пишется как **`N` / `|N|`** (FCC 12 · гекс 6). Исторический ромб κ на N₄ — только здесь как архив: κ=1/√2 совпал с FCC 1-tick, но носитель канон — кубооктаэдр, не квадрат.
