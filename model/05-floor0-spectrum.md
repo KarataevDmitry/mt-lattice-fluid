@@ -138,7 +138,17 @@ $$
 
 Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$). В конце прогона — блок **`=== ЧИТАТЬ ТАК ===`** (явные «НЕТ», не пустота).
 
-**Линearization (v1 · FD):** `tools/boil_linear_spectrum.py` — на фоне post-settle, возмущение Fourier-моды на $z_{\mathrm{curr}}$, один тик $g$, оценка $\lambda_k$; рядом `shift_mse` contrast на ring $T\in\{21,41,82,\ldots\}$. На boil low-$k$ даёт **$|\lambda_k|\gg1$** (усиление, не $U(1)$-мода на торе) → фазовый «$T\sim2\pi/\arg\lambda$» **не** интерпретировать как период океана; кольцо 512 **не** проявляется как минимум MSE на contrast.
+**Линearization (v1 · FD):** `tools/boil_linear_spectrum.py` — на фоне post-settle, возмущение Fourier-моды на $z_{\mathrm{curr}}$, один тик $g$, оценка $\lambda_k$; рядом `shift_mse` contrast на ring $T\in\{21,41,82,\ldots\}$.
+
+**Три строки итога (dogfood · `habitat_boil` 16³, settle 64 — числа пересчитываются probe):**
+
+| # | что смотрим | результат (как читать) |
+|---|-------------|------------------------|
+| **1** | low-$k$, $|\lambda_k|$ | $|\lambda|\gg1$ → **«$T\sim2\pi/\arg\lambda$» не читаем** (мода не нейтральная; это не «T не найден», а «фазовый период не определён») |
+| **2** | ring $21/41/82$ vs `ρ_contrast` | `shift_mse` **растёт** (тип. $0.10\to0.34\to1.3$) → **минимумов на лестнице §5.0.4-A нет** |
+| **3** | `best_shift_T` на contrast | часто **$T=2$** при малом mse → **дрейф/leapfrog**, не кольцо и не $f(t+2)=f(t)$ |
+
+Probe печатает те же три строки в **`=== ЧИТАТЬ ТАК ===`**. На boil low-$k$ даёт усиление, не $U(1)$-волну на торе.
 
 **Открыто:** полное перечисление $\Gamma_{hV}$; возбуждённые ветки ($n_E\ge1$, $\Phi\ge 41$) — kick-harness.
 
