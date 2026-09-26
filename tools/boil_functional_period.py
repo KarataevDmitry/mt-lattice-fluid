@@ -14,6 +14,7 @@ import json
 from collections import defaultdict
 
 from mt_ca.analysis.functional_period import scan_ca_leapfrog_period, scan_observable_period
+from mt_ca.analysis.human_readout import functional_period_verdict, print_verdict
 import torch
 
 from mt_ca.app.lab import open_lab
@@ -90,6 +91,7 @@ def run_boil_functional_period(
         out["ca_leapfrog"] = scan_ca_leapfrog_period(
             f_currs, f_pasts, max_lag=min(max_lag, ticks // 3)
         )
+    out["human_verdict"] = functional_period_verdict(out)
     return out
 
 
@@ -134,6 +136,7 @@ def main() -> None:
                 f"  T={row['T']:3d}  exact_rate={row['exact_match_rate']:.4f}  "
                 f"mismatch={row['mean_mismatch']:.6f}"
             )
+    print_verdict("ЧИТАТЬ ТАК", rep.get("human_verdict") or [])
 
 
 def _print_scan(label: str, scan: dict) -> None:

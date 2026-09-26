@@ -11,6 +11,7 @@ import argparse
 import json
 
 from mt_ca.analysis.functional_period import scan_observable_period, shift_residual
+from mt_ca.analysis.human_readout import functional_period_verdict, linear_spectrum_verdict, print_verdict
 from mt_ca.analysis.linearized_g import ring_period_candidates, scan_low_k_modes
 from mt_ca.app.lab import open_lab
 from mt_ca.instruments.catalog import InstrumentId
@@ -43,6 +44,18 @@ def run_boil_linear_spectrum(
     scan = scan_observable_period(contrast, max_lag=min(128, track_ticks // 3))
     ring_mse = {T: round(shift_residual(contrast, T), 6) for T in ring if T < len(contrast)}
 
+    human = linear_spectrum_verdict(
+        {
+            "modes": modes[:24],
+            "contrast_shift_mse_at_ring": ring_mse,
+            "contrast_scan": {
+                "best_shift_T": scan.get("best_shift_T"),
+                "best_shift_mse_norm": scan.get("best_shift_mse_norm"),
+            },
+            "model_ring_T": ring,
+        }
+    )
+
     return {
         **lab.meta,
         "settle": settle,
@@ -56,6 +69,7 @@ def run_boil_linear_spectrum(
             "best_shift_T": scan.get("best_shift_T"),
             "best_shift_mse_norm": scan.get("best_shift_mse_norm"),
         },
+        "human_verdict": human,
     }
 
 
@@ -90,6 +104,7 @@ def main() -> None:
     print("model ring T:", rep["model_ring_T"])
     print("contrast shift_mse at ring T:", rep["contrast_shift_mse_at_ring"])
     print("contrast best_shift:", rep["contrast_scan"])
+    print_verdict("ЧИТАТЬ ТАК", rep.get("human_verdict") or [])
 
 
 if __name__ == "__main__":

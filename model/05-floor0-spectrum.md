@@ -136,7 +136,7 @@ $$
 | **readout** | contrast, kick, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
 | **КА** | пара leapfrog $(f_{\mathrm{curr}},f_{\mathrm{past}})\in\mathbb{Z}_N[i]^{\Lambda}$ | доля $t$ с **точным** совпадением пары при сдвige $T$; `exact_period_T` = минимальное $T$ с rate $=1$ |
 
-Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$).
+Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$). В конце прогона — блок **`=== ЧИТАТЬ ТАК ===`** (явные «НЕТ», не пустота).
 
 **Линearization (v1 · FD):** `tools/boil_linear_spectrum.py` — на фоне post-settle, возмущение Fourier-моды на $z_{\mathrm{curr}}$, один тик $g$, оценка $\lambda_k$; рядом `shift_mse` contrast на ring $T\in\{21,41,82,\ldots\}$. На boil low-$k$ даёт **$|\lambda_k|\gg1$** (усиление, не $U(1)$-мода на торе) → фазовый «$T\sim2\pi/\arg\lambda$» **не** интерпретировать как период океана; кольцо 512 **не** проявляется как минимум MSE на contrast.
 
