@@ -1,4 +1,4 @@
-"""T bounded context loads (DDD migration)."""
+"""T bounded context loads (DDD)."""
 
 from __future__ import annotations
 
@@ -15,10 +15,3 @@ def test_t_coarse_reexport() -> None:
     from mt_ca.t.coarse import macro_amplitude
 
     assert callable(macro_amplitude)
-
-
-def test_matter_survey_shim() -> None:
-    from mt_ca.matter_survey import MatterSite
-    from mt_ca.matter_readout import MatterSite as Legacy
-
-    assert MatterSite is Legacy

@@ -17,7 +17,7 @@ import torch
 from mt_ca.app import READOUT_SCHEMA, dual_lanes, gates_at_z
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor, encode_spinor
-from mt_ca.matter_readout import defect_candidates
+from mt_ca.matter_survey import defect_candidates
 from mt_ca.seeds import SeedClass, boil_ocean_spinor_3d, make_seed
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.topology import winding_nearest_int

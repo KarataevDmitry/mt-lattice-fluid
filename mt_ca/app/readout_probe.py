@@ -6,7 +6,7 @@ from typing import Any, Literal
 import torch
 
 from mt_ca.app.gates import gate_b
-from mt_ca.matter_readout import MatterSite, default_anchor
+from mt_ca.matter_survey import MatterSite, default_anchor
 
 READOUT_SCHEMA = 1
 

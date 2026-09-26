@@ -110,12 +110,12 @@
 
 | MODEL | Код (bounded context) | Заметка |
 |-------|-------------------------|---------|
-| binomial $\|Φ\|$, §4.1.1 | `mt_ca.t.coarse` ← `macro.py` | предпочтительный импорт |
-| DFT / dispersion (калибровка) | `mt_ca.t.spectral` ← `t_analysis.py` | не заменяет micro `g` |
-| T-CR, path-Green, §4.1.0–HL | `mt_ca.t.hydro_limit` | было `t_continuum_readout.py` |
-| T1/T2/T3, `validate_mt` | `mt_ca.t.validation` ← `t_validation.py` | |
-| якоря §5 (Arg, $m_e$) | `mt_ca.t.anchors` ← `m_to_t.py` | |
-| контур $n$, survey/anchor | `mt_ca.matter_survey` | shim: `matter_readout.py` |
+| binomial $\|Φ\|$, §4.1.1 | `mt_ca.t.coarse` | реализация: `macro.py` (перенос в пакет — открыто) |
+| DFT / dispersion (калибровка) | `mt_ca.t.spectral` | реализация: `t_analysis.py` |
+| T-CR, path-Green, §4.1.0–HL | `mt_ca.t.hydro_limit` | |
+| T1/T2/T3, `validate_mt` | `mt_ca.t.validation` | перенос из `t_validation.py` |
+| якоря §5 (Arg, $m_e$) | `mt_ca.t.anchors` | перенос из `m_to_t.py` |
+| контур $n$, survey/anchor | `mt_ca.matter_survey` | |
 | lab / CLI | `mt_ca.app`, `mt_ca.instruments` | orchestration |
 
-**Не термин MODEL:** *readout* — снят с prose; в коде только legacy shims до полной миграции. **Ubiquitous language** в новом коде: *coarse*, *macro_amplitude*, *survey*, *hydro_limit*, *макроописание T*.
+**Не термин MODEL:** *readout* — снят с prose и с имён модулей. **Ubiquitous language:** *coarse*, *macro_amplitude*, *survey*, *hydro_limit*, *макроописание T*.

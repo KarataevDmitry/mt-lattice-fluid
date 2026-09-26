@@ -177,7 +177,3 @@ def hydro_limit_verify_row() -> dict[str, float | int | bool | str]:
         "separable_121_is_not_fcc_law": True,
         "note": "§4.1.0-T: макроописание T из binomial+Green; no hL→0",
     }
-
-
-# Legacy verify id (pre-DDD module name)
-t_continuum_readout_row = hydro_limit_verify_row

@@ -14,7 +14,7 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ## 2026-09-26 · DDD · bounded context `mt_ca.t`
 
-**T-слой:** `mt_ca/t/` (coarse, spectral, hydro_limit, validation, anchors); `t_continuum_readout.py` → shim на `t.hydro_limit`. **M-инструмент:** `matter_survey.py` (shim `matter_readout`). Глоссарий §«Макроописание T» — карта MODEL↔код. Tests +17.
+**T-слой:** `mt_ca/t/` (coarse, spectral, hydro_limit, validation, anchors). **M-инструмент:** `matter_survey.py`. Удалены re-export `matter_readout` / `t_continuum_readout`. Глоссарий §«Макроописание T».
 
 Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simulator`, draft `floor0_resonance*`. One API: scenario id + `embedding`.
 

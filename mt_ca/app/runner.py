@@ -16,7 +16,7 @@ from mt_ca.blanket.stack import apply_blanket_preset
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor
 from mt_ca.ledger import ledger_step_probe, momentum_density, n_E_field
-from mt_ca.matter_readout import MatterSite, default_anchor, plane_mconfig, snap_column_peak, spinor_plane
+from mt_ca.matter_survey import MatterSite, default_anchor, plane_mconfig, snap_column_peak, spinor_plane
 from mt_ca.metrics import coarse_amplitude, field_amplitude, has_nan, norm_drift
 from mt_ca.seeds import SeedClass, make_seed, vacuum_boil_fixed
 from mt_ca.si_constants import internal_phase_decode, kappa_link

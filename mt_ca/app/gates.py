@@ -5,7 +5,7 @@ from typing import Any
 
 import torch
 
-from mt_ca.matter_readout import MatterSite, default_anchor, planckon_instrument, survey_density_sites
+from mt_ca.matter_survey import MatterSite, default_anchor, planckon_instrument, survey_density_sites
 from mt_ca.spinor import spinor_density
 from mt_ca.topology import gate_plane_z, winding_channels, winding_nearest_int
 

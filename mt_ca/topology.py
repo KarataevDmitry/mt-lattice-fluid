@@ -243,7 +243,7 @@ def matter_occupancy_b(
     contour_radius: int = 2,
 ) -> int:
     """b(x) = min(1, |n_∂|) at cell — §5.0: ρ_matter = ρ_P·b, m_cell = m_P·b."""
-    from mt_ca.matter_readout import readout_at_site, snap_column_peak
+    from mt_ca.matter_survey import readout_at_site, snap_column_peak
     from mt_ca.spinor import spinor_density
 
     rho = spinor_density(z)

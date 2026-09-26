@@ -11,7 +11,7 @@ from mt_ca.instruments.catalog import InstrumentId
 from mt_ca.instruments.scales import QuantityKind, reading
 from mt_ca.m_to_t import arg_mass_load, m_rest_readout, zigzag_activity
 from mt_ca.macro import macro_amplitude, macro_matter_b
-from mt_ca.matter_readout import default_anchor, plane_mconfig, spinor_plane
+from mt_ca.matter_survey import default_anchor, plane_mconfig, spinor_plane
 from mt_ca.metrics import field_amplitude
 from mt_ca.spinor import spinor_density
 from mt_ca.t_validation import (

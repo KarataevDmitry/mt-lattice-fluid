@@ -79,7 +79,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
         "§5.0 b=min(1,|n_∂|)",
         "M_site",
         "{0,1}",
-        "matter_readout instrument (survey/anchor)",
+        "matter_survey instrument (survey/anchor)",
     ),
     InstrumentSpec(
         InstrumentId.N_TOPO,

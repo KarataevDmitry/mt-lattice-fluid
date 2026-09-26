@@ -156,7 +156,7 @@ class SIFloor0Rows:
         from mt_ca.app.lattice import build_run_spec, open_lattice
         from mt_ca.app.scenario import get_scenario
         from mt_ca.ledger import n_E_field
-        from mt_ca.matter_readout import default_anchor, plane_mconfig, spinor_plane
+        from mt_ca.matter_survey import default_anchor, plane_mconfig, spinor_plane
         from mt_ca.projected_collision import projected_phi_int
         from mt_ca.reversible import canonical_fixed
         from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget, n_E_from_phi_ticks

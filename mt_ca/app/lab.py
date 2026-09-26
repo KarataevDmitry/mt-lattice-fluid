@@ -11,7 +11,7 @@ from mt_ca.app.gates import gate_b
 from mt_ca.app.lattice import build_run_spec, describe_lattice, open_lattice
 from mt_ca.app.run_spec import RunSpec
 from mt_ca.instruments.panel import sample_field, sample_panel, sample_site
-from mt_ca.matter_readout import (
+from mt_ca.matter_survey import (
     MatterSite,
     default_anchor,
     planckon_instrument,
