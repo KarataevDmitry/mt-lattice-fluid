@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Minimal forward envelope: M seed → T readout ℬ → CMB-scale δT/T (META §3.0.1).
+"""Minimal forward envelope: M seed → T coarse ℬ → CMB-scale δT/T (META §3.0.1).
 
 Back-of-envelope only — not a full C_ℓ solver.
 
 Pipeline:
   1. boil → settle → half-space phase wall (§3.2 dogfood)
-  2. coarse binomial readout on Δρ = |Φ|_wall − |Φ|_base (slice at iz)
+  2. coarse binomial macro on Δρ = |Φ|_wall − |Φ|_base (slice at iz)
   3. extra ν_viscosity passes (§4.1.2 proxy for long bubble evolution)
   4. extrapolate to N_CMB via nu_coarse_passes(N_CMB, block)
   5. invert: which δφ lands at δT/T ~ 10⁻⁵ after smoothing?
@@ -40,7 +40,7 @@ CMB_DELTA_T_OVER_T = 1.0e-5
 
 
 def coarse_slice(z: torch.Tensor, iz: int, block: int) -> torch.Tensor:
-    """2D macro |Φ| at lattice slice iz (3D spinor → 2D readout)."""
+    """2D macro |Φ| at lattice slice iz (3D spinor → 2D macro slice)."""
     if z.ndim == 4:
         return coarse_grain(z[iz], block)
     return coarse_grain(z, block)

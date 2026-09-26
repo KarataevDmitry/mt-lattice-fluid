@@ -2,7 +2,7 @@
 """Sweep boil → settle → spinor half-space wall (META §3.2 dogfood).
 
 Axes: settle_ticks × delta_angle × wall_axis (x|y|z).
-Metrics: born_* (survey readout), b_survey_*, min_pair_dist.
+Metrics: born_* (survey), b_survey_*, min_pair_dist.
 """
 
 from __future__ import annotations

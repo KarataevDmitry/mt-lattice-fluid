@@ -138,7 +138,7 @@ def test_collision(
     micro_amp_late = float(field_amplitude(sim.z).max())
     coarse_amp_ratio = float(coarse.max()) / (float(coarse_0.max()) + 1e-12)
 
-    # After binomial (1-2-1) §4.1 readout, interference → several peaks (not mush=0/1).
+    # After binomial (1-2-1) §4.1 macro, interference → several peaks (not mush=0/1).
     # Upper bound must not punish fringes (T_wave_particle already sees peaks=5).
     structured = peaks_late >= 2
     ok = structured and peaks_0 >= 2
@@ -306,7 +306,7 @@ def test_wave_particle(
 
 
 def test_dispersion(size: int = 128, steps: int = 64, device: str = "cpu") -> dict:
-    """§4.6: plane-wave phase advance vs γ (T readout)."""
+    """§4.6: plane-wave phase advance vs γ (macro-T)."""
     from mt_ca.t_analysis import estimate_phase_velocity_plane_wave
 
     sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)

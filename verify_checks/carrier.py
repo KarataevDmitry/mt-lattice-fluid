@@ -53,7 +53,7 @@ def check_carrier_torus_close(device: str = "cpu") -> dict:
     }
 
 def check_gpu_eng_tail_close(device: str = "cpu") -> dict:
-    """§0.10 — GPU eng-tail floor/step/literals closed as MODEL readout."""
+    """§0.10 — GPU eng-tail floor/step/literals closed as MODEL macro export."""
     from mt_ca.si_constants import SI
 
     del device
@@ -459,7 +459,7 @@ def check_vacuum_bath(device: str = "cpu") -> dict:
     }
 
 def check_bubble_tick(device: str = "cpu") -> dict:
-    """META §3.0.1 — exact bubble age t = N·hT from derived hT (no readout)."""
+    """META §3.0.1 — exact bubble age t = N·hT from derived hT (no coarse extrapolation)."""
     from mt_ca.si_constants import SI
 
     del device

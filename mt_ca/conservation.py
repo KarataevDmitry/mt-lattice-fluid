@@ -23,7 +23,7 @@ def rotate_c4(z: torch.Tensor) -> torch.Tensor:
 
 
 def madelung_div_j(z: torch.Tensor) -> torch.Tensor:
-    """Discrete Madelung flux divergence on the first spinor component (2D T-readout)."""
+    """Discrete Madelung flux divergence on the first spinor component (2D T-layer)."""
     u = spinor_scalar(z)
     jx = (u.conj() * torch.roll(u, -1, 1)).imag
     jy = (u.conj() * torch.roll(u, -1, 0)).imag
@@ -115,7 +115,7 @@ def t_madelung_continuity_report(
     *,
     device: str = "cpu",
 ) -> dict:
-    """T-layer Madelung residual — emergent readout, never an M hard fail."""
+    """T-layer Madelung residual — emergent macro, never an M hard fail."""
     madelung = projected_madelung_residual(size, device=device)
     return {
         "id": "T_MadelungContinuity",

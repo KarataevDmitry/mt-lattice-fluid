@@ -2,7 +2,7 @@
 
 DFT / spectral tools read macro structure and calibrate dispersion — they do not
 replace local CA update. Bond continuity + SO(2) on N₄ are M operators (§5.2.1);
-spectral continuity is a T readout aid.
+spectral continuity is a T spectral aid.
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ import torch
 
 
 def laplacian_eigenvalues(ny: int, nx: int, device: torch.device, dtype: torch.dtype) -> torch.Tensor:
-    """Eigenvalues of von Neumann Δ₄ on periodic torus — for spectral readout only."""
+    """Eigenvalues of von Neumann Δ₄ on periodic torus — for spectral macro only."""
     ky = 2.0 * torch.pi * torch.fft.fftfreq(ny, device=device, dtype=dtype)
     kx = 2.0 * torch.pi * torch.fft.fftfreq(nx, device=device, dtype=dtype)
     yy, xx = torch.meshgrid(ky, kx, indexing="ij")

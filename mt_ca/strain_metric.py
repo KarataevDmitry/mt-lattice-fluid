@@ -1,4 +1,4 @@
-"""§8.4.2-C′/C′′′ — strain readout h_00 from ρ-edges; saturation-core probe."""
+"""§8.4.2-C′/C′′′ — strain macro h_00 from ρ-edges; saturation-core probe."""
 
 from __future__ import annotations
 

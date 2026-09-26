@@ -579,7 +579,7 @@ class SIAlphaSoftRows:
         }
 
     def alpha_meter_na0_bridge_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·meter — N_a0/a0 readout from sealed α; meter not input.
+        """§8.2·α·meter — N_a0/a0 samples from sealed α; meter not input.
 
         Fint (dependency flip):
           OLD trap: optical meter / a0 → N_a0 → α (T-anchor as definition).

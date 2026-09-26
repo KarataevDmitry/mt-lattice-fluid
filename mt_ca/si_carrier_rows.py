@@ -37,14 +37,14 @@ class SICarrierRows:
           · Open finite patch without wrap = walls under another name.
           · Sphere / curved compact → no flat FCC/hex equal light-like edges (§1).
           · Infinite noncompact Λ: local g same — not rejected as local law;
-            finite readout / D5 on finite connected graph / META wave-return
+            finite macro export / D5 on finite connected graph / META wave-return
             need compact-without-boundary.
           · Flat translation lattice + compact no boundary → torus:
                 (3+1) T³ · (2+1) slice T².
           · Λ×S¹ = phase fiber over Λ (Arg/U(1)), not «torus instead of lattice».
           · closed: finite wall-free carrier topology = torus.
           · SOFT: cosmological period N; long-run entropy numerics; covers.
-          · Sim torch.roll = eng readout of §1.7 (DEVLOG §10.1), not new physics.
+          · Sim torch.roll = eng mirror of §1.7 (DEVLOG §10.1), not new physics.
         """
         inventory: list[dict[str, str | float | bool]] = [
             {
@@ -59,7 +59,7 @@ class SICarrierRows:
                 "status": "closed",
             },
             {
-                "id": "closed_sim_roll_is_readout",
+                "id": "closed_sim_roll_is_periodic_eng",
                 "maps_to": "torch.roll / bond wrap = eng of §1.7, not separate law",
                 "status": "closed",
             },
@@ -96,7 +96,7 @@ class SICarrierRows:
         ok = (
             "closed_finite_wallfree_is_torus" in closed_ids
             and "closed_Lambda_times_S1_fiber" in closed_ids
-            and "closed_sim_roll_is_readout" in closed_ids
+            and "closed_sim_roll_is_periodic_eng" in closed_ids
             and "reject_absorbing_wall" in reject_ids
             and "reject_reflecting_wall" in reject_ids
             and "reject_sphere_as_flat_FCC_carrier" in reject_ids
@@ -115,21 +115,21 @@ class SICarrierRows:
             "checks_ok": ok,
             "note": (
                 "Finite wall-free carrier = torus (T³/T²). Λ×S¹ = phase fiber. "
-                "Period N / covers soft. Sim wrap = readout of §1.7."
+                "Period N / covers soft. Sim wrap = mirror of §1.7."
             ),
         }
 
     def gpu_eng_tail_close_row(self) -> dict[str, float | int | str | bool | list]:
         """§0.10 · GPU eng-tail close (was DEVLOG §10.2–§10.4).
 
-        Ask: are the three GPU fuses new physics or MODEL readout?
+        Ask: are the three GPU fuses new physics or MODEL macro export?
 
         Carrier answers (2026-09-24):
           · Floor+seed (§10.2): z≡0 deadlock; |z|≥z_min; vacuum_amplitude=z_min;
             per-cell gauge_fix forbidden on tick path.
           · Step algebra (§10.3): R(Φ)=ω^Φ only; Euler z+=iφz rejected (A3).
           · Literals (§10.4): DX/DT/K_P/α* = as_code_dict SI paste, not free parameters.
-          · All closed as eng readout of §0.5 / A3·A4 / §7 SI.
+          · All closed as eng mirror of §0.5 / A3·A4 / §7 SI.
           · Soft: verify norm_drift threshold = sim hygiene.
         """
         hv = hv_bit_budget()
@@ -208,7 +208,7 @@ class SICarrierRows:
             and "soft_open_norm_drift_verify_threshold" in soft_open_ids
         )
         return {
-            "theorem": "§0.10 GPU eng-tail — floor/step/literals = MODEL readout",
+            "theorem": "§0.10 GPU eng-tail — floor/step/literals = MODEL macro export",
             "z_min": z_min,
             "frac_bits": hv.frac_bits,
             "PHASE_SATURATION": float(code["PHASE_SATURATION"]),
@@ -225,13 +225,13 @@ class SICarrierRows:
             "soft_open_ids": soft_open_ids,
             "checks_ok": ok,
             "note": (
-                "GPU fuses closed as readout: floor+seed (§0.5), R(Φ) not Euler, "
+                "GPU fuses closed as T export: floor+seed (§0.5), R(Φ) not Euler, "
                 "SI literals paste. Soft: verify norm_drift threshold."
             ),
         }
 
     def maxwell_row(self) -> dict[str, float]:
-        """§8.2 macro Maxwell — light = K_P/μ_P; T-readout (not Planck ∇)."""
+        """§8.2 macro Maxwell — light = K_P/μ_P; T-layer (not Planck ∇)."""
         mu_p = self.mu_P
         k_p = self.K_P
         u_p = self.u_P
@@ -677,7 +677,7 @@ class SICarrierRows:
             {
                 "id": "alpha_fs_derived",
                 "ratio": float(geo["alpha_fs_inv_derived"]),
-                "maps_to": "T-readout π-postulate; not from a alone",
+                "maps_to": "T-layer π-postulate; not from a alone",
                 "status": "derived_T",
                 "mechanism": "guardrail vs skipping a→Φ_□ path",
             },
@@ -691,7 +691,7 @@ class SICarrierRows:
             "ratio_inventory": ratio_inventory,
             "ratio_derived_count": derived,
             "ratio_open_count": open_,
-            "precedent": "κ = R_in(a)/R_out(a) at a=l_P; c=κc₀ is readout check — see kappa_bottom_up_row",
+            "precedent": "κ = R_in(a)/R_out(a) at a=l_P; c=κc₀ is T-export check — see kappa_bottom_up_row",
             "note": "§8.2·geo: dimensional body at a=l_P first; ratios derived",
         }
 
@@ -946,7 +946,7 @@ class SICarrierRows:
         hbar_nu0 = hbar * nu0
         tol = 1e-12
         return {
-            "theorem": "Thm 5.2 / Cor 0.9: excitations quantize; wave is T-readout only",
+            "theorem": "Thm 5.2 / Cor 0.9: excitations quantize; wave is T-layer only",
             "no_fundamental_wave_on_M": True,
             "axioms": "A3,Thm0.1,§3.12,§5.2.2,§5.2.4,§4.9",
             "energy_transfer_n_E_integer": eq["energy_ticks_per_E0"] >= 1,

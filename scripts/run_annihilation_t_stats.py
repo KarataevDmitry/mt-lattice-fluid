@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Print §5.0.3 T-statistics probe (dual-front readout)."""
+"""Print §5.0.3 T-statistics probe (dual-front coarse probe)."""
 
 from __future__ import annotations
 

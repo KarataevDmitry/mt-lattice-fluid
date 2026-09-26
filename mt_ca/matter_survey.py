@@ -210,7 +210,7 @@ def planckon_instrument(
     require_local_max: bool = True,
     cfg: MConfig | None = None,
 ) -> dict[str, Any]:
-    """Full instrument: anchor readout + ρ survey (denisitometer modes)."""
+    """Full instrument: anchor lane + ρ survey (denisitometer modes)."""
     cfg = cfg or MConfig.for_stencil("fcc" if z.ndim == 4 else "hex")
     rho = spinor_density(z)
     margin = survey_margin if survey_margin is not None else contour_radius + 1
@@ -293,7 +293,7 @@ def defect_candidates(
     margin: int | None = None,
     require_local_max: bool = False,
 ) -> list[SiteSurvey]:
-    """Survey instrument: sites with b≥1 (|n|≥¾) after column-snap and plane readout."""
+    """Survey instrument: sites with b≥1 (|n|≥¾) after column-snap and plane contour."""
     margin = margin if margin is not None else contour_radius + 1
     rho = spinor_density(z)
     sites = survey_density_sites(

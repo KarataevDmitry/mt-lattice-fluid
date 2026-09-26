@@ -4,7 +4,7 @@
 Arms (2+1 hex or 3+1 FCC via --fcc):
   ice_uniform, ice_disk_d1, ice_wall_d1, ice_ripple, boil_control, boil_relax_wall
 
-Tracks born_final / born_ever via **survey** readout (with --sample-every).
+Tracks born_final / born_ever via **survey** macro (with --sample-every).
 """
 
 from __future__ import annotations

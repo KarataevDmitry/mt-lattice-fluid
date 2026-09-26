@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""§4.9 GPU leaf: wave interference vs vortex localization readout."""
+"""§4.9 GPU leaf: wave interference vs vortex localization macro."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from mt_ca.t_validation import wave_particle_macro
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="§4.9 wave↔particle readout test")
+    parser = argparse.ArgumentParser(description="§4.9 wave↔particle macro test")
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--size", type=int, default=512)
     parser.add_argument("--steps", type=int, default=256)

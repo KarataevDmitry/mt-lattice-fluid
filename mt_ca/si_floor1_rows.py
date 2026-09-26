@@ -353,7 +353,7 @@ class SIFloor1Rows:
             },
             {
                 "id": "reject_Compton_as_dressing",
-                "maps_to": "Compton/a0 = IR readout, not near-zone ρ_Θ",
+                "maps_to": "Compton/a0 = IR macro, not near-zone ρ_Θ",
                 "status": "rejected",
             },
             {

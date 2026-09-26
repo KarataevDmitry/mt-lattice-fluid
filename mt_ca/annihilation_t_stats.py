@@ -1,6 +1,6 @@
-"""§5.0.3 · T-statistics readout for 2γ-like dual-front channel.
+"""§5.0.3 · T-statistics (coarse) for 2γ-like dual-front channel.
 
-M: deterministic g; T: binomial coarse readout + rotated ensemble (§2.1).
+M: deterministic g; T: binomial coarse (§4.1) + rotated ensemble (§2.1).
 
 **Probe path:** head-on Gaussian packets (macro pressure-wave analog, §4.2 T2) —
 full vortex-pair annihilation on torus with global winding is **sim-open** (winding NaN on superposition).
@@ -40,7 +40,7 @@ def _head_on_packets(
 
 
 def _dipole_axis_angle(coarse: torch.Tensor) -> float | None:
-    """Major axis of amplitude-weighted covariance (T dipole readout)."""
+    """Major axis of amplitude-weighted covariance (T dipole from coarse)."""
     rho = coarse.detach().float()
     peak = float(rho.max().item())
     if peak <= 1e-9:
@@ -132,7 +132,7 @@ def annihilation_t_stats_probe(
     ensemble: int = 12,
     device: str = "cpu",
 ) -> dict[str, float | int | bool | str | None]:
-    """Head-on dual-front T-readout + rotated ensemble (⟨dσ/dΩ⟩ proxy)."""
+    """Head-on dual-front T-layer + rotated ensemble (⟨dσ/dΩ⟩ proxy)."""
     dev = torch.device(device)
     sep = sep if sep is not None else max(16, size // 6)
 
@@ -173,7 +173,7 @@ def annihilation_t_stats_probe(
         and single["elongation"] > 1.25
         and single["elongation"] < float("inf")
     )
-    # Injected ensemble is uniform; readout should track axis modulo π (dipole symmetry).
+    # Injected ensemble is uniform; estimate should track axis modulo π (dipole symmetry).
     axis_tracks = mean_axis_err < 0.35 if axis_err else False
     pi_amb = [min(e, abs(e - math.pi)) for e in axis_err]
     mean_pi_err = sum(pi_amb) / len(pi_amb) if pi_amb else float("inf")

@@ -75,7 +75,7 @@ def phase_field_rel(z: torch.Tensor) -> torch.Tensor:
 
 
 def gate_plane_z(z: torch.Tensor, iz: int) -> torch.Tensor:
-    """2D (ny,nx,2) slice for A10 contour readout in 3+1 (winding in a plane)."""
+    """2D (ny,nx,2) slice for A10 contour slice in 3+1 (winding in a plane)."""
     if z.ndim == 3:
         return z
     return z[iz]
@@ -150,7 +150,7 @@ def winding_channels(
     center: tuple[int, int] | None = None,
     radius: int = 24,
 ) -> dict[str, float]:
-    """Both A10 readouts + auto pick — for probes / seed seeker diagnostics."""
+    """Both A10 contours + auto pick — for probes / seed seeker diagnostics."""
     w_rel = winding_number(z, center=center, radius=radius, channel="rel")
     w_u1 = winding_number(z, center=center, radius=radius, channel="u1")
     w_auto = winding_number(z, center=center, radius=radius, channel="auto")
@@ -269,7 +269,7 @@ def matter_occupancy_b_field(
     rho_frac: float = 0.25,
     contour_radius: int = 2,
 ) -> torch.Tensor:
-    """b(x) ∈ {0,1} — primary matter readout; needs ρ ≥ ρ_frac·ρ_P and |n_∂|≥¾ (§5.2.3)."""
+    """b(x) ∈ {0,1} — primary matter survey; needs ρ ≥ ρ_frac·ρ_P and |n_∂|≥¾ (§5.2.3)."""
     from mt_ca.spinor import spinor_density
 
     cfg = MConfig.for_stencil("hex")

@@ -419,7 +419,7 @@ def check_matter_b_macro(size: int = 64, device: str = "cpu") -> dict:
 
 
 def check_planckon_instrument_fcc(size: int = 48, steps: int = 128, device: str = "cpu") -> dict:
-    """§5.0 readout instrument — 3+1 FCC anchor vs ρ-survey (densitometer)."""
+    """§5.0 survey instrument — 3+1 FCC anchor vs ρ-survey (densitometer)."""
     from mt_ca.app.lab import planckon_lab_report
 
     row = planckon_lab_report(

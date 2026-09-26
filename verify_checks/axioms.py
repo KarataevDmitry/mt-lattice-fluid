@@ -304,7 +304,7 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
         "seed_charges": read,
         "abs_winding_after_steps": round(w_late, 4),
         "ok": ok,
-        "note": "n∈ℤ at seeds; |n|≥½ after evolution (T contour readout)",
+        "note": "n∈ℤ at seeds; |n|≥½ after evolution (T contour slice)",
     }
 
 def check_pauli_repel(device: str = "cpu") -> dict:
@@ -380,7 +380,7 @@ def check_arg_mass_carrier(size: int = 64, device: str = "cpu") -> dict:
         "max_abs_dphi": active_max,
         "max_gate_phi": float(phi.abs().max().item()),
         "ok": ok,
-        "note": "M mass carrier = Arg(⟨z⟩·z*); Higgs is T readout only (§5.0.1)",
+        "note": "M mass carrier = Arg(⟨z⟩·z*); Higgs is macro-T only (§5.0.1)",
     }
 
 def check_a14_symmetry(size: int = 128, steps: int = 64, device: str = "cpu") -> dict:

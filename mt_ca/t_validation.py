@@ -15,7 +15,7 @@ def coarse_grain(
     radius: int | None = None,
     nu_viscosity_passes: int = 0,
 ) -> torch.Tensor:
-    """Binomial (1-2-1) macro readout |Φ| — MODEL §4.1.1 (stride = block, R ≈ block)."""
+    """Binomial (1-2-1) macro coarse |Φ| — MODEL §4.1.1 (stride = block, R ≈ block)."""
     if block <= 1:
         return coarse_amplitude(z, max(block, 1))
     r = radius if radius is not None else block
@@ -28,7 +28,7 @@ def coarse_grain(
 
 
 def nu_coarse_passes(steps: int, block: int) -> int:
-    """Extra binomial passes on T readout — ν_CA coarse-graining loss (§4.1.2)."""
+    """Extra binomial passes on macro-T — ν_CA coarse-graining loss (§4.1.2)."""
     from mt_ca.si_constants import nu_CA_natural
 
     return max(0, int(round(2.0 * steps * nu_CA_natural() / max(block, 1))))

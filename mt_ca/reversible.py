@@ -37,7 +37,7 @@ def evolve_canonical(
     *,
     z_past: torch.Tensor | None = None,
 ) -> torch.Tensor:
-    """Apply g^steps on Z_N[i]; decode to ℂ² for readout only."""
+    """Apply g^steps on Z_N[i]; decode to ℂ² for macro only."""
     f_curr = canonical_fixed(z, cfg)
     f_past = canonical_fixed(z_past if z_past is not None else z, cfg)
     for _ in range(steps):

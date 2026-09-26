@@ -221,7 +221,7 @@ class SIUnitsRows:
             "note": (
                 "Asked carrier: Thm5.2⇒N_a0∈ℤ; hop α=N_c/N_a0 and mass α²=m_e N_φ/m_H "
                 "are one α² — masses do not fix N_a0 alone. Rejected N_c·137 and optical "
-                "a₀ as M-definition. FINT: α sealed without meter; N_a0=N_c/α is readout "
+                "a₀ as M-definition. FINT: α sealed without meter; N_a0=N_c/α is T-export "
                 "(see alpha_meter_na0_bridge_row). OPEN remains: H→ℤN_a0 without α "
                 "(census) — does NOT block α / meter definition."
             ),
@@ -268,7 +268,7 @@ class SIUnitsRows:
             },
             {
                 "id": "N_a0_metre_free",
-                "maps_to": "N_a0 = N_c/α — dimensionless readout",
+                "maps_to": "N_a0 = N_c/α — dimensionless export",
                 "value": n_a0,
                 "ok": bool(meter["identity_alpha_eq_Nc_over_Na0"]),
             },
@@ -744,7 +744,7 @@ class SIUnitsRows:
                 "status": "derived",
             },
             {
-                "id": "T_readout_alpha",
+                "id": "T_macro_alpha",
                 "ratio": alpha,
                 "maps_to": "α=κ/M names the same NN force as F/F_P",
                 "status": "derived",
@@ -777,7 +777,7 @@ class SIUnitsRows:
             and abs(kappa**2 - 0.5) < 1e-15,
             "note": (
                 "M Coulomb: F=n1 n2 F₀/(M N²) with M=97. "
-                "α=κ/M is T-readout of the same NN ratio. "
+                "α=κ/M is T-layer of the same NN ratio. "
                 "pi-tower removed; alpha=fundamentals."
             ),
         }

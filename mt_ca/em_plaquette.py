@@ -128,7 +128,7 @@ def alpha_link_phase_field(
     *,
     alpha: float,
 ) -> torch.Tensor:
-    """Construct phi(O)=0, phi(NN)=alpha on spinor lane-0 (readout sanity for E=-Δφ/a)."""
+    """Construct phi(O)=0, phi(NN)=alpha on spinor lane-0 (link sanity for E=-Δφ/a)."""
     z = z_base.clone()
     i0 = _mod_index(base, (0, 0, 0), z.shape[:3])
     i1 = _mod_index(base, nn, z.shape[:3])

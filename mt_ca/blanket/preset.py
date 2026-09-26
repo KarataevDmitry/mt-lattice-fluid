@@ -12,4 +12,4 @@ class BlanketPreset(str, Enum):
     """Ocean only — no МЗВ overlay."""
 
     HOMOGENEOUS_MZW = "homogeneous_mzw"
-    """Uniform τ, layered exp attenuation; T readout via WNM Γ=Λ + ℬ ripple."""
+    """Uniform τ, layered exp attenuation; macro-T via WNM Γ=Λ + ℬ ripple."""

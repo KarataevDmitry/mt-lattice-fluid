@@ -48,7 +48,7 @@ def find_defect_peaks(
     contour_radius: int = 2,
     merge_r: float = 6.0,
 ) -> list[dict[str, Any]]:
-    """Defects from survey readout instrument (column-snap + plane contour)."""
+    """Defects from survey instrument (column-snap + plane contour)."""
     raw: list[dict[str, Any]] = []
     for row in defect_candidates(
         z, top_k=top_k, contour_radius=contour_radius, require_local_max=False

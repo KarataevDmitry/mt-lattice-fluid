@@ -298,7 +298,7 @@ def fig_axiom_defects() -> None:
 
 
 def fig_axiom_m_t() -> None:
-    """Determinism on M vs coarse readout on T."""
+    """Determinism on M vs coarse macro on T."""
     fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.8))
     n = 16
     rng = np.random.default_rng(0)

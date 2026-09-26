@@ -1,4 +1,4 @@
-"""ISM blanket — homogeneous МЗВ fill over ocean; T_ISM readout (not CMB / not T_M_bath)."""
+"""ISM blanket — homogeneous МЗВ fill over ocean; T_ISM macro (not CMB / not T_M_bath)."""
 
 from __future__ import annotations
 

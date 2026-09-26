@@ -390,19 +390,19 @@ class SIAlphaProbeRows:
                 "status": "identity",
             },
             {
-                "id": "readout_force_not_meaning",
+                "id": "t_export_force_not_meaning",
                 "maps_to": "F=α F_P/N² — consequence of coupling, not definition",
-                "status": "readout",
+                "status": "t_export",
             },
             {
-                "id": "readout_hops_not_meaning",
+                "id": "t_export_hops_not_meaning",
                 "maps_to": "α=N_c/N_a0 — length expression of same coupling",
-                "status": "readout",
+                "status": "t_export",
             },
             {
-                "id": "readout_force_lattice_not_meaning",
+                "id": "t_export_force_lattice_not_meaning",
                 "maps_to": "F₀ landing; M=97 seats; α=soft face (α₀ coarse)",
-                "status": "readout_derived",
+                "status": "t_export_derived",
             },
             {
                 "id": "M_native_force_law",
@@ -746,7 +746,7 @@ class SIAlphaProbeRows:
         Ask / DoD:
           • Dirac g=2 for charge vortex n=±1 — topology? (bare)
           • A5 bath dresses magnetic moment → ae without inserting α
-          • then α = ae/(2r) = 2π ae is upstairs readout
+          • then α = ae/(2r) = 2π ae is upstairs T export
 
         One-loop vs CODATA ae ≈ +1516 ppm (higher loops); identity 2αr holds exact.
         """
@@ -1157,7 +1157,7 @@ class SIAlphaProbeRows:
         lambar_c = hbar / (m_e * c)
         r_inf_from_phase_residue = (alpha_c * alpha_c) * r / lambar_c
         r_inf_classic = (alpha_c * alpha_c) * m_e * c / (4.0 * math.pi * hbar)
-        # Hall legacy readout (μ₀ exact era)
+        # Hall legacy T export (μ₀ exact era)
         alpha_from_hall_legacy = mu0_legacy * c / (2.0 * r_k)
         hop = self.alpha_hop_ladder_row()
         alpha2_hop = float(hop["alpha2_from_Nre_over_Na0"])

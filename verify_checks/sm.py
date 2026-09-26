@@ -222,7 +222,7 @@ def check_neutron_mass(device: str = "cpu") -> dict:
 
 
 def check_annihilation_t_stats(device: str = "cpu") -> dict:
-    """§5.0.3 T-readout: lattice τ_M, dipole 2γ proxy, ensemble ⟨dσ/dΩ⟩ isotropy."""
+    """§5.0.3 T-layer: lattice τ_M, dipole 2γ proxy, ensemble ⟨dσ/dΩ⟩ isotropy."""
     from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
 
     row = annihilation_t_stats_probe(size=160, steps=64, block=8, ensemble=12, device=device)

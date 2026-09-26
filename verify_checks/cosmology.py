@@ -1,4 +1,4 @@
-"""verify_checks.cosmology — ISM screen / CMB-readout dogfood (META §3.0.1 exploratory)."""
+"""verify_checks.cosmology — ISM screen / CMB-forward dogfood (META §3.0.1 exploratory)."""
 
 from __future__ import annotations
 

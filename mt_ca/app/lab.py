@@ -1,4 +1,4 @@
-"""Instrument lab SSOT — always pairs sim.cfg with panel / planckon readouts."""
+"""Instrument lab SSOT — always pairs sim.cfg with panel / planckon surveys."""
 from __future__ import annotations
 
 from dataclasses import dataclass

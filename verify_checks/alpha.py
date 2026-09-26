@@ -543,7 +543,7 @@ def check_alpha_meter_na0_bridge(device: str = "cpu") -> dict:
     }
 
 def check_coulomb_M_native(device: str = "cpu") -> dict:
-    """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-readout only."""
+    """§8.2·Coulomb·M-native — F=n1 n2 F₀/(M N²); α is T-layer only."""
     from mt_ca.si_constants import SI
 
     del device

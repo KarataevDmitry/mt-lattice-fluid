@@ -1,6 +1,6 @@
 """Instrument catalog — MODEL refs and registry (§5.0 · §5.2 · A10).
 
-M-layer: readout from ``z`` (and ``z_past`` for one-tick ledger), not separate fields.
+M-layer: samples from ``z`` (and ``z_past`` for one-tick ledger), not separate fields.
 T-layer: macro/coarse instruments live in ``mt_ca.macro`` (binomial Φ) — listed for routing.
 """
 from __future__ import annotations
@@ -148,7 +148,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
     InstrumentSpec(
         InstrumentId.J_X,
         "j_x Madelung flux",
-        "§5.2 bond flux (T-readout)",
+        "§5.2 bond flux (T-layer)",
         "M_site",
         "natural",
         "2D; diagnostic not M hard law",
@@ -339,7 +339,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
     ),
     InstrumentSpec(
         InstrumentId.T_NU_COARSE_PASSES,
-        "ν_CA readout passes",
+        "ν_CA coarse passes",
         "§4.1.2",
         "T_macro",
         "1",

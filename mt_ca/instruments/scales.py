@@ -213,7 +213,7 @@ def scale_spec(kind: QuantityKind) -> ScaleSpec:
             L.m_P_kg * lp**2,
             nat_anchor="coarse T sum",
             si_derivation="m_P·l_P²",
-            note="integrated T mass readout (2+1 coarse sum)",
+            note="integrated T macro mass (2+1 coarse sum)",
         ),
     }
     return table[kind]

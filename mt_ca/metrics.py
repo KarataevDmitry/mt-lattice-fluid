@@ -106,7 +106,7 @@ def contour_radius_anisotropy(
     threshold: float = 0.5,
     n_bins: int = 64,
 ) -> float:
-    """max r(θ)/min r(θ) on isodensity contour (§3.8 Fourier r(θ) readout)."""
+    """max r(θ)/min r(θ) on isodensity contour (§3.8 Fourier r(θ) contour)."""
     peak = float(rho.max().item())
     if peak <= 1e-12:
         return float("inf")

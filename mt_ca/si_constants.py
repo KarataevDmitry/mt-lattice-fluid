@@ -45,7 +45,7 @@ LN2 = math.log(2.0)
 
 
 
-# N₄ isotropic macro readout: c = κ·c₀ (§1.1 MODEL.md)
+# N₄ isotropic macro coarse: c = κ·c₀ (§1.1 MODEL.md)
 
 KAPPA = 1.0 / math.sqrt(2.0)
 
@@ -928,7 +928,7 @@ def planck_density_from_cell(*, m_P: float | None = None, l_P: float | None = No
 
 def macro_density_illusion(*, occupied_fraction: float) -> float:
 
-    """T-readout: ρ_macro ≈ ⟨b⟩ · ρ_P (§5.0); ⟨b⟩ = mean occupancy, not mean |z|²."""
+    """T-layer: ρ_macro ≈ ⟨b⟩ · ρ_P (§5.0); ⟨b⟩ = mean occupancy, not mean |z|²."""
 
     return occupied_fraction * SI.rho_P
 

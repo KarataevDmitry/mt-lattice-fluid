@@ -1,7 +1,7 @@
 """T-layer macro-averaging operator (MODEL §4.1.1).
 
 Integer binomial (1-2-1) separable filter — isotropic on von Neumann stencil,
-not float Gaussian (avoids false reflections and exp() on T readout).
+not float Gaussian (avoids false reflections and exp() on macro-T).
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ def macro_average_spinor(
     stride: int = 1,
     sigma: float | None = None,  # deprecated; ignored — binomial only
 ) -> torch.Tensor:
-    """Φ(X) = (1-2-1)^{⊗2·R} z — integer binomial macro readout on spinor components."""
+    """Φ(X) = (1-2-1)^{⊗2·R} z — integer binomial macro coarse on spinor components."""
     del sigma  # API compat; §4.1.1 uses binomial stencil only
     if z.ndim != 3 or z.shape[-1] != 2:
         raise ValueError(f"expected spinor (ny, nx, 2), got {tuple(z.shape)}")
@@ -77,7 +77,7 @@ def macro_amplitude(
     sigma: float | None = None,
     nu_viscosity_passes: int = 0,
 ) -> torch.Tensor:
-    """|Φ| on macro grid — T amplitude readout (field density)."""
+    """|Φ| on macro grid — T amplitude macro (field density)."""
     phi = macro_average_spinor(z, radius=radius, stride=stride, sigma=sigma)
     amp = phi.abs().square().sum(dim=-1).sqrt()
     if nu_viscosity_passes > 0:
@@ -91,7 +91,7 @@ def macro_matter_b(
     radius: int,
     stride: int = 1,
 ) -> torch.Tensor:
-    """⟨b⟩ macro readout — ρ_matter primary, not |z|² (§5.0 · §5.2.3 IV)."""
+    """⟨b⟩ macro coarse — ρ_matter primary, not |z|² (§5.0 · §5.2.3 IV)."""
     from mt_ca.topology import matter_occupancy_b_field
 
     b = matter_occupancy_b_field(z).to(torch.float32)

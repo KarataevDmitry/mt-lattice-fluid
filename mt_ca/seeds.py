@@ -456,7 +456,7 @@ def vacuum_ocean_spinor(
     phase_bits: int = HV.phase_bits,
     phase_class: int = 0,
 ) -> torch.Tensor:
-    """Decode vacuum ocean to ℂ² readout (evolution still owns Z_N)."""
+    """Decode vacuum ocean to ℂ² macro (evolution still owns Z_N)."""
     f = vacuum_ocean_fixed(
         *spatial,
         device=device,

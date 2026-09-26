@@ -36,7 +36,7 @@ SUBS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"open leaf vs"), "асимптотика vs"),
     (re.compile(r"open sim"), "открытый вывод"),
     (re.compile(r"open leaf"), "открытый вывод"),
-    (re.compile(r" — open DoD на T"), " — требуют T-readout"),
+    (re.compile(r" — open DoD на T"), " — требуют T-layer"),
     (re.compile(r"\bdogfood\b", re.I), "срез"),
     (re.compile(r"\| sim:"), "|"),
     (re.compile(r"⚠️\s*"), ""),

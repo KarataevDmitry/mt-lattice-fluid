@@ -533,7 +533,7 @@ class SIAlphaThmRows:
           α F_P = F₀/M  ⇒  α₀ = κ/M (coarse),  κ=1/√2 closed, M=n_F_seats=97 closed
           (nF Thm). Number scored after; no α input.
 
-        Contrast: fundamentals α⁻¹=alpha_from_fundamentals is continuum solid-angle T-readout
+        Contrast: fundamentals α⁻¹=alpha_from_fundamentals is continuum solid-angle T-layer
         (~2 ppm) — competing *number*, not the discrete descent.
         Coarse α₀=κ/97 ~−1040 ppm. Soft preferred (seat+face) inside CODATA band; unit descent closed (G-grade completeness).
         """
@@ -579,8 +579,8 @@ class SIAlphaThmRows:
             {
                 "id": "pi_tower_is_T_competitor",
                 "ppm": ppm(a_pi),
-                "maps_to": "fundamentals ~2 ppm — continuum Ω readout, not discrete descent",
-                "status": "T_readout_not_descent",
+                "maps_to": "fundamentals ~2 ppm — continuum Ω export, not discrete descent",
+                "status": "T_export_not_descent",
             },
             {
                 "id": "soft_residual_open",
