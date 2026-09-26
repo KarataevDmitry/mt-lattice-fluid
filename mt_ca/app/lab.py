@@ -104,9 +104,10 @@ def open_lab(
     steps: int = 0,
     **run_kw: object,
 ) -> LabSession:
-    spec = build_run_spec(
-        scenario_id, edge, device=device, steps=steps, embedding=embedding, **run_kw
-    )
+    kw: dict[str, object] = dict(device=device, steps=steps, **run_kw)
+    if embedding is not None:
+        kw["embedding"] = embedding
+    spec = build_run_spec(scenario_id, edge, **kw)
     sim = open_lattice(spec)
     return LabSession(spec=spec, sim=sim, dimension=spec.embedding)
 

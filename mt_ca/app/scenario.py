@@ -1,13 +1,9 @@
-"""Named scenarios — SSOT for *conditions* (habitat + seed), not grid embedding.
-
-Embedding (2+1 vs 3+1) is chosen on ``RunSpec`` / ``open_lab(embedding=…)``.
-"""
+"""Named scenarios — SSOT for conditions (habitat + seed), not grid embedding."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from mt_ca.app.brick import BrickSpec
-from mt_ca.app.dimension import LatticeDimension
 from mt_ca.app.habitat import HabitatPreset
 from mt_ca.seeds import SeedClass
 
@@ -67,32 +63,11 @@ SCENARIOS: dict[str, ScenarioSpec] = {
     ),
 }
 
-# Backward-compatible run ids → (canonical scenario, default embedding)
-SCENARIO_ALIASES: dict[str, tuple[str, LatticeDimension]] = {
-    "floor0_planckon_hex_slice": ("floor0_planckon", LatticeDimension.SLICE_2P1),
-    "habitat_boil_hex_slice": ("habitat_boil", LatticeDimension.SLICE_2P1),
-}
-
-
-def resolve_scenario_id(scenario_id: str) -> tuple[str, LatticeDimension | None]:
-    if scenario_id in SCENARIOS:
-        return scenario_id, None
-    if scenario_id in SCENARIO_ALIASES:
-        base, emb = SCENARIO_ALIASES[scenario_id]
-        return base, emb
-    raise KeyError(
-        f"Unknown scenario '{scenario_id}'. Known: {sorted(SCENARIOS)} "
-        f"aliases: {sorted(SCENARIO_ALIASES)}"
-    )
-
 
 def get_scenario(scenario_id: str) -> ScenarioSpec:
-    base_id, _ = resolve_scenario_id(scenario_id)
-    return SCENARIOS[base_id]
-
-
-def list_scenario_ids() -> list[str]:
-    return sorted(SCENARIOS) + sorted(SCENARIO_ALIASES)
+    if scenario_id not in SCENARIOS:
+        raise KeyError(f"Unknown scenario '{scenario_id}'. Known: {sorted(SCENARIOS)}")
+    return SCENARIOS[scenario_id]
 
 
 _SEED_TO_SCENARIO: dict[SeedClass, str] = {

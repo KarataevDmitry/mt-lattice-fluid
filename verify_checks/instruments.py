@@ -40,7 +40,7 @@ def check_instrument_panel_vortex(size: int = 48, device: str = "cpu") -> dict:
     }
 
 
-def check_instrument_panel_hex_slice(size: int = 64, device: str = "cpu") -> dict:
+def check_instrument_panel_2p1(size: int = 64, device: str = "cpu") -> dict:
     """§5 panel on **2+1** embedding — same ``floor0_planckon`` conditions."""
     from mt_ca.app.dimension import LatticeDimension
     from mt_ca.app.lab import open_lab
@@ -63,7 +63,7 @@ def check_instrument_panel_hex_slice(size: int = 64, device: str = "cpu") -> dic
         and lab.meta["stencil"] == "hex"
     )
     return {
-        "id": "Instrument_panel_hex_slice",
+        "id": "Instrument_panel_2p1",
         "ok": ok,
         "dimension": lab.meta["dimension"],
         "scenario_id": lab.meta["scenario_id"],

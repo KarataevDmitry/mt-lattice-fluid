@@ -130,7 +130,7 @@ def run_all(device: str) -> list[dict]:
         check_matter_b_readout(device=device),
         check_planckon_instrument_fcc(device=device),
         check_instrument_panel_vortex(device=device),
-        check_instrument_panel_hex_slice(device=device),
+        check_instrument_panel_2p1(device=device),
         check_instrument_scales_ladder(device=device),
         check_instrument_scales_time_first(device=device),
         check_a14_symmetry(device=device),
