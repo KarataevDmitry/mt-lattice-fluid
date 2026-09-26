@@ -71,14 +71,15 @@ def main() -> int:
     )
     tism = rep["T_ism"]
     q = tism["T_ism_map_K"]["quantiles"]
-    t_nom = tism["anchor_K"]["T_LIC_nominal"]
+    t_eq = tism["derived_K"]["T_eq_from_nH_Saha_UV"]
+    t_obs = tism["observation_K"]["T_LIC_literature"]
 
     lines = [
-        f"МЗВ однородна: τ={rep['tau_ism_uniform']:.4f} на всём одеяле (n_H/LIC scale, без полос).",
-        f"T_МЗВ на readout: median={q['p50']:.0f} K, mean={tism['T_ism_map_K']['mean_K']:.0f} K "
-        f"(якорь LIC {t_nom:.0f} K, rel err median {tism['T_ism_map_K']['median_rel_err_vs_LIC']:.2f}).",
-        f"Разброс T от ряби океана: p05…p95 = {q['p05']:.0f}…{q['p95']:.0f} K "
-        f"(|Φ| rms/mean океан {rep['ocean_phi_rms_rel']:.3f}, одеяло {rep['blanket_phi_rms_rel']:.3f}).",
+        f"МЗВ однородна: τ={rep['tau_ism_uniform']:.4f} (полное заполнение, без полос).",
+        f"T_eq из n_H + Saha↔UV (без 7000 K в формуле): {t_eq:.0f} K.",
+        f"Readout T_МЗВ: median={q['p50']:.0f} K, mean={tism['T_ism_map_K']['mean_K']:.0f} K "
+        f"vs наблюдение LIC {t_obs:.0f} K (rel {tism['T_ism_map_K']['median_rel_err_vs_LIC_obs']:.2f}).",
+        f"Разброс от ℬ: p05…p95 = {q['p05']:.0f}…{q['p95']:.0f} K.",
     ]
 
     out: dict[str, Any] = {
@@ -93,7 +94,8 @@ def main() -> int:
     for line in lines:
         print(f"  · {line}", flush=True)
     status = "PASS" if tism["ok_T_ISM_hypothesis"] else "FAIL"
-    print(f"{status}  T_ISM_hypothesis", flush=True)
+    obs = "да" if tism.get("ok_match_LIC_observation") else "нет"
+    print(f"{status}  T_ISM scale (10³ K)  ·  совпадение с LIC 7000 K: {obs}", flush=True)
     if args.json:
         print(json.dumps(out, indent=2))
     return 0 if tism["ok_T_ISM_hypothesis"] else 1

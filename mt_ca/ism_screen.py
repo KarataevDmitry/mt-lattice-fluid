@@ -161,11 +161,33 @@ def effective_T_from_wall_rms(
     return T_ref_K * (1.0 + thermal_coupling * delta)
 
 
+def equilibrium_T_wnm_K(n_H_cm3: float, constraints: dict[str, Any]) -> float:
+    """Warm-neutral T from n_H + UV ionization floor (match Saha x to photo target, T<12 kK)."""
+    m = constraints["model_v1"]
+    x_tgt = min(
+        float(m["warm_neutral_ionization_max"]),
+        float(m["photoionization_fraction_floor"]),
+    )
+    x_cap = float(m["warm_neutral_ionization_max"])
+    t_lo, t_hi = 300.0, 12_000.0
+    best_t = t_lo
+    best_err = 1e9
+    for i in range(96):
+        log_span = math.log(t_hi / t_lo)
+        t = t_lo * math.exp(log_span * i / 95)
+        x = min(x_cap, saha_h_ionization_fraction(t, n_H_cm3))
+        err = abs(x - x_tgt)
+        if err < best_err:
+            best_err = err
+            best_t = t
+    return best_t
+
+
 def predict_ne_lic_cm3(constraints: dict[str, Any], *, rms_rel: float) -> float:
     lic = constraints["lic"]
     m = constraints["model_v1"]
-    t_k = float(lic["T_K_warm_nominal"])
     n_h = float(lic["n_H_cm3_nominal"])
+    t_k = equilibrium_T_wnm_K(n_h, constraints)
     x_cap = float(m["warm_neutral_ionization_max"])
     x_saha = min(x_cap, saha_h_ionization_fraction(t_k, n_h))
     x_photo = float(m["photoionization_fraction_floor"])

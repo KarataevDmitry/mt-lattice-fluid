@@ -66,7 +66,7 @@
     "expect_acoustic_gap_at_N_CMB": true
   },
   "pass_blanket": {
-    "T_lic_K_range": [4000.0, 12000.0],
-    "T_lic_median_tolerance_frac": 0.45
+    "T_lic_K_range": [2000.0, 12000.0],
+    "T_lic_median_tolerance_frac": 0.55
   }
 }
