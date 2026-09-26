@@ -117,6 +117,61 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 ---
 
+## Задача P0 · период на кипящем океане (полная постановка)
+
+### Дано (SSOT sim = MODEL §3.12)
+
+| объект | описание |
+|--------|----------|
+| **Сценарий** | `habitat_boil` — A5, `VACUUM_BOIL`, все `hV` заполнены |
+| **Embedding** | **3+1** FCC по умолчанию; $\Lambda = \mathbb{Z}_{n_z}\times\mathbb{Z}_{n_y}\times\mathbb{Z}_{n_x}$ (тор) |
+| **Состояние CA** | leapfrog-пара $(f^t,f^{t-1})$, $f(x)\in\mathbb{Z}_N[i]^4$ на hV, $N=2^{\mathrm{mod\_bits}}$ |
+| **Переход $g$** | `projected_step_fixed`: holonomy $\to$ saturating $\Phi$ [Heisenberg] $\to$ Rot_LUT $\to$ leapfrog $\to$ Bekenstein scale (§3.12.5–6) |
+| **Сим** | `mt_ca/app/lab`, `LatticeFluidSimulator.step` = **та же** $g$ |
+
+$z^t=\mathrm{decode}(f^t)$ — только для приборов.
+
+### A · одна hV (не P0, **закрыта**)
+
+$\Phi\in\mathbb{Z}_{512}$, идеализация $\Phi_{t+1}=\Phi_t+\Delta\pmod{512}$.
+
+**Решение:** $T_A=512/\gcd(\Delta,512)$; при $\Delta=41$ → **$T_A=512$**. Landmarks 21, 41, 82 — **арифметика A**, не ответ P0 на $\Lambda$.
+
+### B · полное поле (ядро P0)
+
+$(f^{t+1},f^t)=g(f^t,f^{t-1})$. **Период:** минимальное $T_B>0$ с $g^T=\mathrm{id}$ на цикле. На конечном $\mathcal{F}$ цикл есть; $T_B$ — **exact**, через композицию $g$ (CA).
+
+**Решено:** когда найден $T_B$ или зафиксировано $T_B>T_{\max}$ в окне search.
+
+### C · readout (P0)
+
+$\mathcal{O}^t=\mathcal{O}(z^t,\ldots)$ из instruments. **Период:** минимальное $T_C$ с $\mathcal{O}\circ g^{T_C}=\mathcal{O}$ на attractor.
+
+**Критерий:** `shift_mse_norm` $(T)\le\varepsilon$ или **отвержение** «нет $T_C\le T_{\max}$» (полный ответ).
+
+**Гипотеза C-ring:** $T_C\in\{21,41,82,256,512\}$. **Dogfood `rho_contrast`:** **отвергнута** (MSE на ring растёт).
+
+### D · модa $k$ (линейная часть P0)
+
+$\lambda_{\mathrm{st}}(k)=\sum_{\delta\in N_{12}} e^{2\pi i k\cdot\delta/L}$ — **symbolica**, `stencil_symbol.py` (**не** $T$).
+
+$\mu_k$ — один тик **полной** $g$ на фоне (FD/Jacobian). **$T_D$** только если $|\mu_k|\approx 1$ ($\mu_k^{T_D}\approx 1$). **Dogfood:** $|\mu_k|\gg 1$ → **$T_D$ из v1 не определён**.
+
+### Сводка «аналитика дала $T$?»
+
+| | Вопрос | Dogfood boil |
+|---|--------|--------------|
+| **A** | $T$ на кольце hV | **512** (модель $\Delta=41$), не океан |
+| **B** | $T_B$ CA | **open** в окне (exact search) |
+| **C** | $T_C$ contrast | **нет** при $\varepsilon=10^{-4}$ |
+| **D** | $T_D$ moda $k$ | **нет**; $\lambda_{\mathrm{st}}(k)$ **есть** |
+
+**P0:** найти/отвергнуть $T_B$, $T_C$ (и $T_D$ при необходимости) для **полной** $g$ на `habitat_boil` **3+1**; явно развести с A.
+
+**Методы:** exact CA (`boil_period_solve --ca-cycle`), readout (`boil_functional_period`, `boil_period_solve`), symbolica $k$ + FD (`boil_linear_spectrum`). **Не $T$:** autocorr без functional; `best_shift` без $\varepsilon$; $\arg\mu$ при $|\mu|\gg 1$.
+
+---
+
 ## Кипящий океан · функциональный период (readout + КА)
 
 **Определение (дискретное):** наблюдаемая $\mathcal{O}^t=\mathcal{O}(z^t)$ **$T$-периодична** на отрезке траектории, если
