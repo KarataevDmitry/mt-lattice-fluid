@@ -20,6 +20,7 @@ from verify_checks.units import *  # noqa: F403
 from verify_checks.carrier import *  # noqa: F403
 from verify_checks.sm import *  # noqa: F403
 from verify_checks.geometry import *  # noqa: F403
+from verify_checks.instruments import *  # noqa: F403
 
 def run_all(device: str) -> list[dict]:
     return [
@@ -127,6 +128,7 @@ def run_all(device: str) -> list[dict]:
         check_ladder_ledger(device=device),
         check_matter_b_readout(device=device),
         check_planckon_instrument_fcc(device=device),
+        check_instrument_panel_vortex(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_saturation_bc(device=device),

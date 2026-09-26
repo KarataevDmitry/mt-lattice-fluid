@@ -87,3 +87,24 @@ def planted_lost(g0: dict[str, float | int | bool], g1: dict[str, float | int | 
 
 def sample_row(g: dict[str, float | int | bool], *, t: int) -> dict[str, Any]:
     return {"t": t, **dual_lanes(g)}
+
+
+def panel_row(
+    z: torch.Tensor,
+    cfg: Any,
+    *,
+    t: int = 0,
+    z_past: torch.Tensor | None = None,
+) -> dict[str, Any]:
+    """Matter lanes + full instrument panel at default anchor (time-series JSON)."""
+    from mt_ca.config import MConfig
+    from mt_ca.instruments.panel import sample_panel
+
+    if not isinstance(cfg, MConfig):
+        cfg = MConfig.for_stencil("fcc" if z.ndim == 4 else "hex")
+    g = gates_at_z(z, with_anchor=True)
+    return {
+        "t": t,
+        **dual_lanes(g),
+        "panel": sample_panel(z, cfg, z_past=z_past),
+    }

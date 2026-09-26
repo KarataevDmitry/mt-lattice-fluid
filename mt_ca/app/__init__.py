@@ -10,6 +10,8 @@ Quick start::
 """
 from mt_ca.app.brick import BrickSpec, brick_axis_configs
 from mt_ca.app.gates import gate_b, peak_stats
+from mt_ca.instruments import REGISTRY as INSTRUMENT_REGISTRY
+from mt_ca.instruments import sample_panel
 from mt_ca.app.readout_probe import (
     READOUT_SCHEMA,
     born_survey,
@@ -35,7 +37,9 @@ __all__ = [
     "ScenarioSpec",
     "apply_scenario",
     "brick_axis_configs",
+    "INSTRUMENT_REGISTRY",
     "READOUT_SCHEMA",
+    "sample_panel",
     "born_survey",
     "dual_lanes",
     "gate_b",
