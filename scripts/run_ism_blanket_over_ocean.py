@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-"""Dogfood: boil ocean (ST fabric) + ISM blanket — T_ISM map (LIC / VLISM), not CMB."""
+"""Boil ocean (ST) + homogeneous ISM blanket — T_МЗВ on full fill (no sky stripes)."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import sys
 import time
 from typing import Any
 
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.ism_blanket import apply_ism_blanket, blanket_distribution_report, tau_map_ism_blanket
+from mt_ca.ism_blanket import apply_ism_blanket, blanket_distribution_report, tau_uniform_ism_blanket
 from mt_ca.ism_screen import load_ism_constraints
 from mt_ca.seeds import boil_ocean_spinor_3d
 from mt_ca.simulator import LatticeFluidSimulator
@@ -25,7 +24,6 @@ def main() -> int:
     p.add_argument("--thickness", type=int, default=6)
     p.add_argument("--settle", type=int, default=128)
     p.add_argument("--evolve", type=int, default=0)
-    p.add_argument("--wind", default="x", choices=("x", "y"))
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--json", action="store_true")
     args = p.parse_args()
@@ -50,14 +48,7 @@ def main() -> int:
         sim.step(args.settle)
     z_ocean = sim.z.clone()
 
-    tau, path = tau_map_ism_blanket(
-        nz,
-        nz,
-        constraints,
-        device=sim.device,
-        dtype=sim.dtype,
-        wind_axis=args.wind,
-    )
+    tau = tau_uniform_ism_blanket(nz, nz, constraints, device=sim.device)
     z_blanket = apply_ism_blanket(
         sim.z,
         tau,
@@ -76,42 +67,33 @@ def main() -> int:
         thickness=args.thickness,
         block=args.block,
         tau_2d=tau,
-        path_2d=path,
         constraints=constraints,
     )
-    elapsed = time.perf_counter() - t0
     tism = rep["T_ism"]
     q = tism["T_ism_map_K"]["quantiles"]
-    reg = tism["regimes"]
-    anc = tism["anchors_K"]
+    t_nom = tism["anchor_K"]["T_LIC_nominal"]
 
     lines = [
-        f"T_ISM на одеяле: mean={tism['T_ism_map_K']['mean_K']:.0f} K "
-        f"(log10≈{tism['T_ism_map_K']['log10_mean']:.2f}), "
-        f"полоса {q['min']:.0f}…{q['max']:.0f} K.",
-        f"Небо LIC (path≤{constraints['pass_blanket']['lic_sky_path_max']}): "
-        f"median {reg['lic_sky_median_K']:.0f} K vs якорь {anc['T_LIC_nominal']:.0f} K "
-        f"(rel err {reg['lic_sky_rel_err']:.2f}).",
-        f"Небо VLISM (path≥{constraints['pass_blanket']['vlism_sky_path_min']}): "
-        f"median {reg['vlism_sky_median_K']:.0f} K vs ref {anc['T_VLISM_ref']:.0f} K "
-        f"(rel err {reg['vlism_sky_rel_err']:.2f}).",
-        "Не T_CMB и не T_M_bath — macro readout МЗВ на ткани океана.",
+        f"МЗВ однородна: τ={rep['tau_ism_uniform']:.4f} на всём одеяле (n_H/LIC scale, без полос).",
+        f"T_МЗВ на readout: median={q['p50']:.0f} K, mean={tism['T_ism_map_K']['mean_K']:.0f} K "
+        f"(якорь LIC {t_nom:.0f} K, rel err median {tism['T_ism_map_K']['median_rel_err_vs_LIC']:.2f}).",
+        f"Разброс T от ряби океана: p05…p95 = {q['p05']:.0f}…{q['p95']:.0f} K "
+        f"(|Φ| rms/mean океан {rep['ocean_phi_rms_rel']:.3f}, одеяло {rep['blanket_phi_rms_rel']:.3f}).",
     ]
 
     out: dict[str, Any] = {
         "id": "ism_blanket_over_ocean",
-        "seconds": round(elapsed, 2),
+        "seconds": round(time.perf_counter() - t0, 2),
         "dims": f"{nz}^3",
         "report": rep,
         "interpretation_ru": lines,
     }
 
-    print("=== ISM blanket · T_ISM readout ===", flush=True)
+    print("=== ISM blanket · homogeneous T_МЗВ ===", flush=True)
     for line in lines:
         print(f"  · {line}", flush=True)
     status = "PASS" if tism["ok_T_ISM_hypothesis"] else "FAIL"
     print(f"{status}  T_ISM_hypothesis", flush=True)
-
     if args.json:
         print(json.dumps(out, indent=2))
     return 0 if tism["ok_T_ISM_hypothesis"] else 1

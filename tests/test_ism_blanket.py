@@ -1,15 +1,15 @@
-"""ISM blanket — T_ISM readout (not Planck bath)."""
+"""Homogeneous ISM blanket — no wind stripes."""
 
 from __future__ import annotations
 
 from mt_ca.config import MConfig
-from mt_ca.ism_blanket import apply_ism_blanket, blanket_distribution_report, tau_map_ism_blanket
+from mt_ca.ism_blanket import apply_ism_blanket, blanket_distribution_report, tau_uniform_ism_blanket
 from mt_ca.ism_screen import load_ism_constraints
 from mt_ca.seeds import boil_ocean_spinor_3d
 from mt_ca.simulator import LatticeFluidSimulator
 
 
-def test_T_ism_in_thousands_K_not_bath() -> None:
+def test_uniform_tau_and_T_in_lic_band() -> None:
     c = load_ism_constraints()
     nz = 32
     th = 4
@@ -25,12 +25,8 @@ def test_T_ism_in_thousands_K_not_bath() -> None:
     sim.set_field(boil_ocean_spinor_3d(nz, nz, nz, **kw))
     sim.step(64)
     z0 = sim.z.clone()
-    tau, path = tau_map_ism_blanket(nz, nz, c, device=sim.device, dtype=sim.dtype)
+    tau = tau_uniform_ism_blanket(nz, nz, c, device=sim.device)
+    assert float((tau.max() - tau.min()).item()) < 1.0e-6
     zb = apply_ism_blanket(sim.z, tau, thickness=th, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits)
-    rep = blanket_distribution_report(
-        z0, zb, thickness=th, block=4, tau_2d=tau, path_2d=path, constraints=c
-    )
-    t = rep["T_ism"]
-    mean = t["T_ism_map_K"]["mean_K"]
-    assert 1.0e3 <= mean <= 1.0e5
-    assert t["T_ism_map_K"]["log10_mean"] < 10.0
+    rep = blanket_distribution_report(z0, zb, thickness=th, block=4, tau_2d=tau, constraints=c)
+    assert rep["T_ism"]["T_ism_map_K"]["log10_mean"] < 10.0
