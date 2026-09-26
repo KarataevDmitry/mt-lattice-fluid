@@ -1,0 +1,32 @@
+# ism_constraints/v0 — external anchors for ISM-screen forward dogfood (not g knobs).
+
+schema: ism_constraints/v0
+
+lic:
+  n_H_cm3_nominal: 0.07
+  n_H_cm3_range: [0.03, 0.12]
+  T_K_warm_nominal: 7000.0
+  note: "Local Interstellar Cloud · warm neutral · order-of-magnitude"
+
+vlism_voyager_v1:
+  n_e_cm3_nominal: 0.147
+  n_e_cm3_range: [0.10, 0.20]
+  B_nT_nominal: 0.5
+  r_au_nominal: 122.0
+  note: "Voyager 1 VLISM · PWS n_e plateau · MAG |B|~0.5 nT"
+
+cmb_readout:
+  delta_T_over_T: 1.0e-5
+  T_CMB_K: 2.725
+
+screen_v0:
+  tau_column_max: 12.0
+  macro_fill_for_vlism_match: 1.0
+  nu_passes_typical: 64
+  power_law_alpha_typical: 0.5
+  rms_rel_after_wall_typical: 0.02
+
+pass:
+  log10_T_M_over_CMB_min: 30.0
+  required_tau_max: 10.0
+  vlism_ne_tolerance_frac: 0.35

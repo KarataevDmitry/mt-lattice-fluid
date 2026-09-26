@@ -20,6 +20,7 @@ from verify_checks.units import *  # noqa: F403
 from verify_checks.carrier import *  # noqa: F403
 from verify_checks.sm import *  # noqa: F403
 from verify_checks.geometry import *  # noqa: F403
+from verify_checks.cosmology import *  # noqa: F403
 from verify_checks.instruments import *  # noqa: F403
 
 def run_all(device: str) -> list[dict]:
@@ -92,6 +93,7 @@ def run_all(device: str) -> list[dict]:
         check_arg_quantum(device=device),
         check_higgs_mass(device=device),
         check_vacuum_bath(device=device),
+        check_ism_screen_v0(device=device),
         check_cuboctahedron_geometry(device=device),
         check_cuboctahedron_carrier(device=device),
         check_rhombic_dodecahedron_geometry(device=device),
