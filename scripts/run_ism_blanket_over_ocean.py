@@ -11,8 +11,12 @@ from typing import Any
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.ism_blanket import apply_ism_blanket, blanket_distribution_report, tau_uniform_ism_blanket
-from mt_ca.ism_screen import load_ism_constraints
+from mt_ca.blanket import (
+    apply_ism_blanket,
+    blanket_distribution_report,
+    load_ism_constraints,
+    tau_uniform_ism_blanket,
+)
 from mt_ca.seeds import boil_ocean_spinor_3d
 from mt_ca.simulator import LatticeFluidSimulator
 

@@ -1,5 +1,6 @@
-"""App SSOT: scenario (conditions) · RunSpec.embedding · lab (instruments)."""
+"""App SSOT: scenario (conditions) · RunSpec.embedding · lab (instruments) · blanket stack."""
 from mt_ca.app.brick import BrickSpec, brick_axis_configs
+from mt_ca.blanket.preset import BlanketPreset
 from mt_ca.app.dimension import LatticeDimension, dimension_for_stencil, grid_shape_label, nz_for_dimension
 from mt_ca.app.gates import gate_b, peak_stats
 from mt_ca.app.habitat import HabitatPreset
@@ -24,6 +25,7 @@ from mt_ca.instruments import sample_panel
 
 __all__ = [
     "BrickSpec",
+    "BlanketPreset",
     "CANON_STENCIL",
     "SLICE_STENCIL",
     "HabitatPreset",

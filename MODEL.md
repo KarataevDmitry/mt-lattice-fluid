@@ -66,6 +66,8 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 | [`model/08-higgs.md`](model/08-higgs.md) | §8.3 Higgs |
 | [`model/08-forces.md`](model/08-forces.md) | §8.4 силы · GR · Weinberg · CKM |
 
+**ISM blanket (вторая поверхность, T readout):** hub [`BLANKET.md`](BLANKET.md) + [`blanket/`](blanket/) + `data/ism_constraints_v0.yaml` · код `mt_ca/blanket/` (не часть аксиом `g` в MODEL).
+
 **Носитель (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆** = {111} FCC. Квадрат N₄ — не физика M (см. DEVLOG).
 
 ### Инженерный хвост (не SSOT физики)

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from mt_ca.app.brick import BrickSpec
 from mt_ca.app.habitat import HabitatPreset
+from mt_ca.blanket.preset import BlanketPreset
 from mt_ca.seeds import SeedClass
 
 
@@ -18,6 +19,8 @@ class ScenarioSpec:
     brick: BrickSpec | None = None
     impulse_amplitude: float = 0.35
     description: str = ""
+    blanket: BlanketPreset = BlanketPreset.NONE
+    blanket_thickness: int = 6
 
     @property
     def habitat_label(self) -> str:
@@ -60,6 +63,14 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         seed=SeedClass.VACUUM_BOIL,
         habitat=HabitatPreset.VACUUM_BOIL,
         description="Multi-arm bath emergence dogfood (§6 C3).",
+    ),
+    "ocean_ism_blanket": ScenarioSpec(
+        id="ocean_ism_blanket",
+        seed=SeedClass.VACUUM_BOIL,
+        habitat=HabitatPreset.VACUUM_BOIL,
+        blanket=BlanketPreset.HOMOGENEOUS_MZW,
+        blanket_thickness=6,
+        description="Boil ocean + homogeneous МЗВ blanket (BLANKET.md).",
     ),
 }
 

@@ -11,6 +11,8 @@ from mt_ca.app.readout_probe import gates_at_z, planted_persisted
 from mt_ca.app.run_spec import RunSpec
 from mt_ca.app.results import RunResult
 from mt_ca.app.scenario import ScenarioSpec
+from mt_ca.blanket.preset import BlanketPreset
+from mt_ca.blanket.stack import apply_blanket_preset
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor
 from mt_ca.ledger import ledger_step_probe, momentum_density, n_E_field
@@ -79,6 +81,12 @@ def apply_scenario(sim: LatticeFluidSimulator, scenario: ScenarioSpec) -> None:
         **kw,
     )
     sim.set_field(z)
+    if scenario.blanket is not BlanketPreset.NONE:
+        apply_blanket_preset(
+            sim,
+            scenario.blanket,
+            thickness=scenario.blanket_thickness,
+        )
 
 
 def run(spec: RunSpec) -> RunResult:

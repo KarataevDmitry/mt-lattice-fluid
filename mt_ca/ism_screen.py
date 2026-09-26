@@ -1,42 +1,16 @@
-"""ISM screen — ℬ contrast ν-damp + column τ; VLISM n_e magnetothermal; CMB N_CMB chain."""
+"""ISM screen forward — ν-damp + column τ; VLISM magnetothermal; CMB chain.
+
+Column τ SSOT: ``mt_ca.blanket.column``. Blanket geometry: ``mt_ca.blanket`` · BLANKET.md.
+"""
 
 from __future__ import annotations
 
-import json
 import math
-from pathlib import Path
 from typing import Any
 
-import yaml
-
-_DATA_DIR = Path(__file__).resolve().parents[1] / "data"
-_DEFAULT_YAML = _DATA_DIR / "ism_constraints_v0.yaml"
-_DEFAULT_JSON = _DATA_DIR / "ism_constraints_v0.json"
-
-_K_BOLTZ = 1.380649e-23
-_MU0 = 4.0e-7 * math.pi
-
-
-def load_ism_constraints(path: Path | str | None = None) -> dict[str, Any]:
-    if path is not None:
-        p = Path(path)
-        if p.suffix.lower() in {".yaml", ".yml"}:
-            with p.open(encoding="utf-8") as f:
-                data = yaml.safe_load(f)
-        else:
-            with p.open(encoding="utf-8") as f:
-                data = json.load(f)
-    elif _DEFAULT_YAML.is_file():
-        with _DEFAULT_YAML.open(encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-    elif _DEFAULT_JSON.is_file():
-        with _DEFAULT_JSON.open(encoding="utf-8") as f:
-            data = json.load(f)
-    else:
-        raise FileNotFoundError("missing data/ism_constraints_v0.yaml or .json")
-    if not isinstance(data, dict):
-        raise ValueError("invalid ISM constraints file")
-    return data
+from mt_ca.blanket.column import column_tau_at_r, r_au_to_pc
+from mt_ca.blanket.constraints import load_ism_constraints
+from mt_ca.blanket.wnm import equilibrium_T_wnm_K
 
 
 def apply_tau_on_contrast(rms_rel: float, tau: float) -> float:
@@ -82,37 +56,8 @@ def loglog_extrapolate_rms(
     return math.exp(math.log(r0) + t * (math.log(r1) - math.log(r0)))
 
 
-def r_au_to_pc(r_au: float, geometry: dict[str, Any]) -> float:
-    return float(r_au) * float(geometry["AU_cm"]) / float(geometry["pc_cm"])
-
-
-def cumulative_N_H_cm2(segments: list[dict[str, Any]], r_pc: float) -> float:
-    """Line-of-sight column built from radial shells (fractional inner segment)."""
-    total = 0.0
-    for seg in segments:
-        r0 = float(seg["r_start_pc"])
-        r1 = float(seg["r_end_pc"])
-        if r1 <= r0:
-            continue
-        n_col = float(seg["N_H_cm2"])
-        if r_pc <= r0:
-            continue
-        if r_pc >= r1:
-            total += n_col
-        else:
-            total += n_col * (r_pc - r0) / (r1 - r0)
-    return total
-
-
-def tau_from_column(N_H_cm2: float, sigma_eff_cm2: float) -> float:
-    return max(0.0, float(N_H_cm2) * float(sigma_eff_cm2))
-
-
-def column_tau_at_r(constraints: dict[str, Any], r_pc: float) -> dict[str, float]:
-    col = constraints["column_screen"]
-    sigma = float(col["sigma_eff_cm2"])
-    n_h = cumulative_N_H_cm2(col["segments"], r_pc)
-    return {"r_pc": r_pc, "N_H_cm2": n_h, "tau": tau_from_column(n_h, sigma)}
+_K_BOLTZ = 1.380649e-23
+_MU0 = 4.0e-7 * math.pi
 
 
 def saha_h_ionization_fraction(T_K: float, n_H_cm3: float) -> float:
@@ -159,13 +104,6 @@ def effective_T_from_wall_rms(
         return T_ref_K
     delta = rms_rel / rms_reference_boil - 1.0
     return T_ref_K * (1.0 + thermal_coupling * delta)
-
-
-def equilibrium_T_wnm_K(n_H_cm3: float, constraints: dict[str, Any]) -> float:
-    """WNM thermal balance (Γ=Λ); supersedes Saha-only shortcut."""
-    from mt_ca.wnm_thermal import wnm_equilibrium_T_K
-
-    return float(wnm_equilibrium_T_K(n_H_cm3, constraints)["T_K"])
 
 
 def predict_ne_lic_cm3(constraints: dict[str, Any], *, rms_rel: float) -> float:
