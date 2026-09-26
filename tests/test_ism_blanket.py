@@ -32,7 +32,7 @@ def test_T_map_ignores_observed_T_LIC_in_yaml() -> None:
 def test_derived_T_eq_in_thousands_K() -> None:
     c = load_ism_constraints()
     t_eq = equilibrium_T_wnm_K(float(c["lic"]["n_H_cm3_nominal"]), c)
-    assert 1_000.0 <= t_eq <= 12_000.0
+    assert 4_000.0 <= t_eq <= 10_000.0
 
 
 def test_blanket_log10_T_not_planck() -> None:

@@ -162,25 +162,10 @@ def effective_T_from_wall_rms(
 
 
 def equilibrium_T_wnm_K(n_H_cm3: float, constraints: dict[str, Any]) -> float:
-    """Warm-neutral T from n_H + UV ionization floor (match Saha x to photo target, T<12 kK)."""
-    m = constraints["model_v1"]
-    x_tgt = min(
-        float(m["warm_neutral_ionization_max"]),
-        float(m["photoionization_fraction_floor"]),
-    )
-    x_cap = float(m["warm_neutral_ionization_max"])
-    t_lo, t_hi = 300.0, 12_000.0
-    best_t = t_lo
-    best_err = 1e9
-    for i in range(96):
-        log_span = math.log(t_hi / t_lo)
-        t = t_lo * math.exp(log_span * i / 95)
-        x = min(x_cap, saha_h_ionization_fraction(t, n_H_cm3))
-        err = abs(x - x_tgt)
-        if err < best_err:
-            best_err = err
-            best_t = t
-    return best_t
+    """WNM thermal balance (Γ=Λ); supersedes Saha-only shortcut."""
+    from mt_ca.wnm_thermal import wnm_equilibrium_T_K
+
+    return float(wnm_equilibrium_T_K(n_H_cm3, constraints)["T_K"])
 
 
 def predict_ne_lic_cm3(constraints: dict[str, Any], *, rms_rel: float) -> float:

@@ -66,7 +66,17 @@
     "expect_acoustic_gap_at_N_CMB": true
   },
   "pass_blanket": {
-    "T_lic_K_range": [2000.0, 12000.0],
-    "T_lic_median_tolerance_frac": 0.55
+    "T_lic_K_range": [4000.0, 12000.0],
+    "T_lic_median_tolerance_frac": 0.35
+  },
+  "wnm_thermal": {
+    "zeta_H_s-1": 1.8e-17,
+    "habing_G0": 1.0,
+    "dust_pe_efficiency": 0.05,
+    "cooling_scale": 0.1135,
+    "T_min_K": 1500.0,
+    "T_max_K": 20000.0,
+    "n_eff_saha_cm3": 0.35,
+    "note": "Γ=Λ Wolfire-style channels; cooling_scale = solar line-strength norm at LIC n_H"
   }
 }

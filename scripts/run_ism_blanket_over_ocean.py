@@ -71,12 +71,15 @@ def main() -> int:
     )
     tism = rep["T_ism"]
     q = tism["T_ism_map_K"]["quantiles"]
-    t_eq = tism["derived_K"]["T_eq_from_nH_Saha_UV"]
+    t_eq = tism["derived_K"]["T_eq_WNM_balance"]
+    wnm = tism.get("wnm_balance", {})
     t_obs = tism["observation_K"]["T_LIC_literature"]
 
     lines = [
         f"МЗВ однородна: τ={rep['tau_ism_uniform']:.4f} (полное заполнение, без полос).",
-        f"T_eq из n_H + Saha↔UV (без 7000 K в формуле): {t_eq:.0f} K.",
+        f"T_eq WNM balance Γ=Λ: {t_eq:.0f} K "
+        f"(G0={wnm.get('habing_G0', '?')}, n_e≈{wnm.get('n_e_cm3', 0):.4f} cm⁻³, "
+        f"balance err {wnm.get('balance_rel_err', 0):.2e}).",
         f"Readout T_МЗВ: median={q['p50']:.0f} K, mean={tism['T_ism_map_K']['mean_K']:.0f} K "
         f"vs наблюдение LIC {t_obs:.0f} K (rel {tism['T_ism_map_K']['median_rel_err_vs_LIC_obs']:.2f}).",
         f"Разброс от ℬ: p05…p95 = {q['p05']:.0f}…{q['p95']:.0f} K.",

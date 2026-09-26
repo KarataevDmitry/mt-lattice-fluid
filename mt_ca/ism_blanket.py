@@ -101,7 +101,10 @@ def ism_temperature_report(
     phi_o = coarse_grain(z_ocean[iface], block)
     phi_b = coarse_grain(z_blanket[iz_top], block)
     t_map = ism_T_map_K(phi_b, phi_o, constraints)
-    t_eq = equilibrium_T_wnm_K(float(constraints["lic"]["n_H_cm3_nominal"]), constraints)
+    from mt_ca.wnm_thermal import wnm_equilibrium_T_K
+
+    wnm = wnm_equilibrium_T_K(float(constraints["lic"]["n_H_cm3_nominal"]), constraints)
+    t_eq = float(wnm["T_K"])
     pas = constraints.get("pass_blanket", {})
     lic_lo, lic_hi = pas.get("T_lic_K_range", [4000.0, 12000.0])
     t_obs = float(constraints["lic"]["T_K_warm_nominal"])
@@ -125,12 +128,13 @@ def ism_temperature_report(
             "log10_mean": math.log10(mean),
             "median_rel_err_vs_LIC_obs": rel,
         },
-        "derived_K": {"T_eq_from_nH_Saha_UV": t_eq},
+        "derived_K": {"T_eq_WNM_balance": t_eq},
+        "wnm_balance": wnm,
         "observation_K": {"T_LIC_literature": t_obs},
         "ok_T_ISM_scale": ok_scale,
         "ok_match_LIC_observation": ok_match_obs,
         "ok_T_ISM_hypothesis": ok_scale,
-        "note": "T_eq from n_H + Saha↔UV floor; ℬ ripple from sim; LIC 7000K is pass compare only.",
+        "note": "T_eq from WNM Γ=Λ (CR+PE heat, CII/OI/Lyα/ ff cool); ℬ ripple from sim.",
     }
 
 
