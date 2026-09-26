@@ -8,6 +8,8 @@ import torch
 from mt_ca.config import MConfig
 from mt_ca.conservation import madelung_div_j
 from mt_ca.instruments.catalog import InstrumentId, REGISTRY
+from mt_ca.instruments.scales import QuantityKind, reading
+from mt_ca.instruments.t_panel import sample_t_field
 from mt_ca.ledger import (
     angular_momentum_density,
     ledger_step_probe,
@@ -19,7 +21,7 @@ from mt_ca.metrics import total_norm_squared
 from mt_ca.spinor import arg_phase_defect, saturating_phase, spinor_density
 from mt_ca.topology import winding_nearest_int
 
-PANEL_SCHEMA = 1
+PANEL_SCHEMA = 2
 _CONTOUR_DEFAULT = 2
 
 
@@ -86,6 +88,20 @@ def sample_site(
         row[InstrumentId.ENERGY_STAR.value] = float(probe["energy_star"][y, x].item())
         row[InstrumentId.MOMENTUM_STAR_X.value] = float(probe["momentum_star_x"][y, x].item())
         row[InstrumentId.MOMENTUM_STAR_Y.value] = float(probe["momentum_star_y"][y, x].item())
+    row["scaled"] = {
+        InstrumentId.RHO_FIELD.value: reading(
+            InstrumentId.RHO_FIELD.value, QuantityKind.RHO_FIELD, rho
+        ).to_dict(),
+        InstrumentId.B_MATTER.value: reading(
+            InstrumentId.B_MATTER.value, QuantityKind.DIMENSIONLESS, float(matter.b)
+        ).to_dict(),
+        InstrumentId.N_E.value: reading(
+            InstrumentId.N_E.value, QuantityKind.ENERGY_E0, float(n_e)
+        ).to_dict(),
+        InstrumentId.DELTA_PHI.value: reading(
+            InstrumentId.DELTA_PHI.value, QuantityKind.PHASE_RAD, float(dphi[y, x].abs().item())
+        ).to_dict(),
+    }
     return row
 
 
@@ -121,12 +137,21 @@ def sample_panel(
     site: MatterSite | None = None,
     z_past: torch.Tensor | None = None,
     contour_radius: int = _CONTOUR_DEFAULT,
+    macro_block: int = 8,
+    steps_for_nu: int = 0,
 ) -> dict[str, Any]:
-    """Full panel: field meters + site meters (default anchor)."""
+    """Full panel: M field + M site + T macro (default anchor; SI scales on readings)."""
     site = site or default_anchor(z)
     return {
         "schema": PANEL_SCHEMA,
         "catalog": [s.id.value for s in REGISTRY],
         "field": sample_field(z, cfg, z_past=z_past),
         "site": sample_site(z, site, cfg, contour_radius=contour_radius, z_past=z_past),
+        "t": sample_t_field(
+            z,
+            cfg,
+            block=macro_block,
+            z_past=z_past,
+            steps_for_nu=steps_for_nu,
+        ),
     }

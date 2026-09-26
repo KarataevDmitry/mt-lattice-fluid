@@ -34,6 +34,24 @@ class InstrumentId(str, Enum):
     ENERGY_STAR = "energy_star"
     MOMENTUM_STAR_X = "momentum_star_x"
     MOMENTUM_STAR_Y = "momentum_star_y"
+    # T macro (§4.1 · §5.2) — values natural; SI via instruments.scales
+    T_PHI_AMP_MEAN = "t_phi_amp_mean"
+    T_PHI_AMP_MAX = "t_phi_amp_max"
+    T_RHO_FIELD_MEAN = "t_rho_field_mean"
+    T_MACRO_B_MEAN = "t_macro_b_mean"
+    T_MACRO_B_MAX = "t_macro_b_max"
+    T_M_REST = "t_m_rest"
+    T_M_REST_LEGACY = "t_m_rest_legacy"
+    T_ZIGZAG_ACTIVITY = "t_zigzag_activity"
+    T_ARG_MASS_LOAD = "t_arg_mass_load"
+    T_ISOTROPY = "t_isotropy"
+    T_COV_ISOTROPY = "t_cov_isotropy"
+    T_COARSE_PEAKS = "t_coarse_peaks"
+    T_MADELUNG_RESIDUAL_MAX = "t_madelung_residual_max"
+    T_RADIAL_SPEED_CV = "t_radial_speed_cv"
+    T_PROFILE_CORR = "t_profile_corr"
+    T_NU_READOUT_PASSES = "t_nu_readout_passes"
+    T_MACRO_BLOCK = "t_macro_block"
 
 
 @dataclass(frozen=True, slots=True)
@@ -198,6 +216,142 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
         "M_ledger_tick",
         "p₀ packets",
         "needs z_past",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_PHI_AMP_MEAN,
+        "⟨|Φ|⟩ macro",
+        "§4.1.1 binomial",
+        "T_macro",
+        "|z|_nat",
+        "FIELD_AMPLITUDE scale → SI",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_PHI_AMP_MAX,
+        "max |Φ| macro",
+        "§4.1.1",
+        "T_macro",
+        "|z|_nat",
+        "",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_RHO_FIELD_MEAN,
+        "⟨|z|²⟩ micro (slice)",
+        "§5.0 A7",
+        "T_macro",
+        "|z|²_nat",
+        "RHO_FIELD → J/m³",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_MACRO_B_MEAN,
+        "⟨b⟩ macro",
+        "§5.2.3 IV",
+        "T_macro",
+        "1",
+        "matter occupancy coarse",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_MACRO_B_MAX,
+        "max ⟨b⟩ macro",
+        "§5.2.3",
+        "T_macro",
+        "1",
+        "",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_M_REST,
+        "Σ|Φ|² coherent mass",
+        "§4.1.2 · §5.0.1",
+        "T_macro",
+        "coarse² sum",
+        "MACRO_MASS_READOUT scale",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_M_REST_LEGACY,
+        "m_rest_readout alias",
+        "§5.0.1",
+        "T_macro",
+        "coarse² sum",
+        "",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_ZIGZAG_ACTIVITY,
+        "Arg zigzag activity",
+        "§5.0.1",
+        "T_macro",
+        "rad",
+        "PHASE_RAD",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_ARG_MASS_LOAD,
+        "Arg mass load",
+        "§5.0.1",
+        "T_macro",
+        "action nat",
+        "ACTION_S0",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_ISOTROPY,
+        "isotropy score",
+        "§4.1 T",
+        "T_macro",
+        "1",
+        "→1 round",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_COV_ISOTROPY,
+        "covariance isotropy",
+        "§4.1 T",
+        "T_macro",
+        "1",
+        "",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_COARSE_PEAKS,
+        "coarse peak count",
+        "§4.9 collision",
+        "T_macro",
+        "1",
+        "",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_MADELUNG_RESIDUAL_MAX,
+        "|Δρ+div j|/ρ",
+        "§5.2 Madelung T",
+        "T_macro",
+        "1",
+        "needs z_past",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_RADIAL_SPEED_CV,
+        "radial front speed CV",
+        "§4.6 T",
+        "T_macro",
+        "1",
+        "needs z_past",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_PROFILE_CORR,
+        "coarse profile corr",
+        "§4.9.2 soliton",
+        "T_macro",
+        "1",
+        "needs z_past",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_NU_READOUT_PASSES,
+        "ν_CA readout passes",
+        "§4.1.2",
+        "T_macro",
+        "1",
+        "",
+    ),
+    InstrumentSpec(
+        InstrumentId.T_MACRO_BLOCK,
+        "macro block R",
+        "§4.1.1",
+        "T_macro",
+        "cells",
+        "stride=block",
     ),
 )
 

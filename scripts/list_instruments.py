@@ -11,23 +11,25 @@ from mt_ca.instruments import REGISTRY
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--json", action="store_true")
+    p.add_argument("--layer", choices=("M_site", "M_field", "M_ledger_tick", "T_macro"), default="")
     args = p.parse_args()
-    rows = [
-        {
+    specs = [s for s in REGISTRY if not args.layer or s.layer == args.layer]
+    rows = []
+    for s in specs:
+        row = {
             "id": s.id.value,
             "title": s.title,
             "layer": s.layer,
-            "unit": s.unit,
+            "unit_nat": s.unit,
             "model_ref": s.model_ref,
             "note": s.note,
         }
-        for s in REGISTRY
-    ]
+        rows.append(row)
     if args.json:
         print(json.dumps(rows, indent=2, ensure_ascii=False))
         return 0
-    for s in REGISTRY:
-        print(f"{s.id.value:22} [{s.layer:14}] {s.title} — {s.model_ref}")
+    for s in specs:
+        print(f"{s.id.value:28} [{s.layer:14}] {s.title} — {s.model_ref}")
     print(f"\n{len(REGISTRY)} instruments · sample via mt_ca.instruments.sample_panel")
     return 0
 
