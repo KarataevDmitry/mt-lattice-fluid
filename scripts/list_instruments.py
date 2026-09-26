@@ -5,14 +5,19 @@ from __future__ import annotations
 import argparse
 import json
 
-from mt_ca.instruments import REGISTRY
+from mt_ca.instruments import REGISTRY, instrument_ladder
 
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--json", action="store_true")
+    p.add_argument("--ladder", action="store_true", help="print §8.2 time-first SI ladder (SSOT)")
     p.add_argument("--layer", choices=("M_site", "M_field", "M_ledger_tick", "T_macro"), default="")
     args = p.parse_args()
+    if args.ladder:
+        row = instrument_ladder().to_dict()
+        print(json.dumps(row, indent=2, ensure_ascii=False) if args.json else row)
+        return 0
     specs = [s for s in REGISTRY if not args.layer or s.layer == args.layer]
     rows = []
     for s in specs:

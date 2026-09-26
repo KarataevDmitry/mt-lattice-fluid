@@ -57,3 +57,44 @@ def check_instrument_scales_ladder(device: str = "cpu") -> dict:
         "rel_p0_c0": row["rel_p0_c0"],
         "note": "Instrument SI scale for 1 E₀ matches SI.E_0",
     }
+
+
+def check_instrument_scales_time_first(device: str = "cpu") -> dict:
+    """§8.2 time-first cascade is SSOT for all instrument si_per_nat."""
+    from mt_ca.instruments.scales import QuantityKind, reading
+    from mt_ca.instruments.time_first_ladder import instrument_ladder
+    from mt_ca.si_constants import SI
+
+    L = instrument_ladder()
+    e0 = reading("E_0", QuantityKind.ENERGY_E0, 1.0)
+    ht = reading("hT", QuantityKind.TIME_HT, 1.0)
+    rho = reading("rho", QuantityKind.RHO_FIELD, 1.0)
+    mp = reading("m_P", QuantityKind.MASS_MP, 1.0)
+    rel_e0 = abs(e0.value_si - L.E_0_J) / L.E_0_J
+    rel_ht = abs(ht.value_si - L.hT_s) / L.hT_s
+    rel_rho = abs(rho.value_si - L.u_P_J_m3) / L.u_P_J_m3
+    rel_mp = abs(mp.value_si - L.m_P_kg) / L.m_P_kg
+    id_lp_ct = abs(L.l_P_m / (L.c_m_s * L.t_P_s) - 1.0)
+    ok = (
+        L.cascade_checks_ok
+        and L.energy_ladder_rel_max < 1e-12
+        and rel_e0 < 1e-12
+        and rel_ht < 1e-12
+        and rel_rho < 1e-12
+        and rel_mp < 1e-12
+        and id_lp_ct < 1e-14
+        and e0.si_derivation.startswith("s₀/hT")
+        and e0.scale_ssot.startswith("§8.2")
+    )
+    return {
+        "id": "Instrument_scales_time_first",
+        "ok": ok,
+        "cascade_checks_ok": L.cascade_checks_ok,
+        "ontology_order": list(L.ontology_order),
+        "rel_E_0": rel_e0,
+        "rel_hT": rel_ht,
+        "rel_u_P": rel_rho,
+        "rel_m_P": rel_mp,
+        "identity_lP_eq_c_tP": id_lp_ct,
+        "note": "Instruments export SI from time-first ladder, not scattered SI.*",
+    }
