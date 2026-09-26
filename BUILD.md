@@ -2,7 +2,7 @@
 
 Повторяемый протокол: **генезис → каркас → условия → конкретизация → проверка**.
 
-Канон формул: `MODEL.md` · манифест: `MANIFEST.md` · impl/verify/open: `DEVLOG.md`. Код: `mt_ca/`, проверка: `verify_principles.py`.
+Канон формул: `MODEL.md` · **ISM blanket (2-я поверхность):** `BLANKET.md` · манифест: `MANIFEST.md` · impl/verify/open: `DEVLOG.md`. Код: `mt_ca/`, проверка: `verify_principles.py`.
 
 ---
 
