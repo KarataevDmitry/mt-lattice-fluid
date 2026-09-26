@@ -86,4 +86,6 @@
 
 **Не путать:** фазовый остаток планковской дырки $r=1/(4\pi)$, $1+r$ — насыщающая фаза (§7.1), **не** $\alpha$.
 
+**Размерный анализ (lab):** $[e]=\mathrm{IT}$, $[\varepsilon_0]=\mathrm{M^{-1}L^{-3}T^{4}I^{2}}$ ⇒ $[e^2/(\varepsilon_0\hbar c)]=1$. Подробно — §8.2·α·dim, `08-units` §dim (каскад $E_0,p_0,F_0,u_P$).
+
 **Код:** `alpha_from_fundamentals()` / `alpha_preferred` · verify `Alpha_meaning`, `Alpha_full_quantization_bridge` · текст §8.2·α·name.

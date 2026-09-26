@@ -63,6 +63,26 @@ SI-2019 секунда (`Δν_Cs` exact) — тот же класс тавтол
 Числа «метр/секунда/кг» SI-2019 — T-export ярлыки, не прототипы базы.
 **Код:** `SI.units_time_first_cascade_row()` Â· verify **`Units_time_first_cascade`**.
 
+#### §8.2·units·dim · Размерный анализ каскада (контроль учителя)
+База time-first: $[t_P]=\mathrm{T}$, $[\ell_P]=\mathrm{L}$, $[m_P]=\mathrm{M}$.
+
+| шаг | формула | размерность |
+|-----|---------|-------------|
+| длина из света | $\ell_P=c\,t_P$ | $\mathrm{L}$ |
+| масса из $\hbar$ | $m_P=\hbar/(c^2 t_P)$ | $\mathrm{M}$ |
+| M-тик | $hT=\kappa\,t_P$, $\kappa$ безразмерна | $\mathrm{T}$ |
+| тактовая скорость | $c_0=\ell_P/hT$ | $\mathrm{LT^{-1}}$ |
+| macro $c$ | $c=\kappa c_0$ | $\mathrm{LT^{-1}}$ |
+| действие Arg | $s_0=\hbar\,\Delta\phi_{\min}$ | $\mathrm{ML^2T^{-1}}$ |
+| энергия тика | $E_0=s_0/hT$ | $\mathrm{ML^2T^{-2}}$ |
+| импульс | $p_0=s_0/\ell_P$ | $\mathrm{MLT^{-1}}$ |
+| сила | $F_0=p_0/hT$ | $\mathrm{MLT^{-2}}$ |
+| $u_P$ | $m_P c^2/\ell_P^3$ | $\mathrm{ML^{-1}T^{-2}}$ (= Дж/м³) |
+
+$\alpha_{fs}$ в эту таблицу **не входит**: $[\alpha]=1$ (§8.2·α·dim). EM-длины — $L=N\cdot\ell_P$ при безразмерном $N(\alpha,\ldots)$.
+
+**Книга:** `\cref{rem:time-first-dim}`.
+
 #### §8.2·units·T_P · температура без k_B (закрыто)
 На M (§5.3.1) **T = ⟨E_kin zigzag⟩** — энергия, отдельной оси Θ нет.
 
