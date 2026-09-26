@@ -2,7 +2,7 @@
 
 Повторяемый протокол: **генезис → каркас → условия → конкретизация → проверка**.
 
-Спецификация: `MODEL.md` · одеяло МЗВ: `BLANKET.md` · манифест: `MANIFEST.md` · журнал: `DEVLOG.md`. Код: `mt_ca/`, верификация: `verify_principles.py`.
+SSOT физики: `MODEL.md` · SSOT одеяла: `BLANKET.md` · манифест: `MANIFEST.md` · журнал: `DEVLOG.md`. Код: `mt_ca/`, верификация: `verify_principles.py`.
 
 ---
 

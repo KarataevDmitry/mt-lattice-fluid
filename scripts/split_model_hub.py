@@ -94,7 +94,7 @@ def main() -> None:
         print(f"wrote {path.relative_to(ROOT)} chars={len(text)}")
 
     hub_path = ROOT / "MODEL.md"
-    hub = hub_path.read_text(encoding="utf-8") if hub_path.exists() else "# Спецификация M→T→SM\n"
+    hub = hub_path.read_text(encoding="utf-8") if hub_path.exists() else "# MODEL · SSOT физики M→T→SM\n"
     MODEL.write_text(hub, encoding="utf-8", newline="\n")
     print(f"wrote MODEL.md hub chars={len(hub)}")
 
