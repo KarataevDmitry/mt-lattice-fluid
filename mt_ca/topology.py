@@ -236,34 +236,30 @@ def plaquette_winding(
 def matter_occupancy_b(
     z: torch.Tensor,
     *,
+    iz: int | None = None,
     y: int | None = None,
     x: int | None = None,
     rho_frac: float = 0.25,
     contour_radius: int = 2,
 ) -> int:
     """b(x) = min(1, |n_∂|) at cell — §5.0: ρ_matter = ρ_P·b, m_cell = m_P·b."""
-    from mt_ca.config import MConfig
+    from mt_ca.matter_readout import readout_at_site, snap_column_peak
     from mt_ca.spinor import spinor_density
 
     rho = spinor_density(z)
     if y is None or x is None:
         flat_idx = int(rho.reshape(-1).argmax().item())
-        iz, y, x = unravel_peak_index(rho, flat_idx)
-        if iz is not None:
-            z = gate_plane_z(z, iz)
-            rho_peak = float(rho[iz, y, x].item())
-        else:
-            rho_peak = float(rho[y, x].item())
+        iz_peak, y, x = unravel_peak_index(rho, flat_idx)
+        site = snap_column_peak(rho, y, x, iz_hint=iz_peak)
     else:
-        rho_peak = float(rho[y, x].item()) if rho.ndim == 2 else float(rho[:, y, x].max().item())
-
-    if rho_peak < rho_frac * MConfig.for_stencil("hex").rho_max:
-        return 0
-
-    w = winding_number(z, center=(y, x), radius=contour_radius)
-    if w != w or abs(w) < 0.75:
-        return 0
-    return min(1, abs(winding_nearest_int(w)))
+        site = snap_column_peak(rho, y, x, iz_hint=iz)
+    row = readout_at_site(
+        z,
+        site,
+        contour_radius=contour_radius,
+        rho_frac=rho_frac,
+    )
+    return row.b
 
 
 def matter_occupancy_b_field(

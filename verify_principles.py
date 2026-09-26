@@ -126,6 +126,7 @@ def run_all(device: str) -> list[dict]:
         check_planck_vacuum_floor(device=device),
         check_ladder_ledger(device=device),
         check_matter_b_readout(device=device),
+        check_planckon_instrument_fcc(device=device),
         check_a14_symmetry(device=device),
         check_electron_anchor(device=device),
         check_saturation_bc(device=device),
