@@ -95,7 +95,7 @@ def main() -> None:
 
     hub = """# M → T → SM lattice fluid
 
-**Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».  
+**Манифест:** [`MANIFEST.md`](MANIFEST.md) — «Кипящий океан» (исходный текст, не заголовок-каталог).  
 **Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`.  
 **Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.  
 **SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md), часть **MODEL**, не meta.

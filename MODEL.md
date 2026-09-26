@@ -1,6 +1,6 @@
 # M → T → SM lattice fluid
 
-**Манифест:** [`MANIFEST.md`](MANIFEST.md) — исходная формулировка «Дискретная информационная термодинамика».
+**Манифест:** [`MANIFEST.md`](MANIFEST.md) — «Кипящий океан» (исходный текст, не заголовок-каталог).
 **Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.
 **Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.
 **SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md) (hub §6–§8), часть **MODEL**, не meta.
@@ -14,7 +14,7 @@
                            ↓  проверяет (impl ↔ M)
                       sim  validate_mt, GPU  — не «истина»; ловит sim-gap и T-метрики
                            ↓
-                      T    coarse, readout     — наблюдаемый слой
+                      T    coarse, мacro-T     — наблюдаемый слой
                            ↓  (интерпретация)
                       Meta META.md           — космология, UI, access; **не refute M**
                       Devlog DEVLOG.md       — impl status, verify, open; **не refute M**
@@ -41,7 +41,7 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 |-----|--------|----------|---------|
 | **model-gap** | в M **не применили** уже известную физику | **MODEL** | дописать/вывести § |
 | **sim-gap** | в MODEL **уже сказано**, impl/sim **не догнали** | **mt_ca** / verify | код, harness |
-| **T-metric** | грубый readout / слабая метрика T | **validate_mt**, macro | не «M refuted» |
+| **T-metric** | грубый macro-T / слабая метрика | **validate_mt**, macro | не «M refuted» |
 
 **Правило:** sim ≠ M → сначала классифицировать gap; **не** ослаблять MODEL под sim.
 
@@ -66,7 +66,7 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 | [`model/08-higgs.md`](model/08-higgs.md) | §8.3 Higgs |
 | [`model/08-forces.md`](model/08-forces.md) | §8.4 силы · GR · Weinberg · CKM |
 
-**ISM blanket (вторая поверхность, T readout):** hub [`BLANKET.md`](BLANKET.md) + [`blanket/`](blanket/) + `data/ism_constraints_v0.yaml` · код `mt_ca/blanket/` (не часть аксиом `g` в MODEL).
+**Одеяло МЗВ (вторая поверхность над океаном):** hub [`BLANKET.md`](BLANKET.md) + [`blanket/`](blanket/) + `data/ism_constraints_v0.yaml` · код `mt_ca/blanket/` (не часть аксиом `g` в MODEL).
 
 **Носитель (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆** = {111} FCC. Квадрат N₄ — не физика M (см. DEVLOG).
 

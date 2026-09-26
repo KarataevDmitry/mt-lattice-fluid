@@ -17,7 +17,7 @@ Loader: `mt_ca.blanket.constraints.load_ism_constraints()`.
 | `vlism_voyager_v1` | якорь τ, magnetothermal VLISM (forward harness) |
 | `column_screen` | segments $N_H$, $\sigma_{\mathrm{eff}}$ |
 | `model_v1` | thermal_coupling, ionization caps, Y_He |
-| `wnm_thermal` | Γ, Λ knobs, `cooling_scale` |
+| `wnm_thermal` | table JSON path, `equilibrium_mode`, `wnm_reference_log_nH` |
 | `pass_blanket` | T range, tolerance vs LIC obs |
 
 ### §4.2 · Sync yaml ↔ json
