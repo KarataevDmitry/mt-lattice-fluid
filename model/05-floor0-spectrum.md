@@ -138,6 +138,8 @@ $$
 
 Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$).
 
+**Линearization (v1 · FD):** `tools/boil_linear_spectrum.py` — на фоне post-settle, возмущение Fourier-моды на $z_{\mathrm{curr}}$, один тик $g$, оценка $\lambda_k$; рядом `shift_mse` contrast на ring $T\in\{21,41,82,\ldots\}$. На boil low-$k$ даёт **$|\lambda_k|\gg1$** (усиление, не $U(1)$-мода на торе) → фазовый «$T\sim2\pi/\arg\lambda$» **не** интерпретировать как период океана; кольцо 512 **не** проявляется как минимум MSE на contrast.
+
 **Открыто:** полное перечисление $\Gamma_{hV}$; возбуждённые ветки ($n_E\ge1$, $\Phi\ge 41$) — kick-harness.
 
 ---
