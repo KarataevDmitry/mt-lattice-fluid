@@ -1,6 +1,6 @@
 # Глоссарий M (термины и обозначения)
 
-**Термины** для MODEL и книги. Имена в коде не меняются — только поясняющий текст.
+**Термины** для MODEL и книги. **Код — DDD:** bounded contexts и имена модулей следуют слоям модели (M / T / app / blanket / instruments), а не устаревшему жаргону вроде *readout*.
 
 ---
 
@@ -94,4 +94,16 @@
 
 ## Макроописание T
 
-Переход **M → T**: из микросостояния `z` на решётке получают макроскопические поля, температуру, наблюдаемые SM (**усреднение T**: binomial (1-2-1), $\Phi=ℬz$, §4.1 и далее). Имена модулей в коде (`t_analysis`, `macro`) — инженерные, не термин MODEL.
+Переход **M → T**: из микросостояния `z` на решётке получают макроскопические поля, температуру, наблюдаемые SM (**усреднение T**: binomial (1-2-1), $\Phi=ℬz$, §4.1 и далее).
+
+| MODEL | Код (bounded context) | Заметка |
+|-------|-------------------------|---------|
+| binomial $\|Φ\|$, §4.1.1 | `mt_ca.t.coarse` ← `macro.py` | предпочтительный импорт |
+| DFT / dispersion (калибровка) | `mt_ca.t.spectral` ← `t_analysis.py` | не заменяет micro `g` |
+| T-CR, path-Green, §4.1.0–HL | `mt_ca.t.hydro_limit` | было `t_continuum_readout.py` |
+| T1/T2/T3, `validate_mt` | `mt_ca.t.validation` ← `t_validation.py` | |
+| якоря §5 (Arg, $m_e$) | `mt_ca.t.anchors` ← `m_to_t.py` | |
+| контур $n$, survey/anchor | `mt_ca.matter_survey` | shim: `matter_readout.py` |
+| lab / CLI | `mt_ca.app`, `mt_ca.instruments` | orchestration |
+
+**Не термин MODEL:** *readout* — снят с prose; в коде только legacy shims до полной миграции. **Ubiquitous language** в новом коде: *coarse*, *macro_amplitude*, *survey*, *hydro_limit*, *макроописание T*.

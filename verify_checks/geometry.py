@@ -170,10 +170,10 @@ def check_t_madelung_continuity(size: int = 64, device: str = "cpu") -> dict:
     return t_madelung_continuity_report(size, device=device)
 
 def check_t_continuum_readout(device: str = "cpu") -> dict:
-    from mt_ca.t_continuum_readout import t_continuum_readout_row
+    from mt_ca.t.hydro_limit import hydro_limit_verify_row
 
     del device
-    row = t_continuum_readout_row()
+    row = hydro_limit_verify_row()
     ok = (
         row["path_atom_is_121"] is True
         and row["var_atom"] == 0.5
@@ -202,7 +202,7 @@ def check_t_continuum_readout(device: str = "cpu") -> dict:
     }
 
 def check_t_hydro_limit(device: str = "cpu") -> dict:
-    from mt_ca.t_continuum_readout import fcc_hydro_limit_row
+    from mt_ca.t.hydro_limit import fcc_hydro_limit_row
 
     del device
     row = fcc_hydro_limit_row()
