@@ -21,6 +21,10 @@ class RunSpec:
     settle: int = 0
     track: int = 0
 
+    @property
+    def dimension(self):
+        return self.scenario.dimension
+
     @classmethod
     def from_id(
         cls,

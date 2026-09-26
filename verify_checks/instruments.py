@@ -1,19 +1,15 @@
-"""Instrument panel — catalog wired to sim."""
+"""Instrument panel — catalog wired to sim via app lab SSOT."""
 from __future__ import annotations
 
 
-def check_instrument_panel_vortex(size: int = 64, device: str = "cpu") -> dict:
-    from mt_ca.config import MConfig
-    from mt_ca.instruments import REGISTRY, sample_panel
-    from mt_ca.seeds import SeedClass
-    from mt_ca.simulator import LatticeFluidSimulator
+def check_instrument_panel_vortex(size: int = 48, device: str = "cpu") -> dict:
+    """§5 panel on **3+1 FCC** planckon (``floor0_planckon`` + ``LabSession``)."""
+    from mt_ca.app.lab import open_lab
+    from mt_ca.instruments import REGISTRY
 
-    dev = __import__("torch").device(device)
-    cfg = MConfig.for_stencil("hex")
-    sim = LatticeFluidSimulator(size, size, cfg, device=dev)
-    sim.reset(SeedClass.VORTEX_P)
-    sim.step(32)
-    panel = sample_panel(sim.z, cfg, z_past=sim.z_past)
+    lab = open_lab("floor0_planckon", size, device=device)
+    lab.step(128)
+    panel = lab.panel()
     site = panel["site"]
     t = panel["t"]["readings"]
     rho_si = site["scaled"]["rho_field"]["value_si"]
@@ -25,10 +21,14 @@ def check_instrument_panel_vortex(size: int = 64, device: str = "cpu") -> dict:
         and "phi_kick_tick" in site
         and "t_m_rest" in t
         and rho_si > 0
+        and lab.dimension.value == "3+1"
     )
     return {
         "id": "Instrument_panel_vortex",
         "ok": ok,
+        "dimension": lab.meta["dimension"],
+        "scenario_id": lab.meta["scenario_id"],
+        "grid": lab.meta["grid"],
         "catalog_count": len(REGISTRY),
         "b_matter": site["b_matter"],
         "n_topo": site["n_topo"],
@@ -36,7 +36,34 @@ def check_instrument_panel_vortex(size: int = 64, device: str = "cpu") -> dict:
         "rho_field_si_J_m3": rho_si,
         "t_m_rest_si": t["t_m_rest"]["value_si"],
         "rho_contrast": panel["field"]["rho_contrast"],
-        "note": "§5 panel M+T; SI = value_nat * si_per_nat per instrument",
+        "note": "§5 panel M+T via mt_ca.app.lab; 3+1 FCC canon (not hex slice)",
+    }
+
+
+def check_instrument_panel_hex_slice(size: int = 64, device: str = "cpu") -> dict:
+    """§5 panel on explicit **2+1 hex slice** scenario (component / legacy path)."""
+    from mt_ca.app.lab import open_lab
+    from mt_ca.instruments import REGISTRY
+
+    lab = open_lab("floor0_planckon_hex_slice", size, device=device)
+    lab.settle(32)
+    lab.step(32)
+    panel = lab.panel()
+    site = panel["site"]
+    ok = (
+        len(REGISTRY) >= 30
+        and site["b_matter"] == 1
+        and lab.dimension.value == "2+1"
+        and lab.meta["stencil"] == "hex"
+    )
+    return {
+        "id": "Instrument_panel_hex_slice",
+        "ok": ok,
+        "dimension": lab.meta["dimension"],
+        "scenario_id": lab.meta["scenario_id"],
+        "grid": lab.meta["grid"],
+        "b_matter": site["b_matter"],
+        "note": "2+1 hex slice only — not cosmology SSOT",
     }
 
 

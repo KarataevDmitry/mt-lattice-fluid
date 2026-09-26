@@ -83,15 +83,10 @@ def apply_scenario(sim: LatticeFluidSimulator, scenario: ScenarioSpec) -> None:
 
 def run(spec: RunSpec) -> RunResult:
     """Execute one simulation run and return a typed result."""
-    cfg = MConfig.for_stencil(spec.scenario.stencil)
-    sim = LatticeFluidSimulator(
-        spec.ny,
-        spec.nx,
-        cfg,
-        nz=spec.nz,
-        device=spec.device,
-    )
-    apply_scenario(sim, spec.scenario)
+    from mt_ca.app.lattice import open_lattice
+
+    sim = open_lattice(spec)
+    cfg = sim.cfg
 
     planted = spec.scenario.seed in (
         SeedClass.VORTEX_P,
@@ -224,11 +219,11 @@ def run_floor0_phase_space(
     device: str = "cpu",
 ) -> dict[str, Any]:
     """§5.0.4-A — Γ_hV probe on boiling ocean + planckon (3+1 FCC via app SSOT)."""
-    from mt_ca.app.grid import open_simulator, run_spec_cube
+    from mt_ca.app.lattice import build_run_spec, open_lattice
     from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
     from mt_ca.spinor import spinor_density
 
-    spec = run_spec_cube(
+    spec = build_run_spec(
         "floor0_planckon",
         size,
         device=device,
@@ -236,7 +231,7 @@ def run_floor0_phase_space(
         settle=settle,
         track=track,
     )
-    sim = open_simulator(spec)
+    sim = open_lattice(spec)
 
     from mt_ca.si_floor0_rows import _BLOCH_DISTINCT_Q6
 
@@ -328,14 +323,14 @@ def run_floor0_nE_excitation_harness(
     read integer Φ and n_E from ``projected_phi_int`` at the planted core (not the
     settled snapshot alone, which stays n_E=0).
     """
-    from mt_ca.app.grid import open_simulator, run_spec_cube
+    from mt_ca.app.lattice import build_run_spec, open_lattice
     from mt_ca.projected_collision import projected_phi_int
     from mt_ca.reversible import canonical_fixed
     from mt_ca.si_constants import elementary_quanta_row, energy_ledger_ticks_per_E0
     from mt_ca.topology import matter_occupancy_b, winding_channels
 
-    spec = run_spec_cube("floor0_planckon", size, device=device, steps=0)
-    sim = open_simulator(spec)
+    spec = build_run_spec("floor0_planckon", size, device=device, steps=0)
+    sim = open_lattice(spec)
     ticks_per_e0 = energy_ledger_ticks_per_E0(phase_bits=sim.cfg.phase_bits)
 
     for _ in range(settle):

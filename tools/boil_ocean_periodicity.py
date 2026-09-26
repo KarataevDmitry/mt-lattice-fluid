@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Boiling ocean only — autocorrelation / FFT on instrument time series (no planckon).
 
+Uses ``mt_ca.app.lab`` SSOT (``habitat_boil``, 3+1 FCC).
+
 Usage:
   python tools/boil_ocean_periodicity.py
   python tools/boil_ocean_periodicity.py --ticks 1024
@@ -12,6 +14,7 @@ from collections import defaultdict
 
 import torch
 
+from mt_ca.app.lab import open_lab
 from mt_ca.instruments.catalog import InstrumentId
 from mt_ca.instruments.panel import sample_field, sample_site
 
@@ -63,45 +66,33 @@ def run_boil_ocean_periodicity(
     settle: int = 128,
     size: int = 32,
 ) -> dict:
-    from mt_ca.app.grid import open_simulator, run_spec_cube
-    from mt_ca.matter_readout import snap_column_peak, spinor_density
-    from mt_ca.projected_collision import projected_phi_int
-    from mt_ca.reversible import canonical_fixed
-
-    spec = run_spec_cube("habitat_boil", size, device="cpu", steps=0)
-    sim = open_simulator(spec)
-    cfg = sim.cfg
-    sim.step(settle)
+    lab = open_lab("habitat_boil", size, device="cpu")
+    lab.step(settle)
 
     cy = size // 2
-    rho0 = spinor_density(sim.z)
-    sites = {
-        "center": snap_column_peak(rho0, cy, cy),
-        "bath_a": snap_column_peak(rho0, 10, 10),
-        "bath_b": snap_column_peak(rho0, min(size - 4, 50), min(size - 4, 50)),
-    }
+    sites = lab.snap_sites(
+        {
+            "center": (cy, cy),
+            "bath_a": (10, 10),
+            "bath_b": (min(size - 4, 50), min(size - 4, 50)),
+        }
+    )
     series: dict[str, dict[str, list[float]]] = {
         name: defaultdict(list) for name in sites
     }
     contrast: list[float] = []
 
     for _t in range(ticks):
-        z_p = sim.z_past.clone() if sim.z_past is not None else sim.z.clone()
-        sim.step(1)
-        fld = sample_field(sim.z, cfg, z_past=z_p)
+        z_p = lab.sim.z_past.clone() if lab.sim.z_past is not None else lab.sim.z.clone()
+        lab.step(1)
+        fld = lab.field_row(z_past=z_p)
         contrast.append(float(fld[InstrumentId.RHO_CONTRAST.value]))
-        f = canonical_fixed(sim.z, cfg)
-        phi_int = projected_phi_int(f, cfg)
         for name, site in sites.items():
-            row = sample_site(sim.z, site, cfg, z_past=z_p)
+            row = lab.site_row(site, z_past=z_p)
             series[name]["rho"].append(float(row[InstrumentId.RHO_FIELD.value]))
             series[name]["phi_kick"].append(float(row.get(InstrumentId.PHI_KICK_TICK.value) or 0))
             series[name]["n_E"].append(float(row[InstrumentId.N_E.value]))
-            if phi_int.ndim == 2:
-                series[name]["Phi"].append(float(phi_int[site.y, site.x].abs().item()))
-            else:
-                iz = site.iz if site.iz is not None else 0
-                series[name]["Phi"].append(float(phi_int[iz, site.y, site.x].abs().item()))
+            series[name]["Phi"].append(float(lab.projected_phi_at(site)))
 
     out_sites: dict[str, dict] = {}
     for name in sites:
@@ -122,7 +113,7 @@ def run_boil_ocean_periodicity(
     ac_lag, ac = ac_peak_period(contrast)
     fft_p, fft_pow = fft_peak_period(contrast)
     return {
-        "habitat": "vacuum_boil",
+        **lab.meta,
         "ticks": ticks,
         "settle": settle,
         "field_rho_contrast": {
@@ -139,15 +130,19 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ticks", type=int, default=1024)
     parser.add_argument("--settle", type=int, default=128)
+    parser.add_argument("--size", type=int, default=32)
     args = parser.parse_args()
-    rep = run_boil_ocean_periodicity(ticks=args.ticks, settle=args.settle)
-    print("habitat:", rep["habitat"], "ticks:", rep["ticks"])
+    rep = run_boil_ocean_periodicity(ticks=args.ticks, settle=args.settle, size=args.size)
+    print("lattice:", rep.get("dimension"), rep.get("grid"), "scenario:", rep.get("scenario_id"))
+    print("ticks:", rep["ticks"], "settle:", rep["settle"])
     print("field rho_contrast:", rep["field_rho_contrast"])
     for site, block in rep["sites"].items():
         print(f"--- {site} ---")
         for key, stats in block.items():
-            print(f"  {key}: mean={stats['mean']}  ac_period={stats['ac_period']} ac={stats['ac']}  "
-                  f"fft_period={stats['fft_period']} power={stats['fft_power']}")
+            print(
+                f"  {key}: mean={stats['mean']}  ac_period={stats['ac_period']} ac={stats['ac']}  "
+                f"fft_period={stats['fft_period']} power={stats['fft_power']}"
+            )
 
 
 if __name__ == "__main__":

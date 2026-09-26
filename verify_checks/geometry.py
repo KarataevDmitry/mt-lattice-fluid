@@ -420,41 +420,21 @@ def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
 
 def check_planckon_instrument_fcc(size: int = 48, steps: int = 128, device: str = "cpu") -> dict:
     """§5.0 readout instrument — 3+1 FCC anchor vs ρ-survey (densitometer)."""
-    from mt_ca.app.gates import gate_b
-    from mt_ca.config import MConfig
-    from mt_ca.matter_readout import default_anchor, planckon_instrument
-    from mt_ca.simulator import LatticeFluidSimulator
-    from mt_ca.topology import matter_occupancy_b
+    from mt_ca.app.lab import planckon_lab_report
 
-    dev = torch.device(device)
-    cfg = MConfig.for_stencil("fcc")
-    sim = LatticeFluidSimulator(size, size, cfg, device=dev, nz=size)
-    sim.reset(SeedClass.VORTEX_P)
-    sim.step(steps)
-    anchor = default_anchor(sim.z)
-    inst = planckon_instrument(sim.z, anchor=anchor, top_k=8)
-    gate_survey = gate_b(sim.z, anchor=None)
-    gate_core = gate_b(sim.z, anchor=anchor)
-    core_b = matter_occupancy_b(sim.z, iz=anchor.iz, y=anchor.y, x=anchor.x)
-
-    ok = (
-        inst["b_anchor"] == 1
-        and inst["passed_anchor"]
-        and gate_core["passed"]
-        and core_b == 1
-        and abs(float(inst["anchor"]["w_auto"])) >= 0.75
+    row = planckon_lab_report(
+        "floor0_planckon",
+        edge=size,
+        settle=0,
+        steps=steps,
+        device=device,
     )
+    ok = bool(row.pop("ok"))
     return {
         "id": "Planckon_instrument_fcc",
-        "b_anchor": inst["b_anchor"],
-        "passed_anchor": inst["passed_anchor"],
-        "passed_survey": inst["passed_survey"],
-        "gate_survey_passed": gate_survey["passed"],
-        "gate_anchor_passed": gate_core["passed"],
-        "core_b_fixed_site": core_b,
-        "anchor_w_auto": inst["anchor"]["w_auto"],
         "ok": ok,
-        "note": "Planted vortex on boil: anchor readout is SSOT for stability; survey is birth-hunt mode",
+        **row,
+        "note": "Planted vortex on boil via app.lab; anchor readout SSOT",
     }
 
 

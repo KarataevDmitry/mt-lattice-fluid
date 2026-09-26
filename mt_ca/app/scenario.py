@@ -10,6 +10,8 @@ from dataclasses import dataclass
 
 from mt_ca.app.brick import BrickSpec
 
+from mt_ca.app.dimension import LatticeDimension, dimension_for_stencil, grid_shape_label
+
 from mt_ca.app.stencil import CANON_STENCIL, SLICE_STENCIL
 
 from mt_ca.app.habitat import HabitatPreset
@@ -51,6 +53,18 @@ class ScenarioSpec:
         return self.habitat.value
 
 
+
+    @property
+
+    def dimension(self) -> LatticeDimension:
+
+        return dimension_for_stencil(self.stencil)
+
+
+
+    def grid_label(self, edge: int) -> str:
+
+        return grid_shape_label(self.dimension, edge)
 
 
 

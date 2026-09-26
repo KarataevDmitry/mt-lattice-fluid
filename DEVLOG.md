@@ -12,7 +12,12 @@
 
 
 
-## 2026-09-26 · mt_ca.app · 3+1 FCC SSOT (floor0 + boil)
+## 2026-09-26 · mt_ca.app · lattice + lab (2+1 vs 3+1, instruments SSOT)
+
+**DoD:** `dimension.py` (`LatticeDimension`), `lattice.py` (`build_run_spec`, `open_lattice`), `lab.py` (`LabSession`, `open_lab`, `planckon_lab_report`). CLI: `list` (dim column), `panel`. Verify: `Instrument_panel_*` canon vs hex_slice; `Planckon_instrument_fcc` → lab. Tools/probes via `open_lab`.
+
+**Stack:** scenario → lattice → lab (instruments always `sim.cfg`; T-panel `plane_mconfig` on gate plane).
+
 
 **DoD:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после settle; gate-plane readout `plane_mconfig`.
 

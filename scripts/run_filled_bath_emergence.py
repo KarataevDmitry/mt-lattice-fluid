@@ -22,8 +22,8 @@ def run_arm(
     device: str,
     block: int,
 ) -> dict:
-    spec = RunSpec(
-        scenario=get_scenario(scenario_id),
+    spec = RunSpec.from_id(
+        scenario_id,
         ny=size,
         nx=size,
         steps=steps,

@@ -153,7 +153,7 @@ class SIFloor0Rows:
 
         Open (explicit): n_E≥1 kick-harness on boiling floor.
         """
-        from mt_ca.app.grid import open_simulator, run_spec_cube
+        from mt_ca.app.lattice import build_run_spec, open_lattice
         from mt_ca.app.scenario import get_scenario
         from mt_ca.ledger import n_E_field
         from mt_ca.matter_readout import default_anchor, plane_mconfig, spinor_plane
@@ -206,8 +206,8 @@ class SIFloor0Rows:
 
         dev = torch.device(device)
         scenario = get_scenario("floor0_planckon")
-        spec = run_spec_cube("floor0_planckon", size, device=str(dev), steps=0)
-        sim = open_simulator(spec)
+        spec = build_run_spec("floor0_planckon", size, device=str(dev), steps=0)
+        sim = open_lattice(spec)
         cfg = sim.cfg
         for _ in range(settle):
             sim.step(1)

@@ -4,7 +4,7 @@
 
 **Среда симуляции (обязательно):** пустоты нет — все `hV` заполнены; фон = **кипящий океан** `VACUUM_BOIL` (A5). Планкон = возбуждение **на** этом океане (`VORTEX_*`), не в «мёртвом» gauge-fixed `VACUUM` (Φ=0 control).
 
-**SSOT симуляции:** сценарии и сетка — `mt_ca/app/` (`scenario.py`, `grid.py`, `runner.py`, CLI). **Канон 3+1 FCC** (`floor0_planckon`, `habitat_boil`, …). **2+1 hex** только явные slice-сценарии (`*_hex_slice`) — не дефолт и не cosmology-dogfish. Readout на gate-plane в 3+1: контур A10 в плоскости `(y,x)` при выбранном `iz` (`matter_readout.plane_mconfig` → hex-соседи на срезе).
+**SSOT симуляции:** `mt_ca/app/` — **`scenario`** (что за среда) → **`lattice`** (2+1 vs 3+1, `RunSpec`) → **`lab`** (приборы на `sim.cfg`). CLI: `list` | `run` | `panel`. **3+1 FCC** канон; **2+1 hex** только `*_hex_slice`.
 
 **Связь:** родитель §5.0.4 в [`05-matter.md`](05-matter.md); внешние оболочки ε — §5.0.5 / этаж 1; BZ вакуума — §5.2.4 (отдельный leaf).
 
