@@ -20,3 +20,4 @@ book/sources/*.out
 book/sources/*.toc
 book/sources/main.pdf
 book/out/
+data/_cache/

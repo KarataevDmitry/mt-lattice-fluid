@@ -67,11 +67,14 @@ pass_blanket:
   T_lic_median_tolerance_frac: 0.35
 
 wnm_thermal:
+  cooling_table_json: wnm_cooling_ps20_fiducial_z0_v1.json
+  equilibrium_mode: wnm_ridge
+  wnm_reference_log_nH: -2.85
+  P_th_over_k_cm3: 3500.0
+  wnm_T_floor_K: 4000.0
   zeta_H_s-1: 1.8e-17
   habing_G0: 1.0
   dust_pe_efficiency: 0.05
-  cooling_scale: 0.1135
   T_min_K: 1500.0
   T_max_K: 20000.0
-  n_eff_saha_cm3: 0.35
-  note: "Γ=Λ Wolfire-style channels; cooling_scale = solar line-strength norm at LIC n_H"
+  note: "Γ=Λ from PS20 fiducial table (Hybrid-CHIMES 2025 format); wnm_ridge ref when no hot root at LIC n_H"
