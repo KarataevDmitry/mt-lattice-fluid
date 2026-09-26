@@ -276,3 +276,29 @@ def default_anchor(z: torch.Tensor) -> MatterSite:
     rho = spinor_density(z)
     iz = int(rho[:, cy, cx].argmax().item())
     return MatterSite(iz, cy, cx)
+
+
+def defect_candidates(
+    z: torch.Tensor,
+    *,
+    top_k: int = 24,
+    contour_radius: int = 2,
+    margin: int | None = None,
+    require_local_max: bool = False,
+) -> list[MatterSiteReadout]:
+    """Survey instrument: sites with b≥1 (|n|≥¾) after column-snap and plane readout."""
+    margin = margin if margin is not None else contour_radius + 1
+    rho = spinor_density(z)
+    sites = survey_density_sites(
+        rho,
+        top_k=top_k,
+        margin=margin,
+        require_local_max=require_local_max,
+    )
+    rows: list[MatterSiteReadout] = []
+    for site in sites:
+        row = readout_at_site(z, site, contour_radius=contour_radius)
+        if row.b >= 1:
+            rows.append(row)
+    rows.sort(key=lambda r: r.rho, reverse=True)
+    return rows

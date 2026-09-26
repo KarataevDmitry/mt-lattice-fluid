@@ -2,7 +2,7 @@
 """Sweep boil → settle → spinor half-space wall (META §3.2 dogfood).
 
 Axes: settle_ticks × delta_angle × wall_axis (x|y|z).
-Metrics: born_final, born_ever, first_born_t, b_final, max_b, min_pair_dist.
+Metrics: born_* (survey readout), b_survey_*, min_pair_dist.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ if str(_SCRIPTS) not in sys.path:
 
 import torch
 
-from mt_ca.app import gate_b
+from mt_ca.app import READOUT_SCHEMA, born_survey, dual_lanes, gates_at_z
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor, encode_spinor
 from mt_ca.seeds import boil_ocean_spinor_3d
@@ -92,10 +92,10 @@ def run_config(
             delta_angle=delta_angle,
         )
     )
-    g0 = gate_b(sim.z)
+    g0 = gates_at_z(sim.z, with_anchor=True)
     born_ever = False
     first_born_t: int | None = None
-    max_b = int(g0["b_hits_topk"])
+    max_b = int(g0["b_argmax"])
     max_w = float(g0["winding_abs_max"])
     min_pair: float | None = None
     done = 0
@@ -103,20 +103,20 @@ def run_config(
         chunk = min(sample_every, steps - done)
         sim.step(chunk)
         done += chunk
-        g = gate_b(sim.z)
-        born_now = bool(g["passed"] and not g0["passed"])
+        g = gates_at_z(sim.z, with_anchor=True)
+        born_now = born_survey(g0, g)
         if born_now and not born_ever:
             first_born_t = done
         born_ever = born_ever or born_now
-        max_b = max(max_b, int(g["b_hits_topk"]))
+        max_b = max(max_b, int(g["b_argmax"]))
         max_w = max(max_w, float(g["winding_abs_max"]))
         defects = find_defect_peaks(sim.z, top_k=16)
         pairs = pairwise_distances(defects)
         if pairs:
             d = min(p["dist_cells"] for p in pairs)
             min_pair = d if min_pair is None else min(min_pair, d)
-    g1 = gate_b(sim.z)
-    born_final = bool(g1["passed"] and not g0["passed"])
+    g1 = gates_at_z(sim.z, with_anchor=True)
+    born_final = born_survey(g0, g1)
     born_ever = born_ever or born_final
     if born_final and first_born_t is None:
         first_born_t = steps
@@ -131,7 +131,9 @@ def run_config(
         "born_final": born_final,
         "born_ever": born_ever,
         "first_born_t": first_born_t,
-        "b_final": int(g1["b_hits_topk"]),
+        "readout_schema": READOUT_SCHEMA,
+        "b_final_survey": int(g1["b_argmax"]),
+        "lanes_final": dual_lanes(g1),
         "b_max": max_b,
         "w_max": round(max_w, 4),
         "n_def_final": len(final_defects),
@@ -196,7 +198,7 @@ def main() -> int:
         print(
             f"{i + 1}/{len(configs)} settle={settle:3d} ang={angle:.3f} {axis} "
             f"born_f={int(row['born_final'])} ever={int(row['born_ever'])} "
-            f"b_f={row['b_final']} b_max={row['b_max']} net_n={row['net_n_final']:+.0f} "
+            f"b_f={row['b_final_survey']} b_max={row['b_max']} net_n={row['net_n_final']:+.0f} "
             f"@t{row['first_born_t']}",
             flush=True,
         )
@@ -205,7 +207,7 @@ def main() -> int:
         return (
             int(r["born_final"]),
             int(r["born_ever"]),
-            r["b_final"],
+            r["b_final_survey"],
             abs(r["net_n_final"]),
             r["b_max"],
         )
@@ -214,6 +216,7 @@ def main() -> int:
     elapsed = time.perf_counter() - t0
     out = {
         "id": "boil_wall_sweep",
+        "readout_schema": READOUT_SCHEMA,
         "dims": f"{nz}x{ny}x{nx}",
         "steps": args.steps,
         "sample_every": args.sample_every,
@@ -226,7 +229,7 @@ def main() -> int:
     for r in ranked[: args.top]:
         print(
             f"  settle={r['settle']:3d} ang={r['delta_angle']:.3f} axis={r['axis']} "
-            f"born_f={int(r['born_final'])} b_f={r['b_final']} b_max={r['b_max']} "
+            f"born_f={int(r['born_final'])} b_f={r['b_final_survey']} b_max={r['b_max']} "
             f"net_n={r['net_n_final']:+.0f} min_pair={r['min_pair_dist']} "
             f"contrast={r['contrast_final']}",
             flush=True,

@@ -6,7 +6,7 @@ Family: phase_class(y,x)=(dy·y + dx·x + offset) mod N_φ with |dy|=|dx|=1
 so axis NN differ by one class ⇒ Δφ=Δφ_min. Enumerate offset∈0..N_φ−1 and
 the four axis sign pairs. Rejected family: free N_ring plane-wave ramp.
 
-Gate: b≥1 at density peak (|n_∂|≥¾).
+Readout: survey lane (spontaneous birth on brick boil).
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ import time
 
 import torch
 
-from mt_ca.app import BrickSpec, gate_b, brick_axis_configs
+from mt_ca.app import READOUT_SCHEMA, born_survey, brick_axis_configs, BrickSpec, gates_at_z
 from mt_ca.app.habitat import HabitatPreset
 from mt_ca.app.runner import apply_scenario
 from mt_ca.app.scenario import ScenarioSpec
@@ -39,17 +39,17 @@ def run_one(
         brick=brick,
     )
     apply_scenario(sim, scenario)
-    g0 = gate_b(sim.z)
+    g0 = gates_at_z(sim.z, with_anchor=False)
     sim.step(steps)
-    g1 = gate_b(sim.z)
+    g1 = gates_at_z(sim.z, with_anchor=False)
     return {
         "class_dy": brick.class_dy,
         "class_dx": brick.class_dx,
         "class_offset": brick.class_offset,
         "gate0": g0,
         "gate1": g1,
-        "passed": bool(g1["passed"]),
-        "born": bool(g1["passed"] and not g0["passed"]),
+        "passed_survey": bool(g1["passed_survey"]),
+        "born": born_survey(g0, g1),
     }
 
 
@@ -73,7 +73,7 @@ def main() -> int:
     t0 = time.perf_counter()
     for i, brick in enumerate(configs):
         row = run_one(sim=sim, brick=brick, steps=args.steps)
-        if row["passed"]:
+        if row["passed_survey"]:
             hits.append(row)
         if row["born"]:
             born.append(row)
@@ -86,6 +86,7 @@ def main() -> int:
     elapsed = time.perf_counter() - t0
     out = {
         "id": "seed_brick_scan",
+        "readout_schema": READOUT_SCHEMA,
         "N_phi": n_phi,
         "family": "filled_Heisenberg_brick_NN_dclass_1",
         "rejected_family": "N_ring_plane_wave_ramp",
@@ -104,7 +105,7 @@ def main() -> int:
         ],
         "hit_rows": hits,
         "born_rows": born,
-        "gate": "b≥1 at density peak (|n_∂|≥¾)",
+        "readout": "survey lane only (no planted anchor on brick grid)",
     }
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:

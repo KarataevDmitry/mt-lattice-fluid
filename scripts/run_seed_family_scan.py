@@ -9,7 +9,9 @@ Families (enum — few):
 Rejected elsewhere: free N_ring stripe ramp (run_seed_ring_scan).
 Brick-offset sweep was one BOIL sub-family; this is the class switch.
 
-Gate: b≥1 at density peak (|n_∂|≥¾), channels rel/u1/auto.
+Readout instrument (``READOUT_SCHEMA``):
+  **survey** — spontaneous birth hunt (local ρ maxima, torus-safe)
+  **anchor** — lattice-center column (planted vortex persistence)
 """
 
 from __future__ import annotations
@@ -20,7 +22,15 @@ import time
 
 import torch
 
-from mt_ca.app import RunSpec, gate_b, scenario_for_seed
+from mt_ca.app import (
+    READOUT_SCHEMA,
+    born_survey,
+    dual_lanes,
+    gates_at_z,
+    planted_lost,
+    planted_persisted,
+    scenario_for_seed,
+)
 from mt_ca.app.runner import apply_scenario
 from mt_ca.config import MConfig
 from mt_ca.seeds import SeedClass, make_seed
@@ -64,7 +74,7 @@ def run_one(
             phase_bits=sim.cfg.phase_bits,
         )
         sim.set_field(z)
-    g0 = gate_b(sim.z)
+    g0 = gates_at_z(sim.z, with_anchor=True)
     planted = seed in PLANTED_FAMILIES
     born_ever = False
     first_born_t: int | None = None
@@ -75,39 +85,40 @@ def run_one(
             chunk = min(sample_every, steps - done)
             sim.step(chunk)
             done += chunk
-            g = gate_b(sim.z)
-            born_now = bool(g["passed"] and not g0["passed"])
+            g = gates_at_z(sim.z, with_anchor=True)
+            born_now = born_survey(g0, g)
             if born_now and not born_ever:
                 first_born_t = done
             born_ever = born_ever or born_now
-            samples.append(
-                {
-                    "t": done,
-                    "b_hits": int(g["b_hits_topk"]),
-                    "born": born_now,
-                    "contrast": g["contrast"],
-                    "winding_abs_max": g["winding_abs_max"],
-                }
-            )
-        g1 = gate_b(sim.z)
+            row = dual_lanes(g)
+            row["t"] = done
+            row["born_survey"] = born_now
+            samples.append(row)
+        g1 = gates_at_z(sim.z, with_anchor=True)
     else:
         sim.step(steps)
-        g1 = gate_b(sim.z)
-    born_final = bool(g1["passed"] and not g0["passed"])
+        g1 = gates_at_z(sim.z, with_anchor=True)
+    born_final = born_survey(g0, g1)
     born_ever = born_ever or born_final
     if born_final and first_born_t is None:
         first_born_t = steps
+    lanes0 = dual_lanes(g0)
+    lanes1 = dual_lanes(g1)
     return {
         "seed": seed.value,
         "role": "planted_control" if planted else "birth_candidate",
+        "readout_schema": READOUT_SCHEMA,
         "gate0": g0,
         "gate1": g1,
-        "passed": bool(g1["passed"]),
+        "lanes0": lanes0,
+        "lanes1": lanes1,
+        "passed_survey": bool(g1["passed_survey"]),
+        "passed_anchor": bool(g1["passed_anchor"]),
         "born": born_final,
         "born_ever": born_ever,
         "first_born_t": first_born_t,
-        "persisted": bool(planted and g0["passed"] and g1["passed"]),
-        "lost_plant": bool(planted and g0["passed"] and not g1["passed"]),
+        "persisted": planted_persisted(g0, g1) if planted else False,
+        "lost_plant": planted_lost(g0, g1) if planted else False,
         "samples": samples,
     }
 
@@ -170,24 +181,27 @@ def main() -> int:
         )
         rows.append(row)
         ever_s = f" ever={int(row['born_ever'])}@t{row['first_born_t']}" if sample_every else ""
+        sv = row["lanes1"]["survey"]
+        an = row["lanes1"]["anchor"]
         print(
             f"{i + 1}/{len(families)} {seed.value}: "
-            f"b0={int(row['gate0']['passed'])} b1={int(row['gate1']['passed'])} "
+            f"survey={int(sv['passed'])} anchor={int(an['passed'])} "
             f"born={int(row['born'])}{ever_s} "
-            f"contrast {row['gate0']['contrast']:.3g}→{row['gate1']['contrast']:.3g} "
-            f"|n|_auto {row['gate1']['winding_abs_max']:.3g} "
-            f"(rel {row['gate1']['winding_rel_max']:.3g} u1 {row['gate1']['winding_u1_max']:.3g})",
+            f"contrast {row['lanes0']['survey']['contrast']:.3g}→{sv['contrast']:.3g} "
+            f"|n|_auto {sv['w_max']:.3g} "
+            f"(rel {sv['w_rel']:.3g} u1 {sv['w_u1']:.3g})",
             flush=True,
         )
 
     elapsed = time.perf_counter() - t0
     born = [r for r in rows if r["born"]]
     born_ever_rows = [r for r in rows if r["born_ever"]]
-    hits = [r for r in rows if r["passed"]]
+    hits = [r for r in rows if r["passed_survey"]]
     persisted = [r for r in rows if r["persisted"]]
     lost = [r for r in rows if r["lost_plant"]]
     out = {
         "id": "seed_family_scan",
+        "readout_schema": READOUT_SCHEMA,
         "families": [s.value for s in families],
         "stencil": stencil,
         "dims": f"{nz}x{args.size}x{args.size}" if nz else f"{args.size}x{args.size}",
@@ -198,7 +212,7 @@ def main() -> int:
         "device": args.device,
         "scanned": len(rows),
         "seconds": round(elapsed, 3),
-        "hits_final_b": len(hits),
+        "hits_final_survey": len(hits),
         "born": len(born),
         "born_ever": len(born_ever_rows),
         "born_ever_keys": [r["seed"] for r in born_ever_rows],
@@ -210,7 +224,7 @@ def main() -> int:
         "persisted_keys": [r["seed"] for r in persisted],
         "lost_keys": [r["seed"] for r in lost],
         "rows": rows,
-        "gate": "b≥1 at density peak (|n_∂|≥¾) dual rel/u1/auto",
+        "readout": "survey=birth; anchor=planted persistence (center column)",
     }
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:
@@ -226,7 +240,7 @@ def main() -> int:
             f"scanned={out['scanned']} in {out['seconds']}s"
         )
         print(
-            f"born_final={out['born']} born_ever={out['born_ever']} hits_final={out['hits_final_b']} "
+            f"born_final={out['born']} born_ever={out['born_ever']} hits_survey={out['hits_final_survey']} "
             f"planted_ok={out['planted_persisted']} planted_lost={out['planted_lost']}"
         )
         print(f"born_keys={out['born_keys']}")

@@ -10,6 +10,15 @@ Quick start::
 """
 from mt_ca.app.brick import BrickSpec, brick_axis_configs
 from mt_ca.app.gates import gate_b, peak_stats
+from mt_ca.app.readout_probe import (
+    READOUT_SCHEMA,
+    born_survey,
+    dual_lanes,
+    gates_at_z,
+    planted_lost,
+    planted_persisted,
+    sample_row,
+)
 from mt_ca.app.habitat import HabitatPreset
 from mt_ca.app.results import RunResult, SCHEMA_VERSION
 from mt_ca.app.run_spec import RunSpec
@@ -26,7 +35,14 @@ __all__ = [
     "ScenarioSpec",
     "apply_scenario",
     "brick_axis_configs",
+    "READOUT_SCHEMA",
+    "born_survey",
+    "dual_lanes",
     "gate_b",
+    "gates_at_z",
+    "planted_lost",
+    "planted_persisted",
+    "sample_row",
     "get_scenario",
     "scenario_for_seed",
     "peak_stats",

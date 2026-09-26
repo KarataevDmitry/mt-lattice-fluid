@@ -6,7 +6,8 @@ from typing import Any
 
 import torch
 
-from mt_ca.app.gates import gate_b, peak_stats
+from mt_ca.app.gates import peak_stats
+from mt_ca.app.readout_probe import gates_at_z, planted_persisted
 from mt_ca.app.run_spec import RunSpec
 from mt_ca.app.results import RunResult
 from mt_ca.app.scenario import ScenarioSpec
@@ -78,18 +79,28 @@ def run(spec: RunSpec) -> RunResult:
     )
     apply_scenario(sim, spec.scenario)
 
-    gate0 = gate_b(sim.z)
+    planted = spec.scenario.seed in (
+        SeedClass.VORTEX_P,
+        SeedClass.VORTEX_M,
+        SeedClass.VORTEX_N2,
+    )
+    gate0 = gates_at_z(sim.z, with_anchor=True)
     samples: list[dict[str, Any]] = []
     t0 = time.perf_counter()
+    ps_anchor = "center" if planted else None
 
     if spec.sample_every is not None:
-        samples.append({"t": 0, **peak_stats(sim.z), "norm": sim.norm()})
+        samples.append(
+            {"t": 0, **peak_stats(sim.z, anchor=ps_anchor), "norm": sim.norm()}
+        )
         done = 0
         while done < spec.steps:
             chunk = min(spec.sample_every, spec.steps - done)
             sim.step(chunk)
             done += chunk
-            samples.append({"t": done, **peak_stats(sim.z), "norm": sim.norm()})
+            samples.append(
+                {"t": done, **peak_stats(sim.z, anchor=ps_anchor), "norm": sim.norm()}
+            )
     else:
         if spec.settle > 0:
             sim.step(spec.settle)
@@ -98,13 +109,13 @@ def run(spec: RunSpec) -> RunResult:
             sim.step(remaining)
 
     elapsed = time.perf_counter() - t0
-    gate1 = gate_b(sim.z)
+    gate1 = gates_at_z(sim.z, with_anchor=True)
     coarse = coarse_amplitude(sim.z, spec.block).cpu()
 
     extra: dict[str, Any] = {}
     if samples:
         extra["emerged_b"] = any(
-            s.get("b_hits_topk", 0) > 0 or s.get("b_argmax", 0) > 0 for s in samples[1:]
+            s.get("passed_survey", False) or s.get("passed_anchor", False) for s in samples[1:]
         )
         extra["contrast_grew"] = samples[-1]["contrast"] > samples[0]["contrast"] * 1.05
 
@@ -127,11 +138,7 @@ def run(spec: RunSpec) -> RunResult:
             "coarse_amp_max": float(coarse.max().item()),
             "steps_per_sec": round(spec.steps / elapsed, 1) if elapsed > 0 else None,
         },
-        ok=bool(gate1.get("passed")) if spec.scenario.seed in (
-            SeedClass.VORTEX_P,
-            SeedClass.VORTEX_M,
-            SeedClass.VORTEX_N2,
-        ) else None,
+        ok=bool(gate1["passed_anchor"]) if planted else None,
     )
 
 

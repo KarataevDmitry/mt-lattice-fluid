@@ -4,7 +4,7 @@
 Arms (2+1 hex or 3+1 FCC via --fcc):
   ice_uniform, ice_disk_d1, ice_wall_d1, ice_ripple, boil_control, boil_relax_wall
 
-Tracks born_final and born_ever (with --sample-every).
+Tracks born_final / born_ever via **survey** readout (with --sample-every).
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from typing import Any, Callable
 
 import torch
 
-from mt_ca.app import gate_b
+from mt_ca.app import READOUT_SCHEMA, born_survey, dual_lanes, gates_at_z
 from mt_ca.app.runner import apply_scenario
 from mt_ca.app.scenario import get_scenario
 from mt_ca.config import MConfig
@@ -68,7 +68,7 @@ def run_arm(
     sample_every: int | None = None,
 ) -> dict[str, Any]:
     ic_fn()
-    g0 = gate_b(sim.z)
+    g0 = gates_at_z(sim.z, with_anchor=True)
     born_ever = False
     first_born_t: int | None = None
     samples: list[dict[str, Any]] = []
@@ -78,39 +78,37 @@ def run_arm(
             chunk = min(sample_every, steps - done)
             sim.step(chunk)
             done += chunk
-            g = gate_b(sim.z)
-            born_now = bool(g["passed"] and not g0["passed"])
+            g = gates_at_z(sim.z, with_anchor=True)
+            born_now = born_survey(g0, g)
             if born_now and not born_ever:
                 first_born_t = done
             born_ever = born_ever or born_now
-            samples.append(
-                {
-                    "t": done,
-                    "b_hits": int(g["b_hits_topk"]),
-                    "born": born_now,
-                    "contrast": g["contrast"],
-                    "winding_abs_max": g["winding_abs_max"],
-                }
-            )
-        g1 = gate_b(sim.z)
+            row = dual_lanes(g)
+            row["t"] = done
+            row["born_survey"] = born_now
+            samples.append(row)
+        g1 = gates_at_z(sim.z, with_anchor=True)
     else:
         sim.step(steps)
-        g1 = gate_b(sim.z)
-    born_final = bool(g1["passed"] and not g0["passed"])
+        g1 = gates_at_z(sim.z, with_anchor=True)
+    born_final = born_survey(g0, g1)
     born_ever = born_ever or born_final
     if born_final and first_born_t is None:
         first_born_t = steps
+    lanes1 = dual_lanes(g1)
     return {
         "arm": label,
         "premise": premise,
+        "readout_schema": READOUT_SCHEMA,
         "gate0": g0,
         "gate1": g1,
-        "passed": bool(g1["passed"]),
+        "lanes1": lanes1,
+        "passed_survey": bool(g1["passed_survey"]),
         "born": born_final,
         "born_ever": born_ever,
         "first_born_t": first_born_t,
-        "contrast0": g0["contrast"],
-        "contrast1": g1["contrast"],
+        "contrast0": float(dual_lanes(g0)["survey"]["contrast"]),
+        "contrast1": float(lanes1["survey"]["contrast"]),
         "samples": samples,
     }
 
@@ -201,10 +199,11 @@ def main() -> int:
             if sample_every
             else ""
         )
+        sv0 = int(dual_lanes(row["gate0"])["survey"]["b"])
+        sv1 = int(row["lanes1"]["survey"]["b"])
         print(
             f"{i + 1}/{len(arms_spec)} {label:16} "
-            f"b0={row['gate0']['b_hits_topk']} b1={row['gate1']['b_hits_topk']} "
-            f"born={int(row['born'])}{ever_s} "
+            f"survey_b {sv0}→{sv1} born={int(row['born'])}{ever_s} "
             f"contrast {row['contrast0']:.2f}→{row['contrast1']:.1f}",
             flush=True,
         )
@@ -234,10 +233,11 @@ def main() -> int:
         if sample_every
         else ""
     )
+    sv0 = int(dual_lanes(relax_row["gate0"])["survey"]["b"])
+    sv1 = int(relax_row["lanes1"]["survey"]["b"])
     print(
         f"{len(arms_spec) + 1}/{len(arms_spec) + 1} boil_relax_wall  "
-        f"b0={relax_row['gate0']['b_hits_topk']} b1={relax_row['gate1']['b_hits_topk']} "
-        f"born={int(relax_row['born'])}{ever_s} "
+        f"survey_b {sv0}→{sv1} born={int(relax_row['born'])}{ever_s} "
         f"contrast {relax_row['contrast0']:.2f}→{relax_row['contrast1']:.1f}",
         flush=True,
     )
@@ -247,6 +247,7 @@ def main() -> int:
     born_ever = [r["arm"] for r in results if r["born_ever"]]
     out = {
         "id": "phase_iv_to_i",
+        "readout_schema": READOUT_SCHEMA,
         "premise": "META §3.2: ice + deterministic shift → spontaneous b?",
         "stencil": stencil,
         "dims": f"{nz}x{args.size}x{args.size}" if nz else f"{args.size}x{args.size}",
@@ -262,7 +263,7 @@ def main() -> int:
         "born_final_arms": born_final,
         "born_ever_count": len(born_ever),
         "born_ever_arms": born_ever,
-        "gate": "b≥1 at density peak (|n_∂|≥¾) dual rel/u1/auto",
+        "readout": "born_* = survey lane; anchor in lanes* for diagnostics",
     }
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:

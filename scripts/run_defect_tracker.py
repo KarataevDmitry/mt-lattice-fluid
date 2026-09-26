@@ -14,12 +14,13 @@ from typing import Any
 
 import torch
 
-from mt_ca.app import gate_b
+from mt_ca.app import READOUT_SCHEMA, dual_lanes, gates_at_z
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor, encode_spinor
+from mt_ca.matter_readout import defect_candidates
 from mt_ca.seeds import SeedClass, boil_ocean_spinor_3d, make_seed
 from mt_ca.simulator import LatticeFluidSimulator
-from mt_ca.topology import gate_plane_z, unravel_peak_index, winding_channels, winding_nearest_int
+from mt_ca.topology import winding_nearest_int
 
 
 def _apply_spinor_phase_wall(
@@ -47,34 +48,20 @@ def find_defect_peaks(
     contour_radius: int = 2,
     merge_r: float = 6.0,
 ) -> list[dict[str, Any]]:
-    """Defects at density peaks with |n_∂|≥¾ on the local readout plane."""
-    from mt_ca.spinor import spinor_density
-
-    rho = spinor_density(z)
-    flat = rho.reshape(-1)
-    k = min(top_k, flat.numel())
-    _, idx = torch.topk(flat, k)
-    ny, nx = rho.shape[-2:]
-    margin = contour_radius + 1
+    """Defects from survey readout instrument (column-snap + plane contour)."""
     raw: list[dict[str, Any]] = []
-    for i in range(k):
-        iz, iy, ix = unravel_peak_index(rho, int(idx[i].item()))
-        z_plane = gate_plane_z(z, iz) if iz is not None else z
-        if iy < margin or ix < margin or iy >= ny - margin or ix >= nx - margin:
-            continue
-        ch = winding_channels(z_plane, center=(iy, ix), radius=contour_radius)
-        w = ch["auto"]
-        if w != w or abs(w) < 0.75:
-            continue
-        pos = (iz or 0, iy, ix)
+    for row in defect_candidates(
+        z, top_k=top_k, contour_radius=contour_radius, require_local_max=False
+    ):
+        w = row.winding_auto
         raw.append(
             {
-                "iz": pos[0],
-                "iy": pos[1],
-                "ix": pos[2],
+                "iz": row.site.iz or 0,
+                "iy": row.site.y,
+                "ix": row.site.x,
                 "n": int(winding_nearest_int(w)),
                 "w": round(float(w), 4),
-                "rho": round(float(flat[idx[i]].item()), 4),
+                "rho": round(row.rho, 4),
             }
         )
     # merge peaks within merge_r (same blob, multiple top-k hits)
@@ -164,7 +151,8 @@ def track_run(
                 if p["dist_cells"] < 8.0:
                     close_encounters.append({"t": done, **p})
         links, births, deaths = _match_tracks(prev_defects, defects)
-        gate = gate_b(sim.z)
+        gate = gates_at_z(sim.z, with_anchor=True)
+        lanes = dual_lanes(gate)
         frames.append(
             {
                 "t": done,
@@ -175,8 +163,9 @@ def track_run(
                 "links": links,
                 "births": len(births),
                 "deaths": len(deaths),
-                "gate_b": gate["b_hits_topk"],
-                "winding_abs_max": gate["winding_abs_max"],
+                "readout": lanes,
+                "survey_b": lanes["survey"]["b"],
+                "survey_w_max": lanes["survey"]["w_max"],
             }
         )
         if done >= steps:
@@ -296,7 +285,7 @@ def main() -> int:
             mp = fr["min_pair_dist"]
             mp_s = f"{mp:.1f}" if mp is not None else "-"
             print(
-                f"  t={fr['t']:4d} n_def={fr['count']} b={fr['gate_b']} "
+                f"  t={fr['t']:4d} n_def={fr['count']} survey_b={fr['survey_b']} "
                 f"min_dist={mp_s} max_step_disp="
                 f"{max((l['disp_cells'] for l in fr['links']), default=0):.1f} "
                 f"births={fr['births']} deaths={fr['deaths']} {pos}",
@@ -310,6 +299,7 @@ def main() -> int:
 
     out = {
         "id": "defect_tracker",
+        "readout_schema": READOUT_SCHEMA,
         "dims": f"{nz}x{ny}x{nx}",
         "steps": args.steps,
         "sample_every": args.sample_every,
