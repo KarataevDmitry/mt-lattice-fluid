@@ -27,7 +27,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 **Stack:** scenario → lattice → lab (instruments always `sim.cfg`; T-panel `plane_mconfig` on gate plane).
 
 
-**Критерий готовности:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после settle; gate-plane readout `plane_mconfig`.
+**Критерий готовности:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после settle; макроописание gate-plane `plane_mconfig`.
 
 **Verify:** `Brick_internal_spectrum`, `Floor0_phase_space`, `Floor0_nE_excitation` PASS on FCC 32³ (CPU).
 
@@ -91,7 +91,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 **Code:** `SI.meter_decouple_from_M_row()` · verify `Meter_decouple_from_M` · MODEL §8.2·meter·decouple.
 
 
-## 2026-09-24 · §8.2·α·meter fint — N_a0/a0 readout (closed α-path)
+## 2026-09-24 · §8.2·α·meter fint — N_a0/a0 макроописание (closed α-path)
 
 **Критерий готовности:** meter/optical a0 is **not** an input to α. Preferred α + upstairs cascade predict `N_a0=N_c/α`, `a0=N_a0·l_P`. Optical Bohr ≈ T-door ~0.45%. H→ℤN_a0 without α remains OPEN census (does not block α).
 
@@ -118,9 +118,9 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 **Один экран.** Строка = известное ограничение → что требует от **`g`** → где в **MODEL** → **gap** → **verify** → **impl** → **следующий шаг**.
 
-**Метод:** ansatz **`g`** → наложить известное. **`l_P = √(ℏG/c³)`** — естественная длина; **`L = f·l_P`**. Нет **`hL→0`** на M — T-readout вверх (MODEL §0.4).
+**Метод:** ansatz **`g`** → наложить известное. **`l_P = √(ℏG/c³)`** — естественная длина; **`L = f·l_P`**. Нет **`hL→0`** на M — макроописание T вверх (MODEL §0.4).
 
-**Gap:** **—** закрыто · **sim** MODEL есть, код нет · **model** ещё не выведено в MODEL · **T** readout/metric.
+**Gap:** **—** закрыто · **sim** MODEL есть, код нет · **model** ещё не выведено в MODEL · **T** метрика T.
 
 **Verify:** `python verify_principles.py --device cpu` · T: `validate_mt.py` · snapshot **2026-09-22**.
 
@@ -135,7 +135,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **A5** | **Абс. ноль недостижим** | boiling vac; **`z≡0`** excluded | §2 · §0.5 | sim | **`A5`** · **`PlanckVacuumFloor`** PASS | `heisenberg_floor` · seeds | ≠ D5 при floor — MODEL §2.3.8 |
 | **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
 | **A7** | **`ρ ≤ ρ_P`** | **`K_P`** в Φ; clamp | §2 · §3.12.5 | sim | **`A7`** PASS | `bekenstein_scale_spinor` | — |
-| **A8** | **Macro-линейность** | **`w(ρ)`** затухает | §2 · §3.4 | T | **`A8`** PASS | gate **`w(ρ)`** | T-readout probes |
+| **A8** | **Macro-линейность** | **`w(ρ)`** затухает | §2 · §3.4 | T | **`A8`** PASS | gate **`w(ρ)`** | макроописание T probes |
 | **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | sim | **`A9`** stationarity PASS · plateau ceiling open | `cr_phi_int` in Φ | absolute ν_CA band |
 | **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | — | seeds OK · **`A10`** evolution PASS (HF off) | `topology` · seeds | — |
 | **A11** | **Soliton / anti-smear** | **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | sim | **`A11`** PASS | saturating Φ | — |
@@ -169,7 +169,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 ## §3. Open leaves (индекс)
 
-- **§3.9 DA:** long-run exact `n` conservation on contour (T-readout шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
+- **§3.9 DA:** long-run exact `n` conservation on contour (макроописание T шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
 - **§3.10 SU(2):** full SM electron-from-`hV` sim (algebra `m_e=α²·m_H/N_φ` ✅ · `Electron_mass`; sim census still open)
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
@@ -183,17 +183,17 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
-- **§4.1.0 FCC/hex Green:** depth-2 path-Green algebra ✅ (`T_continuum_readout`); R-fold accumulation / soft sim leaf open
+- **§4.1.0 FCC/hex Green:** depth-2 path-Green algebra ✅ (`mt_ca/t_analysis.py`); R-fold accumulation / soft sim leaf open
 - **§4.1.1-HL hydro:** Thm **T-HL** algebra ✅ (`T_hydro_limit`: `M=(4/3)I`, `Ŵ=1−(2/3)|k|²`, `κ=1/12` → NLSE+ν / NS-class); live FCC R-fold + `ω_macro` fit open
 - **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
 - **§4.10 tunnel:** slab barrier $N$ · $|\mathcal{A}|\sim\tau^N$ · WKB continuum — open DoD
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
-- **§5.0 binary ρ:** occupancy readout on T — open
+- **§5.0 binary ρ:** заполнение на T on T — open
 - **§5.0.1 Arg mass:** **`m_H=m_P α_fs⁸ √(π/2)`** ✅ algebra · width/lineshape open
 - **§5.0.3 antimatter:** sim VORTEX_P + VORTEX_M → n_net→0 + 2-front — open
 - **§5.2.2 κ_link:** sim ballistic check on `c` — open
-- **§5.3 gas:** sim EOS / `P(ρ)` readout — open
-- **§5.3.2 v_s:** численный `v_s` on T-readout — open
+- **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
+- **§5.3.2 v_s:** численный `v_s` on макроописание T — open
 - **§5.3.3 VdW:** T compression / occupancy — open
 - **§8.4.1–§8.4.4:** α_s runner ✅ · girth ✅ · GR+Эйнштейн ✅ · Weinberg+α+массы ✅ · **CKM $N_{gen}=d$, $\lambda=3/13$** ✅ · stencil/GW/Λ / census / IR / Aρη — open
 - **§8 Higgs:** **`m_H` algebra** ✅ · width / lineshape leaf open
@@ -300,7 +300,7 @@ z' = z · exp(iφ)
 | **projected 𝒩** | **`projected_collision.py`** · default **`use_projected_collision=True`** |
 | **`g` 2-го порядка** | **`reversible.evolve_canonical`** · **`projected_collision.py`** |
 | `(Z, Z_past)` + ledger | **`simulator.py`** |
-| decode/readout | **`fixed_point.decode_spinor`** — T/UI, not tick |
+| декодирование для T | **`fixed_point.decode_spinor`** — T/UI, not tick |
 
 ### §3.12 Leapfrog Z_N[i]
 
@@ -365,7 +365,7 @@ z' = z · exp(iφ)
 | 2026-09-22 | §8.2 распад | аннигиляция≠распад · free $\gamma$ / одиночный $n\pm1$ стабильны · $\Gamma,\tau$ open · `SI.decay_row` |
 | 2026-09-22 | §8.2 lemma | $m\ll m_P\not\Rightarrow$ must decay · масса≠стабильность · кирпич≠свободная $m_P$ |
 | 2026-09-22 | §8.4.2-G | Diff hinge: фиксированная решётка ≠ Diff · DoD = 2 моды + PPN γ→1 · anti-BD |
-| 2026-09-22 | §8.4.2-G lemma | ответ: $g$=strain readout, не free $h$ · Diff не axiom на FCC · verify = спектр IR |
+| 2026-09-22 | §8.4.2-G lemma | ответ: $g$=описание деформации T, не free $h$ · Diff не axiom на FCC · verify = спектр IR |
 | 2026-09-22 | §8.4.2-C′ | strain: $\varepsilon_e[\delta\rho]\to\ell_e\to\theta_f$; $h_{0i}[\Delta\varphi_e]$; не $\varepsilon\propto\Delta\varphi$ |
 | 2026-09-22 | §8.4.2-C′′ | физсмысл: $h_{00,ij}\leftarrow\varepsilon$ (strain≠Коши); $h_{0i}\leftarrow$ Madelung; Regge пассивен |
 | 2026-09-22 | §8.4.2-C′ | $\ell_P=\mathrm{const}$; $\ell_e$ = эффективная Regge-длина, не деформация шага |
@@ -379,11 +379,11 @@ z' = z · exp(iφ)
 | 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
 | 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete ledgers; **`T_MadelungContinuity`** |
-| 2026-09-23 | §4.9 T2 | probes: soliton=vortex; wave=dual Gaussian; 1-2-1 = T readout (не M); fringes≠fail |
+| 2026-09-23 | §4.9 T2 | probes: soliton=vortex; wave=dual Gaussian; 1-2-1 = макро T (не M); fringes≠fail |
 | 2026-09-23 | §4.1.0 | вывод `(1-2-1)`: атом `[1,1]/2` → `w∗w`; 2D `⊗`; FCC 3D multinomial — hinge |
 | 2026-09-23 | §4.1.0 physics | A1: depth-2 return-paths → `[1,2,1]`; `⊗`≠hex/FCC; κ независимо от бинома |
 | 2026-09-23 | §8.3.1 Δλ | empty-cell quantum `δλ=α_fs/(4π)`; stack `N_hier·δλ` → m_H≈125.31 (0.045%) |
-| 2026-09-23 | §8.3.1 | `m_H=v/2=m_P α⁸√(π/2)` · топология: peak·√(π/2); `λ=1/8` SM-readout |
+| 2026-09-23 | §8.3.1 | `m_H=v/2=m_P α⁸√(π/2)` · топология: peak·√(π/2); `λ=1/8` описание SM |
 | 2026-09-23 | §8.3.1 fix | снята фальш soft-wall «поля занятости»; `b`=бит, объём=`z` |
 | 2026-09-23 | §8.2 m_p | bare `m_p=α_fs·v/2≈0.8979 GeV` (−4.3% PDG) · тот же контур что `m_H=v/2` · edge `1+1/24` кандидат |
 | 2026-09-23 | §8.2 m_p pack | stack `1+κ²/N₁₂` (`κ=1/√2`, `N₁₂=12`) → m_p≈0.9353 GeV (0.32%); inscribed sphere, not soft |E| |
@@ -396,8 +396,8 @@ z' = z · exp(iφ)
 | 2026-09-24 | §8.2·α·carrier-soft | носитель: homogenize = product local($N_4$+SU2)×global($M$); subtract soft unit restores layers · candidate, not sealed |
 | 2026-09-24 | §8.2·α·7=N4+SU2 | семёрка soft unit: кандидат **фундаментальный** $7=N_4+3$ (крест+Паули); κ/n_□ — число/эхо; descent OPEN · `seven_N4_plus_SU2` |
 | 2026-09-24 | §6·seed·brick·scan | VACUUM_BOIL = N_φ Heisenberg bricks (full fill); reject N_ring ramp ring-scan; seeker → run_seed_brick_scan |
-| 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals closed as MODEL readout; §10→eng pointer · Gpu_eng_tail_close PASS |
-| 2026-09-24 | §1.7·torus·close | finite wall-free Λ=T³/T²; Λ×S¹=phase fiber; reject walls/sphere; N soft; eng wrap=readout · Carrier_torus_close PASS |
+| 2026-09-24 | §0.10·gpu·eng·tail·close | floor+seed / R(Φ)≠Euler / SI literals closed as MODEL макроописание; §10→eng pointer · Gpu_eng_tail_close PASS |
+| 2026-09-24 | §1.7·torus·close | finite wall-free Λ=T³/T²; Λ×S¹=phase fiber; reject walls/sphere; N soft; eng wrap=макроописание · Carrier_torus_close PASS |
 | 2026-09-24 | §6·floor1·C3·bath·контрольный расчёт | VACUUM_BOIL contrast grows; **b=1 after densitometer dual-channel** (stale emerged_b=False was blind A10); gauge VACUUM frozen · Floor1_C3_bath_контрольный расчёт PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·reopen | alone n_ticks=1 coarse soft (void artifact?); continuum≠M kept · Floor1_C3_gamma_close PASS |
 | 2026-09-24 | §6·floor1·C3·gamma·close | reject continuum Γ on M; local C3 τ_M=1·hT · Floor1_C3_gamma_close PASS |
@@ -422,7 +422,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·α·Arg-try | Arg identity Δm=m_arg/(2MN_a0) closed; best int M=97 ~−2080ppm; reject 137² / 1/(4π·11) / mass-cascade; derivation OPEN · Alpha_arg_binding_try PASS |
 | 2026-09-23 | §8.2·α·mass-defect | QM floor: α=√(2Δm/m_e); U/BE=2; E_coul_NN/E₀=α/κ; BE/E₀~1.58e-27 soft Arg; DoD Arg→Δm OPEN · Alpha_mass_defect_optics PASS |
 | 2026-09-23 | §8.2·α·descent | амнезия: vacuum→r→Ω→N_φ→charge; phase residue≠α; AFTER π-tower~2ppm / α_geom~263ppm; coupling fraction OPEN · `Alpha_descent` PASS |
-| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток r=1/(4π); число=π-tower (removed); F/hops/κ/M = readout; discrete FCC fraction OPEN · `Alpha_meaning` PASS |
+| 2026-09-23 | §8.2·α·meaning | опора: α=phase↔vacuum coupling; фазовый остаток r=1/(4π); число=π-tower (removed); F/hops/κ/M = макроописание; discrete FCC fraction OPEN · `Alpha_meaning` PASS |
 | 2026-09-23 | §8.2·F | сила на F₀: **α=κ/M**; M_target≈96.90; **M=97** −1040 ppm; **M=96=N₁₂N_hier** +9366 ppm; reject 137κ; π not replaced · `Alpha_force_lattice` PASS |
 | 2026-09-23 | §8.2·H | `N_a0` (размер H): Thm5.2⇒ℤ; mass≡hop α² (не независимый размер); отвергнуто `N_c·137` и optical a₀ как M; OPEN = H structure/`N_pack` · `Na0_H_carrier` PASS |
 | 2026-09-23 | N_a0 carrier | `na0_from_carrier_row` · **`Na0_from_carrier` PASS** — N_a0=(m_P/m_e)·137 (α_geom); stack FP inv≈137.089 (−384 ppm); pure 13/12/8/512 monomials OPEN; **N_c·137 path later rejected as α-input** |
@@ -433,7 +433,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2 α bridges | verify **`Alpha_bridges`**: δλ=α·r, B_hV runner, N_φ=|N₁₂|+1, Coulomb carrier PASS; r³ cascade OPEN (~4%); e₀/sim OPEN |
 | 2026-09-23 | META §3.0 | карточка «два времени»: A5-пена M (нет начала/конца) vs наблюдаемая UI (генезис есть); §0.6 · §2.3 · MODEL hub |
 | 2026-09-23 | META §3.0.1 | наш пузырь: CMB→`N_tick` ✅; full `Ψ` via `g⁻¹` ✕ (ℬ); realistic = seed §3.6 + constraints |
-| 2026-09-23 | META §3.0.1 fix | `t_SI=N·hT` exact on M (no readout); open = infer N + anchor N=0; N_today~10⁶¹ |
+| 2026-09-23 | META §3.0.1 fix | `t_SI=N·hT` exact on M (no макроописание); open = infer N + anchor N=0; N_today~10⁶¹ |
 | 2026-09-23 | bubble_tick | `SI.bubble_tick_row()` + verify **`Bubble_tick`**: N_today≈1.141×10⁶¹, N_CMB≈3.146×10⁵⁶, t_start=0 |
 | 2026-09-23 | §8.2·vac | A5 bath: `vacuum_bath_row` · `T_M,bath~10³¹ K` · `λ₀~l_P` · **`Vacuum_bath` PASS** · ≠ CMB · Bose open |
 | 2026-09-23 | §7.4 a≡l_P | `anchor_a_is_l_P_row` · **`Anchor_a_lP` PASS** — one ruler hL; √(ℏG/c³) check only; m_arg via c₀ |
@@ -447,7 +447,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2·geo | cuboctahedron 1-tick: **`V_cubo=(16/3)v_hV`** at `a=l_P` · `cuboctahedron_geometry_row` · **`Cuboctahedron_geo` PASS** · α_geom=137 (~260 ppm) exploratory; derived π ~2 ppm |
 | 2026-09-23 | §8.2·geo | `cuboctahedron_carrier_row` · **`Cuboctahedron` PASS** — ratio inventory (κ derived; V/S, 6/8, 135°, Φ_□ open) |
 | 2026-09-23 | §8.2·geo anchor | dimensional chain **`a=l_P` first** — `edge_a_m`, `V/S`, `A_□=a²`; ratios derived (κ=R_in/R_out after lengths) |
-| 2026-09-23 | §8.2·Φ_□ probe | `em_plaquette.py` · **`Phi_square_probe` PASS** — hull lattice path; vortex Δφ_NN~1.48; α link readout ok; **alpha_match_open** (1/r≠α yet) |
+| 2026-09-23 | §8.2·Φ_□ probe | `em_plaquette.py` · **`Phi_square_probe` PASS** — hull lattice path; vortex Δφ_NN~1.48; α link макроописание ok; **alpha_match_open** (1/r≠α yet) |
 | 2026-09-23 | §8.2·5 ΔB | derived $g$ **без** хода $\Delta B\neq 0$; $p\not\to e^+\pi^0$; confining girth-$d$ = $B$-класс; census sim всё ещё open |
 | 2026-09-23 | §4.1.1-HL | Thm **T-HL**: FCC depth-2 `M=(4/3)I` · `Ŵ=1−(2/3)|k|²` · Madelung → NLSE+ν / NS-class; `T_hydro_limit` |
 | 2026-09-23 | §4.1.0-T | Thm **T-CR** full proof: `2log cos(k/2)` series → `Ŵ/G=exp(−R k⁴/96+…)`; FCC/hex depth-2 census |
@@ -508,7 +508,7 @@ python scripts/run_symmetry_probe.py
 | 11 | **system_quanta:** **`Δx, Δt`, `N_frame`, `I_max`**; мозг/UI → META §2 | §4.8 · META §2 |
 | 12 | **Любая система:** из **`M, τ, R`** → **`N_frame`**, fractal **`m_P/M`** | §4.8 |
 | 13 | **Газ:** macro-облако **`hV`**; **`PV=nRT`**; **`v_s ≪ c`**; **VdW `a,b` из `K_P,l_P`** | §5.3 |
-| 14 | **Плотность M бинарна:** **`ρ ∈ {0, ρ_P}`**; macro **`1000 kg/m³`** = T-иллюзия binomial readout | §5.0 |
+| 14 | **Плотность M бинарна:** **`ρ ∈ {0, ρ_P}`**; macro **`1000 kg/m³`** = T-иллюзия binomialное усреднение | §5.0 |
 | 15 | **Масса M:** **`Arg(⟨z⟩/z)`**-зигзаг + **`K_P`**; **Higgs = T-пена**, не первопричина | §5.0.1 · §8.3 |
 | 16 | **Arg-квант:** **`s₀=ℏ/2`**, **`E₀=E_P/√2`**, **`m_arg=m_P/√2`**, **`v_arg=c₀`** | §5.0.2 |
 | 17 | **Дуализм = T-иллюзия:** M — чистая жидкость; «частица» = солитон; Young = CR-схлоп | §4.9 |
@@ -548,7 +548,7 @@ _геометрия(n,N₄)**.
 
 ---
 
-## §10. GPU / численная реализация (simulation readout · физика closed)
+## §10. GPU / численная реализация (симуляционное макроописание · физика closed)
 
 **Физика предохранителей закрыта в MODEL:** §1.7 (тор) · **§0.10** (пол/seed · `R(Φ)` · SI literals) · verify `Carrier_torus_close` · `Gpu_eng_tail_close`.  
 Ниже — **только** пути в коде. Не новая физика, не knobs.
@@ -585,7 +585,7 @@ x+N ≡ x ,   y+N ≡ y
 
 ## §10.5 Thermometer dual-channel (2026-09-24)
 
-**Gap:** A10 readout was only `∮ d arg(z₂/z₁)`. Locked equal-lane boil (`z₁≡z₂`, VACUUM_BOIL bricks) → rel≡0 → seeker reported dead universe while contrast grew.
+**Gap:** A10 макроописание was only `∮ d arg(z₂/z₁)`. Locked equal-lane boil (`z₁≡z₂`, VACUUM_BOIL bricks) → rel≡0 → seeker reported dead universe while contrast grew.
 
 **Fix:** `mt_ca/topology.py` — channels **rel** / **u1**=`Arg(z₁+z₂)` / **auto**=max`|n|`. MODEL §5.0 derived. `MatterOccupancyB` gate includes locked U(1) synth. Brick-scan gate reports `winding_rel_max` / `winding_u1_max`.
 
@@ -595,7 +595,7 @@ x+N ≡ x ,   y+N ≡ y
 
 **α·full-quant:** тонкая структура = `α=κ/M` из полного квантования (Thm 5.1 seats); `M=97` **теорема** closed; π-tower coarse as descent; soft −1040 ppm OPEN. `Alpha_full_quantization_bridge`.
 
-**Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только T-readout. `Coulomb_M_native`.
+**Coulomb M-native:** закон силы на M — `F=n₁n₂ F₀/(M N²)` без continuum-α/π-tower; α=κ/M только макроописание T. `Coulomb_M_native`.
 
 **α·U0·soft face:** preferred ~−0.000068 ppm (~0.45σ). Soft unit from symmetry: $U=(d+1)/d=1/(1−κ^{n_□})=8/7$. **Unit descent closed** — G-grade completeness: grade-0 soft singlet once in M-scale den (soft-minus; not ×M; not in num). `derivation_closed=True`. Global-M book false trail. Upstairs on `alpha_preferred`.
 
@@ -607,7 +607,7 @@ x+N ≡ x ,   y+N ≡ y
 
 ## §11. Код (M-only slice)
 
-`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — simulation readout §0.10/§1.7.
+`mt_ca/`: M = `local_ca` + gate. T = `t_analysis.py` + `validate_mt.py`. Протокол: `BUILD.md` · константы: `si_constants.py` · §10 — симуляционное макроописание §0.10/§1.7.
 
 
 ### Layout MODEL после split

@@ -143,7 +143,7 @@ $(f^{t+1},f^t)=g(f^t,f^{t-1})$. **Период:** минимальное $T_B>0$
 
 **Решено:** когда найден $T_B$ или зафиксировано $T_B>T_{\max}$ в окне search.
 
-### C · readout (P0)
+### C · макроописание (P0)
 
 $\mathcal{O}^t=\mathcal{O}(z^t,\ldots)$ из instruments. **Период:** минимальное $T_C$ с $\mathcal{O}\circ g^{T_C}=\mathcal{O}$ на attractor.
 
@@ -168,11 +168,11 @@ $\mu_k$ — один тик **полной** $g$ на фоне (FD/Jacobian). **
 
 **P0:** найти/отвергнуть $T_B$, $T_C$ (и $T_D$ при необходимости) для **полной** $g$ на `habitat_boil` **3+1**; явно развести с A.
 
-**Методы:** exact CA (`boil_period_solve --ca-cycle`), readout (`boil_functional_period`, `boil_period_solve`), symbolica $k$ + FD (`boil_linear_spectrum`). **Не $T$:** autocorr без functional; `best_shift` без $\varepsilon$; $\arg\mu$ при $|\mu|\gg 1$.
+**Методы:** exact CA (`boil_period_solve --ca-cycle`), макроописание (`boil_functional_period`, `boil_period_solve`), symbolica $k$ + FD (`boil_linear_spectrum`). **Не $T$:** autocorr без functional; `best_shift` без $\varepsilon$; $\arg\mu$ при $|\mu|\gg 1$.
 
 ---
 
-## Кипящий океан · функциональный период (readout + КА)
+## Кипящий океан · функциональный период (макроописание + КА)
 
 **Определение (дискретное):** наблюдаемая $\mathcal{O}^t=\mathcal{O}(z^t)$ **$T$-периодична** на отрезке траектории, если
 
@@ -188,7 +188,7 @@ $$
 
 | слой | объект | метрика |
 |------|--------|---------|
-| **readout** | contrast, kick, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
+| **макроописание** | contrast, kick, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
 | **КА** | пара leapfrog $(f_{\mathrm{curr}},f_{\mathrm{past}})\in\mathbb{Z}_N[i]^{\Lambda}$ | доля $t$ с **точным** совпадением пары при сдвige $T$; `exact_period_T` = минимальное $T$ с rate $=1$ |
 
 Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$). В конце прогона — блок **`=== ЧИТАТЬ ТАК ===`** (явные «НЕТ», не пустота).
