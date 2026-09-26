@@ -56,6 +56,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--bloch-only", action="store_true")
     parser.add_argument("--phase-space", action="store_true")
+    parser.add_argument("--excitation", action="store_true")
     parser.add_argument("--frac-bits", type=int, default=6)
     args = parser.parse_args()
 
@@ -77,6 +78,20 @@ def main() -> None:
             print(f"{key}: {row[key]}")
         print("planckon_core:", row["planckon_core"])
         print("bath_brick:", row["bath_brick"])
+        return
+
+    if args.excitation:
+        row = SI.floor0_nE_excitation_row()
+        for key in (
+            "habitat",
+            "n_E_peak_core",
+            "phi_ticks_peak_core",
+            "peak_tick",
+            "hits_planckon",
+            "checks_ok",
+        ):
+            print(f"{key}: {row[key]}")
+        print("first_hit:", row["first_hit"])
         return
 
     row = SI.internal_state_catalog_row()

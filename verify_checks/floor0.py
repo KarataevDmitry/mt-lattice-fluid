@@ -84,3 +84,28 @@ def check_brick_internal_spectrum(device: str = "cpu") -> dict:
         "n_E_excitation_sim_open": row["n_E_excitation_sim_open"],
         "note": row["note"],
     }
+
+
+def check_floor0_nE_excitation(device: str = "cpu") -> dict:
+    """§5.0.4-A — n_E≥1 on planckon core after settle (ledger track / kick-harness)."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor0_nE_excitation_row(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and row["habitat"] == "vacuum_boil"
+        and int(row["n_E_peak_core"]) >= 1
+        and int(row["hits_planckon"]) >= 1
+        and int(row["ticks_per_E0"]) == 41
+    )
+    return {
+        "id": "Floor0_nE_excitation",
+        "ok": ok,
+        "habitat": row["habitat"],
+        "n_E_peak_core": row["n_E_peak_core"],
+        "phi_ticks_peak_core": row["phi_ticks_peak_core"],
+        "peak_tick": row["peak_tick"],
+        "first_hit": row["first_hit"],
+        "hits_planckon": row["hits_planckon"],
+        "note": row["note"],
+    }

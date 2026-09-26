@@ -121,6 +121,21 @@ class SIFloor0Rows:
 
         return run_floor0_phase_space(size=size, settle=settle, track=track, device=device)
 
+    def floor0_nE_excitation_row(
+        self,
+        *,
+        size: int = 64,
+        settle: int = 64,
+        track: int = 32,
+        device: str = "cpu",
+    ) -> dict[str, float | int | str | bool | list | dict | None]:
+        """§5.0.4-A — n_E≥1 at planckon core via post-settle ledger track (kick-harness)."""
+        from mt_ca.app.runner import run_floor0_nE_excitation_harness
+
+        return run_floor0_nE_excitation_harness(
+            size=size, settle=settle, track=track, device=device
+        )
+
     def brick_internal_spectrum_row(
         self,
         *,
@@ -281,11 +296,11 @@ class SIFloor0Rows:
             "su2_monodromy_ok": su2_ok,
             "snapshot_ok": snapshot_ok,
             "ground_ok": ground_ok,
-            "n_E_excitation_sim_open": True,
+            "n_E_excitation_sim_open": False,
             "checks_ok": algebra_ok and ground_ok and su2_ok,
             "derivation_closed": False,
             "note": (
                 "§5.0.4-A: algebra + planckon on boiling ocean; SU(2) 2π/4π at settle. "
-                "n_E≥1 kick-harness still open."
+                "n_E≥1 in dynamics — verify Floor0_nE_excitation."
             ),
         }

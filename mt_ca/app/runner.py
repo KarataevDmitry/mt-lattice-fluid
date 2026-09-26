@@ -292,3 +292,96 @@ def run_floor0_phase_space(
             "Full Γ table still open."
         ),
     }
+
+
+def run_floor0_nE_excitation_harness(
+    *,
+    size: int = 64,
+    settle: int = 64,
+    track: int = 32,
+    device: str = "cpu",
+    min_n_E: int = 1,
+    winding_min: float = 0.75,
+) -> dict[str, Any]:
+    """§5.0.4-A — post-settle ledger track: n_E≥1 at planckon core under free g.
+
+    Protocol (kick-harness): floor0_planckon on VACUUM_BOIL → settle → track ticks;
+    read integer Φ and n_E from ``projected_phi_int`` at the planted core (not the
+    settled snapshot alone, which stays n_E=0).
+    """
+    from mt_ca.app.scenario import get_scenario
+    from mt_ca.projected_collision import projected_phi_int
+    from mt_ca.reversible import canonical_fixed
+    from mt_ca.si_constants import elementary_quanta_row, energy_ledger_ticks_per_E0
+    from mt_ca.topology import matter_occupancy_b, winding_channels
+
+    spec = RunSpec(
+        scenario=get_scenario("floor0_planckon"),
+        ny=size,
+        nx=size,
+        steps=0,
+        device=device,
+        settle=0,
+        track=0,
+    )
+    cfg = MConfig.for_stencil(spec.scenario.stencil)
+    sim = LatticeFluidSimulator(size, size, cfg, device=device)
+    apply_scenario(sim, spec.scenario)
+    cy = cx = size // 2
+    ticks_per_e0 = energy_ledger_ticks_per_E0(phase_bits=cfg.phase_bits)
+
+    for _ in range(settle):
+        sim.step(1)
+
+    hits: list[dict[str, int | float | bool]] = []
+    peak_n_e = 0
+    peak_phi = 0
+    peak_tick = 0
+
+    for tick in range(1, track + 1):
+        sim.step(1)
+        f = canonical_fixed(sim.z, cfg)
+        phi = projected_phi_int(f, cfg)
+        n_e = int(n_E_field(phi, cfg)[cy, cx].item())
+        phi_core = int(phi[cy, cx].abs().item())
+        b_core = int(matter_occupancy_b(sim.z, y=cy, x=cx))
+        w_abs = abs(float(winding_channels(sim.z, center=(cy, cx), radius=2)["auto"]))
+        if n_e > peak_n_e or (n_e == peak_n_e and phi_core > peak_phi):
+            peak_n_e = n_e
+            peak_phi = phi_core
+            peak_tick = tick
+        if n_e >= min_n_E and b_core == 1 and w_abs >= winding_min:
+            hits.append(
+                {
+                    "tick": tick,
+                    "n_E": n_e,
+                    "phi_ticks": phi_core,
+                    "b_core": b_core,
+                    "winding_abs": w_abs,
+                }
+            )
+
+    eq = elementary_quanta_row()
+    first = hits[0] if hits else None
+    ok = peak_n_e >= min_n_E and len(hits) >= 1
+
+    return {
+        "habitat": spec.scenario.habitat_label,
+        "settle": settle,
+        "track": track,
+        "ticks_per_E0": ticks_per_e0,
+        "E0_1_ticks": int(eq["delta_phi_min_disc"]),
+        "n_E_peak_core": peak_n_e,
+        "phi_ticks_peak_core": peak_phi,
+        "peak_tick": peak_tick,
+        "first_hit": first,
+        "hits_planckon": len(hits),
+        "hit_samples": hits[:8],
+        "min_n_E": min_n_E,
+        "checks_ok": ok,
+        "derivation_closed": False,
+        "note": (
+            "§5.0.4-A kick-harness: after planckon settle, free g yields n_E≥1 on core "
+            "in ledger track (integer Φ); settled snapshot alone stays n_E=0."
+        ),
+    }

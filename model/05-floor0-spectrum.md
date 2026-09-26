@@ -121,12 +121,12 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 | leaf | статус |
 |------|--------|
-| **$n_E\ge 1$ в свободной эволюции** | стандартные seeds не дают $\|\Phi\|\ge 41$ в gate; нужен отдельный kick-harness |
+| **$n_E\ge 1$ в свободной эволюции** | post-settle ledger track на ядре планкона — verify **`Floor0_nE_excitation`** (snapshot после settle остаётся $n_E=0$) |
 | **полный список внутренних состояний** | $\Gamma_{hV}$: оси $(q,p)$ + ground fixed point; полная таблица и возбуждённые ветки — нет |
 | **правила отбора** между внутренними уровнями | схема §5.0.4, не sim |
 | **внешние моды ε** (1-я NN-сфера) | §5.0.4-B / этаж 1 |
 
-**DoD этажа 0-A (текущий):** landmarks + ground + SU(2) monodromy + catalog + $\Gamma_{hV}$ ground fixed PASS; excitation sim — следующий под-leaf.
+**DoD этажа 0-A (текущий):** landmarks + ground + SU(2) monodromy + catalog + $\Gamma_{hV}$ ground fixed PASS; **$n_E\ge1$** на ядре в track PASS (`Floor0_nE_excitation`); полная таблица $\Gamma$ и ветки kick-harness с фиксированным импульсом — open.
 
 ---
 
