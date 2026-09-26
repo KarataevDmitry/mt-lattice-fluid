@@ -61,3 +61,9 @@ pass:
 
 pass_v2:
   expect_acoustic_gap_at_N_CMB: true
+
+pass_blanket:
+  T_lic_K_range: [4000.0, 12000.0]
+  T_vlism_K_range: [15000.0, 65000.0]
+  lic_sky_path_max: 0.35
+  vlism_sky_path_min: 0.65

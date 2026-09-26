@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Dogfood: settled boil ocean + ISM blanket (ММС) on top — readout distribution on the blanket.
-
-Vertical picture (z up):
-  bottom … ocean (vacuum_boil, settled)
-  top K layers — «одеяло»: same ℬ as interface, screened by spatial τ(n_H, wind).
-"""
+"""Dogfood: boil ocean (ST fabric) + ISM blanket — T_ISM map (LIC / VLISM), not CMB."""
 
 from __future__ import annotations
 
@@ -12,17 +7,12 @@ import argparse
 import json
 import sys
 import time
-from pathlib import Path
 from typing import Any
 
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.ism_blanket import (
-    apply_ism_blanket,
-    blanket_distribution_report,
-    tau_map_ism_blanket,
-)
+from mt_ca.ism_blanket import apply_ism_blanket, blanket_distribution_report, tau_map_ism_blanket
 from mt_ca.ism_screen import load_ism_constraints
 from mt_ca.seeds import boil_ocean_spinor_3d
 from mt_ca.simulator import LatticeFluidSimulator
@@ -32,9 +22,9 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--size", type=int, default=48)
     p.add_argument("--block", type=int, default=4)
-    p.add_argument("--thickness", type=int, default=6, help="ISM blanket layers (z)")
+    p.add_argument("--thickness", type=int, default=6)
     p.add_argument("--settle", type=int, default=128)
-    p.add_argument("--evolve", type=int, default=0, help="CA steps after blanket")
+    p.add_argument("--evolve", type=int, default=0)
     p.add_argument("--wind", default="x", choices=("x", "y"))
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--json", action="store_true")
@@ -60,7 +50,7 @@ def main() -> int:
         sim.step(args.settle)
     z_ocean = sim.z.clone()
 
-    tau = tau_map_ism_blanket(
+    tau, path = tau_map_ism_blanket(
         nz,
         nz,
         constraints,
@@ -86,45 +76,45 @@ def main() -> int:
         thickness=args.thickness,
         block=args.block,
         tau_2d=tau,
+        path_2d=path,
+        constraints=constraints,
     )
     elapsed = time.perf_counter() - t0
+    tism = rep["T_ism"]
+    q = tism["T_ism_map_K"]["quantiles"]
+    reg = tism["regimes"]
+    anc = tism["anchors_K"]
 
-    o = rep["ocean_before_blanket"]
-    u = rep["interface_after_blanket"]
-    b = rep["blanket_top"]
     lines = [
-        f"Океан до одеяла (интерфейс z={rep['iz_interface']}): |Φ| mean={o['mean']:.4f}, "
-        f"рябь rms/mean={o['rms_rel']:.4f}.",
-        f"Тот же интерфейс после установки одеяла: mean={u['mean']:.4f} (не трогаем).",
-        f"Верх одеяла ММС (z={rep['iz_blanket_top']}): mean={b['mean']:.4f}, rms/mean={b['rms_rel']:.4f} "
-        f"— средний уровень ×{rep['contrast_ratio_mean']:.3f}, рябь "
-        f"{'сглажена' if rep['blanket_smooths'] else 'как у океана'}.",
-        f"τ на одеяле: min={rep['tau_min']:.3f}, max={rep['tau_max']:.1f} "
-        f"(ветер {args.wind}: тонко у «Солнца», толще по ветру).",
-        "Это распределение на readout-слое T (|Φ| coarse), не карта n_e Voyager.",
+        f"T_ISM на одеяле: mean={tism['T_ism_map_K']['mean_K']:.0f} K "
+        f"(log10≈{tism['T_ism_map_K']['log10_mean']:.2f}), "
+        f"полоса {q['min']:.0f}…{q['max']:.0f} K.",
+        f"Небо LIC (path≤{constraints['pass_blanket']['lic_sky_path_max']}): "
+        f"median {reg['lic_sky_median_K']:.0f} K vs якорь {anc['T_LIC_nominal']:.0f} K "
+        f"(rel err {reg['lic_sky_rel_err']:.2f}).",
+        f"Небо VLISM (path≥{constraints['pass_blanket']['vlism_sky_path_min']}): "
+        f"median {reg['vlism_sky_median_K']:.0f} K vs ref {anc['T_VLISM_ref']:.0f} K "
+        f"(rel err {reg['vlism_sky_rel_err']:.2f}).",
+        "Не T_CMB и не T_M_bath — macro readout МЗВ на ткани океана.",
     ]
-    if args.evolve > 0:
-        lines.append(f"После {args.evolve} тактов КА одеяло слегка смешалось с океаном (см. json).")
 
     out: dict[str, Any] = {
         "id": "ism_blanket_over_ocean",
         "seconds": round(elapsed, 2),
         "dims": f"{nz}^3",
-        "blanket_thickness": args.thickness,
-        "settle": args.settle,
-        "evolve": args.evolve,
-        "wind_axis": args.wind,
         "report": rep,
         "interpretation_ru": lines,
     }
 
-    print("=== ISM blanket over boil ocean ===", flush=True)
+    print("=== ISM blanket · T_ISM readout ===", flush=True)
     for line in lines:
         print(f"  · {line}", flush=True)
+    status = "PASS" if tism["ok_T_ISM_hypothesis"] else "FAIL"
+    print(f"{status}  T_ISM_hypothesis", flush=True)
 
     if args.json:
         print(json.dumps(out, indent=2))
-    return 0
+    return 0 if tism["ok_T_ISM_hypothesis"] else 1
 
 
 if __name__ == "__main__":
