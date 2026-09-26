@@ -16,6 +16,36 @@ $e^2/(4\pi\varepsilon_0\hbar c)$.
 ($\hl$, $\htick$, $\kgeom$, $N_{12}$, $N_4$, $SU(2)$, $\Delta\phi_{\min}$)
 --- не объявить его входом и не подменить лабораторным якорем на~$M$.
 
+\section{Спектроскопическое имя и онтология}
+\label{sec:alpha-name}
+
+Исторически «тонкая структура'' --- мелкие \emph{расщепления} спектральных линий
+(релятивистские и смежные поправки к уровням).
+Позже то же слово закрепили за безразмерным EM-coupling в форме Соммерфельда
+\[
+  \alpha_{\mathrm{fs}}=\frac{e^2}{4\pi\varepsilon_0\hbar c}
+  \quad\text{(\cref{eq:alpha-fs}).}
+\]
+Удобная линейка СИ уже несёт $e$, $\hbar$, $c$, $\varepsilon_0$;
+$\alpha_{\mathrm{fs}}$ получают \emph{размерной комбинацией} «собрать безразмерное отношение''.
+Это не логическая ошибка, но перевёрнутая онтология:
+coupling выглядит \emph{производным} от T-якорей, хотя по смыслу на~$\Mlayer$ это первичное
+отношение квантов силы (\cref{sec:force-lattice}, \cref{def:alpha-meaning}).
+
+\begin{remark}[Порядок слоёв]
+\label{rem:alpha-name-order}
+\begin{enumerate}[label=\arabic*.]
+\item $\alpha_{\mathrm{fs}}$ --- число~$M$ из закона~$g$ и геометрии носителя (\cref{thm:alpha}).
+\item $e_0=e$ CODATA --- \textbf{якорь~$T$} (заряд в кулонах), не \emph{определение} $\alpha_{\mathrm{fs}}$.
+\item Формула через $e$, $\hbar$, $c$ --- \textbf{согласование} lab-readout с тем же coupling.
+\item «Тонкая структура'' \emph{спектра} --- другой феномен; не синоним определения $\alpha_{\mathrm{fs}}$.
+\end{enumerate}
+После time-first триады $\{t_P,\ell_P,m_P\}$ и такта $\htick=\kgeom t_P$
+все метры и секунды SI --- T-export; $\alpha_{\mathrm{fs}}$ остаётся точной безразмерной
+и задаёт hop-лестницу EM-длин ($N_{a0}=N_c/\alpha_{\mathrm{fs}}$, гл.~\ref{ch:si-sm}),
+а не наоборот.
+\end{remark}
+
 \section{Ложный след: $\alpha^*$ и $\pi$-башня}
 
 Первый соблазн --- спутать тонкую структуру с \emph{фазовым остатком вакуума}.
@@ -102,6 +132,7 @@ $\alpha=N_c/N_{a0}$, $\alpha^2=N_{re}/N_{a0}$ --- тождества длин в
 при уже известном $\alpha$; целое $N_{a0}$ из структуры H без $\alpha$ --- открыто.
 
 \section{Сила на решётке}
+\label{sec:force-lattice}
 
 Поворот --- спросить носитель о \emph{Кулоне на $F_0$},
 а не о $\pi$-степенях.
@@ -172,8 +203,10 @@ $U=d/(d+1)=7/8$ в знаменателе (не fitted по CODATA).
 
 \begin{definition}[Смысл $\alpha_{\mathrm{fs}}$]
 \label{def:alpha-meaning}
-$\alpha_{\mathrm{fs}}$ --- сила фазового сопряжения единичного заряда с вакуумом.
-Не $|N_{12}|$, не hop-счёт, не $\alpha^*$.
+$\alpha_{\mathrm{fs}}$ --- сила фазового сопряжения единичного заряда с вакуумом
+(телесный угол / фазовый объём emergent $d=3$).
+Не $|N_{12}|$, не hop-счёт, не $\alpha^*$, не фазовый остаток $r=1/(4\pi)$ (\cref{lem:vacuum-phase-residue}).
+Историческое имя и lab-формула --- \cref{sec:alpha-name,rem:alpha-name-order}.
 \end{definition}
 
 \section{Вверх по лестнице}
