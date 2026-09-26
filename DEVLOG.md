@@ -12,6 +12,10 @@
 
 
 
+## 2026-09-26 · mt_ca.app · drop legacy shims
+
+Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simulator`, draft `floor0_resonance*`. One API: scenario id + `embedding`.
+
 ## 2026-09-26 · mt_ca.app · scenario ⊥ embedding
 
 **Fix:** сценарий = только условия (habitat/seed); **2+1 / 3+1** — поле ``RunSpec.embedding``, не отдельный «hex scenario». Алиасы ``*_hex_slice`` → тот же scenario + embedding 2+1.
