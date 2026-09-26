@@ -373,12 +373,12 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 
 \begin{definition}[Элементарные шаг и такт]
 \label{def:step-tick}
-$\hl$ --- элементарный шаг: длина, на которую за один такт уходит сигнал.
-$\htick$ --- один такт эволюции.
-Тактовая скорость сигнала на~$M$
-\[
-  c_0 = \frac{\hl}{\htick}.
-\]
+Шаг решётки $a$, такт $\Delta t$ и тактовая скорость $c_0$ на~\Mlayer связаны так:
+\begin{equation}
+  c_0 = \frac{a}{\Delta t}.
+\end{equation}
+За один $\Delta t$ сигнал не дальше одного $a$.
+Номер такта --- $\tau\in\mathbb{Z}$; $t_{\mathrm{SI}}(\tau)=\tau\,\Delta t$ после моста (\cref{def:si-bridge}).
 \end{definition}
 
 \begin{definition}[Окрестность одного такта]

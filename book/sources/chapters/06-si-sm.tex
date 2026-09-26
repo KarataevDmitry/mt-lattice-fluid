@@ -9,46 +9,44 @@
 Ниже --- вся ось длины одним взглядом.
 
 От ячейки~$\hv$ до метра и гладкого ньютоновского мира одна ось длины:
-число планковских шагов~$N=L/\hl$.
-Каждый шаг шкалы~$N$ --- не новая физика, а тот же узел или оболочка,
+характерная длина~$\lambda$, отсчитываемая от кванта~$\ell_P=a$ (\cref{ch:descent,def:step-tick}).
+Каждый шаг шкалы~$\lambda$ --- не новая физика, а тот же узел или оболочка,
 прочитанная на большем радиусе или через осреднение~\cref{sec:readout,ch:macro}.
 
-\begin{definition}[Длина в планковских шагах]
+\begin{definition}[Длина и планковский квант]
 \label{def:hop-count}
-Для любой длины~$L$
-\[
-  N:=\frac{L}{\hl}=\frac{L}{\ell_P}.
-\]
-Якорь электромагнитной шкалы --- комптоновская длина электрона
-$N_c:=m_P/m_e\approx 2{,}3\times 10^{22}$.
+Длина $L$ на~\Tlayer, шаг $a$ на~\Mlayer (\cref{def:step-tick}); после \cref{def:si-bridge} $\ell_P:=a$.
+Характерная длина $\lambda$ и планковский квант $\ell_P$:
+\begin{equation}
+  \frac{\lambda}{\ell_P}
+  = \frac{L}{\ell_P},\qquad
+  \ell_P := a.
+\end{equation}
+Якорь EM --- $\lambda_C$; $N_c:=\lambda_C/\ell_P=m_P/m_e\approx 2{,}3\times 10^{22}$.
 \end{definition}
 
-На одной лестнице сосуществуют три закона роста~$N$; их нельзя смешивать.
-
-\begin{remark}[Три разных «лестницы'']
+На одной лестнице длины сосуществуют три закона роста~$\lambda$; их нельзя смешивать.
 Оглавление монографии (главы~1--9), битовая таблица $\mathrm{CL}{-}1\ldots\mathrm{CL}{-}8$
 на $\mathbb{Z}_{N_{\mathrm{ring}}}$ (\cref{ch:matter}) и шаги шкалы~$k$ ниже ---
-разные объекты.
-Здесь --- только \emph{физическая} ось длины до макромира.
-\end{remark}
+разные объекты; здесь --- только \emph{физическая} ось $\lambda$ до макромира.
 
 \paragraph{Геометрия каузальной звезды.}
 Составные оболочки до инфракрасной зоны растут степенями числа соседей FCC:
 \[
-  N=N_{12}^{m},\qquad N_{12}=12,\quad m=0,1,2,\ldots
+  \lambda=N_{12}^{m}\,\ell_P,\qquad N_{12}=12,\quad m=0,1,2,\ldots
 \]
-Это окно лептонного этажа ($m=3\ldots 5$ даёт $10^3\ldots 10^5\cdot\hl$),
+Это окно лептонного этажа ($m=3\ldots 5$ даёт $10^3\ldots 10^5\cdot a$),
 а не комптоновский или боровский радиус.
 
 \paragraph{Инфракрасная hop-лестница.}
 От якоря~$N_c$ длина растёт делением на~$\alpha_{\mathrm{fs}}$:
 \begin{equation}
 \label{eq:ir-hop-ladder}
-  N_{k+1}=\frac{N_k}{\alpha_{\mathrm{fs}}},\qquad
-  N_{-1}=\alpha_{\mathrm{fs}} N_c\quad(r_e),\quad
-  N_0=N_c\quad(\bar\lambda_C),\quad
-  N_1=\frac{N_c}{\alpha_{\mathrm{fs}}}\quad(a_0),\quad
-  N_k=\frac{N_c}{\alpha_{\mathrm{fs}}^{k}}\ \text{для }k\geq 0.
+  \lambda_{k+1}=\frac{\lambda_k}{\alpha_{\mathrm{fs}}},\qquad
+  \lambda_{-1}=\alpha_{\mathrm{fs}}\,\lambda_C\quad(r_e),\quad
+  \lambda_0=\lambda_C\quad(\bar\lambda_C),\quad
+  \lambda_1=\frac{\lambda_C}{\alpha_{\mathrm{fs}}}\quad(a_0),\quad
+  \lambda_k=\frac{\lambda_C}{\alpha_{\mathrm{fs}}^{k}}\ \text{для }k\geq 0.
 \end{equation}
 Тождества~\eqref{eq:ir-hop-ladder} согласованы с мостом к~SI (\cref{def:si-bridge}).
 
@@ -57,9 +55,9 @@ $N_c:=m_P/m_e\approx 2{,}3\times 10^{22}$.
 $v\sim\alpha_{\mathrm{fs}}^{8}$, $m_H\sim\alpha_{\mathrm{fs}}^{8}$,
 $m_p\sim\alpha_{\mathrm{fs}}^{1}v$, $m_e\sim\alpha_{\mathrm{fs}}^{2}m_H$,
 $m_\nu\sim\alpha_{\mathrm{fs}}^{5}m_H$.
-Длина тела массы~$M$ на том же законе: $N=m_P/M$.
+Длина тела массы~$M$ на том же законе: $\lambda=\hbar/(Mc)=\ell_P\,m_P/M$.
 
-\begin{proposition}[Шаги шкалы $N$ от планкона до метра]
+\begin{proposition}[Шаги шкалы $\lambda$ от планкона до метра]
 \label{prop:ladder-scale-steps}
 Порядок величин при $N_{12}=12$, $\alpha_{\mathrm{fs}}^{-1}\approx 137$:
 
@@ -69,22 +67,22 @@ $m_\nu\sim\alpha_{\mathrm{fs}}^{5}m_H$.
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{@{}r r r l l l@{}}
 \toprule
-$k$ & $N$ & $\log_{10}N$ & степень $\alpha$ & объект & слой \\
+$k$ & $\lambda/\ell_P$ & $\log_{10}(\lambda/\ell_P)$ & степень $\alpha$ & объект & слой \\
 \midrule
-0 & $1$ & $0$ & $m_P$ & планкон $\hv$ & $\Mlayer$ \\
-1 & $12$ & $1.1$ & --- & $\varepsilon$-звезда; $R_{\mathrm{dress}}=\hl$ & $\Mlayer$ \\
+0 & $1$ & $0$ & $m_P$ & планкон $\hv$; $\lambda=\ell_P$ & $\Mlayer$ \\
+1 & $12$ & $1.1$ & --- & $\varepsilon$-звезда; $R_{\mathrm{dress}}=a$ & $\Mlayer$ \\
 2 & $144$ & $2.2$ & --- & вторая координационная сфера & $\Mlayer$ \\
 3 & $1728$ & $3.2$ & --- & лептонное окно (пре-резонансы) & $\Mlayer$ \\
 4 & $2.07\times 10^4$ & $4.3$ & --- & полоса лептонного этажа & $\Mlayer$ \\
 5 & $2.5\times 10^5$ & $5.4$ & --- & верх лептонного этажа & $\Mlayer$ \\
 6 & $\sim 10^{15}$ & $15$ & confining & кварковые фокусы ($d\approx 3$) & $\Mlayer$ \\
 7 & $\alpha N_c$ & $20.2$ & $-1$ & $r_e$; адронная упаковка & $\Mlayer$--$\Tlayer$ \\
-8 & $N_c$ & $22.4$ & $0$ & $\bar\lambda_C(e)$; масса $m_e$ & $\Mlayer\to\Tlayer$ \\
+8 & $N_c$ & $22.4$ & $0$ & $\lambda_C$; масса $m_e$ & $\Mlayer\to\Tlayer$ \\
 9 & $N_c/\alpha$ & $24.5$ & $1$ & боровский $a_0$; облако H & $\Tlayer$ \\
 10 & $N_c/\alpha^2$ & $26.6$ & $2$ & орбиталь $\mathrm{\AA}$, $N_{\mathrm{pack}}$ & $\Tlayer$ \\
 11--13 & $\ldots$ & $28.8\ldots 33$ & $3\ldots 5$ & молекула, мм--см & $\Tlayer$ \\
 14 & $\sim 10^{35}$ & $35.3$ & $6$ & метр; macro-газ, тело & $\Tlayer$ \\
-15 & $\lambda\gg\sigma_R\hl$ & --- & --- & гладкий макромир (теор.~\ref{thm:t-cr}) & $\Tlayer$ \\
+15 & $\lambda\gg\sigma_R a$ & --- & --- & гладкий макромир (теор.~\ref{thm:t-cr}) & $\Tlayer$ \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -94,11 +92,11 @@ $k$ & $N$ & $\log_{10}N$ & степень $\alpha$ & объект & слой \\
 \begin{center}
 \small
 \begin{tabular}{@{}l@{\quad}l@{}}
-$k=0\ldots 5$ & $N=N_{12}^{m}$ --- геометрия составного узла на~$\Mlayer$ \\
-$k=6$ & $\sim 10^{15}\hl$ --- кварковый этаж (схема) \\
-$k=7\ldots 9$ & $N_{-1},N_0,N_1$ --- EM IR: $r_e\to\bar\lambda_C\to a_0$ \\
-$k\geq 10$ & $N_k=N_c/\alpha_{\mathrm{fs}}^{k}$ --- атом, химия, метр \\
-$k=15$ & $\lambda\gg\sigma_R\hl$ --- непрерывный предел readout'а без $\hl\to 0$ \\
+$k=0\ldots 5$ & $\lambda=N_{12}^{m}\ell_P$ --- геометрия составного узла на~$\Mlayer$ \\
+$k=6$ & $\lambda\sim 10^{15}\ell_P$ --- кварковый этаж (схема) \\
+$k=7\ldots 9$ & $\lambda_{-1},\lambda_0=\lambda_C,\lambda_1$ --- EM IR: $r_e\to\bar\lambda_C\to a_0$ \\
+$k\geq 10$ & $\lambda_k=\lambda_C/\alpha_{\mathrm{fs}}^{k}$ --- атом, химия, метр \\
+$k=15$ & $\lambda\gg\sigma_R a$ --- непрерывный предел readout'а без $a\to 0$ \\
 \end{tabular}
 \end{center}
 
@@ -109,11 +107,11 @@ $k=15$ & $\lambda\gg\sigma_R\hl$ --- непрерывный предел readout
 микроуровень опровергается лишь несходимостью макроинвариантов.
 
 \begin{remark}
-Радиус одевания электрона $R_{\mathrm{dress}}=\hl$ ($k=1$) не совпадает
+Радиус одевания электрона $R_{\mathrm{dress}}=a$ ($k=1$) не совпадает
 с комптоновской длиной ($k=8$) и с боровским радиусом ($k=9$).
 Степени $N_{12}^{m}$ ($k\leq 5$) и деления $N_c/\alpha^{k}$ ($k\geq 7$) ---
-разные законы на одной оси~$N$.
-Точные целые $N_k$ для $k\geq 10$ и число упаковки $N_{\mathrm{pack}}$
+разные законы на одной оси~$\lambda$.
+Точные $\lambda_k$ для $k\geq 10$ и число упаковки $N_{\mathrm{pack}}$
 атомной ячейки Вороного остаются предметом дальнейшего вывода.
 \end{remark}
 
@@ -121,9 +119,9 @@ $k=15$ & $\lambda\gg\sigma_R\hl$ --- непрерывный предел readout
 
 \begin{definition}[Планковская идентификация]
 \label{def:si-bridge}
-$\ell_P:=\hl$, $a=\hl$, $\kgeom$ из однотактового тела (гл.~\ref{ch:carrier}):
+$\ell_P:=a$, $\kgeom$ из однотактового тела (гл.~\ref{ch:carrier}):
 \[
-  \htick=\kgeom\, t_P,\quad E_0=\kgeom E_P,\quad c=\kgeom c_0.
+  \Delta t=\kgeom\, t_P,\quad E_0=\kgeom E_P,\quad c=\kgeom c_0.
 \]
 \end{definition}
 
@@ -138,7 +136,7 @@ $\kgeom$ выводится из геометрии, после чего $c=\kge
   [\ell_P]=[c\,t_P]=\mathrm{L},\qquad
   [m_P]=\left[\frac{\hbar}{c^{2}t_P}\right]=\mathrm{M}.
 \]
-Безразмерная $\kgeom$ даёт $[\htick]=\mathrm{T}$, $[c_0]=\ell_P/\htick=\mathrm{LT^{-1}}$,
+Безразмерная $\kgeom$ даёт $[\Delta t]=\mathrm{T}$, $[c_0]=\ell_P/\Delta t=\mathrm{LT^{-1}}$,
 $[c]=\kgeom c_0=\mathrm{LT^{-1}}$.
 Лестница §5.2.2: $[s_0]=[\hbar]=\mathrm{ML^{2}T^{-1}}$,
 $[E_0]=[s_0/\htick]=\mathrm{ML^{2}T^{-2}}$,

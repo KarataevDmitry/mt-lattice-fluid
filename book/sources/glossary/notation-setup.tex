@@ -1,0 +1,43 @@
+% glossaries-extra v5: стиль таблицы «Условные обозначения»
+
+\newglossarystyle{notationlong}{%
+  \renewenvironment{theglossary}{%
+    \small
+    \setlength{\tabcolsep}{6pt}%
+    \renewcommand{\arraystretch}{1.15}%
+    \begin{longtable}{@{}p{0.22\linewidth}p{0.72\linewidth}@{}}%
+    \toprule
+    \foreignlanguage{russian}{Обозначение} & \foreignlanguage{russian}{Смысл} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \foreignlanguage{russian}{Обозначение} & \foreignlanguage{russian}{Смысл} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+  }{%
+    \end{longtable}%
+  }%
+  \renewcommand*{\glossaryheader}{}%
+  \renewcommand*{\glsgroupheading}[1]{}%
+  \renewcommand{\glossentry}[2]{%
+    \ifglshasdesc{##1}{%
+      \glstarget{##1}{\glossentryname{##1}} &
+      \glossentrydesc{##1}\glspostdescription\space ##2\tabularnewline
+    }{%
+      \glossentryname{##1} & \tabularnewline
+    }%
+  }%
+  \renewcommand{\subglossentry}[3]{}%
+  \renewcommand*{\glsgroupskip}{}%
+}
+
+% Запись-заголовок секции: description пустой, name = \textit{...}
+\newcommand{\newnotationsection}[3]{%
+  \newglossaryentry{#1}{%
+    type=notation, sort={#2},
+    name={#3},
+    description={}%
+  }%
+}

@@ -1,0 +1,7 @@
+% Печать notation-glossary (записи: glossary/notation-entries.tex).
+\chapter*{Условные обозначения}
+\addcontentsline{toc}{chapter}{Условные обозначения}
+\label{ch:notation}
+
+% Все записи type=notation, порядок по полю sort (не noidx: иначе пусто до «следующего» прогона).
+\printunsrtglossary[type=notation,style=notationlong,sort=standard,nonumberlist]

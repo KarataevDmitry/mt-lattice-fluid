@@ -4,12 +4,16 @@
 
 ## Сборка
 
+Требуется **XeLaTeX** (скрипт сам ставит **MiKTeX** через `winget`, если TeX нет, и дописывает `...\MiKTeX\miktex\bin\x64` в user PATH).
+
 ```powershell
 cd book
 ./build.ps1
 ```
 
-PDF: `book/out/main.pdf` (XeLaTeX, Times New Roman, три прохода).
+PDF: `book/out/main.pdf` (XeLaTeX, Times New Roman, три прохода). Все артефакты (`main.aux`, `.log`, …) только в `book/out/` — не копируй `.aux` в `sources/` (ломает `\ref`).
+
+**Обозначения:** `glossaries-extra`, список в `sources/notation.tex`, записи в `sources/glossary/notation-entries.tex`. Записи `symb:…` в `notation-entries.tex`; в тексте и в `equation` — `\gls{symb:…}` (как в учебнике). Опционально короткие `\hl` = `\gls{symb:a}`. Код: `hL`/`hT`/`hV`. `\makenoidxglossaries`.
 
 ## Структура каталога
 

@@ -4,6 +4,92 @@ param([switch]$RenderFigures)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+function Get-MiKTeXBinDir {
+    $dirs = @(
+        (Join-Path $env:LOCALAPPDATA 'Programs\MiKTeX\miktex\bin\x64')
+        'C:\Program Files\MiKTeX\miktex\bin\x64'
+    )
+    foreach ($dir in $dirs) {
+        if (Test-Path -LiteralPath (Join-Path $dir 'xelatex.exe')) {
+            return $dir
+        }
+    }
+    return $null
+}
+
+function Ensure-MiKTeXInstalled {
+    if (Get-MiKTeXBinDir) {
+        return
+    }
+
+    $winget = Get-Command winget -ErrorAction SilentlyContinue
+    if (-not $winget) {
+        throw 'MiKTeX not found and winget is unavailable. Install from https://miktex.org/download'
+    }
+
+    Write-Host 'MiKTeX not found — installing via winget (MiKTeX.MiKTeX) ...'
+    & winget install --id MiKTeX.MiKTeX -e --accept-source-agreements --accept-package-agreements --disable-interactivity
+    # 0 = ok; negative winget codes include "already installed" on some builds
+    if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189) {
+        throw "winget MiKTeX install failed (exit $LASTEXITCODE)"
+    }
+
+    if (-not (Get-MiKTeXBinDir)) {
+        throw 'MiKTeX install finished but xelatex.exe was not found. Reopen the terminal or log off/on.'
+    }
+}
+
+function Ensure-MiKTeXUserPath {
+    $texBin = Get-MiKTeXBinDir
+    if (-not $texBin) {
+        return
+    }
+
+    $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    if ($null -eq $userPath) {
+        $userPath = ''
+    }
+    if ($userPath -notlike "*$texBin*") {
+        $newPath = if ([string]::IsNullOrWhiteSpace($userPath)) { $texBin } else { "$texBin;$userPath" }
+        [Environment]::SetEnvironmentVariable('Path', $newPath, 'User')
+        Write-Host "MiKTeX added to user PATH: $texBin"
+    }
+    if ($env:Path -notlike "*$texBin*") {
+        $env:Path = "$texBin;$env:Path"
+    }
+}
+
+function Resolve-XeLaTeX {
+    Ensure-MiKTeXInstalled
+    Ensure-MiKTeXUserPath
+
+    $onPath = Get-Command xelatex -ErrorAction SilentlyContinue
+    if ($onPath) {
+        return $onPath.Source
+    }
+
+    $candidates = @(
+        (Join-Path $env:LOCALAPPDATA 'Programs\MiKTeX\miktex\bin\x64\xelatex.exe')
+        'C:\Program Files\MiKTeX\miktex\bin\x64\xelatex.exe'
+        'C:\texlive\2025\bin\windows\xelatex.exe'
+        'C:\texlive\2024\bin\windows\xelatex.exe'
+        'C:\texlive\2023\bin\windows\xelatex.exe'
+    )
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+    }
+
+    throw 'xelatex not found after MiKTeX setup. Reopen the terminal and run build.ps1 again.'
+}
+
+$XeLaTeX = Resolve-XeLaTeX
+$texBin = Split-Path -Parent $XeLaTeX
+if ($env:Path -notlike "*$texBin*") {
+    $env:Path = "$texBin;$env:Path"
+}
+
 $Root = $PSScriptRoot
 $Sources = Join-Path $Root 'sources'
 $Out = Join-Path $Root 'out'
@@ -225,11 +311,30 @@ if ($RenderFigures) {
 $pdf = Join-Path $Out "$JobName.pdf"
 Stop-ProcessesLockingPdf -PdfPath $pdf
 
+# Stale artifacts in sources/ (from old builds without -aux-directory) break cross-refs.
+$staleInSources = @(
+    (Join-Path $Sources "$JobName.aux")
+    (Join-Path $Sources "$JobName.log")
+    (Join-Path $Sources "$JobName.out")
+    (Join-Path $Sources "$JobName.toc")
+    (Join-Path $Sources "$JobName.pdf")
+    (Join-Path $Sources "$JobName.synctex.gz")
+)
+foreach ($f in $staleInSources) {
+    if (Test-Path -LiteralPath $f) {
+        Remove-Item -LiteralPath $f -Force
+        Write-Host "removed stale: $($f.Replace($Root + '\', ''))"
+    }
+}
+
 Push-Location $Sources
 try {
     foreach ($pass in 1..3) {
         Write-Host "xelatex pass $pass/3 ..."
-        & xelatex -interaction=nonstopmode -halt-on-error -output-directory="$Out" -jobname="$JobName" main.tex
+        # aux + pdf must live in $Out; otherwise TeX reads sources/main.aux and refs stay ??.
+        & $XeLaTeX -interaction=nonstopmode -halt-on-error `
+            -output-directory="$Out" -aux-directory="$Out" `
+            -jobname="$JobName" main.tex
         if ($LASTEXITCODE -ne 0) {
             throw "xelatex failed (exit $LASTEXITCODE) on pass $pass"
         }

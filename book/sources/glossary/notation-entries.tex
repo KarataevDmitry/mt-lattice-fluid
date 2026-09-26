@@ -1,0 +1,198 @@
+% Записи notation-glossary (SSOT). Код: hL, hT, hV → $a$, $\Delta t$, $v_{\mathrm{p}}$.
+% Описания — в \newcommand (не inline в description={...}: xkeyval и `}`).
+% Имена макросов: нельзя \NotationDescc0 (TeX читает как \NotationDescc+0); только \NotationDescCzero.
+% glossaries раскрывает description в преамбуле: математика через \(...\), не $...$ и не \Cref.
+
+\newcommand{\NotationDescMlayer}{микроуровень: решётка, локальный закон g.}
+\newcommand{\NotationDescTlayer}{макроуровень: осреднённая физика, SI, эксперимент.}
+\newcommand{\NotationDescLambda}{счётное множество узлов носителя.}
+\newcommand{\NotationDescvp}{планкон --- элементарная ячейка на M.}
+\newcommand{\NotationDescg}{локальный обратимый закон эволюции; конфигурация в такт t.}
+\newcommand{\NotationDesca}{элементарный шаг решётки (шаг--такт); в коде hL.}
+\newcommand{\NotationDescdt}{длительность одного такта g (шаг--такт); в коде hT.}
+\newcommand{\NotationDesctau}{номер такта (поколение CA); связь с t\_SI после SI-моста.}
+\newcommand{\NotationDescCzero}{тактовая скорость сигнала на M; c\_0=a/\(\Delta t\) (шаг--такт).}
+\newcommand{\NotationDescCspeed}{макроскопическая скорость света после моста M\(\to\)T (SI-мост).}
+\newcommand{\NotationDesckgeom}{безразмерный коэффициент геометрии носителя (kappa в коде).}
+\newcommand{\NotationDescdhdt}{внешние координаты dh и dt (dh=a, dt=\(\Delta t\)).}
+\newcommand{\NotationDescL}{длина в метрах (слой T).}
+\newcommand{\NotationDesclambda}{характерная длина на шаге шкалы (комптоновская, боровская, \ldots).}
+\newcommand{\NotationDesclambdaC}{комптоновская длина электрона.}
+\newcommand{\NotationDesclambdak}{шаги IR-лестницы.}
+\newcommand{\NotationDescellP}{планковская длина; на носителе \(\ell_P=a\) (SI-мост).}
+\newcommand{\NotationDescNc}{безразмерное \(\lambda_C/\ell_P\); не «голое» N.}
+\newcommand{\NotationDescloglambda}{порядок длины в таблице шкалы.}
+\newcommand{\NotationDesctSI}{время в секундах (слой T).}
+\newcommand{\NotationDesctP}{планковское время; \(\Delta t=\kappa\,t_P\) (SI-мост).}
+\newcommand{\NotationDesclogtau}{порядок числа тактов (космология; verify: log10\_N\_today).}
+\newcommand{\NotationDescNring}{размер фазового кольца \(N_{\mathrm{ring}}\) (дискретная фаза).}
+\newcommand{\NotationDescBhv}{информационный бюджет ячейки; связь с \(N_{\mathrm{ring}}\) (дискретная фаза).}
+\newcommand{\NotationDescphiPhi}{дискретная фаза и фазовый kick за такт.}
+\newcommand{\NotationDescNphi}{число секторов Heisenberg-кванта фазы.}
+\newcommand{\NotationDescNFCC}{число ближайших соседей FCC; степени \(N_{12}^m\) --- геометрия звезды.}
+\newcommand{\NotationDescNpack}{число упаковки атомной ячейки (открытый вывод).}
+\newcommand{\NotationDescNhier}{число ступеней ослабления на T (VEV).}
+
+\newcommand{\NotationSecCarrierTitle}{\textit{Слои и носитель}}
+\newcommand{\NotationSecLatticeTitle}{\textit{Решётка: длина и время (не путать с \(N_{\mathrm{ring}}\))}}
+\newcommand{\NotationSecLengthTitle}{\textit{Длина в SI и по шкале}}
+\newcommand{\NotationSecTimeTitle}{\textit{Время в SI}}
+\newcommand{\NotationSecPhaseTitle}{\textit{Фаза, регистр ячейки (логарифмы в основе 2)}}
+\newcommand{\NotationSecNamedNTitle}{\textit{Именованные N (не ось длины)}}
+
+\newnotationsection{symb:sec-carrier}{carrier-00}{\NotationSecCarrierTitle}
+\newglossaryentry{symb:Mlayer}{%
+  type=notation, sort={carrier-01a},
+  name={\ensuremath{M}},
+  description={\NotationDescMlayer}%
+}
+\newglossaryentry{symb:Tlayer}{%
+  type=notation, sort={carrier-01b},
+  name={\ensuremath{T}},
+  description={\NotationDescTlayer}%
+}
+\newglossaryentry{symb:Lambda}{%
+  type=notation, sort={carrier-02},
+  name={\ensuremath{\Lambda}},
+  description={\NotationDescLambda}%
+}
+\newglossaryentry{symb:vp}{%
+  type=notation, sort={carrier-03},
+  name={\ensuremath{v_{\mathrm{p}}{,}\,v_p}},
+  description={\NotationDescvp}%
+}
+\newglossaryentry{symb:g}{%
+  type=notation, sort={carrier-04},
+  name={\ensuremath{g{,}\,\Psi^t}},
+  description={\NotationDescg}%
+}
+
+\newnotationsection{symb:sec-lattice}{lattice-00}{\NotationSecLatticeTitle}
+\newglossaryentry{symb:a}{%
+  type=notation, sort={lattice-01},
+  name={\ensuremath{a}},
+  description={\NotationDesca}%
+}
+\newglossaryentry{symb:dt}{%
+  type=notation, sort={lattice-02},
+  name={\ensuremath{\Delta t}},
+  description={\NotationDescdt}%
+}
+\newglossaryentry{symb:tau}{%
+  type=notation, sort={lattice-03},
+  name={\ensuremath{\tau\in\mathbb{Z}}},
+  description={\NotationDesctau}%
+}
+\newglossaryentry{symb:c0}{%
+  type=notation, sort={lattice-04},
+  name={\ensuremath{c_0}},
+  description={\NotationDescCzero}%
+}
+\newglossaryentry{symb:c}{%
+  type=notation, sort={lattice-05},
+  name={\ensuremath{c{=}\kappa c_0}},
+  description={\NotationDescCspeed}%
+}
+\newglossaryentry{symb:kgeom}{%
+  type=notation, sort={lattice-06},
+  name={\ensuremath{\kappa}},
+  description={\NotationDesckgeom}%
+}
+\newglossaryentry{symb:dhdt}{%
+  type=notation, sort={lattice-07},
+  name={\ensuremath{(dh{,}dt)}},
+  description={\NotationDescdhdt}%
+}
+
+\newnotationsection{symb:sec-length}{length-00}{\NotationSecLengthTitle}
+\newglossaryentry{symb:L}{%
+  type=notation, sort={length-01},
+  name={\ensuremath{L}},
+  description={\NotationDescL}%
+}
+\newglossaryentry{symb:lambda}{%
+  type=notation, sort={length-02},
+  name={\ensuremath{\lambda}},
+  description={\NotationDesclambda}%
+}
+\newglossaryentry{symb:lambdaC}{%
+  type=notation, sort={length-03},
+  name={\ensuremath{\lambda_C}},
+  description={\NotationDesclambdaC}%
+}
+\newglossaryentry{symb:lambdak}{%
+  type=notation, sort={length-04},
+  name={\ensuremath{\lambda_k}},
+  description={\NotationDesclambdak}%
+}
+\newglossaryentry{symb:ellP}{%
+  type=notation, sort={length-05},
+  name={\ensuremath{\ell_P}},
+  description={\NotationDescellP}%
+}
+\newglossaryentry{symb:Nc}{%
+  type=notation, sort={length-06},
+  name={\ensuremath{N_c}},
+  description={\NotationDescNc}%
+}
+\newglossaryentry{symb:loglambda}{%
+  type=notation, sort={length-07},
+  name={\ensuremath{\log_{10}(\lambda/\ell_P)}},
+  description={\NotationDescloglambda}%
+}
+
+\newnotationsection{symb:sec-time}{time-00}{\NotationSecTimeTitle}
+\newglossaryentry{symb:tSI}{%
+  type=notation, sort={time-01},
+  name={\ensuremath{t_{\mathrm{SI}}}},
+  description={\NotationDesctSI}%
+}
+\newglossaryentry{symb:tP}{%
+  type=notation, sort={time-02},
+  name={\ensuremath{t_P}},
+  description={\NotationDesctP}%
+}
+\newglossaryentry{symb:logtau}{%
+  type=notation, sort={time-03},
+  name={\ensuremath{\log_{10}|\tau|}},
+  description={\NotationDesclogtau}%
+}
+
+\newnotationsection{symb:sec-phase}{phase-00}{\NotationSecPhaseTitle}
+\newglossaryentry{symb:Nring}{%
+  type=notation, sort={phase-01},
+  name={\ensuremath{N_{\mathrm{ring}}{=}512}},
+  description={\NotationDescNring}%
+}
+\newglossaryentry{symb:Bhv}{%
+  type=notation, sort={phase-02},
+  name={\ensuremath{B_{v_{\mathrm{p}}}}},
+  description={\NotationDescBhv}%
+}
+\newglossaryentry{symb:phiPhi}{%
+  type=notation, sort={phase-03},
+  name={\ensuremath{\varphi_{\mathrm{disc}}{,}\,\Phi}},
+  description={\NotationDescphiPhi}%
+}
+\newglossaryentry{symb:Nphi}{%
+  type=notation, sort={phase-04},
+  name={\ensuremath{N_\phi{=}13}},
+  description={\NotationDescNphi}%
+}
+
+\newnotationsection{symb:sec-namedN}{namedN-00}{\NotationSecNamedNTitle}
+\newglossaryentry{symb:N12}{%
+  type=notation, sort={namedN-01},
+  name={\ensuremath{N_{12}{=}12}},
+  description={\NotationDescNFCC}%
+}
+\newglossaryentry{symb:Npack}{%
+  type=notation, sort={namedN-02},
+  name={\ensuremath{N_{\mathrm{pack}}}},
+  description={\NotationDescNpack}%
+}
+\newglossaryentry{symb:Nhier}{%
+  type=notation, sort={namedN-03},
+  name={\ensuremath{N_{\mathrm{hier}}}},
+  description={\NotationDescNhier}%
+}
