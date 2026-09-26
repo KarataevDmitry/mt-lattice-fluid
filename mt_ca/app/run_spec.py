@@ -1,16 +1,18 @@
-"""Run specification — grid, duration, device."""
+"""Run specification — scenario conditions + embedding + grid + duration."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from mt_ca.app.scenario import ScenarioSpec, get_scenario
+from mt_ca.app.dimension import LatticeDimension, nz_for_dimension, stencil_for_dimension
+from mt_ca.app.scenario import ScenarioSpec, get_scenario, resolve_scenario_id
 
 
 @dataclass(frozen=True, slots=True)
 class RunSpec:
-    """One executable simulation run."""
+    """One executable run: *what* (scenario) × *where* (embedding) × grid size."""
 
     scenario: ScenarioSpec
+    embedding: LatticeDimension
     ny: int
     nx: int
     steps: int
@@ -20,10 +22,16 @@ class RunSpec:
     sample_every: int | None = None
     settle: int = 0
     track: int = 0
+    run_id: str | None = None
+    """Original scenario/alias id passed to ``from_id`` (for logging)."""
 
     @property
-    def dimension(self):
-        return self.scenario.dimension
+    def dimension(self) -> LatticeDimension:
+        return self.embedding
+
+    @property
+    def stencil(self) -> str:
+        return stencil_for_dimension(self.embedding)
 
     @classmethod
     def from_id(
@@ -33,13 +41,25 @@ class RunSpec:
         ny: int,
         nx: int | None = None,
         steps: int,
+        embedding: LatticeDimension | None = None,
         nz: int | None = None,
         **kwargs: object,
     ) -> RunSpec:
-        scenario = get_scenario(scenario_id)
+        base_id, emb_alias = resolve_scenario_id(scenario_id)
+        scenario = get_scenario(base_id)
+        emb = embedding or emb_alias or LatticeDimension.VOLUME_3P1
         nx = nx if nx is not None else ny
-        if scenario.stencil == "fcc" and nz is None:
-            nz = ny
-        if scenario.stencil != "fcc":
+        if nz is None:
+            nz = nz_for_dimension(emb, ny)
+        elif emb is LatticeDimension.SLICE_2P1:
             nz = None
-        return cls(scenario=scenario, ny=ny, nx=nx, nz=nz, steps=steps, **kwargs)
+        return cls(
+            scenario=scenario,
+            embedding=emb,
+            ny=ny,
+            nx=nx,
+            nz=nz,
+            steps=steps,
+            run_id=scenario_id,
+            **kwargs,
+        )

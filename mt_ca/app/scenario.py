@@ -1,265 +1,125 @@
-"""Named simulation scenarios — SSOT for IC + habitat."""
+"""Named scenarios — SSOT for *conditions* (habitat + seed), not grid embedding.
 
+Embedding (2+1 vs 3+1) is chosen on ``RunSpec`` / ``open_lab(embedding=…)``.
+"""
 from __future__ import annotations
-
-
 
 from dataclasses import dataclass
 
-
-
 from mt_ca.app.brick import BrickSpec
-
-from mt_ca.app.dimension import LatticeDimension, dimension_for_stencil, grid_shape_label
-
-from mt_ca.app.stencil import CANON_STENCIL, SLICE_STENCIL
-
+from mt_ca.app.dimension import LatticeDimension
 from mt_ca.app.habitat import HabitatPreset
-
 from mt_ca.seeds import SeedClass
 
 
-
-
-
 @dataclass(frozen=True, slots=True)
-
 class ScenarioSpec:
-
-    """One reproducible simulation setup."""
-
-
+    """Initial conditions + habitat — same object in any embedding dimension."""
 
     id: str
-
     seed: SeedClass
-
     habitat: HabitatPreset
-
-    stencil: str = CANON_STENCIL
-
     brick: BrickSpec | None = None
-
     impulse_amplitude: float = 0.35
-
     description: str = ""
 
-
-
     @property
-
     def habitat_label(self) -> str:
-
         return self.habitat.value
 
 
-
-    @property
-
-    def dimension(self) -> LatticeDimension:
-
-        return dimension_for_stencil(self.stencil)
-
-
-
-    def grid_label(self, edge: int) -> str:
-
-        return grid_shape_label(self.dimension, edge)
-
-
-
 SCENARIOS: dict[str, ScenarioSpec] = {
-
     "habitat_boil": ScenarioSpec(
-
         id="habitat_boil",
-
         seed=SeedClass.VACUUM_BOIL,
-
         habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=CANON_STENCIL,
-
-        description="Filled boiling ocean (3+1 FCC, A5).",
-
+        description="Filled boiling ocean (A5).",
     ),
-
     "habitat_frozen": ScenarioSpec(
-
         id="habitat_frozen",
-
         seed=SeedClass.VACUUM,
-
         habitat=HabitatPreset.VACUUM_FROZEN,
-
-        stencil=CANON_STENCIL,
-
-        description="Gauge-fixed frozen vacuum — control (FCC).",
-
+        description="Gauge-fixed frozen vacuum — control.",
     ),
-
     "floor0_planckon": ScenarioSpec(
-
         id="floor0_planckon",
-
         seed=SeedClass.VORTEX_P,
-
         habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=CANON_STENCIL,
-
-        description="Planckon vortex on boiling ocean (§5.0.4-A, 3+1 FCC).",
-
+        description="Planckon vortex on boiling ocean (§5.0.4-A).",
     ),
-
     "birth_impulse": ScenarioSpec(
-
         id="birth_impulse",
-
         seed=SeedClass.IMPULSE,
-
         habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=CANON_STENCIL,
-
-        description="Impulse on boil — birth candidate (FCC).",
-
+        description="Impulse on boil — birth candidate.",
     ),
-
     "birth_plane_wave": ScenarioSpec(
-
         id="birth_plane_wave",
-
         seed=SeedClass.PLANE_WAVE,
-
         habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=CANON_STENCIL,
-
-        description="Plane-wave packet on boil (FCC).",
-
+        description="Plane-wave packet on boil.",
     ),
-
     "filled_bath_emergence": ScenarioSpec(
-
         id="filled_bath_emergence",
-
         seed=SeedClass.VACUUM_BOIL,
-
         habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=CANON_STENCIL,
-
-        description="Multi-arm bath emergence dogfood (§6 C3, FCC).",
-
+        description="Multi-arm bath emergence dogfood (§6 C3).",
     ),
+}
 
-    "floor0_planckon_hex_slice": ScenarioSpec(
-
-        id="floor0_planckon_hex_slice",
-
-        seed=SeedClass.VORTEX_P,
-
-        habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=SLICE_STENCIL,
-
-        description="2+1 hex slice only — legacy/dogfood, not cosmology SSOT.",
-
-    ),
-
-    "habitat_boil_hex_slice": ScenarioSpec(
-
-        id="habitat_boil_hex_slice",
-
-        seed=SeedClass.VACUUM_BOIL,
-
-        habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=SLICE_STENCIL,
-
-        description="2+1 hex boil slice — fixed-point control, not 3+1 dynamics.",
-
-    ),
-
+# Backward-compatible run ids → (canonical scenario, default embedding)
+SCENARIO_ALIASES: dict[str, tuple[str, LatticeDimension]] = {
+    "floor0_planckon_hex_slice": ("floor0_planckon", LatticeDimension.SLICE_2P1),
+    "habitat_boil_hex_slice": ("habitat_boil", LatticeDimension.SLICE_2P1),
 }
 
 
-
-
-
-def get_scenario(scenario_id: str) -> ScenarioSpec:
-
-    if scenario_id not in SCENARIOS:
-
-        raise KeyError(f"Unknown scenario '{scenario_id}'. Known: {sorted(SCENARIOS)}")
-
-    return SCENARIOS[scenario_id]
-
-
-
-
-
-_SEED_TO_SCENARIO: dict[SeedClass, str] = {
-
-    SeedClass.VACUUM_BOIL: "habitat_boil",
-
-    SeedClass.VACUUM: "habitat_frozen",
-
-    SeedClass.VORTEX_P: "floor0_planckon",
-
-    SeedClass.VORTEX_M: "floor0_planckon",
-
-    SeedClass.VORTEX_N2: "floor0_planckon",
-
-    SeedClass.IMPULSE: "birth_impulse",
-
-    SeedClass.PLANE_WAVE: "birth_plane_wave",
-
-}
-
-
-
-
-
-def scenario_for_seed(seed: SeedClass) -> ScenarioSpec:
-
-    """Map ``SeedClass`` to a scenario (registered id or inline on boil)."""
-
-    if seed in _SEED_TO_SCENARIO:
-
-        registered = get_scenario(_SEED_TO_SCENARIO[seed])
-
-        if registered.seed is seed:
-
-            return registered
-
-        return ScenarioSpec(
-
-            id=seed.value,
-
-            seed=seed,
-
-            habitat=HabitatPreset.VACUUM_BOIL,
-
-            stencil=CANON_STENCIL,
-
-            description=f"{seed.value} on boiling ocean (FCC)",
-
-        )
-
-    return ScenarioSpec(
-
-        id=seed.value,
-
-        seed=seed,
-
-        habitat=HabitatPreset.VACUUM_BOIL,
-
-        stencil=CANON_STENCIL,
-
-        description=f"{seed.value} on boiling ocean (FCC)",
-
+def resolve_scenario_id(scenario_id: str) -> tuple[str, LatticeDimension | None]:
+    if scenario_id in SCENARIOS:
+        return scenario_id, None
+    if scenario_id in SCENARIO_ALIASES:
+        base, emb = SCENARIO_ALIASES[scenario_id]
+        return base, emb
+    raise KeyError(
+        f"Unknown scenario '{scenario_id}'. Known: {sorted(SCENARIOS)} "
+        f"aliases: {sorted(SCENARIO_ALIASES)}"
     )
 
 
+def get_scenario(scenario_id: str) -> ScenarioSpec:
+    base_id, _ = resolve_scenario_id(scenario_id)
+    return SCENARIOS[base_id]
+
+
+def list_scenario_ids() -> list[str]:
+    return sorted(SCENARIOS) + sorted(SCENARIO_ALIASES)
+
+
+_SEED_TO_SCENARIO: dict[SeedClass, str] = {
+    SeedClass.VACUUM_BOIL: "habitat_boil",
+    SeedClass.VACUUM: "habitat_frozen",
+    SeedClass.VORTEX_P: "floor0_planckon",
+    SeedClass.VORTEX_M: "floor0_planckon",
+    SeedClass.VORTEX_N2: "floor0_planckon",
+    SeedClass.IMPULSE: "birth_impulse",
+    SeedClass.PLANE_WAVE: "birth_plane_wave",
+}
+
+
+def scenario_for_seed(seed: SeedClass) -> ScenarioSpec:
+    if seed in _SEED_TO_SCENARIO:
+        registered = get_scenario(_SEED_TO_SCENARIO[seed])
+        if registered.seed is seed:
+            return registered
+        return ScenarioSpec(
+            id=seed.value,
+            seed=seed,
+            habitat=HabitatPreset.VACUUM_BOIL,
+            description=f"{seed.value} on boiling ocean",
+        )
+    return ScenarioSpec(
+        id=seed.value,
+        seed=seed,
+        habitat=HabitatPreset.VACUUM_BOIL,
+        description=f"{seed.value} on boiling ocean",
+    )

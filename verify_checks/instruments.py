@@ -36,16 +36,22 @@ def check_instrument_panel_vortex(size: int = 48, device: str = "cpu") -> dict:
         "rho_field_si_J_m3": rho_si,
         "t_m_rest_si": t["t_m_rest"]["value_si"],
         "rho_contrast": panel["field"]["rho_contrast"],
-        "note": "§5 panel M+T via mt_ca.app.lab; 3+1 FCC canon (not hex slice)",
+        "note": "§5 panel via lab; floor0_planckon @ embedding 3+1",
     }
 
 
 def check_instrument_panel_hex_slice(size: int = 64, device: str = "cpu") -> dict:
-    """§5 panel on explicit **2+1 hex slice** scenario (component / legacy path)."""
+    """§5 panel on **2+1** embedding — same ``floor0_planckon`` conditions."""
+    from mt_ca.app.dimension import LatticeDimension
     from mt_ca.app.lab import open_lab
     from mt_ca.instruments import REGISTRY
 
-    lab = open_lab("floor0_planckon_hex_slice", size, device=device)
+    lab = open_lab(
+        "floor0_planckon",
+        size,
+        device=device,
+        embedding=LatticeDimension.SLICE_2P1,
+    )
     lab.settle(32)
     lab.step(32)
     panel = lab.panel()
@@ -63,7 +69,7 @@ def check_instrument_panel_hex_slice(size: int = 64, device: str = "cpu") -> dic
         "scenario_id": lab.meta["scenario_id"],
         "grid": lab.meta["grid"],
         "b_matter": site["b_matter"],
-        "note": "2+1 hex slice only — not cosmology SSOT",
+        "note": "Same planckon scenario; embedding=2+1 (hex slice)",
     }
 
 

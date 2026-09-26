@@ -99,18 +99,21 @@ def open_lab(
     scenario_id: str,
     edge: int,
     *,
+    embedding: LatticeDimension | None = None,
     device: str = "cpu",
     steps: int = 0,
     **run_kw: object,
 ) -> LabSession:
-    spec = build_run_spec(scenario_id, edge, device=device, steps=steps, **run_kw)
+    spec = build_run_spec(
+        scenario_id, edge, device=device, steps=steps, embedding=embedding, **run_kw
+    )
     sim = open_lattice(spec)
-    return LabSession(spec=spec, sim=sim, dimension=spec.scenario.dimension)
+    return LabSession(spec=spec, sim=sim, dimension=spec.embedding)
 
 
 def open_lab_from_spec(spec: RunSpec) -> LabSession:
     sim = open_lattice(spec)
-    return LabSession(spec=spec, sim=sim, dimension=spec.scenario.dimension)
+    return LabSession(spec=spec, sim=sim, dimension=spec.embedding)
 
 
 def planckon_lab_report(

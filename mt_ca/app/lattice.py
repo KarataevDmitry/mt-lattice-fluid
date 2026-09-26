@@ -1,11 +1,11 @@
-"""Lattice SSOT — scenario → RunSpec → initialized simulator."""
+"""Lattice SSOT — bind scenario conditions to an embedding grid."""
 from __future__ import annotations
 
 from mt_ca.app.dimension import (
     LatticeDimension,
-    dimension_for_stencil,
     grid_shape_label,
     nz_for_dimension,
+    stencil_for_dimension,
 )
 from mt_ca.app.run_spec import RunSpec
 from mt_ca.app.scenario import ScenarioSpec
@@ -20,41 +20,41 @@ __all__ = [
     "build_run_spec",
     "describe_lattice",
     "open_lattice",
-    # backward-compatible names
     "run_spec_cube",
     "open_simulator",
     "nz_for_scenario",
 ]
 
 
-def nz_for_scenario(scenario: ScenarioSpec, edge: int) -> int | None:
-    return nz_for_dimension(scenario.dimension, edge)
+def nz_for_scenario(scenario: ScenarioSpec, edge: int, embedding: LatticeDimension) -> int | None:
+    del scenario  # conditions do not set nz; embedding does
+    return nz_for_dimension(embedding, edge)
 
 
 def build_run_spec(
     scenario_id: str,
     edge: int,
     *,
+    embedding: LatticeDimension | None = None,
     device: str = "cpu",
     steps: int = 0,
     **kwargs: object,
 ) -> RunSpec:
-    """Executable ``RunSpec`` with correct ``nz`` for 3+1 vs 2+1."""
     return RunSpec.from_id(
         scenario_id,
         ny=edge,
         nx=edge,
         steps=steps,
         device=device,
+        embedding=embedding,
         **kwargs,
     )
 
 
 def open_lattice(spec: RunSpec) -> LatticeFluidSimulator:
-    """SSOT: habitat + seed + grid geometry → stepped-ready simulator."""
     from mt_ca.app.runner import apply_scenario
 
-    cfg = MConfig.for_stencil(spec.scenario.stencil)
+    cfg = MConfig.for_stencil(spec.stencil)
     sim = LatticeFluidSimulator(
         spec.ny,
         spec.nx,
@@ -67,19 +67,19 @@ def open_lattice(spec: RunSpec) -> LatticeFluidSimulator:
 
 
 def describe_lattice(spec: RunSpec) -> dict[str, str | int | None]:
-    dim = spec.scenario.dimension
     return {
+        "run_id": spec.run_id or spec.scenario.id,
         "scenario_id": spec.scenario.id,
-        "dimension": dim.value,
-        "stencil": spec.scenario.stencil,
+        "embedding": spec.embedding.value,
+        "dimension": spec.embedding.value,
+        "stencil": spec.stencil,
         "habitat": spec.scenario.habitat_label,
-        "grid": grid_shape_label(dim, spec.ny),
+        "grid": grid_shape_label(spec.embedding, spec.ny),
         "ny": spec.ny,
         "nx": spec.nx,
         "nz": spec.nz,
     }
 
 
-# Aliases (older call sites)
 run_spec_cube = build_run_spec
 open_simulator = open_lattice

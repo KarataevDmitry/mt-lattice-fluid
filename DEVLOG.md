@@ -12,6 +12,10 @@
 
 
 
+## 2026-09-26 · mt_ca.app · scenario ⊥ embedding
+
+**Fix:** сценарий = только условия (habitat/seed); **2+1 / 3+1** — поле ``RunSpec.embedding``, не отдельный «hex scenario». Алиасы ``*_hex_slice`` → тот же scenario + embedding 2+1.
+
 ## 2026-09-26 · mt_ca.app · lattice + lab (2+1 vs 3+1, instruments SSOT)
 
 **DoD:** `dimension.py` (`LatticeDimension`), `lattice.py` (`build_run_spec`, `open_lattice`), `lab.py` (`LabSession`, `open_lab`, `planckon_lab_report`). CLI: `list` (dim column), `panel`. Verify: `Instrument_panel_*` canon vs hex_slice; `Planckon_instrument_fcc` → lab. Tools/probes via `open_lab`.
