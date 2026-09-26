@@ -14,7 +14,7 @@ from typing import Any
 
 import torch
 
-from mt_ca.app import READOUT_SCHEMA, dual_lanes, gates_at_z
+from mt_ca.app import SURVEY_PROBE_SCHEMA, dual_lanes, gates_at_z
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor, encode_spinor
 from mt_ca.matter_survey import defect_candidates
@@ -163,7 +163,7 @@ def track_run(
                 "links": links,
                 "births": len(births),
                 "deaths": len(deaths),
-                "readout": lanes,
+                "survey": lanes,
                 "survey_b": lanes["survey"]["b"],
                 "survey_w_max": lanes["survey"]["w_max"],
             }
@@ -299,7 +299,7 @@ def main() -> int:
 
     out = {
         "id": "defect_tracker",
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "dims": f"{nz}x{ny}x{nx}",
         "steps": args.steps,
         "sample_every": args.sample_every,

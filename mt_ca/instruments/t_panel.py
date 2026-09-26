@@ -9,7 +9,7 @@ from mt_ca.config import MConfig
 from mt_ca.conservation import madelung_div_j
 from mt_ca.instruments.catalog import InstrumentId
 from mt_ca.instruments.scales import QuantityKind, reading
-from mt_ca.m_to_t import arg_mass_load, m_rest_readout, zigzag_activity
+from mt_ca.m_to_t import arg_mass_load, m_rest_macro, zigzag_activity
 from mt_ca.macro import macro_amplitude, macro_matter_b
 from mt_ca.matter_survey import default_anchor, plane_mconfig, spinor_plane
 from mt_ca.metrics import field_amplitude
@@ -20,7 +20,7 @@ from mt_ca.t_validation import (
     covariance_isotropy,
     isotropy_ratio,
     macro_mass,
-    nu_readout_passes,
+    nu_coarse_passes,
     profile_correlation,
     radial_speed_uniformity,
 )
@@ -49,7 +49,7 @@ def sample_t_field(
     if plane.ndim != 3:
         raise ValueError("T panel needs spinor (ny,nx,2) plane")
 
-    nu = nu_readout_passes(steps_for_nu, block) if steps_for_nu > 0 else 0
+    nu = nu_coarse_passes(steps_for_nu, block) if steps_for_nu > 0 else 0
     radius = max(1, block)
     coarse = coarse_grain(plane, block, nu_viscosity_passes=nu)
     amp_macro = macro_amplitude(plane, radius=radius, nu_viscosity_passes=nu)
@@ -61,7 +61,7 @@ def sample_t_field(
     plane_cfg = plane_mconfig(plane, cfg)
     zigzag = zigzag_activity(plane, plane_cfg)
     arg_load = arg_mass_load(plane, plane_cfg)
-    m_rest_legacy = m_rest_readout(plane, block)
+    m_rest_legacy = m_rest_macro(plane, block)
 
     iso = isotropy_ratio(amp_macro)
     cov_iso = covariance_isotropy(amp_macro)
@@ -140,8 +140,8 @@ def sample_t_field(
             QuantityKind.DIMENSIONLESS,
             float(peaks),
         ).to_dict(),
-        InstrumentId.T_NU_READOUT_PASSES.value: reading(
-            InstrumentId.T_NU_READOUT_PASSES.value,
+        InstrumentId.T_NU_COARSE_PASSES.value: reading(
+            InstrumentId.T_NU_COARSE_PASSES.value,
             QuantityKind.DIMENSIONLESS,
             float(nu),
         ).to_dict(),

@@ -14,7 +14,7 @@ import json
 from collections import defaultdict
 
 from mt_ca.analysis.functional_period import scan_ca_leapfrog_period, scan_observable_period
-from mt_ca.analysis.human_readout import functional_period_verdict, print_verdict
+from mt_ca.analysis.human_verdict import functional_period_verdict, print_verdict
 import torch
 
 from mt_ca.app.lab import open_lab

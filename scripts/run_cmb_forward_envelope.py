@@ -7,7 +7,7 @@ Pipeline:
   1. boil → settle → half-space phase wall (§3.2 dogfood)
   2. coarse binomial readout on Δρ = |Φ|_wall − |Φ|_base (slice at iz)
   3. extra ν_viscosity passes (§4.1.2 proxy for long bubble evolution)
-  4. extrapolate to N_CMB via nu_readout_passes(N_CMB, block)
+  4. extrapolate to N_CMB via nu_coarse_passes(N_CMB, block)
   5. invert: which δφ lands at δT/T ~ 10⁻⁵ after smoothing?
 """
 
@@ -32,7 +32,7 @@ from mt_ca.macro import binomial121_smooth, macro_amplitude
 from mt_ca.seeds import boil_ocean_spinor_3d
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.si_constants import SI, T_CMB_K_REF
-from mt_ca.t_validation import coarse_grain, nu_readout_passes
+from mt_ca.t_validation import coarse_grain, nu_coarse_passes
 
 from run_boil_wall_sweep import apply_half_space_wall
 
@@ -263,7 +263,7 @@ def main() -> int:
     bubble = SI.bubble_tick_row()
     bath = SI.vacuum_bath_row()
     n_cmb = int(bubble["N_CMB"])
-    nu_at_ncmb = nu_readout_passes(n_cmb, args.block)
+    nu_at_ncmb = nu_coarse_passes(n_cmb, args.block)
 
     cfg = MConfig.for_stencil("fcc")
     sim = LatticeFluidSimulator(nz, nz, cfg, nz=nz, device=args.device)
@@ -328,7 +328,7 @@ def main() -> int:
         "N_CMB": n_cmb,
         "N_CMB_sci": bubble["N_CMB_sci"],
         "N_today": bubble["N_today"],
-        "nu_readout_at_N_CMB": nu_at_ncmb,
+        "nu_coarse_at_N_CMB": nu_at_ncmb,
         "log10_nu_at_N_CMB": math.log10(nu_at_ncmb) if nu_at_ncmb > 0 else None,
         "calibration": cal_rows,
         "reference_row": {
@@ -359,7 +359,7 @@ def main() -> int:
     }
 
     print("\n=== CMB forward envelope ===", flush=True)
-    print(f"N_CMB = {bubble['N_CMB_sci']}  nu_readout ≈ 10^{math.log10(nu_at_ncmb):.2f}", flush=True)
+    print(f"N_CMB = {bubble['N_CMB_sci']}  nu_coarse ≈ 10^{math.log10(nu_at_ncmb):.2f}", flush=True)
     print(f"T_M,bath = {bath['T_M_bath_K']:.3e} K  T_CMB = {T_CMB_K_REF} K", flush=True)
     print(
         f"ref settle={ref['settle']} δ={ref['delta_angle']:.4f} "

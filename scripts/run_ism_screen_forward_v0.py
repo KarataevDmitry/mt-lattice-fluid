@@ -25,7 +25,7 @@ from mt_ca.config import MConfig
 from mt_ca.ism_screen import evaluate_ism_screen_v2, load_ism_constraints
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.si_constants import SI, T_CMB_K_REF
-from mt_ca.t_validation import nu_readout_passes
+from mt_ca.t_validation import nu_coarse_passes
 
 from run_cmb_forward_envelope import calibrate_wall_row
 
@@ -65,7 +65,7 @@ def main() -> int:
     )
     elapsed = time.perf_counter() - t0
 
-    nu_ncmb = float(nu_readout_passes(int(bubble["N_CMB"]), args.block))
+    nu_ncmb = float(nu_coarse_passes(int(bubble["N_CMB"]), args.block))
 
     eval_row = evaluate_ism_screen_v2(
         log10_T_M_over_CMB=float(bath["log10_T_M_bath_over_CMB"]),

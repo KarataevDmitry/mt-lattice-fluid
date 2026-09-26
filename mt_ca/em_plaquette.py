@@ -234,7 +234,7 @@ def square_face_holonomy_probe(
     f_over_fp = alpha
     alpha_from_dphi = abs(dphi_nn_mono)
     alpha_rel_err = abs(alpha_from_dphi - alpha) / alpha if alpha > 0 else float("inf")
-    readout_alpha_rel_err = abs(abs(dphi_nn_alpha) - alpha) / alpha if alpha > 0 else float("inf")
+    alpha_link_rel_err = abs(abs(dphi_nn_alpha) - alpha) / alpha if alpha > 0 else float("inf")
 
     return {
         "grid": grid,
@@ -256,9 +256,9 @@ def square_face_holonomy_probe(
         "F_P_N": f_p,
         "alpha_from_abs_dphi_nn": alpha_from_dphi,
         "alpha_from_E_rel_err": alpha_rel_err,
-        "alpha_link_readout_rel_err": readout_alpha_rel_err,
+        "alpha_link_rel_err": alpha_link_rel_err,
         "alpha_match_open": alpha_rel_err > 0.05,
-        "readout_ok": readout_alpha_rel_err < 1e-6,
+        "alpha_link_ok": alpha_link_rel_err < 1e-6,
         "V_over_v_hV": 16.0 / 3.0,
         "kappa_1tick": 1.0 / math.sqrt(2.0),
         "alpha_geom_inv": 137.0,

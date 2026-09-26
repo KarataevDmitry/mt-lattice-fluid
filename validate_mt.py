@@ -18,11 +18,11 @@ from mt_ca.t_validation import (
     collision_peak_count,
     isotropy_ratio,
     macro_mass,
-    nu_readout_passes,
+    nu_coarse_passes,
     profile_correlation,
     radial_speed_uniformity,
     soliton_peak_track,
-    wave_particle_readout,
+    wave_particle_macro,
 )
 
 
@@ -176,7 +176,7 @@ def test_gaussian_collision(
     mass0 = macro_mass(sim.z, block, foam_quantile=0.75)
 
     sim.step(steps)
-    nu = nu_readout_passes(steps, block)
+    nu = nu_coarse_passes(steps, block)
     coarse = coarse_grain(sim.z, block, nu_viscosity_passes=nu).cpu()
     ratio = float(coarse.max()) / (amp0 + 1e-12)
     mass_base = macro_mass(sim.z, block, foam_quantile=0.75)
@@ -215,7 +215,7 @@ def test_macro_viscosity(
 
     sim.step(steps)
     norm_d = norm_drift(norm0, total_norm_squared(sim.z))
-    nu = nu_readout_passes(steps, block)
+    nu = nu_coarse_passes(steps, block)
     peak_base = float(coarse_grain(sim.z, block).max().item())
     peak_damped = float(coarse_grain(sim.z, block, nu_viscosity_passes=nu).max().item())
     peak_ratio = peak_damped / (peak_base + 1e-12)
@@ -233,7 +233,7 @@ def test_macro_viscosity(
         "micro_norm_drift": norm_d,
         "macro_peak_ratio": round(peak_ratio, 4),
         "macro_mass_ratio": round(mass_ratio, 4),
-        "nu_readout_passes": nu,
+        "nu_coarse_passes": nu,
         "nu_CA_SI_m2_s": SI.nu_CA,
         "ok": ok,
         "criterion": "A3 micro stable; macro Φ damps into vacuum foam (§4.1.2)",
@@ -247,7 +247,7 @@ def test_zigzag_mass(
     device: str = "cpu",
 ) -> dict:
     """§5.0.1: vortex Arg-activity + macro m_rest exceed dilute vacuum (mass from zigzag)."""
-    from mt_ca.m_to_t import arg_mass_load, m_rest_readout
+    from mt_ca.m_to_t import arg_mass_load, m_rest_macro
 
     cfg = MConfig.for_stencil('hex')
 
@@ -255,7 +255,7 @@ def test_zigzag_mass(
     sim_v.reset(SeedClass.VORTEX_P)
     sim_v.step(steps)
     load_v = arg_mass_load(sim_v.z, cfg)
-    m_v = m_rest_readout(sim_v.z, block)
+    m_v = m_rest_macro(sim_v.z, block)
     m_v = macro_mass(sim_v.z, block, foam_quantile=0.75)
 
     sim_vac = LatticeFluidSimulator(size, size, cfg, device=device)
@@ -288,7 +288,7 @@ def test_wave_particle(
     device: str = "cpu",
 ) -> dict:
     """§4.9: wave interference vs vortex localization on same CA (no duality paradox)."""
-    row = wave_particle_readout(size, steps, block, device)
+    row = wave_particle_macro(size, steps, block, device)
     ok = bool(row["ok"])
     return {
         "id": "T_wave_particle",

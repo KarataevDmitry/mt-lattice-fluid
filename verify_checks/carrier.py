@@ -90,7 +90,7 @@ def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
         abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
         and abs(row["phi_square_vac_rad"]) < 0.2
         and abs(row["delta_phi_nn_vortex"]) > 0.5
-        and row["readout_ok"]
+        and row["alpha_link_ok"]
         and row["alpha_match_open"]
         and row["V_over_v_hV"] == 16.0 / 3.0
     )
@@ -99,12 +99,12 @@ def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
         "phi_square_vortex_rad": row["phi_square_vortex_rad"],
         "delta_phi_nn_vortex": row["delta_phi_nn_vortex"],
         "delta_phi_nn_alpha_link": row["delta_phi_nn_alpha_link"],
-        "alpha_link_readout_rel_err": row["alpha_link_readout_rel_err"],
+        "alpha_link_rel_err": row["alpha_link_rel_err"],
         "B_square_vortex_T": row["B_square_vortex_T"],
         "alpha_fs": row["alpha_fs"],
         "alpha_from_E_rel_err": row["alpha_from_E_rel_err"],
         "alpha_match_open": row["alpha_match_open"],
-        "readout_ok": row["readout_ok"],
+        "alpha_link_ok": row["alpha_link_ok"],
         "ok": ok,
         "note": row["note"],
     }
@@ -187,7 +187,7 @@ def check_excitations_full_quantization(device: str = "cpu") -> dict:
         and row["photon_sector_n0"] is True
         and row["E0_ladder_closed"] is True
         and row["continuum_wave_is_T_only"] is True
-        and row["madelung_j_is_T_readout"] is True
+        and row["madelung_j_is_T_layer"] is True
     )
     return {
         "id": "Excitations_full_quantization",
@@ -243,7 +243,7 @@ def check_mechanics_from_axioms(device: str = "cpu") -> dict:
         and row["lemma_E0_ladder_F0_hL"] is True
         and row["lemma_E0_ladder_L0_hT"] is True
         and float(row["delta_phi_min_rad"]) == DELTA_PHI_MIN
-        and row["continuum_p_L_F_is_T_readout"] is True
+        and row["continuum_p_L_F_is_T_layer"] is True
         and row["p0_from_hbar_over_2hL_not_macro_c"] is True
     )
     return {

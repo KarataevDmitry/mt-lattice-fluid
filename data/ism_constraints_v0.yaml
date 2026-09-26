@@ -36,7 +36,7 @@ column_screen:
       r_end_pc: 0.002
       N_H_cm2: 2.0e17
 
-cmb_readout:
+cmb_forward:
   delta_T_over_T: 1.0e-5
   T_CMB_K: 2.725
 

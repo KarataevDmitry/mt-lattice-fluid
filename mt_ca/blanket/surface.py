@@ -139,7 +139,7 @@ def ism_temperature_report(
     }
 
 
-def readout_slice_stats(z: torch.Tensor, iz: int, block: int) -> dict[str, float]:
+def macro_slice_stats(z: torch.Tensor, iz: int, block: int) -> dict[str, float]:
     macro = coarse_grain(z[iz], block)
     m = float(macro.mean().item())
     s = float(macro.std().item())
@@ -166,9 +166,9 @@ def blanket_distribution_report(
 ) -> dict[str, Any]:
     iface = z_after.shape[0] - thickness - 1
     iz_top = z_after.shape[0] - 1
-    ocean = readout_slice_stats(z_before, iface, block)
-    under = readout_slice_stats(z_after, iface, block)
-    top = readout_slice_stats(z_after, iz_top, block)
+    ocean = macro_slice_stats(z_before, iface, block)
+    under = macro_slice_stats(z_after, iface, block)
+    top = macro_slice_stats(z_after, iz_top, block)
     tau_flat = tau_2d.detach().flatten()
     out: dict[str, Any] = {
         "iz_interface": iface,

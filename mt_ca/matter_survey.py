@@ -25,7 +25,7 @@ from mt_ca.topology import (
 
 
 def plane_mconfig(z_plane: torch.Tensor, cfg: MConfig) -> MConfig:
-    """Gate-plane readout uses 2D hex neighbors even in 3+1 FCC (A10 contour)."""
+    """Gate-plane contour uses 2D hex neighbors even in 3+1 FCC (A10)."""
     if z_plane.ndim == 3 and cfg.stencil != "hex":
         return replace(cfg, stencil="hex")
     return cfg
@@ -33,7 +33,7 @@ def plane_mconfig(z_plane: torch.Tensor, cfg: MConfig) -> MConfig:
 
 @dataclass(frozen=True, slots=True)
 class MatterSite:
-    """Readout target on the torus."""
+    """Survey target on the torus."""
 
     iz: int | None
     y: int
@@ -41,7 +41,7 @@ class MatterSite:
 
 
 @dataclass(frozen=True, slots=True)
-class MatterSiteReadout:
+class SiteSurvey:
     site: MatterSite
     rho: float
     b: int
@@ -135,14 +135,14 @@ def b_from_winding(w: float) -> int:
     return min(1, abs(winding_nearest_int(w)))
 
 
-def readout_at_site(
+def survey_at_site(
     z: torch.Tensor,
     site: MatterSite,
     *,
     contour_radius: int = 2,
     rho_frac: float = 0.25,
     cfg: MConfig | None = None,
-) -> MatterSiteReadout:
+) -> SiteSurvey:
     """Single-site densitometer: ρ gate + dual-channel contour winding → b."""
     cfg = cfg or MConfig.for_stencil("fcc" if z.ndim == 4 else "hex")
     rho = spinor_density(z)
@@ -156,7 +156,7 @@ def readout_at_site(
     ch = winding_channels(z_plane, center=(site.y, site.x), radius=contour_radius)
     w_auto = float(ch["auto"])
     b = b_from_winding(w_auto) if rho_ok else 0
-    return MatterSiteReadout(
+    return SiteSurvey(
         site=site,
         rho=rho_val,
         b=b,
@@ -215,18 +215,18 @@ def planckon_instrument(
     rho = spinor_density(z)
     margin = survey_margin if survey_margin is not None else contour_radius + 1
 
-    anchor_row: MatterSiteReadout | None = None
+    anchor_row: SiteSurvey | None = None
     if anchor is not None:
-        anchor_row = readout_at_site(
+        anchor_row = survey_at_site(
             z, anchor, contour_radius=contour_radius, rho_frac=rho_frac, cfg=cfg
         )
 
-    survey_rows: list[MatterSiteReadout] = []
+    survey_rows: list[SiteSurvey] = []
     for site in survey_density_sites(
         rho, top_k=top_k, margin=margin, require_local_max=require_local_max
     ):
         survey_rows.append(
-            readout_at_site(z, site, contour_radius=contour_radius, rho_frac=rho_frac, cfg=cfg)
+            survey_at_site(z, site, contour_radius=contour_radius, rho_frac=rho_frac, cfg=cfg)
         )
 
     b_survey_max = max((r.b for r in survey_rows), default=0)
@@ -256,7 +256,7 @@ def planckon_instrument(
     }
 
 
-def _row_dict(row: MatterSiteReadout | None) -> dict[str, Any] | None:
+def _row_dict(row: SiteSurvey | None) -> dict[str, Any] | None:
     if row is None:
         return None
     return {
@@ -292,7 +292,7 @@ def defect_candidates(
     contour_radius: int = 2,
     margin: int | None = None,
     require_local_max: bool = False,
-) -> list[MatterSiteReadout]:
+) -> list[SiteSurvey]:
     """Survey instrument: sites with b≥1 (|n|≥¾) after column-snap and plane readout."""
     margin = margin if margin is not None else contour_radius + 1
     rho = spinor_density(z)
@@ -302,9 +302,9 @@ def defect_candidates(
         margin=margin,
         require_local_max=require_local_max,
     )
-    rows: list[MatterSiteReadout] = []
+    rows: list[SiteSurvey] = []
     for site in sites:
-        row = readout_at_site(z, site, contour_radius=contour_radius)
+        row = survey_at_site(z, site, contour_radius=contour_radius)
         if row.b >= 1:
             rows.append(row)
     rows.sort(key=lambda r: r.rho, reverse=True)

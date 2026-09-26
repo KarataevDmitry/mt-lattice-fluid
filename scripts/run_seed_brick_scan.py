@@ -17,7 +17,7 @@ import time
 
 import torch
 
-from mt_ca.app import READOUT_SCHEMA, born_survey, brick_axis_configs, BrickSpec, gates_at_z
+from mt_ca.app import SURVEY_PROBE_SCHEMA, born_survey, brick_axis_configs, BrickSpec, gates_at_z
 from mt_ca.app.habitat import HabitatPreset
 from mt_ca.app.runner import apply_scenario
 from mt_ca.app.scenario import ScenarioSpec
@@ -86,7 +86,7 @@ def main() -> int:
     elapsed = time.perf_counter() - t0
     out = {
         "id": "seed_brick_scan",
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "N_phi": n_phi,
         "family": "filled_Heisenberg_brick_NN_dclass_1",
         "rejected_family": "N_ring_plane_wave_ramp",
@@ -105,7 +105,7 @@ def main() -> int:
         ],
         "hit_rows": hits,
         "born_rows": born,
-        "readout": "survey lane only (no planted anchor on brick grid)",
+        "survey": "survey lane only (no planted anchor on brick grid)",
     }
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:

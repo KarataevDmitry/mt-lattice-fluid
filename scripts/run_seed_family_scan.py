@@ -9,7 +9,7 @@ Families (enum — few):
 Rejected elsewhere: free N_ring stripe ramp (run_seed_ring_scan).
 Brick-offset sweep was one BOIL sub-family; this is the class switch.
 
-Readout instrument (``READOUT_SCHEMA``):
+Readout instrument (``SURVEY_PROBE_SCHEMA``):
   **survey** — spontaneous birth hunt (local ρ maxima, torus-safe)
   **anchor** — lattice-center column (planted vortex persistence)
 """
@@ -23,7 +23,7 @@ import time
 import torch
 
 from mt_ca.app import (
-    READOUT_SCHEMA,
+    SURVEY_PROBE_SCHEMA,
     born_survey,
     dual_lanes,
     gates_at_z,
@@ -107,7 +107,7 @@ def run_one(
     return {
         "seed": seed.value,
         "role": "planted_control" if planted else "birth_candidate",
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "gate0": g0,
         "gate1": g1,
         "lanes0": lanes0,
@@ -201,7 +201,7 @@ def main() -> int:
     lost = [r for r in rows if r["lost_plant"]]
     out = {
         "id": "seed_family_scan",
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "families": [s.value for s in families],
         "stencil": stencil,
         "dims": f"{nz}x{args.size}x{args.size}" if nz else f"{args.size}x{args.size}",
@@ -224,7 +224,7 @@ def main() -> int:
         "persisted_keys": [r["seed"] for r in persisted],
         "lost_keys": [r["seed"] for r in lost],
         "rows": rows,
-        "readout": "survey=birth; anchor=planted persistence (center column)",
+        "survey": "survey=birth; anchor=planted persistence (center column)",
     }
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:

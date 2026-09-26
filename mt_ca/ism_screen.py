@@ -155,7 +155,7 @@ def evaluate_ism_screen_v2(
     c = constraints or load_ism_constraints()
     scr = c["screen_v0"]
     pas = c["pass"]
-    cmb = c["cmb_readout"]
+    cmb = c["cmb_forward"]
     v_obs = c["vlism_voyager_v1"]
     geom = c.get("geometry", {})
 

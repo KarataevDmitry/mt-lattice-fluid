@@ -50,7 +50,7 @@ class InstrumentId(str, Enum):
     T_MADELUNG_RESIDUAL_MAX = "t_madelung_residual_max"
     T_RADIAL_SPEED_CV = "t_radial_speed_cv"
     T_PROFILE_CORR = "t_profile_corr"
-    T_NU_READOUT_PASSES = "t_nu_readout_passes"
+    T_NU_COARSE_PASSES = "t_nu_coarse_passes"
     T_MACRO_BLOCK = "t_macro_block"
 
 
@@ -267,7 +267,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
     ),
     InstrumentSpec(
         InstrumentId.T_M_REST_LEGACY,
-        "m_rest_readout alias",
+        "m_rest_macro alias",
         "§5.0.1",
         "T_macro",
         "coarse² sum",
@@ -338,7 +338,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
         "needs z_past",
     ),
     InstrumentSpec(
-        InstrumentId.T_NU_READOUT_PASSES,
+        InstrumentId.T_NU_COARSE_PASSES,
         "ν_CA readout passes",
         "§4.1.2",
         "T_macro",

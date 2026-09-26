@@ -12,9 +12,9 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 
 
-## 2026-09-26 · DDD · bounded context `mt_ca.t`
+## 2026-09-26 · DDD · убрать readout из API
 
-**T-слой:** `mt_ca/t/` (coarse, spectral, hydro_limit, validation, anchors). **M-инструмент:** `matter_survey.py`. Удалены re-export `matter_readout` / `t_continuum_readout`. Глоссарий §«Макроописание T».
+`survey_probe`, `survey_at_site`, `SiteSurvey`, `nu_coarse_passes`, `m_rest_macro`, `check_t_hydro_limit_bundle`, `macro_slice_stats`, `cmb_forward` в yaml. Удалены `readout_probe`, `human_readout`, `run_gpu_readout`.
 
 Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simulator`, draft `floor0_resonance*`. One API: scenario id + `embedding`.
 

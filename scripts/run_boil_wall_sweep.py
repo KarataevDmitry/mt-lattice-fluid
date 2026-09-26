@@ -21,7 +21,7 @@ if str(_SCRIPTS) not in sys.path:
 
 import torch
 
-from mt_ca.app import READOUT_SCHEMA, born_survey, dual_lanes, gates_at_z
+from mt_ca.app import SURVEY_PROBE_SCHEMA, born_survey, dual_lanes, gates_at_z
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor, encode_spinor
 from mt_ca.seeds import boil_ocean_spinor_3d
@@ -131,7 +131,7 @@ def run_config(
         "born_final": born_final,
         "born_ever": born_ever,
         "first_born_t": first_born_t,
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "b_final_survey": int(g1["b_argmax"]),
         "lanes_final": dual_lanes(g1),
         "b_max": max_b,
@@ -216,7 +216,7 @@ def main() -> int:
     elapsed = time.perf_counter() - t0
     out = {
         "id": "boil_wall_sweep",
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "dims": f"{nz}x{ny}x{nx}",
         "steps": args.steps,
         "sample_every": args.sample_every,

@@ -6,12 +6,12 @@ from mt_ca.t_validation import (
     covariance_isotropy,
     isotropy_ratio,
     macro_mass,
-    nu_readout_passes,
+    nu_coarse_passes,
     profile_correlation,
     radial_front_radii,
     radial_speed_uniformity,
     soliton_peak_track,
-    wave_particle_readout,
+    wave_particle_macro,
 )
 
 __all__ = [
@@ -20,10 +20,10 @@ __all__ = [
     "covariance_isotropy",
     "isotropy_ratio",
     "macro_mass",
-    "nu_readout_passes",
+    "nu_coarse_passes",
     "profile_correlation",
     "radial_front_radii",
     "radial_speed_uniformity",
     "soliton_peak_track",
-    "wave_particle_readout",
+    "wave_particle_macro",
 ]

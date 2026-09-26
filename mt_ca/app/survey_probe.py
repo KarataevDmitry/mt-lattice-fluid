@@ -1,4 +1,4 @@
-"""Script-facing readout probe — survey vs anchor in one call (§5.0 instrument)."""
+"""Script-facing survey probe — survey vs anchor in one call (§5.0 instrument)."""
 from __future__ import annotations
 
 from typing import Any, Literal
@@ -8,7 +8,7 @@ import torch
 from mt_ca.app.gates import gate_b
 from mt_ca.matter_survey import MatterSite, default_anchor
 
-READOUT_SCHEMA = 1
+SURVEY_PROBE_SCHEMA = 1
 
 
 def gates_at_z(
@@ -61,7 +61,7 @@ def lane_anchor(g: dict[str, float | int | bool]) -> dict[str, float | int | boo
 
 def dual_lanes(g: dict[str, float | int | bool]) -> dict[str, Any]:
     return {
-        "schema": READOUT_SCHEMA,
+        "schema": SURVEY_PROBE_SCHEMA,
         "survey": lane_survey(g),
         "anchor": lane_anchor(g),
     }

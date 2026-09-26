@@ -9,7 +9,7 @@ import sys
 
 import torch
 
-from mt_ca.t_validation import wave_particle_readout
+from mt_ca.t_validation import wave_particle_macro
 
 
 def main() -> int:
@@ -25,7 +25,7 @@ def main() -> int:
         print("CUDA unavailable — cpu", file=sys.stderr)
         args.device = "cpu"
 
-    row = wave_particle_readout(args.size, args.steps, args.block, args.device)
+    row = wave_particle_macro(args.size, args.steps, args.block, args.device)
     out = {"id": "T_wave_particle", **row}
     if args.json:
         print(json.dumps(out, indent=2))

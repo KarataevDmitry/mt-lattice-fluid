@@ -929,7 +929,7 @@ class SICarrierRows:
             "E0_J": e0,
             "m_arg_kg": self.m_arg,
             "momentum_ledger_integer": "A13 leapfrog + floor N only in N; verify LadderLedger",
-            "continuum_p_L_F_is_T_readout": True,
+            "continuum_p_L_F_is_T_layer": True,
             "p0_from_hbar_over_2hL_not_macro_c": abs(p0 - self.hbar / (2.0 * self.l_P)) / p0 < tol,
             "note": "§0.8/Thm5.1: Landau ladder from s0=ℏ/2; float j=Im(z*∇z) is T only",
         }
@@ -962,7 +962,7 @@ class SICarrierRows:
             "sound_macro_vs_photon": "T: v_s<<c; M: p0 packets / phonon n_k",
             "E0_ladder_closed": en["rel_p0_c0"] < tol and en["rel_F0_lP"] < tol,
             "continuum_wave_is_T_only": True,
-            "madelung_j_is_T_readout": True,
+            "madelung_j_is_T_layer": True,
             "note": "§0.9: light/sound quantize; interference=many quanta; wave label=T",
         }
 

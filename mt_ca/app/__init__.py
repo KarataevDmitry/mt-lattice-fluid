@@ -6,8 +6,8 @@ from mt_ca.app.gates import gate_b, peak_stats
 from mt_ca.app.habitat import HabitatPreset
 from mt_ca.app.lab import LabSession, open_lab, open_lab_from_spec, planckon_lab_report
 from mt_ca.app.lattice import build_run_spec, describe_lattice, open_lattice
-from mt_ca.app.readout_probe import (
-    READOUT_SCHEMA,
+from mt_ca.app.survey_probe import (
+    SURVEY_PROBE_SCHEMA,
     born_survey,
     dual_lanes,
     gates_at_z,
@@ -32,7 +32,7 @@ __all__ = [
     "INSTRUMENT_REGISTRY",
     "LabSession",
     "LatticeDimension",
-    "READOUT_SCHEMA",
+    "SURVEY_PROBE_SCHEMA",
     "RunResult",
     "RunSpec",
     "SCENARIOS",

@@ -65,7 +65,7 @@ def arg_mass_load(z: torch.Tensor, cfg: MConfig) -> float:
     return float(n) * circulation
 
 
-def m_rest_readout(z: torch.Tensor, block: int = 8) -> float:
+def m_rest_macro(z: torch.Tensor, block: int = 8) -> float:
     """Integrated macro amplitude Σ|Φ|² — T mass readout (§5, §5.0.1)."""
     return macro_mass(z, block)
 
@@ -75,5 +75,5 @@ def zigzag_mass_row(z: torch.Tensor, cfg: MConfig, *, block: int = 8) -> dict[st
     return {
         "zigzag_activity": zigzag_activity(z, cfg),
         "arg_mass_load": arg_mass_load(z, cfg),
-        "m_rest": m_rest_readout(z, block),
+        "m_rest": m_rest_macro(z, block),
     }

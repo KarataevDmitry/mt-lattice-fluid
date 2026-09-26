@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GPU/CPU readout: T1 isotropy, collision, vortex contour (MODEL §3.7.3)."""
+"""GPU/CPU macro probes: T1 isotropy, collision, vortex contour (MODEL §3.7.3)."""
 
 from __future__ import annotations
 
@@ -16,7 +16,8 @@ from mt_ca.simulator import LatticeFluidSimulator
 from validate_mt import test_collision, test_isotropy
 
 
-def vortex_contour_readout(size: int, steps: int, block: int, device: str) -> dict:
+def vortex_contour_macro(size: int, steps: int, block: int, device: str) -> dict:
+    del block
     sim = LatticeFluidSimulator(size, size, MConfig(stencil="hex"), device=device)
     sim.reset(SeedClass.VORTEX_P)
     amp0 = float(sim.snapshot_amplitude().max().item())
@@ -38,7 +39,7 @@ def vortex_contour_readout(size: int, steps: int, block: int, device: str) -> di
 
 
 def unitarity_smoke(size: int, steps: int, device: str) -> dict:
-    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil('hex'), device=device)
+    sim = LatticeFluidSimulator(size, size, MConfig.for_stencil("hex"), device=device)
     sim.reset(SeedClass.PLANE_WAVE)
     n0 = sim.norm()
     sim.step(steps)
@@ -47,7 +48,7 @@ def unitarity_smoke(size: int, steps: int, device: str) -> dict:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="M→T GPU readout bundle")
+    parser = argparse.ArgumentParser(description="M→T GPU macro probe bundle")
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--size", type=int, default=512)
     parser.add_argument("--steps", type=int, default=256)
@@ -62,7 +63,7 @@ def main() -> int:
     rows = [
         test_isotropy(args.size, args.steps, args.block, args.device),
         test_collision(args.size, args.steps, args.block, args.device),
-        vortex_contour_readout(args.size, args.steps, args.block, args.device),
+        vortex_contour_macro(args.size, args.steps, args.block, args.device),
         unitarity_smoke(min(args.size, 256), args.steps, args.device),
     ]
 

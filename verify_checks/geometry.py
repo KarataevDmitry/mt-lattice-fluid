@@ -169,7 +169,7 @@ def check_t_madelung_continuity(size: int = 64, device: str = "cpu") -> dict:
 
     return t_madelung_continuity_report(size, device=device)
 
-def check_t_continuum_readout(device: str = "cpu") -> dict:
+def check_t_hydro_limit_bundle(device: str = "cpu") -> dict:
     from mt_ca.t.hydro_limit import hydro_limit_verify_row
 
     del device
@@ -193,7 +193,7 @@ def check_t_continuum_readout(device: str = "cpu") -> dict:
         and row["separable_121_is_not_fcc_law"] is True
     )
     return {
-        "id": "T_continuum_readout",
+        "id": "T_hydro_limit_bundle",
         "max_rel_err_k_sigma_lt_0_30": row["max_rel_err_k_sigma_lt_0_30"],
         "fcc_p_origin": row["fcc_p_origin"],
         "hex_p_origin": row["hex_p_origin"],
@@ -357,7 +357,7 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
         "note": "§2.3.8a–b; VACUUM = Heisenberg-class ocean at z_min (kick may be 0 locally)",
     }
 
-def check_matter_b_readout(size: int = 64, device: str = "cpu") -> dict:
+def check_matter_b_macro(size: int = 64, device: str = "cpu") -> dict:
     from mt_ca.macro import macro_amplitude, macro_matter_b
     from mt_ca.spinor import spinor_density
     from mt_ca.topology import matter_occupancy_b, matter_occupancy_b_field, winding_channels, winding_number
@@ -434,7 +434,7 @@ def check_planckon_instrument_fcc(size: int = 48, steps: int = 128, device: str 
         "id": "Planckon_instrument_fcc",
         "ok": ok,
         **row,
-        "note": "Planted vortex on boil via app.lab; anchor readout SSOT",
+        "note": "Planted vortex on boil via app.lab; anchor lane SSOT",
     }
 
 

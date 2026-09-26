@@ -11,7 +11,7 @@ import argparse
 import json
 
 from mt_ca.analysis.functional_period import scan_observable_period, shift_residual
-from mt_ca.analysis.human_readout import functional_period_verdict, linear_spectrum_verdict, print_verdict
+from mt_ca.analysis.human_verdict import functional_period_verdict, linear_spectrum_verdict, print_verdict
 from mt_ca.analysis.linearized_g import ring_period_candidates, scan_low_k_modes
 from mt_ca.app.lab import open_lab
 from mt_ca.instruments.catalog import InstrumentId

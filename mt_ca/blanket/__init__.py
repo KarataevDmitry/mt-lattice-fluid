@@ -9,7 +9,7 @@ from mt_ca.blanket.surface import (
     blanket_distribution_report,
     ism_T_map_K,
     ism_temperature_report,
-    readout_slice_stats,
+    macro_slice_stats,
     tau_map_ism_blanket,
     tau_uniform_ism_blanket,
 )
@@ -28,7 +28,7 @@ __all__ = [
     "ism_T_map_K",
     "ism_temperature_report",
     "load_ism_constraints",
-    "readout_slice_stats",
+    "macro_slice_stats",
     "r_au_to_pc",
     "tau_from_column",
     "tau_map_ism_blanket",

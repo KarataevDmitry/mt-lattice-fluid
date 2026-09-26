@@ -5,12 +5,12 @@ from mt_ca.t_analysis import (
     block_mean,
     estimate_phase_velocity_plane_wave,
     laplacian_eigenvalues,
-    macro_readout_amplitude,
+    macro_amplitude_plane,
     spectral_apply,
     spectral_unitary_reference,
 )
 
-macro_amplitude = macro_readout_amplitude
+macro_amplitude = macro_amplitude_plane
 
 __all__ = [
     "amplitude_spectrum",
@@ -18,7 +18,7 @@ __all__ = [
     "estimate_phase_velocity_plane_wave",
     "laplacian_eigenvalues",
     "macro_amplitude",
-    "macro_readout_amplitude",
+    "macro_amplitude_plane",
     "spectral_apply",
     "spectral_unitary_reference",
 ]

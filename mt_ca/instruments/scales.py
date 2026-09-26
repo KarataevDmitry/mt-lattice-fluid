@@ -34,7 +34,7 @@ class QuantityKind(str, Enum):
     MASS_DENSITY_RHOP = "mass_density_rhoP"
     CURRENT_DENSITY = "current_density"
     TEMPERATURE_E_OVER_KB = "temperature_E0_over_kB"
-    MACRO_MASS_READOUT = "macro_mass_readout"
+    MACRO_MASS_READOUT = "macro_mass_coarse"
 
 
 @dataclass(frozen=True, slots=True)

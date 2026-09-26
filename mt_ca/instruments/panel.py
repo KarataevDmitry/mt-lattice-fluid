@@ -16,7 +16,7 @@ from mt_ca.ledger import (
     momentum_density,
     n_E_field,
 )
-from mt_ca.matter_survey import MatterSite, default_anchor, plane_mconfig, readout_at_site, spinor_plane
+from mt_ca.matter_survey import MatterSite, default_anchor, plane_mconfig, survey_at_site, spinor_plane
 from mt_ca.metrics import total_norm_squared
 from mt_ca.spinor import arg_phase_defect, saturating_phase, spinor_density
 from mt_ca.topology import winding_nearest_int
@@ -43,7 +43,7 @@ def sample_site(
     rho = float(spinor_density(z)[site.iz, y, x].item()) if site.iz is not None else float(
         spinor_density(z)[y, x].item()
     )
-    matter = readout_at_site(z, site, contour_radius=contour_radius, cfg=cfg)
+    matter = survey_at_site(z, site, contour_radius=contour_radius, cfg=cfg)
     plane_cfg = plane_mconfig(plane, cfg)
     phi = saturating_phase(plane, plane_cfg)
     dphi = arg_phase_defect(plane, plane_cfg, apply_floor=False)

@@ -27,7 +27,7 @@ def coarse_grain(
     )
 
 
-def nu_readout_passes(steps: int, block: int) -> int:
+def nu_coarse_passes(steps: int, block: int) -> int:
     """Extra binomial passes on T readout — ν_CA coarse-graining loss (§4.1.2)."""
     from mt_ca.si_constants import nu_CA_natural
 
@@ -199,7 +199,7 @@ def collision_peak_count(rho: torch.Tensor, *, min_frac: float = 0.35) -> int:
     return count
 
 
-def wave_particle_readout(
+def wave_particle_macro(
     size: int = 512,
     steps: int = 256,
     block: int = 8,

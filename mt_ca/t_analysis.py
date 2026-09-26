@@ -44,14 +44,14 @@ def block_mean(z: torch.Tensor, block: int) -> torch.Tensor:
     return blocks.mean(dim=(1, 3))
 
 
-def macro_readout_amplitude(
+def macro_amplitude_plane(
     z: torch.Tensor,
     *,
     radius: int,
     stride: int = 8,
     sigma: float | None = None,
 ) -> torch.Tensor:
-    """Integer (1-2-1) binomial macro amplitude |Φ| — canonical T readout (§4.1.1)."""
+    """Integer (1-2-1) binomial macro amplitude |Φ| — canonical T coarse (§4.1.1)."""
     from mt_ca.macro import macro_amplitude
 
     if z.ndim == 3 and z.shape[-1] == 2:

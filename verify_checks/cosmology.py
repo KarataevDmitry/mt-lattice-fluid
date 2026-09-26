@@ -25,7 +25,7 @@ def check_ism_screen_v0_sim(size: int = 32, device: str = "cpu") -> dict:
 
     from mt_ca.config import MConfig
     from mt_ca.simulator import LatticeFluidSimulator
-    from mt_ca.t_validation import nu_readout_passes
+    from mt_ca.t_validation import nu_coarse_passes
 
     scripts = Path(__file__).resolve().parents[1] / "scripts"
     if str(scripts) not in sys.path:
@@ -53,7 +53,7 @@ def check_ism_screen_v0_sim(size: int = 32, device: str = "cpu") -> dict:
     )
     bath = SI.vacuum_bath_row()
     bubble = SI.bubble_tick_row()
-    nu_ncmb = float(nu_readout_passes(int(bubble["N_CMB"]), block))
+    nu_ncmb = float(nu_coarse_passes(int(bubble["N_CMB"]), block))
     row = evaluate_ism_screen_v2(
         log10_T_M_over_CMB=float(bath["log10_T_M_bath_over_CMB"]),
         rms_rel_wall=float(cal["rms_rel"]),

@@ -16,7 +16,7 @@ from typing import Any, Callable
 
 import torch
 
-from mt_ca.app import READOUT_SCHEMA, born_survey, dual_lanes, gates_at_z
+from mt_ca.app import SURVEY_PROBE_SCHEMA, born_survey, dual_lanes, gates_at_z
 from mt_ca.app.runner import apply_scenario
 from mt_ca.app.scenario import get_scenario
 from mt_ca.config import MConfig
@@ -99,7 +99,7 @@ def run_arm(
     return {
         "arm": label,
         "premise": premise,
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "gate0": g0,
         "gate1": g1,
         "lanes1": lanes1,
@@ -247,7 +247,7 @@ def main() -> int:
     born_ever = [r["arm"] for r in results if r["born_ever"]]
     out = {
         "id": "phase_iv_to_i",
-        "readout_schema": READOUT_SCHEMA,
+        "survey_probe_schema": SURVEY_PROBE_SCHEMA,
         "premise": "META §3.2: ice + deterministic shift → spontaneous b?",
         "stencil": stencil,
         "dims": f"{nz}x{args.size}x{args.size}" if nz else f"{args.size}x{args.size}",
@@ -263,7 +263,7 @@ def main() -> int:
         "born_final_arms": born_final,
         "born_ever_count": len(born_ever),
         "born_ever_arms": born_ever,
-        "readout": "born_* = survey lane; anchor in lanes* for diagnostics",
+        "survey": "born_* = survey lane; anchor in lanes* for diagnostics",
     }
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:

@@ -7,7 +7,7 @@ from typing import Any
 import torch
 
 from mt_ca.app.gates import peak_stats
-from mt_ca.app.readout_probe import gates_at_z, planted_persisted
+from mt_ca.app.survey_probe import gates_at_z, planted_persisted
 from mt_ca.app.run_spec import RunSpec
 from mt_ca.app.results import RunResult
 from mt_ca.app.scenario import ScenarioSpec
