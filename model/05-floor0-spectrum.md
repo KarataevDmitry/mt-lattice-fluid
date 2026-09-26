@@ -115,6 +115,29 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 Код: `SI.floor0_phase_space_row()` · probe `tools/floor0_catalog_probe.py --phase-space`.
 
+---
+
+## Кипящий океан · функциональный период (readout + КА)
+
+**Определение (дискретное):** наблюдаемая $\mathcal{O}^t=\mathcal{O}(z^t)$ **$T$-периодична** на отрезке траектории, если
+
+$$
+\mathcal{O}^{t+T}=\mathcal{O}^t \quad \text{для всех } t \text{ в окне}
+\quad\Leftrightarrow\quad
+\mathcal{O}\circ g^T=\mathcal{O}\ \text{на attractor-сегменте}.
+$$
+
+**Аналитика (открыто на полном поле):** линearization $g$ на торе → собственные значения $\hat L_k$ на корнях из 1 дают кандидаты $T$ для **малых** мод; закрытая алгебра §5.0.4-A ($\mathbb{Z}_{512}$, 41, 21) — **одна hV**, не орбита всего $\Lambda$.
+
+**Численно (SSOT КА):** тот же функциональный тест без FFT-эвристики:
+
+| слой | объект | метрика |
+|------|--------|---------|
+| **readout** | contrast, kick, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
+| **КА** | пара leapfrog $(f_{\mathrm{curr}},f_{\mathrm{past}})\in\mathbb{Z}_N[i]^{\Lambda}$ | доля $t$ с **точным** совпадением пары при сдвige $T$; `exact_period_T` = минимальное $T$ с rate $=1$ |
+
+Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$).
+
 **Открыто:** полное перечисление $\Gamma_{hV}$; возбуждённые ветки ($n_E\ge1$, $\Phi\ge 41$) — kick-harness.
 
 ---
