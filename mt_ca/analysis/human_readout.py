@@ -67,40 +67,67 @@ def _observable_verdict(
         lines.append(
             f"  → MODEL-кандидаты T∈{{{', '.join(parts)}}} на {name} не дают малого residual — связь с кольцом 512 здесь НЕ видна."
         )
+    if name.startswith("ρ_contrast") and best_t == 2 and mse is not None and mse < 0.02:
+        lines.append(
+            f"  → (строка 3) best_shift T=2 при mse={mse}: дрейф, не кольцо 41/512 и не доказательство периода 2."
+        )
 
 
 def linear_spectrum_verdict(rep: dict) -> list[str]:
     """Human lines for ``run_boil_linear_spectrum`` report."""
     lines: list[str] = []
+    lines.extend(linear_probe_three_lines(rep))
     modes = rep.get("modes") or []
     stable = [m for m in modes if m.get("stable_mode")]
-    if not stable:
-        top = modes[0] if modes else {}
-        ab = top.get("abs_lambda", "?")
+    if stable:
         lines.append(
-            f"Линearization: нейтральных мод (|λ|≤1) среди low-k — НЕТ; типично |λ|≈{ab} → фон усиливает возмущения, не «крутится» малым T."
-        )
-    else:
-        lines.append(f"Линearization: {len(stable)} мод с |λ|≤1 — кандидаты на осцилляцию (смотри inferred_T только у stable).")
-
-    ring_mse: dict = rep.get("contrast_shift_mse_at_ring") or {}
-    ring_t = rep.get("model_ring_T") or []
-    if ring_mse:
-        best_ring = min(ring_mse.items(), key=lambda kv: kv[1])
-        scan = rep.get("contrast_scan") or {}
-        best_any_t = scan.get("best_shift_T")
-        best_any_mse = scan.get("best_shift_mse_norm")
-        lines.append(
-            f"Contrast vs MODEL T: на кольце (21/41/82…) mse={ring_mse} — это не нули; минимум на кольце T={best_ring[0]} (mse={best_ring[1]})."
-        )
-        if best_any_mse is not None and best_any_mse < 0.01 and best_ring[1] > best_any_mse * 3:
-            lines.append(
-                f"  → Лестница E₀ ({ring_t}) не объясняет «лучший» T={best_any_t} contrast — другая физика (дрейф/чётность шага)."
-            )
-        lines.append(
-            "Итог: период океана = кольцо planckon на одной hV — в этих probe НЕ подтверждён (и не обязан — разные объекты)."
+            f"Дополнительно: {len(stable)} low-k мод с |λ|≤1 — только у них имеет смысл inferred_T."
         )
     return lines
+
+
+def linear_probe_three_lines(rep: dict) -> list[str]:
+    """Fixed «three lines» summary matching MODEL table (explicit negatives)."""
+    modes = rep.get("modes") or []
+    top = modes[0] if modes else {}
+    ab = top.get("abs_lambda", "?")
+    stable = [m for m in modes if m.get("stable_mode")]
+
+    if not stable:
+        line1 = (
+            f"1) Low-k на boil: |λ|≈{ab} (>1) → формула «T∼2π/arg λ» здесь НЕ ПРИМЕНИМА "
+            "(это не «не нашли T», а «фаза не задаёт период», пока мода раздувается)."
+        )
+    else:
+        line1 = (
+            f"1) Low-k: есть нейтральные моды (|λ|≤1); T∼2π/arg λ читать только у stable_mode."
+        )
+
+    ring_mse: dict = rep.get("contrast_shift_mse_at_ring") or {}
+    if ring_mse:
+        ordered = sorted((int(t), float(v)) for t, v in ring_mse.items())
+        chain = " → ".join(f"{t}:{v:.3g}" for t, v in ordered[:4])
+        line2 = (
+            f"2) Ring 21/41/82 vs ρ_contrast: shift_mse растёт ({chain}) — "
+            "минимумов на лестнице §5.0.4-A НЕТ (алгебра одной hV ≠ spatial contrast)."
+        )
+    else:
+        line2 = (
+            "2) Ring vs contrast: данных нет в этом прогоне — перезапусти boil_linear_spectrum."
+        )
+
+    scan = rep.get("contrast_scan") or {}
+    bt = scan.get("best_shift_T")
+    bm = scan.get("best_shift_mse_norm")
+    if bt is not None and bm is not None:
+        line3 = (
+            f"3) Functional best_shift: T={bt}, mse={bm} — "
+            "это артеfact медленного дрейfa/шага leapfrog, НЕ период кольца и НЕ f(t+T)=f(t)."
+        )
+    else:
+        line3 = "3) Functional best_shift: нет contrast_scan в отчёте."
+
+    return [line1, line2, line3]
 
 
 def print_verdict(title: str, lines: list[str]) -> None:
