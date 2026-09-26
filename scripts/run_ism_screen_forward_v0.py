@@ -22,9 +22,10 @@ if str(_SCRIPTS) not in sys.path:
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.ism_screen import evaluate_ism_screen_v1, load_ism_constraints
+from mt_ca.ism_screen import evaluate_ism_screen_v2, load_ism_constraints
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.si_constants import SI, T_CMB_K_REF
+from mt_ca.t_validation import nu_readout_passes
 
 from run_cmb_forward_envelope import calibrate_wall_row
 
@@ -64,10 +65,15 @@ def main() -> int:
     )
     elapsed = time.perf_counter() - t0
 
-    eval_row = evaluate_ism_screen_v1(
+    nu_ncmb = float(nu_readout_passes(int(bubble["N_CMB"]), args.block))
+
+    eval_row = evaluate_ism_screen_v2(
         log10_T_M_over_CMB=float(bath["log10_T_M_bath_over_CMB"]),
         rms_rel_wall=float(cal["rms_rel"]),
         constraints=constraints,
+        smooth_decay=cal["smooth_decay"],
+        nu_at_N_CMB=nu_ncmb,
+        block=args.block,
     )
 
     out: dict[str, Any] = {
@@ -91,10 +97,12 @@ def main() -> int:
         "interpretation": [
             f"M bath T~{bath['T_M_bath_K']:.2e} K vs CMB {T_CMB_K_REF} K — log10 gap {bath['log10_T_M_bath_over_CMB']:.2f}.",
             f"Measured wall rms/mean={cal['rms_rel']:.4e}; after ν+τ screen rms~{eval_row['rms_after_screen']:.4e} (target {eval_row['delta_T_over_T_target']:.0e}).",
-            f"Required τ≈{eval_row['tau_required']:.2f} (applied {eval_row['tau_applied']:.2f}); "
-            f"n_e pred={eval_row['n_e_vlism_pred_cm3']:.3f} vs obs {eval_row['n_e_vlism_obs_cm3']:.3f} "
-            f"(rel err {eval_row['vlism_ne_rel_err']:.2f}, band {eval_row['vlism_ne_range']}).",
-            "Next: spatial τ(N_H) profile + acoustic growth to N_CMB (not wall-only ν extrapolation).",
+            f"Required τ≈{eval_row['tau_required']:.2f} (scalar cap {eval_row['tau_applied_scalar']:.2f}); "
+            f"τ_ism@V1≈{eval_row['tau_ism_voyager']['tau']:.3f} vs LIC full≈{eval_row['tau_ism_lic_full']['tau']:.1f}.",
+            f"n_e pred={eval_row['n_e_vlism_pred_cm3']:.3f} (T_ref={eval_row['vlism_T_ref_K']:.0f} K) "
+            f"vs obs {eval_row['n_e_vlism_obs_cm3']:.3f} (rel {eval_row['vlism_ne_rel_err']:.2f}).",
+            f"Blind rms@N_CMB≈{eval_row.get('rms_blind_at_N_CMB', 0):.0e} "
+            f"→ acoustic growth required={eval_row.get('needs_acoustic_growth', 'n/a')}.",
         ],
     }
 

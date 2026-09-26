@@ -1,85 +1,63 @@
-# ism_constraints/v1 — external anchors + model inputs (Voyager n_e never in prediction formula).
+# ism_constraints/v2 — anchors + column τ profile + VLISM T_eff range (KB bracket).
 
+schema: ism_constraints/v2
 
-
-schema: ism_constraints/v1
-
-
+geometry:
+  AU_cm: 1.495978707e13
+  pc_cm: 3.085677581e18
 
 lic:
-
   n_H_cm3_nominal: 0.07
-
   n_H_cm3_range: [0.03, 0.12]
-
   n_e_cm3_range: [0.005, 0.04]
-
   T_K_warm_nominal: 7000.0
-
-  note: "Local Interstellar Cloud · warm neutral · order-of-magnitude"
-
-
+  note: "Local Interstellar Cloud · warm neutral"
 
 vlism_voyager_v1:
-
   n_e_cm3_nominal: 0.147
-
   n_e_cm3_range: [0.10, 0.20]
-
   B_nT_nominal: 0.5
-
-  T_eff_K_reference: 42000.0
-
+  T_eff_K_range: [28000.0, 52000.0]
+  T_eff_K_reference: 40000.0
   r_au_nominal: 122.0
+  note: "PWS n_e · MAG |B|; T_eff range from VLISM plasma literature (not n_e fit)"
 
-  note: "Voyager 1 VLISM · PWS n_e · MAG |B|~0.5 nT; T_eff ref bracket for β~O(1) scale (literature)"
-
-
+column_screen:
+  lic_outer_pc: 15.0
+  sigma_eff_cm2: 2.4e-19
+  note: "Effective ℬ screen σ·N_H; σ chosen so τ≈12 at full LIC column (not Thomson on CMB)"
+  segments:
+    - id: lic
+      r_start_pc: 0.0
+      r_end_pc: 15.0
+      N_H_cm2: 5.0e19
+    - id: heliosheath
+      r_start_pc: 0.0004
+      r_end_pc: 0.002
+      N_H_cm2: 2.0e17
 
 cmb_readout:
-
   delta_T_over_T: 1.0e-5
-
   T_CMB_K: 2.725
 
-
-
 model_v1:
-
   rms_reference_boil: 0.05
-
   thermal_coupling: 0.15
-
   rms_ionization_gain: 0.12
-
   Y_He_mass_fraction: 0.25
-
   photoionization_fraction_floor: 0.08
-
   warm_neutral_ionization_max: 0.11
 
-  note: "Dogfood boil rms ref; coupling ℬ→T_eff / ionization — not tuned to Voyager n_e"
-
-
-
 screen_v0:
-
   tau_column_max: 12.0
-
   nu_passes_typical: 64
-
   power_law_alpha_typical: 0.5
-
   rms_rel_after_wall_typical: 0.02
 
-
-
 pass:
-
   log10_T_M_over_CMB_min: 30.0
-
   required_tau_max: 10.0
-
   vlism_ne_tolerance_frac: 0.35
 
-
+pass_v2:
+  expect_acoustic_gap_at_N_CMB: true
