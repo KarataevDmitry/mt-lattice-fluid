@@ -22,7 +22,7 @@ if str(_SCRIPTS) not in sys.path:
 import torch
 
 from mt_ca.config import MConfig
-from mt_ca.ism_screen import evaluate_ism_screen_v0, load_ism_constraints
+from mt_ca.ism_screen import evaluate_ism_screen_v1, load_ism_constraints
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.si_constants import SI, T_CMB_K_REF
 
@@ -64,7 +64,7 @@ def main() -> int:
     )
     elapsed = time.perf_counter() - t0
 
-    eval_row = evaluate_ism_screen_v0(
+    eval_row = evaluate_ism_screen_v1(
         log10_T_M_over_CMB=float(bath["log10_T_M_bath_over_CMB"]),
         rms_rel_wall=float(cal["rms_rel"]),
         constraints=constraints,
@@ -91,7 +91,9 @@ def main() -> int:
         "interpretation": [
             f"M bath T~{bath['T_M_bath_K']:.2e} K vs CMB {T_CMB_K_REF} K — log10 gap {bath['log10_T_M_bath_over_CMB']:.2f}.",
             f"Measured wall rms/mean={cal['rms_rel']:.4e}; after ν+τ screen rms~{eval_row['rms_after_screen']:.4e} (target {eval_row['delta_T_over_T_target']:.0e}).",
-            f"Required τ≈{eval_row['tau_required']:.2f} (applied {eval_row['tau_applied']:.2f}); toy n_e={eval_row['toy_n_e_cm3']:.3f} cm⁻³ vs Voyager band {eval_row['vlism_ne_range']}.",
+            f"Required τ≈{eval_row['tau_required']:.2f} (applied {eval_row['tau_applied']:.2f}); "
+            f"n_e pred={eval_row['n_e_vlism_pred_cm3']:.3f} vs obs {eval_row['n_e_vlism_obs_cm3']:.3f} "
+            f"(rel err {eval_row['vlism_ne_rel_err']:.2f}, band {eval_row['vlism_ne_range']}).",
             "Next: spatial τ(N_H) profile + acoustic growth to N_CMB (not wall-only ν extrapolation).",
         ],
     }
@@ -100,7 +102,7 @@ def main() -> int:
     for line in out["interpretation"]:
         print(f"  · {line}", flush=True)
     status = "PASS" if eval_row["ok"] else "FAIL"
-    print(f"{status}  ISM_screen_v0  tau_req={eval_row['tau_required']:.2f}", flush=True)
+    print(f"{status}  {eval_row['id']}  tau_req={eval_row['tau_required']:.2f}", flush=True)
 
     if args.json:
         print(json.dumps(out, indent=2))

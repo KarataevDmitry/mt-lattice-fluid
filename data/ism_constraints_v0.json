@@ -1,32 +1,85 @@
 {
-  "schema": "ism_constraints/v0",
+
+  "schema": "ism_constraints/v1",
+
   "lic": {
+
     "n_H_cm3_nominal": 0.07,
+
     "n_H_cm3_range": [0.03, 0.12],
+
+    "n_e_cm3_range": [0.005, 0.04],
+
     "T_K_warm_nominal": 7000.0,
+
     "note": "Local Interstellar Cloud · warm neutral · order-of-magnitude"
+
   },
+
   "vlism_voyager_v1": {
+
     "n_e_cm3_nominal": 0.147,
+
     "n_e_cm3_range": [0.1, 0.2],
+
     "B_nT_nominal": 0.5,
+
+    "T_eff_K_reference": 42000.0,
+
     "r_au_nominal": 122.0,
-    "note": "Voyager 1 VLISM · PWS n_e plateau · MAG |B|~0.5 nT"
+
+    "note": "Voyager 1 VLISM · PWS n_e · MAG |B|~0.5 nT; T_eff ref bracket for β~O(1) scale (literature)"
+
   },
+
   "cmb_readout": {
+
     "delta_T_over_T": 1e-5,
+
     "T_CMB_K": 2.725
+
   },
+
+  "model_v1": {
+
+    "rms_reference_boil": 0.05,
+
+    "thermal_coupling": 0.15,
+
+    "rms_ionization_gain": 0.12,
+
+    "Y_He_mass_fraction": 0.25,
+
+    "photoionization_fraction_floor": 0.08,
+
+    "warm_neutral_ionization_max": 0.11,
+
+    "note": "Dogfood boil rms ref; coupling ℬ→T_eff / ionization — not tuned to Voyager n_e"
+
+  },
+
   "screen_v0": {
+
     "tau_column_max": 12.0,
-    "macro_fill_for_vlism_match": 1.0,
+
     "nu_passes_typical": 64,
+
     "power_law_alpha_typical": 0.5,
+
     "rms_rel_after_wall_typical": 0.02
+
   },
+
   "pass": {
+
     "log10_T_M_over_CMB_min": 30.0,
+
     "required_tau_max": 10.0,
+
     "vlism_ne_tolerance_frac": 0.35
+
   }
+
 }
+
+

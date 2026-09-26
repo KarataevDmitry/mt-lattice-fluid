@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
-from mt_ca.ism_screen import evaluate_ism_screen_v0
+from mt_ca.ism_screen import evaluate_ism_screen_v1
 from mt_ca.si_constants import SI
 
 
 def check_ism_screen_v0(device: str = "cpu") -> dict:
-    """v0: M-bath vs CMB gap + feasible ν+τ screen to δT/T; toy VLISM n_e."""
+    """v1 physics (verify id legacy): ν+τ screen; VLISM n_e from B,T_eff(rms)."""
     del device
     bath = SI.vacuum_bath_row()
     log10_gap = float(bath["log10_T_M_bath_over_CMB"])
-    row = evaluate_ism_screen_v0(log10_T_M_over_CMB=log10_gap)
+    row = evaluate_ism_screen_v1(log10_T_M_over_CMB=log10_gap)
     row["T_M_bath_K"] = bath["T_M_bath_K"]
     return row
 
@@ -50,11 +50,11 @@ def check_ism_screen_v0_sim(size: int = 32, device: str = "cpu") -> dict:
         nu_passes=nu_list,
     )
     bath = SI.vacuum_bath_row()
-    row = evaluate_ism_screen_v0(
+    row = evaluate_ism_screen_v1(
         log10_T_M_over_CMB=float(bath["log10_T_M_bath_over_CMB"]),
         rms_rel_wall=float(cal["rms_rel"]),
     )
-    row["id"] = "ISM_screen_v0_sim"
+    row["id"] = "ISM_screen_v1_sim"
     row["dims"] = f"{nz}^3"
     row["settle"] = cal["settle"]
     row["delta_angle"] = cal["delta_angle"]
