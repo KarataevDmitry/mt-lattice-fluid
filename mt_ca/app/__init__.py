@@ -98,6 +98,7 @@ __all__ = [
 
     "RunSpec",
 
+    "SCENARIOS",
     "SCENARIO_ALIASES",
     "resolve_scenario_id",
     "list_scenario_ids",
