@@ -74,7 +74,7 @@ k=15       λ≫σ_R·dl          continuum T (без hL→0)
 
 **Мост M→T** (не отдельный шаг шкалы — **обязателен** на пути вниз): §4.0 — без coarse нет доступа; §2.1 — Born = UI; §4.1.1 — NLSE/GL + $\nu_{CA}$.
 
-**Проверка модели** — только на **T** (таблица PDG, $\Gamma$, $d\sigma/d\Omega$, lab SI). **M** refuted только если T-инварианты не сходятся.
+**Проверка модели** — только на **T** (таблица PDG, $\Gamma$, $d\sigma/d\Omega$, lab SI). M опровергается только если T-инварианты не сходятся.
 
 **Северная звезда:** рекурсивный спуск **M→T→SM** на каждом leaf; шаги шкалы **k≤9** — субатомика + IR (milestone); **k≥10** — macro/T-ансамбли; META/UI — над T.
 
@@ -107,7 +107,7 @@ $$
 **Мягко (переоткрыто):** гипотеза $n_{\mathrm{ticks}}=1$ для *одиночного* multi-shell C3 (A1+local downhill) может быть артефактом пустоты. Dogfood вакуума: кипение нормальное только когда задали *всю* решётку — пустоты нет. $n_{\mathrm{ticks}}$ для C3 в заполненной A5-ванне **не выведено**.
 **Не здесь:** PDG-время жизни $\mu$ (нужен лист массы/композита).
 **Код:** `SI.floor1_C3_gamma_close_row()` · verify **`Floor1_C3_gamma_close`** (отвержение continuum + мягкие часы ванны).
-#### §6·floor1·C3·bath·dogfood · предыдущий этаж целиком
+#### §6·floor1·C3·bath·контрольный расчёт · предыдущий этаж целиком
 **Не один C3.** Gauge-fixed `VACUUM` (class 0) — Φ=0, мёртвый. `VACUUM_BOIL` — вся решётка заполненными ячейками, NN Δφ=Δφ_min: live, контраст сам ~1.5→773, ρ_max→1 за 1024 тика.
 **Денсометр (§10.5):** старый A10 (`∮ d arg(z₂/z₁)`) на locked boil был слеп → ложный `emerged_b=False`. Dual-channel rel / u1=`Arg(z₁+z₂)` / auto — **b читается**. Probes: `SYNTH_U1`, `VORTEX_P` → **`b=1`**; family `PLANE_WAVE` → `born=1`.
 **Код:** `SeedClass.VACUUM_BOIL` · `scripts/run_filled_bath_emergence.py` · `SI.floor1_C3_bath_dogfood_row()` · verify **`Floor1_C3_bath_dogfood`**.
@@ -141,4 +141,4 @@ $|\zeta|$ — scalar gate, без **выведенного** $\zeta_{\min}$ → 
 
 ---
 
-**Сюда:** физика (§). Impl / verify / код → [`DEVLOG.md`](../DEVLOG.md).
+**Сюда:** физика (§). Реализация / верификация / код → [`DEVLOG.md`](../DEVLOG.md).

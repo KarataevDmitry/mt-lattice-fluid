@@ -1,57 +1,55 @@
 # Одеяло МЗВ · вторая поверхность над океаном
 
-**Океан (первая поверхность):** ST-ткань M-слоя (~$10^{31}$ K в log-масштабе T) — канон **`MODEL.md`** + hub [`model/`](model/) + код **`mt_ca.app`** (`HabitatPreset.VACUUM_BOIL`, `habitat_boil`).
+**Океан (первая поверхность):** ST-ткань M-слоя (~$10^{31}$ K в log-масштабе T) — см. **`MODEL.md`**, [`model/`](model/), код **`mt_ca.app`** (`HabitatPreset.VACUUM_BOIL`, `habitat_boil`).
 
-**Одеяло МЗВ (вторая поверхность):** однородное заполнение тёплой нейтральной среды поверх устоявшегося океана; мacro **$T_{\mathrm{МЗВ}}\sim 10^3\,\mathrm{K}$** (LIC ~7000 K), **не** CMB (2.7 K) и **не** подмена «заполнить до T_LIC».
+**Одеяло МЗВ (вторая поверхность):** однородная тёплая нейтральная среда поверх установившегося океана; **$T_{\mathrm{МЗВ}}\sim 10^3\,\mathrm{K}$** (LIC ~7000 K), **не** CMB (2.7 K), **не** подгонка «заполнить до T_LIC».
 
-**Devlog** (impl, dogfood, open) → [`DEVLOG.md`](DEVLOG.md) — **не SSOT** одеяла; не меняет утверждения ниже.
+**Журнал разработки** → [`DEVLOG.md`](DEVLOG.md) — не меняет утверждения ниже.
 
-### Иерархия (SSOT одеяла)
+### Структура документации
 
 ```
-гипотеза + T-физика МЗВ  →  BLANKET.md + blanket/*.md   — что такое вторая поверхность, Γ=Λ, pass
+гипотеза, баланс Γ=Λ  →  BLANKET.md + blanket/*.md
                               ↓
-                         data/ism_constraints_v0.yaml    — числа, якоря LIC/VLISM, pass_blanket
+                         data/ism_constraints_v0.yaml
                               ↓
-                         impl mt_ca/blanket/             — preset · surface · wnm · constraints
+                         mt_ca/blanket/
                               ↓
-                         sim scripts / verify            — dogfood; может отставать
+                         скрипты, верификация (может отставать)
 ```
 
-**Истина одеяла** идёт из **этого hub + `blanket/` + `data/ism_constraints_v0.*`**. Код **догоняет**.
-
-### M vs blanket vs Meta
+### MODEL · одеяло · META
 
 | | **MODEL** | **BLANKET** | **META** |
 |---|-----------|-------------|----------|
-| Роль | канон **`g`**, M→T мост | канон **второй поверхности** (МЗВ на океане) | космология / наблюдатель **над** macro-T |
-| Температура | $T_M$ fabric, coarse | $T_{\mathrm{МЗВ}}$, WNM balance | observer narrative |
-| Код | `mt_ca.app` habitat | `mt_ca.blanket` | — |
+| Роль | спецификация **`g`**, M→T | спецификация **МЗВ на океане** | космология над макро-T |
+| Температура | $T_M$, усреднение | $T_{\mathrm{МЗВ}}$, баланс WNM | описание наблюдателя |
+| Код | `mt_ca.app` | `mt_ca.blanket` | — |
 
-**MODEL не дублируется:** одеяло — **над** уже кипящим океаном; не новая аксиoma в `g`.
+Одеяло **над** кипящим оcean; новых аксиом в `g` нет.
 
 ### Карта
 
 | файл | содержание |
 |------|------------|
-| [`blanket/00-glossary.md`](blanket/00-glossary.md) | МЗВ, LIC, τ, $T_{\mathrm{eq}}$, что **не** входит в солвер |
-| [`blanket/01-two-surfaces.md`](blanket/01-two-surfaces.md) | стек: ocean → blanket; аналогия `app` / `blanket` |
-| [`blanket/02-homogeneous-fill.md`](blanket/02-homogeneous-fill.md) | однородное τ, слои ℬ, readout $T_{\mathrm{ISM}}(\|\Phi\|)$ |
-| [`blanket/03-wnm-thermal.md`](blanket/03-wnm-thermal.md) | Γ=Λ, H+He, `cooling_scale` как норма линий |
-| [`blanket/04-constraints-data.md`](blanket/04-constraints-data.md) | schema yaml/json, pass criteria |
-| [`blanket/05-screen-forward.md`](blanket/05-screen-forward.md) | column τ forward (смежный harness, не геометрия одеяла) |
+| [`blanket/00-glossary.md`](blanket/00-glossary.md) | термины МЗВ, LIC, τ, $T_{\mathrm{eq}}$ |
+| [`blanket/01-two-surfaces.md`](blanket/01-two-surfaces.md) | океан → одеяло |
+| [`blanket/02-homogeneous-fill.md`](blanket/02-homogeneous-fill.md) | однородное τ, слои ℬ, карта T |
+| [`blanket/03-wnm-thermal.md`](blanket/03-wnm-thermal.md) | Γ=Λ, таблица PS20 |
+| [`blanket/04-constraints-data.md`](blanket/04-constraints-data.md) | yaml/json, критерии |
+| [`blanket/05-screen-forward.md`](blanket/05-screen-forward.md) | колонка τ (смежная задача) |
 
-### Код (SSOT impl)
+### Реализация
 
 | модуль | роль |
 |--------|------|
-| `mt_ca.blanket.constraints` | `load_ism_constraints()` → `data/ism_constraints_v0.yaml` |
-| `mt_ca.blanket.preset` | `BlanketPreset` — none / homogeneous_mzw |
-| `mt_ca.blanket.surface` | τ uniform, `apply_ism_blanket`, `ism_T_map_K`, reports |
-| `mt_ca.blanket.wnm` | `wnm_equilibrium_T_K`, `equilibrium_T_wnm_K` |
-| `mt_ca.blanket.column` | column τ(N_H, r) для uniform fill и forward |
-| `mt_ca.blanket.stack` | наложение preset на `LatticeFluidSimulator` |
+| `mt_ca.blanket.constraints` | `load_ism_constraints()` |
+| `mt_ca.blanket.preset` | `BlanketPreset` |
+| `mt_ca.blanket.surface` | τ, `apply_ism_blanket`, `ism_T_map_K` |
+| `mt_ca.blanket.wnm` | равновесие WNM |
+| `mt_ca.blanket.column` | τ(N_H, r) по колонке |
+| `mt_ca.blanket.stack` | наложение на симулятор |
 
-Legacy import paths (`mt_ca.ism_blanket`, `mt_ca.ism_screen`, `mt_ca.wnm_thermal`) — shims; новый код импортирует **`mt_ca.blanket`**.
+Старые импорты (`ism_blanket`, `ism_screen`, `wnm_thermal`) — совместимость; новый код: **`mt_ca.blanket`**.
 
-Dogfood: `python scripts/run_ism_blanket_over_ocean.py`.
+**Контрольный расчёт:** `python scripts/run_ism_blanket_over_ocean.py`.

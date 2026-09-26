@@ -2,7 +2,7 @@
 
 Повторяемый протокол: **генезис → каркас → условия → конкретизация → проверка**.
 
-Канон формул: `MODEL.md` · **ISM blanket (2-я поверхность):** `BLANKET.md` · манифест: `MANIFEST.md` · impl/verify/open: `DEVLOG.md`. Код: `mt_ca/`, проверка: `verify_principles.py`.
+Спецификация: `MODEL.md` · одеяло МЗВ: `BLANKET.md` · манифест: `MANIFEST.md` · журнал: `DEVLOG.md`. Код: `mt_ca/`, верификация: `verify_principles.py`.
 
 ---
 
@@ -28,7 +28,7 @@
 Λ = (ℤ/Nℤ)^d ,  t ∈ ℤ
 dl = hL = l_P ,  hT = t_P ,  dV = dl³
 N₄(x) = { x ± ê_i }     Moore запрещён — §1.3 (световой конус, Δs²)
-f_геометрия зависит от ε; канон = N₄ из симметрии, не LBM-костыль
+f_геометрия зависит от ε; выбор N₄ из симметрии, не LBM-костыль
 ```
 
 **Проверка:** `laplacian.py` — только 4 `roll`, без диагоналей. **Не Moore** в micro (внешний совет «8 соседей» ломает A1).
@@ -91,7 +91,7 @@ z' = z · exp(i·φ_eff)   — default isotropic: one exp(iφ), no sweeps (§3.6
 γ = 0.25                   (dispersion — калибровать vs T DFT oracle)
 ```
 
-SSOT: `mt_ca/si_constants.py` · `python -c "from mt_ca.si_constants import as_code_dict; print(as_code_dict())"`
+См. `mt_ca/si_constants.py` · `python -c "from mt_ca.si_constants import as_code_dict; print(as_code_dict())"`
 
 **A8 без `w`:** при ρ→∞, `α*/(ρ+ε)-1 → -1` ⇒ φ→0 mod 2π — gate уже гасит нелинейность на macro.
 

@@ -1,75 +1,75 @@
-# M → T → SM lattice fluid
+# Спецификация M→T→SM (решёточная жидкость)
 
 **Манифест:** [`MANIFEST.md`](MANIFEST.md) — «Кипящий океан» (исходный текст, не заголовок-каталог).
-**Meta** (космология, observer UI, access) → **[`META.md`](META.md)** — **не SSOT**; не добавляет knobs в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.
-**Devlog** (impl, verify, open leaves) → **[`DEVLOG.md`](DEVLOG.md)** — **не SSOT**; не меняет `g`.
-**SM constants** — [`model/06-si-sm.md`](model/06-si-sm.md) (hub §6–§8), часть **MODEL**, не meta.
+**META** (космология, наблюдатель) → **[`META.md`](META.md)** — **не входит в спецификацию MODEL**; не добавляет параметров в `g`. **Два «времени»:** A5-пена без начала/конца (M) vs генезис **наблюдаемой** — **META §3.0**.
+**Журнал разработки** → **[`DEVLOG.md`](DEVLOG.md)** — **не спецификация MODEL**; не меняет `g`.
+**Константы SM** — [`model/06-si-sm.md`](model/06-si-sm.md) (§6–§8), часть **MODEL**, не META.
 
-### Иерархия слоёв (SSOT)
+### Слои документации
 
 ```
-физика (известное)  →  M   model/*.md + этот hub   — утверждения: g, аксиомы, ДА, M→T→SM
-                           ↓  следует
-                      impl mt_ca/            — реализация; **может отставать** от M
-                           ↓  проверяет (impl ↔ M)
-                      sim  validate_mt, GPU  — не «истина»; ловит sim-gap и T-метрики
-                           ↓
-                      T    coarse, мacro-T     — наблюдаемый слой
-                           ↓  (интерпретация)
-                      Meta META.md           — космология, UI, access; **не refute M**
-                      Devlog DEVLOG.md       — impl status, verify, open; **не refute M**
+известная физика  →  M   MODEL.md + model/*.md   — g, аксиомы, ДА, M→T→SM
+                        ↓
+                   реализация mt_ca/            — может отставать от MODEL
+                        ↓  сверка с MODEL
+                   симуляция validate_mt, GPU  — не «истина»; фиксирует расхождения
+                        ↓
+                   T   крупномасштабное усреднение, макро-T
+                        ↓
+                   META.md           — интерпретация; не опровергает MODEL
+                   DEVLOG.md         — статус кода и открытые задачи
 ```
 
-**Истина идёт из MODEL (hub + `model/`).** Impl и sim **догоняют**.
+**Утверждения физики — в MODEL.** Реализация и симуляция **догоняют**.
 
 ### Запрещено в MODEL
 
-Даты сессий · snapshot-таблицы · **`Impl:`** · MVP/Genese-повествование · «была здесь» · provenance · sim notes — **только [`DEVLOG.md`](DEVLOG.md)**.
+Даты сессий · таблицы снимков · пометки «код:» · черновое MVP · «была здесь» · история правок · заметки о симуляции — **только [`DEVLOG.md`](DEVLOG.md)**.
 MODEL = физика `g` **сейчас**, не дневник разработки.
 
-### M vs Meta / Devlog
+### MODEL · META · журнал
 
 | | **MODEL** | **META** | **DEVLOG** |
 |---|-----------|----------|------------|
-| Роль | **SSOT физики** | UI / космология **над** M | impl / verify / open |
-| Где | этот hub + [`model/`](model/) | `META.md` | `DEVLOG.md` |
-| Спор | «что делает `g`?» → только MODEL | «что видит мозг?» → META | «догнали код?» → DEVLOG |
+| Роль | **спецификация физики** | космология **над** M | реализация / верификация / открытое |
+| Где | `MODEL.md` + [`model/`](model/) | `META.md` | `DEVLOG.md` |
+| Спор | «что делает `g`?» → только MODEL | «что видит наблюдатель?» → META | «догнали код?» → DEVLOG |
 
-### Три вида gap
+### Три типа расхождения
 
-| gap | смысл | чей долг | лечение |
-|-----|--------|----------|---------|
-| **model-gap** | в M **не применили** уже известную физику | **MODEL** | дописать/вывести § |
-| **sim-gap** | в MODEL **уже сказано**, impl/sim **не догнали** | **mt_ca** / verify | код, harness |
-| **T-metric** | грубый macro-T / слабая метрика | **validate_mt**, macro | не «M refuted» |
+| тип | смысл | чей долг | что делать |
+|-----|--------|----------|------------|
+| **пробел в MODEL** | не выведена уже известная физика | **MODEL** | дописать § |
+| **отставание кода** | в MODEL сказано, код/симуляция не догнали | **mt_ca** | реализация, тесты |
+| **слабая метрика T** | грубое усреднение или слабый критерий | **validate_mt** | не трактовать как опровержение MODEL |
 
-**Правило:** sim ≠ M → сначала классифицировать gap; **не** ослаблять MODEL под sim.
+**Правило:** симуляция ≠ MODEL → классифицировать расхождение; **не** ослаблять MODEL под симуляцию.
 
 ### Карта физики
 
 | файл | содержание |
 |------|------------|
-| [`model/00-glossary.md`](model/00-glossary.md) | **глоссарий:** планкон · планковская дырка · планковская ячейка · вакуум |
-| [`model/00-foundations.md`](model/00-foundations.md) | §0 основания · **eng-хвост §0.10** |
-| [`model/01-carrier.md`](model/01-carrier.md) | §1 носитель: FCC N₁₂ · гекс-срез · κ · **тор §1.7** |
-| [`model/02-axioms.md`](model/02-axioms.md) | §2 абсолютные условия A1–A16 |
+| [`model/00-glossary.md`](model/00-glossary.md) | глоссарий: планкон · планковская дырка · ячейка · вакуум |
+| [`model/00-foundations.md`](model/00-foundations.md) | §0 основания · технический §0.10 |
+| [`model/01-carrier.md`](model/01-carrier.md) | §1 носитель: FCC N₁₂ · гекс-срез · κ · тор §1.7 |
+| [`model/02-axioms.md`](model/02-axioms.md) | §2 условия A1–A16 |
 | [`model/03-evolution.md`](model/03-evolution.md) | §3 `g`, ДА, спинор, leapfrog |
 | [`model/04-macro.md`](model/04-macro.md) | §4 M→T |
-| [`model/05-matter.md`](model/05-matter.md) | §5 dV, occupancy, гидро |
-| [`model/05-floor0-spectrum.md`](model/05-floor0-spectrum.md) | §5.0.4-A внутренний спектр планкона (этаж 0) |
-| [`model/06-si-sm.md`](model/06-si-sm.md) | hub §6–§8 (оглавление) |
-| [`model/06-ladder.md`](model/06-ladder.md) | §6 иерархия M→SM · **§6.0 лестница до T** |
+| [`model/05-matter.md`](model/05-matter.md) | §5 dV, заполнение, гидродинамика |
+| [`model/05-floor0-spectrum.md`](model/05-floor0-spectrum.md) | §5.0.4-A спектр планкона (этаж 0) |
+| [`model/06-si-sm.md`](model/06-si-sm.md) | оглавление §6–§8 |
+| [`model/06-ladder.md`](model/06-ladder.md) | §6 иерархия M→SM · §6.0 лестница до T |
 | [`model/07-si-bridge.md`](model/07-si-bridge.md) | §7 SI-мост |
 | [`model/08-alpha.md`](model/08-alpha.md) | §8.1–8.2 α |
-| [`model/08-units.md`](model/08-units.md) | §8.2 meter / units |
+| [`model/08-units.md`](model/08-units.md) | §8.2 единицы длины |
 | [`model/08-masses.md`](model/08-masses.md) | §8.2 массы |
-| [`model/08-higgs.md`](model/08-higgs.md) | §8.3 Higgs |
+| [`model/08-higgs.md`](model/08-higgs.md) | §8.3 бозон Higgs |
 | [`model/08-forces.md`](model/08-forces.md) | §8.4 силы · GR · Weinberg · CKM |
 
-**Одеяло МЗВ (вторая поверхность над океаном):** hub [`BLANKET.md`](BLANKET.md) + [`blanket/`](blanket/) + `data/ism_constraints_v0.yaml` · код `mt_ca/blanket/` (не часть аксиом `g` в MODEL).
+**Одеяло МЗВ:** [`BLANKET.md`](BLANKET.md) + [`blanket/`](blanket/) + `data/ism_constraints_v0.yaml` · код `mt_ca/blanket/` (не аксиомы `g`).
 
-**Носитель (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆** = {111} FCC. Квадрат N₄ — не физика M (см. DEVLOG).
+**Носитель (3+1):** FCC **N₁₂**. **Срез (2+1):** гекс **N₆**. Квадрат N₄ — не физика M (см. DEVLOG).
 
-### Инженерный хвост (не SSOT физики)
+### Инженерное приложение
 
-Seeds / GPU-контракт / code slice — [`DEVLOG.md`](DEVLOG.md) (§ eng).
+Начальные условия, GPU, фрагменты кода — [`DEVLOG.md`](DEVLOG.md).

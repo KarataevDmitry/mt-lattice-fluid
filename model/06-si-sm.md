@@ -12,4 +12,4 @@
 | [`model/08-higgs.md`](08-higgs.md) | §8.3 · Higgs (~87 строк) |
 | [`model/08-forces.md`](08-forces.md) | §8.4 · Четыре взаимодействия (~501 строк) |
 
-**Сюда:** физика. Impl / verify → [`DEVLOG.md`](../DEVLOG.md).
+**Сюда:** физика. Реализация / верификация → [`DEVLOG.md`](../DEVLOG.md).

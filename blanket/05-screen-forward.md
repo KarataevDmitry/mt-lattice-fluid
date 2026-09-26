@@ -1,11 +1,9 @@
-# §5 · Column screen forward (смежный harness)
+# §5 · Колонка экрана (смежная задача)
 
-**Не геометрия одеяла.** Отдельная цепочка: contrast после ν-damp → τ column → CMB ΔT/T target, VLISM $n_e$ magnetothermal.
+Не геометрия одеяла. Цепочка: контраст → τ по колонке → CMB ΔT/T, VLISM.
 
-Код legacy path: `mt_ca.ism_screen` (`evaluate_ism_screen_v2`).
+Код: `mt_ca.ism_screen`. Общие формулы $N_H(r)$, τ — `mt_ca.blanket.column`.
 
-Общие куски column τ вынесены в **`mt_ca.blanket.column`** (SSOT формулы $N_H(r)$, τ).
+Одеяло берёт только $\tau_0$ в якорной точке.
 
-Одеяло использует **только** scalar $\tau_0$ из column в якорной точке, без radial map на macro grid.
-
-Verify: `verify_checks/cosmology.py`, `scripts/run_ism_screen_forward_v0.py`.
+Верификация: `verify_checks/cosmology.py`, `scripts/run_ism_screen_forward_v0.py`.
