@@ -100,7 +100,9 @@ z' = z · exp(i·φ_eff)   — default isotropic: one exp(iφ), no sweeps (§3.6
 ## Шаг 5. Численная проверка
 
 ```bash
-python verify_principles.py
+python verify_principles.py --ship
+python verify_principles.py --list
+python verify_principles.py --suite t_macro
 python run_benchmark.py --json
 ```
 
@@ -173,7 +175,7 @@ python run_benchmark.py --json
 ```bash
 python validate_mt.py
 python verify_principles.py
-# sweep: r∈{1..5}, seeds above — leaf script TBD
+# sweep: r∈{1..5}, seeds above — UoW script TBD
 ```
 
 **Сжатия:** моды Δ₄/DFT · winding `n` only · optional inverse coarse-grain из T.
