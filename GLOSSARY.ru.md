@@ -23,11 +23,12 @@
 | **Журнал разработки** | `DEVLOG.md` | Даты, impl, open UoW §3 — не физика. |
 | **Полный учёт** (классов / ходов / конфигураций) | verify `*census*`, `Floor1_B0_census`, якорь `§*·census` | Исчерпывающее перечисление на носителе: **комбинаторный учёт** (места α, учёт ходов FCC) или **таблица устойчивых классов** (этаж 1, B=0). **Учёт в симуляции** — перебор в CA, может опровергнуть (§8.4.1-D3). Не голый «подсчёт одного числа». Eng. *census* — только в id verify и якорях §. |
 | **Объём / скорость** | $V_P$, $dV$ vs $v$, $c$ | **$V$** — объём; **$v$** — скорость (см. `model/00-glossary.md`). |
-| **Планковская ячейка ($V_P$)** | `planck_cell`, `dl`, `enforce_planck_cell_floor` | **Место** на $\Lambda$; $V_P=\ell_P^3$. FCC: $dV$ (в SI-рядах ключ `v_hV_m3` = $dV$). |
-| **Бит-бюджет ячейки $B_V$** | `hv_bit_budget`, поле `B_hV` в row | $B_V=2\pi/\ln2$; в JSON пока имя `B_hV` — тот же $B_V$. |
+| **Планковская ячейка ($V_P$)** | `planck_cell`, `dl`, `enforce_planck_cell_floor` | **Место** на $\Lambda$; $V_P=\ell_P^3$. FCC: $dV$ (в SI-рядах ключ `dV_m3` = $dV$). |
+| **Бит-бюджет ячейки $B_V$** | `planck_cell_bit_budget`, `PlanckCellBitBudget`, ключ `B_V` | $B_V=2\pi/\ln2$; verify `PlanckCellBitBudget`. |
+| **Объём FCC $dV$ (SI)** | `dV_m3`, `V_over_dV` в geo rows | $dV=V_P/\sqrt{2}$ на узле; не путать с $v$ (скорость). |
 | **Планкон / дырка** | `b=1` / `b=0`, `VORTEX_*`, `empty-cell` | **Содержимое** ячейки. Не путать с местом ($V_P$). |
 | **Узел планкона** | `b_core`, `planckon_core` | Узел с $b=1$; **не** закон $g$. |
 | **Занятость** $b$ | `matter_occupancy_b` | $b\in\{0,1\}$ на узле. |
-| **$\Gamma$ планкона** | `floor0_gamma`, $\Gamma_V$ | Внутренние $(q,p)$ на одном $V_P$; verify id `Floor0_gamma_hV`. |
+| **$\Gamma$ планкона** | `floor0_gamma`, $\Gamma_V$ | Внутренние $(q,p)$ на одном $V_P$; verify id `Floor0_gamma_V`. |
 
 **Правило для текста:** в `model/` и книге — левая колонка; в Python и yaml — правая, пока не сделана явная миграция.

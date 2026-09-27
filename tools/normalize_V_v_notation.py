@@ -15,11 +15,11 @@ SUBS: list[tuple[str, str]] = [
     ("$B_{hV}$", "$B_V$"),
     ("B_{hV}", "B_V"),
     ("`B_hV`", "`B_V`"),
-    ("B_hV", "B_V"),
+    ("B_V", "B_V"),
     ("$v_{hV}$", "$dV$"),
     ("v_{hV}", "dV"),
-    ("`v_hV`", "`dV`"),
-    ("v_hV", "dV"),
+    ("`dV`", "`dV`"),
+    ("dV", "dV"),
     ("`v_p`", "`V_P`"),
     ("$v_p$", "$V_P$"),
     ("∂(hV)", "∂(V_P)"),
@@ -41,14 +41,14 @@ def patch_text(text: str) -> str:
     for old, new in SUBS:
         text = text.replace(old, new)
     text = V_P_RE.sub("V_P", text)
-    # last: standalone hV (not inside identifiers like Floor0_gamma_hV — already Gamma fixed)
+    # last: standalone hV (not inside identifiers like Floor0_gamma_V — already Gamma fixed)
     text = HV_RE.sub("V_P", text)
     return text
 
 
 def main() -> None:
     paths = list((ROOT / "model").glob("*.md"))
-    # GLOSSARY.ru.md — править вручную (ключи JSON вроде v_hV_m3 не трогать автозаменой).
+    # GLOSSARY.ru.md — править вручную (ключи JSON вроде dV_m3 не трогать автозаменой).
     for path in paths:
         raw = path.read_text(encoding="utf-8")
         new = patch_text(raw)

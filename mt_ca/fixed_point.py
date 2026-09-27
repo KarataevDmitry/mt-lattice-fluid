@@ -8,11 +8,11 @@ from __future__ import annotations
 
 import torch
 
-from mt_ca.si_constants import HV
+from mt_ca.si_constants import PLANCK_CELL
 from mt_ca.z_ring import leapfrog_next, leapfrog_past, mod_lane, signed_from_mod
 
-DEFAULT_FRAC_BITS = HV.frac_bits
-DEFAULT_MOD_BITS = HV.mod_bits
+DEFAULT_FRAC_BITS = PLANCK_CELL.frac_bits
+DEFAULT_MOD_BITS = PLANCK_CELL.mod_bits
 
 
 def scale(frac_bits: int = DEFAULT_FRAC_BITS) -> float:

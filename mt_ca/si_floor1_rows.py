@@ -9,7 +9,7 @@ from mt_ca.si_constants import (
     DELTA_PHI_MIN,
     HBAR,
     N12_FCC_CAUSAL_LINKS,
-    hv_bit_budget
+    planck_cell_bit_budget
 )
 
 
@@ -45,8 +45,8 @@ class SIFloor1Rows:
         Status: scale window motivated; content census OPEN.
         """
         n12 = int(N12_FCC_CAUSAL_LINKS)
-        n_phi = int(hv_bit_budget().N_phi)
-        n_hier = int(math.floor(hv_bit_budget().B_hV)) - 1
+        n_phi = int(planck_cell_bit_budget().N_phi)
+        n_hier = int(math.floor(planck_cell_bit_budget().B_V)) - 1
         l_p = self.l_P
         # linear scales in ·dl
         lo = float(n12**3)
@@ -310,11 +310,11 @@ class SIFloor1Rows:
 
         TRY (next, not closed):
           · shell-walk: k = min{k: max_|Δφ| on shell k < Δφ_min}
-          · combinatorial candidates from N_phi, B_hV, N_ring
+          · combinatorial candidates from N_phi, B_V, N_ring
         """
         n12 = int(N12_FCC_CAUSAL_LINKS)
         dphi = float(DELTA_PHI_MIN)
-        n_phi = int(hv_bit_budget().N_phi)
+        n_phi = int(planck_cell_bit_budget().N_phi)
         r_min = 1.0  # ·dl — ε-star
         r_floor1_lo = float(n12**3)
         r_floor1_hi = float(n12**4)
@@ -369,7 +369,7 @@ class SIFloor1Rows:
             {
                 "id": "try_combinatorial_Nphi_BhV",
                 "ratio": float(n_phi),
-                "maps_to": "N_phi / B_hV / N_ring as candidate cutoffs — unproven",
+                "maps_to": "N_phi / B_V / N_ring as candidate cutoffs — unproven",
                 "status": "try",
             },
         ]
@@ -433,7 +433,7 @@ class SIFloor1Rows:
         """
         n12 = int(N12_FCC_CAUSAL_LINKS)
         dphi = float(DELTA_PHI_MIN)
-        n_phi = int(hv_bit_budget().N_phi)
+        n_phi = int(planck_cell_bit_budget().N_phi)
         dphi_ring = 2.0 * math.pi / float(n12)
         r_dress = 1.0  # ·dl
 
@@ -529,7 +529,7 @@ class SIFloor1Rows:
           · free float parameters in f
         """
         dphi = float(DELTA_PHI_MIN)
-        n_phi = int(hv_bit_budget().N_phi)
+        n_phi = int(planck_cell_bit_budget().N_phi)
 
         inventory: list[dict[str, str | float | bool]] = [
             {

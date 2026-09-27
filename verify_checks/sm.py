@@ -129,11 +129,11 @@ def check_proton_mass(device: str = "cpu") -> dict:
     }
 
 def check_electron_mass(device: str = "cpu") -> dict:
-    from mt_ca.si_constants import HV, SI
+    from mt_ca.si_constants import PLANCK_CELL, SI
 
     del device
     row = SI.electron_mass_row()
-    n_phi = float(HV.N_phi)
+    n_phi = float(PLANCK_CELL.N_phi)
     a2 = row["alpha_preferred"] ** 2
     ok = (
         row["N_phi"] == n_phi
@@ -157,11 +157,11 @@ def check_electron_mass(device: str = "cpu") -> dict:
     }
 
 def check_neutrino_mass(device: str = "cpu") -> dict:
-    from mt_ca.si_constants import HV, SI
+    from mt_ca.si_constants import PLANCK_CELL, SI
 
     del device
     row = SI.neutrino_mass_row()
-    n_phi = float(HV.N_phi)
+    n_phi = float(PLANCK_CELL.N_phi)
     n_hier = float(row["N_hier"])
     a = row["alpha_preferred"]
     expected = (a**5) * (2.0 * row["m_H_GeV"]) / (n_hier * n_phi) * 1e9

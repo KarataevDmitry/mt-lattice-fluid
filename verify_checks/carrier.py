@@ -92,7 +92,7 @@ def check_square_face_holonomy_probe(device: str = "cpu") -> dict:
         and abs(row["delta_phi_nn_vortex"]) > 0.5
         and row["alpha_link_ok"]
         and row["alpha_match_open"]
-        and row["V_over_v_hV"] == 16.0 / 3.0
+        and row["V_over_dV"] == 16.0 / 3.0
     )
     return {
         "id": "Phi_square_probe",
@@ -118,7 +118,7 @@ def check_cuboctahedron_carrier(device: str = "cpu") -> dict:
     inv = row["ratio_inventory"]
     by_id = {str(r["id"]): r for r in inv}
     ok = (
-        abs(row["V_over_v_hV"] - 16.0 / 3.0) < 1e-12
+        abs(row["V_over_dV"] - 16.0 / 3.0) < 1e-12
         and abs(float(by_id["edge_a_anchor"]["ratio"]) - 1.0) < 1e-12
         and abs(row["edge_a_m"] - SI.l_P) / SI.l_P < 1e-12
         and abs(float(by_id["kappa_inscr_1tick"]["ratio"]) - KAPPA_FCC_1TICK) < 1e-12
@@ -133,7 +133,7 @@ def check_cuboctahedron_carrier(device: str = "cpu") -> dict:
     return {
         "id": "Cuboctahedron",
         "edge_a_m": row["edge_a_m"],
-        "V_over_v_hV": row["V_over_v_hV"],
+        "V_over_dV": row["V_over_dV"],
         "V_over_S_m": row["V_over_S_m"],
         "V_over_S_over_l_P": row["V_over_S_over_l_P"],
         "n_square_over_n_triangle": row["n_square_over_n_triangle"],
@@ -156,7 +156,7 @@ def check_discreteness_from_axioms(device: str = "cpu") -> dict:
         and row["s0_equals_hbar_half"] is True
         and row["p0_equals_hbar_over_2hL"] is True
         and row["p0_equals_m_arg_c0_half"] is True
-        and abs(float(row["B_hV_pure"]) - 2.0 * math.pi / math.log(2.0)) < 1e-12
+        and abs(float(row["B_V_pure"]) - 2.0 * math.pi / math.log(2.0)) < 1e-12
         and int(row["N_phi"]) == 13
         and int(row["N_ring"]) == 512
         and int(row["frac_bits"]) == 6
@@ -165,7 +165,7 @@ def check_discreteness_from_axioms(device: str = "cpu") -> dict:
     )
     return {
         "id": "Discreteness_from_axioms",
-        "B_hV_pure": row["B_hV_pure"],
+        "B_V_pure": row["B_V_pure"],
         "N_ring": row["N_ring"],
         "N_phi": row["N_phi"],
         "z_min_natural": row["z_min_natural"],
@@ -267,7 +267,7 @@ def check_anchor_a_is_l_P(device: str = "cpu") -> dict:
         and row["a_equals_hL"] is True
         and row["l_P_not_defined_by_c"] is True
         and row["scale_decoupled_from_c_definition"] is True
-        and row["v_hV_equals_lP3_over_sqrt2"] is True
+        and row["dV_equals_V_P_over_sqrt2"] is True
         and row["m_arg_mech_equals_em"] is True
         and row["p0_equals_hbar_over_2lP"] is True
         and float(row["l_P_textbook_rel_err"]) < 1e-12
@@ -296,7 +296,7 @@ def check_planck_from_cell_conditions(device: str = "cpu") -> dict:
         and row["cell_m_arg_equals_mP_over_sqrt2"] is True
         and row["cell_E0_equals_s0_over_hT"] is True
         and row["bekenstein_algebraic"] is True
-        and abs(float(row["geometry_v_hV_over_lP3"]) - 1.0 / math.sqrt(2.0)) < 1e-12
+        and abs(float(row["geometry_dV_over_V_P"]) - 1.0 / math.sqrt(2.0)) < 1e-12
         and float(row["conventional_t_P_rel_err"]) < 1e-12
         and float(row["conventional_E_P_rel_err"]) < 1e-12
         and int(row["register_N_phi"]) == 13
@@ -305,9 +305,9 @@ def check_planck_from_cell_conditions(device: str = "cpu") -> dict:
     return {
         "id": "Planck_from_cell",
         "closure_rho_cell_equals_mu_P": row["closure_rho_cell_equals_mu_P"],
-        "geometry_v_hV_over_lP3": row["geometry_v_hV_over_lP3"],
+        "geometry_dV_over_V_P": row["geometry_dV_over_V_P"],
         "conventional_t_P_rel_err": row["conventional_t_P_rel_err"],
-        "bekenstein_B_hV": row["bekenstein_B_hV"],
+        "bekenstein_B_V": row["bekenstein_B_V"],
         "ok": ok,
         "note": row["note"],
     }
@@ -344,13 +344,13 @@ def check_kappa_bottom_up(device: str = "cpu") -> dict:
     }
 
 def check_rhombic_dodecahedron_geometry(device: str = "cpu") -> dict:
-    """§8.2·geo·voronoi — FCC Voronoy cell; dual to cuboctahedron; V=v_hV."""
+    """§8.2·geo·voronoi — FCC Voronoy cell; dual to cuboctahedron; V=dV."""
     from mt_ca.si_constants import KAPPA_FCC_1TICK, SI
 
     del device
     row = SI.rhombic_dodecahedron_geometry_row()
     ok = (
-        abs(row["V_over_v_hV"] - 1.0) < 1e-12
+        abs(row["V_over_dV"] - 1.0) < 1e-12
         and abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
         and abs(row["R_in_over_a"] - 0.5) < 1e-12
         and abs(row["V_cuboctahedron_over_V_voronoi"] - 16.0 / 3.0) < 1e-12
@@ -366,7 +366,7 @@ def check_rhombic_dodecahedron_geometry(device: str = "cpu") -> dict:
     return {
         "id": "Rhombic_dodecahedron_geo",
         "edge_a_m": row["edge_a_m"],
-        "V_over_v_hV": row["V_over_v_hV"],
+        "V_over_dV": row["V_over_dV"],
         "R_in_Voronoi_m": row["R_in_Voronoi_m"],
         "V_cuboctahedron_over_V_voronoi": row["V_cuboctahedron_over_V_voronoi"],
         "V_over_S_over_a": row["V_over_S_over_a"],
@@ -383,16 +383,16 @@ def check_rhombic_dodecahedron_carrier(device: str = "cpu") -> dict:
     inv = row["ratio_inventory"]
     by_id = {str(r["id"]): r for r in inv}
     ok = (
-        abs(row["V_over_v_hV"] - 1.0) < 1e-12
+        abs(row["V_over_dV"] - 1.0) < 1e-12
         and abs(row["V_cuboctahedron_over_V_voronoi"] - 16.0 / 3.0) < 1e-12
         and abs(float(by_id["R_in_Voronoi"]["ratio"]) - 0.5) < 1e-12
-        and by_id["V_over_v_hV"]["status"] == "derived"
+        and by_id["V_over_dV"]["status"] == "derived"
         and by_id["R_in_Voronoi"]["status"] == "derived"
         and len(row["ratio_inventory"]) >= 6
     )
     return {
         "id": "Rhombic_dodecahedron",
-        "V_over_v_hV": row["V_over_v_hV"],
+        "V_over_dV": row["V_over_dV"],
         "R_in_Voronoi_m": row["R_in_Voronoi_m"],
         "V_cuboctahedron_over_V_voronoi": row["V_cuboctahedron_over_V_voronoi"],
         "ratio_derived_count": row["ratio_derived_count"],
@@ -401,13 +401,13 @@ def check_rhombic_dodecahedron_carrier(device: str = "cpu") -> dict:
     }
 
 def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
-    """§8.2·geo — cuboctahedron V=(16/3)v_hV; discrete α candidate vs derived π."""
+    """§8.2·geo — cuboctahedron V=(16/3)dV; discrete α candidate vs derived π."""
     from mt_ca.si_constants import SI
 
     del device
     row = SI.cuboctahedron_geometry_row()
     ok = (
-        abs(row["V_over_v_hV"] - 16.0 / 3.0) < 1e-12
+        abs(row["V_over_dV"] - 16.0 / 3.0) < 1e-12
         and abs(row["edge_a_over_l_P"] - 1.0) < 1e-12
         and abs(row["R_in_over_R_out_1tick"] - 1.0 / math.sqrt(2.0)) < 1e-12
         and abs(row["A_square_one_m2"] - row["edge_a_m"] ** 2) < 1e-24 * row["edge_a_m"] ** 2
@@ -420,7 +420,7 @@ def check_cuboctahedron_geometry(device: str = "cpu") -> dict:
     return {
         "id": "Cuboctahedron_geo",
         "edge_a_m": row["edge_a_m"],
-        "V_over_v_hV": row["V_over_v_hV"],
+        "V_over_dV": row["V_over_dV"],
         "V_over_S_m": row["V_over_S_m"],
         "alpha_fs_inv_geom": row["alpha_fs_inv_geom"],
         "alpha_inv_geom_rel_err": row["alpha_inv_geom_rel_err"],
@@ -586,11 +586,11 @@ def check_nu_CA_exact(device: str = "cpu") -> dict:
         "note": "ν_CA = ¼·c₀·l_P (N₄ lattice gas, §4.1.2)",
     }
 
-def check_hv_bit_budget(device: str = "cpu") -> dict:
+def check_planck_cell_bit_budget(device: str = "cpu") -> dict:
     from mt_ca.config import MConfig
-    from mt_ca.si_constants import HV, hv_bit_budget_row
+    from mt_ca.si_constants import PLANCK_CELL, planck_cell_bit_budget_row
 
-    row = hv_bit_budget_row()
+    row = planck_cell_bit_budget_row()
     cfg = MConfig.for_stencil('hex')
     ok = (
         row["rel_err"] < 1e-12
@@ -601,16 +601,17 @@ def check_hv_bit_budget(device: str = "cpu") -> dict:
         and row["frac_bits"] == 6
         and abs(row["heisenberg_phi_min_rad"] - 0.5) < 1e-12
         and row["heisenberg_phi_min_disc"] == 41
-        and cfg.mod_bits == HV.mod_bits
-        and cfg.frac_bits == HV.frac_bits
-        and cfg.phase_bits == HV.phase_bits
+        and cfg.mod_bits == PLANCK_CELL.mod_bits
+        and cfg.frac_bits == PLANCK_CELL.frac_bits
+        and cfg.phase_bits == PLANCK_CELL.phase_bits
         and abs(cfg.heisenberg_phi_min - 0.5) < 1e-12
     )
     return {
-        "id": "HvBitBudget",
+        "id": "PlanckCellBitBudget",
+        "alias_ids": ["HvBitBudget"],
         "ok": ok,
         **{k: v for k, v in row.items()},
-        "note": "§3.12.6: B_hV=2π/ln2, N_ring=512, defaults from Planck brick",
+        "note": "§3.12.6: B_V=2π/ln2, N_ring=512, defaults from Planck brick",
     }
 
 def check_rho_P_binary(device: str = "cpu") -> dict:

@@ -11,7 +11,7 @@ from mt_ca.si_constants import (
     KAPPA_FCC_1TICK,
     N12_FCC_CAUSAL_LINKS,
     N4_CAUSAL_LINKS,
-    hv_bit_budget,
+    planck_cell_bit_budget,
 )
 
 
@@ -282,8 +282,8 @@ class SIAlphaThmRows:
 
         Already derived (not new knobs):
           N₁₂ = 12 (FCC links)
-          ⌊B_hV⌋ = 9
-          N_hier = ⌊B_hV⌋ − 1 = 8  — hierarchy channels after removing
+          ⌊B_V⌋ = 9
+          N_hier = ⌊B_V⌋ − 1 = 8  — hierarchy channels after removing
             occupancy bit b (§8.4.1-A / T1)
           b∈{0,1} on pra-core (A11)
 
@@ -292,7 +292,7 @@ class SIAlphaThmRows:
           Coulomb NN force still sits on a charged core (b=1) plus the
           link×hierarchy budget that carries the impulse stack outward:
             M = 1 + N₁₂ · N_hier
-              = 1 + N₁₂ · (⌊B_hV⌋ − 1)
+              = 1 + N₁₂ · (⌊B_V⌋ − 1)
               = 97
           Reading: one F₀ seat on the occupied hV + N₁₂·N_hier seats on
           the causal star × hierarchy depth. Same −1/+1 bookkeeping as T1,
@@ -304,10 +304,10 @@ class SIAlphaThmRows:
         Status: lemmas force unique M — theorem, not a motivated try.
         Proof carrier: alpha_nF_momentum_registry_row (seat table = axioms).
         """
-        hv = hv_bit_budget()
+        hv = planck_cell_bit_budget()
         kappa = KAPPA_FCC_1TICK
         n12 = int(N12_FCC_CAUSAL_LINKS)
-        floor_b = int(math.floor(hv.B_hV))
+        floor_b = int(math.floor(hv.B_V))
         n_hier = floor_b - 1
         alpha_c = 7.2973525693e-3
         m_96 = n12 * n_hier
@@ -324,7 +324,7 @@ class SIAlphaThmRows:
             {
                 "id": "N_hier_minus_b_bit",
                 "ratio": n_hier,
-                "maps_to": "N_hier=⌊B_hV⌋−1 — derived T1",
+                "maps_to": "N_hier=⌊B_V⌋−1 — derived T1",
                 "status": "derived",
                 "mechanism": "hierarchy channels exclude occupancy bit b",
             },
@@ -338,7 +338,7 @@ class SIAlphaThmRows:
             {
                 "id": "algebra_same_as_N12_floorB_minus_N12_plus_1",
                 "ratio": m_alt,
-                "maps_to": "M=N₁₂⌊B_hV⌋−N₁₂+1 ≡ 1+N₁₂ N_hier",
+                "maps_to": "M=N₁₂⌊B_V⌋−N₁₂+1 ≡ 1+N₁₂ N_hier",
                 "status": "identity",
             },
             {
@@ -364,7 +364,7 @@ class SIAlphaThmRows:
         ]
         return {
             "theorem": "§8.2·α·M·g·try — M=1+N₁₂ N_hier from b-bit bookkeeping",
-            "floor_B_hV": floor_b,
+            "floor_B_V": floor_b,
             "N_hier": n_hier,
             "N12": n12,
             "M_try": m_try,
@@ -403,7 +403,7 @@ class SIAlphaThmRows:
               Hierarchy forbids counting b inside N_hier; the force source
               still requires that seat.
           L2. Link×hier seats — isotropic star (§5.2.2): every of N₁₂ causal
-              links × N_hier exclusive hierarchy channels (⌊B_hV⌋−1).
+              links × N_hier exclusive hierarchy channels (⌊B_V⌋−1).
               Gate has no preferred axis ⇒ whole star, not partner bond alone.
 
         Conclusion:
@@ -414,10 +414,10 @@ class SIAlphaThmRows:
         opcode in CA). Soft −1040 ppm is higher-structure residue, not a
         missing seat.
         """
-        hv = hv_bit_budget()
+        hv = planck_cell_bit_budget()
         kappa = KAPPA_FCC_1TICK
         n12 = int(N12_FCC_CAUSAL_LINKS)
-        floor_b = int(math.floor(hv.B_hV))
+        floor_b = int(math.floor(hv.B_V))
         n_hier = floor_b - 1  # occupancy bit removed (T1)
         alpha_c = 7.2973525693e-3
 
@@ -499,7 +499,7 @@ class SIAlphaThmRows:
 
         return {
             "theorem": "§8.2·α·nF·Thm — M=1+N₁₂·N_hier from momentum registry axioms",
-            "floor_B_hV": floor_b,
+            "floor_B_V": floor_b,
             "N_hier": n_hier,
             "N12": n12,
             "n_core": n_core,
@@ -519,7 +519,7 @@ class SIAlphaThmRows:
             "checks_ok": census_ok and abs(ppm + 1040.3688788164525) < 1.0,
             "note": (
                 "Thm: M=1+N₁₂·N_hier. Core b=1 (force source) + isotropic "
-                "star N₁₂ × exclusive hier channels N_hier=⌊B_hV⌋−1. "
+                "star N₁₂ × exclusive hier channels N_hier=⌊B_V⌋−1. "
                 "Unit NN Coulomb F=F₀/M; M unique. α=soft face preferred, not α₀."
             ),
         }

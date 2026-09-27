@@ -172,7 +172,7 @@ def check_a9_cr_smooth_modes(
         "cr_seed_ceiling": seed_max,
         "cr_dispersion_ceiling": stat_max,
         "nu_CA_natural": nu_CA_natural(),
-        "B_hV_fraction": bekenshtein_fractional_part(),
+        "B_V_fraction": bekenshtein_fractional_part(),
         "stationarity_delta": delta,
         "stationarity_tol": stat_tol,
         "plateau_ok": plateau_ok,

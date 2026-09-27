@@ -128,7 +128,7 @@ python run_benchmark.py --json
 | A4 | A4 | \|z·e^{iφ}\| = \|z\| |
 | A5 | A5 | vacuum не схлопывается |
 | A8 | A8 | φ_high < φ_low при ρ_high |
-| A9 | A9 | **`e₀≤ν_CA·{B_hV}²`**, **`e₁≤ν_CA·(1+{B_hV})`**, стационарность (§3.9.6) |
+| A9 | A9 | **`e₀≤ν_CA·{B_V}²`**, **`e₁≤ν_CA·(1+{B_V})`**, стационарность (§3.9.6) |
 | A11 | validation | vortex amp не исчезает за 128 steps |
 
 ---

@@ -113,7 +113,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
         check_names=_names(
             check_brick_internal_spectrum,
             check_floor0_internal_catalog,
-            check_floor0_gamma_hV,
+            check_floor0_gamma_V,
             check_floor0_phase_space,
             check_floor0_nE_excitation,
             check_floor0_nE_selection,
@@ -181,12 +181,12 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
     ),
     "carrier": VerifySuiteSpec(
         id="carrier",
-        description="Geometry, carrier torus, hV budget, vacuum bath.",
+        description="Geometry, carrier torus, planck-cell bit budget, vacuum bath.",
         check_names=_names(
             check_carrier_torus_close,
             check_gpu_eng_tail_close,
             check_bubble_tick,
-            check_hv_bit_budget,
+            check_planck_cell_bit_budget,
             check_congruence_ladder,
             check_internal_phase_coords,
             check_rho_P_binary,

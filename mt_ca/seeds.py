@@ -6,7 +6,7 @@ from enum import Enum
 import torch
 
 from mt_ca.fixed_point import decode_spinor, encode_spinor
-from mt_ca.si_constants import HV, heisenberg_phi_min_disc
+from mt_ca.si_constants import PLANCK_CELL, heisenberg_phi_min_disc
 from mt_ca.z_ring import mod_lane
 
 
@@ -30,8 +30,8 @@ class SeedClass(str, Enum):
 def heisenberg_phase_tick(
     phase_class: int,
     *,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
 ) -> int:
     """Tick on N_ring for Heisenberg phase class k ∈ {0,…,N_φ−1} (§3.12.6).
 
@@ -55,9 +55,9 @@ def _mesh(ny: int, nx: int, device: torch.device, dtype: torch.dtype) -> tuple[t
 def vacuum_ocean_fixed(
     *spatial: int,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
     phase_class: int = 0,
 ) -> torch.Tensor:
     """Full-lattice vacuum IC on Z_N[i] — every cell a complete brick (§0.5 · §3.12.6).
@@ -93,8 +93,8 @@ def _filled_brick_from_phase_class(
     phase_class: torch.Tensor,
     *,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    phase_bits: int = HV.phase_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
 ) -> torch.Tensor:
     """Encode a per-cell Heisenberg class grid into Z_N[i] (filled lattice, no void)."""
     if phase_class.dim() not in (2, 3):
@@ -115,10 +115,10 @@ def _filled_brick_from_phase_class(
 def vacuum_boil_fixed(
     *spatial: int,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     class_dy: int = 1,
     class_dx: int = 1,
     class_offset: int = 0,
@@ -157,10 +157,10 @@ def vacuum_ice_fixed(
     nx: int,
     *,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     phase_class: int = 0,
 ) -> torch.Tensor:
     """META §3.2 phase III — synchronous ω, uniform Heisenberg brick (filled, no void).
@@ -181,10 +181,10 @@ def vacuum_boil_fixed_3d(
     nx: int,
     *,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     class_dz: int = 1,
     class_dy: int = 1,
     class_dx: int = 1,
@@ -214,10 +214,10 @@ def vacuum_ice_fixed_3d(
     nx: int,
     *,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     phase_class: int = 0,
 ) -> torch.Tensor:
     """3+1 synchronous ice — uniform Heisenberg class on filled FCC lattice."""
@@ -236,9 +236,9 @@ def boil_ocean_spinor_3d(
     *,
     device: torch.device,
     dtype: torch.dtype = torch.complex64,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
     class_dz: int = 1,
     class_dy: int = 1,
     class_dx: int = 1,
@@ -266,10 +266,10 @@ def vacuum_ice_phase_shift_fixed_3d(
     nx: int,
     *,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     base_class: int = 0,
     shift_kind: str = "sphere",
     center: tuple[int, int, int] | None = None,
@@ -310,10 +310,10 @@ def ice_ocean_spinor_3d(
     *,
     device: torch.device,
     dtype: torch.dtype = torch.complex64,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     phase_class: int = 0,
     shift_kind: str | None = None,
     center: tuple[int, int, int] | None = None,
@@ -357,10 +357,10 @@ def vacuum_ice_phase_shift_fixed(
     nx: int,
     *,
     device: torch.device,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     base_class: int = 0,
     shift_kind: str = "disk",
     center: tuple[int, int] | None = None,
@@ -407,10 +407,10 @@ def ice_ocean_spinor(
     *,
     device: torch.device,
     dtype: torch.dtype = torch.complex64,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
-    n_phi: int = HV.N_phi,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
+    n_phi: int = PLANCK_CELL.N_phi,
     phase_class: int = 0,
     shift_kind: str | None = None,
     center: tuple[int, int] | None = None,
@@ -451,9 +451,9 @@ def vacuum_ocean_spinor(
     *spatial: int,
     device: torch.device,
     dtype: torch.dtype = torch.complex64,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
     phase_class: int = 0,
 ) -> torch.Tensor:
     """Decode vacuum ocean to ℂ² macro (evolution still owns Z_N)."""
@@ -598,9 +598,9 @@ def make_seed(
     amplitude: float | None = None,
     impulse_amplitude: float = 0.35,
     nz: int | None = None,
-    mod_bits: int = HV.mod_bits,
-    frac_bits: int = HV.frac_bits,
-    phase_bits: int = HV.phase_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
+    frac_bits: int = PLANCK_CELL.frac_bits,
+    phase_bits: int = PLANCK_CELL.phase_bits,
 ) -> torch.Tensor:
     """Spinor field on a filled lattice (§0.5 · A5 — no void).
 

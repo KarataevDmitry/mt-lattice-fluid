@@ -13,7 +13,7 @@ from mt_ca.si_constants import (
     N12_FCC_CAUSAL_LINKS,
     N4_CAUSAL_LINKS,
     alpha_from_fundamentals,
-    hv_bit_budget,
+    planck_cell_bit_budget,
 )
 
 
@@ -686,20 +686,20 @@ class SIAlphaSoftRows:
         }
 
     def alpha_runner_row(self) -> dict[str, float]:
-        """§8.4.3-D — 1/α(MZ)=1/α_fs − B_hV (brick capacity, not QCD-style ln)."""
-        b_hv = self.bekenstein_bits_hv
+        """§8.4.3-D — 1/α(MZ)=1/α_fs − B_V (brick capacity, not QCD-style ln)."""
+        b_hv = self.bekenstein_bits_B_V
         inv0 = self.alpha_fs_inv
         inv_mz = inv0 - b_hv
         inv_mz_floor = inv0 - math.floor(b_hv)
         pdg_inv = 127.955
         return {
             "alpha_fs_inv": inv0,
-            "B_hV": b_hv,
+            "B_V": b_hv,
             "alpha_MZ_inv": inv_mz,
             "alpha_MZ": 1.0 / inv_mz,
             "alpha_MZ_inv_floor_neighbor": inv_mz_floor,
             "alpha_MZ_inv_PDG": pdg_inv,
             "alpha_MZ_inv_rel_err": abs(inv_mz - pdg_inv) / pdg_inv,
-            "note": "§8.4.3-D: 1/α(MZ)=1/α_fs−B_hV; ≠ α_s packing ln",
+            "note": "§8.4.3-D: 1/α(MZ)=1/α_fs−B_V; ≠ α_s packing ln",
         }
 

@@ -11,7 +11,7 @@ from mt_ca.si_constants import (
     KAPPA_FCC_1TICK,
     N12_FCC_CAUSAL_LINKS,
     N4_CAUSAL_LINKS,
-    hv_bit_budget,
+    planck_cell_bit_budget,
 )
 
 

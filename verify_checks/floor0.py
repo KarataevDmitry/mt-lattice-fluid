@@ -3,7 +3,7 @@ from __future__ import annotations
 
 
 def check_floor0_phase_space(device: str = "cpu") -> dict:
-    """§5.0.4-A — Γ_hV on filled boiling ocean; planckon iterates under g."""
+    """§5.0.4-A — Γ_V on filled boiling ocean; planckon iterates under g."""
     from mt_ca.si_constants import SI
 
     row = SI.floor0_phase_space_row(device=device)
@@ -27,11 +27,11 @@ def check_floor0_phase_space(device: str = "cpu") -> dict:
     }
 
 
-def check_floor0_gamma_hV(device: str = "cpu") -> dict:
-    """§5.0.4-A — full Γ_hV orbit table + ground/excited branches under free g."""
+def check_floor0_gamma_V(device: str = "cpu") -> dict:
+    """§5.0.4-A — full Γ_V orbit table + ground/excited branches under free g."""
     from mt_ca.si_constants import SI
 
-    row = SI.floor0_gamma_hV_row(device=device)
+    row = SI.floor0_gamma_V_row(device=device)
     ok = (
         bool(row["checks_ok"])
         and row["habitat"] == "vacuum_boil"
@@ -42,8 +42,8 @@ def check_floor0_gamma_hV(device: str = "cpu") -> dict:
         and int(row["orbit_unique"]) >= 2
     )
     return {
-        "id": "Floor0_gamma_hV",
-        "alias_ids": ["Floor0_gamma_table"],
+        "id": "Floor0_gamma_V",
+        "alias_ids": ["Floor0_gamma_table", "Floor0_gamma_hV"],
         "ok": ok,
         "habitat": row["habitat"],
         "orbit_unique": row["orbit_unique"],

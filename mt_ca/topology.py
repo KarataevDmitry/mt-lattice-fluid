@@ -207,7 +207,7 @@ def plaquette_winding(
     *,
     channel: str = "auto",
 ) -> float:
-    """Discrete ∮ d arg on ∂(hV) — local n_∂ for cell (y,x) (A10, §5.0)."""
+    """Discrete ∮ d arg on ∂(V_P) — local n_∂ for cell (y,x) (A10, §5.0)."""
     ny, nx = z.shape[0], z.shape[1]
     if y < 0 or x < 0 or y + 1 >= ny or x + 1 >= nx:
         return float("nan")

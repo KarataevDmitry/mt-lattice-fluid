@@ -657,7 +657,7 @@ $$
 
 ($\Delta\varphi_{\min}$ — дно Heisenberg/Arg; в саму $\alpha$ ниже не входит, только в насыщающей фазе $\alpha^*$.)
 
-Свёртка регистра (не новое дно — имя для $\lfloor B_V\rfloor$, код `HV.mod_bits`):
+Свёртка регистра (не новое дно — имя для $\lfloor B_V\rfloor$, код `PLANCK_CELL.mod_bits`):
 
 $$
 \mathrm{mod\_bits} := \lfloor B_V\rfloor.

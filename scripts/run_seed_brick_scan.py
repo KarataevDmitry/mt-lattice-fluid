@@ -22,7 +22,8 @@ from mt_ca.app.habitat import HabitatPreset
 from mt_ca.app.runner import apply_scenario
 from mt_ca.app.scenario import ScenarioSpec
 from mt_ca.config import MConfig
-from mt_ca.seeds import HV, SeedClass
+from mt_ca.seeds import SeedClass
+from mt_ca.si_constants import PLANCK_CELL
 from mt_ca.simulator import LatticeFluidSimulator
 
 
@@ -64,7 +65,7 @@ def main() -> int:
     if args.device == "cuda" and not torch.cuda.is_available():
         args.device = "cpu"
 
-    configs = brick_axis_configs(HV.N_phi)
+    configs = brick_axis_configs(PLANCK_CELL.N_phi)
     cfg = MConfig.for_stencil("hex")
 
     hits: list[dict] = []

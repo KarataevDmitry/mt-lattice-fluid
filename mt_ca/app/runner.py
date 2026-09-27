@@ -226,9 +226,9 @@ def run_floor0_phase_space(
     track: int = 32,
     device: str = "cpu",
 ) -> dict[str, Any]:
-    """§5.0.4-A — Γ_hV probe on boiling ocean + planckon (3+1 FCC via app SSOT)."""
+    """§5.0.4-A — Γ_V probe on boiling ocean + planckon (3+1 FCC via app SSOT)."""
     from mt_ca.app.lattice import build_run_spec, open_lattice
-    from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
+    from mt_ca.si_constants import elementary_quanta_row, planck_cell_bit_budget
     from mt_ca.spinor import spinor_density
 
     spec = build_run_spec(
@@ -243,7 +243,7 @@ def run_floor0_phase_space(
 
     from mt_ca.si_floor0_rows import _BLOCH_DISTINCT_Q6
 
-    bb = hv_bit_budget()
+    bb = planck_cell_bit_budget()
     eq = elementary_quanta_row()
     n_ring = int(eq["N_ring"])
     dphi_disc = int(eq["delta_phi_min_disc"])
@@ -310,13 +310,13 @@ def run_floor0_phase_space(
         ),
         "derivation_closed": False,
         "note": (
-            "§5.0.4-A: Γ_hV on filled boiling ocean; planckon core iterates under g. "
-            "Full orbit table — verify Floor0_gamma_hV."
+            "§5.0.4-A: Γ_V on filled boiling ocean; planckon core iterates under g. "
+            "Full orbit table — verify Floor0_gamma_V."
         ),
     }
 
 
-def run_floor0_gamma_hV(
+def run_floor0_gamma_V(
     *,
     size: int = 32,
     relaxation: int = 32,
@@ -324,10 +324,10 @@ def run_floor0_gamma_hV(
     device: str = "cpu",
     winding_min: float = 0.75,
 ) -> dict[str, Any]:
-    """§5.0.4-A — full Γ_hV orbit table + ground/excited branches on planckon core."""
+    """§5.0.4-A — full Γ_V orbit table + ground/excited branches on planckon core."""
     from mt_ca.app.lattice import build_run_spec, open_lattice
     from mt_ca.floor0_gamma import build_gamma_orbit_table, summarize_gamma_branches
-    from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
+    from mt_ca.si_constants import elementary_quanta_row, planck_cell_bit_budget
 
     spec = build_run_spec(
         "floor0_planckon",
@@ -338,7 +338,7 @@ def run_floor0_gamma_hV(
         track=track,
     )
     sim = open_lattice(spec)
-    bb = hv_bit_budget()
+    bb = planck_cell_bit_budget()
     eq = elementary_quanta_row()
     cap = int(round(bb.n_states))
     p0_nat = float(kappa_link())
@@ -373,7 +373,7 @@ def run_floor0_gamma_hV(
         "checks_ok": bool(summary["checks_ok"]),
         "derivation_closed": bool(summary["checks_ok"]),
         "note": (
-            "§5.0.4-A: Γ_hV orbit under free g on planckon core (one hV, VACUUM_BOIL); "
+            "§5.0.4-A: Γ_V orbit under free g on planckon core (one V_P, VACUUM_BOIL); "
             "ground n_E=0 branch + excited n_E≥1 branch; rows capped by Bekenstein budget."
         ),
     }

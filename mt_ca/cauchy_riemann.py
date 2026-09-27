@@ -28,7 +28,7 @@ def cauchy_riemann_energy(z: torch.Tensor) -> float:
 
 
 def cr_stationarity_tolerance(*, energy: float) -> float:
-    """Allowed |ΔE_CR| between two late windows: {B_hV}·E (§3.9.6)."""
+    """Allowed |ΔE_CR| between two late windows: {B_V}·E (§3.9.6)."""
     from mt_ca.si_constants import bekenshtein_fractional_part
 
     return bekenshtein_fractional_part() * energy

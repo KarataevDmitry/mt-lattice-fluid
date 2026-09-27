@@ -134,13 +134,13 @@ def m_tick_count_to_str(n_ticks: int) -> str:
 
 @dataclass(frozen=True)
 
-class HvBitBudget:
+class PlanckCellBitBudget:
 
     """§3.12.6 — information budget of one planck cell V_P (no free parameters)."""
 
 
 
-    B_hV: float
+    B_V: float
 
     """Bekenstein bit capacity: 2π E_P l_P / (ℏ c ln 2) = 2π/ln 2."""
 
@@ -154,7 +154,7 @@ class HvBitBudget:
 
     mod_bits: int
 
-    """Ring exponent: N_ring = 2^mod_bits = 2^⌊B_hV⌋."""
+    """Ring exponent: N_ring = 2^mod_bits = 2^⌊B_V⌋."""
 
 
 
@@ -174,11 +174,11 @@ class HvBitBudget:
 
 
 
-def hv_bit_budget(*, delta_phi_min: float = DELTA_PHI_MIN) -> HvBitBudget:
+def planck_cell_bit_budget(*, delta_phi_min: float = DELTA_PHI_MIN) -> PlanckCellBitBudget:
     """Derive M-layer register widths from Planck brick only (§3.12.6).
 
     Chain:
-      B_hV = 2π/ln2  →  N_ring = 2^⌊B_hV⌋
+      B_V = 2π/ln2  →  N_ring = 2^⌊B_V⌋
       Δφ_min = s₀/ℏ = ½ rad  →  N_φ = ⌈2π/Δφ_min⌉ = ⌈4π⌉
       frac_bits = ⌈log₂(N_ring / N_φ)⌉  — amplitude resolution inside phase topology
     """
@@ -188,8 +188,8 @@ def hv_bit_budget(*, delta_phi_min: float = DELTA_PHI_MIN) -> HvBitBudget:
     n_ring = 1 << mod_bits
     frac_bits = max(4, int(math.ceil(math.log2(n_ring / n_phi))))
     b_phase = math.log2(n_phi)
-    return HvBitBudget(
-        B_hV=b_hv,
+    return PlanckCellBitBudget(
+        B_V=b_hv,
         N_phi=n_phi,
         mod_bits=mod_bits,
         N_ring=n_ring,
@@ -202,7 +202,7 @@ def hv_bit_budget(*, delta_phi_min: float = DELTA_PHI_MIN) -> HvBitBudget:
 
 
 def bekenshtein_fractional_part() -> float:
-    """{B_V} = B_V − ⌊B_V⌋ — unused Bekenstein fraction of one V_P (§3.12.6); field B_hV in rows."""
+    """{B_V} = B_V − ⌊B_V⌋ — unused Bekenstein fraction of one V_P (§3.12.6); field B_V in rows."""
     b_hv = 2.0 * math.pi / LN2
     return b_hv - math.floor(b_hv)
 
@@ -216,10 +216,10 @@ KAPPA_HEX = math.sqrt(3.0) / 2.0  # inscribed circle in 2D causal hexagon
 KAPPA_FCC_1TICK = 1.0 / math.sqrt(2.0)  # inscribed sphere in cuboctahedron (12 NN)
 
 
-HV = hv_bit_budget()
+PLANCK_CELL = planck_cell_bit_budget()
 
 # §8.2·α·nF·Thm — force seats on one charged FCC core (not a free fit).
-N_HIER_CHANNELS = int(HV.mod_bits) - 1  # ⌊B_hV⌋−1; B_hV=2π/ln2 → ⌊…⌋−1=8 (occupancy bit out)
+N_HIER_CHANNELS = int(PLANCK_CELL.mod_bits) - 1  # ⌊B_V⌋−1; B_V=2π/ln2 → ⌊…⌋−1=8 (occupancy bit out)
 M_FORCE_SEATS = 1 + N12_FCC_CAUSAL_LINKS * N_HIER_CHANNELS  # = 97
 D_SOFT = N4_CAUSAL_LINKS + 3  # von Neumann cross + SU(2) Pauli = 7
 U_SOFT = (D_SOFT + 1) / D_SOFT  # = 8/7 = 1/(1−κ⁶)
@@ -288,7 +288,7 @@ def fcc_bridge_row() -> dict[str, float]:
         "E0_over_E_P": e0 / e_P,
         "kappa_link": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
         "nu_CA_natural": kappa_link(n_links=N12_FCC_CAUSAL_LINKS),
-        "v_hV_over_lP3": 1.0 / math.sqrt(2.0),
+        "dV_over_V_P": 1.0 / math.sqrt(2.0),
         "phase_saturation": PHASE_SATURATION,
         "planck_hole_phase_residue": PLANCK_HOLE_PHASE_RESIDUE,
         "alpha_fs_inv": 1.0 / alpha_from_fundamentals(),
@@ -302,13 +302,13 @@ def nu_CA_natural() -> float:
 
 
 def cr_seed_ceiling() -> float:
-    """A9 pre-burn-in ceiling for smooth envelope seeds: ν_CA·{B_hV}² (§3.9.6)."""
+    """A9 pre-burn-in ceiling for smooth envelope seeds: ν_CA·{B_V}² (§3.9.6)."""
     frac = bekenshtein_fractional_part()
     return nu_CA_natural() * frac * frac
 
 
 def cr_dispersion_ceiling() -> float:
-    """A9 stationary CR ceiling after N₄ dispersion + ν_CA: ν_CA·(1+{B_hV}) (§3.9.6)."""
+    """A9 stationary CR ceiling after N₄ dispersion + ν_CA: ν_CA·(1+{B_V}) (§3.9.6)."""
     return nu_CA_natural() * (1.0 + bekenshtein_fractional_part())
 
 
@@ -366,7 +366,7 @@ def energy_quantum_row(*, delta_phi_min: float = DELTA_PHI_MIN) -> dict[str, flo
 
 def amplitude_quantum(*, frac_bits: int | None = None) -> float:
     """a_Q = 2^{−frac_bits} — smallest nonzero |z| on Q lattice (§5.2.3)."""
-    fb = HV.frac_bits if frac_bits is None else frac_bits
+    fb = PLANCK_CELL.frac_bits if frac_bits is None else frac_bits
     return 1.0 / float(1 << fb)
 
 
@@ -387,7 +387,7 @@ def sync_strength_disc(
     delta_phi_min: float = DELTA_PHI_MIN,
 ) -> int:
     """Integer sync coupling: ⌊Δφ_disc·κ_link⌋ ticks per unit CR pull (§5.2.3)."""
-    pb = HV.phase_bits if phase_bits is None else phase_bits
+    pb = PLANCK_CELL.phase_bits if phase_bits is None else phase_bits
     phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
     return max(1, int(phi_disc * kappa_link()))
 
@@ -399,7 +399,7 @@ def pauli_impulse_rad() -> float:
 
 def pauli_impulse_disc(*, phase_bits: int | None = None) -> int:
     """π rad on Z_{N_ring}: N_ring/2 ticks (§5.2.3)."""
-    pb = HV.phase_bits if phase_bits is None else phase_bits
+    pb = PLANCK_CELL.phase_bits if phase_bits is None else phase_bits
     return (1 << pb) // 2
 
 
@@ -424,7 +424,7 @@ def energy_balance_ticks_per_E0(
     delta_phi_min: float = DELTA_PHI_MIN,
 ) -> int:
     """Collision Φ ticks equivalent to one E₀ quantum (§5.2.3)."""
-    pb = HV.phase_bits if phase_bits is None else phase_bits
+    pb = PLANCK_CELL.phase_bits if phase_bits is None else phase_bits
     return max(1, heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min))
 
 
@@ -442,8 +442,8 @@ def elementary_quanta_row(
     rho_max: float = 1.0,
 ) -> dict[str, float | int]:
     """§5.2.3 — full closure table for verify / MConfig defaults."""
-    fb = HV.frac_bits if frac_bits is None else frac_bits
-    pb = HV.phase_bits if phase_bits is None else phase_bits
+    fb = PLANCK_CELL.frac_bits if frac_bits is None else frac_bits
+    pb = PLANCK_CELL.phase_bits if phase_bits is None else phase_bits
     phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
     sync_rad = sync_strength_rad(delta_phi_min=delta_phi_min)
     sync_disc = sync_strength_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
@@ -490,7 +490,7 @@ def as_code_dict() -> dict[str, float]:
 
     """Drop-in literals for configs / GPU kernels (SI + natural gate)."""
 
-    hv = hv_bit_budget()
+    hv = planck_cell_bit_budget()
 
     return {
 
@@ -549,7 +549,7 @@ def as_code_dict() -> dict[str, float]:
 
         "DELTA_PHI_MIN_rad": SI.delta_phi_min,
 
-        "B_HV_bits": hv.B_hV,
+        "B_V_bits": hv.B_V,
 
         "N_PHI": hv.N_phi,
 
@@ -781,8 +781,8 @@ class SIConstants(SIAlphaRows, SIFloor0Rows, SIFloor1Rows, SIUnitsRows, SICarrie
         return self.hbar / self.t_P
 
     @property
-    def bekenstein_bits_hv(self) -> float:
-        """I_hV = 2π E_P l_P / (ℏ c ln 2) = 2π/ln 2 — §3.12.6."""
+    def bekenstein_bits_B_V(self) -> float:
+        """I_V = 2π E_P l_P / (ℏ c ln 2) = 2π/ln 2 — §3.12.6."""
         return 2.0 * math.pi * self.E_P * self.l_P / (self.hbar * self.c * LN2)
 
     @property
@@ -806,7 +806,7 @@ class SIConstants(SIAlphaRows, SIFloor0Rows, SIFloor1Rows, SIUnitsRows, SICarrie
 
     def m_arg(self) -> float:
 
-        """Local E₀/c² on one hV — m_P/√2 [kg]; not a rest-mass particle (§5.0.2)."""
+        """Local E₀/c² on one V_P — m_P/√2 [kg]; not a rest-mass particle (§5.0.2)."""
 
         return self.E_0 / self.c**2
 
@@ -954,9 +954,9 @@ def matter_cell_mass_from_b(*, b: int) -> float:
 
 
 
-def hV_volume(*, l_P: float | None = None) -> float:
+def V_P_volume(*, l_P: float | None = None) -> float:
 
-    """Elementary cell volume hV = l_P³ [m³]."""
+    """Planck volume V_P = ℓ_P³ [m³]."""
 
     lp = SI.l_P if l_P is None else l_P
 
@@ -970,7 +970,7 @@ def vdw_core_volume(*, l_P: float | None = None) -> float:
 
     """Excluded causal core per macro node: b₀ ≈ 4·hV (§5.3.3, N₄ Heisenberg shell)."""
 
-    return 4.0 * hV_volume(l_P=l_P)
+    return 4.0 * V_P_volume(l_P=l_P)
 
 
 
@@ -1299,9 +1299,9 @@ def congruence_ladder_row(
     delta_phi_min: float = DELTA_PHI_MIN,
 ) -> dict[str, float | int | str | bool | list]:
     """§3.12.7 — Z_N ring arithmetic → quanta table; glue to N_12 open."""
-    hv = hv_bit_budget(delta_phi_min=delta_phi_min)
-    fb = HV.frac_bits if frac_bits is None else frac_bits
-    pb = HV.phase_bits if phase_bits is None else phase_bits
+    hv = planck_cell_bit_budget(delta_phi_min=delta_phi_min)
+    fb = PLANCK_CELL.frac_bits if frac_bits is None else frac_bits
+    pb = PLANCK_CELL.phase_bits if phase_bits is None else phase_bits
     n_ring = 1 << pb
     phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
     n_phi = hv.N_phi
@@ -1386,8 +1386,8 @@ def internal_phase_decode(
     Canonical = smallest k_phi with phi_f < Δφ_disc and
     phi_disc ≡ k_phi·Δφ_disc + phi_f (mod N_ring).
     """
-    n_ring = HV.N_ring if n_ring is None else n_ring
-    n_phi = HV.N_phi if n_phi is None else n_phi
+    n_ring = PLANCK_CELL.N_ring if n_ring is None else n_ring
+    n_phi = PLANCK_CELL.N_phi if n_phi is None else n_phi
     delta = (
         heisenberg_phi_min_disc(phase_bits=int(math.log2(n_ring)))
         if delta_phi_disc is None
@@ -1414,8 +1414,8 @@ def internal_phase_encode(
     delta_phi_disc: int | None = None,
 ) -> int:
     """§3.12.6c — τ = κ·Δφ_disc + ρ (mod N_ring); ρ need not be canonical."""
-    n_ring = HV.N_ring if n_ring is None else n_ring
-    n_phi = HV.N_phi if n_phi is None else n_phi
+    n_ring = PLANCK_CELL.N_ring if n_ring is None else n_ring
+    n_phi = PLANCK_CELL.N_phi if n_phi is None else n_phi
     delta = (
         heisenberg_phi_min_disc(phase_bits=int(math.log2(n_ring)))
         if delta_phi_disc is None
@@ -1427,8 +1427,8 @@ def internal_phase_encode(
 
 
 def internal_phase_coords_row() -> dict[str, float | int | str | bool]:
-    """§3.12.6c — CL-O4 probe: natural internal coords (κ, ρ, μ) on one hV brick."""
-    hv = hv_bit_budget()
+    """§3.12.6c — CL-O4 probe: natural internal coords (κ, ρ, μ) on one V_P."""
+    hv = planck_cell_bit_budget()
     n_ring = hv.N_ring
     n_phi = hv.N_phi
     delta = heisenberg_phi_min_disc(phase_bits=hv.phase_bits)
@@ -1475,19 +1475,19 @@ def internal_phase_coords_row() -> dict[str, float | int | str | bool]:
     }
 
 
-def hv_bit_budget_row() -> dict[str, float | int]:
+def planck_cell_bit_budget_row() -> dict[str, float | int]:
 
-    """§3.12.6 — Planck-derived hV bit budget for verify / configs."""
+    """§3.12.6 — Planck cell bit budget (B_V) for verify / configs."""
 
-    row = hv_bit_budget()
+    row = planck_cell_bit_budget()
 
-    rel = abs(row.B_hV - SI.bekenstein_bits_hv) / row.B_hV
+    rel = abs(row.B_V - SI.bekenstein_bits_B_V) / row.B_V
 
     return {
 
-        "B_hV_bits": row.B_hV,
+        "B_V_bits": row.B_V,
 
-        "bekenstein_SI_bits": SI.bekenstein_bits_hv,
+        "bekenstein_SI_bits": SI.bekenstein_bits_B_V,
 
         "rel_err": rel,
 

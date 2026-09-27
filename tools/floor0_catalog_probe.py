@@ -63,7 +63,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.gamma_table:
-        row = SI.floor0_gamma_hV_row()
+        row = SI.floor0_gamma_V_row()
         for key in (
             "habitat",
             "orbit_unique",

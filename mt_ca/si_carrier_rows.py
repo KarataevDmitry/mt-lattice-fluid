@@ -17,7 +17,7 @@ from mt_ca.si_constants import (
     elementary_quanta_row,
     energy_quantum_row,
     heisenberg_phi_min_disc,
-    hv_bit_budget,
+    planck_cell_bit_budget,
     kappa_link,
     n_E_from_phi_ticks
 )
@@ -132,7 +132,7 @@ class SICarrierRows:
           · All closed as eng mirror of §0.5 / A3·A4 / §7 SI.
           · Soft: verify norm_drift threshold = sim hygiene.
         """
-        hv = hv_bit_budget()
+        hv = planck_cell_bit_budget()
         z_min = 2.0 ** (-hv.frac_bits)
         phase_sat = PHASE_SATURATION
         code = as_code_dict()
@@ -292,7 +292,7 @@ class SICarrierRows:
 
     def vacuum_bath_row(self) -> dict[str, float | int | str | bool]:
         """§8.2·vac — A5 boiling bath: ρ_E(z_min), spectral anchors; ≠ CMB (META §3.0)."""
-        hv = hv_bit_budget()
+        hv = planck_cell_bit_budget()
         z_min = 2.0 ** (-hv.frac_bits)
         z_sq_natural = 2.0 * z_min * z_min
         u_p = self.u_P
@@ -306,7 +306,7 @@ class SICarrierRows:
         return {
             "z_min": z_min,
             "frac_bits": hv.frac_bits,
-            "B_hV": hv.B_hV,
+            "B_V": hv.B_V,
             "z_sq_natural_vac": z_sq_natural,
             "rho_E_vac_J_m3": rho_vac,
             "u_P_J_m3": u_p,
@@ -373,11 +373,11 @@ class SICarrierRows:
             "A_triangle_total_m2": a_tri,
             "S_total_m2": s_total,
             "V_cuboctahedron_m3": vol_cubo,
-            "v_hV_m3": v_hv,
+            "dV_m3": v_hv,
             "V_over_S_m": vol_cubo / s_total,
             "square_plaquette_perimeter_m": 4.0 * edge_a,
-            "V_over_v_hV": v_over_v_hv,
-            "V_over_v_hV_exact": "16/3",
+            "V_over_dV": v_over_v_hv,
+            "V_over_dV_exact": "16/3",
             "V_over_S_over_l_P": (vol_cubo / s_total) / lp,
             "kappa_inscribed_1tick": kappa,
             "R_in_over_R_out_classical": r_in_classical / r_out,
@@ -418,7 +418,7 @@ class SICarrierRows:
         r_vertex_cubic = edge_a * math.sqrt(3.0 / 2.0)
         r_in_cubo_1tick = kappa * edge_a
         return {
-            "anchor": "edge_a = l_P (A1); v_hV = Voronoy volume; hull cuboctahedron is dual partner",
+            "anchor": "edge_a = l_P (A1); dV = Voronoy volume; hull cuboctahedron is dual partner",
             "edge_a_m": edge_a,
             "edge_a_over_l_P": edge_a / lp,
             "l_P_m": lp,
@@ -434,10 +434,10 @@ class SICarrierRows:
             "A_rhomb_one_m2": a_rhomb_one,
             "S_total_m2": s_total,
             "V_voronoi_m3": vol_voronoi,
-            "v_hV_m3": v_hv,
+            "dV_m3": v_hv,
             "V_cuboctahedron_m3": vol_cubo,
-            "V_over_v_hV": vol_voronoi / v_hv,
-            "V_over_v_hV_exact": "1",
+            "V_over_dV": vol_voronoi / v_hv,
+            "V_over_dV_exact": "1",
             "V_cuboctahedron_over_V_voronoi": cubo_over_voronoi,
             "V_cuboctahedron_over_V_voronoi_exact": "16/3",
             "V_over_S_m": vol_voronoi / s_total,
@@ -464,9 +464,9 @@ class SICarrierRows:
         edge_a = float(geo["edge_a_m"])
         ratio_inventory: list[dict[str, str | float | bool]] = [
             {
-                "id": "V_over_v_hV",
-                "ratio": float(geo["V_over_v_hV"]),
-                "maps_to": "dV = v_hV on FCC node (§1.6.2)",
+                "id": "V_over_dV",
+                "ratio": float(geo["V_over_dV"]),
+                "maps_to": "dV = dV on FCC node (§1.6.2)",
                 "status": "derived",
                 "mechanism": "Voronoy volume = a³/√2 by packing; identity not fit",
             },
@@ -491,7 +491,7 @@ class SICarrierRows:
                 "ratio": float(geo["V_cuboctahedron_over_V_voronoi"]),
                 "maps_to": "hull bulk / node volume",
                 "status": "inventory",
-                "mechanism": "16/3 = same ratio as cubo V/v_hV from hull side",
+                "mechanism": "16/3 = same ratio as cubo V/dV from hull side",
             },
             {
                 "id": "V_over_S",
@@ -515,7 +515,7 @@ class SICarrierRows:
         return {
             **{k: geo[k] for k in (
                 "edge_a_m",
-                "V_over_v_hV",
+                "V_over_dV",
                 "V_over_S_m",
                 "V_over_S_over_a",
                 "R_in_Voronoi_m",
@@ -550,7 +550,7 @@ class SICarrierRows:
         dihedral_deg = float(geo["dihedral_square_triangle_deg"])
         dihedral_over_180 = dihedral_deg / 180.0
         pack_proton = 1.0 + kappa**2 / n12
-        n_phi = hv_bit_budget().N_phi
+        n_phi = planck_cell_bit_budget().N_phi
         anchor_chain: list[dict[str, str | float]] = [
             {"quantity": "edge_a", "at_a_eq_lP": edge_a, "unit": "m", "from": "A1: |NN|=l_P"},
             {"quantity": "R_out", "at_a_eq_lP": float(geo["R_out_m"]), "unit": "m", "from": "cuboctahedron circumradius = a"},
@@ -558,7 +558,7 @@ class SICarrierRows:
             {"quantity": "A_square_one", "at_a_eq_lP": a_sq_one, "unit": "m²", "from": "□ face; Stokes B_□=Φ_□/a²"},
             {"quantity": "S_total", "at_a_eq_lP": s_total, "unit": "m²", "from": "6a²+8·(√3/4)a²"},
             {"quantity": "V_cubo", "at_a_eq_lP": vol_cubo, "unit": "m³", "from": "(8/3)√2·a³"},
-            {"quantity": "v_hV", "at_a_eq_lP": float(geo["v_hV_m3"]), "unit": "m³", "from": "a³/√2 FCC node"},
+            {"quantity": "dV", "at_a_eq_lP": float(geo["dV_m3"]), "unit": "m³", "from": "a³/√2 FCC node"},
             {"quantity": "V/S", "at_a_eq_lP": v_over_s, "unit": "m", "from": "compactness length at a"},
         ]
         ratio_inventory: list[dict[str, str | float | bool]] = [
@@ -597,13 +597,13 @@ class SICarrierRows:
                 "mechanism": "1/|N₁₂| from causal star at same a=l_P links",
             },
             {
-                "id": "v_hV_at_a",
+                "id": "dV_at_a",
                 "ratio": 1.0 / math.sqrt(2.0),
-                "at_a_eq_lP": float(geo["v_hV_m3"]),
+                "at_a_eq_lP": float(geo["dV_m3"]),
                 "unit": "m³",
-                "maps_to": "dV=v_hV on FCC Voronoy node (§1.6.2)",
+                "maps_to": "dV=dV on FCC Voronoy node (§1.6.2)",
                 "status": "derived",
-                "mechanism": "v_hV=a³/√2 when a=l_P",
+                "mechanism": "dV=a³/√2 when a=l_P",
             },
             {
                 "id": "V_at_a",
@@ -612,14 +612,14 @@ class SICarrierRows:
                 "unit": "m³",
                 "maps_to": "open — bulk hull volume at a",
                 "status": "inventory",
-                "mechanism": "V=(8/3)√2·a³; ratio V/v_hV=16/3 only after both volumes",
+                "mechanism": "V=(8/3)√2·a³; ratio V/dV=16/3 only after both volumes",
             },
             {
-                "id": "V_over_v_hV",
-                "ratio": float(geo["V_over_v_hV"]),
+                "id": "V_over_dV",
+                "ratio": float(geo["V_over_dV"]),
                 "maps_to": "open — derived ratio bulk/node at a=l_P",
                 "status": "inventory",
-                "mechanism": "16/3; do not skip dimensional V and v_hV",
+                "mechanism": "16/3; do not skip dimensional V and dV",
             },
             {
                 "id": "V_over_S",
@@ -685,7 +685,7 @@ class SICarrierRows:
         derived = sum(1 for r in ratio_inventory if r["status"] == "derived")
         open_ = sum(1 for r in ratio_inventory if r["status"] in ("open", "inventory"))
         return {
-            **{k: geo[k] for k in ("edge_a_m", "V_over_v_hV", "V_over_S_m", "V_over_S_over_l_P", "kappa_inscribed_1tick")},
+            **{k: geo[k] for k in ("edge_a_m", "V_over_dV", "V_over_S_m", "V_over_S_over_l_P", "kappa_inscribed_1tick")},
             "anchor_chain": anchor_chain,
             "n_square_over_n_triangle": n_sq_over_n_tri,
             "ratio_inventory": ratio_inventory,
@@ -772,14 +772,14 @@ class SICarrierRows:
         e_brick_sat = u_p * v_hv
         b_hv = 2.0 * math.pi / LN2
         bekenstein_bits = 2.0 * math.pi * e_p * lp / (self.hbar * c * LN2)
-        hv = hv_bit_budget()
+        hv = planck_cell_bit_budget()
         return {
             "derivation_order": (
-                "geometry(v_hV,κ) → cell(s₀,E₀,m_arg) → ρ_cell=μ_P → fluid(u_P=μ_Pc²) "
+                "geometry(dV,κ) → cell(s₀,E₀,m_arg) → ρ_cell=μ_P → fluid(u_P=μ_Pc²) "
                 "→ conventional t_P=hT/κ, E_P=E₀/κ"
             ),
-            "geometry_v_hV_m3": v_hv,
-            "geometry_v_hV_over_lP3": v_hv / lp**3,
+            "geometry_dV_m3": v_hv,
+            "geometry_dV_over_V_P": v_hv / lp**3,
             "geometry_kappa": kappa,
             "cell_s0_J_s": s0,
             "cell_s0_equals_hbar_half": abs(s0 - self.hbar / 2.0) / s0 < tol,
@@ -806,7 +806,7 @@ class SICarrierRows:
             "conventional_E_P_rel_err": abs(e0 / kappa - e_p) / e_p,
             "conventional_l_P_from_cell_a_m": lp,
             "conventional_l_P_from_sqrt_hbar_G_c": math.sqrt(self.hbar * self.G / c**3),
-            "bekenstein_B_hV": b_hv,
+            "bekenstein_B_V": b_hv,
             "bekenstein_algebraic": abs(bekenstein_bits - b_hv) / b_hv < tol,
             "register_N_phi": hv.N_phi,
             "register_N_hier": int(math.floor(b_hv)) - 1,
@@ -831,7 +831,7 @@ class SICarrierRows:
         tol = 1e-11
         return {
             "theorem": "On M there is one spatial step; a cannot differ from l_P",
-            "chain": "Postulate0 hL → A1 NN link → hull edge a → Voronoy v_hV(a) → dV",
+            "chain": "Postulate0 hL → A1 NN link → hull edge a → Voronoy dV(a) → dV",
             "hL_m": lp,
             "hull_edge_a_m": edge_a,
             "a_equals_hL": abs(edge_a - lp) / lp < tol,
@@ -844,10 +844,10 @@ class SICarrierRows:
             "scale_decoupled_from_c_definition": True,
             "no_second_ruler": True,
             "no_rescale_without_breaking": (
-                "λ·a would split hL vs A1 vs dV=v_hV(a) unless λ=1; no structure below dl (§1.4)"
+                "λ·a would split hL vs A1 vs dV=dV(a) unless λ=1; no structure below dl (§1.4)"
             ),
-            "v_hV_at_a_m3": v_hv_geo,
-            "v_hV_equals_lP3_over_sqrt2": abs(v_hv_geo - lp**3 / math.sqrt(2.0)) / v_hv_geo < tol,
+            "dV_at_a_m3": v_hv_geo,
+            "dV_equals_V_P_over_sqrt2": abs(v_hv_geo - lp**3 / math.sqrt(2.0)) / v_hv_geo < tol,
             "m_arg_from_macro_c_kg": m_arg_em,
             "m_arg_from_c0_only_kg": m_arg_mech,
             "m_arg_mech_equals_em": abs(m_arg_mech - m_arg_em) / m_arg_em < tol,
@@ -860,7 +860,7 @@ class SICarrierRows:
 
     def discreteness_from_axioms_row(self) -> dict[str, float | int | str | bool]:
         """§0 Thm 0.1 — discreteness from A1–A3,A7,A10,A13,A16 + bit budget; not Postulate 0.1."""
-        hv = hv_bit_budget()
+        hv = planck_cell_bit_budget()
         lp = self.l_P
         ht = self.hT
         s0 = self.s_0
@@ -876,8 +876,8 @@ class SICarrierRows:
             "lemma_a3_a13_finite_alphabet": True,
             "lemma_a1_fcc_n12": N12_FCC_CAUSAL_LINKS,
             "lemma_a10_integer_charge": True,
-            "B_hV_pure": b_hv,
-            "B_hV_from_bekenstein_when_EPl_eq_hbar_c": True,
+            "B_V_pure": b_hv,
+            "B_V_from_bekenstein_when_EPl_eq_hbar_c": True,
             "N_ring": hv.N_ring,
             "N_phi": hv.N_phi,
             "frac_bits": hv.frac_bits,
@@ -891,7 +891,7 @@ class SICarrierRows:
             "hL_m": lp,
             "hT_s": ht,
             "no_substructure_below_hL": (
-                "A7 rho<=u_P in one dV; A10 n on d(hV); B_hV+frac_bits floor"
+                "A7 rho<=u_P in one dV; A10 n on d(V_P); B_V+frac_bits floor"
             ),
             "scale_hL_name_l_P": "§7.4 after cell closure; not Postulate 0",
             "c_not_in_discreteness_chain": True,
@@ -974,7 +974,7 @@ class SICarrierRows:
         c0 = self.c0
         e0 = self.E_0
         p0 = self.p_0
-        v_hv = float(geo["v_hV_m3"])
+        v_hv = float(geo["dV_m3"])
         n_density = 1.0 / v_hv
         d = 3
         g_acoustic = d
@@ -990,10 +990,10 @@ class SICarrierRows:
         k_debye = (6.0 * math.pi**2 * n_density) ** (1.0 / 3.0)
         tol = 1e-9
         return {
-            "theorem": "Thm 5.3 / carrier ask: phonon from FCC Λ + hL + hT + v_hV",
+            "theorem": "Thm 5.3 / carrier ask: phonon from FCC Λ + hL + hT + dV",
             "carrier": "FCC N12 · rhombic dodecahedron WS · A1 edge=l_P",
             "edge_a_m": float(geo["edge_a_m"]),
-            "v_hV_m3": v_hv,
+            "dV_m3": v_hv,
             "n_density_m3": n_density,
             "n_density_over_sqrt2_lP3": abs(n_density * lp**3 / math.sqrt(2.0) - 1.0) < tol,
             "d_spatial": d,

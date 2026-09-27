@@ -10,7 +10,7 @@ from mt_ca.si_constants import (
     COSMO_RECOMB_KYR,
     DELTA_PHI_MIN,
     EV_J,
-    HV,
+    PLANCK_CELL,
     KAPPA_FCC_1TICK,
     LN2,
     M_ELECTRON_GEV_PDG,
@@ -201,7 +201,7 @@ class SISmRows:
             "m_W_rel_err": abs(m_w - 80.377) / 80.377,
             "m_Z_rel_err": abs(m_z - 91.1876) / 91.1876,
             "mass_ratio_sin2": 1.0 - (m_w / m_z) ** 2,
-            "note": "§8.4.3-E: tree with α(MZ) from B_hV runner + bare 3/13",
+            "note": "§8.4.3-E: tree with α(MZ) from B_V runner + bare 3/13",
         }
 
     def higgs_mass_row(self) -> dict[str, float]:
@@ -269,7 +269,7 @@ class SISmRows:
         higgs = self.higgs_mass_row()
         m_h_bare = float(higgs["m_H_bare_GeV"])
         m_h = float(higgs["m_H_GeV"])
-        n_phi = float(HV.N_phi)
+        n_phi = float(PLANCK_CELL.N_phi)
         a2 = self.alpha_preferred * self.alpha_preferred
         m_e0 = a2 * m_h_bare / n_phi
         m_e = a2 * m_h / n_phi
@@ -360,7 +360,7 @@ class SISmRows:
         from mt_ca.fixed_point import vacuum_amplitude_quantum
 
         rho_star = 1.0
-        vac_amp = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
+        vac_amp = vacuum_amplitude_quantum(frac_bits=PLANCK_CELL.frac_bits)
         rho_vac = vac_amp * vac_amp
         rho_e = 0.5 * (rho_star + rho_vac)
         eps_partial = (rho_e - rho_vac) / rho_vac
@@ -389,7 +389,7 @@ class SISmRows:
         from mt_ca.fixed_point import vacuum_amplitude_quantum
 
         rho_star = 1.0  # A7: |Z|² ≤ 1 ↔ ρ_E ≤ u_P
-        vac_amp = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
+        vac_amp = vacuum_amplitude_quantum(frac_bits=PLANCK_CELL.frac_bits)
         rho_vac = vac_amp * vac_amp  # A5 numerical floor → ρ_vac
         eps_star = (rho_star - rho_vac) / rho_vac
         return {

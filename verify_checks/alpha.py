@@ -683,7 +683,7 @@ def check_alpha_bridges(device: str = "cpu") -> dict:
         "electroweak_tree_ok": electroweak_tree_ok,
         "alpha_fs_inv_ppm_vs_CODATA": abs(SI.alpha_fs_inv - 137.035999177) / 137.035999177 * 1e6,
         "note": (
-            "§8.2 audit: δλ=α_fs/(4π)=α_fs(α*−1), B_hV runner, N_φ=|N12|+1 PASS; "
+            "§8.2 audit: δλ=α_fs/(4π)=α_fs(α*−1), B_V runner, N_φ=|N12|+1 PASS; "
             "α*→α_fs cascade + e₀ derivation + lattice Coulomb sim OPEN"
         ),
     }

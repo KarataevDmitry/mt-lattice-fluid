@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from mt_ca.si_constants import HV
+from mt_ca.si_constants import PLANCK_CELL
 
 
 @dataclass(frozen=True, slots=True)
@@ -17,7 +17,7 @@ class BrickSpec:
 
 def brick_axis_configs(n_phi: int | None = None) -> list[BrickSpec]:
     """Enumerate axis NN brick families (|dy|=|dx|=1) × offset mod N_φ."""
-    n = HV.N_phi if n_phi is None else n_phi
+    n = PLANCK_CELL.N_phi if n_phi is None else n_phi
     out: list[BrickSpec] = []
     for offset in range(n):
         for dy, dx in ((1, 1), (1, -1), (-1, 1), (-1, -1)):

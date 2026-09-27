@@ -1,4 +1,4 @@
-"""§5.0.4-A — Γ_hV orbit table + ground/excited branches under free g (one hV)."""
+"""§5.0.4-A — Γ_V orbit table + ground/excited branches under free g (one V_P)."""
 from __future__ import annotations
 
 from typing import Any

@@ -259,7 +259,7 @@ def square_face_holonomy_probe(
         "alpha_link_rel_err": alpha_link_rel_err,
         "alpha_match_open": alpha_rel_err > 0.05,
         "alpha_link_ok": alpha_link_rel_err < 1e-6,
-        "V_over_v_hV": 16.0 / 3.0,
+        "V_over_dV": 16.0 / 3.0,
         "kappa_1tick": 1.0 / math.sqrt(2.0),
         "alpha_geom_inv": 137.0,
         "note": "§8.2·geo probe: Phi_□ hull path; alpha from holonomy/E open DoD",

@@ -5,7 +5,7 @@ import math
 
 from mt_ca.si_constants import (
     DELTA_PHI_MIN,
-    HV,
+    PLANCK_CELL,
     N12_FCC_CAUSAL_LINKS,
     SI,
     elementary_quanta_row,
@@ -42,7 +42,7 @@ class MConfig:
     macro_weight: bool = True
 
     # t=0 «первичный бульон»: one Q(frac_bits) quanta (§3.12.6)
-    vacuum_amplitude: float = vacuum_amplitude_quantum(frac_bits=HV.frac_bits)
+    vacuum_amplitude: float = vacuum_amplitude_quantum(frac_bits=PLANCK_CELL.frac_bits)
 
     # A9: discrete CR coupling — cr_strength = κ_link (§5.2.2)
     cr_strength: float = kappa_link(n_links=N12_FCC_CAUSAL_LINKS)
@@ -69,10 +69,10 @@ class MConfig:
 
     # §3.12 M-canonical evolution: leapfrog + projected collision on Z_N[i] (§3.12.6)
     evolution: str = "leapfrog"
-    mod_bits: int = HV.mod_bits
-    frac_bits: int = HV.frac_bits
+    mod_bits: int = PLANCK_CELL.mod_bits
+    frac_bits: int = PLANCK_CELL.frac_bits
     use_projected_collision: bool = True
-    phase_bits: int = HV.phase_bits
+    phase_bits: int = PLANCK_CELL.phase_bits
 
     @property
     def is_leapfrog(self) -> bool:

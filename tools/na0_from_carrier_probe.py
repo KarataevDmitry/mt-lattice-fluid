@@ -4,15 +4,15 @@ from __future__ import annotations
 import itertools
 import math
 
-from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI, hv_bit_budget
+from mt_ca.si_constants import KAPPA_FCC_1TICK, N12_FCC_CAUSAL_LINKS, SI, planck_cell_bit_budget
 
 kappa = KAPPA_FCC_1TICK
 N12 = float(N12_FCC_CAUSAL_LINKS)
 Nphi = 13.0
 Nhier = 8.0
-HV = hv_bit_budget()
-N_ring = float(HV.N_ring)
-B = float(HV.B_hV)
+PLANCK_CELL = planck_cell_bit_budget()
+N_ring = float(PLANCK_CELL.N_ring)
+B = float(PLANCK_CELL.B_V)
 N_a0_opt = 5.29177210903e-11 / SI.l_P
 alpha_c = 7.2973525693e-3
 mPe = SI.m_P / SI.m_e_CODATA
@@ -38,7 +38,7 @@ def bare_alpha(n_a0: float) -> float:
 
 
 def main() -> None:
-    print("HV", HV)
+    print("PLANCK_CELL", PLANCK_CELL)
     print("N_a0_opt", N_a0_opt)
     target_stack = Nphi / (
         2 * math.sqrt(math.pi) * (alpha_c**11) * math.sqrt(1 / 8 + 2 * alpha_c / math.pi)
@@ -62,7 +62,7 @@ def main() -> None:
         "N_c * Nphi": mPe * Nphi,
         "N_c * N12": mPe * N12,
         "N_c * Nhier": mPe * Nhier,
-        "N_c * B_hV": mPe * B,
+        "N_c * B_V": mPe * B,
         "N_c * 4pi": mPe * 4 * math.pi,
         "N_c * Nphi*N12/Nhier": mPe * Nphi * N12 / Nhier,
         "N_c * 156/Nphi": mPe * 156 / Nphi,
@@ -75,10 +75,10 @@ def main() -> None:
         "N_c * N_ring / Nphi": mPe * N_ring / Nphi,
         "N_c * N_ring / N12": mPe * N_ring / N12,
         "N_c * N_ring / Nhier": mPe * N_ring / Nhier,
-        "N_c * frac_bits**Nhier": mPe * (HV.frac_bits**Nhier),
-        "N_c * 2**frac_bits": mPe * (2**HV.frac_bits),
-        "N_c * 2**(frac_bits+mod_bits)": mPe * (2 ** (HV.frac_bits + HV.mod_bits)),
-        "N_c * n_states": mPe * float(HV.n_states),
+        "N_c * frac_bits**Nhier": mPe * (PLANCK_CELL.frac_bits**Nhier),
+        "N_c * 2**frac_bits": mPe * (2**PLANCK_CELL.frac_bits),
+        "N_c * 2**(frac_bits+mod_bits)": mPe * (2 ** (PLANCK_CELL.frac_bits + PLANCK_CELL.mod_bits)),
+        "N_c * n_states": mPe * float(PLANCK_CELL.n_states),
     }
 
     cands: list[tuple[float, float, float, str]] = []

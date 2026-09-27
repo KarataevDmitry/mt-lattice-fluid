@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
+from mt_ca.si_constants import elementary_quanta_row, planck_cell_bit_budget
 
 
 @dataclass(frozen=True)
@@ -36,7 +36,7 @@ class Floor0SelectionSchema:
 def floor0_selection_schema_row(*, phase_bits: int | None = None) -> dict[str, Any]:
     """Closed algebra for §5.0.4-A selection (no sim)."""
     schema = Floor0SelectionSchema.from_phase_bits(phase_bits=phase_bits)
-    bb = hv_bit_budget()
+    bb = planck_cell_bit_budget()
     return {
         "N_ring": schema.n_ring,
         "delta_phi_disc": schema.delta_phi_disc,
@@ -70,7 +70,7 @@ def floor0_selection_schema_row(*, phase_bits: int | None = None) -> dict[str, A
             "T dipole |Delta ell|=1 is not an M law at floor 0; multi-quantum |Delta n_E|>1 "
             "is allowed when impulse magnitude carries the ladder jump."
         ),
-        "B_hV": float(bb.B_hV),
+        "B_V": float(bb.B_V),
         "checks_ok": (
             schema.n_ring == 512
             and schema.delta_phi_disc == 41

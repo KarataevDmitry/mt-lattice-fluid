@@ -1,17 +1,17 @@
 """Modular factor ring Z_N[i], N = 2^mod_bits — Planck-derived (§3.12.6).
 
 Each lane of the fixed spinor is an element of Z_N; complex pairs (U, V) form Z_N[i].
-Default N = 512 = 2^⌊B_hV⌋, B_hV = 2π/ln 2 from Bekenstein on one hV brick.
+Default N = 512 = 2^⌊B_V⌋, B_V = 2π/ln 2 from Bekenstein on one V_P.
 """
 
 from __future__ import annotations
 
 import torch
 
-from mt_ca.si_constants import HV
+from mt_ca.si_constants import PLANCK_CELL
 
 
-def signed_from_mod(u: torch.Tensor, mod_bits: int = HV.mod_bits) -> torch.Tensor:
+def signed_from_mod(u: torch.Tensor, mod_bits: int = PLANCK_CELL.mod_bits) -> torch.Tensor:
     """Interpret ring element in [0, N) as signed integer in (−N/2, N/2]."""
     n = 1 << mod_bits
     half = n >> 1
@@ -19,21 +19,21 @@ def signed_from_mod(u: torch.Tensor, mod_bits: int = HV.mod_bits) -> torch.Tenso
     return torch.where(x >= half, x - n, x)
 
 
-def mod_lane(x: torch.Tensor, mod_bits: int = HV.mod_bits) -> torch.Tensor:
+def mod_lane(x: torch.Tensor, mod_bits: int = PLANCK_CELL.mod_bits) -> torch.Tensor:
     """Project into Z_N where N = 2^mod_bits."""
     n = 1 << mod_bits
     return (x.to(torch.int64) % n).to(torch.int32)
 
 
-def add(a: torch.Tensor, b: torch.Tensor, *, mod_bits: int = HV.mod_bits) -> torch.Tensor:
+def add(a: torch.Tensor, b: torch.Tensor, *, mod_bits: int = PLANCK_CELL.mod_bits) -> torch.Tensor:
     return mod_lane(a.to(torch.int64) + b.to(torch.int64), mod_bits)
 
 
-def sub(a: torch.Tensor, b: torch.Tensor, *, mod_bits: int = HV.mod_bits) -> torch.Tensor:
+def sub(a: torch.Tensor, b: torch.Tensor, *, mod_bits: int = PLANCK_CELL.mod_bits) -> torch.Tensor:
     return mod_lane(a.to(torch.int64) - b.to(torch.int64), mod_bits)
 
 
-def double(a: torch.Tensor, *, mod_bits: int = HV.mod_bits) -> torch.Tensor:
+def double(a: torch.Tensor, *, mod_bits: int = PLANCK_CELL.mod_bits) -> torch.Tensor:
     return mod_lane(a.to(torch.int64) << 1, mod_bits)
 
 
@@ -42,7 +42,7 @@ def leapfrog_next(
     z_past: torch.Tensor,
     n_impulse: torch.Tensor,
     *,
-    mod_bits: int = HV.mod_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
 ) -> torch.Tensor:
     """Z(x,t+Δt) = 2Z(x,t) + ⌊𝒩⌋ − Z(x,t−Δt)  in Z_N[i] (lane-wise).
 
@@ -57,7 +57,7 @@ def leapfrog_past(
     z_next: torch.Tensor,
     n_impulse: torch.Tensor,
     *,
-    mod_bits: int = HV.mod_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
 ) -> torch.Tensor:
     """Recover Z(x,t−Δt) from the same modular identity (exact T⁻¹ algebra)."""
     acc = 2 * z.to(torch.int64) + n_impulse.to(torch.int64) - z_next.to(torch.int64)
@@ -70,7 +70,7 @@ def leapfrog_identity_holds(
     z_next: torch.Tensor,
     n_impulse: torch.Tensor,
     *,
-    mod_bits: int = HV.mod_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
 ) -> bool:
     """Check Z⁺ + Z⁻ = 2Z + ⌊𝒩⌋ (mod N) lane-wise."""
     lhs = add(z_next, z_past, mod_bits=mod_bits)
@@ -83,7 +83,7 @@ def bekenstein_scale_spinor(
     *,
     frac_bits: int,
     rho_max_int: int,
-    mod_bits: int = HV.mod_bits,
+    mod_bits: int = PLANCK_CELL.mod_bits,
 ) -> torch.Tensor:
     """A7 on ℤ: scale full spinor when z†z > ρ_max — one factor on all lanes (§5.0 ρ_field)."""
     if rho_max_int <= 0:

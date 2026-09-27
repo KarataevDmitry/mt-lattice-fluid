@@ -14,20 +14,20 @@ class SIFloor0Rows:
     """Ask/row probes for floor-0 planckon internal spectrum."""
 
     def internal_state_catalog_row(self) -> dict[str, float | int | str | bool | list]:
-        """§5.0.4-A — structure of the finite internal-state catalog (one hV).
+        """§5.0.4-A — structure of the finite internal-state catalog (one V_P).
 
         Algebra tier (closed): phase ring Z_512, (k_phi, phi_f) bijection, n_E ladder.
         Amplitude tier: mu in Z_{2^frac_bits}; spinor orientation = Bloch on S^2.
-        Bekenstein cap 2^B_hV binds total distinguishable cell states — registers are
+        Bekenstein cap 2^B_V binds total distinguishable cell states — registers are
         not independent (naive product >> cap).
         """
         from mt_ca.si_constants import (
             elementary_quanta_row,
-            hv_bit_budget,
+            planck_cell_bit_budget,
             internal_phase_coords_row,
         )
 
-        bb = hv_bit_budget()
+        bb = planck_cell_bit_budget()
         ipc = internal_phase_coords_row()
         eq = elementary_quanta_row()
         ticks = int(eq["energy_ticks_per_E0"])
@@ -75,7 +75,7 @@ class SIFloor0Rows:
                 "id": "bekenstein_cap",
                 "status": "closed_bound",
                 "count": cap,
-                "note": "2^B_hV upper bound on distinguishable hV states",
+                "note": "2^B_V upper bound on distinguishable hV states",
             },
         ]
         cap_binds = cap < bloch and cap < naive_phase_n_e
@@ -104,11 +104,11 @@ class SIFloor0Rows:
             ),
             "note": (
                 "§5.0.4-A catalog probe: algebra closed; Bloch count on Q6 pinned; "
-                "full orbit table + branches — Floor0_gamma_hV."
+                "full orbit table + branches — Floor0_gamma_V."
             ),
         }
 
-    def floor0_gamma_hV_row(
+    def floor0_gamma_V_row(
         self,
         *,
         size: int = 32,
@@ -116,10 +116,10 @@ class SIFloor0Rows:
         track: int = 128,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
-        """§5.0.4-A — Γ_hV orbit table + ground/excited branches under free g."""
-        from mt_ca.app.runner import run_floor0_gamma_hV
+        """§5.0.4-A — Γ_V orbit table + ground/excited branches under free g."""
+        from mt_ca.app.runner import run_floor0_gamma_V
 
-        return run_floor0_gamma_hV(
+        return run_floor0_gamma_V(
             size=size, relaxation=relaxation, track=track, device=device
         )
 
@@ -131,7 +131,7 @@ class SIFloor0Rows:
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
-        """§5.0.4-A — discrete phase space Γ_hV (delegates to ``mt_ca.app.runner``)."""
+        """§5.0.4-A — discrete phase space Γ_V (delegates to ``mt_ca.app.runner``)."""
         from mt_ca.app.runner import run_floor0_phase_space
 
         return run_floor0_phase_space(size=size, relaxation=relaxation, track=track, device=device)
@@ -189,12 +189,12 @@ class SIFloor0Rows:
         from mt_ca.matter_survey import default_anchor, plane_mconfig, spinor_plane
         from mt_ca.projected_collision import projected_phi_int
         from mt_ca.reversible import canonical_fixed
-        from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget, n_E_from_phi_ticks
+        from mt_ca.si_constants import elementary_quanta_row, planck_cell_bit_budget, n_E_from_phi_ticks
         from mt_ca.spinor import arg_phase_defect, bloch_vector, su2_apply
         from mt_ca.topology import matter_occupancy_b, winding_channels
 
         eq = elementary_quanta_row()
-        bb = hv_bit_budget()
+        bb = planck_cell_bit_budget()
         n_ring = int(eq["N_ring"])
         dphi_disc = int(eq["delta_phi_min_disc"])
         pauli_disc = int(eq["pauli_impulse_disc"])
@@ -309,7 +309,7 @@ class SIFloor0Rows:
             "habitat": scenario.habitat_label,
             "N_ring": n_ring,
             "N_phi": int(bb.N_phi),
-            "B_hV": float(bb.B_hV),
+            "B_V": float(bb.B_V),
             "delta_phi_min_disc": dphi_disc,
             "delta_phi_min_rad": float(eq["delta_phi_min_rad"]),
             "pauli_impulse_disc": pauli_disc,
