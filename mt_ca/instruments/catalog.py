@@ -30,7 +30,7 @@ class InstrumentId(str, Enum):
     L_Z = "L_z"
     RHO_CONTRAST = "rho_contrast"
     NORM_GLOBAL = "norm_global"
-    PHI_KICK_TICK = "phi_kick_tick"
+    PHI_IMPULSE_TICK = "phi_impulse_tick"
     ENERGY_STAR = "energy_star"
     MOMENTUM_STAR_X = "momentum_star_x"
     MOMENTUM_STAR_Y = "momentum_star_y"
@@ -186,9 +186,9 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
         "",
     ),
     InstrumentSpec(
-        InstrumentId.PHI_KICK_TICK,
-        "Φ kick (ring ticks)",
-        "§3.12 balance equation (kick)",
+        InstrumentId.PHI_IMPULSE_TICK,
+        "Φ impulse (ring ticks)",
+        "§3.12 импульс за тик (Φ)",
         "M_balance_tick",
         "ℤ_N_ring",
         "needs z_past",

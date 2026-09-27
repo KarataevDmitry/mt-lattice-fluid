@@ -51,7 +51,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 **Verify:** `Floor0_nE_selection` PASS · probe `tools/floor0_catalog_probe.py --selection`.
 
-## 2026-09-26 · §5.0.4-A · n_E≥1 kick-harness (floor 0)
+## 2026-09-26 · §5.0.4-A · n_E≥1 · ряд Φ на ядре (floor 0)
 
 **Критерий готовности:** `run_floor0_nE_excitation_harness` — planckon on `VACUUM_BOIL`, релаксация 64, track 32; ряд `n_E` из `projected_phi_int` на ядре даёт `n_E≥1` under free `g` (relaxed snapshot stays `n_E=0`).
 
@@ -190,7 +190,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
 | **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | — | **`FCC_N12`** PASS (пол ON) | true Bravais parity UoW open |
 | **лестница ФТТ:** `G`, BZ, умклапп, `N_pack`, `b_atom` | §5.2.4 | model | — | quanta + probe |
-| leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | нейтральное по $n_E$ распределение kick |
+| leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | нейтральное по $n_E$ распределение импульса Φ |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E`** | §5.2.1–§5.2.3 | sim | **`LadderConservation`** PASS (proxy) | уравнения баланса E/p/L на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
@@ -335,7 +335,7 @@ z' = z · exp(iφ)
 | Planck **`⌊·⌋`** encode | **`fixed_point.py`** · **`frac_bits=6`**, **`mod_bits=9`** |
 | **projected 𝒩** | **`projected_collision.py`** · default **`use_projected_collision=True`** |
 | **`g` 2-го порядка** | **`reversible.evolve_canonical`** · **`projected_collision.py`** |
-| `(Z, Z_past)` + kick stack | **`simulator.py`** |
+| `(Z, Z_past)` + impulse stack | **`simulator.py`** |
 | декодирование для T | **`fixed_point.decode_spinor`** — T/UI, not tick |
 
 ### §3.12 Leapfrog Z_N[i]
@@ -345,7 +345,7 @@ z' = z · exp(iφ)
 | слой | impl |
 |------|------|
 | forward | **`projected_step_fixed`** |
-| reverse | kick stack · **`Leapfrog`** bit-exact |
+| reverse | impulse stack · **`Leapfrog`** bit-exact |
 | gauge-fix encode | ✅ U1 equivariance |
 
 ### §4 T-layer
@@ -410,7 +410,7 @@ z' = z · exp(iφ)
 | 2026-09-22 | §8.4.2-C′ | $\ell_P=\mathrm{const}$; $\ell_e$ = эффективная Regge-длина, не деформация шага |
 | 2026-09-22 | §4.10 | tunnel M→T: leak$\to\tau^N=e^{-\kappa L/\ell_P}$ · sim slab DoD open |
 | 2026-09-22 | §4.9.2a | birth = lock-in germ $V$; M-ID = invariants ($n$, Pauli, $E$); SM-словарь open |
-| 2026-09-22 | §3.12.5a | $\varepsilon$ in $\Phi$-kick · $Z^{+}=2Z+\lfloor\mathcal{N}[\varepsilon]\rfloor-Z^{-}$ · $m_{\mathrm{loc}}\le m_P$ |
+| 2026-09-22 | §3.12.5a | $\varepsilon$ в импульсе $\Phi$ · $Z^{+}=2Z+\lfloor\mathcal{N}[\varepsilon]\rfloor-Z^{-}$ · $m_{\mathrm{loc}}\le m_P$ |
 | 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · **не сшивка**: $|h_{\mathrm{near}}/h_{\mathrm{Newton}}|\sim 2\times 10^{3}$ · dual $\rho_{\mathrm{vac}}$ hinge |
 | 2026-09-22 | SatBC sim | `strain_metric` · verify `SatBC_Cppp` PASS · near/N=2047.5 · far $h=0$ · vortex 32t: $h(R)$ flat ≠$1/R$ |
 | 2026-09-23 | FCC+HF | объёмная FCC (12 соседей) с полом: vacuum/impulse/wave/vortex multi-tick ✅ · verify HF ON |

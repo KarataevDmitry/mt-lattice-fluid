@@ -385,7 +385,7 @@ class SISmRows:
         }
 
     def leapfrog_eps_row(self) -> dict[str, float]:
-        """§3.12.5a — ε in Φ-kick; ℓ_e bound; m_loc ≤ m_P."""
+        """§3.12.5a — ε in импульс Φ; ℓ_e bound; m_loc ≤ m_P."""
         from mt_ca.fixed_point import vacuum_amplitude_quantum
 
         rho_star = 1.0  # A7: |Z|² ≤ 1 ↔ ρ_E ≤ u_P

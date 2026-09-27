@@ -22,7 +22,7 @@ def pauli_phi(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     parallel = (cos2 / denom) > cfg.pauli_overlap_cos**2
     dense = (rho1 > cfg.pauli_rho_min) & (rho2 > cfg.pauli_rho_min)
     bad = parallel & dense
-    return torch.where(bad, torch.full_like(rho1, cfg.pauli_kick), torch.zeros_like(rho1))
+    return torch.where(bad, torch.full_like(rho1, cfg.pauli_impulse), torch.zeros_like(rho1))
 
 
 def _contour_min_rho(

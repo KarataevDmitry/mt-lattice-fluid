@@ -92,7 +92,7 @@ def _human(rep: dict) -> list[str]:
                 "увеличь --ticks или уменьши --size для exact cycle search."
             )
     lines.append(
-        "Полная g: сим = exact композиция; symbolica T(O,k,boil) для kick/floor/LUT — open, не «невозможна»."
+        "Полная g: сим = exact композиция; symbolica T(O,k,boil) для импульса Φ / floor / LUT — open, не «невозможна»."
     )
     return lines
 

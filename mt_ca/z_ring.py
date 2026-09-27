@@ -40,7 +40,7 @@ def double(a: torch.Tensor, *, mod_bits: int = HV.mod_bits) -> torch.Tensor:
 def leapfrog_next(
     z: torch.Tensor,
     z_past: torch.Tensor,
-    n_kick: torch.Tensor,
+    n_impulse: torch.Tensor,
     *,
     mod_bits: int = HV.mod_bits,
 ) -> torch.Tensor:
@@ -48,19 +48,19 @@ def leapfrog_next(
 
     Equivalent symmetric form: Z⁺ + Z⁻ = 2Z + ⌊𝒩⌋.
     """
-    acc = 2 * z.to(torch.int64) + n_kick.to(torch.int64) - z_past.to(torch.int64)
+    acc = 2 * z.to(torch.int64) + n_impulse.to(torch.int64) - z_past.to(torch.int64)
     return mod_lane(acc, mod_bits)
 
 
 def leapfrog_past(
     z: torch.Tensor,
     z_next: torch.Tensor,
-    n_kick: torch.Tensor,
+    n_impulse: torch.Tensor,
     *,
     mod_bits: int = HV.mod_bits,
 ) -> torch.Tensor:
     """Recover Z(x,t−Δt) from the same modular identity (exact T⁻¹ algebra)."""
-    acc = 2 * z.to(torch.int64) + n_kick.to(torch.int64) - z_next.to(torch.int64)
+    acc = 2 * z.to(torch.int64) + n_impulse.to(torch.int64) - z_next.to(torch.int64)
     return mod_lane(acc, mod_bits)
 
 
@@ -68,13 +68,13 @@ def leapfrog_identity_holds(
     z: torch.Tensor,
     z_past: torch.Tensor,
     z_next: torch.Tensor,
-    n_kick: torch.Tensor,
+    n_impulse: torch.Tensor,
     *,
     mod_bits: int = HV.mod_bits,
 ) -> bool:
     """Check Z⁺ + Z⁻ = 2Z + ⌊𝒩⌋ (mod N) lane-wise."""
     lhs = add(z_next, z_past, mod_bits=mod_bits)
-    rhs = add(double(z, mod_bits=mod_bits), n_kick, mod_bits=mod_bits)
+    rhs = add(double(z, mod_bits=mod_bits), n_impulse, mod_bits=mod_bits)
     return bool(torch.equal(lhs, rhs))
 
 

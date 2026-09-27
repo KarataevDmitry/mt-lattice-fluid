@@ -526,7 +526,7 @@ def check_congruence_ladder(device: str = "cpu") -> dict:
         and row["additive_order_delta_phi"] == 512
         and row["gcd_N_phi_N_ring"] == 1
         and row["pauli_equals_half_ring"]
-        and row["pauli_kick_disc"] == 256
+        and row["pauli_impulse_disc"] == 256
         and row["energy_ticks_eq_delta_phi_disc"]
         and row["n_E_sample"] == row["n_E_sample_expected"]
         and row["n_E_sample"] == n_E_from_phi_ticks(int(row["n_E_sample_phi_ticks"]))
@@ -552,12 +552,12 @@ def check_elementary_quanta(device: str = "cpu") -> dict:
     cfg = MConfig.for_stencil('hex')
     ok = (
         abs(cfg.sync_strength - row["sync_strength_rad"]) < 1e-12
-        and abs(cfg.pauli_kick - row["pauli_kick_rad"]) < 1e-12
+        and abs(cfg.pauli_impulse - row["pauli_impulse_rad"]) < 1e-12
         and abs(cfg.pauli_rho_min - row["pauli_rho_min_natural"]) < 1e-12
         and abs(cfg.pauli_overlap_cos - row["pauli_overlap_cos"]) < 1e-12
         and row["sync_equals_kappa_times_delta_phi"] == 1.0
-        and row["pauli_kick_disc_equals_half_ring"]
-        and row["pauli_kick_disc"] == row["N_ring"] // 2
+        and row["pauli_impulse_disc_equals_half_ring"]
+        and row["pauli_impulse_disc"] == row["N_ring"] // 2
         and row["energy_ticks_per_E0"] == row["delta_phi_min_disc"]
     )
     return {
@@ -768,7 +768,7 @@ def check_arg_quantum(device: str = "cpu") -> dict:
 def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
     """§0.5 / §10.2: vacuum_amplitude = z_min; full Z_N ocean; HF ON does not fill."""
     from mt_ca.fixed_point import vacuum_amplitude_quantum
-    from mt_ca.projected_collision import projected_collision_kick
+    from mt_ca.projected_collision import projected_collision_impulse
     from mt_ca.simulator import LatticeFluidSimulator
 
     cfg = MConfig.for_stencil('hex', heisenberg_floor=True)

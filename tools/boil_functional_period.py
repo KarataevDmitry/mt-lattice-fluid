@@ -58,7 +58,7 @@ def _collect(
         for name, site in sites.items():
             row = lab.site_row(site, z_past=z_p)
             series[name]["rho"].append(float(row[InstrumentId.RHO_FIELD.value]))
-            series[name]["phi_kick"].append(float(row.get(InstrumentId.PHI_KICK_TICK.value) or 0))
+            series[name]["phi_impulse"].append(float(row.get(InstrumentId.PHI_IMPULSE_TICK.value) or 0))
             series[name]["n_E"].append(float(row[InstrumentId.N_E.value]))
             series[name]["Phi"].append(float(lab.projected_phi_at(site)))
 

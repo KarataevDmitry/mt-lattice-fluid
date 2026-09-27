@@ -18,7 +18,7 @@ def check_instrument_panel_vortex(size: int = 48, device: str = "cpu") -> dict:
         and site["b_matter"] == 1
         and site["rho_field"] > 0
         and site["n_E"] >= 0
-        and "phi_kick_tick" in site
+        and "phi_impulse_tick" in site
         and "t_m_rest" in t
         and rho_si > 0
         and lab.dimension.value == "3+1"

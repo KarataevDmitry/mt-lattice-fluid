@@ -66,7 +66,7 @@ def check_discrete_rot_exp(device: str = "cpu") -> dict:
 
     from mt_ca.config import MConfig
     from mt_ca.fixed_point import decode_spinor, encode_spinor
-    from mt_ca.projected_collision import rot_kick_uv
+    from mt_ca.projected_collision import rot_impulse_uv
     from mt_ca.si_constants import heisenberg_phi_min_disc, phase_disc_to_rad
     from mt_ca.z_ring import mod_lane
 
@@ -84,8 +84,8 @@ def check_discrete_rot_exp(device: str = "cpu") -> dict:
         u1 = encoded[..., 2].to(torch.int64)
         v1 = encoded[..., 3].to(torch.int64)
         phi = torch.tensor([phi_ticks], device=dev, dtype=torch.int64)
-        du0, dv0 = rot_kick_uv(u0, v0, phi, phase_bits=cfg.phase_bits)
-        du1, dv1 = rot_kick_uv(u1, v1, phi, phase_bits=cfg.phase_bits)
+        du0, dv0 = rot_impulse_uv(u0, v0, phi, phase_bits=cfg.phase_bits)
+        du1, dv1 = rot_impulse_uv(u1, v1, phi, phase_bits=cfg.phase_bits)
         out = encoded.clone()
         out[..., 0] = mod_lane(u0 + du0, cfg.mod_bits)
         out[..., 1] = mod_lane(v0 + dv0, cfg.mod_bits)
@@ -293,7 +293,7 @@ def check_leapfrog_bit_exact(size: int = 64, steps: int = 32, device: str = "cpu
         "impulse": {k: impulse[k] for k in ("bit_exact", "max_rel_err", "steps")},
         "vortex": {k: vortex[k] for k in ("bit_exact", "n0", "n_back", "n_stable", "steps")},
         "ok": ok,
-        "note": "§3.12: z(t+Δt)=−z(t−Δt)+2z(t)+⌊kick⌋; g⁻¹ without CPT",
+        "note": "§3.12: z(t+Δt)=−z(t−Δt)+2z(t)+⌊𝒩⌋; g⁻¹ without CPT",
     }
 
 def check_spinor_360_sign(size: int = 64, device: str = "cpu") -> dict:
@@ -327,7 +327,7 @@ def check_no_m_heat_death(device: str = "cpu") -> dict:
 def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     """§2.3.8: D5 on Z_N[i] = constants only; Planck VACUUM ≠ D5."""
     from mt_ca.fixed_point import vacuum_amplitude_quantum
-    from mt_ca.projected_collision import projected_collision_kick
+    from mt_ca.projected_collision import projected_collision_impulse
     from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
     from mt_ca.simulator import LatticeFluidSimulator
     from mt_ca.z_ring import mod_lane
@@ -340,9 +340,9 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     z_const = torch.full((size, size, 2), amp, device=dev, dtype=torch.complex64)
     cfg_d5 = MConfig.for_stencil('hex', heisenberg_floor=False)
     f_const = canonical_fixed(z_const, cfg_d5)
-    kick_const = projected_collision_kick(f_const, cfg_d5)
+    impulse_const = projected_collision_impulse(f_const, cfg_d5)
     f_next, _, _ = leapfrog_forward_fixed(f_const, f_const, cfg_d5)
-    const_kick_zero = int(kick_const.abs().max().item()) == 0
+    const_impulse_zero = int(impulse_const.abs().max().item()) == 0
     const_step_fixed = bool(torch.equal(mod_lane(f_next, cfg.mod_bits), mod_lane(f_const, cfg.mod_bits)))
 
     # Non-constant: orthogonal neighbor bricks at amp large enough that Φ ≥ Δφ_disc.
@@ -356,27 +356,27 @@ def check_theorem_2_3_8(size: int = 32, device: str = "cpu") -> dict:
     f_nc[odd, 1] = 64
     f_nc[..., 2] = f_nc[..., 0]
     f_nc[..., 3] = f_nc[..., 1]
-    nonconst_kick = int(projected_collision_kick(f_nc, cfg).abs().max().item()) > 0
+    nonconst_impulse = int(projected_collision_impulse(f_nc, cfg).abs().max().item()) > 0
 
     sim = LatticeFluidSimulator(size, size, cfg, device=dev)
     sim.reset(SeedClass.VACUUM)
-    kick_vac = projected_collision_kick(sim._f_curr, cfg)
-    vac_not_frozen = int(kick_vac.abs().max().item()) > 0
+    impulse_vac = projected_collision_impulse(sim._f_curr, cfg)
+    vac_not_frozen = int(impulse_vac.abs().max().item()) > 0
     # Holomorphic ocean (one Heisenberg class) may have ⌊𝒩⌋=0 locally (§2.3.8 remark).
     # Physical claim: VACUUM ≠ c=0 deadlock and ≠ empty lattice; A5 floor holds.
     vac_alive = float(sim.z.abs().square().sum(-1).min().item()) > 0.0
     vac_not_deadlock = vac_alive and float(sim.z.abs().mean().item()) > 0.0
 
-    ok = const_kick_zero and const_step_fixed and nonconst_kick and vac_not_deadlock
+    ok = const_impulse_zero and const_step_fixed and nonconst_impulse and vac_not_deadlock
     return {
         "id": "Theorem_2_3_8",
-        "const_kick_zero": const_kick_zero,
+        "const_impulse_zero": const_impulse_zero,
         "const_step_fixed": const_step_fixed,
-        "nonconst_kick": nonconst_kick,
+        "nonconst_impulse": nonconst_impulse,
         "vac_not_frozen": vac_not_frozen,
         "vac_alive": vac_alive,
         "ok": ok,
-        "note": "§2.3.8a–b; VACUUM = Heisenberg-class ocean at z_min (kick may be 0 locally)",
+        "note": "§2.3.8a–b; VACUUM = Heisenberg-class ocean at z_min (impulse may be 0 locally)",
     }
 
 def check_matter_b_macro(size: int = 64, device: str = "cpu") -> dict:

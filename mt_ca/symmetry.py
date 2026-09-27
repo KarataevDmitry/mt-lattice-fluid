@@ -268,7 +268,7 @@ def u1_vac_report(size: int = 128, device: torch.device | str = "cpu") -> dict:
         and all(rows[n]["inv_zeta_max_err"] < 1e-5 for n in seeds)
         and all(rows[n]["inv_dphi_max_err"] < 1e-4 for n in seeds)
     )
-    # g·e^{iθ} on Z_N[i]: encode Q breaks exact U(1) (kick Δ up to N/2) — invariants are the M claim (§3.11).
+    # g·e^{iθ} on Z_N[i]: encode Q breaks exact U(1) (impulse Δ up to N/2) — invariants are the M claim (§3.11).
     # VACUUM: A5 boiling — strict g at 1e-3 not required (§10.2)
     return {"id": "U1_vac", "seeds": rows, "ok": ok}
 

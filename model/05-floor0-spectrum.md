@@ -29,7 +29,7 @@
 |-------|-------------|-------|--------|
 | **E0_1** | 41 | 1 | минимальный разрешённый скачок |
 | **E0_2** | 82 | 2 | второй уровень |
-| **pauli_pi** | 256 | 6 | Pauli-kick $=N_{\mathrm{ring}}/2$ |
+| **pauli_pi** | 256 | 6 | импульс Паули $\pi$ ($=N_{\mathrm{ring}}/2$) |
 | **ring_2pi** | 512 | 12 | полный оборот $U(1)$ на $\mathbb{Z}_{512}$ |
 
 Код: `SI.brick_internal_spectrum_row()` · verify **`Brick_internal_spectrum`**.
@@ -100,14 +100,14 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 ## Правила отбора между внутренними уровнями $n_E$ (схема · sim)
 
-**Объект:** один $v_p$ с сохранённой топологией ($b=1$, $|n|$ на ядре не меняется без партнёра на $N_{12}$). **Уровень** — класс лестницы $n_E\in\{0,\ldots,12\}$ из $n_E=\lfloor|\Phi_{\mathrm{kick}}|/\Delta\varphi_{\mathrm{disc}}\rfloor$ (§5.0.4 · CL-4).
+**Объект:** один $v_p$ с сохранённой топологией ($b=1$, $|n|$ на ядре не меняется без партнёра на $N_{12}$). **Уровень** — класс лестницы $n_E\in\{0,\ldots,12\}$ из $n_E=\lfloor|\Phi|/\Delta\varphi_{\mathrm{disc}}\rfloor$ (импульс за тик; §5.0.4 · CL-4).
 
-**Аналог атома (T):** дипольный отбор $|\Delta\ell|=1$ — **не** закон M на этаже 0; здесь разрешены **многоквантовые** скачки $|\Delta n_E|>1$, если kick переносит нужное число ступеней $E_0$.
+**Аналог атома (T):** дипольный отбор $|\Delta\ell|=1$ — **не** закон M на этаже 0; здесь разрешены **многоквантовые** скачки $|\Delta n_E|>1$, если **импульс Φ** за тик переносит нужное число ступеней $E_0$.
 
 | id | правило | формулировка |
 |----|---------|--------------|
 | **S1** | **баланс E₀** | $n_E=\lfloor|\Phi|/\Delta\varphi_{\mathrm{disc}}\rfloor$ на каждом тике |
-| **S2** | **Heisenberg** | $|\Phi|=0$ или $|\Phi|\ge\Delta\varphi_{\mathrm{disc}}$ (CL-3; подквантовый kick запрещён) |
+| **S2** | **Heisenberg** | $|\Phi|=0$ или $|\Phi|\ge\Delta\varphi_{\mathrm{disc}}$ (CL-3; подпороговый импульс запрещён) |
 | **S3** | **возбуждение** | если $n_E(t)>n_E(t-1)$, то $|\Phi(t)|\ge n_E(t)\cdot\Delta\varphi_{\mathrm{disc}}$ |
 | **S4** | **потолок** | $n_E\le\lfloor N_{\mathrm{ring}}/\Delta\varphi_{\mathrm{disc}}\rfloor=12$ |
 
@@ -125,12 +125,12 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 | половина | native | размер (алгебра) |
 |----------|--------|------------------|
 | **$q$** | $\varphi_{\mathrm{disc}}$, $(k_\varphi,\varphi_f)$, ориентация Блоха, $\|z\|^2$ | кольцо 512 · сектор 13 · тон 41 · Bloch $\sim 3\cdot10^6$ |
-| **$p$** | kick $\Phi$ [тики/$\mathrm{d}t$], $n_E$, $\pi/p_0$ на ядре | $\mathbb{Z}_{512}$ (Heisenberg) · 13 · $p_0=\kappa_{\mathrm{link}}$ |
+| **$p$** | импульс $\Phi$ [тики/$\mathrm{d}t$], $n_E$, $\pi/p_0$ на ядре | $\mathbb{Z}_{512}$ (Heisenberg) · 13 · $p_0=\kappa_{\mathrm{link}}$ |
 
 Наивное $q\times p$ $\gg 2^{B_{hV}}\approx 535$ — $\Gamma_{hV}$ **сжато** бит-бюджетом, как и каталог конфигураций.
 
-**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик leapfrog + kick stack на **заполненном кипящем** океане.
-Для `VORTEX_P`/`VACUUM_BOIL`: ядро планкона проходит **$\sim 30$** различных точек $\Gamma$ за 32 тика, с ненулевыми kick $\Phi$ — verify **`Floor0_phase_space`**.
+**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик leapfrog + **реестр импульса** на **заполненном кипящем** океане.
+Для `VORTEX_P`/`VACUUM_BOIL`: ядро планкона проходит **$\sim 30$** различных точек $\Gamma$ за 32 тика, с ненулевым **импульсом Φ** — verify **`Floor0_phase_space`**.
 
 Код: `SI.floor0_phase_space_row()` · probe `tools/floor0_catalog_probe.py --phase-space`.
 
@@ -207,7 +207,7 @@ $$
 
 | слой | объект | метрика |
 |------|--------|---------|
-| **макроописание** | contrast, kick, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
+| **макроописание** | contrast, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
 | **КА** | пара leapfrog $(f_{\mathrm{curr}},f_{\mathrm{past}})\in\mathbb{Z}_N[i]^{\Lambda}$ | доля $t$ с **точным** совпадением пары при сдвige $T$; `exact_period_T` = минимальное $T$ с rate $=1$ |
 
 Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$). В конце прогона — блок **`=== ЧИТАТЬ ТАК ===`** (явные «НЕТ», не пустота).

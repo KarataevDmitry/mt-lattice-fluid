@@ -48,12 +48,12 @@ def floor0_selection_schema_row(*, phase_bits: int | None = None) -> dict[str, A
             {
                 "id": "S1",
                 "name": "energy_balance",
-                "statement": "n_E = floor(|Phi_kick| / ticks_per_E0)",
+                "statement": "n_E = floor(|Phi| / ticks_per_E0)",
             },
             {
                 "id": "S2",
                 "name": "heisenberg",
-                "statement": "|Phi_kick| = 0 or |Phi_kick| >= delta_phi_disc (CL-3)",
+                "statement": "|Phi| = 0 or |Phi| >= delta_phi_disc (CL-3)",
             },
             {
                 "id": "S3",
@@ -68,7 +68,7 @@ def floor0_selection_schema_row(*, phase_bits: int | None = None) -> dict[str, A
         ],
         "atom_analog_note": (
             "T dipole |Delta ell|=1 is not an M law at floor 0; multi-quantum |Delta n_E|>1 "
-            "is allowed when kick magnitude carries the ladder jump."
+            "is allowed when impulse magnitude carries the ladder jump."
         ),
         "B_hV": float(bb.B_hV),
         "checks_ok": (

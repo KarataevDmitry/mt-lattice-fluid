@@ -1,6 +1,6 @@
 """Суммы и лапласианы по соседям: N₄, гекс N₆, FCC N₁₂.
 
-Аргумент ``stencil`` в API = **шаблон соседства** (см. ``GLOSSARY.ru.md``).
+Аргумент ``stencil`` в API = **шаблон соседства** (`n4` / `hex` / `fcc`).
 """
 
 from __future__ import annotations

@@ -392,12 +392,12 @@ def sync_strength_disc(
     return max(1, int(phi_disc * kappa_link()))
 
 
-def pauli_kick_rad() -> float:
+def pauli_impulse_rad() -> float:
     """SU(2) exchange antisymmetry phase = π rad (§3.10.4 · §5.2.3)."""
     return math.pi
 
 
-def pauli_kick_disc(*, phase_bits: int | None = None) -> int:
+def pauli_impulse_disc(*, phase_bits: int | None = None) -> int:
     """π rad on Z_{N_ring}: N_ring/2 ticks (§5.2.3)."""
     pb = HV.phase_bits if phase_bits is None else phase_bits
     return (1 << pb) // 2
@@ -447,8 +447,8 @@ def elementary_quanta_row(
     phi_disc = heisenberg_phi_min_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
     sync_rad = sync_strength_rad(delta_phi_min=delta_phi_min)
     sync_disc = sync_strength_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
-    pauli_rad = pauli_kick_rad()
-    pauli_disc = pauli_kick_disc(phase_bits=pb)
+    pauli_rad = pauli_impulse_rad()
+    pauli_disc = pauli_impulse_disc(phase_bits=pb)
     return {
         "frac_bits": fb,
         "phase_bits": pb,
@@ -460,9 +460,9 @@ def elementary_quanta_row(
         "sync_strength_rad": sync_rad,
         "sync_strength_disc": sync_disc,
         "sync_equals_kappa_times_delta_phi": sync_rad / (kappa_link() * delta_phi_min),
-        "pauli_kick_rad": pauli_rad,
-        "pauli_kick_disc": pauli_disc,
-        "pauli_kick_disc_equals_half_ring": pauli_disc == ((1 << pb) // 2),
+        "pauli_impulse_rad": pauli_rad,
+        "pauli_impulse_disc": pauli_disc,
+        "pauli_impulse_disc_equals_half_ring": pauli_disc == ((1 << pb) // 2),
         "pauli_rho_min_natural": pauli_rho_min_natural(rho_max=rho_max),
         "pauli_rho_min_si_J_m3": pauli_rho_min_si(rho_max_natural=rho_max),
         "pauli_overlap_cos": pauli_overlap_cos(delta_phi_min=delta_phi_min),
@@ -563,7 +563,7 @@ def as_code_dict() -> dict[str, float]:
 
         "SYNC_STRENGTH_RAD": sync_strength_rad(),
 
-        "PAULI_KICK_RAD": pauli_kick_rad(),
+        "PAULI_IMPULSE_RAD": pauli_impulse_rad(),
 
         "PAULI_RHO_MIN": pauli_rho_min_natural(),
 
@@ -1308,7 +1308,7 @@ def congruence_ladder_row(
     n12 = N12_FCC_CAUSAL_LINKS
     g_phi = math.gcd(phi_disc, n_ring)
     g_nphi = math.gcd(n_phi, n_ring)
-    pauli_disc = pauli_kick_disc(phase_bits=pb)
+    pauli_disc = pauli_impulse_disc(phase_bits=pb)
     k_fcc = kappa_link(n_links=n12)
     sync_disc_fcc = max(1, int(phi_disc * k_fcc))
     sync_disc_default = sync_strength_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
@@ -1346,7 +1346,7 @@ def congruence_ladder_row(
         "additive_order_delta_phi": _additive_order_mod(phi_disc, n_ring),
         "gcd_N_phi_N_ring": g_nphi,
         "N_phi_unit_in_Z_N": g_nphi == 1,
-        "pauli_kick_disc": pauli_disc,
+        "pauli_impulse_disc": pauli_disc,
         "pauli_equals_half_ring": pauli_disc == n_ring // 2,
         "sync_strength_disc_fcc": sync_disc_fcc,
         "sync_strength_disc_sim_default": sync_disc_default,

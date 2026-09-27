@@ -143,7 +143,7 @@ R_⊥ = (c₀ t) / 2   ⇒   c = k c₀ ,  k = 1/2
 - **Бесконечность** тиков в прошлое/будущее
 - **M → T → UI:** vortex `v_p` → зигзаг/mass → интерференция → coarse-grain мозга
 
-Не GPU-DoD; long-run sim — отдельный leaf.
+Не GPU-DoD; long-run sim — отдельный UoW.
 
 ---
 

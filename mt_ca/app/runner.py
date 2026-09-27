@@ -185,21 +185,21 @@ def track_gamma_points(
         px, py = momentum_density(plane)
         pi_x = int(round(float(px[y, x].item()) / p0_nat))
         pi_y = int(round(float(py[y, x].item()) / p0_nat))
-        kick = int(balance_step_probe(plane, zpp, plane_cfg)["phi"][y, x].item())
-        return (phi_ticks, k_phi, phi_f, n_e, kick, pi_x, pi_y, bloch_key, round(rho, 4))
+        impulse = int(balance_step_probe(plane, zpp, plane_cfg)["phi"][y, x].item())
+        return (phi_ticks, k_phi, phi_f, n_e, impulse, pi_x, pi_y, bloch_key, round(rho, 4))
 
     def _summarize(samples: list[tuple]) -> dict[str, int | list]:
-        kicks = {s[4] for s in samples}
+        impulses = {s[4] for s in samples}
         last = samples[-1]
         return {
             "unique_points": len({s[:8] for s in samples}),
             "ticks": len(samples),
-            "nonzero_kicks": sum(1 for k in kicks if k != 0),
+            "nonzero_impulses": sum(1 for k in impulses if k != 0),
             "phi_disc": last[0],
             "k_phi": last[1],
             "phi_f": last[2],
             "n_E": last[3],
-            "Phi_kick": last[4],
+            "phi_impulse": last[4],
             "pi_p0": [last[5], last[6]],
             "bloch": list(last[7]),
         }
@@ -279,7 +279,7 @@ def run_floor0_phase_space(
         {"id": "bloch", "states": _BLOCH_DISTINCT_Q6, "note": "Q(frac_bits) orientation classes"},
     ]
     p_axes = [
-        {"id": "Phi_kick", "states": n_ring, "note": "kick ticks per dt; 0 or |Φ|≥Δφ_disc"},
+        {"id": "phi_impulse", "states": n_ring, "note": "impulse ticks per dt; 0 or |Φ|≥Δφ_disc"},
         {"id": "n_E", "states": n_e_classes, "note": "E₀ quanta from |Φ| (§5.2.3 balance equation)"},
         {"id": "pi_p0", "states": -1, "note": "π/p₀ integer; width open-bound"},
     ]
@@ -301,7 +301,7 @@ def run_floor0_phase_space(
         "planckon_core": core,
         "bath_brick": bath_track,
         "planckon_iteration_unique": core["unique_points"],
-        "planckon_nonzero_kicks": core["nonzero_kicks"],
+        "planckon_nonzero_impulses": core["nonzero_impulses"],
         "checks_ok": (
             cap < naive_gamma
             and abs(p0_nat - 0.25) < 1e-9
@@ -327,9 +327,9 @@ def run_floor0_nE_excitation_harness(
 ) -> dict[str, Any]:
     """§5.0.4-A — после релаксации: ряд n_E по тикам; n_E≥1 at planckon core under free g.
 
-    Protocol (kick-harness): floor0_planckon on VACUUM_BOIL → релаксация → track ticks;
-    read integer Φ and n_E from ``projected_phi_int`` at the planted core (not the
-    relaxed snapshot alone, which stays n_E=0).
+    Протокол: floor0_planckon на VACUUM_BOIL → релаксация → ряд тиков;
+    целые Φ и n_E с ``projected_phi_int`` на ядре планкона (не один снимок после
+    релаксации — там n_E=0).
     """
     from mt_ca.app.lattice import build_run_spec, open_lattice
     from mt_ca.projected_collision import projected_phi_int
@@ -396,8 +396,8 @@ def run_floor0_nE_excitation_harness(
         "checks_ok": ok,
         "derivation_closed": False,
         "note": (
-            "§5.0.4-A kick-harness: after planckon relaxation, free g yields n_E≥1 on core "
-            "along evolution (integer Φ); relaxed snapshot alone stays n_E=0."
+            "§5.0.4-A: after planckon relaxation, free g yields n_E≥1 on core along Φ track "
+            "(integer impulse per tick); relaxed snapshot alone stays n_E=0."
         ),
     }
 

@@ -90,14 +90,14 @@ def run_boil_ocean_periodicity(
         for name, site in sites.items():
             row = lab.site_row(site, z_past=z_p)
             series[name]["rho"].append(float(row[InstrumentId.RHO_FIELD.value]))
-            series[name]["phi_kick"].append(float(row.get(InstrumentId.PHI_KICK_TICK.value) or 0))
+            series[name]["phi_impulse"].append(float(row.get(InstrumentId.PHI_IMPULSE_TICK.value) or 0))
             series[name]["n_E"].append(float(row[InstrumentId.N_E.value]))
             series[name]["Phi"].append(float(lab.projected_phi_at(site)))
 
     out_sites: dict[str, dict] = {}
     for name in sites:
         block: dict[str, dict] = {}
-        for key in ("rho", "phi_kick", "n_E", "Phi"):
+        for key in ("rho", "phi_impulse", "n_E", "Phi"):
             s = series[name][key]
             ac_lag, ac = ac_peak_period(s)
             fft_p, fft_pow = fft_peak_period(s)

@@ -20,7 +20,7 @@ def check_floor0_phase_space(device: str = "cpu") -> dict:
         "ok": ok,
         "habitat": row["habitat"],
         "planckon_unique_points": core["unique_points"],
-        "planckon_nonzero_kicks": row["planckon_nonzero_kicks"],
+        "planckon_nonzero_impulses": row["planckon_nonzero_impulses"],
         "ocean_contrast_grows": row["ocean_contrast_grows"],
         "bekenstein_cap_states": row["bekenstein_cap_states"],
         "note": row["note"],
@@ -66,7 +66,7 @@ def check_brick_internal_spectrum(device: str = "cpu") -> dict:
         and not bool(row["derivation_closed"])
         and int(row["N_ring"]) == 512
         and int(row["delta_phi_min_disc"]) == 41
-        and int(row["pauli_kick_disc"]) == 256
+        and int(row["pauli_impulse_disc"]) == 256
     )
     return {
         "id": "Brick_internal_spectrum",
@@ -116,7 +116,7 @@ def check_floor0_nE_selection(device: str = "cpu") -> dict:
 
 
 def check_floor0_nE_excitation(device: str = "cpu") -> dict:
-    """§5.0.4-A — n_E≥1 on planckon core after relaxation (n_E time series / kick-harness)."""
+    """§5.0.4-A — n_E≥1 on planckon core after relaxation (n_E time series / Φ track)."""
     from mt_ca.si_constants import SI
 
     row = SI.floor0_nE_excitation_row(device=device)

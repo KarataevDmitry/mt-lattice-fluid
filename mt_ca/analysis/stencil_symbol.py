@@ -1,4 +1,4 @@
-"""Символика суммы по соседям FCC N₁₂ на 3D-торе (λ_st(k); см. GLOSSARY.ru.md)."""
+"""Символика суммы по соседям FCC N₁₂ на 3D-торе (λ_st(k))."""
 from __future__ import annotations
 
 import cmath

@@ -48,10 +48,10 @@ def evolve_canonical(
 def leapfrog_reverse_fixed(
     f_curr: torch.Tensor,
     f_next: torch.Tensor,
-    f_kick: torch.Tensor,
+    f_impulse: torch.Tensor,
     cfg: MConfig,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    f_prev = leapfrog_invert(f_curr, f_next, f_kick, mod_bits=cfg.mod_bits)
+    f_prev = leapfrog_invert(f_curr, f_next, f_impulse, mod_bits=cfg.mod_bits)
     return f_prev, f_curr
 
 
@@ -77,15 +77,15 @@ def micro_step_reversible(
     return leapfrog_forward(z_curr, z_past, cfg)
 
 
-def unwind_with_kicks(
+def unwind_with_impulses(
     f_past: torch.Tensor,
     f_curr: torch.Tensor,
-    kicks: list[torch.Tensor],
+    impulses: list[torch.Tensor],
     cfg: MConfig,
 ) -> torch.Tensor:
     f_p, f_c = f_past, f_curr
-    for f_kick in reversed(kicks):
-        f_p, f_c = leapfrog_reverse_fixed(f_p, f_c, f_kick, cfg)
+    for f_impulse in reversed(impulses):
+        f_p, f_c = leapfrog_reverse_fixed(f_p, f_c, f_impulse, cfg)
     return f_c
 
 
@@ -108,17 +108,17 @@ def bit_exact_roundtrip_report(
     f0 = canonical_fixed(z0, cfg)
     f_past = f0.clone()
     f_curr = f0.clone()
-    kicks: list[torch.Tensor] = []
+    impulses: list[torch.Tensor] = []
     w0 = winding_robust(decode_spinor(f0, frac_bits=cfg.frac_bits))
     n0 = winding_nearest_int(w0) if w0 == w0 and seed_class != SeedClass.IMPULSE else 0
 
     for _ in range(steps):
-        f_next, f_prev, f_kick = leapfrog_forward_fixed(f_curr, f_past, cfg)
-        kicks.append(f_kick)
+        f_next, f_prev, f_impulse = leapfrog_forward_fixed(f_curr, f_past, cfg)
+        impulses.append(f_impulse)
         f_past = f_prev
         f_curr = f_next
 
-    f_back = unwind_with_kicks(f_past, f_curr, kicks, cfg)
+    f_back = unwind_with_impulses(f_past, f_curr, impulses, cfg)
     exact = bool(torch.equal(f0, f_back))
     z_back = decode_spinor(f_back, frac_bits=cfg.frac_bits)
     z_ref = decode_spinor(f0, frac_bits=cfg.frac_bits)
@@ -137,5 +137,5 @@ def bit_exact_roundtrip_report(
         "n_back": n_back,
         "n_stable": n0 == n_back or seed_class == SeedClass.IMPULSE,
         "ok": ok,
-        "note": "Z_N[i] projected collision + kick stack (§3.12.5)",
+        "note": "Z_N[i] projected collision + impulse stack (§3.12.5)",
     }

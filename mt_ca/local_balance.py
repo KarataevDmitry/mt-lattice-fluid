@@ -156,7 +156,7 @@ def ladder_conservation_report(
     z_vac = make_seed(SeedClass.VACUUM, size, size, device=dev, amplitude=cfg.vacuum_amplitude)
     vac = balance_step_probe(z_vac, z_vac.clone(), cfg)
     phi = vac["phi"]
-    # Exact Φ=0 (holomorphic) allowed; any nonzero kick must be ≥ φ_min (§3.7 · §2.3.8).
+    # Exact Φ=0 (holomorphic) allowed; any nonzero impulse must be ≥ φ_min (§3.7 · §2.3.8).
     nonzero = phi.abs() > 0
     heisenberg_ok = bool((~nonzero | (phi.abs() >= phi_min)).all().item())
 

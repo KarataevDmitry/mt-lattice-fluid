@@ -72,7 +72,7 @@ def main() -> None:
         for key in (
             "ocean_contrast_grows",
             "planckon_iteration_unique",
-            "planckon_nonzero_kicks",
+            "planckon_nonzero_impulses",
             "bekenstein_cap_states",
             "naive_q_times_p",
         ):

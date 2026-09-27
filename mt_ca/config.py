@@ -10,7 +10,7 @@ from mt_ca.si_constants import (
     SI,
     elementary_quanta_row,
     kappa_link,
-    pauli_kick_rad,
+    pauli_impulse_rad,
     pauli_overlap_cos,
     pauli_rho_min_natural,
     sync_strength_rad,
@@ -51,9 +51,9 @@ class MConfig:
     holomorphy_sync: bool = True
     sync_strength: float = sync_strength_rad()
 
-    # §3.10.4 Pauli pressure on same v_p — π kick, κ_link·ρ_max thresholds (§5.2.3)
+    # §3.10.4 Pauli pressure on same v_p — π impulse, κ_link·ρ_max thresholds (§5.2.3)
     pauli_exclusion: bool = True
-    pauli_kick: float = pauli_kick_rad()
+    pauli_impulse: float = pauli_impulse_rad()
     pauli_rho_min: float = pauli_rho_min_natural()
     pauli_overlap_cos: float = pauli_overlap_cos()
 

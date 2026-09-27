@@ -96,7 +96,7 @@ class SIAlphaThmRows:
             {
                 "id": "leg_M_theorem_closed",
                 "ratio": m97,
-                "maps_to": "M=1+N12·N_hier=97 — nF kick Thm closed",
+                "maps_to": "M=1+N12·N_hier=97 — nF impulse Thm closed",
                 "status": "derived_leg",
                 "mechanism": "§8.2·α·nF·Thm; not inject 137",
             },
@@ -290,7 +290,7 @@ class SIAlphaThmRows:
         Try (force accounting):
           Hierarchy forbids counting b inside N_hier (−1).
           Coulomb NN force still sits on a charged core (b=1) plus the
-          link×hierarchy budget that carries the kick stack outward:
+          link×hierarchy budget that carries the impulse stack outward:
             M = 1 + N₁₂ · N_hier
               = 1 + N₁₂ · (⌊B_hV⌋ − 1)
               = 97

@@ -85,7 +85,7 @@ def sample_site(
     if z_past is not None:
         zpp, _, _ = _site_on_plane(z_past, site)
         probe = balance_step_probe(plane, zpp, plane_cfg)
-        row[InstrumentId.PHI_KICK_TICK.value] = int(probe["phi"][y, x].item())
+        row[InstrumentId.PHI_IMPULSE_TICK.value] = int(probe["phi"][y, x].item())
         row[InstrumentId.ENERGY_STAR.value] = float(probe["energy_star"][y, x].item())
         row[InstrumentId.MOMENTUM_STAR_X.value] = float(probe["momentum_star_x"][y, x].item())
         row[InstrumentId.MOMENTUM_STAR_Y.value] = float(probe["momentum_star_y"][y, x].item())

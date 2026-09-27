@@ -76,7 +76,7 @@ def apply_heisenberg_floor_signed(
     phi_signed: torch.Tensor,
     phi_min: int,
 ) -> torch.Tensor:
-    """Quantize sub-threshold kicks to 0; leave |Φ|≥φ_min and exact 0 alone.
+    """Quantize sub-threshold impulse to 0; leave |Φ|≥φ_min and exact 0 alone.
 
     Model §3.7: |Δφ| < Δφ_min is not resolvable on the Heisenberg ring.
     §2.3.8 remark: holomorphic Φ=0 is locally admissible (anti-smear ≠ forced noise).
@@ -90,7 +90,7 @@ def apply_heisenberg_floor_signed(
     return torch.where(sub, torch.zeros_like(phi_signed), phi_signed)
 
 
-def saturating_phi_kick(
+def saturating_phi_impulse(
     zeta_r: torch.Tensor,
     zeta_i: torch.Tensor,
     rho2: torch.Tensor,
@@ -108,7 +108,7 @@ def saturating_phi_kick(
     return mod_lane(phi, cfg.mod_bits)
 
 
-def rot_kick_uv(
+def rot_impulse_uv(
     u: torch.Tensor,
     v: torch.Tensor,
     phi: torch.Tensor,
@@ -144,10 +144,10 @@ def pauli_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
     z = decode_spinor(f, frac_bits=cfg.frac_bits, mod_bits=cfg.mod_bits)
     extra = pauli_phi(z, cfg)
-    from mt_ca.si_constants import pauli_kick_disc
+    from mt_ca.si_constants import pauli_impulse_disc
 
-    kick = float(pauli_kick_disc(phase_bits=cfg.phase_bits))
-    ticks = torch.where(extra > 0, torch.full_like(extra, kick), torch.zeros_like(extra))
+    impulse = float(pauli_impulse_disc(phase_bits=cfg.phase_bits))
+    ticks = torch.where(extra > 0, torch.full_like(extra, impulse), torch.zeros_like(extra))
     return mod_lane(ticks.to(torch.int64), cfg.mod_bits)
 
 
@@ -196,7 +196,7 @@ def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 energy balance equation).
 
     Canon: Φ from saturating holonomy ζ only. §3.9 defect Arg(⟨z⟩/z) *is* Δφ_N
-    inside that gate — not a second CR/sync kick stacked on Φ (that double-count
+    inside that gate — not a second CR/sync impulse stacked on Φ (that double-count
     pumped |Z| under leapfrog; sim: vortex stable iff CR extras off).
     Pauli (A16) remains an extra on v_p overlap.
     """
@@ -207,14 +207,14 @@ def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     su0, sv0 = sum_n[..., 0], sum_n[..., 1]
     zeta_r, zeta_i = holonomy_zeta_int(u0, v0, su0, sv0, frac_bits=fb)
     rho2 = rho2_int(u0, v0, frac_bits=fb)
-    phi = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
+    phi = saturating_phi_impulse(zeta_r, zeta_i, rho2, cfg)
     if cfg.pauli_exclusion:
         phi = mod_lane(phi + pauli_phi_int(f, cfg), cfg.mod_bits)
     return phi
 
 
-def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """⌊𝒩⌋: integer saturating Φ + LUT rot kick on both spinor components (§3.12.5)."""
+def projected_collision_impulse(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
+    """⌊𝒩⌋: integer saturating Φ + LUT rot impulse on both spinor components (§3.12.5)."""
     u0 = f[..., 0].to(torch.int64)
     v0 = f[..., 1].to(torch.int64)
     u1 = f[..., 2].to(torch.int64)
@@ -222,8 +222,8 @@ def projected_collision_kick(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
     phi = projected_phi_int(f, cfg)
 
-    du0, dv0 = rot_kick_uv(u0, v0, phi, phase_bits=cfg.phase_bits)
-    du1, dv1 = rot_kick_uv(u1, v1, phi, phase_bits=cfg.phase_bits)
+    du0, dv0 = rot_impulse_uv(u0, v0, phi, phase_bits=cfg.phase_bits)
+    du1, dv1 = rot_impulse_uv(u1, v1, phi, phase_bits=cfg.phase_bits)
 
     return mod_lane(torch.stack([du0, dv0, du1, dv1], dim=-1), cfg.mod_bits)
 
@@ -234,8 +234,8 @@ def projected_step_fixed(
     cfg: MConfig,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """One modular leapfrog tick: Z⁺ + Z⁻ = 2Z + ⌊𝒩⌋ in Z_N[i], then A7 integer scale."""
-    n_kick = projected_collision_kick(f_curr, cfg)
-    f_raw = leapfrog_next(f_curr, f_past, n_kick, mod_bits=cfg.mod_bits)
+    n_impulse = projected_collision_impulse(f_curr, cfg)
+    f_raw = leapfrog_next(f_curr, f_past, n_impulse, mod_bits=cfg.mod_bits)
     rho_max_int = max(1, int(round(cfg.rho_max * (1 << cfg.frac_bits))))
     f_next = bekenstein_scale_spinor(
         f_raw,
@@ -243,8 +243,8 @@ def projected_step_fixed(
         rho_max_int=rho_max_int,
         mod_bits=cfg.mod_bits,
     )
-    n_kick_eff = mod_lane(
+    n_impulse_eff = mod_lane(
         f_next.to(torch.int64) + f_past.to(torch.int64) - 2 * f_curr.to(torch.int64),
         cfg.mod_bits,
     )
-    return f_next, f_curr, n_kick_eff
+    return f_next, f_curr, n_impulse_eff

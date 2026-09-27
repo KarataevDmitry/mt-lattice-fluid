@@ -110,36 +110,36 @@ def decode_spinor(
     return torch.stack([z1, z2], dim=-1).to(dtype)
 
 
-def quantize_kick(
+def quantize_impulse(
     delta: torch.Tensor,
     *,
     frac_bits: int = DEFAULT_FRAC_BITS,
     mod_bits: int = DEFAULT_MOD_BITS,
 ) -> torch.Tensor:
-    """Round collision kick to fixed-point lattice (rounding isolated in gate)."""
+    """Round collision impulse to fixed-point lattice (rounding isolated in gate)."""
     return encode_spinor(delta, frac_bits=frac_bits, mod_bits=mod_bits)
 
 
 def leapfrog_combine(
     f_curr: torch.Tensor,
     f_past: torch.Tensor,
-    f_kick: torch.Tensor,
+    f_impulse: torch.Tensor,
     *,
     mod_bits: int = DEFAULT_MOD_BITS,
 ) -> torch.Tensor:
     """Z⁺ + Z⁻ = 2Z + ⌊𝒩⌋  ⇔  Z⁺ = 2Z + ⌊𝒩⌋ − Z⁻  in Z_N[i]."""
-    return leapfrog_next(f_curr, f_past, f_kick, mod_bits=mod_bits)
+    return leapfrog_next(f_curr, f_past, f_impulse, mod_bits=mod_bits)
 
 
 def leapfrog_invert(
     f_curr: torch.Tensor,
     f_next: torch.Tensor,
-    f_kick: torch.Tensor,
+    f_impulse: torch.Tensor,
     *,
     mod_bits: int = DEFAULT_MOD_BITS,
 ) -> torch.Tensor:
     """Recover Z⁻ from the same modular second-order identity (exact T⁻¹)."""
-    return leapfrog_past(f_curr, f_next, f_kick, mod_bits=mod_bits)
+    return leapfrog_past(f_curr, f_next, f_impulse, mod_bits=mod_bits)
 
 
 def vacuum_amplitude_quantum(*, frac_bits: int = DEFAULT_FRAC_BITS) -> float:

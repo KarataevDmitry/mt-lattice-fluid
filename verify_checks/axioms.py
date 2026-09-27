@@ -124,10 +124,10 @@ def check_a8_macro_suppression(device: str = "cpu") -> dict:
     rho_high = torch.tensor([32.0, 128.0], device=device)
     phi_low = vacuum_phase(rho_low, cfg)
     phi_high = vacuum_phase(rho_high, cfg)
-    kick_low = float((torch.exp(1j * phi_low) - 1.0).abs().mean().item())
-    kick_high = float((torch.exp(1j * phi_high) - 1.0).abs().mean().item())
-    ok = kick_high < kick_low * 0.5
-    return {"id": "A8", "kick_low": kick_low, "kick_high": kick_high, "ok": ok}
+    phi_sat_low = float((torch.exp(1j * phi_low) - 1.0).abs().mean().item())
+    phi_sat_high = float((torch.exp(1j * phi_high) - 1.0).abs().mean().item())
+    ok = phi_sat_high < phi_sat_low * 0.5
+    return {"id": "A8", "phi_sat_low": phi_sat_low, "phi_sat_high": phi_sat_high, "ok": ok}
 
 def check_a9_cr_smooth_modes(
     size: int = 64,
@@ -194,7 +194,7 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
         holonomy_zeta_int,
         int_neighbor_sum,
         rho2_int,
-        saturating_phi_kick,
+        saturating_phi_impulse,
     )
     from mt_ca.reversible import canonical_fixed
     from mt_ca.si_constants import DELTA_PHI_MIN, heisenberg_phi_min_disc, heisenberg_phi_min_physical
@@ -230,13 +230,13 @@ def check_a16_heisenberg_floor(size: int = 64, device: str = "cpu") -> dict:
     sum_n_i = int_neighbor_sum(f, cfg.stencil)
     zeta_r, zeta_i = holonomy_zeta_int(u0, v0, sum_n_i[..., 0], sum_n_i[..., 1], frac_bits=fb)
     rho2 = rho2_int(u0, v0, frac_bits=fb)
-    phi_disc = saturating_phi_kick(zeta_r, zeta_i, rho2, cfg)
+    phi_disc = saturating_phi_impulse(zeta_r, zeta_i, rho2, cfg)
 
     in_ring = bool(((phi_disc >= 0) & (phi_disc < n_ring)).all())
     mod_ok = bool(torch.equal(phi_disc, phi_disc % n_ring))
     half = n_ring // 2
     signed = torch.where(phi_disc >= half, phi_disc - n_ring, phi_disc)
-    # Nonzero discrete kicks must be ≥ φ_min; zeros OK (snap-down).
+    # Nonzero Φ must be ≥ φ_min; zeros OK (snap-down).
     disc_floor_ok = bool((~(signed != 0) | (signed.abs() >= phi_min_disc)).all())
 
     ok = (

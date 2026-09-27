@@ -144,7 +144,7 @@ class SIFloor0Rows:
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list | dict | None]:
-        """§5.0.4-A — n_E≥1 at planckon core via post-relaxation n_E series (kick-harness)."""
+        """§5.0.4-A — n_E≥1 at planckon core via post-relaxation n_E series (Φ track)."""
         from mt_ca.app.runner import run_floor0_nE_excitation_harness
 
         return run_floor0_nE_excitation_harness(
@@ -166,7 +166,7 @@ class SIFloor0Rows:
         Snapshot: planckon at core b=1, |n|≥¾; SU(2) 2π/4π on core spinor.
         Under boil, core Γ drifts (not dead-ocean fixed point).
 
-        Open (explicit): n_E≥1 kick-harness on boiling floor.
+        Open (explicit): n_E≥1 Φ track on boiling floor.
         """
         from mt_ca.app.lattice import build_run_spec, open_lattice
         from mt_ca.app.scenario import get_scenario
@@ -182,7 +182,7 @@ class SIFloor0Rows:
         bb = hv_bit_budget()
         n_ring = int(eq["N_ring"])
         dphi_disc = int(eq["delta_phi_min_disc"])
-        pauli_disc = int(eq["pauli_kick_disc"])
+        pauli_disc = int(eq["pauli_impulse_disc"])
         ticks_per_e0 = int(eq["energy_ticks_per_E0"])
 
         landmarks: list[dict[str, float | int | str]] = [
@@ -202,7 +202,7 @@ class SIFloor0Rows:
                 "id": "pauli_pi",
                 "ticks": pauli_disc,
                 "n_E": n_E_from_phi_ticks(pauli_disc),
-                "role": "Pauli exchange kick = N_ring/2 ticks",
+                "role": "Pauli exchange impulse = N_ring/2 ticks",
             },
             {
                 "id": "ring_2pi",
@@ -297,7 +297,7 @@ class SIFloor0Rows:
             "B_hV": float(bb.B_hV),
             "delta_phi_min_disc": dphi_disc,
             "delta_phi_min_rad": float(eq["delta_phi_min_rad"]),
-            "pauli_kick_disc": pauli_disc,
+            "pauli_impulse_disc": pauli_disc,
             "ticks_per_E0": ticks_per_e0,
             "landmarks": landmarks,
             "algebra_ok": algebra_ok,
