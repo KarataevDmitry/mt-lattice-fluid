@@ -86,6 +86,35 @@ def check_brick_internal_spectrum(device: str = "cpu") -> dict:
     }
 
 
+def check_floor0_nE_selection(device: str = "cpu") -> dict:
+    """§5.0.4-A — n_E ladder selection rules S1–S4 on planckon core track."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor0_selection_row(device=device)
+    stats = row["transition_stats"]
+    ok = (
+        bool(row["checks_ok"])
+        and row["habitat"] == "vacuum_boil"
+        and int(row["violation_total"]) == 0
+        and int(row["planckon_samples"]) >= 32
+        and int(stats["inelastic"]) >= 1
+        and int(row["n_E_peak_core"]) >= 1
+    )
+    return {
+        "id": "Floor0_nE_selection",
+        "ok": ok,
+        "habitat": row["habitat"],
+        "planckon_samples": row["planckon_samples"],
+        "violation_total": row["violation_total"],
+        "violations": row["violations"],
+        "inelastic_transitions": stats["inelastic"],
+        "multi_quantum_transitions": stats["multi_quantum"],
+        "n_E_peak_core": row["n_E_peak_core"],
+        "rule_ids": row["schema"]["rule_ids"],
+        "note": row["note"],
+    }
+
+
 def check_floor0_nE_excitation(device: str = "cpu") -> dict:
     """§5.0.4-A — n_E≥1 on planckon core after relaxation (ledger track / kick-harness)."""
     from mt_ca.si_constants import SI

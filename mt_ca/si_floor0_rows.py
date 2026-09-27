@@ -121,6 +121,21 @@ class SIFloor0Rows:
 
         return run_floor0_phase_space(size=size, relaxation=relaxation, track=track, device=device)
 
+    def floor0_selection_row(
+        self,
+        *,
+        size: int = 32,
+        relaxation: int = 32,
+        track: int = 128,
+        device: str = "cpu",
+    ) -> dict[str, float | int | str | bool | list | dict | None]:
+        """§5.0.4-A — internal n_E selection rules S1–S4 on planckon ledger track."""
+        from mt_ca.app.runner import run_floor0_selection_harness
+
+        return run_floor0_selection_harness(
+            size=size, relaxation=relaxation, track=track, device=device
+        )
+
     def floor0_nE_excitation_row(
         self,
         *,

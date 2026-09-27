@@ -57,6 +57,7 @@ def main() -> None:
     parser.add_argument("--bloch-only", action="store_true")
     parser.add_argument("--phase-space", action="store_true")
     parser.add_argument("--excitation", action="store_true")
+    parser.add_argument("--selection", action="store_true")
     parser.add_argument("--frac-bits", type=int, default=6)
     args = parser.parse_args()
 
@@ -78,6 +79,20 @@ def main() -> None:
             print(f"{key}: {row[key]}")
         print("planckon_core:", row["planckon_core"])
         print("bath_brick:", row["bath_brick"])
+        return
+
+    if args.selection:
+        row = SI.floor0_selection_row()
+        for key in (
+            "habitat",
+            "planckon_samples",
+            "violation_total",
+            "n_E_peak_core",
+            "checks_ok",
+        ):
+            print(f"{key}: {row[key]}")
+        print("violations:", row["violations"])
+        print("transition_stats:", row["transition_stats"])
         return
 
     if args.excitation:

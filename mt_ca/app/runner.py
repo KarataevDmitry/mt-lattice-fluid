@@ -400,3 +400,93 @@ def run_floor0_nE_excitation_harness(
             "in ledger track (integer Φ); relaxed snapshot alone stays n_E=0."
         ),
     }
+
+
+def run_floor0_selection_harness(
+    *,
+    size: int = 32,
+    relaxation: int = 32,
+    track: int = 128,
+    device: str = "cpu",
+    winding_min: float = 0.75,
+) -> dict[str, Any]:
+    """§5.0.4-A — audit n_E selection rules S1–S4 on planckon core ledger track."""
+    from mt_ca.app.lattice import build_run_spec, open_lattice
+    from mt_ca.floor0_selection import (
+        Floor0SelectionSchema,
+        audit_n_E_tick,
+        floor0_selection_schema_row,
+        summarize_transition_histogram,
+    )
+    from mt_ca.projected_collision import projected_phi_int
+    from mt_ca.reversible import canonical_fixed
+    from mt_ca.topology import matter_occupancy_b, winding_channels
+
+    schema_row = floor0_selection_schema_row()
+    schema = Floor0SelectionSchema.from_phase_bits()
+
+    spec = build_run_spec("floor0_planckon", size, device=device, steps=0)
+    sim = open_lattice(spec)
+    for _ in range(relaxation):
+        sim.step(1)
+    site = default_anchor(sim.z)
+
+    prev_n_e: int | None = None
+    deltas: list[int] = []
+    violations: dict[str, int] = {rid: 0 for rid in schema.rule_ids}
+    samples = 0
+    peak_n_e = 0
+
+    for _ in range(track):
+        sim.step(1)
+        f = canonical_fixed(sim.z, sim.cfg)
+        phi = projected_phi_int(f, sim.cfg)
+        phi_ticks = int(_phi_int_at(phi, site).abs().item())
+        n_e = int(n_E_field(phi, sim.cfg)[site.y, site.x].item()) if phi.ndim == 2 else int(
+            n_E_field(phi, sim.cfg)[site.iz, site.y, site.x].item()
+        )
+        b_core = int(matter_occupancy_b(sim.z, y=site.y, x=site.x, iz=site.iz))
+        plane = spinor_plane(sim.z, site)
+        w_abs = abs(float(winding_channels(plane, center=(site.y, site.x), radius=2)["auto"]))
+        if b_core != 1 or w_abs < winding_min:
+            continue
+        samples += 1
+        peak_n_e = max(peak_n_e, n_e)
+        for rid in audit_n_E_tick(
+            phi_ticks=phi_ticks,
+            n_e=n_e,
+            prev_n_e=prev_n_e,
+            schema=schema,
+        ):
+            violations[rid] = violations.get(rid, 0) + 1
+        if prev_n_e is not None:
+            deltas.append(n_e - prev_n_e)
+        prev_n_e = n_e
+
+    hist = summarize_transition_histogram(deltas)
+    total_viol = sum(violations.values())
+    ok = (
+        bool(schema_row["checks_ok"])
+        and samples >= 32
+        and total_viol == 0
+        and hist["inelastic"] >= 1
+        and peak_n_e >= 1
+    )
+
+    return {
+        "habitat": spec.scenario.habitat_label,
+        "relaxation": relaxation,
+        "track": track,
+        "schema": schema_row,
+        "planckon_samples": samples,
+        "violations": violations,
+        "violation_total": total_viol,
+        "n_E_peak_core": peak_n_e,
+        "transition_stats": hist,
+        "checks_ok": ok,
+        "derivation_closed": False,
+        "note": (
+            "§5.0.4-A selection: ledger + Heisenberg + excitation ceiling on planckon core; "
+            "inelastic n_E transitions observed under free g."
+        ),
+    }

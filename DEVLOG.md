@@ -31,7 +31,13 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 **Критерий готовности:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после релаксации; макроописание gate-plane `plane_mconfig`.
 
-**Verify:** `Brick_internal_spectrum`, `Floor0_phase_space`, `Floor0_nE_excitation` PASS on FCC 32³ (CPU).
+**Verify:** `Brick_internal_spectrum`, `Floor0_phase_space`, `Floor0_nE_excitation`, `Floor0_nE_selection` PASS on FCC 32³ (CPU).
+
+## 2026-09-27 · §5.0.4-A · n_E selection rules (floor 0)
+
+**Критерий готовности:** схема S1–S4 в `model/05-floor0-spectrum.md`; `mt_ca/floor0_selection.py` + `run_floor0_selection_harness` — planckon core track on `VACUUM_BOIL`, zero violations, inelastic $\Delta n_E$ observed.
+
+**Verify:** `Floor0_nE_selection` PASS · probe `tools/floor0_catalog_probe.py --selection`.
 
 ## 2026-09-26 · §5.0.4-A · n_E≥1 kick-harness (floor 0)
 
@@ -177,7 +183,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
 - **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim UoW
-- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅ (`Brick_internal_spectrum`); **n_E≥1 excitation sim** + полный каталог состояний — open
+- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅ (`Brick_internal_spectrum`); **n_E≥1** + **selection S1–S4** ✅; полный каталог $\Gamma_{hV}$ — open
 - **Глоссарий:** `model/00-glossary.md` — планкон / **планковская дырка** ($b=0$, аналогия дырочной проводимости) / планковская ячейка / вакуум; sweep MODEL+book (`scripts/apply_planckon_glossary.py`)
 - **§5.0.4-B:** внешние оболочки ε / отбор — open (этаж 1)
 - **§1.6.5:** один КА-схема; `|N|` только от упаковки размерности — не «гекс↔FCC переключатель»
