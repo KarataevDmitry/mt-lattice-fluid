@@ -58,8 +58,25 @@ def main() -> None:
     parser.add_argument("--phase-space", action="store_true")
     parser.add_argument("--excitation", action="store_true")
     parser.add_argument("--selection", action="store_true")
+    parser.add_argument("--gamma-table", action="store_true")
     parser.add_argument("--frac-bits", type=int, default=6)
     args = parser.parse_args()
+
+    if args.gamma_table:
+        row = SI.floor0_gamma_hV_row()
+        for key in (
+            "habitat",
+            "orbit_unique",
+            "ground_branch_rows",
+            "excited_branch_rows",
+            "excited_n_E_values",
+            "orbit_within_cap",
+            "table_rows_total",
+            "full_table_closed",
+            "checks_ok",
+        ):
+            print(f"{key}: {row[key]}")
+        return
 
     if args.bloch_only:
         n = count_bloch_q_grid(frac_bits=args.frac_bits)

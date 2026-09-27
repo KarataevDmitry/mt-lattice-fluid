@@ -94,7 +94,7 @@ class SIFloor0Rows:
             "naive_phase_times_bloch": naive_phase_bloch,
             "cap_binds_registers": cap_binds,
             "tiers": tiers,
-            "full_table_open": True,
+            "full_table_open": False,
             "checks_ok": (
                 phase_states == 512
                 and n_e_classes == 13
@@ -104,9 +104,24 @@ class SIFloor0Rows:
             ),
             "note": (
                 "§5.0.4-A catalog probe: algebra closed; Bloch count on Q6 pinned; "
-                "full state list + g iterations still open."
+                "full orbit table + branches — Floor0_gamma_hV."
             ),
         }
+
+    def floor0_gamma_hV_row(
+        self,
+        *,
+        size: int = 32,
+        relaxation: int = 32,
+        track: int = 128,
+        device: str = "cpu",
+    ) -> dict[str, float | int | str | bool | list]:
+        """§5.0.4-A — Γ_hV orbit table + ground/excited branches under free g."""
+        from mt_ca.app.runner import run_floor0_gamma_hV
+
+        return run_floor0_gamma_hV(
+            size=size, relaxation=relaxation, track=track, device=device
+        )
 
     def floor0_phase_space_row(
         self,

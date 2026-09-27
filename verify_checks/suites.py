@@ -113,6 +113,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
         check_names=_names(
             check_brick_internal_spectrum,
             check_floor0_internal_catalog,
+            check_floor0_gamma_hV,
             check_floor0_phase_space,
             check_floor0_nE_excitation,
             check_floor0_nE_selection,

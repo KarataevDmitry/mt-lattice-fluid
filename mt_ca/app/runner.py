@@ -311,7 +311,70 @@ def run_floor0_phase_space(
         "derivation_closed": False,
         "note": (
             "§5.0.4-A: Γ_hV on filled boiling ocean; planckon core iterates under g. "
-            "Full Γ table still open."
+            "Full orbit table — verify Floor0_gamma_hV."
+        ),
+    }
+
+
+def run_floor0_gamma_hV(
+    *,
+    size: int = 32,
+    relaxation: int = 32,
+    track: int = 128,
+    device: str = "cpu",
+    winding_min: float = 0.75,
+) -> dict[str, Any]:
+    """§5.0.4-A — full Γ_hV orbit table + ground/excited branches on planckon core."""
+    from mt_ca.app.lattice import build_run_spec, open_lattice
+    from mt_ca.floor0_gamma import build_gamma_orbit_table, summarize_gamma_branches
+    from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
+
+    spec = build_run_spec(
+        "floor0_planckon",
+        size,
+        device=device,
+        steps=0,
+        relaxation=relaxation,
+        track=track,
+    )
+    sim = open_lattice(spec)
+    bb = hv_bit_budget()
+    eq = elementary_quanta_row()
+    cap = int(round(bb.n_states))
+    p0_nat = float(kappa_link())
+
+    for _ in range(relaxation):
+        sim.step(1)
+
+    site = default_anchor(sim.z)
+    table = build_gamma_orbit_table(
+        sim,
+        site=site,
+        track=track,
+        n_ring=int(eq["N_ring"]),
+        p0_nat=p0_nat,
+        winding_min=winding_min,
+    )
+    summary = summarize_gamma_branches(table, cap=cap)
+
+    return {
+        "habitat": spec.scenario.habitat_label,
+        "relaxation": relaxation,
+        "track": track,
+        "bekenstein_cap_states": cap,
+        "orbit_unique": summary["orbit_unique"],
+        "ground_branch_rows": summary["ground_branch_rows"],
+        "excited_branch_rows": summary["excited_branch_rows"],
+        "excited_n_E_values": summary["excited_n_E_values"],
+        "orbit_within_cap": summary["orbit_within_cap"],
+        "table_sample": table["table_rows"][:6],
+        "table_rows_total": len(table["table_rows"]),
+        "full_table_closed": bool(summary["checks_ok"]),
+        "checks_ok": bool(summary["checks_ok"]),
+        "derivation_closed": bool(summary["checks_ok"]),
+        "note": (
+            "§5.0.4-A: Γ_hV orbit under free g on planckon core (one hV, VACUUM_BOIL); "
+            "ground n_E=0 branch + excited n_E≥1 branch; rows capped by Bekenstein budget."
         ),
     }
 

@@ -27,6 +27,35 @@ def check_floor0_phase_space(device: str = "cpu") -> dict:
     }
 
 
+def check_floor0_gamma_hV(device: str = "cpu") -> dict:
+    """§5.0.4-A — full Γ_hV orbit table + ground/excited branches under free g."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor0_gamma_hV_row(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and row["habitat"] == "vacuum_boil"
+        and bool(row["full_table_closed"])
+        and int(row["ground_branch_rows"]) >= 1
+        and int(row["excited_branch_rows"]) >= 1
+        and bool(row["orbit_within_cap"])
+        and int(row["orbit_unique"]) >= 2
+    )
+    return {
+        "id": "Floor0_gamma_hV",
+        "alias_ids": ["Floor0_gamma_table"],
+        "ok": ok,
+        "habitat": row["habitat"],
+        "orbit_unique": row["orbit_unique"],
+        "ground_branch_rows": row["ground_branch_rows"],
+        "excited_branch_rows": row["excited_branch_rows"],
+        "excited_n_E_values": row["excited_n_E_values"],
+        "bekenstein_cap_states": row["bekenstein_cap_states"],
+        "table_rows_total": row["table_rows_total"],
+        "note": row["note"],
+    }
+
+
 def check_floor0_internal_catalog(device: str = "cpu") -> dict:
     """§5.0.4-A — internal-state catalog structure (algebra + Bekenstein cap)."""
     from mt_ca.si_constants import SI
@@ -38,7 +67,7 @@ def check_floor0_internal_catalog(device: str = "cpu") -> dict:
         and int(row["n_E_classes"]) == 13
         and int(row["seam_ticks"]) == 21
         and bool(row["cap_binds_registers"])
-        and bool(row["full_table_open"])
+        and not bool(row["full_table_open"])
     )
     return {
         "id": "Floor0_internal_catalog",

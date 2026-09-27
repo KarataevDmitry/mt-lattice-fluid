@@ -6,6 +6,14 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-27 · §5.0.4-A · Γ_hV orbit table + branches (floor 0)
+
+**Критерий готовности:** `mt_ca/floor0_gamma.py` + `run_floor0_gamma_hV` — planckon core on `VACUUM_BOIL`, track 128, projected Φ ledger; orbit rows ≤ Bekenstein cap; ветки **ground** ($n_E=0$ keys) и **excited** ($n_E\ge1$).
+
+**Verify:** `Floor0_gamma_hV` PASS (alias id `Floor0_gamma_table`) · `Floor0_internal_catalog` теперь требует `full_table_open=False` · probe `tools/floor0_catalog_probe.py --gamma-table`.
+
+**Не в scope:** P0 ($T_B/T_C$), §5.0.4-B ε-оболочка.
+
 ## 2026-09-27 · repo · LF normalization
 
 **Политика:** `.gitattributes` + `.editorconfig` · gate verify **`Repo_text_eol`** · `python tools/normalize_text_eol.py` (одноразово / после массовых правок на Windows).
@@ -211,7 +219,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
 - **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim UoW
-- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅ (`Brick_internal_spectrum`); **n_E≥1** + **selection S1–S4** ✅; полный каталог $\Gamma_{hV}$ — open
+- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅; **n_E≥1** + **selection S1–S4** ✅; **Γ_hV orbit table + branches** ✅ (`Floor0_gamma_hV`); P0 / §5.0.4-B — open
 - **Глоссарий:** `model/00-glossary.md` — планкон / **планковская дырка** ($b=0$, аналогия дырочной проводимости) / планковская ячейка / вакуум; sweep MODEL+book (`scripts/apply_planckon_glossary.py`)
 - **§5.0.4-B:** внешние оболочки ε / отбор — open (этаж 1)
 - **§1.6.5:** один КА-схема; `|N|` только от упаковки размерности — не «гекс↔FCC переключатель»
