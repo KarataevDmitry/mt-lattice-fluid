@@ -2,9 +2,7 @@
 
 \input{glossary/notation-units.tex}
 
-\newcommand{\notationentryunit}[1]{%
-  \glsiffieldexists{#1}{user1}{\glsentryfield{#1}{user1}}{\NotationUnitDash}%
-}
+\newcommand{\notationentryunit}[1]{\glsentryuseri{#1}}
 
 \newcommand{\newnotationentry}[5]{%
   \newglossaryentry{#1}{%
@@ -46,7 +44,7 @@
       \glossentrydesc{##1}\glspostdescription\space ##2 &
       \notationentryunit{##1}\tabularnewline
     }{%
-      \multicolumn{3}{@{}l}{\glossentryname{##1}}\tabularnewline
+      \glstarget{##1}{\glossentryname{##1}} & & \tabularnewline
     }%
   }%
   \renewcommand{\subglossentry}[3]{}%
