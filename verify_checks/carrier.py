@@ -512,7 +512,7 @@ def check_internal_phase_coords(device: str = "cpu") -> dict:
 
 
 def check_congruence_ladder(device: str = "cpu") -> dict:
-    """§3.12.7 — Z_512 congruence ladder: gcd, half-ring Pauli, n_E ledger."""
+    """§3.12.7 — Z_512 congruence ladder: gcd, half-ring Pauli, n_E conservation balance."""
     from mt_ca.si_constants import congruence_ladder_row, n_E_from_phi_ticks
 
     row = congruence_ladder_row()
@@ -804,8 +804,8 @@ def check_planck_vacuum_floor(size: int = 32, device: str = "cpu") -> dict:
         "note": "§0.5: full brick ocean; HF snap-down; long-run no fill",
     }
 
-def check_ladder_ledger(size: int = 64, device: str = "cpu") -> dict:
-    from mt_ca.ledger import ladder_ledger_report
+def check_ladder_conservation(size: int = 64, device: str = "cpu") -> dict:
+    from mt_ca.conservation_balance import ladder_conservation_report
 
-    return ladder_ledger_report(size, device=device)
+    return ladder_conservation_report(size, device=device)
 

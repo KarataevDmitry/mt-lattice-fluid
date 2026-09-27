@@ -1,4 +1,4 @@
-"""§5.2.1 / §5.2.3 — local conservation ledgers on canonical Z_N[i] g."""
+"""§5.2.1 / §5.2.3 — local discrete conservation balances on canonical Z_N[i] g."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
 from mt_ca.seeds import SeedClass, make_seed
 from mt_ca.si_constants import (
     DELTA_PHI_MIN,
-    energy_ledger_ticks_per_E0,
+    energy_balance_ticks_per_E0,
     kappa_link,
     n_E_from_phi_ticks,
     heisenberg_phi_min_disc,
@@ -33,7 +33,7 @@ def n4_neighbor_sum(field: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
 def n_E_field(phi: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     """|Φ| → integer E₀ units (§5.2.3)."""
-    unit = energy_ledger_ticks_per_E0(phase_bits=cfg.phase_bits)
+    unit = energy_balance_ticks_per_E0(phase_bits=cfg.phase_bits)
     return phi.abs() // unit
 
 
@@ -52,7 +52,7 @@ def energy_star_residual(phi: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
 
 def stagger_floor_deposit(size_y: int, size_x: int, *, device: torch.device) -> torch.Tensor:
-    """Ledger-neutral Heisenberg floor: ±1 n_E on checkerboard (§5.2.3)."""
+    """Balance-neutral Heisenberg floor: ±1 n_E on checkerboard (§5.2.3)."""
     ys = torch.arange(size_y, device=device, dtype=torch.int64).view(-1, 1)
     xs = torch.arange(size_x, device=device, dtype=torch.int64).view(1, -1)
     return torch.where((ys + xs) % 2 == 0, torch.ones_like(ys), -torch.ones_like(ys))
@@ -115,7 +115,7 @@ def heisenberg_min_ticks(cfg: MConfig) -> int:
     )
 
 
-def ledger_step_probe(
+def conservation_step_probe(
     z: torch.Tensor,
     z_past: torch.Tensor,
     cfg: MConfig,
@@ -142,25 +142,25 @@ def ledger_step_probe(
     }
 
 
-def ladder_ledger_report(
+def ladder_conservation_report(
     size: int = 64,
     *,
     device: str = "cpu",
 ) -> dict:
-    """Verify §5.2.1 / §5.2.3 local ledgers on canonical g."""
+    """Verify §5.2.1 / §5.2.3 local conservation balances on canonical g."""
     dev = torch.device(device)
     cfg = MConfig.for_stencil("hex", heisenberg_floor=True)
     phi_min = heisenberg_min_ticks(cfg)
     p0_nat = float(kappa_link())
 
     z_vac = make_seed(SeedClass.VACUUM, size, size, device=dev, amplitude=cfg.vacuum_amplitude)
-    vac = ledger_step_probe(z_vac, z_vac.clone(), cfg)
+    vac = conservation_step_probe(z_vac, z_vac.clone(), cfg)
     phi = vac["phi"]
     # Exact Φ=0 (holomorphic) allowed; any nonzero kick must be ≥ φ_min (§3.7 · §2.3.8).
     nonzero = phi.abs() > 0
     heisenberg_ok = bool((~nonzero | (phi.abs() >= phi_min)).all().item())
 
-    unit = energy_ledger_ticks_per_E0(phase_bits=cfg.phase_bits)
+    unit = energy_balance_ticks_per_E0(phase_bits=cfg.phase_bits)
     n_e_ok = bool((n_E_field(phi, cfg) * unit <= phi.abs()).all().item())
     n_e_sample = int(n_E_from_phi_ticks(int(phi.abs().max().item()), phase_bits=cfg.phase_bits))
 
@@ -175,7 +175,7 @@ def ladder_ledger_report(
     my0_max = float(my0.abs().max().item())
     momentum_static_ok = mx0_max < 1e-4 and my0_max < 1e-4
 
-    pw1 = ledger_step_probe(z_pw, z_pw.clone(), cfg)
+    pw1 = conservation_step_probe(z_pw, z_pw.clone(), cfg)
     mx_mod = mod_star_error(pw1["momentum_star_x"], p0_nat)
     my_mod = mod_star_error(pw1["momentum_star_y"], p0_nat)
     momentum_step_ok = mx_mod <= 0.5 * p0_nat and my_mod <= 0.5 * p0_nat
@@ -201,7 +201,7 @@ def ladder_ledger_report(
     ok = ok and n_e_sample >= 1
 
     return {
-        "id": "LadderLedger",
+        "id": "LadderConservation",
         "heisenberg_always": heisenberg_ok,
         "phi_min_ticks": phi_min,
         "phi_min_observed": int(phi.abs().min().item()),
@@ -217,5 +217,5 @@ def ladder_ledger_report(
         "angular_ok": angular_ok,
         "n_E_max": n_e_sample,
         "ok": ok,
-        "note": "§5.2.1–§5.2.3: E/p/L ledgers; Heisenberg = nonzero Φ ≥ φ_min (0 OK)",
+        "note": "§5.2.1–§5.2.3: E/p/L conservation balances; Heisenberg = nonzero Φ ≥ φ_min (0 OK)",
     }

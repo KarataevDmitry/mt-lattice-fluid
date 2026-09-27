@@ -1,6 +1,6 @@
 """Instrument catalog — MODEL refs and registry (§5.0 · §5.2 · A10).
 
-M-layer: samples from ``z`` (and ``z_past`` for one-tick ledger), not separate fields.
+M-layer: samples from ``z`` (and ``z_past`` for one-tick balance), not separate fields.
 T-layer: macro/coarse instruments live in ``mt_ca.macro`` (binomial Φ) — listed for routing.
 """
 from __future__ import annotations
@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 
-InstrumentLayer = Literal["M_site", "M_field", "M_ledger_tick", "T_macro"]
+InstrumentLayer = Literal["M_site", "M_field", "M_balance_tick", "T_macro"]
 
 
 class InstrumentId(str, Enum):
@@ -188,16 +188,16 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
     InstrumentSpec(
         InstrumentId.PHI_KICK_TICK,
         "Φ kick (ring ticks)",
-        "§3.12 ledger",
-        "M_ledger_tick",
+        "§3.12 conservation balance",
+        "M_balance_tick",
         "ℤ_N_ring",
         "needs z_past",
     ),
     InstrumentSpec(
         InstrumentId.ENERGY_STAR,
         "Σ_N ΔE star",
-        "§5.2.3 energy ledger",
-        "M_ledger_tick",
+        "§5.2.3 energy conservation balance",
+        "M_balance_tick",
         "n_E·E₀",
         "needs z_past",
     ),
@@ -205,7 +205,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
         InstrumentId.MOMENTUM_STAR_X,
         "Σ_N Δπ_x star",
         "§5.2.1",
-        "M_ledger_tick",
+        "M_balance_tick",
         "p₀ packets",
         "needs z_past",
     ),
@@ -213,7 +213,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
         InstrumentId.MOMENTUM_STAR_Y,
         "Σ_N Δπ_y star",
         "§5.2.1",
-        "M_ledger_tick",
+        "M_balance_tick",
         "p₀ packets",
         "needs z_past",
     ),

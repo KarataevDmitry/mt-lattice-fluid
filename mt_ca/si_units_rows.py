@@ -124,7 +124,7 @@ class SIUnitsRows:
         n_re = float(hop["N_re"])
         n_a0_bohr = float(hop["N_a0_Bohr"])
         alpha = float(hop["alpha_codata"])
-        # mass rhyme at CODATA α (ledger check, not a derivation of N_a0)
+        # mass rhyme at CODATA α (balance check, not a derivation of N_a0)
         higgs = self.higgs_mass_row()
         elec = self.electron_mass_row()
         m_h = float(higgs["m_H_GeV"])

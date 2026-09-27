@@ -535,7 +535,7 @@ class SIAlphaProbeRows:
         Same α identities on M (no new knob):
           U(a₀) = α E_P / N_a0 = α² m_e c² ; BE = U/2  (virial)
           E_coul(N=1)/E₀ = α/κ = F_NN/F₀     (force lattice)
-          BE/E₀ = Δm/m_arg ≪ 1               (soft Arg ledger, not one E₀ click)
+          BE/E₀ = Δm/m_arg ≪ 1               (soft Arg balance, not one E₀ click)
 
         Optics: charge↔vacuum coupling, F₀ landing, hop ladder, and QM mass defect
         are one α. Deriving any one without α derives all.
@@ -576,7 +576,7 @@ class SIAlphaProbeRows:
                 "status": "identity",
             },
             {
-                "id": "soft_Arg_ledger",
+                "id": "soft_Arg_balance",
                 "ratio": be / self.E_0,
                 "maps_to": "BE ≪ E₀ — binding is coarse Arg, not one E₀ quantum",
                 "status": "derived_scale",
@@ -610,7 +610,7 @@ class SIAlphaProbeRows:
         }
 
     def alpha_arg_binding_try_row(self) -> dict[str, float | int | str | bool | list]:
-        """§8.2·α·Arg-try — try Δm from Arg ledger without α-input.
+        """§8.2·α·Arg-try — try Δm from Arg balance without α-input.
 
         Exact bridge (no new knob; coarse α₀=κ/M in identities, U=E₀/(M N_a0), BE=U/2):
             Δm / m_arg = BE/E₀ = 1/(2 M N_a0)
@@ -623,7 +623,7 @@ class SIAlphaProbeRows:
           • reject fraction=1/11 on phase residue r=1/(4π) — ~8.6e3 ppm, worse than M=97
 
         Still OPEN: M and/or N_a0 from g/shell without α. Identity unifies
-        F-ask, H-ask, and QM mass-defect into one Arg ledger.
+        F-ask, H-ask, and QM mass-defect into one Arg balance.
         """
         alpha_c = 7.2973525693e-3
         kappa = KAPPA_FCC_1TICK
@@ -653,7 +653,7 @@ class SIAlphaProbeRows:
 
         inventory: list[dict[str, str | float | bool]] = [
             {
-                "id": "arg_ledger_identity",
+                "id": "arg_balance_identity",
                 "ratio": abs(dm_from_arg / dm - 1.0),
                 "maps_to": "Δm = m_arg/(2 M N_a0) — Arg ticks of H binding",
                 "status": "identity",
@@ -706,7 +706,7 @@ class SIAlphaProbeRows:
             },
         ]
         return {
-            "theorem": "§8.2·α·Arg-try — Arg ledger of H binding; derivation still open",
+            "theorem": "§8.2·α·Arg-try — Arg balance of H binding; derivation still open",
             "M_star": m_star,
             "N_a0": n_a0,
             "N_c": n_c,

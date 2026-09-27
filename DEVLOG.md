@@ -49,7 +49,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 ## 2026-09-26 · §5.0.4-A · n_E≥1 kick-harness (floor 0)
 
-**Критерий готовности:** `run_floor0_nE_excitation_harness` — planckon on `VACUUM_BOIL`, релаксация 64, track 32; ledger `projected_phi_int` at core hits `n_E≥1` under free `g` (relaxed snapshot stays `n_E=0`).
+**Критерий готовности:** `run_floor0_nE_excitation_harness` — planckon on `VACUUM_BOIL`, релаксация 64, track 32; balance track `projected_phi_int` at core hits `n_E≥1` under free `g` (relaxed snapshot stays `n_E=0`).
 
 **Verify:** `Floor0_nE_excitation` PASS · probe `tools/floor0_catalog_probe.py --excitation`.
 
@@ -186,9 +186,9 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
 | **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | — | **`FCC_N12`** PASS (пол ON) | true Bravais parity UoW open |
 | **лестница ФТТ:** `G`, BZ, умклапп, `N_pack`, `b_atom` | §5.2.4 | model | — | quanta + probe |
-| leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
+| leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | balance-neutral kick distribution |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
-| **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
+| **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` conservation balance** | §5.2.1–§5.2.3 | sim | **`LadderConservation`** PASS (proxy) | полный star closure на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
 | **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / угловой шаблон / Aρη | EW+GR+CKM скелет ✅ | census · IR · θ_f · Aρη |
 | **Higgs = T-пена** | §5.0.1 · §8.3.1 | T | — | bare `v/2`; +`N_hier·α_fs/(4π)` → ~125.31 GeV; FCC-tail open; width open |
@@ -331,7 +331,7 @@ z' = z · exp(iφ)
 | Planck **`⌊·⌋`** encode | **`fixed_point.py`** · **`frac_bits=6`**, **`mod_bits=9`** |
 | **projected 𝒩** | **`projected_collision.py`** · default **`use_projected_collision=True`** |
 | **`g` 2-го порядка** | **`reversible.evolve_canonical`** · **`projected_collision.py`** |
-| `(Z, Z_past)` + ledger | **`simulator.py`** |
+| `(Z, Z_past)` + kick stack | **`simulator.py`** |
 | декодирование для T | **`fixed_point.decode_spinor`** — T/UI, not tick |
 
 ### §3.12 Leapfrog Z_N[i]
@@ -341,7 +341,7 @@ z' = z · exp(iφ)
 | слой | impl |
 |------|------|
 | forward | **`projected_step_fixed`** |
-| reverse | momentum ledger · **`Leapfrog`** bit-exact |
+| reverse | kick stack · **`Leapfrog`** bit-exact |
 | gauge-fix encode | ✅ U1 equivariance |
 
 ### §4 T-layer
@@ -362,8 +362,8 @@ z' = z · exp(iφ)
 | §5.0 binary ρ | ✅ **`Rho_P_binary`** · occupancy T — open |
 | §5.0.1 Arg mass | ✅ **`Arg_mass_carrier`** · **`T_zigzag_mass`** · sim open |
 | §5.0.3 antimatter | ✅ A10 seeds · annihilation sim open |
-| §5.2.1 mechanical | ✅ **`MechanicalQuantum`**, **`A3_global_norm`**, **`LadderLedger`** · smooth continuity → **T** |
-| §5.2.3 elementary | ✅ **`ElementaryQuanta`** · **`LadderLedger`** · **`MatterOccupancyB`** |
+| §5.2.1 mechanical | ✅ **`MechanicalQuantum`**, **`A3_global_norm`**, **`LadderConservation`** · smooth continuity → **T** |
+| §5.2.3 elementary | ✅ **`ElementaryQuanta`** · **`LadderConservation`** · **`MatterOccupancyB`** |
 | §5.3 gas / VdW | ✅ algebra · sim EOS open |
 
 ### §8 SM / Higgs
@@ -376,7 +376,7 @@ z' = z · exp(iφ)
 
 | дата | контекст | цитата / триггер |
 |------|----------|------------------|
-| 2026-09-27 | verify | suites SSOT · `--ship` PASS · `m_evolution_open` FAIL · `--scenario` = sim ids · DEVLOG §1.0 closure ledger |
+| 2026-09-27 | verify | suites SSOT · `--ship` PASS · `m_evolution_open` FAIL · `--scenario` = sim ids · DEVLOG §1.0 closure table |
 | 2026-09-27 | §4.0.2 T-CL | аналитический классический предел · `phi_bz` readout |
 | 2026-09-22 | §3.7 | дилемма isotropic vs rays — закрыта Heisenberg + K_P |
 | 2026-09-22 | §3.8 | «тяжёлый vortex на квадрате» + дискретный анализ |
@@ -413,7 +413,7 @@ z' = z · exp(iφ)
 | 2026-09-22 | FCC N₁₂ | шаблон соседства cuboctahedral по умолчанию · κ=1/12 · `FCC_N12` multi-tick **HF ON** PASS |
 | 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
-| 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete ledgers; **`T_MadelungContinuity`** |
+| 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete conservation balances; **`T_MadelungContinuity`** |
 | 2026-09-23 | §4.9 T2 | probes: soliton=vortex; wave=dual Gaussian; 1-2-1 = макро T (не M); fringes≠fail |
 | 2026-09-23 | §4.1.0 | вывод `(1-2-1)`: атом `[1,1]/2` → `w∗w`; 2D `⊗`; FCC 3D multinomial — hinge |
 | 2026-09-23 | §4.1.0 physics | A1: depth-2 return-paths → `[1,2,1]`; `⊗`≠hex/FCC; κ независимо от бинома |
@@ -425,7 +425,7 @@ z' = z · exp(iφ)
 | 2026-09-23 | §8.2 m_e | bare `α²·(v/2)/N_φ`≈0.504 MeV (1.37%); stack `α²·m_H/N_φ`≈0.513 MeV (0.45%); `N_φ=⌈4π⌉=13`; `f_геом` = следствие |
 | 2026-09-23 | §8.2 m_ν | atm `α⁵·2m_H/(N_hier N_φ)`≈0.04986 eV (0.21% vs √Δm²≈0.05); =`α³·m_e/(N_hier/2)`; sol/lightest lemmas |
 | 2026-09-23 | §8.2·5 β | слабый $\Delta B=0$ класс $n\to pe\bar\nu$ **разрешён** (SU(2)/$P_L$+оболочка); $\Gamma$ open ($m_n$ closed §8.2·7) |
-| 2026-09-23 | §8.2·7 $m_n$ | ledger поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
+| 2026-09-23 | §8.2·7 $m_n$ | баланс поверх $m_{\mathrm{arg}}$/$\rho_Q$: $m_n=m_p+2m_e$ (квант $m_e$, $k=2$ min β); порог ✅; Δ~−20% vs PDG; `Neutron_mass` |
 | 2026-09-23 | §8.2 SM→Planck | формулы-карточка: α,v,m_H,m_p,m_e,m_ν,m_n,m_W/Z из E_P+геометрии |
 | 2026-09-23 | §8.2 α honesty | table model α digits fixed (was CODATA clone); Δ(α⁻¹)≈3e-4 ~2ppm |
 | 2026-09-24 | §8.2·α·carrier-soft | носитель: homogenize = product local($N_4$+SU2)×global($M$); subtract soft unit restores layers · candidate, not sealed |
@@ -552,7 +552,7 @@ python scripts/run_symmetry_probe.py
 | 20 | **P / C / T legs (T-layer probes):** mirror, `z*`, chirality boost — **не** M `g⁻¹` | §3.11.3 · A14 |
 | 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
-| 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; A3 + discrete ledgers на M; гладкий **`div j`** = **T** | §5.2.1 · §4.3 · §1.6 |
+| 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; A3 + discrete conservation balances на M; гладкий **`div j`** = **T** | §5.2.1 · §4.3 · §1.6 |
 | 24 | **`κ_link = 1/|N|`:** FCC **`1/12`** (канон 3+1); гекс-срез **`1/6`**; **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 · §1.6 |
 | 25 | **Gate M = `ω^Φ`:** **`exp(i·Θ·σ/2)`** — T-нотация; tick = **`R(Φ)`** / Rot_LUT на **`Z_N[i]`**, не matrix exp | §3.10.3 · §3.12.5 |
 | 26 | **Theorem 2.3:** ¬M heat death, ¬shutdown — Lemmas 2.3.1–2.3.8 | §2.3 |

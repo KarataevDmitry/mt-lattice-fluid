@@ -899,7 +899,7 @@ class SICarrierRows:
         }
 
     def mechanics_from_axioms_row(self) -> dict[str, float | int | str | bool]:
-        """§0.8 / Thm 5.1 — Landau mechanics from Thm 0.1 + A3,A5,A13,A16 + §3.12 ledger."""
+        """§0.8 / Thm 5.1 — Landau mechanics from Thm 0.1 + A3,A5,A13,A16 + §3.12 conservation balance."""
         en = energy_quantum_row()
         tol = 1e-12
         s0 = self.s_0
@@ -928,7 +928,7 @@ class SICarrierRows:
             "g_M_m_s2": g_m,
             "E0_J": e0,
             "m_arg_kg": self.m_arg,
-            "momentum_ledger_integer": "A13 leapfrog + floor N only in N; verify LadderLedger",
+            "momentum_balance_integer": "A13 leapfrog + floor N only in N; verify LadderConservation",
             "continuum_p_L_F_is_T_layer": True,
             "p0_from_hbar_over_2hL_not_macro_c": abs(p0 - self.hbar / (2.0 * self.l_P)) / p0 < tol,
             "note": "§0.8/Thm5.1: Landau ladder from s0=ℏ/2; float j=Im(z*∇z) is T only",

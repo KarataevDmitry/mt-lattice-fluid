@@ -52,7 +52,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
     ),
     "m_axioms": VerifySuiteSpec(
         id="m_axioms",
-        description="M law g — A3–A16, symmetries, leapfrog, ledgers (core).",
+        description="M law g — A3–A16, symmetries, leapfrog, conservation balances (core).",
         check_names=_names(
             check_a3_unitarity,
             check_a3_local_ca,
@@ -75,7 +75,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
             check_no_m_heat_death,
             check_theorem_2_3_8,
             check_planck_vacuum_floor,
-            check_ladder_ledger,
+            check_ladder_conservation,
             check_a14_symmetry,
             check_spinor_360_sign,
             check_su2_720_sign,

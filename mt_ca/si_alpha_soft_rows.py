@@ -209,7 +209,7 @@ class SIAlphaSoftRows:
                 "id": "false_trail_global_M_book",
                 "maps_to": (
                     "Coarse: treating M as a GLOBAL book separate from local 7. "
-                    "Locality (A1) is hard — M is not a non-local ledger."
+                    "Locality (A1) is hard — M is not a non-local balance book."
                 ),
                 "status": "false_trail",
             },
@@ -395,7 +395,7 @@ class SIAlphaSoftRows:
             {
                 "id": "law_m_n",
                 "GeV": float(neut["m_n_GeV"]),
-                "maps_to": "m_n = m_p+2·m_e (k=2 ledger)",
+                "maps_to": "m_n = m_p+2·m_e (k=2 mass balance)",
                 "T_lab_contrast": float(neut["m_n_rel_err"]),
                 "status": "derived_law",
             },

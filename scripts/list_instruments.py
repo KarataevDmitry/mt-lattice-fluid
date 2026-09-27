@@ -12,7 +12,7 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--json", action="store_true")
     p.add_argument("--ladder", action="store_true", help="print §8.2 time-first SI ladder (SSOT)")
-    p.add_argument("--layer", choices=("M_site", "M_field", "M_ledger_tick", "T_macro"), default="")
+    p.add_argument("--layer", choices=("M_site", "M_field", "M_balance_tick", "T_macro"), default="")
     args = p.parse_args()
     if args.ladder:
         row = instrument_ladder().to_dict()

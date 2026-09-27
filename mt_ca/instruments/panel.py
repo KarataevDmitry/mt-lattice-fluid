@@ -10,9 +10,9 @@ from mt_ca.conservation import madelung_div_j
 from mt_ca.instruments.catalog import InstrumentId, REGISTRY
 from mt_ca.instruments.scales import QuantityKind, reading
 from mt_ca.instruments.t_panel import sample_t_field
-from mt_ca.ledger import (
+from mt_ca.conservation_balance import (
     angular_momentum_density,
-    ledger_step_probe,
+    conservation_step_probe,
     momentum_density,
     n_E_field,
 )
@@ -38,7 +38,7 @@ def sample_site(
     contour_radius: int = _CONTOUR_DEFAULT,
     z_past: torch.Tensor | None = None,
 ) -> dict[str, Any]:
-    """All M_site (+ optional ledger tick) readings at one ``hV``."""
+    """All M_site (+ optional balance tick) readings at one ``hV``."""
     plane, y, x = _site_on_plane(z, site)
     rho = float(spinor_density(z)[site.iz, y, x].item()) if site.iz is not None else float(
         spinor_density(z)[y, x].item()
@@ -84,7 +84,7 @@ def sample_site(
 
     if z_past is not None:
         zpp, _, _ = _site_on_plane(z_past, site)
-        probe = ledger_step_probe(plane, zpp, plane_cfg)
+        probe = conservation_step_probe(plane, zpp, plane_cfg)
         row[InstrumentId.PHI_KICK_TICK.value] = int(probe["phi"][y, x].item())
         row[InstrumentId.ENERGY_STAR.value] = float(probe["energy_star"][y, x].item())
         row[InstrumentId.MOMENTUM_STAR_X.value] = float(probe["momentum_star_x"][y, x].item())

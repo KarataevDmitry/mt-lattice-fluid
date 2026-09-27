@@ -1,4 +1,4 @@
-"""§5.0.4-A — internal n_E selection rules (schema + audit on ledger track)."""
+"""§5.0.4-A — internal n_E selection rules (schema + audit on balance track)."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -47,7 +47,7 @@ def floor0_selection_schema_row(*, phase_bits: int | None = None) -> dict[str, A
         "rules": [
             {
                 "id": "S1",
-                "name": "ledger",
+                "name": "energy_balance",
                 "statement": "n_E = floor(|Phi_kick| / ticks_per_E0)",
             },
             {

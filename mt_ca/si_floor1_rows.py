@@ -150,7 +150,7 @@ class SIFloor1Rows:
         """§6·floor1·B0·census — which B=0 configs at ~N₁₂³…N₁₂⁴ can be stable.
 
         Stability (already derived §8.2 decay): no downhill g with same
-        additive invariants (Q, and derived B,L,…) and lower ledger energy.
+        additive invariants (Q, and derived B,L,…) and lower conservation-balance energy.
 
         B=0 here = not confining/baryon class (≠ floor 2/3). Radius band
         from floor1 ask: N₁₂³…N₁₂⁴ · dl.
@@ -699,7 +699,7 @@ class SIFloor1Rows:
           That is T-statistics of many systems (§2.1). g is deterministic.
 
         closed on M:
-          · Clock form = n_ticks ∈ ℕ · hT (ledger time), not float Γ.
+          · Clock form = n_ticks ∈ ℕ · hT (баланс сохранения time), not float Γ.
           · Reject treating soft as free continuum rate knob on M.
 
         SOFT (reopened — alone vs filled bath):

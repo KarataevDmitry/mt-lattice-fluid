@@ -129,7 +129,7 @@ class SIFloor0Rows:
         track: int = 128,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list | dict | None]:
-        """§5.0.4-A — internal n_E selection rules S1–S4 on planckon ledger track."""
+        """§5.0.4-A — internal n_E selection rules S1–S4 on planckon balance track."""
         from mt_ca.app.runner import run_floor0_selection_harness
 
         return run_floor0_selection_harness(
@@ -144,7 +144,7 @@ class SIFloor0Rows:
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list | dict | None]:
-        """§5.0.4-A — n_E≥1 at planckon core via post-relaxation ledger track (kick-harness)."""
+        """§5.0.4-A — n_E≥1 at planckon core via post-relaxation balance track (kick-harness)."""
         from mt_ca.app.runner import run_floor0_nE_excitation_harness
 
         return run_floor0_nE_excitation_harness(
@@ -170,7 +170,7 @@ class SIFloor0Rows:
         """
         from mt_ca.app.lattice import build_run_spec, open_lattice
         from mt_ca.app.scenario import get_scenario
-        from mt_ca.ledger import n_E_field
+        from mt_ca.conservation_balance import n_E_field
         from mt_ca.matter_survey import default_anchor, plane_mconfig, spinor_plane
         from mt_ca.projected_collision import projected_phi_int
         from mt_ca.reversible import canonical_fixed

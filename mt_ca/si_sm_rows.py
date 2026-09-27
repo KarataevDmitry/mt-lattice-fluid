@@ -114,7 +114,7 @@ class SISmRows:
             "neutron_mass_split_closed": True,
             "neutron_mass_quantum": "m_e",
             "neutron_mass_k": 2,
-            "note": "§8.2·5–7: no ΔB≠0; weak n→peν OK; m_n=m_p+2m_e (mass ledger); Γ open",
+            "note": "§8.2·5–7: no ΔB≠0; weak n→peν OK; m_n=m_p+2m_e (mass balance); Γ open",
         }
 
     def birth_row(self) -> dict[str, float]:
@@ -292,7 +292,7 @@ class SISmRows:
         }
 
     def neutron_mass_row(self) -> dict[str, float | int | bool | str]:
-        """§8.2·7 — m_n = m_p + 2·m_e (channel step on §5 m_arg/ρ_Q ledger)."""
+        """§8.2·7 — m_n = m_p + 2·m_e (channel step on §5 m_arg/ρ_Q conservation balance)."""
         prot = self.proton_mass_row()
         elec = self.electron_mass_row()
         m_p = float(prot["m_p_GeV"])

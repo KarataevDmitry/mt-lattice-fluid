@@ -119,17 +119,17 @@ $$
 |-----------|--------|
 | $U(a_0)=\alpha E_P/N_{a0}=\alpha^2 m_e c^2$, $BE=U/2$ | вириал |
 | $E_{\mathrm{coul}}(N{=}1)/E_0=\alpha/\kappa$ | сила на $F_0$ |
-| $BE/E_0=\Delta m/m_{\mathrm{arg}}\ll 1$ | мягкий Arg-ledger, не один клик $E_0$ |
+| $BE/E_0=\Delta m/m_{\mathrm{arg}}\ll 1$ | мягкий Arg-баланс, не один клик $E_0$ |
 **Оптика:** coupling phase↔vacuum, посадка на $F_0$, hop-лестница и QM-дефект массы — **одно** α. Вывел любое без α — вывел все.
 **DoD:** Arg-binding композита H на Λ должен coarse-grain к $\Delta m$. **Открыто:** $\Delta m$ из Arg-связи p–e **без** вставки α.
 **Код:** `SI.alpha_mass_defect_optics_row()` · verify **`Alpha_mass_defect_optics`**.
-#### §8.2·α·Arg-try · Попытка: Δm из Arg-ledger без α
+#### §8.2·α·Arg-try · Попытка: Δm из Arg-баланс без α
 **Тождество (мостик закрыт):** при грубого $\alpha_0=\kappa/M$, $U=E_0/(M N_{a0})$, $BE=U/2$
 $$
 \frac{\Delta m}{m_{\mathrm{arg}}}=\frac{BE}{E_0}=\frac{1}{2 M N_{a0}},\qquad
 \frac{\Delta m}{m_e}=\frac{\kappa^{2}}{2 M^{2}}=\frac{\alpha^{2}}{2}.
 $$
-Связь H — **один Arg-тик**, размазанный на $2 M N_{a0}$ (soft ledger).
+Связь H — **один Arg-тик**, размазанный на $2 M N_{a0}$ (soft balance).
 **Try без вставки α:**
 | кандидат | ppm на $\Delta m/m_e$ | вердикт |
 |----------|----------------------|--------|
@@ -482,7 +482,7 @@ $$
 Что M **закрывает** (без ансамбля):
 | факт носителя | следствие |
 |---------------|----------|
-| ledger $\Delta E = n_E E_0$, $n_E\in\mathbb{Z}$ (§5.2) | энергия моды ступенями |
+| conservation balance $\Delta E = n_E E_0$, $n_E\in\mathbb{Z}$ (§5.2) | энергия моды ступенями |
 | scalar / photon limit $z\in\mathbb{C}$, $n=0$ (§2 A4 note · §8.2) | **нет** Паули на моде → $n=0,1,2,\ldots$ допустимы |
 | A16 Паули | только совпадающие спиноры в одном $v_p$ — **не** на $n=0$-фронт |
 | BZ + $\omega_D$ | $N_{\mathrm{modes}}<\infty$ → continuum-RJ мёртв |

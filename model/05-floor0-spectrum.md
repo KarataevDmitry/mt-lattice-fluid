@@ -41,7 +41,7 @@
 Для `VORTEX_P` на `VACUUM_BOIL` после релаксации на ядре:
 
 - $b=1$, $|n|\ge \tfrac34$ в snapshot;
-- $n_E=0$ в gate-ledger на ядре;
+- $n_E=0$ в gate-баланс на ядре;
 - SU(2) монодромия 2π/4π на snapshot ядра;
 - под продолжающимся $g$ ядро **итерирует** в $\Gamma_{hV}$ (не dead-ocean fixed point): планкон периодически читается ($b_{\mathrm{core}}$-rate $\ge 15\%$ на track).
 
@@ -106,14 +106,14 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 | id | правило | формулировка |
 |----|---------|--------------|
-| **S1** | **ledger** | $n_E=\lfloor|\Phi|/\Delta\varphi_{\mathrm{disc}}\rfloor$ на каждом тике |
+| **S1** | **баланс E₀** | $n_E=\lfloor|\Phi|/\Delta\varphi_{\mathrm{disc}}\rfloor$ на каждом тике |
 | **S2** | **Heisenberg** | $|\Phi|=0$ или $|\Phi|\ge\Delta\varphi_{\mathrm{disc}}$ (CL-3; подквантовый kick запрещён) |
 | **S3** | **возбуждение** | если $n_E(t)>n_E(t-1)$, то $|\Phi(t)|\ge n_E(t)\cdot\Delta\varphi_{\mathrm{disc}}$ |
 | **S4** | **потолок** | $n_E\le\lfloor N_{\mathrm{ring}}/\Delta\varphi_{\mathrm{disc}}\rfloor=12$ |
 
 **Запрещённый переход (§5.0.4):** смена состояния, **не** кратная кванту $E_0$ / $\Delta\varphi_{\mathrm{disc}}$ / $p_0$, или смена топологического $n$ без партнёра — для **внутренней** лестницы это сводится к нарушению **S1–S4**; Паули (A16) и ε-оболочки — отдельные каналы (этаж 1).
 
-**Sim (планкон на `VACUUM_BOIL`):** track ledger на ядре после релаксации; считать нарушения S1–S4 и гистограмму $\Delta n_E$ (упругие $0$ и неупругие $\neq0$, в т.ч. $|\Delta n_E|>1$).
+**Sim (планкон на `VACUUM_BOIL`):** track balance на ядре после релаксации; считать нарушения S1–S4 и гистограмму $\Delta n_E$ (упругие $0$ и неупругие $\neq0$, в т.ч. $|\Delta n_E|>1$).
 
 ---
 
@@ -129,7 +129,7 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 Наивное $q\times p$ $\gg 2^{B_{hV}}\approx 535$ — $\Gamma_{hV}$ **сжато** бит-бюджетом, как и каталог конфигураций.
 
-**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик leapfrog + ledger на **заполненном кипящем** океане.
+**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик leapfrog + kick stack на **заполненном кипящем** океане.
 Для `VORTEX_P`/`VACUUM_BOIL`: ядро планкона проходит **$\sim 30$** различных точек $\Gamma$ за 32 тика, с ненулевыми kick $\Phi$ — verify **`Floor0_phase_space`**.
 
 Код: `SI.floor0_phase_space_row()` · probe `tools/floor0_catalog_probe.py --phase-space`.
@@ -232,7 +232,7 @@ Probe печатает те же три строки в **`=== ЧИТАТЬ ТА
 
 | UoW | статус |
 |------|--------|
-| **$n_E\ge 1$ в свободной эволюции** | после релаксации ledger track на ядре планкона — verify **`Floor0_nE_excitation`** (snapshot после релаксации остаётся $n_E=0$) |
+| **$n_E\ge 1$ в свободной эволюции** | после релаксации balance track на ядре планкона — verify **`Floor0_nE_excitation`** (snapshot после релаксации остаётся $n_E=0$) |
 | **полный список внутренних состояний** | $\Gamma_{hV}$: оси $(q,p)$ + ground fixed point; полная таблица и возбуждённые ветки — нет |
 | **правила отбора** между внутренними уровнями | S1–S4 + sim track на ядре |
 | **внешние моды ε** (1-я NN-сфера) | §5.0.4-B / этаж 1 |

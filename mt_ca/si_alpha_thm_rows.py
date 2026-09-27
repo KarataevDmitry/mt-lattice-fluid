@@ -290,7 +290,7 @@ class SIAlphaThmRows:
         Try (force accounting):
           Hierarchy forbids counting b inside N_hier (−1).
           Coulomb NN force still sits on a charged core (b=1) plus the
-          link×hierarchy budget that carries the momentum ledger outward:
+          link×hierarchy budget that carries the kick stack outward:
             M = 1 + N₁₂ · N_hier
               = 1 + N₁₂ · (⌊B_hV⌋ − 1)
               = 97

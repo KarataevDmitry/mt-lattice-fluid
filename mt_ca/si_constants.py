@@ -418,7 +418,7 @@ def pauli_overlap_cos(*, delta_phi_min: float = DELTA_PHI_MIN) -> float:
     return math.cos(delta_phi_min)
 
 
-def energy_ledger_ticks_per_E0(
+def energy_balance_ticks_per_E0(
     *,
     phase_bits: int | None = None,
     delta_phi_min: float = DELTA_PHI_MIN,
@@ -429,8 +429,8 @@ def energy_ledger_ticks_per_E0(
 
 
 def n_E_from_phi_ticks(phi_ticks: int, *, phase_bits: int | None = None) -> int:
-    """Map saturating collision phase [ticks] → integer E₀ ledger units."""
-    unit = energy_ledger_ticks_per_E0(phase_bits=phase_bits)
+    """Map saturating collision phase [ticks] → integer E₀ conservation balance units."""
+    unit = energy_balance_ticks_per_E0(phase_bits=phase_bits)
     return abs(int(phi_ticks)) // unit
 
 
@@ -466,7 +466,7 @@ def elementary_quanta_row(
         "pauli_rho_min_natural": pauli_rho_min_natural(rho_max=rho_max),
         "pauli_rho_min_si_J_m3": pauli_rho_min_si(rho_max_natural=rho_max),
         "pauli_overlap_cos": pauli_overlap_cos(delta_phi_min=delta_phi_min),
-        "energy_ticks_per_E0": energy_ledger_ticks_per_E0(
+        "energy_ticks_per_E0": energy_balance_ticks_per_E0(
             phase_bits=pb, delta_phi_min=delta_phi_min
         ),
         "E_0_J": SI.E_0,
@@ -1312,7 +1312,7 @@ def congruence_ladder_row(
     k_fcc = kappa_link(n_links=n12)
     sync_disc_fcc = max(1, int(phi_disc * k_fcc))
     sync_disc_default = sync_strength_disc(phase_bits=pb, delta_phi_min=delta_phi_min)
-    e_ticks = energy_ledger_ticks_per_E0(phase_bits=pb, delta_phi_min=delta_phi_min)
+    e_ticks = energy_balance_ticks_per_E0(phase_bits=pb, delta_phi_min=delta_phi_min)
     phi_sample = 3 * phi_disc + 7
     n_e_sample = n_E_from_phi_ticks(phi_sample, phase_bits=pb)
     ladder: list[dict[str, str | bool]] = [
@@ -1364,7 +1364,7 @@ def congruence_ladder_row(
         "ladder_derived_count": sum(1 for r in ladder if r["derived"]),
         "ladder_rows": ladder,
         "open_leaves": open_leaves,
-        "note": "§3.12.7: verify Congruence_ladder; ledger LadderLedger for CL-7/8",
+        "note": "§3.12.7: verify Congruence_ladder; verify LadderConservation for CL-7/8",
     }
 
 
