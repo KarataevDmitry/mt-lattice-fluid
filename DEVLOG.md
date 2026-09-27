@@ -176,7 +176,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | sim | seeds OK · **`A10`** evolution **FAIL** (winding nan) в open suite | `topology` · seeds | contour slice + HF |
 | **A11** | **Soliton / anti-smear** | **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | sim | **`A11`** PASS | saturating Φ | — |
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
-| **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
+| **A13** | **Обратимость** | схема «лягушка» на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
 | **A14** | **P/C/T/U1** | симметрии на **`g`** | §2 · §3.11 | — | **`A14`** · **`U1_vac`** · **`SO2_C4`** PASS · **`Chiral_SU2`** PASS | `symmetry` · `chiral` | g·e^{iθ} on Z_N Q-gap (invariants OK) |
 | **A15** | **Геометрия / kappa_link** | kappa из многогранника; gamma = 1/N; канон N=12 | §1.6 · §5.2.2 | sim | **QuarterQuantum** PASS (MVP 1/4) | `si_constants` | FCC 1/12 row |
 | **A16** | **Pauli / 720°** | **`2π→−1`**, repulsion | §2 · §3.10.4 | sim | **`A16`** · **`Pauli`** PASS | `pauli_phi` | — |
@@ -190,7 +190,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
 | **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | — | **`FCC_N12`** PASS (пол ON) | true Bravais parity UoW open |
 | **лестница ФТТ:** `G`, BZ, умклапп, `N_pack`, `b_atom` | §5.2.4 | model | — | quanta + probe |
-| leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | нейтральное по $n_E$ распределение импульса Φ |
+| схема «лягушка» **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | нейтральное по $n_E$ распределение импульса Φ |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E`** | §5.2.1–§5.2.3 | sim | **`LadderConservation`** PASS (proxy) | уравнения баланса E/p/L на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
@@ -340,7 +340,7 @@ z' = z · exp(iφ)
 
 ### §3.12 Leapfrog Z_N[i]
 
-**Хронология (2026-09-22):** float32 1-го порядка на 4070 → киральная «пляска» `n`; leapfrog на ℤ — единственный закон счёта.
+**Хронология (2026-09-22):** float32 1-го порядка на 4070 → киральная «пляска» `n`; схема «лягушка» на ℤ — единственный закон счёта.
 
 | слой | impl |
 |------|------|
@@ -554,7 +554,7 @@ python scripts/run_symmetry_probe.py
 | 18 | **Антиматерия = `n→−n`:** зеркало фазового вихря; annihilation = `n++n−→0` → 2γ | §5.0.3 · §9.2 |
 | 19 | **`U(1)_vac` + хиральная упаковка:** global phase на `z`; **`defect_axis` fallback = local Bloch**, не `(0,0,1)`; **`P_L/P_R`** + независимый STREAM | §3.11 |
 | 20 | **P / C / T legs (T-layer probes):** mirror, `z*`, chirality boost — **не** M `g⁻¹` | §3.11.3 · A14 |
-| 21 | **M = leapfrog на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
+| 21 | **M = схема «лягушка» на ℤ:** **`l_P=t_P=1`** → нет float; **`z⁺=−z⁻+2z+⌊𝒩⌋`**, `(z,z_past)`; **T⁻¹** = algebra, не CPT-approx | §3.12 · A13 |
 | 22 | **Projected collision = Z_N[i]:** **`N_ring=512`**, **`N_φ=⌈4π⌉=13`**, **`frac_bits=⌈log₂(512/13)⌉=6`**, **`Δφ_min=½` rad** | §3.12.5–§3.12.6 |
 | 23 | **Локальные законы + SO(2):** **`p₀,L₀,F₀`** из **`s₀`**; A3 + уравнения баланса на M; гладкий **`div j`** = **T** | §5.2.1 · §4.3 · §1.6 |
 | 24 | **`κ_link = 1/|N|`:** FCC **`1/12`** (канон 3+1); гекс-срез **`1/6`**; **`γ = cr_strength = ν_CA_natural`**; **`E₀ = p₀·c₀ = F₀·l_P`**; **`b ∈ {0,1}`**; **§5.2.3** — Pauli/sync/**`n_E`** без float | §5.2.2–§5.2.3 · §1.6 |

@@ -129,7 +129,7 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 
 Наивное $q\times p$ $\gg 2^{B_{hV}}\approx 535$ — $\Gamma_{hV}$ **сжато** бит-бюджетом, как и каталог конфигураций.
 
-**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик leapfrog + **реестр импульса** на **заполненном кипящем** океане.
+**Итерация $g$:** точка $\gamma_t=(q_t,p_t)\in\Gamma_{hV}$; $\gamma_{t+1}$ — один тик схемы «лягушка» + **реестр импульса** на **заполненном кипящем** океане.
 Для `VORTEX_P`/`VACUUM_BOIL`: ядро планкона проходит **$\sim 30$** различных точек $\Gamma$ за 32 тика, с ненулевым **импульсом Φ** — verify **`Floor0_phase_space`**.
 
 Код: `SI.floor0_phase_space_row()` · probe `tools/floor0_catalog_probe.py --phase-space`.
@@ -144,8 +144,8 @@ $k_\varphi\in\mathbb{Z}_{13}$, $\varphi_f\in\mathbb{Z}_{41}$, $\varphi_{\mathrm{
 |--------|----------|
 | **Сценарий** | `habitat_boil` — A5, `VACUUM_BOIL`, все `hV` заполнены |
 | **Embedding** | **3+1** FCC по умолчанию; $\Lambda = \mathbb{Z}_{n_z}\times\mathbb{Z}_{n_y}\times\mathbb{Z}_{n_x}$ (тор) |
-| **Состояние CA** | leapfrog-пара $(f^t,f^{t-1})$, $f(x)\in\mathbb{Z}_N[i]^4$ на hV, $N=2^{\mathrm{mod\_bits}}$ |
-| **Переход $g$** | `projected_step_fixed`: holonomy $\to$ saturating $\Phi$ [Heisenberg] $\to$ Rot_LUT $\to$ leapfrog $\to$ Bekenstein scale (§3.12.5–6) |
+| **Состояние CA** | двухрегистровая пара «лягушки» $(f^t,f^{t-1})$, $f(x)\in\mathbb{Z}_N[i]^4$ на hV, $N=2^{\mathrm{mod\_bits}}$ |
+| **Переход $g$** | holonomy $\to$ saturating $\Phi$ [Heisenberg] $\to$ Rot_LUT $\to$ шаг «лягушка» $\to$ Bekenstein scale (§3.12.5–6) |
 | **Сим** | `mt_ca/app/lab`, `LatticeFluidSimulator.step` = **та же** $g$ |
 
 $z^t=\mathrm{decode}(f^t)$ — только для приборов.
@@ -208,7 +208,7 @@ $$
 | слой | объект | метрика |
 |------|--------|---------|
 | **макроописание** | contrast, $\Phi$, $n_E$ … | `shift_mse_norm(T)` = $\mathrm{MSE}(\mathcal{O}^t-\mathcal{O}^{t+T})/\mathrm{Var}(\mathcal{O})$; отдельно $T\in\{21,41,82,256,512\}$ |
-| **КА** | пара leapfrog $(f_{\mathrm{curr}},f_{\mathrm{past}})\in\mathbb{Z}_N[i]^{\Lambda}$ | доля $t$ с **точным** совпадением пары при сдвige $T$; `exact_period_T` = минимальное $T$ с rate $=1$ |
+| **КА** | пара «лягушки» $(f_{\mathrm{curr}},f_{\mathrm{past}})\in\mathbb{Z}_N[i]^{\Lambda}$ | доля $t$ с **точным** совпадением пары при сдвige $T$; `exact_period_T` = минимальное $T$ с rate $=1$ |
 
 Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$). В конце прогона — блок **`=== ЧИТАТЬ ТАК ===`** (явные «НЕТ», не пустота).
 
@@ -220,7 +220,7 @@ Probe: `tools/boil_functional_period.py` (`--ca-state` для полного п�
 |---|-------------|------------------------|
 | **1** | low-$k$, $|\lambda_k|$ | $|\lambda|\gg1$ → **«$T\sim2\pi/\arg\lambda$» не читаем** (мода не нейтральная; это не «T не найден», а «фазовый период не определён») |
 | **2** | ring $21/41/82$ vs `ρ_contrast` | `shift_mse` **растёт** (тип. $0.10\to0.34\to1.3$) → **минимумов на лестнице §5.0.4-A нет** |
-| **3** | `best_shift_T` на contrast | часто **$T=2$** при малом mse → **дрейф/leapfrog**, не кольцо и не $f(t+2)=f(t)$ |
+| **3** | `best_shift_T` на contrast | часто **$T=2$** при малом mse → **дрейф схемы «лягушка»**, не кольцо и не $f(t+2)=f(t)$ |
 
 Probe печатает те же три строки в **`=== ЧИТАТЬ ТАК ===`**. На boil low-$k$ даёт усиление, не $U(1)$-волну на торе.
 

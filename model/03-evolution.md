@@ -75,7 +75,7 @@ N(x) = { x ± ê_i } — первая координационная оболо�
 
 #### 3.9.2 Уравнение на решётке
 
-**§3.12.5:** **`ζ`** → saturating **`Φ ∈ ℤ_{N_ring}`** → **`R(Φ)`** → leapfrog **`Z⁺+Z⁻=2Z+⌊𝒩⌋`**.
+**§3.12.5:** **`ζ`** → saturating **`Φ ∈ ℤ_{N_ring}`** → **`R(Φ)`** → схема «лягушка» **`Z⁺+Z⁻=2Z+⌊𝒩⌋`**.
 
 | член | ДА | M |
 |------|----|---|
@@ -237,7 +237,7 @@ z(t−1) = 2z(t) + ⌊𝒩⌋ − z(t+1)
 | дискретные фазовые сдвиги **`Δφ≥½`** | saturating **`Φ`**, **`R(Φ)`** |
 | обратимость | CA **2-го порядка**; иначе хаос от округления |
 
-#### 3.12.1 Leapfrog
+#### 3.12.1 Схема «лягушка» (2-й порядок)
 
 **`Z(x,t) ∈ ℤ_{N_ring}[i]`**, **`N_ring = 2^{⌊B_{hV}⌋}`** (§3.12.6):
 
@@ -253,7 +253,7 @@ Z(x,t+\Delta t) + Z(x,t-\Delta t) = 2Z(x,t) + \lfloor \mathcal{N} \rfloor
 z(t−1) = 2z(t) + ⌊𝒩(z(t))⌋ − z(t+1)
 ```
 
-**A13:** **`g⁻¹`** из leapfrog и реестр импульса.
+**A13:** **`g⁻¹`** из схемы «лягушка» и реестр импульса.
 
 #### 3.12.3 Projected collision
 
@@ -446,7 +446,7 @@ Z_j = U_j + iV_j ∈ ℤ_{N_ring}[i]   (j=1,2)
 ##### A · Лестница
 
 ```
-физика → Z_{512}[i] → вычеты mod E₀,p₀ → holonomy Σ_N → leapfrog
+физика → Z_{512}[i] → вычеты mod E₀,p₀ → holonomy Σ_N → схема «лягушка»
 ```
 
 ##### B · Тождества
@@ -468,7 +468,7 @@ Z_j = U_j + iV_j ∈ ℤ_{N_ring}[i]   (j=1,2)
 
 \[
 \zeta = f\!\Bigl(Z(x),\ \sum_{y\in N_{12}(x)} Z(y)\Bigr)
-\Rightarrow \Phi\in\mathbb{Z}_N \Rightarrow \lfloor\mathcal{N}\rfloor,\ \text{leapfrog}
+\Rightarrow \Phi\in\mathbb{Z}_N \Rightarrow \lfloor\mathcal{N}\rfloor,\ \text{шаг «лягушка»}
 \]
 
 ##### D · Открытые вопросы

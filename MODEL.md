@@ -54,7 +54,7 @@ MODEL = физика `g` **сейчас**, не дневник разработ�
 | [`model/00-foundations.md`](model/00-foundations.md) | §0 основания · технический §0.10 |
 | [`model/01-carrier.md`](model/01-carrier.md) | §1 носитель: FCC N₁₂ · гекс-срез · κ · тор §1.7 |
 | [`model/02-axioms.md`](model/02-axioms.md) | §2 условия A1–A16 |
-| [`model/03-evolution.md`](model/03-evolution.md) | §3 `g`, ДА, спинор, leapfrog |
+| [`model/03-evolution.md`](model/03-evolution.md) | §3 `g`, ДА, спинор, схема «лягушка» |
 | [`model/04-macro.md`](model/04-macro.md) | §4 M→T |
 | [`model/05-matter.md`](model/05-matter.md) | §5 dV, заполнение, гидродинамика |
 | [`model/05-floor0-spectrum.md`](model/05-floor0-spectrum.md) | §5.0.4-A спектр планкона (этаж 0) |
