@@ -6,7 +6,11 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-27 · §4.0.2 · Thm **T-CL** (аналитический классический предел)
 
+**MODEL:** `model/04-macro.md` §4.0.2 — параметры `ε=σ_R ℓ_P/λ`, `χ=(ℓ_P/λ)²`; цепочка T-CR → T-HL → NLSE+ν → Madelung/NS без `hL→0`. Книга: `04-macro.tex` \cref{thm:t-cl}.
+
+**Verify (численный якорь, не SSOT):** `T_classical_limit` · `tools/classical_limit_probe.py` — согласован с ведущими порядками T-CL.
 
 
 
