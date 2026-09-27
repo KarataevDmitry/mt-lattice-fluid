@@ -103,8 +103,22 @@ z' = z · exp(i·φ_eff)   — default isotropic: one exp(iφ), no sweeps (§3.6
 python verify_principles.py --ship
 python verify_principles.py --list
 python verify_principles.py --suite t_macro
+python verify_principles.py --scenario floor0_planckon   # same ids as: python -m mt_ca.app.cli run …
 python run_benchmark.py --json
 ```
+
+### Agent status card (2026-09-27)
+
+Один экран для агентов. **Полная таблица:** [`DEVLOG.md`](DEVLOG.md) §1.0 · **группировка:** `verify_checks/suites.py` · **сценарии:** `mt_ca/app/scenario.py` (`verify_suites`).
+
+| Вопрос | Ответ |
+|--------|--------|
+| Ship зелёный? | **`--ship`** (~116 checks, CPU 2026-09-27) **PASS** · включает `gate` (`Model_purity`), `m_axioms`, `t_macro`, floor0/1, α/units/carrier/sm/instruments |
+| Что красное? | Suite **`m_evolution_open`** only: `A9`, `A10`, `FCC_N12`, `Vortex_hex` — **не** в ship; M-динамика/пороги, не опровержение §8.2 |
+| α / массы / Higgs «выведены»? | **Да** в смысле MODEL: одна цепочка α_fs→v→m_H→…; verify ship PASS на registry rows. **Open:** ppm-хвосты packing/FCC, Γ/τ/width, альтернативные derivation-пробы в verify (археология) |
+| M→T / классика | Suite **`t_macro`**: `T_hydro_limit*`, **`T_classical_limit`**, **`phi_bz`** (Φ=ℬz) |
+| Сим = verify? | `--scenario <id>` → `ScenarioSpec.verify_suites`; `cli list` колонка `verify` |
+| Перед правкой MODEL | `Model_purity` PASS; не тащить impl/verify в `model/` |
 
 | Тест | Axiom | Критерий |
 |------|-------|----------|
@@ -121,13 +135,15 @@ python run_benchmark.py --json
 
 ## Шаг 6. Открытые пробелы (честно)
 
+**Актуальный снимок verify + α/массы/Higgs:** [`DEVLOG.md`](DEVLOG.md) §1.0 и §3 (open UoW). Таблица ниже — **исторический MVP** (до suites); не использовать для ship-статуса.
+
 | ID | Статус после пересборки |
 |----|-------------------------|
 | A3 | ✅ `local_ca` в M |
 | A6 | ⚠️ мотив сохранён; строгий entropy proof — нет |
 | A8 | ⚠️ gate asymptotics + `w(ρ)` |
-| A9 | ⚠️ метрика + optional soft; не жёсткая CR-аксиома |
-| A10 | ❌ post-process vortex charge |
+| A9 | ⚠️ **`m_evolution_open` FAIL** stationarity (2026-09-27); см. DEVLOG §1 |
+| A10 | ⚠️ seeds OK · evolution **FAIL** в open suite; не «❌ post-process only» |
 | A12 | ❌ T-гипотеза |
 | A14 | ✅ P/C/T/U1 probes · long **`g·P`** open · CPT product = optional T-layer (not M **`g⁻¹**) |
 | A15 | ⚠️ γ dispersion (T); **α*, α_fs, Planck — §7–§8 fixed** |
