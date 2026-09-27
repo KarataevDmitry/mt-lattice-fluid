@@ -8,11 +8,12 @@
 
 ```powershell
 cd book
-./build.ps1              # том I → out/vol-I.pdf (+ копия main.pdf)
-./build.ps1 -Volume III  # заготовка тома III → out/vol-III.pdf
+./build.ps1                        # out/construction.pdf
+./build.ps1 -Volume floors
+./build.ps1 -Volume observer
 ```
 
-PDF: `book/out/vol-<I|II|…>.pdf` (XeLaTeX ×3). Артефакты только в `book/out/` — не копируй `.aux` в `sources/`.
+PDF: `book/out/<construction|floors|cosmology|…>.pdf` — см. [`SERIES.md`](SERIES.md). Артефакты только в `book/out/`.
 
 **Обозначения:** `glossaries-extra`, список в `sources/notation.tex`, записи в `sources/glossary/notation-entries.tex`. Записи `symb:…` в `notation-entries.tex`; в тексте и в `equation` — `\gls{symb:…}` (как в учебнике). Опционально короткие `\hl` = `\gls{symb:a}`. Код: `hL`/`hT`/`hV`. `\makenoidxglossaries`.
 
@@ -20,12 +21,11 @@ PDF: `book/out/vol-<I|II|…>.pdf` (XeLaTeX ×3). Артефакты тольк�
 
 ```
 book/
-  SERIES.md          # карта томов I–V
-  build.ps1          # сборка sources → out
-  sources/           # исходники (только .tex)
-    main.tex         # том I
-    main-vol-II.tex … main-vol-V.tex
-    volumes/         # тела томов + короткий frontmatter II–V
+  SERIES.md          # семантические тома
+  build.ps1          # -Volume construction|floors|…
+  sources/
+    main-construction.tex, main-floors.tex, main-cosmology.tex, …
+    volumes/         # vol-*-body.tex
     preamble.tex
     frontmatter.tex
     chapters/
@@ -36,7 +36,7 @@ book/
 
 Правка текста — прямо в `sources/*.tex`. Без одноразовых патч-скриптов и дампов в `book/`: справочники и черновики — вне репо или в `model/` / KB, не рядом с LaTeX.
 
-## Том I — оглавление (sources)
+## construction — оглавление (текущий текст)
 
 | PDF гл. | Файл | Содержание |
 |---------|------|------------|
@@ -49,13 +49,10 @@ book/
 | 6 | `chapters/03-evolution.tex` | Закон $g$ |
 | 7 | `chapters/04-macro.tex` | Переход $M\to T$, теорема T-CR |
 | 8 | `chapters/05-matter.tex` | Механика ячейки, материя |
-| — | **часть «Этажи вверх»** | |
-| 9 | `chapters/09-floors-preface.tex` | От пола к трём этажам |
-| 10 | `chapters/10-floor0.tex` | Этаж 0: планковский пол |
-| 11 | `chapters/11-floor1.tex` | Этаж 1: облако $\rho_\Theta$, $\varepsilon$-оболочки |
-| 12 | `chapters/12-floor2.tex` | Этаж 2: составной узел, кварки (схема) |
 | **13** | **`chapters/07-alpha.tex`** | **Постоянная тонкой структуры** |
 | 14 | `chapters/06-si-sm.tex` | Лестница $M\to T$, SI, массы, SM |
+
+**floors** (отдельный PDF): `09-floors-preface` … `12-floor2` — см. [`SERIES.md`](SERIES.md).
 | A | `appendix/00-background.tex` | CA, Тоффоли/Фредкин, Маделунг |
 
 Текст — связная русская проза; SSOT физики и верификация — `model/` и репозиторий `mt_ca/`.

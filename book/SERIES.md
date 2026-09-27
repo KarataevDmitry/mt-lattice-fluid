@@ -1,53 +1,43 @@
 # Серия «Кипящий океан»
 
-Одна **MODEL** (`model/`), несколько **томов книги** — разные круги вопросов и проверок. Не смешивать в одном PDF то, что требует разных экспериментов и дисциплин.
+Семантические тома (не `main`, не `vol-I`). SSOT формул: `model/`.
 
-| Том | ID | LaTeX | PDF (`book/out/`) | Статус |
-|-----|-----|--------|-------------------|--------|
-| **I** Лестница | `vol-I` | `sources/main.tex` | `vol-I.pdf` (или `main.pdf`) | **текущий текст** (бывшая монография) |
-| **II** Космология | `vol-II` | `sources/main-vol-II.tex` | `vol-II.pdf` | заготовка |
-| **III** Наблюдатель / живые масштабы | `vol-III` | `sources/main-vol-III.tex` | `vol-III.pdf` | заготовка |
-| **IV** Химия и физическая химия | `vol-IV` | `sources/main-vol-IV.tex` | `vol-IV.pdf` | заготовка |
-| **V** Информатика / вычислительная архитектура | `vol-V` | `sources/main-vol-V.tex` | `vol-V.pdf` | заготовка |
+| ID | Содержание | `main-*.tex` | PDF `out/` |
+|----|------------|--------------|------------|
+| **construction** | Построение: спуск, **g**, macro, matter, **α**, SI-лестница | `main-construction.tex` | `construction.pdf` |
+| **floors** | Этажи 0–2 (отдельно от построения; границы уточняются) | `main-floors.tex` | `floors.pdf` |
+| **cosmology** | BB, CMB, `N_tick`, META §3 | `main-cosmology.tex` | `cosmology.pdf` |
+| **observer** | Узел (M, R_eff), ε, τ_frame | `main-observer.tex` | `observer.pdf` |
+| **chemistry** | Химия / физ. химия на T | `main-chemistry.tex` | `chemistry.pdf` |
+| **compute** | Вычислительная архитектура под **g** | `main-compute.tex` | `compute.pdf` |
 
 ## Сборка
 
 ```powershell
 cd book
-./build.ps1              # том I → out/vol-I.pdf
-./build.ps1 -Volume II   # заготовка тома II
+./build.ps1                          # construction (default)
+./build.ps1 -Volume floors
+./build.ps1 -Volume cosmology
 ```
 
-## Том I — что входит (файлы глав)
+`-Volume`: `construction` | `floors` | `cosmology` | `observer` | `chemistry` | `compute`
 
-Спуск **M → T → SM**, согласованность **g**, этажи 0–2, **α**, SI-лестница. Без космо-нарратива, без химии, без чипов.
+## construction — главы
 
-| Глава | `chapters/` |
-|-------|-------------|
-| Спуск, аксиомы, носитель, **g**, macro | `00-descent` … `04-macro` |
-| Материя | `05-matter` |
-| Этажи 0–2 | `09-floors-preface` … `12-floor2` |
-| α, SI/SM | `07-alpha`, `06-si-sm` |
-| Приложение | `appendix/00-background` |
+`volumes/vol-construction-body.tex`: `00-descent` … `05-matter`, `07-alpha`, `06-si-sm`, приложение CA.
 
-SSOT формул: `model/`. META (наблюдатель, BB-проза): `META.md` — в том I только отсылки, не дублировать.
+**Не входит:** этажи 0–2 → `floors`.
 
-## Том II — космология
+## floors — главы
 
-Стык с **ΛCDM/CMB**, было ли BB, серия космо-sim (DEVLOG). MODEL: космо-ссылки + `META.md` §3.
+`volumes/vol-floors-body.tex`: `09-floors-preface`, `10-floor0` … `12-floor2`.
 
-## Том III — наблюдатель
+Отделение от **construction** — черновая граница; возможен пересмотр (что ещё относится к «этажам» vs лестнице).
 
-Узел **(M, R_eff)**, fractal **ε**, **τ_frame** (§4.8), отношения кадров, кинематика узла (**c₀** vs **c**). Не «шарик 70 kg»; морфология. INBOX: `tom-III-hypothesis` в KB `chat-index`.
+## Остальные тома
 
-## Том IV — химия / хим. физ. / физ. хим.
+Заготовки в `volumes/vol-<id>-body.tex`. Наполнение — отдельные UoW.
 
-Следствия на этажах **T**: связи, барьеры, шкалы — отдельный язык опытов от тома III.
+## Глоссарий
 
-## Том V — вычислительная архитектура
-
-Поиск носителя под **g** (**B_hV**, CA, ledger) — отдельная исследовательская программа; не приложение к IV.
-
-## Общий глоссарий
-
-`sources/notation.tex`, `sources/glossary/` — общие для всех томов; при расхождении с `model/` побеждает **model/**.
+`sources/notation.tex`, `sources/glossary/` — общий; при конфликте побеждает `model/`.

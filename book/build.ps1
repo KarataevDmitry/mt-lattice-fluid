@@ -1,8 +1,8 @@
 #!/usr/bin/env pwsh
-# Build book/out/vol-<I|II|…>.pdf (XeLaTeX × 3). Default: Tom I (main.tex).
+# Build book/out/<volume>.pdf (XeLaTeX × 3). Default: construction.
 param(
-    [ValidateSet('I', 'II', 'III', 'IV', 'V')]
-    [string]$Volume = 'I',
+    [ValidateSet('construction', 'floors', 'cosmology', 'observer', 'chemistry', 'compute')]
+    [string]$Volume = 'construction',
     [switch]$RenderFigures
 )
 Set-StrictMode -Version Latest
@@ -99,11 +99,12 @@ $Sources = Join-Path $Root 'sources'
 $Out = Join-Path $Root 'out'
 
 $VolumeMap = @{
-    I   = @{ Main = 'main.tex'; Job = 'vol-I' }
-    II  = @{ Main = 'main-vol-II.tex'; Job = 'vol-II' }
-    III = @{ Main = 'main-vol-III.tex'; Job = 'vol-III' }
-    IV  = @{ Main = 'main-vol-IV.tex'; Job = 'vol-IV' }
-    V   = @{ Main = 'main-vol-V.tex'; Job = 'vol-V' }
+    construction = @{ Main = 'main-construction.tex'; Job = 'construction' }
+    floors       = @{ Main = 'main-floors.tex'; Job = 'floors' }
+    cosmology    = @{ Main = 'main-cosmology.tex'; Job = 'cosmology' }
+    observer     = @{ Main = 'main-observer.tex'; Job = 'observer' }
+    chemistry    = @{ Main = 'main-chemistry.tex'; Job = 'chemistry' }
+    compute      = @{ Main = 'main-compute.tex'; Job = 'compute' }
 }
 $MainTex = $VolumeMap[$Volume].Main
 $JobName = $VolumeMap[$Volume].Job
@@ -303,7 +304,7 @@ Close the viewer manually: $pdfFull
 
 $mainPath = Join-Path $Sources $MainTex
 if (-not (Test-Path -LiteralPath $mainPath)) {
-    throw "Missing sources/$MainTex — run from book/ root"
+    throw "Missing sources/$MainTex — see book/SERIES.md"
 }
 
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
@@ -358,11 +359,6 @@ try {
         throw "PDF not produced: $pdf"
     }
     Write-Host "Built: $pdf"
-    if ($Volume -eq 'I') {
-        $legacy = Join-Path $Out 'main.pdf'
-        Copy-Item -LiteralPath $pdf -Destination $legacy -Force
-        Write-Host "Also: $legacy (alias for vol-I)"
-    }
 }
 finally {
     Pop-Location
