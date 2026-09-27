@@ -21,5 +21,6 @@
 | **Верификация** | `verify_principles.py`, `verify_checks/suites.py` | Снимок «MODEL ↔ код»; `--ship`, `--suite`, `--scenario` (id как у `mt_ca.app`). |
 | **Окончания строк (LF)** | `.gitattributes`, `.editorconfig`, verify `Repo_text_eol` | Текст в git — Unix LF; после правок на Windows: `python tools/normalize_text_eol.py`. |
 | **Журнал разработки** | `DEVLOG.md` | Даты, impl, open leaves — не физика. |
+| **Полный учёт** (классов / ходов / конфигураций) | verify `*census*`, `Floor1_B0_census`, leaf `§*·census` | Исчерпывающее перечисление на носителе: **комбинаторный учёт** (места α, учёт ходов FCC) или **таблица устойчивых классов** (этаж 1, B=0). **Учёт в симуляции** — перебор в CA, может опровергнуть (§8.4.1-D3). Не голый «подсчёт одного числа». Eng. *census* — только в id verify и якорях §. |
 
 **Правило для текста:** в `model/` и книге — левая колонка; в Python и yaml — правая, пока не сделана явная миграция.
