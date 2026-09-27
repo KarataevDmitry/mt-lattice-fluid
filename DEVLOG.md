@@ -12,9 +12,13 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Verify (численный якорь, не SSOT):** `T_classical_limit` (+ `phi_bz` в sweep: Φ=ℬz, |Φ|², T-CR IR) · `tools/classical_limit_probe.py` — T-CL + readout.
 
+## 2026-09-27 · verify · suites + scenario vocabulary
 
+**SSOT группировки:** `verify_checks/suites.py` · CLI: `--list` · `--ship` · `--suite t_macro` · `--scenario floor0_planckon` (те же id, что `python -m mt_ca.app.cli run`).
 
+**Профили:** `--ship` = 10 suite (116 checks), **без** `m_evolution_open` и `cosmology` · на CPU **PASS** (2026-09-27). **`m_evolution_open`:** `A9`, `A10`, `FCC_N12`, `Vortex_hex` — **FAIL** на CPU/CUDA (вне ship; пороги/стабильность, не ломают α-лестницу).
 
+**Сценарии → suite:** поле `ScenarioSpec.verify_suites` в `mt_ca/app/scenario.py` · `python -m mt_ca.app.cli list` колонка `verify`.
 
 ## 2026-09-26 · DDD · убрать readout из API
 
@@ -134,13 +138,29 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 **Gap:** **—** закрыто · **sim** MODEL есть, код нет · **model** ещё не выведено в MODEL · **T** метрика T.
 
-**Verify:** `verify_principles.py --ship` (suites SSOT: `verify_checks/suites.py`; open: `m_evolution_open`) · T: `validate_mt.py` · snapshot **2026-09-22**.
+**Verify:** `verify_principles.py --ship` · `--scenario <id>` · `--suite …` · SSOT: `verify_checks/suites.py` + `ScenarioSpec.verify_suites` · T: `validate_mt.py` · snapshot **2026-09-27**.
+
+### §1.0 Замыкание MODEL ↔ verify (α · массы · Higgs · T)
+
+**Не путать:** `derivation_closed` в verify = «этот **конкретный** ряд/теорема закрыт»; `derivation_open` на **других** рядах часто = «альтернативный путь ещё не замкнут» или **негативный** тест («лабораторная дверь не обходит coupling»). Это не отмена §8.2.
+
+| слой | **закрыто в MODEL** (статика, одна цепочка) | verify (ship) | **хвост / open** (не «α не вывели») |
+|------|---------------------------------------------|---------------|--------------------------------------|
+| **α_fs** | `alpha_from_fundamentals()` · U0 soft face · **M=97** (реестр импульсов) · Кулон `F=F₀/M` | `Alpha_nF_momentum_registry`, `Coulomb_M_native`, `Alpha_U0_soft_face`, `Alpha_si_bridge`, `Alpha_meter_na0_bridge`, `Meter_decouple_from_M` | coarse **α₀=κ/M** ~−10³ ppm (T-приближение); **holonomy→α** без U0 (§8.2·descent шаг 6); archaeology: hop-ladder, fixed-point stack, `N_a0` без α |
+| **v · λ** | `v_peak=α⁸E_P`, `v=v_peak√(2π)`, bare **`λ=1/8`** | каскад в `Alpha_upstairs_mass_probe` | FCC/binomial уточнение весов на хвосте |
+| **m_H** | bare **`m_H=v/2`**; stack **`λ=1/8+N_hier·α/(4π)`** → ≈125.31 GeV (~0.045% PDG) | `Higgs_mass` | width/lineshape; полный вывод half-energy из gate |
+| **m_p, m_e, m_n, m_ν** | §8.2 таблица: `m_p=α·v/2·(1+κ²/N₁₂)`, `m_e=α²m_H/N_φ`, `m_n=m_p+2m_e`, ν-atm | `Proton_mass`, `Electron_mass`, `Neutron_mass`, `Neutrino_mass`, `Compton_e` | ppm–% хвосты FCC/packing (тот же класс, что у `m_p` edge); **Γ, τ, BR** — динамика T, не статическая лестница |
+| **EW / сильное / GR скелет** | §8.4 таблица forces | `sm` + части `alpha`/`carrier` в ship | census sim, IR, θ_f, GW, Λ |
+| **M→T** | Thm **T-CR**, **T-HL**, **T-CL** (§4.0.2) | suite **`t_macro`**: hydro + **`T_classical_limit`** + **`phi_bz`** | `ω_macro` FCC live fit (H5); `ν_eff` vs `ν_CA` |
+| **M динамика** | A9/A10 смысл в MODEL | suite **`m_evolution_open`** — **красное** | stationarity A9 · winding nan A10 · norm blow-up FCC_N12 — чинить критерии/сетку |
+
+**Команды (агент / человек):** `verify_principles.py --ship` · `--scenario birth_plane_wave` · `--suite t_macro` · `Model_purity` в suite `gate`.
 
 ### A1–A16
 
 | # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
-| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | — | **`FCC_N12`** PASS (16-tick, **HF ON**) | `laplacian` fcc · default | — |
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | sim | **`FCC_N12`** в **`m_evolution_open`**: FAIL norm drift (HF ON, 16 tick) · в ship нет | `laplacian` fcc · default | стабильность probe vs claim A1 |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
 | **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | — | **`Leapfrog`** · **`A3`** · **`A3_global_norm`** PASS | `reversible` · `z_ring` | гладкая непрерывность → **T** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
@@ -148,8 +168,8 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
 | **A7** | **`ρ ≤ ρ_P`** | **`K_P`** в Φ; clamp | §2 · §3.12.5 | sim | **`A7`** PASS | `bekenstein_scale_spinor` | — |
 | **A8** | **Macro-линейность** | **`w(ρ)`** затухает | §2 · §3.4 | T | **`A8`** PASS | gate **`w(ρ)`** | макроописание T probes |
-| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | sim | **`A9`** stationarity PASS · plateau ceiling open | `cr_phi_int` in Φ | absolute ν_CA band |
-| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | — | seeds OK · **`A10`** evolution PASS (HF off) | `topology` · seeds | — |
+| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | sim | **`m_evolution_open`:** **`A9`** FAIL stationarity (HF ON) · в ship нет | `cr_phi_int` in Φ | absolute ν_CA band · GPU/CPU |
+| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | sim | seeds OK · **`A10`** evolution **FAIL** (winding nan) в open suite | `topology` · seeds | contour slice + HF |
 | **A11** | **Soliton / anti-smear** | **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | sim | **`A11`** PASS | saturating Φ | — |
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
 | **A13** | **Обратимость** | leapfrog на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |
@@ -263,7 +283,7 @@ z' = z · exp(iφ)
 |-------|--------|
 | **Φ = saturating ζ only** (§3.12.5) | ✅ 2026-09-23: CR residual / sync **не** второй канал Φ — дефект Arg(⟨z⟩/z) = Δφ_N **внутри** gate |
 | **`Δφ` Heisenberg** | ✅ snap-*down* subthreshold → 0 (snap-up качал amp; Φ=0 локально OK §2.3.8) |
-| winding **`n`** | ✅ **`A10` PASS** HF ON · `winding_robust` |
+| winding **`n`** | seeds ✅ · long-run evolution **`A10`** в **`m_evolution_open`** FAIL (2026-09-27) — не путать с seed-only |
 | holomorphy sync float | float `holomorphy_sync_step` — T/legacy; **не** в projected `g` |
 
 **Verify A9:** `PLANE_WAVE` · HF ON · burn-in 32 + релаксация 32 · stationarity на gate-only. Absolute ν_CA ceiling — open.
@@ -297,7 +317,7 @@ z' = z · exp(iφ)
 
 | слой M | impl |
 |--------|------|
-| **`U(1)_vac`** | ⚠️ verify **`U1_vac` FAIL** — §1 |
+| **`U(1)_vac`** | ✅ verify **`U1_vac` PASS** (suite `m_axioms` / ship) |
 | **`P_L/P_R`** | ✅ **`chiral.py`** · **`Chiral_SU2`** |
 | **projected 𝒩 on Z_N[i]** | ✅ **`projected_collision.py`** |
 | **CPT product** | optional · `run_symmetry_probe.py` |
@@ -330,7 +350,8 @@ z' = z · exp(iφ)
 |--------|--------|
 | §4.1.2 **`ν_CA`** | ✅ algebraic · verify **`Nu_CA`** · **`T3_macro_viscosity`** · fit **`ν_eff`** open |
 | §4.1.0 **(1-2-1) derive** | ✅ из A1: глубина 2 = return-paths; `⊗` только product-срез; FCC Green — open |
-| §4.3 Madelung continuity | ✅ **T** · **`T_MadelungContinuity`** (диагностика; не M hard) |
+| §4.0.2 **T-CL** | ✅ MODEL + book · verify **`T_classical_limit`** + **`phi_bz`** (Φ=ℬz) |
+| §4.3 Madelung continuity | ✅ **T** · **`T_MadelungContinuity`** (диагностика; waive exit; не M hard) |
 | §4.9 Young | ✅ онтология · GPU slit UoW open · partial T2, A11 |
 | §4.2 validate | **`validate_mt.py`** T1/T2/T3/T_dispersion · T2 aligned §4.9 (vortex soliton · dual Gaussian · 1-2-1 fringes OK) |
 
@@ -355,6 +376,8 @@ z' = z · exp(iφ)
 
 | дата | контекст | цитата / триггер |
 |------|----------|------------------|
+| 2026-09-27 | verify | suites SSOT · `--ship` PASS · `m_evolution_open` FAIL · `--scenario` = sim ids · DEVLOG §1.0 closure ledger |
+| 2026-09-27 | §4.0.2 T-CL | аналитический классический предел · `phi_bz` readout |
 | 2026-09-22 | §3.7 | дилемма isotropic vs rays — закрыта Heisenberg + K_P |
 | 2026-09-22 | §3.8 | «тяжёлый vortex на квадрате» + дискретный анализ |
 | 2026-09-22 | §3.9 | «строгий ДА убирает физические натяжки» |
