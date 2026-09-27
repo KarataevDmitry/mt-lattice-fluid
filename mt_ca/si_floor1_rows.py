@@ -709,7 +709,7 @@ class SIFloor1Rows:
             n_ticks for C3 embedded in filled A5 bath is not derived.
 
         NOT claimed here:
-          · PDG μ lifetime (composite organ + m_μ — other leaf).
+          · PDG μ lifetime (composite organ + m_μ — other UoW).
           · Ensemble T-exponential fit numbers.
         """
         # Alone-hypothesis only — not closed as world clock.
@@ -740,8 +740,8 @@ class SIFloor1Rows:
             },
             {
                 "id": "reject_PDG_mu_lifetime_here",
-                "maps_to": "μ τ_PDG needs m_μ/composite leaf — not floor1 soft",
-                "status": "rejected_as_this_leaf",
+                "maps_to": "μ τ_PDG needs m_μ/composite UoW — not floor1 soft",
+                "status": "rejected_as_this_uow",
             },
         ]
 
@@ -779,7 +779,7 @@ class SIFloor1Rows:
             "note": (
                 "Continuum ℏ/τ ≠ M (CLOSED). Alone n_ticks=1 is soft hyp — "
                 "may fall because lonely/void; filled-bath clock open. "
-                "μ PDG lifetime is another leaf."
+                "μ PDG lifetime is another UoW."
             ),
         }
 

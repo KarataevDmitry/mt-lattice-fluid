@@ -20,7 +20,7 @@ class RunSpec:
     nz: int | None = None
     block: int = 8
     sample_every: int | None = None
-    settle: int = 0
+    relax: int = 0
     track: int = 0
 
     @property

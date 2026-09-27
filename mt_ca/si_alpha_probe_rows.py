@@ -1265,7 +1265,7 @@ class SIAlphaProbeRows:
     def alpha_em_face_weight_row(self) -> dict[str, float | int | str | bool | list]:
         """§8.2·α·EM·faces — asked carrier: A_□/A_tot, dihedral, V/S → α?
 
-        Method (geo leaf 1): dimensional areas/angles at a=l_P first;
+        Method (geo UoW 1): dimensional areas/angles at a=l_P first;
         ask which ratio can be EM coupling; score vs α only AFTER.
 
         Carrier answers (2026-09-24):
@@ -1275,7 +1275,7 @@ class SIAlphaProbeRows:
           • Raw weights O(0.1–1) — wrong scale vs α~1/137 (~10⁷ ppm).
           • Scaled tries (w/N₁₂, w·r, V/(Sa)·r, …) still |ppm|≫10³ — reject.
           • α_geom⁻¹=137 uses face *counts* (6□+8△), not area weights —
-            different object; already exploratory (~263 ppm), not this leaf.
+            different object; already exploratory (~263 ppm), not this UoW.
           • REJECT equating area weight or dihedral fraction with α.
           • Channel that remains: Φ_□ on □ (Stokes) — weight ≠ holonomy.
           • Same OPEN: coupling fraction / live Φ_□ — not face-area α.
@@ -1362,7 +1362,7 @@ class SIAlphaProbeRows:
                 "ratio": alpha_geom_inv,
                 "maps_to": "α_geom⁻¹=137 from face *counts* — not area weight",
                 "status": "distinct_exploratory",
-                "mechanism": "descent ask; ~263 ppm; not this leaf",
+                "mechanism": "descent ask; ~263 ppm; not this UoW",
             },
             {
                 "id": "open_Phi_square_not_weight",

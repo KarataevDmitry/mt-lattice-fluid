@@ -64,7 +64,7 @@ class MConfig:
     heisenberg_floor: bool = True
     heisenberg_phi_min: float = DELTA_PHI_MIN
 
-    # §1.6 canon fcc N₁₂ · hex = (2+1) slice · n4 = MVP archive
+    # §1.6 шаблон соседства (поле stencil): fcc N₁₂ · hex = срез 2+1 · n4 = архив
     stencil: str = "fcc"
 
     # §3.12 M-canonical evolution: leapfrog + projected collision on Z_N[i] (§3.12.6)
@@ -93,8 +93,18 @@ class MConfig:
         return self.hT * self.omega
 
     @classmethod
+    def for_neighbor_template(cls, neighbor_template: str = "fcc", **kw: object) -> "MConfig":
+        """κ_link = 1/|N| для шаблона соседства (§1.6 · §5.2.2)."""
+        return cls.for_stencil(neighbor_template, **kw)
+
+    @classmethod
+    def for_neighbor_scheme(cls, neighbor_scheme: str = "fcc", **kw: object) -> "MConfig":
+        """Совместимость → ``for_neighbor_template``."""
+        return cls.for_neighbor_template(neighbor_scheme, **kw)
+
+    @classmethod
     def for_stencil(cls, stencil: str = "fcc", **kw: object) -> "MConfig":
-        """Canon κ_link = 1/|N| tied to stencil (§1.6 · §5.2.2)."""
+        """Совместимость: ``stencil`` = шаблон соседства n4|hex|fcc."""
         n = stencil_n_links(stencil)
         k = kappa_link(n_links=n)
         base = cls(stencil=stencil, gamma=k, cr_strength=k)

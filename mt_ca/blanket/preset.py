@@ -6,7 +6,7 @@ from enum import Enum
 
 
 class BlanketPreset(str, Enum):
-    """What sits above the settled ocean interface (not a habitat swap)."""
+    """What sits above the relaxed ocean interface (not a habitat swap)."""
 
     NONE = "none"
     """Ocean only — no МЗВ overlay."""

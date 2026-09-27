@@ -117,7 +117,7 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--size", type=int, default=48)
     p.add_argument("--steps", type=int, default=1024)
-    p.add_argument("--settle", type=int, default=512, help="boil_relax settle ticks")
+    p.add_argument("--relax", type=int, default=512, help="boil_relax relaxation ticks")
     p.add_argument("--disk-radius", type=int, default=16)
     p.add_argument("--sample-every", type=int, default=64)
     p.add_argument("--fcc", action="store_true", help="3+1 FCC (canon §1.6)")
@@ -209,8 +209,8 @@ def main() -> int:
         )
 
     set_boil()
-    if args.settle > 0:
-        sim.step(args.settle)
+    if args.relax > 0:
+        sim.step(args.relax)
     z_wall = _apply_spinor_phase_wall(
         sim.z,
         frac_bits=cfg.frac_bits,
@@ -223,10 +223,10 @@ def main() -> int:
         ic_fn=lambda: None,
         steps=args.steps,
         label="boil_relax_wall",
-        premise=f"boil settle={args.settle} then spinor half-space phase wall",
+        premise=f"boil relax={args.relax} then spinor half-space phase wall",
         sample_every=sample_every,
     )
-    relax_row["settle_steps"] = args.settle
+    relax_row["relax_ticks"] = args.relax
     results.append(relax_row)
     ever_s = (
         f" ever={int(relax_row['born_ever'])}@t{relax_row['first_born_t']}"
@@ -254,7 +254,7 @@ def main() -> int:
         "size": args.size,
         "nz": nz,
         "steps": args.steps,
-        "settle": args.settle,
+        "relax": args.relax,
         "sample_every": sample_every,
         "device": args.device,
         "seconds": round(elapsed, 3),

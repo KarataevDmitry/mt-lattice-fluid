@@ -119,9 +119,9 @@ def run(spec: RunSpec) -> RunResult:
                 {"t": done, **peak_stats(sim.z, anchor=ps_anchor), "norm": sim.norm()}
             )
     else:
-        if spec.settle > 0:
-            sim.step(spec.settle)
-        remaining = max(0, spec.steps - spec.settle)
+        if spec.relax > 0:
+            sim.step(spec.relax)
+        remaining = max(0, spec.steps - spec.relax)
         if remaining > 0:
             sim.step(remaining)
 
@@ -222,7 +222,7 @@ def track_gamma_points(
 def run_floor0_phase_space(
     *,
     size: int = 32,
-    settle: int = 32,
+    relax: int = 32,
     track: int = 32,
     device: str = "cpu",
 ) -> dict[str, Any]:
@@ -236,7 +236,7 @@ def run_floor0_phase_space(
         size,
         device=device,
         steps=0,
-        settle=settle,
+        relax=relax,
         track=track,
     )
     sim = open_lattice(spec)
@@ -255,9 +255,9 @@ def run_floor0_phase_space(
         n_ring * int(bb.N_phi) * dphi_disc * _BLOCH_DISTINCT_Q6 * n_ring * n_e_classes
     )
     amp0 = float(field_amplitude(sim.z).max().item())
-    for _ in range(settle):
+    for _ in range(relax):
         sim.step(1)
-    amp_settled = float(field_amplitude(sim.z).max().item())
+    amp_relaxed = float(field_amplitude(sim.z).max().item())
 
     anchor = default_anchor(sim.z)
     bath = snap_column_peak(spinor_density(sim.z), 10, 10)
@@ -270,7 +270,7 @@ def run_floor0_phase_space(
     )
     core = tracks[_site_key(anchor)]
     bath_track = tracks[_site_key(bath)]
-    ocean_moves = amp_settled > amp0 * 1.01 or core["unique_points"] > 1
+    ocean_moves = amp_relaxed > amp0 * 1.01 or core["unique_points"] > 1
 
     q_axes = [
         {"id": "phi_disc", "states": n_ring, "note": "ring position mod N_ring"},
@@ -296,7 +296,7 @@ def run_floor0_phase_space(
         "naive_q_times_p": naive_gamma,
         "cap_below_naive_gamma": cap < naive_gamma,
         "rho_max_initial": amp0,
-        "rho_max_after_settle": amp_settled,
+        "rho_max_after_relax": amp_relaxed,
         "ocean_contrast_grows": ocean_moves,
         "planckon_core": core,
         "bath_brick": bath_track,
@@ -319,17 +319,17 @@ def run_floor0_phase_space(
 def run_floor0_nE_excitation_harness(
     *,
     size: int = 32,
-    settle: int = 32,
+    relax: int = 32,
     track: int = 32,
     device: str = "cpu",
     min_n_E: int = 1,
     winding_min: float = 0.75,
 ) -> dict[str, Any]:
-    """§5.0.4-A — post-settle ledger track: n_E≥1 at planckon core under free g.
+    """§5.0.4-A — после релаксации ledger track: n_E≥1 at planckon core under free g.
 
-    Protocol (kick-harness): floor0_planckon on VACUUM_BOIL → settle → track ticks;
+    Protocol (kick-harness): floor0_planckon on VACUUM_BOIL → релаксация → track ticks;
     read integer Φ and n_E from ``projected_phi_int`` at the planted core (not the
-    settled snapshot alone, which stays n_E=0).
+    relaxed snapshot alone, which stays n_E=0).
     """
     from mt_ca.app.lattice import build_run_spec, open_lattice
     from mt_ca.projected_collision import projected_phi_int
@@ -341,7 +341,7 @@ def run_floor0_nE_excitation_harness(
     sim = open_lattice(spec)
     ticks_per_e0 = energy_ledger_ticks_per_E0(phase_bits=sim.cfg.phase_bits)
 
-    for _ in range(settle):
+    for _ in range(relax):
         sim.step(1)
     site = default_anchor(sim.z)
 
@@ -382,7 +382,7 @@ def run_floor0_nE_excitation_harness(
 
     return {
         "habitat": spec.scenario.habitat_label,
-        "settle": settle,
+        "relax": relax,
         "track": track,
         "ticks_per_E0": ticks_per_e0,
         "E0_1_ticks": int(eq["delta_phi_min_disc"]),
@@ -396,7 +396,7 @@ def run_floor0_nE_excitation_harness(
         "checks_ok": ok,
         "derivation_closed": False,
         "note": (
-            "§5.0.4-A kick-harness: after planckon settle, free g yields n_E≥1 on core "
-            "in ledger track (integer Φ); settled snapshot alone stays n_E=0."
+            "§5.0.4-A kick-harness: after planckon relax, free g yields n_E≥1 on core "
+            "in ledger track (integer Φ); relaxed snapshot alone stays n_E=0."
         ),
     }

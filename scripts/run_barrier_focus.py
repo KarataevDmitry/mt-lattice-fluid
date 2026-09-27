@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""§4.9 GPU leaf: wave interference vs vortex localization macro."""
+"""§4.9 GPU UoW: wave interference vs vortex localization macro."""
 
 from __future__ import annotations
 

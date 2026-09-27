@@ -4,7 +4,7 @@
 Back-of-envelope only — not a full C_ℓ solver.
 
 Pipeline:
-  1. boil → settle → half-space phase wall (§3.2 dogfood)
+  1. boil → relax → half-space phase wall (§3.2 dogfood)
   2. coarse binomial macro on Δρ = |Φ|_wall − |Φ|_base (slice at iz)
   3. extra ν_viscosity passes (§4.1.2 proxy for long bubble evolution)
   4. extrapolate to N_CMB via nu_coarse_passes(N_CMB, block)
@@ -53,7 +53,7 @@ def perturbation_metrics(
     iz: int,
     block: int,
 ) -> dict[str, float]:
-    """Δρ relative to settled boil baseline — CMB proxy on T layer."""
+    """Δρ relative to relaxed boil baseline — CMB proxy on T layer."""
     c0 = coarse_slice(base, iz, block)
     c1 = coarse_slice(wall, iz, block)
     d = c1 - c0
@@ -194,7 +194,7 @@ def calibrate_wall_row(
     cfg: MConfig,
     *,
     nz: int,
-    settle: int,
+    relax: int,
     delta_angle: float,
     axis: str,
     block: int,
@@ -209,8 +209,8 @@ def calibrate_wall_row(
         "phase_bits": cfg.phase_bits,
     }
     sim.set_field(boil_ocean_spinor_3d(nz, nz, nz, **kw))
-    if settle > 0:
-        sim.step(settle)
+    if relax > 0:
+        sim.step(relax)
     base = sim.z.clone()
     wall = apply_half_space_wall(
         base,
@@ -224,7 +224,7 @@ def calibrate_wall_row(
     m1 = perturbation_metrics(base, wall, iz=iz, block=block)
     decay = smooth_decay_curve(base, wall, iz=iz, block=block, nu_passes=nu_passes)
     return {
-        "settle": settle,
+        "relax": relax,
         "delta_angle": delta_angle,
         "axis": axis,
         "zero_control_max_rel": m0["max_rel"],
@@ -240,7 +240,7 @@ def main() -> int:
     p.add_argument("--block", type=int, default=4)
     p.add_argument("--iz", type=int, default=-1, help="slice index (-1 = nz//2)")
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
-    p.add_argument("--settles", default="0,128,256")
+    p.add_argument("--relax-ticks", default="0,128,256")
     p.add_argument("--angles", default="0.01,0.05,0.125,0.25")
     p.add_argument("--axis", default="x")
     p.add_argument(
@@ -256,7 +256,7 @@ def main() -> int:
 
     nz = args.size
     iz = args.iz if args.iz >= 0 else nz // 2
-    settles = [int(x) for x in args.settles.split(",") if x.strip()]
+    relax_ticks_list = [int(x) for x in args.relax_ticks.split(",") if x.strip()]
     angles = [float(x) for x in args.angles.split(",") if x.strip()]
     nu_list = [int(x) for x in args.nu_passes.split(",") if x.strip()]
 
@@ -270,13 +270,13 @@ def main() -> int:
 
     t0 = time.perf_counter()
     cal_rows: list[dict[str, Any]] = []
-    for settle in settles:
+    for relax in relax_ticks_list:
         for angle in angles:
             row = calibrate_wall_row(
                 sim,
                 cfg,
                 nz=nz,
-                settle=settle,
+                relax=relax,
                 delta_angle=angle,
                 axis=args.axis,
                 block=args.block,
@@ -285,14 +285,14 @@ def main() -> int:
             )
             cal_rows.append(row)
             print(
-                f"settle={settle:3d} δ={angle:.4f} "
+                f"relax={relax:3d} δ={angle:.4f} "
                 f"max/mean={row['max_rel']:.4e} rms/mean={row['rms_rel']:.4e}",
                 flush=True,
             )
 
-    # Best calibration row: largest settle with measurable signal
+    # Best calibration row: largest relax with measurable signal
     signal_rows = [r for r in cal_rows if r["rms_rel"] > 0.0]
-    ref = max(signal_rows, key=lambda r: (r["settle"], r["rms_rel"])) if signal_rows else cal_rows[0]
+    ref = max(signal_rows, key=lambda r: (r["relax"], r["rms_rel"])) if signal_rows else cal_rows[0]
     decay_nu = [int(r["nu_passes"]) for r in ref["smooth_decay"]]
     decay_rms = [r["rms_rel"] for r in ref["smooth_decay"]]
     alpha = fit_power_law_alpha(decay_nu, decay_rms) or 0.5
@@ -332,7 +332,7 @@ def main() -> int:
         "log10_nu_at_N_CMB": math.log10(nu_at_ncmb) if nu_at_ncmb > 0 else None,
         "calibration": cal_rows,
         "reference_row": {
-            "settle": ref["settle"],
+            "relax": ref["relax"],
             "delta_angle": ref["delta_angle"],
             "max_rel": ref["max_rel"],
             "rms_rel": ref["rms_rel"],
@@ -348,8 +348,8 @@ def main() -> int:
         },
         "extrapolation_local": inv,
         "interpretation": [
-            "Pure phase wall on unsettled boil → zero Δ|Φ| (CMB-blind at t=0).",
-            "After settle, boil texture breaks symmetry; wall Δ|Φ|/mean ~ few % for δ~0.1–0.25.",
+            "Pure phase wall on unrelaxed boil → zero Δ|Φ| (CMB-blind at t=0).",
+            "After relaxation, boil texture breaks symmetry; wall Δ|Φ|/mean ~ few % for δ~0.1–0.25.",
             f"Local ℬ: ~{nu_for_target_f:.0f} binomial passes → rms/mean≈{args.target:.0e} (CMB-scale).",
             f"Blind log-log extrapolation to N_CMB ν≈10^{math.log10(nu_at_ncmb):.1f} → rms~{rms_blind_ncmb:.0e} (signal erased).",
             f"⇒ CMB δT/T is not 'frozen wall smoothed once' — needs acoustic growth / sub-horizon modes between BB and N_CMB.",
@@ -362,7 +362,7 @@ def main() -> int:
     print(f"N_CMB = {bubble['N_CMB_sci']}  nu_coarse ≈ 10^{math.log10(nu_at_ncmb):.2f}", flush=True)
     print(f"T_M,bath = {bath['T_M_bath_K']:.3e} K  T_CMB = {T_CMB_K_REF} K", flush=True)
     print(
-        f"ref settle={ref['settle']} δ={ref['delta_angle']:.4f} "
+        f"ref relax={ref['relax']} δ={ref['delta_angle']:.4f} "
         f"rms/mean={ref['rms_rel']:.4e}",
         flush=True,
     )

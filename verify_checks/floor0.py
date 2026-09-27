@@ -87,7 +87,7 @@ def check_brick_internal_spectrum(device: str = "cpu") -> dict:
 
 
 def check_floor0_nE_excitation(device: str = "cpu") -> dict:
-    """§5.0.4-A — n_E≥1 on planckon core after settle (ledger track / kick-harness)."""
+    """§5.0.4-A — n_E≥1 on planckon core after relaxation (ledger track / kick-harness)."""
     from mt_ca.si_constants import SI
 
     row = SI.floor0_nE_excitation_row(device=device)

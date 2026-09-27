@@ -1,4 +1,4 @@
-"""Exact Fourier symbols for translation-invariant stencils on a 3D torus (FCC N12)."""
+"""Символика суммы по соседям FCC N₁₂ на 3D-торе (λ_st(k); см. GLOSSARY.ru.md)."""
 from __future__ import annotations
 
 import cmath

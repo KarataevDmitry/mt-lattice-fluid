@@ -11,7 +11,7 @@ from mt_ca.spinor import spinor_density
 
 
 def edge_rho_n4(rho: torch.Tensor) -> dict[str, torch.Tensor]:
-    """ρ_e = ½(ρ(x)+ρ(y)) on N₄ bonds (MVP stencil)."""
+    """ρ_e = ½(ρ(x)+ρ(y)) на рёбрах N₄ (архивный шаблон соседства)."""
     rho_r = 0.5 * (rho + torch.roll(rho, shifts=-1, dims=1))
     rho_l = 0.5 * (rho + torch.roll(rho, shifts=1, dims=1))
     rho_d = 0.5 * (rho + torch.roll(rho, shifts=-1, dims=0))

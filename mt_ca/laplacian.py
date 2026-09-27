@@ -1,3 +1,8 @@
+"""Суммы и лапласианы по соседям: N₄, гекс N₆, FCC N₁₂.
+
+Аргумент ``stencil`` в API = **шаблон соседства** (см. ``GLOSSARY.ru.md``).
+"""
+
 from __future__ import annotations
 
 import torch
@@ -28,7 +33,7 @@ def _parity_mask(ny: int, nx: int, device: torch.device) -> torch.Tensor:
 
 
 def hex_neighbor_sum(z: torch.Tensor) -> torch.Tensor:
-    """6-neighbor honeycomb stencil on ℤ² torus (§3.8 ladder step 1)."""
+    """Сумма по 6 соседям гекса на торе ℤ² (§3.8, шаг лестницы 1)."""
     up = torch.roll(z, shifts=-1, dims=0)
     down = torch.roll(z, shifts=1, dims=0)
     left = torch.roll(z, shifts=1, dims=1)
@@ -75,7 +80,7 @@ _FCC_OFFSETS: tuple[tuple[int, int, int], ...] = (
 def fcc_neighbor_sum(z: torch.Tensor) -> torch.Tensor:
     """Σ_{N₁₂} on 3D torus — cuboctahedral ε, |N|=12 (§1.6)."""
     if z.ndim < 3:
-        raise ValueError("fcc stencil needs spatial rank ≥3 (nz, ny, nx)")
+        raise ValueError("fcc: нужны три пространственные оси (nz, ny, nx)")
     # spatial dims = last three before optional batch; we treat (-3,-2,-1) as z,y,x
     acc = torch.zeros_like(z)
     for dz, dy, dx in _FCC_OFFSETS:
@@ -98,7 +103,9 @@ def neighbor_sum(z: torch.Tensor, stencil: str) -> torch.Tensor:
         return hex_neighbor_sum(z)
     if stencil == "fcc":
         return fcc_neighbor_sum(z)
-    raise ValueError(f"Unknown stencil: {stencil!r}. Use 'n4', 'hex', or 'fcc'.")
+    raise ValueError(
+        f"Неизвестный шаблон соседства: {stencil!r} (код: stencil). Допустимо: n4, hex, fcc."
+    )
 
 
 def neighbor_laplacian(z: torch.Tensor, stencil: str) -> torch.Tensor:
@@ -108,7 +115,9 @@ def neighbor_laplacian(z: torch.Tensor, stencil: str) -> torch.Tensor:
         return hex_laplacian(z)
     if stencil == "fcc":
         return fcc_laplacian(z)
-    raise ValueError(f"Unknown stencil: {stencil!r}. Use 'n4', 'hex', or 'fcc'.")
+    raise ValueError(
+        f"Неизвестный шаблон соседства: {stencil!r} (код: stencil). Допустимо: n4, hex, fcc."
+    )
 
 
 def stencil_n_links(stencil: str) -> int:
@@ -118,4 +127,4 @@ def stencil_n_links(stencil: str) -> int:
         return 6
     if stencil == "fcc":
         return 12
-    raise ValueError(f"Unknown stencil: {stencil!r}")
+    raise ValueError(f"Неизвестный шаблон соседства: {stencil!r}")

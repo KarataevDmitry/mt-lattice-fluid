@@ -19,7 +19,7 @@ from mt_ca.instruments.catalog import InstrumentId
 def run(
     *,
     size: int,
-    settle: int,
+    relax: int,
     ticks: int,
     t_max: int,
     mse_threshold: float,
@@ -30,7 +30,7 @@ def run(
     shape = (lab.sim.nz, lab.sim.ny, lab.sim.nx)
     symbol = scan_fcc_low_k(shape, max_k=max_k)
 
-    lab.step(settle)
+    lab.step(relax)
     contrast: list[float] = []
     f_currs: list = []
     f_pasts: list = []
@@ -48,7 +48,7 @@ def run(
     obs = solve_observable_period(contrast, t_max=t_max, mse_threshold=mse_threshold)
     out: dict = {
         **lab.meta,
-        "settle": settle,
+        "relax": relax,
         "ticks": ticks,
         "symbolic_fcc_low_k": symbol[:16],
         "rho_contrast_period": obs,
@@ -100,7 +100,7 @@ def _human(rep: dict) -> list[str]:
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--size", type=int, default=16)
-    p.add_argument("--settle", type=int, default=64)
+    p.add_argument("--relax", type=int, default=64)
     p.add_argument("--ticks", type=int, default=512)
     p.add_argument("--t-max", type=int, default=256)
     p.add_argument("--mse-threshold", type=float, default=1e-4)
@@ -110,7 +110,7 @@ def main() -> None:
     args = p.parse_args()
     rep = run(
         size=args.size,
-        settle=args.settle,
+        relax=args.relax,
         ticks=args.ticks,
         t_max=args.t_max,
         mse_threshold=args.mse_threshold,

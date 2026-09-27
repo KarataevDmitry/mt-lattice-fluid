@@ -24,13 +24,13 @@ from mt_ca.instruments.catalog import InstrumentId
 def _collect(
     *,
     ticks: int,
-    settle: int,
+    relax: int,
     size: int,
     store_ca: bool,
 ) -> tuple[dict, list[torch.Tensor] | None, list[torch.Tensor] | None]:
 
     lab = open_lab("habitat_boil", size, device="cpu")
-    lab.step(settle)
+    lab.step(relax)
 
     cy = size // 2
     sites = lab.snap_sites(
@@ -71,20 +71,20 @@ def _collect(
             for key, vals in series[name].items()
         }
 
-    meta = {**lab.meta, "ticks": ticks, "settle": settle, "observables": observables}
+    meta = {**lab.meta, "ticks": ticks, "relax": relax, "observables": observables}
     return meta, f_currs, f_pasts
 
 
 def run_boil_functional_period(
     *,
     ticks: int = 512,
-    settle: int = 128,
+    relax: int = 128,
     size: int = 32,
     store_ca: bool = False,
     max_lag: int = 128,
 ) -> dict:
     meta, f_currs, f_pasts = _collect(
-        ticks=ticks, settle=settle, size=size, store_ca=store_ca
+        ticks=ticks, relax=relax, size=size, store_ca=store_ca
     )
     out: dict = dict(meta)
     if store_ca and f_currs and f_pasts:
@@ -98,7 +98,7 @@ def run_boil_functional_period(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ticks", type=int, default=512)
-    parser.add_argument("--settle", type=int, default=128)
+    parser.add_argument("--relax", type=int, default=128)
     parser.add_argument("--size", type=int, default=32)
     parser.add_argument("--max-lag", type=int, default=128)
     parser.add_argument(
@@ -110,7 +110,7 @@ def main() -> None:
     args = parser.parse_args()
     rep = run_boil_functional_period(
         ticks=args.ticks,
-        settle=args.settle,
+        relax=args.relax,
         size=args.size,
         store_ca=args.ca_state,
         max_lag=args.max_lag,
@@ -119,7 +119,7 @@ def main() -> None:
         print(json.dumps(rep, indent=2))
         return
     print("lattice:", rep.get("dimension"), rep.get("grid"), "scenario:", rep.get("scenario_id"))
-    print("ticks:", rep["ticks"], "settle:", rep["settle"])
+    print("ticks:", rep["ticks"], "relax:", rep["relax"])
     for block_name, block in rep["observables"].items():
         print(f"=== {block_name} ===")
         if isinstance(block, dict) and "best_shift_T" in block:

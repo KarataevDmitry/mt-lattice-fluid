@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Sweep boil → settle → spinor half-space wall (META §3.2 dogfood).
+"""Sweep boil → relax → spinor half-space wall (META §3.2 dogfood).
 
-Axes: settle_ticks × delta_angle × wall_axis (x|y|z).
+Axes: relax_ticks × delta_angle × wall_axis (x|y|z).
 Metrics: born_* (survey), b_survey_*, min_pair_dist.
 """
 
@@ -66,7 +66,7 @@ def run_config(
     nz: int,
     ny: int,
     nx: int,
-    settle: int,
+    relax: int,
     delta_angle: float,
     axis: str,
     steps: int,
@@ -80,8 +80,8 @@ def run_config(
         "phase_bits": cfg.phase_bits,
     }
     sim.set_field(boil_ocean_spinor_3d(nz, ny, nx, **kw))
-    if settle > 0:
-        sim.step(settle)
+    if relax > 0:
+        sim.step(relax)
     sim.set_field(
         apply_half_space_wall(
             sim.z,
@@ -125,7 +125,7 @@ def run_config(
     for d in final_defects:
         net_n += d["n"]
     return {
-        "settle": settle,
+        "relax": relax,
         "delta_angle": delta_angle,
         "axis": axis,
         "born_final": born_final,
@@ -150,9 +150,9 @@ def main() -> int:
     p.add_argument("--sample-every", type=int, default=32)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument(
-        "--settles",
+        "--relax-ticks",
         default="0,128,256,512",
-        help="comma-separated settle ticks before wall",
+        help="comma-separated relaxation ticks before wall",
     )
     p.add_argument(
         "--angles",
@@ -170,10 +170,10 @@ def main() -> int:
     if args.device == "cuda" and not torch.cuda.is_available():
         args.device = "cpu"
 
-    settles = [int(x) for x in args.settles.split(",") if x.strip()]
+    relax_ticks_list = [int(x) for x in args.relax_ticks.split(",") if x.strip()]
     angles = [float(x) for x in args.angles.split(",") if x.strip()]
     axes = [x.strip() for x in args.axes.split(",") if x.strip()]
-    configs = list(itertools.product(settles, angles, axes))
+    configs = list(itertools.product(relax_ticks_list, angles, axes))
 
     cfg = MConfig.for_stencil("fcc")
     nz = ny = nx = args.size
@@ -181,14 +181,14 @@ def main() -> int:
 
     rows: list[dict[str, Any]] = []
     t0 = time.perf_counter()
-    for i, (settle, angle, axis) in enumerate(configs):
+    for i, (relax, angle, axis) in enumerate(configs):
         row = run_config(
             sim=sim,
             cfg=cfg,
             nz=nz,
             ny=ny,
             nx=nx,
-            settle=settle,
+            relax=relax,
             delta_angle=angle,
             axis=axis,
             steps=args.steps,
@@ -196,7 +196,7 @@ def main() -> int:
         )
         rows.append(row)
         print(
-            f"{i + 1}/{len(configs)} settle={settle:3d} ang={angle:.3f} {axis} "
+            f"{i + 1}/{len(configs)} relax={relax:3d} ang={angle:.3f} {axis} "
             f"born_f={int(row['born_final'])} ever={int(row['born_ever'])} "
             f"b_f={row['b_final_survey']} b_max={row['b_max']} net_n={row['net_n_final']:+.0f} "
             f"@t{row['first_born_t']}",
@@ -228,7 +228,7 @@ def main() -> int:
     print("\n=== TOP (born_final, ever, b_final, |net_n|, b_max) ===", flush=True)
     for r in ranked[: args.top]:
         print(
-            f"  settle={r['settle']:3d} ang={r['delta_angle']:.3f} axis={r['axis']} "
+            f"  relax={r['relax']:3d} ang={r['delta_angle']:.3f} axis={r['axis']} "
             f"born_f={int(r['born_final'])} b_f={r['b_final_survey']} b_max={r['b_max']} "
             f"net_n={r['net_n_final']:+.0f} min_pair={r['min_pair_dist']} "
             f"contrast={r['contrast_final']}",

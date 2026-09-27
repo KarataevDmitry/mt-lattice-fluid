@@ -52,7 +52,7 @@ def check_instrument_panel_2p1(size: int = 64, device: str = "cpu") -> dict:
         device=device,
         embedding=LatticeDimension.SLICE_2P1,
     )
-    lab.settle(32)
+    lab.relax(32)
     lab.step(32)
     panel = lab.panel()
     site = panel["site"]

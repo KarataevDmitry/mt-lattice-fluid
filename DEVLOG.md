@@ -2,7 +2,7 @@
 
 **Не SSOT физики.** Хронология сессий, статус реализации, открытые задачи, снимки верификации.
 
-SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) · протокол: [`BUILD.md`](BUILD.md)
+SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) · протокол: [`BUILD.md`](BUILD.md) · глоссарий: [`GLOSSARY.ru.md`](GLOSSARY.ru.md)
 
 ---
 
@@ -29,13 +29,13 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 **Stack:** scenario → lattice → lab (instruments always `sim.cfg`; T-panel `plane_mconfig` on gate plane).
 
 
-**Критерий готовности:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после settle; макроописание gate-plane `plane_mconfig`.
+**Критерий готовности:** дефолт симов — **FCC 3+1** через `mt_ca/app` (`scenario.py`, `grid.run_spec_cube`, `open_simulator`); hex только `*_hex_slice`. Floor0 probes (`runner`, `si_floor0_rows`, `boil_ocean_periodicity`) на `floor0_planckon` / `habitat_boil`; anchor после релаксации; макроописание gate-plane `plane_mconfig`.
 
 **Verify:** `Brick_internal_spectrum`, `Floor0_phase_space`, `Floor0_nE_excitation` PASS on FCC 32³ (CPU).
 
 ## 2026-09-26 · §5.0.4-A · n_E≥1 kick-harness (floor 0)
 
-**Критерий готовности:** `run_floor0_nE_excitation_harness` — planckon on `VACUUM_BOIL`, settle 64, track 32; ledger `projected_phi_int` at core hits `n_E≥1` under free `g` (settled snapshot stays `n_E=0`).
+**Критерий готовности:** `run_floor0_nE_excitation_harness` — planckon on `VACUUM_BOIL`, релаксация 64, track 32; ledger `projected_phi_int` at core hits `n_E≥1` under free `g` (relaxed snapshot stays `n_E=0`).
 
 **Verify:** `Floor0_nE_excitation` PASS · probe `tools/floor0_catalog_probe.py --excitation`.
 
@@ -111,7 +111,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | «догнали ли код?» | — | **DEVLOG** | — | BUILD |
 | «что видит мозг?» | — | — | META | — |
 
-**Правило:** provenance, ✅/⚠️, open leaves, GPU DoD, даты сессий — **только DEVLOG**. MODEL не датирует разработку.
+**Правило:** provenance, ✅/⚠️, open UoW, GPU DoD, даты сессий — **только DEVLOG**. MODEL не датирует разработку.
 
 
 ---
@@ -154,29 +154,29 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | ограничение | MODEL | gap | verify | следующий шаг |
 |-------------|-------|-----|--------|---------------|
 | **`hL=l_P`**, **`B_hV`**, **`N_ring=512`** | §0 · §3.12.6 | — | **`HvBitBudget`** PASS | — |
-| **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | — | **`FCC_N12`** PASS (пол ON) | true Bravais parity leaf open |
+| **тайл / ε:** **FCC N₁₂** default sim · гекс=срез (2+1) · n4 archive | §1.3 · §1.6.1 | — | **`FCC_N12`** PASS (пол ON) | true Bravais parity UoW open |
 | **лестница ФТТ:** `G`, BZ, умклапп, `N_pack`, `b_atom` | §5.2.4 | model | — | quanta + probe |
 | leapfrog **`2Z+⌊𝒩⌋`**, **`Φ(K_P,ζ,ρ)`**, **`R(Φ)=ω^Φ`** | §3.12.5 | sim | **`Leapfrog`** · **`DiscreteRotExp`** PASS | ledger-neutral kick distribution |
 | **`s₀→p₀,L₀,E₀`**, **`κ_link`** (`¼` MVP / `⅙` hex / `1/12` FCC) | §5.2 · §1.4 · §1.6 | — | **`MechanicalQuantum`** · **`QuarterQuantum`** PASS | FCC/hex row |
 | **`div j`**, **`ΣΔπ mod p₀`**, **`L_z`**, **`n_E` ledger** | §5.2.1–§5.2.3 | sim | **`LadderLedger`** PASS (proxy) | полный star closure на step |
 | **`b` из n_partial, не amp²** | §5.0 · §5.2.3 | sim | **MatterOccupancyB** PASS | T occupancy — open |
-| **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / stencil / Aρη | EW+GR+CKM скелет ✅ | census · IR · stencil · Aρη |
+| **4 силы** · v · α_s · Weinberg · α(MZ) · m_W,m_Z · **G_μν=8πℓ_P²T** · **CKM λ=3/13** | §8.4.1–§8.4.4 | census / IR / угловой шаблон / Aρη | EW+GR+CKM скелет ✅ | census · IR · θ_f · Aρη |
 | **Higgs = T-пена** | §5.0.1 · §8.3.1 | T | — | bare `v/2`; +`N_hier·α_fs/(4π)` → ~125.31 GeV; FCC-tail open; width open |
 
-**Приоритет отставание симуляции:** A9 absolute ν_CA plateau · FCC bulk CR · Young/tunnel/census leaves.
+**Приоритет отставание симуляции:** A9 absolute ν_CA plateau · FCC bulk CR · Young/tunnel/census UoW.
 
 **Цикл:** (1) строка реестра → (2) есть в MODEL? иначе **пробел в MODEL** → (3) режет **`g`**? impl отстаёт → **отставание симуляции** → (4) T-only → **`validate_mt`** → (5) несовместимость → правим MODEL/ansatz, не порог verify.
 
 ---
 
-## §3. Open leaves (индекс)
+## §3. Open UoW (индекс)
 
 - **§3.9 DA:** long-run exact `n` conservation on contour (макроописание T шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
 - **§3.10 SU(2):** full SM electron-from-`hV` sim (algebra `m_e=α²·m_H/N_φ` ✅ · `Electron_mass`; sim census still open)
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
-- **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim leaf
+- **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim UoW
 - **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅ (`Brick_internal_spectrum`); **n_E≥1 excitation sim** + полный каталог состояний — open
 - **Глоссарий:** `model/00-glossary.md` — планкон / **планковская дырка** ($b=0$, аналогия дырочной проводимости) / планковская ячейка / вакуум; sweep MODEL+book (`scripts/apply_planckon_glossary.py`)
 - **§5.0.4-B:** внешние оболочки ε / отбор — open (этаж 1)
@@ -185,9 +185,9 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open
 - **§3.8 / §1.4 hex:** 2D кандидат; мост `κ=√3/2`; impl MVP ещё `N₄`
 - **§4.1.2 ν_CA:** fit **`ν_eff`** vs algebraic **`ν_CA`** — T6
-- **§4.1.0 FCC/hex Green:** depth-2 path-Green algebra ✅ (`mt_ca/t_analysis.py`); R-fold accumulation / soft sim leaf open
+- **§4.1.0 FCC/hex Green:** depth-2 path-Green algebra ✅ (`mt_ca/t_analysis.py`); R-fold accumulation / soft sim UoW open
 - **§4.1.1-HL hydro:** Thm **T-HL** algebra ✅ (`T_hydro_limit`: `M=(4/3)I`, `Ŵ=1−(2/3)|k|²`, `κ=1/12` → NLSE+ν / NS-class); live FCC R-fold + `ω_macro` fit open
-- **§4.9 Young:** GPU leaf barrier + detector screen + slit — open
+- **§4.9 Young:** GPU UoW barrier + detector screen + slit — open
 - **§4.10 tunnel:** slab barrier $N$ · $|\mathcal{A}|\sim\tau^N$ · WKB continuum — open DoD
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** заполнение на T on T — open
@@ -197,8 +197,8 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
 - **§5.3.2 v_s:** численный `v_s` on макроописание T — open
 - **§5.3.3 VdW:** T compression / occupancy — open
-- **§8.4.1–§8.4.4:** α_s runner ✅ · girth ✅ · GR+Эйнштейн ✅ · Weinberg+α+массы ✅ · **CKM $N_{gen}=d$, $\lambda=3/13$** ✅ · stencil/GW/Λ / census / IR / Aρη — open
-- **§8 Higgs:** **`m_H` algebra** ✅ · width / lineshape leaf open
+- **§8.4.1–§8.4.4:** α_s runner ✅ · girth ✅ · GR+Эйнштейн ✅ · Weinberg+α+массы ✅ · **CKM $N_{gen}=d$, $\lambda=3/13$** ✅ · угловой шаблон / GW / Λ / census / IR / Aρη — open
+- **§8 Higgs:** **`m_H` algebra** ✅ · width / lineshape UoW open
 - **§8.2·vac:** A5 bath **`ρ_E(z_min)`**, **`T_M,bath`** order ✅ · Bose **`u(ω)`**, **`ω(k)`** DOS — open
 
 ---
@@ -256,7 +256,7 @@ z' = z · exp(iφ)
 | winding **`n`** | ✅ **`A10` PASS** HF ON · `winding_robust` |
 | holomorphy sync float | float `holomorphy_sync_step` — T/legacy; **не** в projected `g` |
 
-**Verify A9:** `PLANE_WAVE` · HF ON · burn-in 32 + settle 32 · stationarity на gate-only. Absolute ν_CA ceiling — open.
+**Verify A9:** `PLANE_WAVE` · HF ON · burn-in 32 + релаксация 32 · stationarity на gate-only. Absolute ν_CA ceiling — open.
 
 **Dogfood:** CR+sync как extra Φ → fill; без них + Heisenberg-класс вакуум → vacuum/vortex устойчивы, `n` живёт.
 
@@ -321,7 +321,7 @@ z' = z · exp(iφ)
 | §4.1.2 **`ν_CA`** | ✅ algebraic · verify **`Nu_CA`** · **`T3_macro_viscosity`** · fit **`ν_eff`** open |
 | §4.1.0 **(1-2-1) derive** | ✅ из A1: глубина 2 = return-paths; `⊗` только product-срез; FCC Green — open |
 | §4.3 Madelung continuity | ✅ **T** · **`T_MadelungContinuity`** (диагностика; не M hard) |
-| §4.9 Young | ✅ онтология · GPU slit leaf open · partial T2, A11 |
+| §4.9 Young | ✅ онтология · GPU slit UoW open · partial T2, A11 |
 | §4.2 validate | **`validate_mt.py`** T1/T2/T3/T_dispersion · T2 aligned §4.9 (vortex soliton · dual Gaussian · 1-2-1 fringes OK) |
 
 ### §5 Matter · quantization · gas
@@ -377,7 +377,7 @@ z' = z · exp(iφ)
 | 2026-09-22 | §8.4.2-C′′′ | $D_\star$ BC · **не сшивка**: $|h_{\mathrm{near}}/h_{\mathrm{Newton}}|\sim 2\times 10^{3}$ · dual $\rho_{\mathrm{vac}}$ hinge |
 | 2026-09-22 | SatBC sim | `strain_metric` · verify `SatBC_Cppp` PASS · near/N=2047.5 · far $h=0$ · vortex 32t: $h(R)$ flat ≠$1/R$ |
 | 2026-09-23 | FCC+HF | объёмная FCC (12 соседей) с полом: vacuum/impulse/wave/vortex multi-tick ✅ · verify HF ON |
-| 2026-09-22 | FCC N₁₂ | default stencil cuboctahedral · κ=1/12 · `FCC_N12` multi-tick **HF ON** PASS |
+| 2026-09-22 | FCC N₁₂ | шаблон соседства cuboctahedral по умолчанию · κ=1/12 · `FCC_N12` multi-tick **HF ON** PASS |
 | 2026-09-23 | IC+HF | вакуум = N_φ класс, не RNG; HF snap-down; CR≠второй Φ |
 | 2026-09-23 | §3.9/§3.12.5 | sim: extra CR/sync в Φ качал amp; gate=ζ only → A9/A10 HF ON |
 | 2026-09-23 | §4.3 · §5.2 | гладкая непрерывность → **T**; M = A3 + discrete ledgers; **`T_MadelungContinuity`** |

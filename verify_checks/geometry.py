@@ -425,7 +425,7 @@ def check_planckon_instrument_fcc(size: int = 48, steps: int = 128, device: str 
     row = planckon_lab_report(
         "floor0_planckon",
         edge=size,
-        settle=0,
+        relax=0,
         steps=steps,
         device=device,
     )
@@ -465,7 +465,7 @@ def check_model_purity() -> dict:
         (re.compile(r"\*\*Fix:\*\*"), "**Fix:**"),
         (re.compile(r"\bburn-in\b", re.I), "burn-in"),
         (re.compile(r"\bbit-exact\b", re.I), "bit-exact"),
-        (re.compile(r"\| leaf \|"), "leaf column"),
+        (re.compile(r"\| leaf \|"), "leaf column (use UoW)"),
         (re.compile(r"\*\*Не путать"), "**Не путать"),
         (re.compile(r"\(impl"), "(impl"),
         (re.compile(r"impl v\d", re.I), "impl version"),
@@ -478,7 +478,7 @@ def check_model_purity() -> dict:
         (re.compile(r"\bPASS\b"), "PASS"),
         (re.compile(r"\bFAIL\b"), "FAIL"),
         (re.compile(r"\bleaf\b", re.I), "leaf"),
-        (re.compile(r"T-leaf", re.I), "T-leaf"),
+        (re.compile(r"T-leaf", re.I), "T-leaf (use T-UoW)"),
         (re.compile(r"\*\*Код / verify:\*\*"), "Код / verify"),
         (re.compile(r"Sim \(live"), "Sim (live"),
         (re.compile(r"❌"), "❌"),

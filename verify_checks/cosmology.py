@@ -44,7 +44,7 @@ def check_ism_screen_v0_sim(size: int = 32, device: str = "cpu") -> dict:
         sim,
         cfg,
         nz=nz,
-        settle=128,
+        relax=128,
         delta_angle=0.125,
         axis="x",
         block=block,
@@ -62,7 +62,7 @@ def check_ism_screen_v0_sim(size: int = 32, device: str = "cpu") -> dict:
         block=block,
     )
     row["dims"] = f"{nz}^3"
-    row["settle"] = cal["settle"]
+    row["relax"] = cal["relax"]
     row["delta_angle"] = cal["delta_angle"]
     row["measured_max_rel"] = cal["max_rel"]
     row["N_CMB_sci"] = bubble["N_CMB_sci"]

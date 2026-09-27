@@ -153,7 +153,7 @@ $\mathcal{O}^t=\mathcal{O}(z^t,\ldots)$ из instruments. **Период:** ми
 
 ### D · модa $k$ (линейная часть P0)
 
-$\lambda_{\mathrm{st}}(k)=\sum_{\delta\in N_{12}} e^{2\pi i k\cdot\delta/L}$ — **symbolica**, `stencil_symbol.py` (**не** $T$).
+$\lambda_{\mathrm{st}}(k)=\sum_{\delta\in N_{12}} e^{2\pi i k\cdot\delta/L}$ — **символика суммы по $N_{12}$** (численная проверка, **не** $T$).
 
 $\mu_k$ — один тик **полной** $g$ на фоне (FD/Jacobian). **$T_D$** только если $|\mu_k|\approx 1$ ($\mu_k^{T_D}\approx 1$). **Dogfood:** $|\mu_k|\gg 1$ → **$T_D$ из v1 не определён**.
 
@@ -193,7 +193,7 @@ $$
 
 Probe: `tools/boil_functional_period.py` (`--ca-state` для полного поля). Старый autocorr/FFT: `tools/boil_ocean_periodicity.py` (не путать «period» с $r(1)\approx1$). В конце прогона — блок **`=== ЧИТАТЬ ТАК ===`** (явные «НЕТ», не пустота).
 
-**Линearization (v1 · FD):** `tools/boil_linear_spectrum.py` — на фоне post-settle, возмущение Fourier-моды на $z_{\mathrm{curr}}$, один тик $g$, оценка $\lambda_k$; рядом `shift_mse` contrast на ring $T\in\{21,41,82,\ldots\}$.
+**Линearization (v1 · FD):** `tools/boil_linear_spectrum.py` — на фоне после релаксации, возмущение Fourier-моды на $z_{\mathrm{curr}}$, один тик $g$, оценка $\lambda_k$; рядом `shift_mse` contrast на ring $T\in\{21,41,82,\ldots\}$.
 
 **Три строки итога (контрольный расчёт · `habitat_boil` 16³, релаксация 64 — числа пересчитываются probe):**
 
@@ -211,9 +211,9 @@ Probe печатает те же три строки в **`=== ЧИТАТЬ ТА
 
 ## Открыто (явно)
 
-| leaf | статус |
+| UoW | статус |
 |------|--------|
-| **$n_E\ge 1$ в свободной эволюции** | post-settle ledger track на ядре планкона — verify **`Floor0_nE_excitation`** (snapshot после settle остаётся $n_E=0$) |
+| **$n_E\ge 1$ в свободной эволюции** | после релаксации ledger track на ядре планкона — verify **`Floor0_nE_excitation`** (snapshot после релаксации остаётся $n_E=0$) |
 | **полный список внутренних состояний** | $\Gamma_{hV}$: оси $(q,p)$ + ground fixed point; полная таблица и возбуждённые ветки — нет |
 | **правила отбора** между внутренними уровнями | схема §5.0.4, не sim |
 | **внешние моды ε** (1-я NN-сфера) | §5.0.4-B / этаж 1 |

@@ -8,7 +8,10 @@ from __future__ import annotations
 
 from enum import Enum
 
-from mt_ca.app.stencil import CANON_STENCIL, SLICE_STENCIL
+from mt_ca.app.neighbor_template import (
+    CANON_NEIGHBOR_TEMPLATE,
+    SLICE_NEIGHBOR_TEMPLATE,
+)
 
 
 class LatticeDimension(str, Enum):
@@ -21,16 +24,27 @@ class LatticeDimension(str, Enum):
     """Hex torus (ny, nx) — lower-dimensional embedding of the same local g."""
 
 
-def stencil_for_dimension(dim: LatticeDimension) -> str:
-    return CANON_STENCIL if dim is LatticeDimension.VOLUME_3P1 else SLICE_STENCIL
+def neighbor_template_for_dimension(dim: LatticeDimension) -> str:
+    return (
+        CANON_NEIGHBOR_TEMPLATE
+        if dim is LatticeDimension.VOLUME_3P1
+        else SLICE_NEIGHBOR_TEMPLATE
+    )
 
 
-def dimension_for_stencil(stencil: str) -> LatticeDimension:
-    if stencil == CANON_STENCIL:
+def dimension_for_neighbor_template(neighbor_template: str) -> LatticeDimension:
+    if neighbor_template == CANON_NEIGHBOR_TEMPLATE:
         return LatticeDimension.VOLUME_3P1
-    if stencil == SLICE_STENCIL:
+    if neighbor_template == SLICE_NEIGHBOR_TEMPLATE:
         return LatticeDimension.SLICE_2P1
-    raise ValueError(f"Unknown stencil {stencil!r}")
+    raise ValueError(f"Неизвестный шаблон соседства: {neighbor_template!r}")
+
+
+# Совместимость
+neighbor_scheme_for_dimension = neighbor_template_for_dimension
+dimension_for_neighbor_scheme = dimension_for_neighbor_template
+stencil_for_dimension = neighbor_template_for_dimension
+dimension_for_stencil = dimension_for_neighbor_template
 
 
 def nz_for_dimension(dim: LatticeDimension, edge: int) -> int | None:

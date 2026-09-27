@@ -292,7 +292,7 @@ def fcc_bridge_row() -> dict[str, float]:
         "phase_saturation": PHASE_SATURATION,
         "planck_hole_phase_residue": PLANCK_HOLE_PHASE_RESIDUE,
         "alpha_fs_inv": 1.0 / alpha_from_fundamentals(),
-        "note": "asymptotic FCC graph-ball κ — open leaf",
+        "note": "asymptotic FCC graph-ball κ — open UoW",
     }
 
 
@@ -1107,42 +1107,50 @@ def compton_scattering_shift(mass_kg: float, theta_rad: float) -> float:
     return compton_wavelength(mass_kg) * (1.0 - math.cos(theta_rad))
 
 
+def system_delta_t_sys(mass_kg: float) -> float:
+    """Δt_sys = λ̄_C / c₀ (MODEL §4.8 fractal tick)."""
+    return reduced_compton_wavelength(mass_kg) / SI.c0
 
+
+def bekenstein_i_max_bits(mass_kg: float, radius_m: float) -> float:
+    """I_max = 2π Mc²R/(ℏ ln 2) — holographic [bit/кадр] (§4.8)."""
+    return 2.0 * math.pi * mass_kg * C**2 * radius_m / (HBAR * LN2)
+
+
+def tau_frame_seconds(mass_kg: float, radius_m: float) -> float:
+    """τ_frame = I_max·Δt_sys = 2π R c/(c₀ ln 2); M cancels (§4.8)."""
+    return bekenstein_i_max_bits(mass_kg, radius_m) * system_delta_t_sys(mass_kg)
 
 
 def system_quanta(
 
     mass_kg: float,
 
-    tau_frame_s: float,
-
     *,
 
-    radius_m: float | None = None,
+    radius_m: float,
+
+    tau_frame_s: float | None = None,
 
 ) -> SystemQuanta:
 
-    """Compute Δx, Δt, N_frame for a coherent macro system (§4.7.5)."""
+    """Coherent macro-node (M,R): Δx, Δt, I_max, τ_frame, N_frame (§4.8)."""
 
     dx = reduced_compton_wavelength(mass_kg)
 
-    dt = dx / SI.c0
+    dt = system_delta_t_sys(mass_kg)
 
-    n_frame = tau_frame_s / dt
+    i_max = bekenstein_i_max_bits(mass_kg, radius_m)
 
-    i_max = None
+    tau = tau_frame_s if tau_frame_s is not None else tau_frame_seconds(mass_kg, radius_m)
 
-    if radius_m is not None:
-
-        e = mass_kg * C**2
-
-        i_max = 2.0 * math.pi * e * radius_m / (HBAR * LN2)
+    n_frame = tau / dt
 
     return SystemQuanta(
 
         mass_kg=mass_kg,
 
-        tau_frame_s=tau_frame_s,
+        tau_frame_s=tau,
 
         radius_m=radius_m,
 

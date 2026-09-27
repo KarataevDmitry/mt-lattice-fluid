@@ -421,7 +421,7 @@ class SISmRows:
             "hij_from_eps": 1.0,  # h_ij ← ε_e ê_i ê_j
             "note": (
                 "§8.4.2-C′: ε_e[δρ]→ℓ_e→θ_f→δ_e; "
-                "h_0i[Δφ_e]; h_ij[ε_e]; not ε∝Δφ; stencil soft"
+                "h_0i[Δφ_e]; h_ij[ε_e]; not ε∝Δφ; мягкая сим-проверка"
             ),
         }
 

@@ -112,35 +112,35 @@ class SIFloor0Rows:
         self,
         *,
         size: int = 32,
-        settle: int = 32,
+        relax: int = 32,
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
         """§5.0.4-A — discrete phase space Γ_hV (delegates to ``mt_ca.app.runner``)."""
         from mt_ca.app.runner import run_floor0_phase_space
 
-        return run_floor0_phase_space(size=size, settle=settle, track=track, device=device)
+        return run_floor0_phase_space(size=size, relax=relax, track=track, device=device)
 
     def floor0_nE_excitation_row(
         self,
         *,
         size: int = 32,
-        settle: int = 32,
+        relax: int = 32,
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list | dict | None]:
-        """§5.0.4-A — n_E≥1 at planckon core via post-settle ledger track (kick-harness)."""
+        """§5.0.4-A — n_E≥1 at planckon core via после релаксации ledger track (kick-harness)."""
         from mt_ca.app.runner import run_floor0_nE_excitation_harness
 
         return run_floor0_nE_excitation_harness(
-            size=size, settle=settle, track=track, device=device
+            size=size, relax=relax, track=track, device=device
         )
 
     def brick_internal_spectrum_row(
         self,
         *,
         size: int = 32,
-        settle: int = 32,
+        relax: int = 32,
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
@@ -209,7 +209,7 @@ class SIFloor0Rows:
         spec = build_run_spec("floor0_planckon", size, device=str(dev), steps=0)
         sim = open_lattice(spec)
         cfg = sim.cfg
-        for _ in range(settle):
+        for _ in range(relax):
             sim.step(1)
 
         site = default_anchor(sim.z)
@@ -304,7 +304,7 @@ class SIFloor0Rows:
             "checks_ok": algebra_ok and ground_ok and su2_ok,
             "derivation_closed": False,
             "note": (
-                "§5.0.4-A: algebra + planckon on boiling ocean; SU(2) 2π/4π at settle. "
+                "§5.0.4-A: algebra + planckon on boiling ocean; SU(2) 2π/4π after relaxation. "
                 "n_E≥1 in dynamics — verify Floor0_nE_excitation."
             ),
         }
