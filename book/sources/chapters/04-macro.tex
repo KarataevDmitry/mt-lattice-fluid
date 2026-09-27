@@ -103,6 +103,41 @@ Separable накопление $W^{\otimes 2R}$ переносит одноме�
 направлениях осреднения.
 \end{proof}
 
+\section{Теорема T-CL: аналитический классический предел}
+\label{sec:t-cl}
+
+\begin{theorem}[T-CL]
+\label{thm:t-cl}
+На слое~$\Tlayer$ при фиксированных $\caStepSpace$, $\htick$ на~$\Mlayer$
+«классика'' --- предел по масштабу наблюдателя, не по $\caStepSpace\to 0$.
+Пусть $R$ --- радиус осреднения (\cref{def:soft-readout}),
+$\sigma_R^2=R/2$ на product-срезе,
+$\lambda$ --- длина волны наблюдаемой моды,
+\[
+  \varepsilon=\frac{\sigma_R\caStepSpace}{\lambda},\qquad
+  \chi=\Bigl(\frac{\caStepSpace}{\lambda}\Bigr)^2.
+\]
+При $\varepsilon\ll 1$, $\chi\ll 1$ и посылках \cref{thm:t-cr} и гидропредела
+(изотропный depth-2 Green на FCC, \S4.1.1-HL в модели):
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{Спектр.} $|\widehat W_R(k)-G_R(k)|/G_R(k)=O(\varepsilon^4)$ при $k\sim 2\pi\caStepSpace/\lambda$.
+\item \textbf{Лапласиан.} $(K^{*R}-I)\Phi=\tfrac{2R}{3}\caStepSpace^2\nabla^2\Phi+O(\varepsilon^4|\Phi|)$ в IR.
+\item \textbf{Динамика.} Эффективное уравнение NLSE/GL с вязкостью $\nu$ и остатком $O(\varepsilon^4)$
+  (разложение gate на медленном $\Phi$, \cref{sec:gl-free-energy}).
+\item \textbf{Гидро.} Madelung-разложение даёт continuity+Euler/NS;
+  квантовое давление Бома $Q_{\mathrm{Bohm}}=O(\chi)$ на гладких модах;
+  при доминировании инерции и $\nu\nabla^2\mathbf v$ над $Q_{\mathrm{Bohm}}$ ---
+  классическая гидродинамика.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Про $\caStepSpace\to\infty$ и $t_P\to\infty$]
+Увеличение $\caStepSpace$ при фиксированном метре эквивалентно $\varepsilon,\chi\to 0$
+(больше ячеек на длину волны), а не деформации планковской ячейки на~$\Mlayer$.
+Один лишь рост $t_P$ при фиксированном $\caStepSpace$ разрывает связку $c_0=\caStepSpace/\htick$
+(\cref{ch:carrier}); временная «классика'' --- это много тактов~$g$ на один макро-такт прибора.
+\end{remark}
+
 \section{Свободная энергия Ginzburg--Landau}
 \label{sec:gl-free-energy}
 
