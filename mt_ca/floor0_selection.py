@@ -9,7 +9,7 @@ from mt_ca.si_constants import elementary_quanta_row, hv_bit_budget
 
 @dataclass(frozen=True)
 class Floor0SelectionSchema:
-    """M-level selection rules between internal n_E classes (one v_p, topology fixed)."""
+    """M-level selection rules between internal n_E classes (one V_P, topology fixed)."""
 
     n_ring: int
     delta_phi_disc: int

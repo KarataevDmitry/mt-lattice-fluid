@@ -11,8 +11,8 @@ from mt_ca.topology import winding_nearest_int, winding_robust
 from mt_ca.t_validation import macro_mass
 
 
-def electron_v_p_anchor(*, m_e: float | None = None) -> dict[str, float]:
-    """Compare CODATA m_e to m_P·α²·f_geometry — external T anchor, not fitted."""
+def electron_planck_cell_anchor(*, m_e: float | None = None) -> dict[str, float]:
+    """Compare CODATA m_e to m_P·α²·f_geometry — one V_P planckon (§4), not fitted."""
     m_e = m_e if m_e is not None else SI.m_e_CODATA
     f = lepton_geometry_factor(m_e)
     predicted = SI.m_P * SI.alpha_fs**2 * f

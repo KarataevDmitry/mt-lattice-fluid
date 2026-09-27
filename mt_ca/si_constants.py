@@ -136,7 +136,7 @@ def m_tick_count_to_str(n_ticks: int) -> str:
 
 class HvBitBudget:
 
-    """§3.12.6 — information budget of one Planck brick hV (no free parameters)."""
+    """§3.12.6 — information budget of one planck cell V_P (no free parameters)."""
 
 
 
@@ -202,7 +202,7 @@ def hv_bit_budget(*, delta_phi_min: float = DELTA_PHI_MIN) -> HvBitBudget:
 
 
 def bekenshtein_fractional_part() -> float:
-    """{B_hV} = B_hV − ⌊B_hV⌋ — unused Bekenstein fraction of one hV brick (§3.12.6)."""
+    """{B_V} = B_V − ⌊B_V⌋ — unused Bekenstein fraction of one V_P (§3.12.6); field B_hV in rows."""
     b_hv = 2.0 * math.pi / LN2
     return b_hv - math.floor(b_hv)
 
@@ -404,7 +404,7 @@ def pauli_impulse_disc(*, phase_bits: int | None = None) -> int:
 
 
 def pauli_rho_min_natural(*, rho_max: float = 1.0) -> float:
-    """Dense-component threshold: ρ_max/2 — two fermions share one v_p ceiling (§5.2.3)."""
+    """Dense-component threshold: ρ_max/2 — two fermions share one V_P ceiling (§5.2.3)."""
     return 0.5 * rho_max
 
 

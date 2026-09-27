@@ -8,7 +8,7 @@ from mt_ca.config import MConfig
 
 
 def pauli_phi(z: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """§3.10.4: parallel spinors in one v_p → K_P repulsion via extra gate phase."""
+    """§3.10.4: parallel spinors in one V_P → K_P repulsion via extra gate phase."""
     if not cfg.pauli_exclusion:
         return torch.zeros(z.shape[:-1], device=z.device, dtype=z.real.dtype)
 

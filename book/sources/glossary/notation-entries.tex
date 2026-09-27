@@ -1,4 +1,4 @@
-% Записи notation-glossary (SSOT). Код: hL, hT, hV → $a$, $\Delta t$, $v_{\mathrm{p}}$.
+% Записи notation-glossary (SSOT). Код: hL, hT → $a$, $\Delta t$; planck cell → $V_P$ ($v$ — скорость).
 % Описания — в \newcommand (не inline в description={...}: xkeyval и `}`).
 % Имена макросов: нельзя \NotationDescc0 (TeX читает как \NotationDescc+0); только \NotationDescCzero.
 % glossaries раскрывает description в преамбуле: математика через \(...\), не $...$ и не \Cref.
@@ -6,7 +6,7 @@
 \newcommand{\NotationDescMlayer}{микроуровень: решётка, локальный закон g.}
 \newcommand{\NotationDescTlayer}{макроуровень: осреднённая физика, SI, эксперимент.}
 \newcommand{\NotationDescLambda}{счётное множество узлов носителя.}
-\newcommand{\NotationDescvp}{планкон --- элементарная ячейка на M.}
+\newcommand{\NotationDescVp}{планковская ячейка: объём $V_P=\ell_P^3$ на M (не скорость $v$).}
 \newcommand{\NotationDescg}{локальный обратимый закон эволюции; конфигурация в такт t.}
 \newcommand{\NotationDesca}{элементарный шаг решётки (шаг--такт); в коде hL.}
 \newcommand{\NotationDescdt}{длительность одного такта g (шаг--такт); в коде hT.}
@@ -50,7 +50,7 @@
 \newnotationentry{symb:Mlayer}{carrier-01a}{\ensuremath{M}}{\NotationDescMlayer}{\NotationUnitDash}
 \newnotationentry{symb:Tlayer}{carrier-01b}{\ensuremath{T}}{\NotationDescTlayer}{\NotationUnitDash}
 \newnotationentry{symb:Lambda}{carrier-02}{\ensuremath{\Lambda}}{\NotationDescLambda}{\NotationUnitDash}
-\newnotationentry{symb:vp}{carrier-03}{\ensuremath{v_{\mathrm{p}}{,}\,v_p}}{\NotationDescvp}{\NotationUnitMetre}
+\newnotationentry{symb:Vp}{carrier-03}{\ensuremath{V_P}}{\NotationDescVp}{\NotationUnitMetreCubed}
 \newnotationentry{symb:g}{carrier-04}{\ensuremath{g{,}\,\Psi^t}}{\NotationDescg}{\NotationUnitDash}
 
 \newnotationsection{symb:sec-lattice}{lattice-00}{\NotationSecLatticeTitle}

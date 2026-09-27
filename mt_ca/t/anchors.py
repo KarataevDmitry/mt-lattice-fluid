@@ -2,7 +2,7 @@
 
 from mt_ca.m_to_t import (
     arg_mass_load,
-    electron_v_p_anchor,
+    electron_planck_cell_anchor,
     m_rest_macro,
     zigzag_activity,
     zigzag_mass_row,
@@ -10,7 +10,7 @@ from mt_ca.m_to_t import (
 
 __all__ = [
     "arg_mass_load",
-    "electron_v_p_anchor",
+    "electron_planck_cell_anchor",
     "m_rest_macro",
     "zigzag_activity",
     "zigzag_mass_row",

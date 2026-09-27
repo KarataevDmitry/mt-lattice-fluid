@@ -43,9 +43,9 @@ def check_compton_electron(device: str = "cpu") -> dict:
     }
 
 def check_electron_anchor(device: str = "cpu") -> dict:
-    from mt_ca.m_to_t import electron_v_p_anchor
+    from mt_ca.m_to_t import electron_planck_cell_anchor
 
-    row = electron_v_p_anchor()
+    row = electron_planck_cell_anchor()
     ok = row["rel_err"] < 1e-9
     return {"id": "M2T_e", "f_geometry": row["f_geometry"], "rel_err": row["rel_err"], "ok": ok}
 

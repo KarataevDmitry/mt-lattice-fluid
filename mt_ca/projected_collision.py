@@ -137,7 +137,7 @@ def rho2_int(u: torch.Tensor, v: torch.Tensor, *, frac_bits: int) -> torch.Tenso
 
 
 def pauli_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """§3.10.4: parallel spinors on v_p → extra Φ ticks (decode probe → ℤ)."""
+    """§3.10.4: parallel spinors on V_P → extra Φ ticks (decode probe → ℤ)."""
     if not cfg.pauli_exclusion:
         return torch.zeros(f.shape[:-1], device=f.device, dtype=torch.int64)
     from mt_ca.topology import pauli_phi
@@ -198,7 +198,7 @@ def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
     Canon: Φ from saturating holonomy ζ only. §3.9 defect Arg(⟨z⟩/z) *is* Δφ_N
     inside that gate — not a second CR/sync impulse stacked on Φ (that double-count
     pumped |Z| under leapfrog; sim: vortex stable iff CR extras off).
-    Pauli (A16) remains an extra on v_p overlap.
+    Pauli (A16) remains an extra on V_P overlap.
     """
     fb = cfg.frac_bits
     u0 = f[..., 0].to(torch.int64)

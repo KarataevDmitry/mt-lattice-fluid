@@ -1,4 +1,4 @@
-"""SIFloor0Rows — §5.0.4-A internal planckon spectrum (one v_p, floor 0)."""
+"""SIFloor0Rows — §5.0.4-A internal planckon spectrum (one V_P, floor 0)."""
 from __future__ import annotations
 
 import math
@@ -174,7 +174,7 @@ class SIFloor0Rows:
         track: int = 32,
         device: str = "cpu",
     ) -> dict[str, float | int | str | bool | list]:
-        """§5.0.4-A — internal levels on Z_N_ring + SU(2) at one v_p.
+        """§5.0.4-A — internal levels on Z_N_ring + SU(2) at one V_P.
 
         Algebra (closed): landmark ticks on phase ring N_ring=512 and n_E ladder.
         Sim habitat: VACUUM_BOIL + VORTEX_P (filled lattice, A5 boil, no void).

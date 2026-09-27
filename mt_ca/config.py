@@ -51,7 +51,7 @@ class MConfig:
     holomorphy_sync: bool = True
     sync_strength: float = sync_strength_rad()
 
-    # §3.10.4 Pauli pressure on same v_p — π impulse, κ_link·ρ_max thresholds (§5.2.3)
+    # §3.10.4 Pauli pressure on same V_P — π impulse, κ_link·ρ_max thresholds (§5.2.3)
     pauli_exclusion: bool = True
     pauli_impulse: float = pauli_impulse_rad()
     pauli_rho_min: float = pauli_rho_min_natural()
