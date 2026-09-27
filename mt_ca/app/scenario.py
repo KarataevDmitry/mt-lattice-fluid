@@ -21,6 +21,8 @@ class ScenarioSpec:
     description: str = ""
     blanket: BlanketPreset = BlanketPreset.NONE
     blanket_thickness: int = 6
+    # Verify profile: suite ids from verify_checks/suites.py (same vocabulary as --suite).
+    verify_suites: tuple[str, ...] = ("gate", "m_axioms")
 
     @property
     def habitat_label(self) -> str:
@@ -33,36 +35,42 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         seed=SeedClass.VACUUM_BOIL,
         habitat=HabitatPreset.VACUUM_BOIL,
         description="Filled boiling ocean (A5).",
+        verify_suites=("gate", "m_axioms", "carrier"),
     ),
     "habitat_frozen": ScenarioSpec(
         id="habitat_frozen",
         seed=SeedClass.VACUUM,
         habitat=HabitatPreset.VACUUM_FROZEN,
         description="Gauge-fixed frozen vacuum — control.",
+        verify_suites=("gate", "m_axioms"),
     ),
     "floor0_planckon": ScenarioSpec(
         id="floor0_planckon",
         seed=SeedClass.VORTEX_P,
         habitat=HabitatPreset.VACUUM_BOIL,
         description="Planckon vortex on boiling ocean (§5.0.4-A).",
+        verify_suites=("gate", "floor0", "instruments"),
     ),
     "birth_impulse": ScenarioSpec(
         id="birth_impulse",
         seed=SeedClass.IMPULSE,
         habitat=HabitatPreset.VACUUM_BOIL,
         description="Impulse on boil — birth candidate.",
+        verify_suites=("gate", "m_axioms", "t_macro"),
     ),
     "birth_plane_wave": ScenarioSpec(
         id="birth_plane_wave",
         seed=SeedClass.PLANE_WAVE,
         habitat=HabitatPreset.VACUUM_BOIL,
         description="Plane-wave packet on boil.",
+        verify_suites=("gate", "m_axioms", "t_macro", "m_evolution_open"),
     ),
     "filled_bath_emergence": ScenarioSpec(
         id="filled_bath_emergence",
         seed=SeedClass.VACUUM_BOIL,
         habitat=HabitatPreset.VACUUM_BOIL,
         description="Multi-arm bath emergence dogfood (§6 C3).",
+        verify_suites=("gate", "floor1", "m_axioms"),
     ),
     "ocean_ism_blanket": ScenarioSpec(
         id="ocean_ism_blanket",
@@ -71,6 +79,7 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         blanket=BlanketPreset.HOMOGENEOUS_MZW,
         blanket_thickness=6,
         description="Boil ocean + homogeneous МЗВ blanket (BLANKET.md).",
+        verify_suites=("gate", "m_axioms", "cosmology"),
     ),
 }
 

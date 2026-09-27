@@ -26,13 +26,15 @@ def _parse_embedding(raw: str) -> LatticeDimension:
 
 
 def cmd_list(_: argparse.Namespace) -> int:
-    print(f"{'scenario':26}  {'habitat':16}  {'seed':12}  description")
+    print(f"{'scenario':26}  {'habitat':16}  {'seed':12}  verify")
     print("-" * 90)
     for sid, spec in sorted(SCENARIOS.items()):
+        v = ",".join(spec.verify_suites)
         print(
-            f"{sid:26}  {spec.habitat.value:16}  {spec.seed.value:12}  {spec.description}"
+            f"{sid:26}  {spec.habitat.value:16}  {spec.seed.value:12}  {v}"
         )
     print("\nRun: --embedding 3+1 (default) | 2+1")
+    print("Verify: verify_principles.py --scenario <id>")
     return 0
 
 

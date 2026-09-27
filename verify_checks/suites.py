@@ -258,6 +258,20 @@ def get_suite(suite_id: str) -> VerifySuiteSpec:
     return VERIFY_SUITES[suite_id]
 
 
+def order_suite_ids(suite_ids: Sequence[str]) -> tuple[str, ...]:
+    """Dedupe and sort by SUITE_ORDER (for --scenario unions)."""
+    rank = {s: i for i, s in enumerate(SUITE_ORDER)}
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for sid in suite_ids:
+        get_suite(sid)
+        if sid not in seen:
+            seen.add(sid)
+            ordered.append(sid)
+    ordered.sort(key=lambda s: rank[s])
+    return tuple(ordered)
+
+
 def _check_registry() -> dict[str, Callable[..., dict]]:
     import sys
 

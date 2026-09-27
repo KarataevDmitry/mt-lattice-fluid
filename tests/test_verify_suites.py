@@ -28,3 +28,23 @@ def test_ship_excludes_evolution_open() -> None:
     assert "m_evolution_open" not in SHIP_SUITE_IDS
     assert "gate" in SHIP_SUITE_IDS
     assert "t_macro" in SHIP_SUITE_IDS
+
+
+def test_scenario_verify_suites_resolve() -> None:
+    from mt_ca.app.scenario import SCENARIOS
+    from verify_checks.suites import get_suite
+
+    for spec in SCENARIOS.values():
+        assert spec.verify_suites
+        for suite_id in spec.verify_suites:
+            get_suite(suite_id)
+
+
+def test_floor0_planckon_verify_profile() -> None:
+    from mt_ca.app.scenario_verify import verify_suite_ids_for_scenario
+
+    assert verify_suite_ids_for_scenario("floor0_planckon") == (
+        "gate",
+        "floor0",
+        "instruments",
+    )
