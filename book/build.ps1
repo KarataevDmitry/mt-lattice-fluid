@@ -1,6 +1,10 @@
 #!/usr/bin/env pwsh
-# Build book/out/main.pdf from book/sources/main.tex (XeLaTeX × 3)
-param([switch]$RenderFigures)
+# Build book/out/vol-<I|II|…>.pdf (XeLaTeX × 3). Default: Tom I (main.tex).
+param(
+    [ValidateSet('I', 'II', 'III', 'IV', 'V')]
+    [string]$Volume = 'I',
+    [switch]$RenderFigures
+)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
@@ -93,7 +97,16 @@ if ($env:Path -notlike "*$texBin*") {
 $Root = $PSScriptRoot
 $Sources = Join-Path $Root 'sources'
 $Out = Join-Path $Root 'out'
-$JobName = 'main'
+
+$VolumeMap = @{
+    I   = @{ Main = 'main.tex'; Job = 'vol-I' }
+    II  = @{ Main = 'main-vol-II.tex'; Job = 'vol-II' }
+    III = @{ Main = 'main-vol-III.tex'; Job = 'vol-III' }
+    IV  = @{ Main = 'main-vol-IV.tex'; Job = 'vol-IV' }
+    V   = @{ Main = 'main-vol-V.tex'; Job = 'vol-V' }
+}
+$MainTex = $VolumeMap[$Volume].Main
+$JobName = $VolumeMap[$Volume].Job
 
 if (-not ('FileLockInspector' -as [type])) {
     Add-Type -TypeDefinition @'
@@ -288,8 +301,9 @@ Close the viewer manually: $pdfFull
     Write-Host "PDF unlocked."
 }
 
-if (-not (Test-Path (Join-Path $Sources 'main.tex'))) {
-    throw "Missing sources/main.tex — run from book/ root"
+$mainPath = Join-Path $Sources $MainTex
+if (-not (Test-Path -LiteralPath $mainPath)) {
+    throw "Missing sources/$MainTex — run from book/ root"
 }
 
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
@@ -334,7 +348,7 @@ try {
         # aux + pdf must live in $Out; otherwise TeX reads sources/main.aux and refs stay ??.
         & $XeLaTeX -interaction=nonstopmode -halt-on-error `
             -output-directory="$Out" -aux-directory="$Out" `
-            -jobname="$JobName" main.tex
+            -jobname="$JobName" $MainTex
         if ($LASTEXITCODE -ne 0) {
             throw "xelatex failed (exit $LASTEXITCODE) on pass $pass"
         }
@@ -344,6 +358,11 @@ try {
         throw "PDF not produced: $pdf"
     }
     Write-Host "Built: $pdf"
+    if ($Volume -eq 'I') {
+        $legacy = Join-Path $Out 'main.pdf'
+        Copy-Item -LiteralPath $pdf -Destination $legacy -Force
+        Write-Host "Also: $legacy (alias for vol-I)"
+    }
 }
 finally {
     Pop-Location

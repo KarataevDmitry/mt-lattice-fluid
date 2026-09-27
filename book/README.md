@@ -1,6 +1,6 @@
-# Монография (LaTeX)
+# Серия «Кипящий океан» (LaTeX)
 
-Читаемая версия теории для человека: **не** SSOT — не `model/*.md` (SSOT физики для кода).
+Несколько томов — см. **[`SERIES.md`](SERIES.md)**. Читаемая проза: **не** SSOT (`model/` = контракт с кодом).
 
 ## Сборка
 
@@ -8,10 +8,11 @@
 
 ```powershell
 cd book
-./build.ps1
+./build.ps1              # том I → out/vol-I.pdf (+ копия main.pdf)
+./build.ps1 -Volume III  # заготовка тома III → out/vol-III.pdf
 ```
 
-PDF: `book/out/main.pdf` (XeLaTeX, Times New Roman, три прохода). Все артефакты (`main.aux`, `.log`, …) только в `book/out/` — не копируй `.aux` в `sources/` (ломает `\ref`).
+PDF: `book/out/vol-<I|II|…>.pdf` (XeLaTeX ×3). Артефакты только в `book/out/` — не копируй `.aux` в `sources/`.
 
 **Обозначения:** `glossaries-extra`, список в `sources/notation.tex`, записи в `sources/glossary/notation-entries.tex`. Записи `symb:…` в `notation-entries.tex`; в тексте и в `equation` — `\gls{symb:…}` (как в учебнике). Опционально короткие `\hl` = `\gls{symb:a}`. Код: `hL`/`hT`/`hV`. `\makenoidxglossaries`.
 
@@ -19,9 +20,12 @@ PDF: `book/out/main.pdf` (XeLaTeX, Times New Roman, три прохода). Вс
 
 ```
 book/
+  SERIES.md          # карта томов I–V
   build.ps1          # сборка sources → out
   sources/           # исходники (только .tex)
-    main.tex
+    main.tex         # том I
+    main-vol-II.tex … main-vol-V.tex
+    volumes/         # тела томов + короткий frontmatter II–V
     preamble.tex
     frontmatter.tex
     chapters/
@@ -32,7 +36,7 @@ book/
 
 Правка текста — прямо в `sources/*.tex`. Без одноразовых патч-скриптов и дампов в `book/`: справочники и черновики — вне репо или в `model/` / KB, не рядом с LaTeX.
 
-## Оглавление (sources)
+## Том I — оглавление (sources)
 
 | PDF гл. | Файл | Содержание |
 |---------|------|------------|
@@ -58,6 +62,6 @@ book/
 
 ## Граница
 
-- **Книга** (`book/sources/`) — монография для чтения.
+- **Книга** (`book/`, [`SERIES.md`](SERIES.md)) — тома для чтения.
 - **model/** — контракт с реализацией.
 - **DEVLOG.md** — impl / verify (не входят в книгу).
