@@ -138,6 +138,85 @@ $\lambda$ --- длина волны наблюдаемой моды,
 (\cref{ch:carrier}); временная «классика'' --- это много тактов~$g$ на один макро-такт прибора.
 \end{remark}
 
+\begin{definition}[Квантовое давление Бома на~$\Tlayer$]
+\label{def:bohm-pressure}
+Для плотности $\rho>0$ на макроскопическом слое положим $u=\sqrt{\rho}$.
+В координатах прибора (единицы длины --- $\caStepSpace$ на~$\Mlayer$, см.~\cref{ch:carrier})
+\[
+  Q_{\mathrm{Bohm}}(x)\;:=\;-\frac{\planckHbar^2}{2m_{\mathrm{eff}}}\,
+  \frac{\partial_x^2 u(x)}{u(x)},
+\]
+где $m_{\mathrm{eff}}$ --- эффективная масса пакета на~$\Tlayer$ из разложения gate
+(\cref{sec:gl-free-energy}); $\partial_x$ --- производная по координате прибора.
+В силовом уравнении Madelung на~$\Tlayer$ входит $-\partial_x Q_{\mathrm{Bohm}}$.
+\end{definition}
+
+\begin{lemma}[Оценка $Q_{\mathrm{Bohm}}$ на гладкой модуляции]
+\label{lem:bohm-chi}
+Пусть $\rho(x)=\rho_0\bigl(1+\eta\cos(2\pi x/\lambda)\bigr)$ с $0\le\eta<1$,
+$\lambda\gg\caStepSpace$, $\chi=(\caStepSpace/\lambda)^2$.
+Тогда при $\chi\ll 1$
+\[
+  \sup_x |Q_{\mathrm{Bohm}}(x)|
+  \;\le\;
+  \frac{\planckHbar^2}{m_{\mathrm{eff}}}\,
+  \eta\,\chi\,\pi^2\,\bigl(1+O(\eta+\chi)\bigr).
+\]
+В частности $\sup|Q_{\mathrm{Bohm}}|=O(\eta\chi)=O(\chi)$ при фиксированной амплитуде $\eta$.
+\end{lemma}
+
+\begin{proof}
+Безразмеризуем $s=x/\lambda$, $k=2\pi/\lambda$.
+Пишем $\rho/\rho_0=1+\eta\cos\theta$ с $\theta=ks$ и
+$u(s)=\sqrt{1+\eta\cos\theta}$.
+Производные по $x$: $\partial_x=k\partial_\theta$, $\partial_x^2=k^2\partial_\theta^2$.
+
+\smallskip
+\emph{Разложение по $\eta$.}
+При $|\eta|<1$ имеем $(1+\eta\cos\theta)^{1/2}
+=1+\tfrac{\eta}{2}\cos\theta-\tfrac{\eta^2}{8}\cos^2\theta+O(\eta^3)$, откуда
+\[
+  u=1+\frac{\eta}{2}\cos\theta+O(\eta^2),\qquad
+  u_\theta=-\frac{\eta}{2}\sin\theta+O(\eta^2),\qquad
+  u_{\theta\theta}=-\frac{\eta}{2}\cos\theta+O(\eta^2).
+\]
+Тогда
+\[
+  \frac{\partial_x^2 u}{u}
+  =k^2\,\frac{u_{\theta\theta}}{u}
+  =-\frac{k^2\eta}{2}\cos\theta+O(\eta^2 k^2),
+\]
+и
+\[
+  \Bigl|\frac{\partial_x^2 u}{u}\Bigr|
+  \le\frac{k^2\eta}{2}+O(\eta^2 k^2).
+\]
+Подставляя $k=2\pi/\lambda$ и $\chi=(\caStepSpace/\lambda)^2$ при $\caStepSpace=1$ в решёточных единицах,
+$k^2=4\pi^2\chi$, получаем
+$\bigl|\partial_x^2 u/u\bigr|\le 2\pi^2\eta\chi+O(\eta^2\chi)$.
+Умножение на $\planckHbar^2/(2m_{\mathrm{eff}})$ даёт заявленную границу с $O(\eta+\chi)$ в скобке.
+
+\smallskip
+\emph{Замечание о дискретной сетке.}
+На конечной решётке $\partial_x$ в~\cref{def:bohm-pressure} можно понимать как центральную разность
+шага $\caStepSpace$; при $\lambda\gg\caStepSpace$ замена $\partial_x^2\to\Delta^{(2)}_{\caStepSpace}$
+меняет правую часть на ту же ведущую $O(\eta\chi)$ с иной константой
+(ошибка дискретизации $O(\chi)$).
+\end{proof}
+
+\begin{proof}[Доказательство пункта~\emph{(iv)} теоремы~\ref{thm:t-cl}]
+Madelung-разложение комплексного $\Phi=\sqrt\rho\,e^{iS/\planckHbar}$ на~$\Tlayer$
+даёт уравнение непрерывности для $\rho$ и уравнение импульса для $v=\partial_x S/m_{\mathrm{eff}}$
+с силой $-\partial_x Q_{\mathrm{Bohm}}$ плюс градиенты давления от нелинейности gate и вязкости $\nu$
+(модель, \S4.1.1-HL).
+Для моды $\rho=\rho_0(1+\eta\cos(2\pi x/\lambda))$ с фазой, медленно меняющейся на масштабе $\lambda$,
+лемма~\ref{lem:bohm-chi} даёт $\sup|\partial_x Q_{\mathrm{Bohm}}|=O(\eta\chi/\lambda)=O(\chi/\lambda)$.
+Инерционный член $\rho(\partial_t v+v\partial_x v)$ и вязкий $\nu\rho\partial_x^2 v$ на том же масштабе
+имеют порядок, определяемый макроскопической скоростью и $\nu$; при $\chi\to 0$ и фиксированных
+$\rho_0$, $|v|$ доминирование $\nu\partial_x^2 v$ и $\rho v\partial_x v$ над $-\partial_x Q_{\mathrm{Bohm}}$
+воспроизводит классическую гидродинамику (Навье--Стокс/Euler) как ведущее описание пакета.
+\end{proof}
+
 \section{Свободная энергия Ginzburg--Landau}
 \label{sec:gl-free-energy}
 
