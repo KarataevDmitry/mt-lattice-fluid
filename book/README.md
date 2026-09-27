@@ -15,7 +15,7 @@ cd book
 
 PDF: `book/out/<construction|floors|cosmology|…>.pdf` — см. [`SERIES.md`](SERIES.md). Артефакты только в `book/out/`.
 
-**Обозначения:** `notation-macros.tex` — семантический **camelCase** → `\gls{symb:…}` через `notation-tooltips.tex` (**клик** ведёт в «Условные обозначения»). Проводка в главах — вручную (макрос вместо сырого символа). В **каждом** томе в frontmatter подключён `\input{notation.tex}` — иначе ссылки в PDF битые. Hover-тултипы не используются (только клик).
+**Обозначения:** глава «Условные обозначения» (`notation.tex`) — таблица **Обозначение · Смысл · Единица**; записи в `glossary/notation-entries*.tex` (`\newnotationentry`, поле `user1`). `notation-macros.tex` — **camelCase** → `\gls{symb:…}` (клик в ту же главу). В каждом томе в frontmatter — `\input{notation.tex}`.
 
 ## Структура каталога
 

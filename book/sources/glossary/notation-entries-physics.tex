@@ -29,133 +29,29 @@
 \newcommand{\NotationDescVecP}{вектор импульса \(\mathbf{p}\) (пространственная часть \(p^\mu\)).}
 
 \newnotationsection{symb:sec-macrophys}{macrophys-00}{\NotationSecMacroPhysicsTitle}
-\newglossaryentry{symb:nabla}{%
-  type=notation, sort={macrophys-01},
-  name={\ensuremath{\nabla}},
-  description={\NotationDescNabla}%
-}
-\newglossaryentry{symb:partialt}{%
-  type=notation, sort={macrophys-02},
-  name={\ensuremath{\partial_t}},
-  description={\NotationDescPartialT}%
-}
-\newglossaryentry{symb:Efld}{%
-  type=notation, sort={macrophys-03},
-  name={\ensuremath{\mathbf{E}}},
-  description={\NotationDescEfld}%
-}
-\newglossaryentry{symb:Bfld}{%
-  type=notation, sort={macrophys-04},
-  name={\ensuremath{\mathbf{B}}},
-  description={\NotationDescBfld}%
-}
-\newglossaryentry{symb:Jfld}{%
-  type=notation, sort={macrophys-05},
-  name={\ensuremath{\mathbf{j}}},
-  description={\NotationDescJfld}%
-}
-\newglossaryentry{symb:rhoQ}{%
-  type=notation, sort={macrophys-06},
-  name={\ensuremath{\rho}},
-  description={\NotationDescRhoQ}%
-}
-\newglossaryentry{symb:rhoM}{%
-  type=notation, sort={macrophys-07},
-  name={\ensuremath{\rho}},
-  description={\NotationDescRhoM}%
-}
-\newglossaryentry{symb:eps0}{%
-  type=notation, sort={macrophys-08},
-  name={\ensuremath{\varepsilon_0}},
-  description={\NotationDescEpsZero}%
-}
-\newglossaryentry{symb:mu0}{%
-  type=notation, sort={macrophys-09},
-  name={\ensuremath{\mu_0}},
-  description={\NotationDescMuZero}%
-}
-\newglossaryentry{symb:Vfld}{%
-  type=notation, sort={macrophys-10},
-  name={\ensuremath{\mathbf{v}}},
-  description={\NotationDescVfld}%
-}
-\newglossaryentry{symb:Rfld}{%
-  type=notation, sort={macrophys-11},
-  name={\ensuremath{\mathbf{r}}},
-  description={\NotationDescRfld}%
-}
-\newglossaryentry{symb:Ffld}{%
-  type=notation, sort={macrophys-12},
-  name={\ensuremath{\mathbf{F}}},
-  description={\NotationDescFfld}%
-}
-\newglossaryentry{symb:Pfld}{%
-  type=notation, sort={macrophys-13},
-  name={\ensuremath{p}},
-  description={\NotationDescPfld}%
-}
-\newglossaryentry{symb:Sentropy}{%
-  type=notation, sort={macrophys-14},
-  name={\ensuremath{S}},
-  description={\NotationDescSentropy}%
-}
-\newglossaryentry{symb:Ttemp}{%
-  type=notation, sort={macrophys-15},
-  name={\ensuremath{T}},
-  description={\NotationDescTtemp}%
-}
-\newglossaryentry{symb:Hham}{%
-  type=notation, sort={macrophys-16},
-  name={\ensuremath{H}},
-  description={\NotationDescHham}%
-}
-\newglossaryentry{symb:Psi}{%
-  type=notation, sort={macrophys-17},
-  name={\ensuremath{\psi}},
-  description={\NotationDescPsi}%
-}
-\newglossaryentry{symb:hbar}{%
-  type=notation, sort={macrophys-18},
-  name={\ensuremath{\hbar}},
-  description={\NotationDescHbar}%
-}
-\newglossaryentry{symb:echar}{%
-  type=notation, sort={macrophys-19},
-  name={\ensuremath{e}},
-  description={\NotationDescEcharge}%
-}
-\newglossaryentry{symb:me}{%
-  type=notation, sort={macrophys-20},
-  name={\ensuremath{m_e}},
-  description={\NotationDescMe}%
-}
-\newglossaryentry{symb:Mmass}{%
-  type=notation, sort={macrophys-21},
-  name={\ensuremath{m}},
-  description={\NotationDescMmass}%
-}
-\newglossaryentry{symb:varphi}{%
-  type=notation, sort={macrophys-22},
-  name={\ensuremath{\varphi}},
-  description={\NotationDescVarphi}%
-}
-\newglossaryentry{symb:clight}{%
-  type=notation, sort={macrophys-23},
-  name={\ensuremath{c}},
-  description={\NotationDescClight}%
-}
-\newglossaryentry{symb:kB}{%
-  type=notation, sort={macrophys-24},
-  name={\ensuremath{k_B}},
-  description={\NotationDesckB}%
-}
-\newglossaryentry{symb:Ggrav}{%
-  type=notation, sort={macrophys-25},
-  name={\ensuremath{G}},
-  description={\NotationDescGgrav}%
-}
-\newglossaryentry{symb:vecP}{%
-  type=notation, sort={macrophys-26},
-  name={\ensuremath{\mathbf{p}}},
-  description={\NotationDescVecP}%
-}
+\newnotationentry{symb:nabla}{macrophys-01}{\ensuremath{\nabla}}{\NotationDescNabla}{\ensuremath{\mathrm{м^{-1}}}}
+\newnotationentry{symb:partialt}{macrophys-02}{\ensuremath{\partial_t}}{\NotationDescPartialT}{\ensuremath{\mathrm{с^{-1}}}}
+\newnotationentry{symb:Efld}{macrophys-03}{\ensuremath{\mathbf{E}}}{\NotationDescEfld}{\NotationUnitVoltPerMetre}
+\newnotationentry{symb:Bfld}{macrophys-04}{\ensuremath{\mathbf{B}}}{\NotationDescBfld}{\NotationUnitTesla}
+\newnotationentry{symb:Jfld}{macrophys-05}{\ensuremath{\mathbf{j}}}{\NotationDescJfld}{\NotationUnitAmperePerMetreSq}
+\newnotationentry{symb:rhoQ}{macrophys-06}{\ensuremath{\rho}}{\NotationDescRhoQ}{\ensuremath{\mathrm{Кл/м^3}}}
+\newnotationentry{symb:rhoM}{macrophys-07}{\ensuremath{\rho}}{\NotationDescRhoM}{\NotationUnitKgPerMetreCubed}
+\newnotationentry{symb:eps0}{macrophys-08}{\ensuremath{\varepsilon_0}}{\NotationDescEpsZero}{\NotationUnitFaradPerMetre}
+\newnotationentry{symb:mu0}{macrophys-09}{\ensuremath{\mu_0}}{\NotationDescMuZero}{\NotationUnitHenryPerMetre}
+\newnotationentry{symb:Vfld}{macrophys-10}{\ensuremath{\mathbf{v}}}{\NotationDescVfld}{\NotationUnitMetrePerSecond}
+\newnotationentry{symb:Rfld}{macrophys-11}{\ensuremath{\mathbf{r}}}{\NotationDescRfld}{\NotationUnitMetre}
+\newnotationentry{symb:Ffld}{macrophys-12}{\ensuremath{\mathbf{F}}}{\NotationDescFfld}{\NotationUnitNewton}
+\newnotationentry{symb:Pfld}{macrophys-13}{\ensuremath{p}}{\NotationDescPfld}{\NotationUnitPascal}
+\newnotationentry{symb:Sentropy}{macrophys-14}{\ensuremath{S}}{\NotationDescSentropy}{\NotationUnitJoulePerKelvin}
+\newnotationentry{symb:Ttemp}{macrophys-15}{\ensuremath{T}}{\NotationDescTtemp}{\NotationUnitKelvin}
+\newnotationentry{symb:Hham}{macrophys-16}{\ensuremath{H}}{\NotationDescHham}{\NotationUnitJoule}
+\newnotationentry{symb:Psi}{macrophys-17}{\ensuremath{\psi}}{\NotationDescPsi}{\ensuremath{\mathrm{м^{-3/2}}}}
+\newnotationentry{symb:hbar}{macrophys-18}{\ensuremath{\hbar}}{\NotationDescHbar}{\NotationUnitJouleSecond}
+\newnotationentry{symb:echar}{macrophys-19}{\ensuremath{e}}{\NotationDescEcharge}{\NotationUnitCoulomb}
+\newnotationentry{symb:me}{macrophys-20}{\ensuremath{m_e}}{\NotationDescMe}{\NotationUnitKilogram}
+\newnotationentry{symb:Mmass}{macrophys-21}{\ensuremath{m}}{\NotationDescMmass}{\NotationUnitKilogram}
+\newnotationentry{symb:varphi}{macrophys-22}{\ensuremath{\varphi}}{\NotationDescVarphi}{\NotationUnitJoule}
+\newnotationentry{symb:clight}{macrophys-23}{\ensuremath{c}}{\NotationDescClight}{\NotationUnitMetrePerSecond}
+\newnotationentry{symb:kB}{macrophys-24}{\ensuremath{k_B}}{\NotationDesckB}{\NotationUnitJoulePerKelvin}
+\newnotationentry{symb:Ggrav}{macrophys-25}{\ensuremath{G}}{\NotationDescGgrav}{\ensuremath{\mathrm{м^3/(кг{\cdot}с^2)}}}
+\newnotationentry{symb:vecP}{macrophys-26}{\ensuremath{\mathbf{p}}}{\NotationDescVecP}{\NotationUnitKgMetrePerSecond}

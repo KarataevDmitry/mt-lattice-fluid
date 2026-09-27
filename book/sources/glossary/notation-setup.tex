@@ -1,17 +1,36 @@
 % glossaries-extra v5: стиль таблицы «Условные обозначения»
 
+\input{glossary/notation-units.tex}
+
+\newcommand{\notationentryunit}[1]{%
+  \glsiffieldexists{#1}{user1}{\glsentryfield{#1}{user1}}{\NotationUnitDash}%
+}
+
+\newcommand{\newnotationentry}[5]{%
+  \newglossaryentry{#1}{%
+    type=notation, sort={#2},
+    name={#3},
+    description={#4},
+    user1={#5}%
+  }%
+}
+
 \newglossarystyle{notationlong}{%
   \renewenvironment{theglossary}{%
     \small
-    \setlength{\tabcolsep}{6pt}%
-    \renewcommand{\arraystretch}{1.15}%
-    \begin{longtable}{@{}p{0.22\linewidth}p{0.72\linewidth}@{}}%
+    \setlength{\tabcolsep}{5pt}%
+    \renewcommand{\arraystretch}{1.12}%
+    \begin{longtable}{@{}p{0.17\linewidth}p{0.53\linewidth}p{0.24\linewidth}@{}}%
     \toprule
-    \foreignlanguage{russian}{Обозначение} & \foreignlanguage{russian}{Смысл} \\
+    \foreignlanguage{russian}{Обозначение} &
+    \foreignlanguage{russian}{Смысл} &
+    \foreignlanguage{russian}{Единица} \\
     \midrule
     \endfirsthead
     \toprule
-    \foreignlanguage{russian}{Обозначение} & \foreignlanguage{russian}{Смысл} \\
+    \foreignlanguage{russian}{Обозначение} &
+    \foreignlanguage{russian}{Смысл} &
+    \foreignlanguage{russian}{Единица} \\
     \midrule
     \endhead
     \bottomrule
@@ -24,9 +43,10 @@
   \renewcommand{\glossentry}[2]{%
     \ifglshasdesc{##1}{%
       \glstarget{##1}{\glossentryname{##1}} &
-      \glossentrydesc{##1}\glspostdescription\space ##2\tabularnewline
+      \glossentrydesc{##1}\glspostdescription\space ##2 &
+      \notationentryunit{##1}\tabularnewline
     }{%
-      \glossentryname{##1} & \tabularnewline
+      \multicolumn{3}{@{}l}{\glossentryname{##1}}\tabularnewline
     }%
   }%
   \renewcommand{\subglossentry}[3]{}%
