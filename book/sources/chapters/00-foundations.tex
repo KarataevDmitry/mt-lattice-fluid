@@ -5,13 +5,13 @@
 
 Ранний постулат «решётка существует'' снят.
 При абсолютных условиях (гл.~\ref{ch:axioms}) и геометрии носителя (гл.~\ref{ch:carrier})
-дискретность~$\Lambda$, шаг~$\hl$ и такт~$\htick$ \emph{выводятся}.
+дискретность~$\carrierLattice$, шаг~$\caStepSpace$ и такт~$\htick$ \emph{выводятся}.
 
 \begin{lemma}[Счётное пространство конфигураций]
 \label{lem:countable-config}
 При \cref{def:field-a3} пространство микросостояний
 \[
-  \mathcal{C}=\bigl\{z(x)\in\mathbb{C}^2\bigr\}_{x\in\Lambda}
+  \mathcal{C}=\bigl\{z(x)\in\mathbb{C}^2\bigr\}_{x\in\carrierLattice}
 \]
 с дискретным алфавитом на каждом узле счётно, а эволюция $g:\mathcal{C}\to\mathcal{C}$ --- биекция.
 \end{lemma}
@@ -19,33 +19,33 @@
 \begin{proof}
 На узле~$x$ состояние принимается из конечного кольца $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$;
 мощность кольца фиксируется информационным бюджетом~$B_{\hv}$ (\cref{sec:bit-budget}).
-При счётном~$\Lambda$ множество $\mathcal{C}$ есть счётное произведение конечных множеств, значит, $\mathcal{C}$ счётно.
+При счётном~$\carrierLattice$ множество $\mathcal{C}$ есть счётное произведение конечных множеств, значит, $\mathcal{C}$ счётно.
 Норма сохраняется, и у шага есть обратный:
 $g$ --- перестановка (биекция) на~$\mathcal{C}$.
 \end{proof}
 
 \begin{lemma}[FCC-носитель и элементарная шкала]
 \label{lem:fcc-scale}
-Носитель --- $\Lambda=\mathrm{FCC}$ с $|N(x)|=12$ (\cref{thm:fcc-choice}).
-Шаг~$\hl$ и такт~$\htick$ однозначно задаются однотактовым телом FCC (\cref{sec:fcc-kappa});
+Носитель --- $\carrierLattice=\mathrm{FCC}$ с $|N(x)|=12$ (\cref{thm:fcc-choice}).
+Шаг~$\caStepSpace$ и такт~$\htick$ однозначно задаются однотактовым телом FCC (\cref{sec:fcc-kappa});
 $\hv$ --- узел решётки (регистр~\cref{def:field-a3}).
 \end{lemma}
 
 \begin{proof}
-Теорема~\ref{thm:fcc-choice} фиксирует $\Lambda=\mathrm{FCC}$ и $|N|=12$.
+Теорема~\ref{thm:fcc-choice} фиксирует $\carrierLattice=\mathrm{FCC}$ и $|N|=12$.
 
 \smallskip
-\emph{Шаг~$\hl$.}
-Пусть $a=\hl$ --- ребро кубооктаэдра однотактового тела (\cref{sec:fcc-kappa}).
-Объём ячейки Вороного FCC при $a=\hl$ равен $v_{\hv}=a^3/\sqrt{2}=\hl^3/\sqrt{2}$;
+\emph{Шаг~$\caStepSpace$.}
+Пусть $a=\caStepSpace$ --- ребро кубооктаэдра однотактового тела (\cref{sec:fcc-kappa}).
+Объём ячейки Вороного FCC при $a=\caStepSpace$ равен $v_{\hv}=a^3/\sqrt{2}=\caStepSpace^3/\sqrt{2}$;
 это минимальный регистр, согласованный с плотнейшей упаковкой.
 
 \smallskip
 \emph{Шаг~$\htick$.}
-Тот же раздел задаёт $\kgeom=R_{\mathrm{in}}/R_{\mathrm{out}}=1/\sqrt{2}$ и
-$c_0=\hl/\htick$.
-После SI-моста (\cref{def:si-bridge}) $\htick=\kgeom\,t_P$ при $\ell_P:=\hl$,
-откуда $c_0=\sqrt{2}\,c$ --- согласованность тактовой и макроскопической скоростей.
+Тот же раздел задаёт $\caKappaGeom=R_{\mathrm{in}}/R_{\mathrm{out}}=1/\sqrt{2}$ и
+$\caSignalSpeed=\caStepSpace/\htick$.
+После SI-моста (\cref{def:si-bridge}) $\htick=\caKappaGeom\,t_P$ при $\ell_P:=\caStepSpace$,
+откуда $\caSignalSpeed=\sqrt{2}\,\speedC$ --- согласованность тактовой и макроскопической скоростей.
 
 \smallskip
 \emph{Ячейка~$\hv$.}
@@ -55,7 +55,7 @@ $c_0=\hl/\htick$.
 \begin{lemma}[Атомность регистра]
 \label{lem:register-atom}
 Элементарная ячейка~$\hv$ не дробится
-на под-решётку с шагом $\hl'<\hl$ без смены алфавита и закона~$g$.
+на под-решётку с шагом $\caStepSpace'<\caStepSpace$ без смены алфавита и закона~$g$.
 \end{lemma}
 
 \begin{proof}
@@ -66,7 +66,7 @@ $c_0=\hl/\htick$.
 \]
 откуда
 \[
-  s_0=\hbar/2,\qquad p_0=\frac{\hbar}{2\hl}.
+  \ladderAction=\planckHbar/2,\qquad \ladderMomentum=\frac{\planckHbar}{2\caStepSpace}.
 \]
 Топологический заряд $n\in\mathbb{Z}$ и полюс сидят на границе одной ячейки~$\hv$.
 Размазывание полюса по подузлам разнесло бы этот заряд.
@@ -76,13 +76,13 @@ $c_0=\hl/\htick$.
 
 \begin{theorem}[Дискретность и минимальная ячейка $\hv$]
 \label{thm:discreteness}
-Пусть $g$ --- допустимый локальный закон на~$M$,
+Пусть $g$ --- допустимый локальный закон на~$\layerMicro$,
 удовлетворяющий абсолютным условиям~\cref{ch:axioms} на геометрии FCC-носителя~\cref{ch:carrier}.
 Тогда:
 \begin{enumerate}[label=(\roman*)]
-\item $g$ --- дискретная динамика на~$\Lambda$;
-\item существуют счётный FCC-носитель~$\Lambda$, элементарная ячейка~$\hv$, шаг~$\hl$ и такт~$\htick$;
-\item дробление регистра «ниже~$\hl$'' меняет алфавит: под-решётка несёт другой закон.
+\item $g$ --- дискретная динамика на~$\carrierLattice$;
+\item существуют счётный FCC-носитель~$\carrierLattice$, элементарная ячейка~$\hv$, шаг~$\caStepSpace$ и такт~$\htick$;
+\item дробление регистра «ниже~$\caStepSpace$'' меняет алфавит: под-решётка несёт другой закон.
 \end{enumerate}
 \end{theorem}
 
@@ -95,17 +95,17 @@ $c_0=\hl/\htick$.
 на узле.
 Биективная эволюция~$g$ на таком пространстве не воспроизводит континуальный поток:
 у потока на~$\mathbb{R}^3$ степеней свободы больше, чем у конечного алфавита на узле.
-Следовательно, $g$ --- дискретная динамика на~$\Lambda$.
+Следовательно, $g$ --- дискретная динамика на~$\carrierLattice$.
 
 \smallskip
 \emph{(ii)}~Носитель и шкала уже выведены.
-Теорема~\ref{thm:fcc-choice} даёт $\Lambda=\mathrm{FCC}$ и $|N|=12$.
-Объём ячейки Вороного при ребре $a=\hl$ равен $v_{\hv}=\hl^3/\sqrt{2}$ (\cref{sec:fcc-kappa}).
-Отношение радиусов оболочки $\kgeom=1/\sqrt{2}$ фиксирует такт через макроскопическую скорость: $\htick=\kgeom\, t_P$ при $\ell_P:=\hl$, откуда $c_0=\sqrt{2}\,c$.
+Теорема~\ref{thm:fcc-choice} даёт $\carrierLattice=\mathrm{FCC}$ и $|N|=12$.
+Объём ячейки Вороного при ребре $a=\caStepSpace$ равен $v_{\hv}=\caStepSpace^3/\sqrt{2}$ (\cref{sec:fcc-kappa}).
+Отношение радиусов оболочки $\caKappaGeom=1/\sqrt{2}$ фиксирует такт через макроскопическую скорость: $\htick=\caKappaGeom\, t_P$ при $\ell_P:=\caStepSpace$, откуда $\caSignalSpeed=\sqrt{2}\,\speedC$.
 Узел регистра --- одна ячейка этой решётки (\cref{def:field-a3}).
 
 \smallskip
-\emph{(iii)}~Если бы подрешётка с шагом $\hl'<\hl$ несла тот же закон~$g$,
+\emph{(iii)}~Если бы подрешётка с шагом $\caStepSpace'<\caStepSpace$ несла тот же закон~$g$,
 на одном узле FCC оказалось бы несколько регистров с тем же топологическим зарядом на границе одной ячейки.
 Это запрещено \cref{lem:register-atom}: заряд и устойчивость полюса сидят на границе именно одной~$\hv$, а бюджет регистра не делится без смены алфавита.
 \end{proof}
@@ -119,7 +119,7 @@ $c_0=\hl/\htick$.
 
 \begin{corollary}[Континуум на~$M$ отсутствует]
 \label{cor:no-continuum}
-Непрерывные поля и предел $\hl\to 0$ --- свойство макроуровня~$T$
+Непрерывные поля и предел $\caStepSpace\to 0$ --- свойство макроуровня~$T$
 (гл.~\ref{sec:no-continuum-carrier}).
 \end{corollary}
 

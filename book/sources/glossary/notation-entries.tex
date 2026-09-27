@@ -12,9 +12,14 @@
 \newcommand{\NotationDescdt}{длительность одного такта g (шаг--такт); в коде hT.}
 \newcommand{\NotationDesctau}{номер такта (поколение CA); связь с t\_SI после SI-моста.}
 \newcommand{\NotationDescCzero}{тактовая скорость сигнала на M; c\_0=a/\(\Delta t\) (шаг--такт).}
-\newcommand{\NotationDescCspeed}{макроскопическая скорость света после моста M\(\to\)T (SI-мост).}
+\newcommand{\NotationDescCspeed}{макроскопическая скорость света на макроуровне (SI-мост).}
 \newcommand{\NotationDesckgeom}{безразмерный коэффициент геометрии носителя (kappa в коде).}
 \newcommand{\NotationDescdhdt}{внешние координаты dh и dt (dh=a, dt=\(\Delta t\)).}
+\newcommand{\NotationDescszero}{ступень действия на одну ячейку и один такт; порождает лестницу квантов.}
+\newcommand{\NotationDescpzero}{импульсный квант: p\_0=s\_0/dh.}
+\newcommand{\NotationDescEzero}{энергетический квант: E\_0=s\_0/dt.}
+\newcommand{\NotationDescFzero}{силовой квант: F\_0=s\_0/(dh·dt).}
+\newcommand{\NotationDescmzero}{массовый квант лестницы: m\_0=E\_0/c\_0\textasciicircum 2; SI-мост.}
 \newcommand{\NotationDescL}{длина в метрах (слой T).}
 \newcommand{\NotationDesclambda}{характерная длина на шаге шкалы (комптоновская, боровская, \ldots).}
 \newcommand{\NotationDesclambdaC}{комптоновская длина электрона.}
@@ -25,7 +30,7 @@
 \newcommand{\NotationDesctSI}{время в секундах (слой T).}
 \newcommand{\NotationDesctP}{планковское время; \(\Delta t=\kappa\,t_P\) (SI-мост).}
 \newcommand{\NotationDesclogtau}{порядок числа тактов (космология; verify: log10\_N\_today).}
-\newcommand{\NotationDescNring}{размер фазового кольца \(N_{\mathrm{ring}}\) (дискретная фаза).}
+\newcommand{\NotationDescNring}{размер фазового кольца N\_ring (дискретная фаза).}
 \newcommand{\NotationDescBhv}{информационный бюджет ячейки; связь с \(N_{\mathrm{ring}}\) (дискретная фаза).}
 \newcommand{\NotationDescphiPhi}{дискретная фаза и фазовый kick за такт.}
 \newcommand{\NotationDescNphi}{число секторов Heisenberg-кванта фазы.}
@@ -35,6 +40,7 @@
 
 \newcommand{\NotationSecCarrierTitle}{\textit{Слои и носитель}}
 \newcommand{\NotationSecLatticeTitle}{\textit{Решётка: длина и время (не путать с \(N_{\mathrm{ring}}\))}}
+\newcommand{\NotationSecLadderTitle}{\textit{Лестница квантов на \((dh,dt)\)}}
 \newcommand{\NotationSecLengthTitle}{\textit{Длина в SI и по шкале}}
 \newcommand{\NotationSecTimeTitle}{\textit{Время в SI}}
 \newcommand{\NotationSecPhaseTitle}{\textit{Фаза, регистр ячейки (логарифмы в основе 2)}}
@@ -102,6 +108,33 @@
   type=notation, sort={lattice-07},
   name={\ensuremath{(dh{,}dt)}},
   description={\NotationDescdhdt}%
+}
+
+\newnotationsection{symb:sec-ladder}{ladder-00}{\NotationSecLadderTitle}
+\newglossaryentry{symb:s0}{%
+  type=notation, sort={ladder-01},
+  name={\ensuremath{s_0}},
+  description={\NotationDescszero}%
+}
+\newglossaryentry{symb:p0}{%
+  type=notation, sort={ladder-02},
+  name={\ensuremath{p_0}},
+  description={\NotationDescpzero}%
+}
+\newglossaryentry{symb:E0}{%
+  type=notation, sort={ladder-03},
+  name={\ensuremath{E_0}},
+  description={\NotationDescEzero}%
+}
+\newglossaryentry{symb:F0}{%
+  type=notation, sort={ladder-04},
+  name={\ensuremath{F_0}},
+  description={\NotationDescFzero}%
+}
+\newglossaryentry{symb:m0}{%
+  type=notation, sort={ladder-05},
+  name={\ensuremath{m_0}},
+  description={\NotationDescmzero}%
 }
 
 \newnotationsection{symb:sec-length}{length-00}{\NotationSecLengthTitle}
@@ -196,3 +229,6 @@
   name={\ensuremath{N_{\mathrm{hier}}}},
   description={\NotationDescNhier}%
 }
+
+\input{glossary/notation-entries-physics.tex}
+\input{glossary/notation-entries-autogen.tex}

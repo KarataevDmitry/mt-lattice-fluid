@@ -55,7 +55,7 @@
 $v\sim\alpha_{\mathrm{fs}}^{8}$, $m_H\sim\alpha_{\mathrm{fs}}^{8}$,
 $m_p\sim\alpha_{\mathrm{fs}}^{1}v$, $m_e\sim\alpha_{\mathrm{fs}}^{2}m_H$,
 $m_\nu\sim\alpha_{\mathrm{fs}}^{5}m_H$.
-Длина тела массы~$M$ на том же законе: $\lambda=\hbar/(Mc)=\ell_P\,m_P/M$.
+Длина тела массы~$M$ на том же законе: $\lambda=\planckHbar/(Mc)=\ell_P\,m_P/M$.
 
 \begin{proposition}[Шаги шкалы $\lambda$ от планкона до метра]
 \label{prop:ladder-scale-steps}
@@ -119,14 +119,14 @@ $k=15$ & $\lambda\gg\sigma_R a$ --- непрерывный предел readout'
 
 \begin{definition}[Планковская идентификация]
 \label{def:si-bridge}
-$\ell_P:=a$, $\kgeom$ из однотактового тела (гл.~\ref{ch:carrier}):
+$\ell_P:=a$, $\caKappaGeom$ из однотактового тела (гл.~\ref{ch:carrier}):
 \[
-  \Delta t=\kgeom\, t_P,\quad E_0=\kgeom E_P,\quad c=\kgeom c_0.
+  \Delta t=\caKappaGeom\, t_P,\quad \ladderEnergy=\caKappaGeom E_P,\quad c=\caKappaGeom \caSignalSpeed.
 \]
 \end{definition}
 
 Планковское время $t_P=\ell_P/c$ уже содержит макроскопическую скорость~$c$;
-$\kgeom$ выводится из геометрии, после чего $c=\kgeom c_0$ --- проверка согласованности.
+$\caKappaGeom$ выводится из геометрии, после чего $c=\caKappaGeom \caSignalSpeed$ --- проверка согласованности.
 
 \begin{remark}[Размерный анализ time-first и моста \cref{def:si-bridge}]
 \label{rem:time-first-dim}
@@ -134,13 +134,13 @@ $\kgeom$ выводится из геометрии, после чего $c=\kge
 \[
   [t_P]=\mathrm{T},\qquad
   [\ell_P]=[c\,t_P]=\mathrm{L},\qquad
-  [m_P]=\left[\frac{\hbar}{c^{2}t_P}\right]=\mathrm{M}.
+  [m_P]=\left[\frac{\planckHbar}{c^{2}t_P}\right]=\mathrm{M}.
 \]
-Безразмерная $\kgeom$ даёт $[\Delta t]=\mathrm{T}$, $[c_0]=\ell_P/\Delta t=\mathrm{LT^{-1}}$,
-$[c]=\kgeom c_0=\mathrm{LT^{-1}}$.
-Лестница §5.2.2: $[s_0]=[\hbar]=\mathrm{ML^{2}T^{-1}}$,
-$[E_0]=[s_0/\htick]=\mathrm{ML^{2}T^{-2}}$,
-$[p_0]=[s_0/\ell_P]=\mathrm{MLT^{-1}}$,
+Безразмерная $\caKappaGeom$ даёт $[\Delta t]=\mathrm{T}$, $[\caSignalSpeed]=\ell_P/\Delta t=\mathrm{LT^{-1}}$,
+$[c]=\caKappaGeom \caSignalSpeed=\mathrm{LT^{-1}}$.
+Лестница §5.2.2: $[\ladderAction]=[\planckHbar]=\mathrm{ML^{2}T^{-1}}$,
+$[\ladderEnergy]=[\ladderAction/\htick]=\mathrm{ML^{2}T^{-2}}$,
+$[p_0]=[\ladderAction/\ell_P]=\mathrm{MLT^{-1}}$,
 $[F_0]=[p_0/\htick]=\mathrm{MLT^{-2}}$,
 $[u_P]=[m_P c^{2}/\ell_P^{3}]=\mathrm{ML^{-1}T^{-2}}$ (энергия/объём).
 Все производные сходятся с СИ; $\alpha_{\mathrm{fs}}$ при этом остаётся $[\alpha]=1$
@@ -153,7 +153,7 @@ $[u_P]=[m_P c^{2}/\ell_P^{3}]=\mathrm{ML^{-1}T^{-2}}$ (энергия/объём
 до закрытой формулы мягкой грани с $M=97$ --- вынесен в отдельную
 главу~\ref{ch:alpha}.
 Здесь используем итог (\cref{thm:alpha}, \cref{def:alpha-meaning}).
-Почему «тонкая структура'' в названии намекает на T-export через $e,\hbar,c$
+Почему «тонкая структура'' в названии намекает на T-export через $e,\planckHbar,c$
 и чем это отличается от M-coupling --- \cref{sec:alpha-name}.
 
 \section{Электрослабый сектор}
@@ -191,7 +191,7 @@ $N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512$.
 
 \smallskip
 \emph{Интеграл readout'а.}
-Теорема~\ref{thm:t-cr}: осреднение~$\mathcal{B}$ на масштабах $\gg\hl$
+Теорема~\ref{thm:t-cr}: осреднение~$\mathcal{B}$ на масштабах $\gg\caStepSpace$
 даёт гауссово ядро ширины~$\sigma_R$.
 Для стандартной нормали отношение пиковой плотности к интегральной амплитуде
 равно $\sqrt{2\pi}$:
@@ -208,9 +208,9 @@ $N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512$.
 \begin{proposition}[Лептоны и барионы]
 \begin{align*}
   m_H^{(\mathrm{bare})}&=v/2,\\
-  m_e&\approx \alpha_{\mathrm{fs}}^2 m_H/N_\phi,\quad N_\phi=13,\\
-  m_p&\approx \alpha_{\mathrm{fs}}\, v/2\cdot(1+\kgeom^2/N_{12}),\\
-  m_n&=m_p+2m_e\quad\text{(канал $\beta$-распада)}.
+  \massElectron&\approx \alpha_{\mathrm{fs}}^2 m_H/N_\phi,\quad N_\phi=13,\\
+  m_p&\approx \alpha_{\mathrm{fs}}\, v/2\cdot(1+\caKappaGeom^2/N_{12}),\\
+  m_n&=m_p+2\massElectron\quad\text{(канал $\beta$-распада)}.
 \end{align*}
 \end{proposition}
 

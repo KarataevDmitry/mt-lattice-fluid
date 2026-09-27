@@ -2,7 +2,7 @@
 \label{ch:floors-preface}
 
 В \cref{sec:planck-floor} мы спустились до планковского мира~$\Mlayer$:
-счётные узлы~$\Lambda$, такт~$\htick$, ячейка~$\hv=\PlanckCell$, закон~$g$.
+счётные узлы~$\carrierLattice$, такт~$\htick$, ячейка~$\hv=\PlanckCell$, закон~$g$.
 Дальше текст идёт не вниз по единицам измерения, а \emph{вверх по радиусу} ---
 на том же носителе, без новых аксиом.
 
@@ -12,15 +12,15 @@
 
 \begin{enumerate}[label=\textbf{этаж~\arabic*.},leftmargin=*]
 \item \textbf{Планковский пол} ($N\sim 1$): один планкон в одной ячейке~$\hv$.
-  Внутренний спектр --- фазовое кольцо $\mathbb{Z}_{512}$ и спинор $SU(2)$ на ядре
+  Внутренний спектр --- фазовое кольцо $\mathbb{Z}_{\phaseRingCount}$ и спинор $SU(2)$ на ядре
   (\cref{ch:floor0}).
 
-\item \textbf{Чуть выше} ($N\sim N_{12}\ldots N_{12}^{5}$): облако~$\rho_\Theta$
-  вокруг ядра, $\varepsilon$-звезда соседей, минимальный ореол $R_{\mathrm{dress}}=\hl$,
+\item \textbf{Чуть выше} ($N\sim \geomNeighborTwelve\ldots \geomNeighborTwelve^{5}$): облако~$\rho_\Theta$
+  вокруг ядра, $\varepsilon$-звезда соседей, минимальный ореол $R_{\mathrm{dress}}=\caStepSpace$,
   полоса пре-резонансов на степенях каузальной звезды
   (\cref{ch:floor1}).
 
-\item \textbf{Составной узел} ($N\sim 10^{15}\cdot\hl$): конфайнящие фокусы,
+\item \textbf{Составной узел} ($N\sim 10^{15}\cdot\caStepSpace$): конфайнящие фокусы,
   кварковая схема, квантовые числа цвета и поколения как следствия топологии,
   не как вход (\cref{ch:floor2}).
 \end{enumerate}

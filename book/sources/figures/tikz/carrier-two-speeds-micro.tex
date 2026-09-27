@@ -3,8 +3,8 @@
   \def\xlim{1.35}
   \draw[carrier muted, dashed] (0,0) -- (\xlim,\tlim);
   \draw[carrier muted, dashed] (0,0) -- (-\xlim,\tlim);
-  \draw[carrier object] (0,0) -- (\xlim,0) node[midway, below, inner sep=1pt] {$\hl$};
-  \draw[carrier object] (0,0) -- (0,\tlim) node[midway, left, inner sep=1pt] {$\htick$};
+  \draw[carrier object] (0,0) -- (\xlim,0) node[midway, below, inner sep=1pt] {$\caStepSpace$};
+  \draw[carrier object] (0,0) -- (0,\tlim) node[midway, left, inner sep=1pt] {$\caStepTime$};
   \foreach \i in {0,1,2,3} {
     \filldraw[carrier object] ({0.33*\i}, {0.33*\i}) circle (1.6pt);
   }

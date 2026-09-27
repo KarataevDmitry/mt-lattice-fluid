@@ -15,7 +15,7 @@ cd book
 
 PDF: `book/out/<construction|floors|cosmology|…>.pdf` — см. [`SERIES.md`](SERIES.md). Артефакты только в `book/out/`.
 
-**Обозначения:** `glossaries-extra`, список в `sources/notation.tex`, записи в `sources/glossary/notation-entries.tex`. Записи `symb:…` в `notation-entries.tex`; в тексте и в `equation` — `\gls{symb:…}` (как в учебнике). Опционально короткие `\hl` = `\gls{symb:a}`. Код: `hL`/`hT`/`hV`. `\makenoidxglossaries`.
+**Обозначения:** `notation-macros.tex` — семантический **camelCase** → `\gls{symb:…}` через `notation-tooltips.tex` (**клик** ведёт в «Условные обозначения»). Проводка в главах — вручную (макрос вместо сырого символа). В **каждом** томе в frontmatter подключён `\input{notation.tex}` — иначе ссылки в PDF битые. Hover-тултипы не используются (только клик).
 
 ## Структура каталога
 

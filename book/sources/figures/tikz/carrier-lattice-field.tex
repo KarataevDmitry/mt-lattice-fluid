@@ -13,8 +13,8 @@
   }
   \node[carrier site, minimum size=5pt] at (1,1) {};
   \node[anchor=south west, inner sep=2pt] at (1.1,1.12) {$x$};
-  \CarrierDimH{1}{2}{0.42}{$\hl$}
-  \node[anchor=north west, font=\footnotesize] at (-0.05,2.55) {$\Lambda$};
+  \CarrierDimH{1}{2}{0.42}{$\caStepSpace$}
+  \node[anchor=north west, font=\footnotesize] at (-0.05,2.55) {$\carrierLattice$};
 
   % --- такт: стрелка скорости c₀ в плоскости (x,t) ---
   \begin{scope}[shift={(4.0,0.2)}, x=1.05cm, y=1.05cm]
@@ -23,8 +23,8 @@
     \draw[carrier muted, -{Stealth[length=1.6mm]}] (0,0) -- (1.3,0)
       node[anchor=north, inner sep=2pt, font=\scriptsize] {$x$};
     \draw[carrier arrow, line width=0.95pt] (0,0) -- (1,1);
-    \node[anchor=south west, inner sep=1pt] at (0.48,0.62) {$c_0$};
-    \CarrierDimH{0}{1}{-0.12}{$\hl$}
-    \CarrierDimV{0}{1}{-0.12}{$\htick$}
+    \node[anchor=south west, inner sep=1pt] at (0.48,0.62) {$\caSignalSpeed$};
+    \CarrierDimH{0}{1}{-0.12}{$\caStepSpace$}
+    \CarrierDimV{0}{1}{-0.12}{$\caStepTime$}
   \end{scope}
 \end{tikzpicture}

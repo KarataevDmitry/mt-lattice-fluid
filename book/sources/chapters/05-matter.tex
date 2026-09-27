@@ -11,7 +11,7 @@
 
 \paragraph{Термин $\alpha_{\mathrm{fs}}$.}
 \textbf{Постоянная тонкой структуры} на~$\Mlayer$ --- безразмерное EM-сопряжение заряда с вакуумом
-(\cref{def:alpha-meaning}), число из дна носителя, не из $e,\hbar,c$.
+(\cref{def:alpha-meaning}), число из дна носителя, не из $e,\planckHbar,c$.
 Историческое имя из спектроскопии и lab-формула \eqref{eq:alpha-fs} --- T-export
 (\cref{rem:alpha-fs-bridge,sec:alpha-name}).
 Не путать с фазовым остатком $1/(4\pi)$ в saturating gate (\cref{lem:vacuum-phase-residue}).
@@ -34,14 +34,14 @@ $K_P=u_P$ --- планковское давление жидкости;
 \begin{theorem}[Лестница Ландау на ячейке]
 \label{thm:51}
 После \cref{thm:discreteness,thm:g-law} локальные механические величины на~$\hv$ образуют
-единственную лестницу $s_0\to p_0\to L_0\to F_0\to E_0$
+единственную лестницу $\ladderAction\to \ladderMomentum\to L_0\to \ladderForce\to \ladderEnergy$
 без трёх независимых подгоняемых параметров.
 \end{theorem}
 
 \begin{lemma}[5.1a]
 \label{lem:51a}
 \[
-  s_0=\hbar/2.
+  \ladderAction=\planckHbar/2.
 \]
 \end{lemma}
 
@@ -52,70 +52,70 @@ $K_P=u_P$ --- планковское давление жидкости;
 \]
 Ненулевой осциллирующий фон задаёт минимальное событие изменения аргумента на~$\hv$ за такт~$\htick$:
 \[
-  s_0=\hbar\,\Delta\phi_{\min}=\hbar/2.
+  \ladderAction=\planckHbar\,\Delta\phi_{\min}=\planckHbar/2.
 \]
 \end{proof}
 
 \begin{lemma}[5.1b]
 \label{lem:51b}
-Из $s_0$ и пары $(\hl,\htick)$: $p_0=s_0/\hl$, $E_0=s_0/\htick$, $m_{\arg}=E_0/c^2$,
-и потому $p_0=m_{\arg} c_0/2$.
+Из $\ladderAction$ и пары $(\caStepSpace,\htick)$: $\ladderMomentum=\ladderAction/\caStepSpace$, $\ladderEnergy=\ladderAction/\htick$, $m_{\arg}=\ladderEnergy/c^2$,
+и потому $\ladderMomentum=m_{\arg} \caSignalSpeed/2$.
 \end{lemma}
 
 \begin{proof}
-Квант действия $s_0$, отнесённый к шагу, есть импульс; тот же квант, отнесённый к такту, есть энергия:
+Квант действия $\ladderAction$, отнесённый к шагу, есть импульс; тот же квант, отнесённый к такту, есть энергия:
 \[
-  p_0=\frac{s_0}{\hl}=\frac{\hbar}{2\hl},\qquad
-  E_0=\frac{s_0}{\htick}.
+  \ladderMomentum=\frac{\ladderAction}{\caStepSpace}=\frac{\planckHbar}{2\caStepSpace},\qquad
+  \ladderEnergy=\frac{\ladderAction}{\htick}.
 \]
-Тактовая скорость $c_0=\hl/\htick$ связывает их: $E_0=p_0 c_0$.
+Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ связывает их: $\ladderEnergy=\ladderMomentum \caSignalSpeed$.
 Масса аргумента определяется через макроскопическую скорость света, уже выведенную из оболочки:
-$c=\kgeom c_0$ при $\kgeom=1/\sqrt{2}$, то есть $c^2=c_0^2/2$.
+$c=\kgeom \caSignalSpeed$ при $\kgeom=1/\sqrt{2}$, то есть $c^2=\caSignalSpeed^2/2$.
 \[
-  m_{\arg}=\frac{E_0}{c^2}=\frac{E_0}{c_0^2/2}=\frac{2E_0}{c_0^2}=\frac{2p_0}{c_0}.
+  m_{\arg}=\frac{\ladderEnergy}{c^2}=\frac{\ladderEnergy}{\caSignalSpeed^2/2}=\frac{2\ladderEnergy}{\caSignalSpeed^2}=\frac{2\ladderMomentum}{\caSignalSpeed}.
 \]
-Отсюда $p_0=m_{\arg} c_0/2$.
+Отсюда $\ladderMomentum=m_{\arg} \caSignalSpeed/2$.
 Множитель $1/2$ --- это $\kgeom^2$.
 \end{proof}
 
 \begin{lemma}[5.1c]
 \label{lem:51c}
-$L_0=p_0\hl=s_0$, $g_M=c_0/(2\htick)$, $F_0=p_0/\htick=m_{\arg} g_M$ ---
+$L_0=\ladderMomentum\caStepSpace=\ladderAction$, $g_M=\caSignalSpeed/(2\htick)$, $\ladderForce=\ladderMomentum/\htick=m_{\arg} g_M$ ---
 соотношение $F=mg$ на одной ячейке~$\hv$.
 \end{lemma}
 
 \begin{proof}
 Момент на одном шаге совпадает с действием:
 \[
-  L_0=p_0\hl=s_0.
+  L_0=\ladderMomentum\caStepSpace=\ladderAction.
 \]
-Из \cref{lem:51b} скорость, стоящая в $p_0=m_{\arg} v$, равна $v=c_0/2$.
+Из \cref{lem:51b} скорость, стоящая в $\ladderMomentum=m_{\arg} v$, равна $v=\caSignalSpeed/2$.
 Набрать её за один такт значит иметь ускорение
 \[
-  g_M=\frac{c_0/2}{\htick}=\frac{c_0}{2\htick}.
+  g_M=\frac{\caSignalSpeed/2}{\htick}=\frac{\caSignalSpeed}{2\htick}.
 \]
 Сила, меняющая импульс на один квант за один такт,
 \[
-  F_0=\frac{p_0}{\htick}.
+  \ladderForce=\frac{\ladderMomentum}{\htick}.
 \]
-Подставляем $p_0=m_{\arg} c_0/2$:
+Подставляем $\ladderMomentum=m_{\arg} \caSignalSpeed/2$:
 \[
-  m_{\arg} g_M=m_{\arg}\cdot\frac{c_0}{2\htick}=\frac{p_0}{\htick}=F_0.
+  m_{\arg} g_M=m_{\arg}\cdot\frac{\caSignalSpeed}{2\htick}=\frac{\ladderMomentum}{\htick}=\ladderForce.
 \]
-Это и есть $F=mg$ на одной ячейке: ни масса, ни ускорение не вводятся отдельно от~$s_0$.
+Это и есть $F=mg$ на одной ячейке: ни масса, ни ускорение не вводятся отдельно от~$\ladderAction$.
 \end{proof}
 
 \begin{lemma}[5.1d]
 \label{lem:51d}
-Ударный член $\lfloor\mathcal{N}\rfloor$ на~$\mathbb{Z}$ $\Rightarrow$ $\Delta p\in p_0\cdot\mathbb{Z}$;
+Ударный член $\lfloor\mathcal{N}\rfloor$ на~$\mathbb{Z}$ $\Rightarrow$ $\Delta p\in \ladderMomentum\cdot\mathbb{Z}$;
 интеграл $\int\Im(z^*\nabla z)$ --- только макроописание на~$T$.
 \end{lemma}
 
 \begin{proof}
-В замкнутом~$g$ (\cref{thm:g-law}) импульс на связи дискретен: $p_0=s_0/\hl$.
+В замкнутом~$g$ (\cref{thm:g-law}) импульс на связи дискретен: $\ladderMomentum=\ladderAction/\caStepSpace$.
 Удар $\lfloor\mathcal{N}\rfloor$ --- целое число фазовых квантов $\Delta\phi_{\mathrm{disc}}$
 на такт (\cref{sec:congruence}, CL-4), поэтому приращение импульса
-$\Delta p=p_0\cdot n$ с $n\in\mathbb{Z}$.
+$\Delta p=\ladderMomentum\cdot n$ с $n\in\mathbb{Z}$.
 
 \smallskip
 Интеграл $\int\Im(z^*\nabla z)\,\mathrm{d}^3x$ предполагает гладкое поле и меру Лебега ---
@@ -126,34 +126,34 @@ $\Delta p=p_0\cdot n$ с $n\in\mathbb{Z}$.
 
 \begin{lemma}[5.1e]
 \label{lem:51e}
-$E_0=p_0 c_0=F_0\hl=L_0/\htick$, $E=n_E E_0$, $n_E\in\mathbb{Z}$.
+$\ladderEnergy=\ladderMomentum \caSignalSpeed=\ladderForce\caStepSpace=L_0/\htick$, $E=n_E \ladderEnergy$, $n_E\in\mathbb{Z}$.
 \end{lemma}
 
 \begin{proof}
-Из \cref{lem:51b,lem:51c} и $c_0=\hl/\htick$:
+Из \cref{lem:51b,lem:51c} и $\caSignalSpeed=\caStepSpace/\htick$:
 \begin{align*}
-  E_0&=\frac{s_0}{\htick}=\frac{p_0\hl}{\htick}=p_0 c_0,\\
-  F_0\hl&=\frac{p_0}{\htick}\cdot\hl=p_0 c_0,\\
-  \frac{L_0}{\htick}&=\frac{s_0}{\htick}=E_0.
+  \ladderEnergy&=\frac{\ladderAction}{\htick}=\frac{\ladderMomentum\caStepSpace}{\htick}=\ladderMomentum \caSignalSpeed,\\
+  \ladderForce\caStepSpace&=\frac{\ladderMomentum}{\htick}\cdot\caStepSpace=\ladderMomentum \caSignalSpeed,\\
+  \frac{L_0}{\htick}&=\frac{\ladderAction}{\htick}=\ladderEnergy.
 \end{align*}
 Три записи совпадают, поэтому лестница замыкается на одном кванте энергии.
 Число событий за такт есть целое число фазовых квантов импульса,
 $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$ (CL-4, \cref{sec:congruence}),
-и энергия события $E=n_E E_0$ кратна тому же~$E_0$.
+и энергия события $E=n_E \ladderEnergy$ кратна тому же~$\ladderEnergy$.
 \end{proof}
 
 \begin{proof}[Доказательство теоремы]
-Минимальное событие на ячейке несёт действие $s_0=\hbar/2$ (\cref{lem:51a}).
-Деление на $\hl$ и на $\htick$ даёт импульс и энергию;
-масса через $c=\kgeom c_0$ превращает их в $p_0=m_{\arg} c_0/2$ (\cref{lem:51b}).
+Минимальное событие на ячейке несёт действие $\ladderAction=\planckHbar/2$ (\cref{lem:51a}).
+Деление на $\caStepSpace$ и на $\htick$ даёт импульс и энергию;
+масса через $c=\kgeom \caSignalSpeed$ превращает их в $\ladderMomentum=m_{\arg} \caSignalSpeed/2$ (\cref{lem:51b}).
 Сила одного кванта импульса за такт совпадает с $m_{\arg} g_M$ (\cref{lem:51c}).
 Приращение импульса на решётке целочисленно, а непрерывный интеграл $\int\Im(z^*\nabla z)$ на~$M$ не определён (\cref{lem:51d}).
-Три записи энергии $p_0 c_0$, $F_0\hl$ и $L_0/\htick$ равны одному и тому же~$E_0$ (\cref{lem:51e}).
+Три записи энергии $\ladderMomentum \caSignalSpeed$, $\ladderForce\caStepSpace$ и $L_0/\htick$ равны одному и тому же~$\ladderEnergy$ (\cref{lem:51e}).
 Свободного параметра, который можно было бы подогнать отдельно для импульса, силы и энергии, не остаётся.
 \end{proof}
 
 \begin{corollary}[Закон Ньютона на ячейке]
-$p_0=m_{\arg}(c_0/2)$, $F_0=m_{\arg} g_M$, $\Delta F=\Delta m\cdot g$ при $\Delta m\in m_{\arg}\mathbb{Z}$.
+$\ladderMomentum=m_{\arg}(\caSignalSpeed/2)$, $\ladderForce=m_{\arg} g_M$, $\Delta F=\Delta m\cdot g$ при $\Delta m\in m_{\arg}\mathbb{Z}$.
 \end{corollary}
 
 \section{Термодинамические потенциалы на \texorpdfstring{$T$}{T}}
@@ -166,15 +166,15 @@ $p_0=m_{\arg}(c_0/2)$, $F_0=m_{\arg} g_M$, $\Delta F=\Delta m\cdot g$ при $\D
 \cref{thm:51} после осреднения~\cref{def:soft-readout}.
 
 \paragraph{Внутренняя энергия.}
-По \cref{lem:51e} энергия на~$M$ дискретна: $E=\sum_x n_E(x)\,E_0$,
+По \cref{lem:51e} энергия на~$M$ дискретна: $E=\sum_x n_E(x)\,\ladderEnergy$,
 $n_E\in\mathbb{Z}_{\ge 0}$.
 На~$T$ в объёме~$V$ прибор видит гладкую плотность возбуждений
 $\mathscr{n}_E(X)=\mathcal{B}*n_E$ и определяет
 \begin{equation}
 \label{eq:internal-energy}
-  U(V)=\int_V \mathscr{n}_E(X)\,E_0\,\mathrm{d}^3X
+  U(V)=\int_V \mathscr{n}_E(X)\,\ladderEnergy\,\mathrm{d}^3X
   = \int_V u(X)\,\mathrm{d}^3X,
-  \qquad u=\mathscr{n}_E E_0.
+  \qquad u=\mathscr{n}_E \ladderEnergy.
 \end{equation}
 Вакуум ($n_E=0$ везде) даёт $U=0$; это согласуется с $S\to 0$ при $T\to 0$,
 если основное состояние невырождено ($W=1$ в формулировке Планка).
@@ -184,7 +184,7 @@ $\mathscr{n}_E(X)=\mathcal{B}*n_E$ и определяет
 вращатель насыщается при $\rho_E\to K_P$.
 В термодинамике объём~$V$ --- макрообъём прибора; давление~$P$ --- сопряжённая
 к~$V$ величина при медленных деформациях фона.
-В натуральных единицах ($c_0=\hl/\htick=1$) равновесный вакуум ($\rho_E=0$)
+В натуральных единицах ($\caSignalSpeed=\caStepSpace/\htick=1$) равновесный вакуум ($\rho_E=0$)
 лежит у нижней границы насыщения; для малых отклонений $\delta\rho=\rho_E\ll K_P$
 \begin{equation}
 \label{eq:pressure-linear}
@@ -224,7 +224,7 @@ $\mathcal{F}_{\mathrm{GL}}$ описывает \emph{поле}~$\Phi$, а $P$ и
 \end{equation}
 Связи $S=-(\partial F/\partial T)_V$, $P=-(\partial F/\partial V)_T$ --- стандартные
 тождества при гладкости $U(T,V)$; модель не подменяет их новыми аксиомами,
-а фиксирует \emph{микроскопические} якоря $E_0$ и~$K_P$, из которых $U$ и~$P$
+а фиксирует \emph{микроскопические} якоря $\ladderEnergy$ и~$K_P$, из которых $U$ и~$P$
 следуют после~\eqref{eq:internal-energy} и насыщения gate.
 Полевая свободная энергия~\eqref{eq:gl-free-energy} --- другой уровень описания:
 $\mathcal{F}_{\mathrm{GL}}[\Phi]$ для неоднородного $\Phi(X)$, тогда как $F$ в~\eqref{eq:helmholtz}
@@ -237,9 +237,9 @@ $\mathcal{F}_{\mathrm{GL}}[\Phi]$ для неоднородного $\Phi(X)$, �
 На~$M$ сохраняются:
 \begin{itemize}
 \item заряд при $U(1)$: $Q=\sum|z|^2$;
-\item импульс: $\mathrm{div}\,\pi=0$ по модулю~$p_0$;
+\item импульс: $\mathrm{div}\,\pi=0$ по модулю~$\ladderMomentum$;
 \item момент при $SO(2)$ изотropного~$N$: $L_z\in L_0\cdot\mathbb{Z}$;
-\item энергия: $E\in E_0\cdot\mathbb{Z}$;
+\item энергия: $E\in \ladderEnergy\cdot\mathbb{Z}$;
 \item топологический заряд: $n\in\mathbb{Z}$.
 \end{itemize}
 \end{proposition}
@@ -254,17 +254,17 @@ $\mathcal{F}_{\mathrm{GL}}[\Phi]$ для неоднородного $\Phi(X)$, �
 \section{Геометрический квант связи \texorpdfstring{$\kappa_{\mathrm{link}}=1/|N|$}{kappa=1/|N|}}
 
 \begin{proposition}
-На FCC $|N|=12$ $\Rightarrow$ $\kappa_{\mathrm{link}}=1/12=\gamma=\nu_{\mathrm{CA}}/(c_0\hl)$.
+На FCC $|N|=12$ $\Rightarrow$ $\kappa_{\mathrm{link}}=1/12=\gamma=\nu_{\mathrm{CA}}/(\caSignalSpeed\caStepSpace)$.
 На гексагональном срезе $|N|=6$ $\Rightarrow$ $1/6$.
 \end{proposition}
 
-Спектральные методы калибруют макроуровень~$T$.
+Спектральные методы калибруют макроуровень~$\layerMacro$.
 
 \section{Фононы и спектр}
 
-Периодичность~$\Lambda$ $\Rightarrow$ первая зона Бриллюэна;
-$p=n p_0+\hbar k$, $k$ дискретен.
-Фонон вакуума:, $v_a=2c_0$.
+Периодичность~$\carrierLattice$ $\Rightarrow$ первая зона Бриллюэна;
+$p=n \ladderMomentum+\planckHbar k$, $k$ дискретен.
+Фонон вакуума:, $v_a=2\caSignalSpeed$.
 \[
 \omega(k)\approx v_a|k|
 \]

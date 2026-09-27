@@ -1,0 +1,161 @@
+% Макро-физика (Максвелл, Ньютон, КМ, …) — тултипы в формулах через макросы.
+
+\newcommand{\NotationSecMacroPhysicsTitle}{\textit{Макроскопическая физика (поля, операторы, SI)}}
+\newcommand{\NotationDescNabla}{оператор набла; ротор и дивергенция в уравнениях Максвелла.}
+\newcommand{\NotationDescPartialT}{производная по времени (локальная на макроуровне).}
+\newcommand{\NotationDescEfld}{вектор электрического поля.}
+\newcommand{\NotationDescBfld}{вектор магнитной индукции.}
+\newcommand{\NotationDescJfld}{плотность электрического тока.}
+\newcommand{\NotationDescRhoQ}{объёмная плотность заряда (уравнение Гаусса).}
+\newcommand{\NotationDescRhoM}{массовая плотность (гидродинамика, не заряд).}
+\newcommand{\NotationDescEpsZero}{электрическая постоянная вакуума \(\varepsilon_0\).}
+\newcommand{\NotationDescMuZero}{магнитная постоянная вакуума \(\mu_0\).}
+\newcommand{\NotationDescVfld}{вектор скорости.}
+\newcommand{\NotationDescRfld}{радиус-вектор точки.}
+\newcommand{\NotationDescFfld}{сила (механика Ньютона).}
+\newcommand{\NotationDescPfld}{давление (гидродинамика).}
+\newcommand{\NotationDescSentropy}{энтропия.}
+\newcommand{\NotationDescTtemp}{температура.}
+\newcommand{\NotationDescHham}{гамильтониан / оператор Гамильтона.}
+\newcommand{\NotationDescPsi}{волновая функция.}
+\newcommand{\NotationDescHbar}{постоянная Планка \(\hbar\).}
+\newcommand{\NotationDescEcharge}{элементарный заряд \(e\).}
+\newcommand{\NotationDescMe}{масса электрона \(m_e\).}
+\newcommand{\NotationDescMmass}{масса тела (Ньютон).}
+\newcommand{\NotationDescVarphi}{фаза (Маделунг, \(\psi=\sqrt{\rho}\,e^{i\varphi/\hbar}\)).}
+\newcommand{\NotationDescClight}{скорость света c в SI (макроуровень).}
+\newcommand{\NotationDesckB}{постоянная Больцмана \(k_B\).}
+\newcommand{\NotationDescGgrav}{гравитационная постоянная \(G\).}
+\newcommand{\NotationDescVecP}{вектор импульса \(\mathbf{p}\) (пространственная часть \(p^\mu\)).}
+
+\newnotationsection{symb:sec-macrophys}{macrophys-00}{\NotationSecMacroPhysicsTitle}
+\newglossaryentry{symb:nabla}{%
+  type=notation, sort={macrophys-01},
+  name={\ensuremath{\nabla}},
+  description={\NotationDescNabla}%
+}
+\newglossaryentry{symb:partialt}{%
+  type=notation, sort={macrophys-02},
+  name={\ensuremath{\partial_t}},
+  description={\NotationDescPartialT}%
+}
+\newglossaryentry{symb:Efld}{%
+  type=notation, sort={macrophys-03},
+  name={\ensuremath{\mathbf{E}}},
+  description={\NotationDescEfld}%
+}
+\newglossaryentry{symb:Bfld}{%
+  type=notation, sort={macrophys-04},
+  name={\ensuremath{\mathbf{B}}},
+  description={\NotationDescBfld}%
+}
+\newglossaryentry{symb:Jfld}{%
+  type=notation, sort={macrophys-05},
+  name={\ensuremath{\mathbf{j}}},
+  description={\NotationDescJfld}%
+}
+\newglossaryentry{symb:rhoQ}{%
+  type=notation, sort={macrophys-06},
+  name={\ensuremath{\rho}},
+  description={\NotationDescRhoQ}%
+}
+\newglossaryentry{symb:rhoM}{%
+  type=notation, sort={macrophys-07},
+  name={\ensuremath{\rho}},
+  description={\NotationDescRhoM}%
+}
+\newglossaryentry{symb:eps0}{%
+  type=notation, sort={macrophys-08},
+  name={\ensuremath{\varepsilon_0}},
+  description={\NotationDescEpsZero}%
+}
+\newglossaryentry{symb:mu0}{%
+  type=notation, sort={macrophys-09},
+  name={\ensuremath{\mu_0}},
+  description={\NotationDescMuZero}%
+}
+\newglossaryentry{symb:Vfld}{%
+  type=notation, sort={macrophys-10},
+  name={\ensuremath{\mathbf{v}}},
+  description={\NotationDescVfld}%
+}
+\newglossaryentry{symb:Rfld}{%
+  type=notation, sort={macrophys-11},
+  name={\ensuremath{\mathbf{r}}},
+  description={\NotationDescRfld}%
+}
+\newglossaryentry{symb:Ffld}{%
+  type=notation, sort={macrophys-12},
+  name={\ensuremath{\mathbf{F}}},
+  description={\NotationDescFfld}%
+}
+\newglossaryentry{symb:Pfld}{%
+  type=notation, sort={macrophys-13},
+  name={\ensuremath{p}},
+  description={\NotationDescPfld}%
+}
+\newglossaryentry{symb:Sentropy}{%
+  type=notation, sort={macrophys-14},
+  name={\ensuremath{S}},
+  description={\NotationDescSentropy}%
+}
+\newglossaryentry{symb:Ttemp}{%
+  type=notation, sort={macrophys-15},
+  name={\ensuremath{T}},
+  description={\NotationDescTtemp}%
+}
+\newglossaryentry{symb:Hham}{%
+  type=notation, sort={macrophys-16},
+  name={\ensuremath{H}},
+  description={\NotationDescHham}%
+}
+\newglossaryentry{symb:Psi}{%
+  type=notation, sort={macrophys-17},
+  name={\ensuremath{\psi}},
+  description={\NotationDescPsi}%
+}
+\newglossaryentry{symb:hbar}{%
+  type=notation, sort={macrophys-18},
+  name={\ensuremath{\hbar}},
+  description={\NotationDescHbar}%
+}
+\newglossaryentry{symb:echar}{%
+  type=notation, sort={macrophys-19},
+  name={\ensuremath{e}},
+  description={\NotationDescEcharge}%
+}
+\newglossaryentry{symb:me}{%
+  type=notation, sort={macrophys-20},
+  name={\ensuremath{m_e}},
+  description={\NotationDescMe}%
+}
+\newglossaryentry{symb:Mmass}{%
+  type=notation, sort={macrophys-21},
+  name={\ensuremath{m}},
+  description={\NotationDescMmass}%
+}
+\newglossaryentry{symb:varphi}{%
+  type=notation, sort={macrophys-22},
+  name={\ensuremath{\varphi}},
+  description={\NotationDescVarphi}%
+}
+\newglossaryentry{symb:clight}{%
+  type=notation, sort={macrophys-23},
+  name={\ensuremath{c}},
+  description={\NotationDescClight}%
+}
+\newglossaryentry{symb:kB}{%
+  type=notation, sort={macrophys-24},
+  name={\ensuremath{k_B}},
+  description={\NotationDesckB}%
+}
+\newglossaryentry{symb:Ggrav}{%
+  type=notation, sort={macrophys-25},
+  name={\ensuremath{G}},
+  description={\NotationDescGgrav}%
+}
+\newglossaryentry{symb:vecP}{%
+  type=notation, sort={macrophys-26},
+  name={\ensuremath{\mathbf{p}}},
+  description={\NotationDescVecP}%
+}

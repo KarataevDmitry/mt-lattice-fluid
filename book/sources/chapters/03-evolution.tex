@@ -3,14 +3,14 @@
 
 \section{Общая структура}
 
-Дискретность~$\Lambda$ и пара $(\hl,\htick)$ установлены теоремой~\ref{thm:discreteness}
+Дискретность~$\carrierLattice$ и пара $(\caStepSpace,\htick)$ установлены теоремой~\ref{thm:discreteness}
 и гл.~\ref{ch:carrier}.
 Глобальное состояние эволюционирует по закону
 \[
-\Psi^t=\{z(x,t)\}_{x\in\Lambda}
+\symCapitalPsi^t=\{z(x,t)\}_{x\in\carrierLattice}
 \]
 \[
-  \Psi^{t+1}=g(\Psi^t),\qquad g=g_{\mathrm{nl}}\circ g_{\mathrm{lin}},
+  \symCapitalPsi^{t+1}=g(\symCapitalPsi^t),\qquad g=g_{\mathrm{nl}}\circ g_{\mathrm{lin}},
 \]
 где $g_{\mathrm{lin}}$ --- линейное смешивание по соседям~$N(x)$,
 $g_{\mathrm{nl}}$ --- умножение на фазу $e^{i\Phi(z)}$.
@@ -79,7 +79,7 @@ $U(2\pi)=-\mathbb{1}$, $U(4\pi)=+\mathbb{1}$.
 \end{proof}
 
 Запрет Паули: два параллельных спинора в одной ячейке~$\PlanckCell$
-приводят к $z_A+z_B\to 0$; коэффициент~$K_P$ задаёт отталкивание при $d\le\hl$.
+приводят к $z_A+z_B\to 0$; коэффициент~$K_P$ задаёт отталкивание при $d\le\caStepSpace$.
 
 \section{$U(1)_{\mathrm{vac}}$ и хиральность}
 

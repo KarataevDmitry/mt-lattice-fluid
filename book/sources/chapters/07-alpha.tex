@@ -8,12 +8,12 @@
 \section{Что искали}
 
 На~$\Tlayer$ константа тонкой структуры --- сила электромагнитного сопряжения
-$e^2/(4\pi\varepsilon_0\hbar c)$.
+$\chargeE^2/(4\pi\constEpsZero\planckHbar c)$.
 На~$\Mlayer$ тот же объект --- безразмерная доля, на которую заряд
 \emph{сцепляется} с вакуумной фазой при переносе импульса и энергии
 (\cref{def:alpha-meaning}).
 Задача: получить это число из дна
-($\hl$, $\htick$, $\kgeom$, $N_{12}$, $N_4$, $SU(2)$, $\Delta\phi_{\min}$)
+($\caStepSpace$, $\htick$, $\caKappaGeom$, $N_{12}$, $N_4$, $SU(2)$, $\Delta\phi_{\min}$)
 --- не объявить его входом и не подменить лабораторным якорем на~$M$.
 
 \section{Спектроскопическое имя и онтология}
@@ -23,12 +23,12 @@ $e^2/(4\pi\varepsilon_0\hbar c)$.
 (релятивистские и смежные поправки к уровням).
 Позже то же слово закрепили за безразмерным EM-coupling в форме Соммерфельда
 \[
-  \alpha_{\mathrm{fs}}=\frac{e^2}{4\pi\varepsilon_0\hbar c}
+  \alphaFs=\frac{\chargeE^2}{4\pi\constEpsZero\planckHbar c}
   \quad\text{(\cref{eq:alpha-fs}).}
 \]
 Размерный анализ (почему справа нет ``лишней'' оси) --- \cref{rem:alpha-fs-dim}.
-Удобная линейка СИ уже несёт $e$, $\hbar$, $c$, $\varepsilon_0$;
-$\alpha_{\mathrm{fs}}$ получают \emph{размерной комбинацией} «собрать безразмерное отношение''.
+Удобная линейка СИ уже несёт $e$, $\planckHbar$, $c$, $\constEpsZero$;
+$\alphaFs$ получают \emph{размерной комбинацией} «собрать безразмерное отношение''.
 Это не логическая ошибка, но перевёрнутая онтология:
 coupling выглядит \emph{производным} от T-якорей, хотя по смыслу на~$\Mlayer$ это первичное
 отношение квантов силы (\cref{sec:force-lattice}, \cref{def:alpha-meaning}).
@@ -36,14 +36,14 @@ coupling выглядит \emph{производным} от T-якорей, х�
 \begin{remark}[Порядок слоёв]
 \label{rem:alpha-name-order}
 \begin{enumerate}[label=\arabic*.]
-\item $\alpha_{\mathrm{fs}}$ --- число~$M$ из закона~$g$ и геометрии носителя (\cref{thm:alpha}).
-\item $e_0=e$ CODATA --- \textbf{якорь~$T$} (заряд в кулонах), не \emph{определение} $\alpha_{\mathrm{fs}}$.
-\item Формула через $e$, $\hbar$, $c$ --- \textbf{согласование} lab-readout с тем же coupling.
-\item «Тонкая структура'' \emph{спектра} --- другой феномен; не синоним определения $\alpha_{\mathrm{fs}}$.
+\item $\alphaFs$ --- число~$M$ из закона~$g$ и геометрии носителя (\cref{thm:alpha}).
+\item $e_0=e$ CODATA --- \textbf{якорь~$T$} (заряд в кулонах), не \emph{определение} $\alphaFs$.
+\item Формула через $e$, $\planckHbar$, $c$ --- \textbf{согласование} lab-readout с тем же coupling.
+\item «Тонкая структура'' \emph{спектра} --- другой феномен; не синоним определения $\alphaFs$.
 \end{enumerate}
-После time-first триады $\{t_P,\ell_P,m_P\}$ и такта $\htick=\kgeom t_P$
-все метры и секунды SI --- T-export; $\alpha_{\mathrm{fs}}$ остаётся точной безразмерной
-и задаёт hop-лестницу EM-длин ($N_{a0}=N_c/\alpha_{\mathrm{fs}}$, гл.~\ref{ch:si-sm}),
+После time-first триады $\{t_P,\ell_P,m_P\}$ и такта $\htick=\caKappaGeom t_P$
+все метры и секунды SI --- T-export; $\alphaFs$ остаётся точной безразмерной
+и задаёт hop-лестницу EM-длин ($N_{a0}=N_c/\alphaFs$, гл.~\ref{ch:si-sm}),
 а не наоборот.
 \end{remark}
 
@@ -64,7 +64,7 @@ coupling выглядит \emph{производным} от T-якорей, х�
 \]
 \end{lemma}
 
-Порядок единицы, не $1/137$: \emph{не} $\alpha_{\mathrm{fs}}$.
+Порядок единицы, не $1/137$: \emph{не} $\alphaFs$.
 
 Второй соблазн --- $\pi$-башня
 \[
@@ -77,7 +77,7 @@ coupling выглядит \emph{производным} от T-якорей, х�
 
 \begin{remark}[Отвергнутая $\pi$-башня]
 \label{rem:pi-tower}
-$\pi$-башня снята с роли определения $\alpha_{\mathrm{fs}}$:
+$\pi$-башня снята с роли определения $\alphaFs$:
 оставлена как отчёт о T-конкуренте, не как онтология~$M$.
 \end{remark}
 
@@ -96,12 +96,12 @@ $\pi$-башня снята с роли определения $\alpha_{\mathrm{
 \item A5 + Heisenberg $\Rightarrow$ $\Delta\phi_{\min}=\tfrac12$, $r=1/(4\pi)$, $\alpha^*$.
 \item Полный оборот $\Rightarrow$ телесный угол $\Omega=1/r=4\pi$,
       $N_\phi=\lceil\Omega\rceil=13$.
-\item FCC $\Rightarrow$ $\kgeom=1/\sqrt{2}$, $N_{12}=12$, грани $6\sqcup+8\triangle$.
+\item FCC $\Rightarrow$ $\caKappaGeom=1/\sqrt{2}$, $N_{12}=12$, грани $6\sqcup+8\triangle$.
 \item A10 $\Rightarrow$ заряд $n\in\mathbb{Z}$.
 \item \textbf{Шестой шаг открыт:} безразмерная доля EM-сопряжения заряда с вакуумом.
 \end{enumerate}
 
-Сырые кандидаты $r$, $r^2$, $\kgeom r$, $\kgeom^2/N_{12}$ --- неверный масштаб
+Сырые кандидаты $r$, $r^2$, $\caKappaGeom r$, $\caKappaGeom^2/N_{12}$ --- неверный масштаб
 ($|\mathrm{ppm}|\gg 10^3$).
 Фазовый остаток $r=\Delta\phi_{\min}/(2\pi)$ задаёт \emph{масштаб ошибки}, не саму константу.
 
@@ -119,17 +119,17 @@ Bare $g=2$ для вихря $n=\pm1$ следует из A16 и орбитал�
 аномалия $a_e$ --- одевание A5-ванной, не топология.
 
 \paragraph{Ридберг и квантовый дефект массы водорода.}
-$R_\infty=\alpha^2 m_e c/(4\pi\hbar)$, $BE=\tfrac12\alpha^2 m_e c^2$
-$\Rightarrow$ $\alpha=\sqrt{2\Delta m/m_e}$ на предыдущем этаже КМ.
+$R_\infty=\alphaFs^2 \massElectron \speedC/(4\symPi\planckHbar)$, $BE=\tfrac12\alphaFs^2 \massElectron \speedC^2$
+$\Rightarrow$ $\alpha=\sqrt{2\Delta m/\massElectron}$ на предыдущем этаже КМ.
 На~$M$ те же тождества связывают $U(a_0)$, $BE$ и $F_0$ --- одно $\alpha$,
 но Arg-связь $p$--$e$ без вставки $\alpha$ ещё не выведена.
 
 \paragraph{Холл и квант сопротивления.}
-После SI-2019 $h$ и $e$ точны: $R_K=h/e^2$ не даёт независимого $\alpha$.
+После SI-2019 $h$ и $e$ точны: $R_K=h/\chargeE^2$ не даёт независимого $\alpha$.
 Дверь остаётся проверкой согласованности, не источником на~$M$.
 
 \paragraph{Hop-лестница.}
-$\alpha=N_c/N_{a0}$, $\alpha^2=N_{re}/N_{a0}$ --- тождества длин в шагах $\hl$
+$\alpha=N_c/N_{a0}$, $\alpha^2=N_{re}/N_{a0}$ --- тождества длин в шагах $\caStepSpace$
 при уже известном $\alpha$; целое $N_{a0}$ из структуры H без $\alpha$ --- открыто.
 
 \section{Сила на решётке}
@@ -144,12 +144,12 @@ $\alpha=N_c/N_{a0}$, $\alpha^2=N_{re}/N_{a0}$ --- тождества длин в
   \qquad N\in\mathbb{N},\ n_i\in\mathbb{Z}.
 \]
 На ближайшем соседе ($N=1$): $F=F_0/M$.
-Грубый readout $\alpha_0=\kgeom/M$ даёт $\alpha^{-1}\approx 97\sqrt{2}\approx 137.2$
+Грубый readout $\alpha_0=\caKappaGeom/M$ даёт $\alpha^{-1}\approx 97\sqrt{2}\approx 137.2$
 при $M\approx 97$ --- порядок верный, зазор $\sim 10^3$\,ppm.
 
 \begin{table}[ht]
 \centering
-\caption{Кандидаты $M$ для $\alpha_0=\kgeom/M$}
+\caption{Кандидаты $M$ для $\alpha_0=\caKappaGeom/M$}
 \begin{tabular}{@{}lrrl@{}}
 \toprule
 $M$ & откуда & $\alpha^{-1}$ & вердикт \\
@@ -174,7 +174,7 @@ $N_{\mathrm{hier}}=\lfloor B_{\hv}\rfloor-1=8$ иерархических сту
 \end{theorem}
 
 На NN тогда $F=F_0/97$.
-Одного $\kgeom/M$ мало: нужна поправка симметрии грани.
+Одного $\caKappaGeom/M$ мало: нужна поправка симметрии грани.
 
 \section{Мягкая грань: закрытие числа}
 
@@ -182,14 +182,14 @@ $N_{\mathrm{hier}}=\lfloor B_{\hv}\rfloor-1=8$ иерархических сту
 Soft-unit из изотропии квадратной грани кубооктаэдра:
 $U=d/(d+1)=7/8$ в знаменателе (не fitted по CODATA).
 
-\begin{theorem}[Константа $\alpha_{\mathrm{fs}}$]
+\begin{theorem}[Константа $\alphaFs$]
 \label{thm:alpha}
 \[
-  \alpha_{\mathrm{fs}}
+  \alphaFs
   =
-  \frac{7M^{2}\kgeom\,(7M+\kgeom)}
-       {49M^{4}-7M\kgeom^{3}-8},
-  \qquad M=97,\ \kgeom=\frac{1}{\sqrt{2}}.
+  \frac{7M^{2}\caKappaGeom\,(7M+\caKappaGeom)}
+       {49M^{4}-7M\caKappaGeom^{3}-8},
+  \qquad M=97,\ \caKappaGeom=\frac{1}{\sqrt{2}}.
 \]
 Значение --- точный элемент $\mathbb{Q}(\sqrt{2})$;
 сравнение с CODATA --- только на~$\Tlayer$ ($\sim -0.00007$\,ppm на предпочтительной форме).
@@ -202,9 +202,9 @@ $U=d/(d+1)=7/8$ в знаменателе (не fitted по CODATA).
 Остаток $\alpha^*$ и $\pi$-башня в числитель не входят.
 \end{proof}
 
-\begin{definition}[Смысл $\alpha_{\mathrm{fs}}$]
+\begin{definition}[Смысл $\alphaFs$]
 \label{def:alpha-meaning}
-$\alpha_{\mathrm{fs}}$ --- сила фазового сопряжения единичного заряда с вакуумом
+$\alphaFs$ --- сила фазового сопряжения единичного заряда с вакуумом
 (телесный угол / фазовый объём emergent $d=3$).
 Не $|N_{12}|$, не hop-счёт, не $\alpha^*$, не фазовый остаток $r=1/(4\pi)$ (\cref{lem:vacuum-phase-residue}).
 Историческое имя и lab-формула --- \cref{sec:alpha-name,rem:alpha-name-order}.
@@ -212,33 +212,33 @@ $\alpha_{\mathrm{fs}}$ --- сила фазового сопряжения еди
 
 \section{Вверх по лестнице}
 
-После seal $\alpha_{\mathrm{fs}}$ каскад масс --- \emph{закон}, не подгонка:
+После seal $\alphaFs$ каскад масс --- \emph{закон}, не подгонка:
 \[
-  v=\alpha_{\mathrm{fs}}^{8} E_P\sqrt{2\pi},\quad
+  v=\alphaFs^{8} E_P\sqrt{2\pi},\quad
   m_H=\sqrt{2\lambda}\,v,\quad
-  m_p=\alpha_{\mathrm{fs}}\,\frac{v}{2}\Bigl(1+\frac{\kgeom^2}{N_{12}}\Bigr),\quad
-  m_e=\alpha_{\mathrm{fs}}^{2}\,\frac{m_H}{N_\phi},\quad
-  m_n=m_p+2m_e.
+  m_p=\alphaFs\,\frac{v}{2}\Bigl(1+\frac{\caKappaGeom^2}{N_{12}}\Bigr),\quad
+  \massElectron=\alphaFs^{2}\,\frac{m_H}{N_\phi},\quad
+  m_n=m_p+2\massElectron.
 \]
-Вход --- одно $\alpha_{\mathrm{fs}}$; расхождения с PDG на хвостах $\sim 10^{-3}$
+Вход --- одно $\alphaFs$; расхождения с PDG на хвостах $\sim 10^{-3}$
 --- тот же класс FCC/binomial, что у packing и планковской дырки, не пробел в $\alpha$.
 
 \section{Карта пути и открытые хвосты}
 
 \begin{table}[ht]
 \centering
-\caption{Журнал поиска $\alpha_{\mathrm{fs}}$}
+\caption{Журнал поиска $\alphaFs$}
 \footnotesize
 \begin{tabular}{@{}p{0.22\linewidth}p{0.38\linewidth}p{0.28\linewidth}@{}}
 \toprule
 этап & что проверяли & итог \\
 \midrule
-остаток $\alpha^*$ & $\Delta\phi_{\min}\to 1/(4\pi)$ & закрыто; \textbf{не} $\alpha_{\mathrm{fs}}$ \\
+остаток $\alpha^*$ & $\Delta\phi_{\min}\to 1/(4\pi)$ & закрыто; \textbf{не} $\alphaFs$ \\
 $\pi$-башня & $4\pi^3+\pi^2+\pi$ & $\sim 2$\,ppm; \textbf{отвергнуто} как определение \\
 $\alpha_{\mathrm{geom}}=137$ & счёт граней & $\sim 260$\,ppm; exploratory \\
 спуск/amnesia & $r\to\Omega\to N_\phi\to$ заряд & шаг 6 открыт \\
 лаб. двери & $a_e$, $R_\infty$, $R_K$, hops & читают $\alpha$, не рождают \\
-$F_0/(MN^2)$ & $\alpha_0=\kgeom/M$ & живой путь; $M=97$ \\
+$F_0/(MN^2)$ & $\alpha_0=\caKappaGeom/M$ & живой путь; $M=97$ \\
 мягкая грань & $d=7$, $U=8/7$ & \textbf{закрыто} \\
 вверх & $v$, $m_H$, $m_p$, $m_e$ & каскад на preferred $\alpha$ \\
 \bottomrule

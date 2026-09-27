@@ -16,7 +16,7 @@
 \emph{«Игра жизни''} Конвея (1970) и \emph{Rule~110} (доказательство универсальности Cook, 2004)
 показывают, что даже простые булевы правила Тьюринг-полны.
 Наша модель~$M$ --- \emph{другой} элемент того же класса:
-обратимый спинорный автомат с регистром $\mathbb{Z}_{512}[i]$, не подобранный для картинки.
+обратимый спинорный автомат с регистром $\spaceZ_{\phaseRingCount}[i]$, не подобранный для картинки.
 
 \section{Тьюринг-полнота}
 \label{sec:app-universality}
@@ -36,7 +36,7 @@
 
 \section{Обратимость: Тоффоли и Фредкин}
 
-На~$M$ требуется $g^{-1}(g(\Psi))=\Psi$ --- иначе унитарность \eqref{eq:norm} нарушается на шаге.
+На~$M$ требуется $g^{-1}(g(\symCapitalPsi))=\symCapitalPsi$ --- иначе унитарность \eqref{eq:norm} нарушается на шаге.
 \emph{Эдвард Фредкин} и \emph{Томмазо Тоффоли} (1970--1980-е) развивали обратимые CA
 как модель вычисления без энтропийного стирания бита.
 Физическая мотивация в монографии та же, что в спуске:
@@ -45,21 +45,21 @@
 \section{Представление Маделунга}
 
 В 1927 году \emph{Эрвин Маделунг} переписал уравнение Шрёдингера в гидродинамической форме:
-$\psi=\sqrt{\rho}\,e^{iS/\hbar}$, откуда неразрывность $\partial_t\rho+\nabla\cdot(\rho\mathbf{v})=0$
-и квантовое давление $Q\propto\nabla^2\sqrt{\rho}/\sqrt{\rho}$.
+$\wavePsi=\sqrt{\massDensity}\,e^{iS/\planckHbar}$, откуда неразрывность $\opPartialT\chargeRho+\opNabla\cdot(\symRho\fieldV)=0$
+и квантовое давление $Q\propto\opNabla^2\sqrt{\massDensity}/\sqrt{\massDensity}$.
 
 Маделунг --- язык \emph{непрерывного}~$T$.
-На~$M$ нет гладкого $\partial_t\rho+\nabla\cdot\mathbf{j}=0$ как фундаментального закона;
+На~$M$ нет гладкого $\opPartialT\chargeRho+\opNabla\cdot\fieldJ=0$ как фундаментального закона;
 норма сохраняется дискретно, а гидродинамика появляется после осреднения
 (гл.~\ref{ch:macro}, \ref{ch:matter}).
 Дискретизация фазы в спуске (\cref{sec:descent-phase-disc}) --- не «доказательство Маделунгом'',
-а замена $\varphi\in\mathbb{R}$ конечным $\varphi_{\mathrm{disc}}$ при том же смысле $|z|^2$ и фазы.
+а замена $\phaseVarphi\in\spaceR$ конечным $\phaseVarphi_{\mathrm{disc}}$ при том же смысле $|z|^2$ и фазы.
 
 \begin{remark}[Частые заблуждения]
 \begin{enumerate}
 \item \textbf{«Маделунг доказывает дискретность.''} Нет --- он переписывает непрерывное уравнение.
 \item \textbf{«КА = Игра жизни.''} Игра жизни --- частный необратимый пример.
-\item \textbf{«На $M$ --- неразрывность Маделунга.''} Гладкость --- свойство~$T$ при $\lambda\gg\hl$.
+\item \textbf{«На $M$ --- неразрывность Маделунга.''} Гладкость --- свойство~$T$ при $\lengthScale\gg\caStepSpace$.
 \end{enumerate}
 \end{remark}
 
@@ -79,8 +79,8 @@ $\psi=\sqrt{\rho}\,e^{iS/\hbar}$, откуда неразрывность $\part
 Обратимость & Фредкин, Тоффоли & $g^{-1}$, гл.~\ref{ch:evolution} \\
 Дискретная фаза & --- & Спуск \cref{sec:descent-phase-disc} \\
 $(dh,dt)$ & --- & Спуск \cref{sec:coords-dh-dt} \\
-Скорость света CA & $c_0=1$ cell/tick & $c_0=\hl/\htick$; см. \cref{sec:ca-terminology,sec:two-c} \\
-Маделунг & 1927, $\rho$, $\mathbf{j}$ & Только~$T$ \\
+Скорость света CA & $\caSignalSpeed=1$ cell/tick & $\caSignalSpeed=\caStepSpace/\caStepTime$; см. \cref{sec:ca-terminology,sec:two-c} \\
+Маделунг & 1927, $\symRho$, $\fieldJ$ & Только~$T$ \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,13 @@
+% Клик по символу → «Условные обозначения» (\glslink). Hover-тултипы отключены:
+% pdfcomment/Widget в Acrobat часто без текста; клик надёжнее без лишних аннотаций.
+
+\ExplSyntaxOn
+\cs_new_protected:Npn \notation_gls:n #1
+ {
+   \glslink {#1} { \glossentryname {#1} }
+ }
+\AtBeginDocument
+ {
+   \RenewDocumentCommand \gls { m } { \notation_gls:n {#1} }
+ }
+\ExplSyntaxOff

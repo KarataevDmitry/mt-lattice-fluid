@@ -4,8 +4,8 @@
 \section{Что уже введено}
 \label{sec:carrier-motivation}
 
-Носитель как счётное множество узлов~$\Lambda$, элементарные шаг~$\hl$ и такт~$\htick$,
-тактовая скорость $c_0=\hl/\htick$, окрестность одного такта и поле на узле
+Носитель как счётное множество узлов~$\carrierLattice$, элементарные шаг~$\caStepSpace$ и такт~$\htick$,
+тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$, окрестность одного такта и поле на узле
 появились в конце спуска (\cref{sec:planck-floor}).
 Абсолютные условия $A_1$--$A_{16}$ (гл.~\ref{ch:axiom-rationale}, \ref{ch:axioms})
 ограничивают класс локальных законов на этом носителе
@@ -14,7 +14,7 @@
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-lattice-field.tex}
-  \caption{Носитель $\Lambda$, шаг $\hl$, такт $\htick$.}
+  \caption{Носитель $\carrierLattice$, шаг $\caStepSpace$, такт $\htick$.}
   \label{fig:carrier-lattice-field}
 \end{figure}
 
@@ -51,16 +51,16 @@
 
 \begin{definition}[Световая $\varepsilon$-окрестность]
 \label{def:epsilon}
-Для узла $x\in\Lambda$ окрестность одного такта --- узлы, до которых сигнал доходит за~$\htick$:
+Для узла $x\in\carrierLattice$ окрестность одного такта --- узлы, до которых сигнал доходит за~$\htick$:
 \[
-  N(x)\subset\Lambda.
+  N(x)\subset\carrierLattice.
 \]
 \end{definition}
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-epsilon.tex}
-  \caption{Световая $\varepsilon$-окрестность $N(x)$: узлы на расстоянии~$\hl$ за один такт~$\htick$.}
+  \caption{Световая $\varepsilon$-окрестность $N(x)$: узлы на расстоянии~$\caStepSpace$ за один такт~$\htick$.}
   \label{fig:carrier-epsilon}
 \end{figure}
 
@@ -73,7 +73,7 @@
 На плоскости существуют ровно три регулярных типа: треугольник, квадрат и шестиугольник
 (\cref{fig:carrier-tiling-triangle,fig:carrier-tiling-square,fig:carrier-tiling-hex}).
 Число соседей $|N(x)|$ на одном такте --- отдельный вопрос: узлы стоят в центрах плиток
-или в вершинах, и квадратная решётка допускает диагональ $h_L\sqrt{2}$, недостижимую за один~$\htick$
+или в вершинах, и квадратная решётка допускает диагональ $\caStepSpace\sqrt{2}$, недостижимую за один~$\htick$
 (\cref{fig:carrier-neighbors-tri,fig:carrier-neighbors-sq,fig:carrier-neighbors-hex}).
 Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
 (\cref{fig:carrier-hex-neighbors}).
@@ -109,7 +109,7 @@
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-neighbors-sq.tex}
-  \caption{Квадратная решётка: $|N(x)|=4$; диагональ $\hl\sqrt{2}$ недостижима за один такт.}
+  \caption{Квадратная решётка: $|N(x)|=4$; диагональ $\caStepSpace\sqrt{2}$ недостижима за один такт.}
   \label{fig:carrier-neighbors-sq}
 \end{figure}
 
@@ -123,13 +123,13 @@
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-hex-neighbors.tex}
-  \caption{Гексагональная ячейка Вороного: ребро $a=\hl$ и $|N(x)|=6$.}
+  \caption{Гексагональная ячейка Вороного: ребро $a=\caStepSpace$ и $|N(x)|=6$.}
   \label{fig:carrier-hex-neighbors}
 \end{figure}
 
 \subsection{Константы на гексагональном слое}
 
-Центр правильного шестиугольника и его вершина разделены ребром~$a=\hl$.
+Центр правильного шестиугольника и его вершина разделены ребром~$a=\caStepSpace$.
 Апофема --- расстояние от центра до стороны --- есть высота равностороннего треугольника со стороной~$a$:
 \[
   R_{\mathrm{in}}=\frac{\sqrt{3}}{2}\,a.
@@ -138,35 +138,35 @@
 (\cref{fig:carrier-hex-radii}).
 Отношение к радиусу до вершины $R_{\mathrm{out}}=a$ даёт геометрический множитель среза
 \[
-  \kgeom_{\mathrm{hex}}=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}=\frac{\sqrt{3}}{2}.
+  \caKappaGeom_{\mathrm{hex}}=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}=\frac{\sqrt{3}}{2}.
 \]
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-hex-radii.tex}
-  \caption{Вписанный и описанный радиусы правильного шестиугольника: $\kgeom_{\mathrm{hex}}$.}
+  \caption{Вписанный и описанный радиусы правильного шестиугольника: $\caKappaGeom_{\mathrm{hex}}$.}
   \label{fig:carrier-hex-radii}
 \end{figure}
 
-Тактовая скорость $c_0=\hl/\htick$ и макроскопическая~$c$ связаны этим же отношением, $c=\kgeom_{\mathrm{hex}} c_0$,
+Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ и макроскопическая~$\speedC$ связаны этим же отношением, $\speedC=\caKappaGeom_{\mathrm{hex}} \caSignalSpeed$,
 поэтому
 \[
-  \htick=\kgeom_{\mathrm{hex}}\,t_P,\qquad
-  c_0=\frac{2}{\sqrt{3}}\,c,\qquad
+  \htick=\caKappaGeom_{\mathrm{hex}}\,t_P,\qquad
+  \caSignalSpeed=\frac{2}{\sqrt{3}}\,c,\qquad
   \kappa_{\mathrm{link}}=\frac{1}{|N|}=\frac{1}{6}.
 \]
-Число~$c$ одно и на срезе, и на трёхмерном носителе, который будет выбран ниже;
-меняется только разбиение $c=\kgeom c_0$.
+Число~$\speedC$ одно и на срезе, и на трёхмерном носителе, который будет выбран ниже;
+меняется только разбиение $\speedC=\caKappaGeom \caSignalSpeed$.
 
 \section{Выбор FCC с двенадцатью соседями}
 \label{sec:fcc-choice}
 
 \begin{theorem}[Носитель в $(3{+}1)$]
 \label{thm:fcc-choice}
-Пусть выполнены: замощение без дыр; единственная длина~$\hl$;
+Пусть выполнены: замощение без дыр; единственная длина~$\caStepSpace$;
 только светоподобные рёбра за один~$\htick$;
 изотропия вакуума; один носитель на узел; физическое пространство трёхмерно.
-Тогда носитель --- $\Lambda=\mathrm{FCC}$, $|N(x)|=12$ для всех узлов,
+Тогда носитель --- $\carrierLattice=\mathrm{FCC}$, $|N(x)|=12$ для всех узлов,
 $\kappa_{\mathrm{link}}=1/12$.
 \end{theorem}
 
@@ -174,9 +174,9 @@ $\kappa_{\mathrm{link}}=1/12$.
 Сначала отбираются упаковки с одной длиной ребра и без дыр, затем отсекается вторая координационная оболочка световым конусом.
 
 \emph{Упаковка.}
-Ячейку представляем шаром радиуса $\hl/2$: касание двух шаров есть ребро длины~$\hl$.
+Ячейку представляем шаром радиуса $\caStepSpace/2$: касание двух шаров есть ребро длины~$\caStepSpace$.
 В трёх измерениях плотнейшая упаковка равных шаров --- гранецентрированная кубическая или гексагональная плотная (теорема Кеплера).
-У каждого шара тогда ровно двенадцать соседей на расстоянии~$\hl$.
+У каждого шара тогда ровно двенадцать соседей на расстоянии~$\caStepSpace$.
 Простая кубическая решётка имеет шесть соседей, объёмно-центрированная --- восемь; обе реже и отпадают, раз требуется максимальная плотность при одной длине ребра
 (\cref{fig:carrier-packing-sc,fig:carrier-packing-bcc,fig:carrier-packing-fcc}).
 
@@ -208,18 +208,18 @@ $\kappa_{\mathrm{link}}=1/12$.
 Поэтому носитель --- FCC.
 
 \emph{Световой конус.}
-Двенадцать соседей узла в начале координат, при ребре кубической ячейки $\hl\sqrt{2}$, суть все перестановки
+Двенадцать соседей узла в начале координат, при ребре кубической ячейки $\caStepSpace\sqrt{2}$, суть все перестановки
 \[
-  \bigl(\pm\hl/\sqrt{2},\ \pm\hl/\sqrt{2},\ 0\bigr).
+  \bigl(\pm\caStepSpace/\sqrt{2},\ \pm\caStepSpace/\sqrt{2},\ 0\bigr).
 \]
 Расстояние до начала
 \[
-  \sqrt{2\cdot(\hl/\sqrt{2})^2}=\hl.
+  \sqrt{2\cdot(\caStepSpace/\sqrt{2})^2}=\caStepSpace.
 \]
-Вторая оболочка --- перестановки $(\pm\hl\sqrt{2},0,0)$, расстояние $\hl\sqrt{2}$.
-За один такт $c_0\htick=\hl$, и интервал до узла второй оболочки
+Вторая оболочка --- перестановки $(\pm\caStepSpace\sqrt{2},0,0)$, расстояние $\caStepSpace\sqrt{2}$.
+За один такт $\caSignalSpeed\htick=\caStepSpace$, и интервал до узла второй оболочки
 \[
-  c_0^2\htick^2-(\hl\sqrt{2})^2=\hl^2-2\hl^2=-\hl^2<0.
+  \caSignalSpeed^2\htick^2-(\caStepSpace\sqrt{2})^2=\caStepSpace^2-2\caStepSpace^2=-\caStepSpace^2<0.
 \]
 Интервал пространственноподобен: узел второй оболочки за этот такт недостижим
 (\cref{fig:carrier-light-cone-2d,fig:carrier-light-cone-3d}).
@@ -228,7 +228,7 @@ $\kappa_{\mathrm{link}}=1/12$.
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-light-cone-2d.tex}
-  \caption{Световой конус $c_0$ в срезе $(x,t)$: первая оболочка на конусе, вторая ($\hl\sqrt{2}$) --- вне.}
+  \caption{Световой конус $\caSignalSpeed$ в срезе $(x,t)$: первая оболочка на конусе, вторая ($\caStepSpace\sqrt{2}$) --- вне.}
   \label{fig:carrier-light-cone-2d}
 \end{figure}
 
@@ -257,7 +257,7 @@ $\kappa_{\mathrm{link}}=1/12$.
 \label{sec:fcc-kappa}
 
 Выпуклая оболочка двенадцати соседей --- кубооктаэдр.
-Его вершины --- те же точки $(\pm a/\sqrt{2},\pm a/\sqrt{2},0)$ и перестановки, где $a=\hl$.
+Его вершины --- те же точки $(\pm a/\sqrt{2},\pm a/\sqrt{2},0)$ и перестановки, где $a=\caStepSpace$.
 Расстояние от центра до вершины уже сосчитано:
 \[
   R_{\mathrm{out}}=a.
@@ -270,12 +270,12 @@ $\kappa_{\mathrm{link}}=1/12$.
 \]
 Отношение двух длин одного и того же тела
 \[
-  \kgeom=R_{\mathrm{in}}^{\mathrm{hull}}/R_{\mathrm{out}}=1/\sqrt{2}
+  \caKappaGeom=R_{\mathrm{in}}^{\mathrm{hull}}/R_{\mathrm{out}}=1/\sqrt{2}
 \]
 ещё не использует скорость света: это геометрия оболочки.
 Треугольная грань через $(a/\sqrt{2},a/\sqrt{2},0)$, $(a/\sqrt{2},0,a/\sqrt{2})$ и $(0,a/\sqrt{2},a/\sqrt{2})$ лежит в плоскости $x+y+z=a\sqrt{2}$ и отстоит от центра на $a\sqrt{2/3}$.
 Квадратные и треугольные грани лежат на разных расстояниях, поэтому одной вписанной сферы, касающейся всех граней, нет.
-В мост $c=\kgeom c_0$ входит расстояние до квадратной грани
+В мост $\speedC=\caKappaGeom \caSignalSpeed$ входит расстояние до квадратной грани
 (\cref{fig:carrier-cuboctahedron,fig:carrier-cubocta-meridian}).
 
 \begin{figure}[htbp]
@@ -300,7 +300,7 @@ $\kappa_{\mathrm{link}}=1/12$.
 Стена Вороного проходит посредине ребра к соседу, на расстоянии $a/2$ от узла.
 Это не радиус оболочки:
 \[
-  R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2=\kgeom\, R_{\mathrm{in}}^{\mathrm{hull}}.
+  R_{\mathrm{in}}^{\mathrm{Voronoi}}=a/2=\caKappaGeom\, R_{\mathrm{in}}^{\mathrm{hull}}.
 \]
 (\cref{fig:carrier-hull-voronoi,fig:carrier-voronoi-cell}).
 Двенадцать соседей двойственны двенадцати ромбам этой ячейки.
@@ -338,22 +338,22 @@ $\kappa_{\mathrm{link}}=1/12$.
 
 Макроскопическая скорость связана с тактовой тем же отношением радиусов оболочки:
 \[
-  c=\kgeom c_0,\qquad \htick=\kgeom\, t_P,\qquad c_0=\sqrt{2}\,c,
+  c=\caKappaGeom \caSignalSpeed,\qquad \htick=\caKappaGeom\, t_P,\qquad \caSignalSpeed=\sqrt{2}\,c,
 \]
-где $t_P=\hl/c$ --- учебниковая метка.
-Непрерывное определение $t_P=\hl/c$ предполагало бы $c_0=c$; на этой оболочке тактовая и макроскопическая скорости различаются множителем~$\sqrt{2}$.
+где $t_P=\caStepSpace/c$ --- учебниковая метка.
+Непрерывное определение $t_P=\caStepSpace/c$ предполагало бы $\caSignalSpeed=c$; на этой оболочке тактовая и макроскопическая скорости различаются множителем~$\sqrt{2}$.
 
 \section{Планковская решётка}
 \label{sec:planck-lattice}
 
 \begin{definition}[Планковская решётка]
 \label{def:planck-lattice}
-Носитель $\Lambda$ --- FCC-подрешётка $\mathbb{R}^3$
+Носитель $\carrierLattice$ --- FCC-подрешётка $\mathbb{R}^3$
 (теорема~\ref{thm:fcc-choice}).
 Срез плоскостью $\{111\}$ даёт гексагональный слой $(2{+}1)$ (\cref{sec:hex-slice}, \cref{fig:carrier-fcc-111-slice}).
 Объём элементарной ячейки Вороного
 \[
-  v_{\hv}=\hl^3/\sqrt{2}.
+  v_{\hv}=\caStepSpace^3/\sqrt{2}.
 \]
 \end{definition}
 
@@ -364,75 +364,75 @@ $\kappa_{\mathrm{link}}=1/12$.
   \label{fig:carrier-fcc-111-slice}
 \end{figure}
 
-Для этого носителя $\htick=\kgeom\, t_P$ при $\kgeom=1/\sqrt{2}$,
-где $t_P=\hl/c$ --- планковское время в учебниковой нормировке; тогда $c_0=\sqrt{2}\,c$.
-Это не подгонка задним числом: непрерывное определение $t_P=\hl/c$ предполагает $c_0=c$,
-тогда как на решётке с $\kgeom=1/\sqrt{2}$ тактовая и макроскопическая скорости
+Для этого носителя $\htick=\caKappaGeom\, t_P$ при $\caKappaGeom=1/\sqrt{2}$,
+где $t_P=\caStepSpace/c$ --- планковское время в учебниковой нормировке; тогда $\caSignalSpeed=\sqrt{2}\,c$.
+Это не подгонка задним числом: непрерывное определение $t_P=\caStepSpace/c$ предполагает $\caSignalSpeed=c$,
+тогда как на решётке с $\caKappaGeom=1/\sqrt{2}$ тактовая и макроскопическая скорости
 принципиально различаются.
 
-\section{Две скорости и мост $c=\kgeom c_0$}
+\section{Две скорости и мост $\speedC=\caKappaGeom \caSignalSpeed$}
 \label{sec:two-c}
 
 На гексагональном срезе $(2{+}1)$ коэффициент
 \[
-\kgeom_{\mathrm{hex}}=\sqrt{3}/2
+\caKappaGeom_{\mathrm{hex}}=\sqrt{3}/2
 \]
 (\cref{sec:hex-slice}); на FCC-носителе
 \[
-\kgeom_{\mathrm{FCC}}=1/\sqrt{2}
+\caKappaGeom_{\mathrm{FCC}}=1/\sqrt{2}
 \]
 (\cref{sec:fcc-kappa}).
-Величина $\kgeom$ --- отношение радиусов вписанной и описанной сфер однотактового тела.
-Тождество $c=\kgeom c_0$ служит проверкой согласованности макроописания
-после фиксации $\htick=\kgeom t_P$ (\cref{fig:carrier-two-speeds-micro,fig:carrier-two-speeds-macro}).
+Величина $\caKappaGeom$ --- отношение радиусов вписанной и описанной сфер однотактового тела.
+Тождество $\speedC=\caKappaGeom \caSignalSpeed$ служит проверкой согласованности макроописания
+после фиксации $\htick=\caKappaGeom t_P$ (\cref{fig:carrier-two-speeds-micro,fig:carrier-two-speeds-macro}).
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-two-speeds-micro.tex}
-  \caption{Микро: дискретный шаг по решётке, тактовая скорость $c_0$.}
+  \caption{Микро: дискретный шаг по решётке, тактовая скорость $\caSignalSpeed$.}
   \label{fig:carrier-two-speeds-micro}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-two-speeds-macro.tex}
-  \caption{Макро: осреднённый фронт, $c=\kgeom c_0$.}
+  \caption{Макро: осреднённый фронт, $\speedC=\caKappaGeom \caSignalSpeed$.}
   \label{fig:carrier-two-speeds-macro}
 \end{figure}
 
 \section{Отказ от континуума на микроуровне}
 \label{sec:no-continuum-carrier}
 
-Непрерывное пространство-время $(x,t)\in\mathbb{R}^4$ с пределом $\hl,\htick\to 0$
-\emph{не} описывает микроуровень~$M$, как только зафиксированы FCC, $\kgeom=1/\sqrt{2}$
+Непрерывное пространство-время $(x,t)\in\mathbb{R}^4$ с пределом $\caStepSpace,\htick\to 0$
+\emph{не} описывает микроуровень~$M$, как только зафиксированы FCC, $\caKappaGeom=1/\sqrt{2}$
 и значение~$c$ из эксперимента.
 Непрерывные поля и дифференциальные уравнения --- язык макроуровня~$T$
-на \emph{фиксированной} решётке; уменьшение $\hl$ не определено:
-$\hl$ --- минимальный квант длины.
+на \emph{фиксированной} решётке; уменьшение $\caStepSpace$ не определено:
+$\caStepSpace$ --- минимальный квант длины.
 
 \section{Каузальность и наблюдаемая скорость света}
 
-По решётке сигнал проходит за такт не дальше~$c_0\htick=\hl$.
-На микроуровне мировая линия --- ломаная по рёбрам $N(x)$ со скоростью звена~$c_0$;
+По решётке сигнал проходит за такт не дальше~$\caSignalSpeed\htick=\caStepSpace$.
+На микроуровне мировая линия --- ломаная по рёбрам $N(x)$ со скоростью звена~$\caSignalSpeed$;
 массивная частица --- зигзаг внутри того же конуса (\cref{fig:carrier-worldlines-fcc,fig:carrier-worldlines-hex}).
-Макроскопический наблюдатель, осредняя поле на масштабах $\gg\hl$,
-восстанавливает null-линию со скоростью $c=\kgeom c_0$ на FCC.
-Локальная структура размера порядка~$\hl$ несёт конус~$c_0$;
+Макроскопический наблюдатель, осредняя поле на масштабах $\gg\caStepSpace$,
+восстанавливает null-линию со скоростью $\speedC=\caKappaGeom \caSignalSpeed$ на FCC.
+Локальная структура размера порядка~$\caStepSpace$ несёт конус~$\caSignalSpeed$;
 составная структура, простирающаяся на многие ячейки, усредняется до макроскопической~$c$.
 Сверхсветовое распространение на~$T$ здесь не возникает: сигнал не покидает
-микроскопический световой конус~$c_0$.
+микроскопический световой конус~$\caSignalSpeed$.
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-worldlines-fcc.tex}
-  \caption{Мировые линии на FCC ($\kgeom=1/\sqrt{2}$): микро-null, зигзаг и макро-фотон $c=\kgeom c_0$.}
+  \caption{Мировые линии на FCC ($\caKappaGeom=1/\sqrt{2}$): микро-null, зигзаг и макро-фотон $\speedC=\caKappaGeom \caSignalSpeed$.}
   \label{fig:carrier-worldlines-fcc}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-worldlines-hex.tex}
-  \caption{Мировые линии на гекс-срезе $(2{+}1)$ ($\kgeom_{\mathrm{hex}}=\sqrt{3}/2$).}
+  \caption{Мировые линии на гекс-срезе $(2{+}1)$ ($\caKappaGeom_{\mathrm{hex}}=\sqrt{3}/2$).}
   \label{fig:carrier-worldlines-hex}
 \end{figure}
 
@@ -441,7 +441,7 @@ $\hl$ --- минимальный квант длины.
 В классической физике твёрдого тела атомы расположены на решётке Браве,
 элементарная ячейка задаётся зоной Вигнера--Зейтца, колебания описываются фононами,
 спектр --- зонами Блоха.
-Если под атомами лежит среда элементарных носителей масштаба~$\hl$,
+Если под атомами лежит среда элементарных носителей масштаба~$\caStepSpace$,
 тот же словарь повторяется на более глубоком уровне:
 центры --- ячейки~$\hv$ масштаба~$\ell_P$,
 частицы --- первичные вихри и моды поля~$z$,
@@ -452,20 +452,20 @@ $\hl$ --- минимальный квант длины.
 
 Гексагональный слой $(2{+}1)$ --- срез пространства Минковского $(3{+}1)$ с FCC
 (\cref{fig:carrier-slice-hex-layer,fig:carrier-slice-fcc-layer}).
-Мост $c=\kgeom c_0$ с $\kgeom=1/\sqrt{2}$ якорится на полном трёхмерном носителе;
-чистый $(2{+}1)$ без объёма несёт $\kgeom=\sqrt{3}/2$.
+Мост $\speedC=\caKappaGeom \caSignalSpeed$ с $\caKappaGeom=1/\sqrt{2}$ якорится на полном трёхмерном носителе;
+чистый $(2{+}1)$ без объёма несёт $\caKappaGeom=\sqrt{3}/2$.
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-slice-hex-layer.tex}
-  \caption{Гексагональный срез $(2{+}1)$: $\kgeom_{\mathrm{hex}}=\sqrt{3}/2$, $|N|=6$.}
+  \caption{Гексагональный срез $(2{+}1)$: $\caKappaGeom_{\mathrm{hex}}=\sqrt{3}/2$, $|N|=6$.}
   \label{fig:carrier-slice-hex-layer}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-slice-fcc-layer.tex}
-  \caption{Носитель $(3{+}1)$ FCC и срез $\{111\}$: $\kgeom=1/\sqrt{2}$, $|N|=12$.}
+  \caption{Носитель $(3{+}1)$ FCC и срез $\{111\}$: $\caKappaGeom=1/\sqrt{2}$, $|N|=12$.}
   \label{fig:carrier-slice-fcc-layer}
 \end{figure}
 

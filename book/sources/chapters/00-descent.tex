@@ -15,9 +15,9 @@
 Возмущение доходит за конечное время.
 Если бы влияние было мгновенным, показание прибора в данном месте зависело бы от того,
 что в тот же момент происходит сколь угодно далеко, и локальный опыт не сходился бы.
-За время~$\Delta t$ сигнал проходит путь не длиннее~$c\Delta t$:
+За время~$\caStepTime$ сигнал проходит путь не длиннее~$\speedC\,\caStepTime$:
 \begin{equation}
-  |\Delta\mathbf{x}| \le c\,\Delta t.
+  |\symCapitalDelta\vecX| \le \speedC\,\caStepTime.
   \label{eq:light-cone}
 \end{equation}
 Любой более глубокий закон обязан сохранить этот конус.
@@ -27,52 +27,52 @@
 Для электромагнитного поля это уравнения Максвелла:
 производная по времени стоит в точке, ротор и дивергенция берут соседние значения,
 \begin{align}
-  \nabla\times\mathbf{E} &= -\partial_t\mathbf{B}, &
-  \nabla\cdot\mathbf{B} &= 0, \label{eq:maxwell-hom}\\
-  \nabla\times\mathbf{B}
-    &= \mu_0\mathbf{j} + \mu_0\varepsilon_0\,\partial_t\mathbf{E}, &
-  \nabla\cdot\mathbf{E} &= \rho/\varepsilon_0. \label{eq:maxwell-inh}
+  \opNabla\times\fieldE &= -\opPartialT\fieldB, &
+  \opNabla\cdot\fieldB &= 0, \label{eq:maxwell-hom}\\
+  \opNabla\times\fieldB
+    &= \constMuZero\fieldJ + \constMuZero\constEpsZero\,\opPartialT\fieldE, &
+  \opNabla\cdot\fieldE &= \chargeRho/\constEpsZero. \label{eq:maxwell-inh}
 \end{align}
 Характеристики этой системы лежат на конусе \eqref{eq:light-cone}.
 Та же схема у гидродинамики.
 Для идеальной жидкости скорость в точке меняется от давления и скорости рядом:
 \begin{equation}
-  \partial_t\mathbf{v} + (\mathbf{v}\cdot\nabla)\mathbf{v}
-  = -\frac{1}{\rho}\nabla p.
+  \opPartialT\fieldV + (\fieldV\cdot\opNabla)\fieldV
+  = -\frac{1}{\massDensity}\opNabla \pressureP.
   \label{eq:euler}
 \end{equation}
 В механике сплошной среды справа стоит дивергенция напряжений,
-$\partial_k\sigma_{ik}$, снова из окрестности той же точки.
+$\opPartialK\stressSigmaIk$, снова из окрестности той же точки.
 
 Механическое состояние исчерпывается координатами и скоростями.
-Положение точки есть $\mathbf{r}(t)$, скорость --- его производная,
+Положение точки есть $\fieldR(t)$, скорость --- его производная,
 \begin{equation}
-  \mathbf{v} = \dot{\mathbf{r}}.
+  \fieldV = \dot{\fieldR}.
   \label{eq:velocity}
 \end{equation}
 Уравнения Ньютона связывают ускорение с этим состоянием:
 \begin{equation}
-  m\ddot{\mathbf{r}} = \mathbf{F}(\mathbf{r},\dot{\mathbf{r}}).
+  \massBody\ddot{\fieldR} = \fieldF(\fieldR,\dot{\fieldR}).
   \label{eq:newton}
 \end{equation}
 Это уравнение второго порядка.
-Задание $\mathbf{r}$ и~$\dot{\mathbf{r}}$ в один момент восстанавливает их и в предыдущий, и в следующий.
+Задание $\fieldR$ и~$\dot{\fieldR}$ в один момент восстанавливает их и в предыдущий, и в следующий.
 Старшей производной среди начальных данных в \eqref{eq:newton} нет:
 закон, которому она понадобилась бы, описывал бы другой мир.
 
 Тепловое равновесие добавляет два запрета, тоже измеренных.
 В адиабатически замкнутой системе энтропия не убывает,
 \begin{equation}
-  \mathrm{d}S \ge 0.
+  \mathrm{d}\entropyS \ge 0.
   \label{eq:second-law}
 \end{equation}
-При $T\to 0$ энтропия равновесной системы перестаёт зависеть от параметров равновесия~$\lambda$
+При $\tempT\to 0$ энтропия равновесной системы перестаёт зависеть от параметров равновесия~$\symEll$
 и в шкале Планка обращается в нуль:
 \begin{equation}
-  \Bigl(\frac{\partial S}{\partial\lambda}\Bigr)_{T}
-    \xrightarrow[T\to 0]{} 0,
+  \Bigl(\frac{\partial \entropyS}{\partial \symEll}\Bigr)_{\tempT}
+    \xrightarrow[\tempT\to 0]{} 0,
   \qquad
-  S \xrightarrow[T\to 0]{} 0.
+  \entropyS \xrightarrow[\tempT\to 0]{} 0.
   \label{eq:third-law}
 \end{equation}
 Система садится в одно основное состояние.
@@ -83,14 +83,14 @@ $\partial_k\sigma_{ik}$, снова из окрестности той же то
 скорость одна и та же вдоль любой оси.
 Вместе с \eqref{eq:light-cone} это интервал
 \begin{equation}
-  \mathrm{d}s^2 = c^2\,\mathrm{d}t^2 - \mathrm{d}\mathbf{x}^2,
+  \mathrm{d}s^2 = \speedC^2\,\mathrm{d}t^2 - \mathrm{d}\vecX^2,
   \label{eq:interval}
 \end{equation}
 один и тот же во всех инерциальных системах.
 Заряд в замкнутой системе сохраняется.
 Это уравнение непрерывности
 \begin{equation}
-  \partial_t\rho + \nabla\cdot\mathbf{j} = 0,
+  \opPartialT\chargeRho + \opNabla\cdot\fieldJ = 0,
   \label{eq:continuity}
 \end{equation}
 а на узле проводников --- закон Кирхгофа, $\sum_k I_k = 0$.
@@ -110,19 +110,19 @@ $\partial_k\sigma_{ik}$, снова из окрестности той же то
 Из \eqref{eq:second-law} и \eqref{eq:third-law} строится термодинамика.
 Температура есть производная энергии по энтропии,
 \begin{equation}
-  T = \Bigl(\frac{\partial E}{\partial S}\Bigr)_{V,N},
+  \tempT = \Bigl(\frac{\partial \energyE}{\partial \entropyS}\Bigr)_{V,N},
   \label{eq:temperature}
 \end{equation}
 и из неё же --- потенциалы.
 Интервал \eqref{eq:interval} один и тот же во всех инерциальных системах,
 поэтому энергия и импульс составляют четырёхвектор
 \begin{equation}
-  p^{\mu} = (E/c,\,\mathbf{p}).
+  p^{\mu} = (\energyE/\speedC,\,\vecP).
   \label{eq:four-momentum}
 \end{equation}
 
 Из этих уравнений собрана система единиц.
-Числа~$c$, $\hbar$, $k_B$, заряд~$e$, массы частиц и постоянная тонкой структуры~$\alpha_{\mathrm{fs}}$ в ней измерены.
+Числа~$\speedC$, $\planckHbar$, $\constBoltzmann$, заряд~$\chargeE$, массы частиц и постоянная тонкой структуры~$\alphaFs$ в ней измерены.
 Сами уравнения их не выводят.
 На этом этаже такое ещё терпимо: число может быть константой прибора.
 Один этаж ниже тот же закон, если он претендует быть фундаментальным, уже не имеет права оставлять число вписанным рукой.
@@ -139,10 +139,10 @@ $\partial_k\sigma_{ik}$, снова из окрестности той же то
 Уравнения поля содержат частоты и не содержат границу между системой, прибором и записью результата.
 Сохранение того, что в ансамбле выглядит как полная вероятность, здесь ещё не объясняет одиночный отсчёт.
 
-Числа~$c$, $\hbar$, $G$, $e$ и массы фермионов измерены с большой точностью.
+Числа~$\speedC$, $\planckHbar$, $\constGrav$, $\chargeE$ и массы фермионов измерены с большой точностью.
 Безразмерное число, которое из них собирается, --- постоянная тонкой структуры
 \begin{equation}
-  \alpha_{\mathrm{fs}} = \frac{e^2}{4\pi\varepsilon_0\hbar c}.
+  \alphaFs = \frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}.
   \label{eq:alpha-fs}
 \end{equation}
 Она стоит в законе свободным множителем:
@@ -152,27 +152,27 @@ $\partial_k\sigma_{ik}$, снова из окрестности той же то
 
 \begin{remark}[Формула \eqref{eq:alpha-fs} --- мост, не онтология]
 \label{rem:alpha-fs-bridge}
-Запись $\alpha_{\mathrm{fs}}=e^2/(4\pi\varepsilon_0\hbar c)$ удобна на~$T$:
+Запись $\alphaFs=\chargeE^2/(4\symPi\constEpsZero\planckHbar \speedC)$ удобна на~$\layerMacro$:
 безразмерное число \emph{собрано} из измеренных размерных величин.
-На~$\Mlayer$ тот же объект --- coupling фазы и вакуума и отношение квантов силы $F_0$
-(\cref{ch:alpha}, \cref{def:alpha-meaning}); $e$ не входит в его \emph{определение}.
+На~$\layerMicro$ тот же объект --- coupling фазы и вакуума и отношение квантов силы $\ladderForce$
+(\cref{ch:alpha}, \cref{def:alpha-meaning}); $\chargeE$ не входит в его \emph{определение}.
 \end{remark}
 
 \begin{remark}[Размерный анализ \eqref{eq:alpha-fs}]
 \label{rem:alpha-fs-dim}
-В СИ (оси $\mathrm{L,M,T,I}$): $[e]=\mathrm{IT}$, $[\hbar]=\mathrm{ML^{2}T^{-1}}$, $[c]=\mathrm{LT^{-1}}$.
-Из закона Кулона $F=q_1 q_2/(4\pi\varepsilon_0 r^2)$ при $[F]=\mathrm{MLT^{-2}}$, $[r]=\mathrm{L}$:
+В СИ (оси $\mathrm{L,M,T,I}$): $[\chargeE]=\mathrm{IT}$, $[\planckHbar]=\mathrm{ML^{2}T^{-1}}$, $[\speedC]=\mathrm{LT^{-1}}$.
+Из закона Кулона $F=q_1 q_2/(4\symPi\constEpsZero r^2)$ при $[F]=\mathrm{MLT^{-2}}$, $[r]=\mathrm{L}$:
 \[
-  [\varepsilon_0]=\mathrm{M^{-1}L^{-3}T^{4}I^{2}}.
+  [\constEpsZero]=\mathrm{M^{-1}L^{-3}T^{4}I^{2}}.
 \]
 Произведение в знаменателе:
 \[
-  [\varepsilon_0\hbar c]
+  [\constEpsZero\planckHbar \speedC]
   =\mathrm{M^{-1}L^{-3}T^{4}I^{2}}\cdot\mathrm{ML^{2}T^{-1}}\cdot\mathrm{LT^{-1}}
   =\mathrm{T^{2}I^{2}},
 \]
 \[
-  \left[\frac{e^{2}}{4\pi\varepsilon_{0}\hbar c}\right]
+  \left[\frac{\chargeE^{2}}{4\symPi\constEpsZero\planckHbar \speedC}\right]
   =\frac{\mathrm{I^{2}T^{2}}}{\mathrm{T^{2}I^{2}}}=1.
 \]
 Coupling обязан быть безразмерным; формула --- единственная способность линейки СИ
@@ -182,36 +182,36 @@ Coupling обязан быть безразмерным; формула --- ед
 Чёрная дыра делает ограниченность плотности видимой числом.
 Энтропия горизонта пропорциональна его площади~$A$:
 \begin{equation}
-  S = \frac{k_B A}{4\ell_P^2},
+  \entropyS = \frac{\constBoltzmann A}{4\lengthPlanck^2},
   \qquad
-  \ell_P^2 = \frac{\hbar G}{c^3}.
+  \lengthPlanck^2 = \frac{\planckHbar \constGrav}{\speedC^3}.
   \label{eq:bh-entropy}
 \end{equation}
-Размерный контроль: $[G]=\mathrm{L^{3}M^{-1}T^{-2}}$, $[\hbar G/c^{3}]=\mathrm{L^{2}}$,
-$[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согласуется с $[k_B A/\ell_P^{2}]$.
+Размерный контроль: $[\constGrav]=\mathrm{L^{3}M^{-1}T^{-2}}$, $[\planckHbar \constGrav/\speedC^{3}]=\mathrm{L^{2}}$,
+$[A/\lengthPlanck^{2}]=1$, энтропия $[\entropyS]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согласуется с $[\constBoltzmann A/\lengthPlanck^{2}]$.
 Число различимых состояний в причинно связанной области поэтому конечно,
 \begin{equation}
-  \ln\mathcal{N} \le \frac{A}{4\ell_P^2}.
+  \ln\opNormN \le \frac{A}{4\lengthPlanck^2}.
   \label{eq:state-count}
 \end{equation}
 У шара радиуса~$R$ правая часть пропорциональна~$R^2$.
 Набор независимых значений поля в каждой точке объёма рос бы как объём, то есть как~$R^3$,
-а непрерывное значение в каждой точке $x\in\mathbb{R}^3$ даёт несчётное множество конфигураций.
+а непрерывное значение в каждой точке $x\in\spaceRthree$ даёт несчётное множество конфигураций.
 Энергия в той же области ограничена сверху по той же причине.
 Горизонт Шварцшильда
 \begin{equation}
-  R_s = \frac{2GE}{c^4}
+  R_s = \frac{2\constGrav\energyE}{\speedC^4}
   \label{eq:schwarzschild}
 \end{equation}
 достигает радиуса области, когда энергия слишком велика:
 \begin{equation}
-  E \le \frac{R c^4}{2G}.
+  \energyE \le \frac{R \speedC^4}{2\constGrav}.
   \label{eq:energy-bound}
 \end{equation}
 Общая теория относительности и квантовая теория поля локально друг другу не противоречат
 и счёта \eqref{eq:state-count} не содержат.
 
-Там, где одновременно существенны $\hbar$, $G$ и~$c$, масштаб есть~$\ell_P$ из \eqref{eq:bh-entropy}.
+Там, где одновременно существенны $\planckHbar$, $\constGrav$ и~$\speedC$, масштаб есть~$\lengthPlanck$ из \eqref{eq:bh-entropy}.
 Поле в каждой точке счёт \eqref{eq:state-count} нарушает.
 Следующий этаж --- запись того же сохранения и той же обратимости,
 при которой спектр атома и два знака спина уже получаются.
@@ -223,71 +223,71 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 устойчивые орбиты и линейчатый спектр ей противоречат.
 Кулоновская задача для электрона,
 \begin{equation}
-  \Bigl(-\frac{\hbar^2}{2m_e}\nabla^2 - \frac{e^2}{4\pi\varepsilon_0 r}\Bigr)\psi = E\psi,
+  \Bigl(-\frac{\planckHbar^2}{2\massElectron}\opNabla^2 - \frac{\chargeE^2}{4\symPi\constEpsZero r}\Bigr)\wavePsi = \energyE\wavePsi,
   \label{eq:hydrogen}
 \end{equation}
 даёт дискретные уровни
 \begin{equation}
-  E_n = -\frac{m_e c^2\alpha_{\mathrm{fs}}^2}{2n^2},
+  E_n = -\frac{\massElectron \speedC^2\alphaFs^2}{2n^2},
   \qquad n=1,2,\ldots
   \label{eq:rydberg}
 \end{equation}
 Опыт интерференции показывает ещё и то, что складываются не частоты исходов, а амплитуды:
 \begin{equation}
-  w \propto |\psi_1+\psi_2|^2,
+  w \propto |\wavePsi_1+\wavePsi_2|^2,
   \label{eq:interference}
 \end{equation}
 иначе тёмных полос не было бы.
 Состояние, из которого такие амплитуды читаются, есть вектор;
 частота исхода на макроэтаже есть квадрат его модуля,
 \begin{equation}
-  w(a) = |\langle a|\psi\rangle|^2.
+  w(a) = |\langle a|\wavePsi\rangle|^2.
   \label{eq:born}
 \end{equation}
 Обратимость, уже видная в \eqref{eq:newton}, здесь означает,
 что эволюция не меняет полную норму.
 Уравнение Шрёдингера
 \begin{equation}
-  i\hbar\,\partial_t\psi = H\psi,
-  \qquad H^\dagger = H,
+  i\planckHbar\,\opPartialT\wavePsi = \hamiltonianH\wavePsi,
+  \qquad \hamiltonianH^\dagger = \hamiltonianH,
   \label{eq:schrodinger}
 \end{equation}
 сохраняет
 \begin{equation}
-  \langle\psi|\psi\rangle = \mathrm{const}
+  \langle\wavePsi|\wavePsi\rangle = \mathrm{const}
   \label{eq:norm}
 \end{equation}
 и по состоянию в один момент восстанавливает состояние в предыдущий.
 
 Опыт со спином электрона даёт два исхода,
 \begin{equation}
-  s_z = \pm\frac{\hbar}{2},
+  s_z = \pm\frac{\planckHbar}{2},
   \label{eq:spin-z}
 \end{equation}
 и ещё одно свойство поворота.
-Поворот на угол~$\theta$ вокруг оси~$\mathbf{n}$ действует как
+Поворот на угол~$\symTheta$ вокруг оси~$\mathbf{n}$ действует как
 \begin{equation}
-  U(\mathbf{n},\theta)
-  = \exp\bigl(-i\theta\,\mathbf{n}\cdot\boldsymbol{\sigma}/2\bigr).
+  U(\mathbf{n},\symTheta)
+  = \exp\bigl(-i\symTheta\,\mathbf{n}\cdot\boldsymbol{\sigma}/2\bigr).
   \label{eq:spin-rotation}
 \end{equation}
-Оборот на $2\pi$ меняет знак, оборот на $4\pi$ возвращает состояние:
+Оборот на $2\symPi$ меняет знак, оборот на $4\symPi$ возвращает состояние:
 \begin{equation}
-  U(2\pi)=-\mathbb{1},
+  U(2\symPi)=-\mathbb{1},
   \qquad
-  U(4\pi)=+\mathbb{1}.
+  U(4\symPi)=+\mathbb{1}.
   \label{eq:spin-4pi}
 \end{equation}
-Запись состояния --- столбец $\psi\in\mathbb{C}^2$.
-Общий множитель-фаза $e^{i\alpha}$ не меняет частот \eqref{eq:born}
+Запись состояния --- столбец $\wavePsi\in\spaceC^2$.
+Общий множитель-фаза $e^{i\symAlpha}$ не меняет частот \eqref{eq:born}
 и соответствует сохранению заряда, уже записанному \eqref{eq:continuity}.
 Локальный поворот двух компонент лежит в $SU(2)$.
 
 Физическая величина, построенная из такого состояния,
-не имеет права зависеть от того, где проведён разрез аргумента на $2\pi$.
+не имеет права зависеть от того, где проведён разрез аргумента на $2\symPi$.
 Комбинация, которая разреза не видит, собирается из амплитуды и сопряжённой амплитуды:
 \begin{equation}
-  \langle\psi|O|\psi\rangle.
+  \langle\wavePsi|O|\wavePsi\rangle.
   \label{eq:observable}
 \end{equation}
 
@@ -306,7 +306,7 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 
 Заряд, который доходит до прибора, кратен элементарному:
 \begin{equation}
-  Q = n e, \qquad n\in\mathbb{Z}.
+  Q = n \chargeE, \qquad n\in\spaceZ.
   \label{eq:charge-quantum}
 \end{equation}
 Свободный кварк не наблюдается, заряд лептона целый.
@@ -318,7 +318,7 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
   \label{eq:cpt}
 \end{equation}
 по отдельности отражение и зарядовое сопряжение в слабом взаимодействии нарушены.
-Общий поворот фазы вакуума $\psi\mapsto e^{i\alpha}\psi$ не меняет частот:
+Общий поворот фазы вакуума $\wavePsi\mapsto e^{i\symAlpha}\wavePsi$ не меняет частот:
 это то же сохранение заряда, \eqref{eq:continuity}.
 Обе симметрии должны сидеть в самом законе.
 
@@ -338,7 +338,7 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 Квантование метрики в той же схеме не замкнуто.
 Планковская энергия
 \begin{equation}
-  E_P = \sqrt{\frac{\hbar c^5}{G}}
+  E_P = \sqrt{\frac{\planckHbar \speedC^5}{\constGrav}}
   \label{eq:planck-energy}
 \end{equation}
 --- граница записи тех же требований.
@@ -350,22 +350,22 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 \label{sec:carrier-object}
 
 Масштаб длины, на котором одновременно видны
-квантовость, локальная кривизна и причинность, уже записан: $\ell_P$ в \eqref{eq:bh-entropy}.
-Вместе с ним время~$t_P=\ell_P/c$ и масса~$m_P=\sqrt{\hbar c/G}$,
+квантовость, локальная кривизна и причинность, уже записан: $\lengthPlanck$ в \eqref{eq:bh-entropy}.
+Вместе с ним время~$\timePlanck=\lengthPlanck/\speedC$ и масса~$m_P=\sqrt{\planckHbar \speedC/\constGrav}$,
 а энергия того же масштаба --- \eqref{eq:planck-energy}.
 Физика по-прежнему не зависит от человеческих единиц:
 важны безразмерные отношения и те же симметрии, что названы выше.
 
 Требование ограниченной плотности уже названо.
-Если в каждой точке $x\in\mathbb{R}^3$ сидит своё комплексное число,
+Если в каждой точке $x\in\spaceRthree$ сидит своё комплексное число,
 в любом конечном причинном объёме конфигураций несчётно много,
 а требование уже ограничивает это число.
 Место, на котором это выполнено, --- счётное множество узлов.
 
 \begin{definition}[Носитель как множество узлов]
 \label{def:carrier-sites}
-Носитель микроуровня~$M$ --- счётное множество узлов~$\Lambda$.
-Время, согласное с одним шагом сигнала, дискретно: $t\in\mathbb{Z}$.
+Носитель микроуровня~$\layerMicro$ --- счётное множество узлов~$\carrierLattice$.
+Время, согласное с одним шагом сигнала, дискретно: $t\in\spaceZ$.
 \end{definition}
 
 Требование конечной скорости уже названо.
@@ -373,20 +373,20 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 
 \begin{definition}[Элементарные шаг и такт]
 \label{def:step-tick}
-Шаг решётки $a$, такт $\Delta t$ и тактовая скорость $c_0$ на~\Mlayer связаны так:
+Шаг решётки $\caStepSpace$, такт $\caStepTime$ и тактовая скорость $\caSignalSpeed$ на~\layerMicro связаны так:
 \begin{equation}
-  c_0 = \frac{a}{\Delta t}.
+  \caSignalSpeed = \frac{\caStepSpace}{\caStepTime}.
 \end{equation}
-За один $\Delta t$ сигнал не дальше одного $a$.
-Номер такта --- $\tau\in\mathbb{Z}$; $t_{\mathrm{SI}}(\tau)=\tau\,\Delta t$ после моста (\cref{def:si-bridge}).
+За один $\caStepTime$ сигнал не дальше одного $\caStepSpace$.
+Номер такта --- $\symTau\in\spaceZ$; $t_{\mathrm{SI}}(\symTau)=\symTau\,\caStepTime$ после моста (\cref{def:si-bridge}).
 \end{definition}
 
 \begin{definition}[Окрестность одного такта]
 \label{def:neighborhood}
-Окрестность узла $x\in\Lambda$ --- множество узлов, достижимых из~$x$
+Окрестность узла $x\in\carrierLattice$ --- множество узлов, достижимых из~$x$
 ровно за один такт:
 \[
-  N(x)\subset\Lambda.
+  N(x)\subset\carrierLattice.
 \]
 \end{definition}
 
@@ -396,26 +396,26 @@ $[A/\ell_P^{2}]=1$, энтропия $[S]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согл�
 
 \begin{definition}[Поле и норма]
 \label{def:field-a3}
-На каждом узле $x\in\Lambda$ задан спинор
+На каждом узле $x\in\carrierLattice$ задан спинор
 \[
-  z(x,t)=(z_1,z_2)^\top\in\mathbb{C}^2.
+  z(x,t)=(z_1,z_2)^\top\in\spaceC^2.
 \]
-$\PlanckCell$ --- этот узел.
+$\caPlanckCell$ --- этот узел.
 Модуль $|z_1|^2+|z_2|^2$ --- плотность поля на узле;
 фазы $z_k/|z_k|$ --- степени свободы, которые перемешиваются при эволюции.
 Конфигурация всех узлов в такт~$t$ есть
 \[
-  \Psi^t=\{z(x,t)\}_{x\in\Lambda}.
+  \symCapitalPsi^t=\{z(x,t)\}_{x\in\carrierLattice}.
 \]
-Суммарная норма, аналог $\langle\psi|\psi\rangle$,
+Суммарная норма, аналог $\langle\wavePsi|\wavePsi\rangle$,
 \[
-  N(t):=\sum_{x\in\Lambda} z^\dagger(x,t)\,z(x,t)=\sum_x\bigl(|z_1|^2+|z_2|^2\bigr).
+  N(t):=\sum_{x\in\carrierLattice} z^\dagger(x,t)\,z(x,t)=\sum_x\bigl(|z_1|^2+|z_2|^2\bigr).
 \]
 \end{definition}
 
 Дальше --- не новый «язык'', а те же требования, записанные без континуума:
 дискретная фаза, конечный регистр на узле, обратимый локальный шаг.
-Геометрия~$\Lambda$ (FCC) и конкретный закон~$g$ выбираются в следующих главах;
+Геометрия~$\carrierLattice$ (FCC) и конкретный закон~$g$ выбираются в следующих главах;
 здесь фиксируется, \emph{что} осталось после QED и планковского счёта.
 
 \section{Дискретизация фазы}
@@ -424,62 +424,62 @@ $\PlanckCell$ --- этот узел.
 
 На макроэтаже волновая функция допускает запись Маделунга,
 \[
-  \psi=\sqrt{\rho}\,e^{i\varphi/\hbar},
+  \wavePsi=\sqrt{\massDensity}\,e^{i\phaseVarphi/\planckHbar},
 \]
-с плотностью $\rho=|\psi|^2$ и фазой~$\varphi$.
-На узле~$\PlanckCell$ тот же смысл несут $|z|^2$ и аргументы компонент $z_k$.
-Континуумная фаза $\varphi\in\mathbb{R}$ на одной планковской ячейке не определена бесконечно точно:
+с плотностью $\massDensity=|\wavePsi|^2$ и фазой~$\phaseVarphi$.
+На узле~$\caPlanckCell$ тот же смысл несут $|z|^2$ и аргументы компонент $z_k$.
+Континуумная фаза $\phaseVarphi\in\spaceR$ на одной планковской ячейке не определена бесконечно точно:
 требование обратимости и конечного числа различимых состояний
 (\eqref{eq:state-count}) задаёт \emph{конечное кольцо фаз}.
 
-Счёт \eqref{eq:state-count} на ячейке объёма~$v_{\hv}\sim\hl^3$ даёт информационный бюджет
+Счёт \eqref{eq:state-count} на ячейке объёма~$v_{\hv}\sim\caStepSpace^3$ даёт информационный бюджет
 \[
-  B_{\hv}=\frac{2\pi}{\ln 2}\quad\text{(мост $T$)},\qquad
-  N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512,\qquad
-  B_{\hv}=\log_2 N_{\mathrm{ring}}+\varepsilon_B,\quad \varepsilon_B\approx 0{,}065.
+  B_{\hv}=\frac{2\symPi}{\ln 2}\quad\text{(мост $\layerMacro$)},\qquad
+  \phaseRingCount=2^{\lfloor B_{\hv}\rfloor}=512,\qquad
+  B_{\hv}=\log_2 \phaseRingCount+\symVarepsilon_B,\quad \symVarepsilon_B\approx 0{,}065.
 \]
-Минимальный фазовый шаг, уже видимый в квантовой механике как $\Delta\phi_{\min}=\tfrac12$,
+Минимальный фазовый шаг, уже видимый в квантовой механике как $\symCapitalDelta\symPhi_{\min}=\tfrac12$,
 на кольце есть целое число тиков:
 \[
-  \Delta\phi_{\mathrm{disc}}=41,\qquad
-  N_\phi=\lceil 2\pi/\Delta\phi_{\min}\rceil=13.
+  \symCapitalDelta\symPhi_{\mathrm{disc}}=41,\qquad
+  \phaseSectorCount=\lceil 2\symPi/\symCapitalDelta\symPhi_{\min}\rceil=13.
 \]
-Один такт~$\htick$ --- полный оборот $\mathbb{Z}_{N_{\mathrm{ring}}}$;
-генератор вращения $\omega=e^{i2\pi/N_{\mathrm{ring}}}$, состояние на $S^1$ --- $\omega^{\varphi_{\mathrm{disc}}}$.
+Один такт~$\htick$ --- полный оборот $\spaceZ_{\phaseRingCount}$;
+генератор вращения $\symOmegaLower=e^{i2\symPi/\phaseRingCount}$, состояние на $S^1$ --- $\symOmegaLower^{\phaseVarphi_{\mathrm{disc}}}$.
 
-\begin{remark}[Фаза, $\omega$ и kick $\Phi$]
+\begin{remark}[Фаза, $\symOmegaLower$ и kick $\symCapitalPhi$]
 \label{rem:phi-omega-Phi}
-$\varphi_{\mathrm{disc}}\in\mathbb{Z}_{N_{\mathrm{ring}}}$ --- \emph{координата} фазы (аддитивный индекс).
-$\omega$ --- генератор, не вторая координата.
-$\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$ --- фазовый \emph{kick} за такт ($R(\Phi)=\omega^{\Phi}$), не регистр $\varphi_{\mathrm{disc}}$.
-В мосте~$T$: $\varphi=\varphi_{\mathrm{disc}}\cdot(2\pi/N_{\mathrm{ring}})$;
-поправка Швингера $a_e\sim\alpha_{\mathrm{fs}}/(2\pi)$ читается там же, на~$M$ --- в тиках кольца.
+$\phaseVarphi_{\mathrm{disc}}\in\spaceZ_{\phaseRingCount}$ --- \emph{координата} фазы (аддитивный индекс).
+$\symOmegaLower$ --- генератор, не вторая координата.
+$\symCapitalPhi\in\spaceZ_{\phaseRingCount}$ --- фазовый \emph{kick} за такт ($R(\symCapitalPhi)=\symOmegaLower^{\symCapitalPhi}$), не регистр $\phaseVarphi_{\mathrm{disc}}$.
+В мосте~$\layerMacro$: $\phaseVarphi=\phaseVarphi_{\mathrm{disc}}\cdot(2\symPi/\phaseRingCount)$;
+поправка Швингера $a_e\sim\alphaFs/(2\symPi)$ читается там же, на~$\layerMicro$ --- в тиках кольца.
 \end{remark}
 
 Спинор на узле кодируется в конечном кольце Гауссовых целых
 \[
-  Z=U+iV\in\mathbb{Z}_{N_{\mathrm{ring}}}[i],
+  Z=U+iV\in\spaceZ_{\phaseRingCount}[i],
 \]
-амплитуда --- на сетке $Q(2^{-6})$, $\mu\in\mathbb{Z}_{64}$.
+амплитуда --- на сетке $Q(2^{-6})$, $\symMu\in\spaceZ_{64}$.
 Дискретная фаза раскладывается по Heisenberg-кванту:
 \[
-  \varphi_{\mathrm{disc}} \equiv k_\phi\cdot\Delta\phi_{\mathrm{disc}}+\varphi_{\mathrm{f}}
-  \pmod{N_{\mathrm{ring}}},
+  \phaseVarphi_{\mathrm{disc}} \equiv k_{\symPhi}\cdot\symCapitalDelta\symPhi_{\mathrm{disc}}+\phaseVarphi_{\mathrm{f}}
+  \pmod{\phaseRingCount},
 \]
-$k_\phi\in\mathbb{Z}_{13}$ --- сектор, $\varphi_{\mathrm{f}}\in\{0,\ldots,40\}$ --- тонкая фаза.
+$k_{\symPhi}\in\spaceZ_{13}$ --- сектор, $\phaseVarphi_{\mathrm{f}}\in\{0,\ldots,40\}$ --- тонкая фаза.
 
 \begin{proposition}[Каноническая фаза и шов]
 \label{prop:canonical-phase}
-Каждому $\varphi_{\mathrm{disc}}\in\mathbb{Z}_{512}$ сопоставляется единственная каноническая пара
-$(k_\phi,\varphi_{\mathrm{f}})$ с минимальным $k_\phi$.
-Наивная карта $\mathbb{Z}_{13}\times\mathbb{Z}_{41}\to\mathbb{Z}_{512}$ имеет $21$ коллизию;
+Каждому $\phaseVarphi_{\mathrm{disc}}\in\spaceZ_{\phaseRingCount}$ сопоставляется единственная каноническая пара
+$(k_{\symPhi},\phaseVarphi_{\mathrm{f}})$ с минимальным $k_{\symPhi}$.
+Наивная карта $\spaceZ_{13}\times\spaceZ_{41}\to\spaceZ_{\phaseRingCount}$ имеет $21$ коллизию;
 \[
-  N_{\mathrm{ring}}=N_\phi\cdot\Delta\phi_{\mathrm{disc}}-(N_\phi+N_{\mathrm{hier}})=13\cdot 41-21.
+  \phaseRingCount=\phaseSectorCount\cdot\symCapitalDelta\symPhi_{\mathrm{disc}}-(\phaseSectorCount+\vevHierarchySteps)=13\cdot 41-21.
 \]
 \end{proposition}
 
-Фазовый остаток планковской дырки на~$M$: $\alpha_*-1=\Delta\phi_{\mathrm{disc}}/N_{\mathrm{ring}}=41/512$;
-в мосте~$T$ то же число носит имя $1/(4\pi)$ и не совпадает с $\alpha_{\mathrm{fs}}$ из \eqref{eq:alpha-fs}.
+Фазовый остаток планковской дырки на~$\layerMicro$: $\symAlpha_*-1=\symCapitalDelta\symPhi_{\mathrm{disc}}/\phaseRingCount=41/512$;
+в мосте~$\layerMacro$ то же число носит имя $1/(4\symPi)$ и не совпадает с $\alphaFs$ из \eqref{eq:alpha-fs}.
 
 \section{Обобщённые координаты}
 \label{sec:coords-dh-dt}
@@ -488,31 +488,31 @@ $(k_\phi,\varphi_{\mathrm{f}})$ с минимальным $k_\phi$.
 \begin{definition}[Внешние координаты $(dh,dt)$]
 \label{def:dh-dt}
 \[
-  dh:=\hl,\qquad dt:=\htick,\qquad c_0=dh/dt.
+  dh:=\caStepSpace,\qquad dt:=\htick,\qquad \caSignalSpeed=dh/dt.
 \]
 В натуральных единицах симуляции $dh=dt=1$.
-Одна ступень действия~$s_0$ на $(\hv,1\,dt)$ порождает лестницу
-$p_0=s_0/dh$, $E_0=s_0/dt$, $F_0=s_0/(dh\cdot dt)$ без трёх независимых подгонок.
+Одна ступень действия~$\ladderAction$ на $(\hv,1\,dt)$ порождает лестницу
+$\ladderMomentum=\ladderAction/dh$, $\ladderEnergy=\ladderAction/dt$, $\ladderForce=\ladderAction/(dh\cdot dt)$ без трёх независимых подгонок.
 \end{definition}
 
 \begin{definition}[Внутренние координаты]
 \label{def:internal-coords}
-Регистр ячейки: $(\mu,k_\phi,\varphi_{\mathrm{f}})$ или $(\mu,\varphi_{\mathrm{disc}})$;
-спинор~$\mathbb{C}^2$ --- две копии; вакуум: $\varphi_{\mathrm{f}}=0$, $\varphi_{\mathrm{disc}}=k_\phi\cdot 41$.
+Регистр ячейки: $(\symMu,k_{\symPhi},\phaseVarphi_{\mathrm{f}})$ или $(\symMu,\phaseVarphi_{\mathrm{disc}})$;
+спинор~$\spaceC^2$ --- две копии; вакуум: $\phaseVarphi_{\mathrm{f}}=0$, $\phaseVarphi_{\mathrm{disc}}=k_{\symPhi}\cdot 41$.
 \end{definition}
 
 \begin{table}[ht]
 \centering
-\caption{Лестница $s_0$ и мост $M\to T$.}
+\caption{Лестница $\ladderAction$ и мост $\layerMicro\to\layerMacro$.}
 \label{tab:dh-dt-bridge}
 \begin{tabular}{@{}lll@{}}
 \toprule
-На $M$ & $(dh,dt)$ & Мост $T$ \\
+На $\layerMicro$ & $(dh,dt)$ & Мост $\layerMacro$ \\
 \midrule
-$s_0$ & на $(\hv,1\,dt)$ & $\hbar/2$ \\
-$p_0$ & $s_0/dh$ & $\hbar/(2\hl)$ \\
-$E_0$ & $s_0/dt$ & $\hbar/(2\htick)$ \\
-$c_0$ & $dh/dt$ & $\hl/\htick$ \\
+$\ladderAction$ & на $(\hv,1\,dt)$ & $\planckHbar/2$ \\
+$\ladderMomentum$ & $\ladderAction/dh$ & $\planckHbar/(2\caStepSpace)$ \\
+$\ladderEnergy$ & $\ladderAction/dt$ & $\planckHbar/(2\htick)$ \\
+$\caSignalSpeed$ & $dh/dt$ & $\caStepSpace/\htick$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -521,19 +521,19 @@ $c_0$ & $dh/dt$ & $\hl/\htick$ \\
 \label{sec:descent-ca}
 
 Когда на каждом узле конечный алфавит, время дискретно, а обновление локально,
-микроуровень~$M$ есть \emph{клеточный автомат}:
+микроуровень~$\layerMicro$ есть \emph{клеточный автомат}:
 \[
   s(x,t+1)=f\bigl(\{s(y,t)\}_{y\in N(x)}\bigr),
 \]
-но с физическими ограничениями из спуска: сохранение нормы, обратимость, спин~$1/2$, заряд~$\in\mathbb{Z}$.
+но с физическими ограничениями из спуска: сохранение нормы, обратимость, спин~$1/2$, заряд~$\in\spaceZ$.
 
 \begin{definition}[Закон эволюции]
 \label{def:g-ca}
-Глобальная конфигурация $\Psi^t=\{z(x,t)\}_{x\in\Lambda}$ обновляется локальным обратимым правилом
+Глобальная конфигурация $\symCapitalPsi^t=\{z(x,t)\}_{x\in\carrierLattice}$ обновляется локальным обратимым правилом
 \[
-  \Psi^{t+1}=g(\Psi^t),\qquad g^{-1}\circ g=\mathrm{id},
+  \symCapitalPsi^{t+1}=g(\symCapitalPsi^t),\qquad g^{-1}\circ g=\mathrm{id},
 \]
-с конечным регистром $Z\in\mathbb{Z}_{N_{\mathrm{ring}}}[i]$ на узле.
+с конечным регистром $Z\in\spaceZ_{\phaseRingCount}[i]$ на узле.
 Исторические примеры (Конвей, Rule~110) иллюстрируют класс CA, но не задают~$g$;
 см. приложение~\ref{app:background}.
 \end{definition}
@@ -554,30 +554,30 @@ $c_0$ & $dh/dt$ & $\hl/\htick$ \\
 \toprule
 Термин КА & На~$M$ & Замечание \\
 \midrule
-ячейка, site & узел $\hv\in\Lambda$ & регистр $Z\in\mathbb{Z}_{N_{\mathrm{ring}}}[i]$ \\
-состояние $s(x)$ & спинор $z(x)\in\mathbb{C}^2$ & в коде --- фиксированная точка на $Z$ \\
+ячейка, site & узел $\hv\in\carrierLattice$ & регистр $Z\in\spaceZ_{\phaseRingCount}[i]$ \\
+состояние $s(x)$ & спинор $z(x)\in\spaceC^2$ & в коде --- фиксированная точка на $Z$ \\
 окрестность & $N(x)$ (\cref{def:neighborhood}) & световая за один такт, не Мур \\
 правило, $f$ & закон $g$ (\cref{def:g-ca}) & обратим; $g^{-1}\circ g=\mathrm{id}$ \\
-поколение, generation & такт $dt=\htick$ & $t\in\mathbb{Z}$ \\
-шаг решётки & $dh=\hl$ & один hop по $\Lambda$ \\
-\emph{скорость света} CA & $c_0=dh/dt=\hl/\htick$ & \textbf{тактовая} скорость сигнала \\
-макроскорость & $c=\kgeom c_0$ & мост~$T$, CODATA (\cref{sec:two-c}) \\
-световой конус & $|x-y|\le c_0\cdot\Delta t\cdot dh$ & каузальность одного такта \\
-алфавит & $\mathbb{Z}_{N_{\mathrm{ring}}}[i]\times Q(2^{-6})$ & конечный, не $\{0,1\}$ \\
+поколение, generation & такт $dt=\htick$ & $t\in\spaceZ$ \\
+шаг решётки & $dh=\caStepSpace$ & один hop по $\carrierLattice$ \\
+\emph{скорость света} CA & $\caSignalSpeed=dh/dt=\caStepSpace/\htick$ & \textbf{тактовая} скорость сигнала \\
+макроскорость & $\speedC=\kgeom \caSignalSpeed$ & мост~$\layerMacro$, CODATA (\cref{sec:two-c}) \\
+световой конус & $|x-y|\le \caSignalSpeed\cdot\caStepTime\cdot dh$ & каузальность одного такта \\
+алфавит & $\spaceZ_{\phaseRingCount}[i]\times Q(2^{-6})$ & конечный, не $\{0,1\}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-В учебниках по CA «скорость света'' почти всегда означает \emph{не} экспериментальную $c$,
-а нормировку «одна ячейка за один такт'': $c_0=1$ в natural units.
+В учебниках по CA «скорость света'' почти всегда означает \emph{не} экспериментальную $\speedC$,
+а нормировку «одна ячейка за один такт'': $\caSignalSpeed=1$ в natural units.
 У нас то же: за один~$dt$ сигнал не дальше одного ребра длины~$dh$ (\cref{def:step-tick}).
-Макроскопическая скорость света в вакууме~$c$ появляется только после осреднения на~$T$
-и связана с~$c_0$ коэффициентом~$\kgeom$ (гл.~\ref{ch:carrier}, \cref{sec:two-c}).
-Путать $c_0$ и $c$ --- типичная ошибка при чтении CA-литературы рядом с физикой поля.
+Макроскопическая скорость света в вакууме~$\speedC$ появляется только после осреднения на~$\layerMacro$
+и связана с~$\caSignalSpeed$ коэффициентом~$\kgeom$ (гл.~\ref{ch:carrier}, \cref{sec:two-c}).
+Путать $\caSignalSpeed$ и $\speedC$ --- типичная ошибка при чтении CA-литературы рядом с физикой поля.
 
 Закон~$g$ не подбирается под таблицу Rule~110: он \emph{замыкается} из абсолютных условий
 и геометрии носителя (гл.~\ref{ch:axioms}, \ref{ch:carrier}, \ref{ch:evolution}).
-Макромир~$T$, с которого начался спуск, --- осреднение $\mathcal{B}$ по~$M$;
+Макромир~$\layerMacro$, с которого начался спуск, --- осреднение $\opBoundary$ по~$\layerMicro$;
 гладкие уравнения QED и Маделунга --- его имена, не ядро автомата.
 
 \section{Сводка моста}
@@ -585,19 +585,19 @@ $c_0$ & $dh/dt$ & $\hl/\htick$ \\
 
 \begin{table}[ht]
 \centering
-\caption{Где живут $\pi$, $\ln 2$ и CODATA.}
+\caption{Где живут $\symPi$, $\ln 2$ и CODATA.}
 \label{tab:m-t-bridge}
 \begin{tabular}{@{}p{0.42\linewidth}p{0.48\linewidth}@{}}
 \toprule
-Ядро $M$ & Только мост $T$ \\
+Ядро $\layerMicro$ & Только мост $\layerMacro$ \\
 \midrule
-$\varphi_{\mathrm{disc}}$, $k_\phi$, $\mu$; $dh$, $dt$ & $\hbar$, $t_P$, $\ell_P$, $c$ \\
-$\Delta\phi_{\mathrm{disc}}/N_{\mathrm{ring}}$ & $\alpha_*-1=1/(4\pi)$ \\
-$\log_2 N_{\mathrm{ring}}+\varepsilon_B$ & $B_{\hv}=2\pi/\ln 2$ \\
-$N_\phi=13$ & $\lceil 4\pi\rceil$ \\
+$\phaseVarphi_{\mathrm{disc}}$, $k_{\symPhi}$, $\symMu$; $dh$, $dt$ & $\planckHbar$, $\timePlanck$, $\lengthPlanck$, $\speedC$ \\
+$\symCapitalDelta\symPhi_{\mathrm{disc}}/\phaseRingCount$ & $\symAlpha_*-1=1/(4\symPi)$ \\
+$\log_2 \phaseRingCount+\symVarepsilon_B$ & $B_{\hv}=2\symPi/\ln 2$ \\
+$\phaseSectorCount=13$ & $\lceil 4\symPi\rceil$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Спуск с макроскопической физики на~$T$ к обратимому автомату на~$M$ завершён.
-Далее: выбор геометрии~$\Lambda$ (FCC), теорема дискретности и явный закон~$g$.
+Спуск с макроскопической физики на~$\layerMacro$ к обратимому автомату на~$\layerMicro$ завершён.
+Далее: выбор геометрии~$\carrierLattice$ (FCC), теорема дискретности и явный закон~$g$.
