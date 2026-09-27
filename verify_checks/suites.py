@@ -52,7 +52,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
     ),
     "m_axioms": VerifySuiteSpec(
         id="m_axioms",
-        description="M law g — A3–A16, symmetries, leapfrog, conservation balances (core).",
+        description="M law g — A3–A16, symmetries, leapfrog, balance equations (core).",
         check_names=_names(
             check_a3_unitarity,
             check_a3_local_ca,

@@ -1,4 +1,4 @@
-"""§5.0.4-A — internal n_E selection rules (schema + audit on balance track)."""
+"""§5.0.4-A — internal n_E selection rules (schema + audit along n_E time series)."""
 from __future__ import annotations
 
 from dataclasses import dataclass

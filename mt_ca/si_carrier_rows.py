@@ -899,7 +899,7 @@ class SICarrierRows:
         }
 
     def mechanics_from_axioms_row(self) -> dict[str, float | int | str | bool]:
-        """§0.8 / Thm 5.1 — Landau mechanics from Thm 0.1 + A3,A5,A13,A16 + §3.12 conservation balance."""
+        """§0.8 / Thm 5.1 — Landau mechanics from Thm 0.1 + A3,A5,A13,A16 + §3.12 balance equations."""
         en = energy_quantum_row()
         tol = 1e-12
         s0 = self.s_0

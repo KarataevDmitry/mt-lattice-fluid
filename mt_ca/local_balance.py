@@ -1,4 +1,4 @@
-"""§5.2.1 / §5.2.3 — local discrete conservation balances on canonical Z_N[i] g."""
+"""§5.2.1 / §5.2.3 — local balance equations (E, p, L) on canonical Z_N[i] g."""
 
 from __future__ import annotations
 
@@ -115,12 +115,12 @@ def heisenberg_min_ticks(cfg: MConfig) -> int:
     )
 
 
-def conservation_step_probe(
+def balance_step_probe(
     z: torch.Tensor,
     z_past: torch.Tensor,
     cfg: MConfig,
 ) -> dict[str, torch.Tensor | float]:
-    """One canonical tick — fields for conservation probes."""
+    """One canonical tick — star residuals for §5.2.1 balance equations."""
     f_curr = canonical_fixed(z, cfg)
     f_past = canonical_fixed(z_past, cfg)
     phi = projected_phi_int(f_curr, cfg)
@@ -147,14 +147,14 @@ def ladder_conservation_report(
     *,
     device: str = "cpu",
 ) -> dict:
-    """Verify §5.2.1 / §5.2.3 local conservation balances on canonical g."""
+    """Verify §5.2.1 / §5.2.3 local balance equations on canonical g."""
     dev = torch.device(device)
     cfg = MConfig.for_stencil("hex", heisenberg_floor=True)
     phi_min = heisenberg_min_ticks(cfg)
     p0_nat = float(kappa_link())
 
     z_vac = make_seed(SeedClass.VACUUM, size, size, device=dev, amplitude=cfg.vacuum_amplitude)
-    vac = conservation_step_probe(z_vac, z_vac.clone(), cfg)
+    vac = balance_step_probe(z_vac, z_vac.clone(), cfg)
     phi = vac["phi"]
     # Exact Φ=0 (holomorphic) allowed; any nonzero kick must be ≥ φ_min (§3.7 · §2.3.8).
     nonzero = phi.abs() > 0
@@ -175,7 +175,7 @@ def ladder_conservation_report(
     my0_max = float(my0.abs().max().item())
     momentum_static_ok = mx0_max < 1e-4 and my0_max < 1e-4
 
-    pw1 = conservation_step_probe(z_pw, z_pw.clone(), cfg)
+    pw1 = balance_step_probe(z_pw, z_pw.clone(), cfg)
     mx_mod = mod_star_error(pw1["momentum_star_x"], p0_nat)
     my_mod = mod_star_error(pw1["momentum_star_y"], p0_nat)
     momentum_step_ok = mx_mod <= 0.5 * p0_nat and my_mod <= 0.5 * p0_nat
@@ -217,5 +217,5 @@ def ladder_conservation_report(
         "angular_ok": angular_ok,
         "n_E_max": n_e_sample,
         "ok": ok,
-        "note": "§5.2.1–§5.2.3: E/p/L conservation balances; Heisenberg = nonzero Φ ≥ φ_min (0 OK)",
+        "note": "§5.2.1–§5.2.3: E/p/L balance equations; Heisenberg = nonzero Φ ≥ φ_min (0 OK)",
     }

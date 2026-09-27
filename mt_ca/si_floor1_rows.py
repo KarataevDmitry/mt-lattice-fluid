@@ -699,7 +699,7 @@ class SIFloor1Rows:
           That is T-statistics of many systems (§2.1). g is deterministic.
 
         closed on M:
-          · Clock form = n_ticks ∈ ℕ · hT (баланс сохранения time), not float Γ.
+          · Clock form = n_ticks ∈ ℕ · hT (discrete tick time), not float Γ.
           · Reject treating soft as free continuum rate knob on M.
 
         SOFT (reopened — alone vs filled bath):

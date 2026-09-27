@@ -15,7 +15,7 @@ from mt_ca.blanket.preset import BlanketPreset
 from mt_ca.blanket.stack import apply_blanket_preset
 from mt_ca.config import MConfig
 from mt_ca.fixed_point import decode_spinor
-from mt_ca.conservation_balance import conservation_step_probe, momentum_density, n_E_field
+from mt_ca.local_balance import balance_step_probe, momentum_density, n_E_field
 from mt_ca.matter_survey import MatterSite, default_anchor, plane_mconfig, snap_column_peak, spinor_plane
 from mt_ca.metrics import coarse_amplitude, field_amplitude, has_nan, norm_drift
 from mt_ca.seeds import SeedClass, make_seed, vacuum_boil_fixed
@@ -185,7 +185,7 @@ def track_gamma_points(
         px, py = momentum_density(plane)
         pi_x = int(round(float(px[y, x].item()) / p0_nat))
         pi_y = int(round(float(py[y, x].item()) / p0_nat))
-        kick = int(conservation_step_probe(plane, zpp, plane_cfg)["phi"][y, x].item())
+        kick = int(balance_step_probe(plane, zpp, plane_cfg)["phi"][y, x].item())
         return (phi_ticks, k_phi, phi_f, n_e, kick, pi_x, pi_y, bloch_key, round(rho, 4))
 
     def _summarize(samples: list[tuple]) -> dict[str, int | list]:
@@ -280,7 +280,7 @@ def run_floor0_phase_space(
     ]
     p_axes = [
         {"id": "Phi_kick", "states": n_ring, "note": "kick ticks per dt; 0 or |Φ|≥Δφ_disc"},
-        {"id": "n_E", "states": n_e_classes, "note": "E₀ conservation balance from |Φ|"},
+        {"id": "n_E", "states": n_e_classes, "note": "E₀ quanta from |Φ| (§5.2.3 balance equation)"},
         {"id": "pi_p0", "states": -1, "note": "π/p₀ integer; width open-bound"},
     ]
 
@@ -325,7 +325,7 @@ def run_floor0_nE_excitation_harness(
     min_n_E: int = 1,
     winding_min: float = 0.75,
 ) -> dict[str, Any]:
-    """§5.0.4-A — после релаксации balance track: n_E≥1 at planckon core under free g.
+    """§5.0.4-A — после релаксации: ряд n_E по тикам; n_E≥1 at planckon core under free g.
 
     Protocol (kick-harness): floor0_planckon on VACUUM_BOIL → релаксация → track ticks;
     read integer Φ and n_E from ``projected_phi_int`` at the planted core (not the
@@ -397,7 +397,7 @@ def run_floor0_nE_excitation_harness(
         "derivation_closed": False,
         "note": (
             "§5.0.4-A kick-harness: after planckon relaxation, free g yields n_E≥1 on core "
-            "in balance track (integer Φ); relaxed snapshot alone stays n_E=0."
+            "along evolution (integer Φ); relaxed snapshot alone stays n_E=0."
         ),
     }
 
@@ -410,7 +410,7 @@ def run_floor0_selection_harness(
     device: str = "cpu",
     winding_min: float = 0.75,
 ) -> dict[str, Any]:
-    """§5.0.4-A — audit n_E selection rules S1–S4 on planckon core balance track."""
+    """§5.0.4-A — audit n_E selection rules S1–S4 on planckon core (n_E time series)."""
     from mt_ca.app.lattice import build_run_spec, open_lattice
     from mt_ca.floor0_selection import (
         Floor0SelectionSchema,
@@ -486,7 +486,7 @@ def run_floor0_selection_harness(
         "checks_ok": ok,
         "derivation_closed": False,
         "note": (
-            "§5.0.4-A selection: conservation balance + Heisenberg + excitation ceiling on planckon core; "
+            "§5.0.4-A selection: energy balance equation + Heisenberg + excitation ceiling on planckon core; "
             "inelastic n_E transitions observed under free g."
         ),
     }

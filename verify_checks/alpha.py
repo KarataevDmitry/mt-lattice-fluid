@@ -193,7 +193,7 @@ def check_alpha_mass_defect_optics(device: str = "cpu") -> dict:
     }
 
 def check_alpha_arg_binding_try(device: str = "cpu") -> dict:
-    """§8.2·α·Arg-try — Arg balance identity; derivation still open."""
+    """§8.2·α·Arg-try — Arg energy-balance identity; derivation still open."""
     from mt_ca.si_constants import SI
 
     del device

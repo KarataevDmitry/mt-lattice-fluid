@@ -209,7 +209,7 @@ class SIAlphaSoftRows:
                 "id": "false_trail_global_M_book",
                 "maps_to": (
                     "Coarse: treating M as a GLOBAL book separate from local 7. "
-                    "Locality (A1) is hard — M is not a non-local balance book."
+                    "Locality (A1) is hard — M is not a non-local conservation law."
                 ),
                 "status": "false_trail",
             },

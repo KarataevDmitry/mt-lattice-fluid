@@ -1,6 +1,6 @@
 """Instrument catalog — MODEL refs and registry (§5.0 · §5.2 · A10).
 
-M-layer: samples from ``z`` (and ``z_past`` for one-tick balance), not separate fields.
+M-layer: samples from ``z`` (and ``z_past`` for one-tick balance equations), not separate fields.
 T-layer: macro/coarse instruments live in ``mt_ca.macro`` (binomial Φ) — listed for routing.
 """
 from __future__ import annotations
@@ -188,7 +188,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
     InstrumentSpec(
         InstrumentId.PHI_KICK_TICK,
         "Φ kick (ring ticks)",
-        "§3.12 conservation balance",
+        "§3.12 balance equation (kick)",
         "M_balance_tick",
         "ℤ_N_ring",
         "needs z_past",
@@ -196,7 +196,7 @@ REGISTRY: tuple[InstrumentSpec, ...] = (
     InstrumentSpec(
         InstrumentId.ENERGY_STAR,
         "Σ_N ΔE star",
-        "§5.2.3 energy conservation balance",
+        "§5.2.3 energy balance equation",
         "M_balance_tick",
         "n_E·E₀",
         "needs z_past",

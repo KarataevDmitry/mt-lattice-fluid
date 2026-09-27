@@ -292,7 +292,7 @@ class SISmRows:
         }
 
     def neutron_mass_row(self) -> dict[str, float | int | bool | str]:
-        """§8.2·7 — m_n = m_p + 2·m_e (channel step on §5 m_arg/ρ_Q conservation balance)."""
+        """§8.2·7 — m_n = m_p + 2·m_e (channel step on §5 m_arg/ρ_Q mass balance)."""
         prot = self.proton_mass_row()
         elec = self.electron_mass_row()
         m_p = float(prot["m_p_GeV"])

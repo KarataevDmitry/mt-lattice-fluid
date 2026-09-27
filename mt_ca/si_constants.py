@@ -429,7 +429,7 @@ def energy_balance_ticks_per_E0(
 
 
 def n_E_from_phi_ticks(phi_ticks: int, *, phase_bits: int | None = None) -> int:
-    """Map saturating collision phase [ticks] → integer E₀ conservation balance units."""
+    """Map saturating collision phase [ticks] → integer E₀ quanta (§5.2.3 balance equation)."""
     unit = energy_balance_ticks_per_E0(phase_bits=phase_bits)
     return abs(int(phi_ticks)) // unit
 

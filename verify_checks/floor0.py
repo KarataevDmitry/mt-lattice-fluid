@@ -116,7 +116,7 @@ def check_floor0_nE_selection(device: str = "cpu") -> dict:
 
 
 def check_floor0_nE_excitation(device: str = "cpu") -> dict:
-    """§5.0.4-A — n_E≥1 on planckon core after relaxation (balance track / kick-harness)."""
+    """§5.0.4-A — n_E≥1 on planckon core after relaxation (n_E time series / kick-harness)."""
     from mt_ca.si_constants import SI
 
     row = SI.floor0_nE_excitation_row(device=device)

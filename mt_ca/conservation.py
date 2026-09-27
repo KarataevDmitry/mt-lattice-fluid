@@ -1,4 +1,4 @@
-"""Conservation probes: M = A3 global norm + discrete conservation balances; smooth Madelung = T."""
+"""Conservation probes: M = A3 global norm + local balance equations; smooth Madelung = T."""
 
 from __future__ import annotations
 

@@ -193,7 +193,7 @@ def cr_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
 
 
 def projected_phi_int(f: torch.Tensor, cfg: MConfig) -> torch.Tensor:
-    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 conservation balance).
+    """Integer Φ ticks per cell before Rot_LUT (§3.12.5 · §5.2.3 energy balance equation).
 
     Canon: Φ from saturating holonomy ζ only. §3.9 defect Arg(⟨z⟩/z) *is* Δφ_N
     inside that gate — not a second CR/sync kick stacked on Φ (that double-count
