@@ -134,7 +134,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 **Gap:** **—** закрыто · **sim** MODEL есть, код нет · **model** ещё не выведено в MODEL · **T** метрика T.
 
-**Verify:** `python verify_principles.py --device cpu` · T: `validate_mt.py` · snapshot **2026-09-22**.
+**Verify:** `verify_principles.py --ship` (suites SSOT: `verify_checks/suites.py`; open: `m_evolution_open`) · T: `validate_mt.py` · snapshot **2026-09-22**.
 
 ### A1–A16
 
