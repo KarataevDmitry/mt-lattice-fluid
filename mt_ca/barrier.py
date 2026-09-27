@@ -1,4 +1,4 @@
-"""Barrier / slit helpers for §4.9 GPU leaves (T macro probes)."""
+"""Barrier / slit helpers for §4.9 GPU UoW (T macro probes)."""
 
 from __future__ import annotations
 

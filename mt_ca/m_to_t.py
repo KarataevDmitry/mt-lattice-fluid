@@ -71,7 +71,7 @@ def m_rest_macro(z: torch.Tensor, block: int = 8) -> float:
 
 
 def zigzag_mass_row(z: torch.Tensor, cfg: MConfig, *, block: int = 8) -> dict[str, float]:
-    """Joint M Arg-activity + T m_rest macro for correlation leaves."""
+    """Joint M Arg-activity + T m_rest macro for correlation UoW."""
     return {
         "zigzag_activity": zigzag_activity(z, cfg),
         "arg_mass_load": arg_mass_load(z, cfg),
