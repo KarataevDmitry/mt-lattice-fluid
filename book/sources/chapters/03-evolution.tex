@@ -164,7 +164,7 @@ n=z^\dagger\sigma z/|z|^2
 \subsection{Информационный бюджет ячейки}
 \label{sec:bit-budget}
 
-Нативная запись бюджета и координат $(dh,dt)$, $(k_\phi,\varphi_{\mathrm{f}},\mu)$
+Нативная запись бюджета и координат $\caCoordsDhDt$, $(k_\phi,\varphi_{\mathrm{f}},\mu)$
 --- спуск, \cref{sec:descent-phase-disc,sec:coords-dh-dt,rem:phi-omega-Phi}.
 
 \[
@@ -209,7 +209,7 @@ n=z^\dagger\sigma z/|z|^2
 \[
   n_E=\Bigl\lfloor\frac{|\Phi|}{\Delta\phi_{\mathrm{disc}}}\Bigr\rfloor,
   \qquad
-  E=n_E E_0.
+  E=n_E \ladderEnergy.
 \]
 
 \emph{CL-5, CL-6.}
@@ -230,17 +230,17 @@ n=z^\dagger\sigma z/|z|^2
 
 \emph{CL-7, CL-8.}
 \[
-  \Delta E=n_E E_0,
+  \Delta E=n_E \ladderEnergy,
   \qquad
-  \Delta p=n_p p_0,
+  \Delta p=n_p \ladderMomentum,
   \qquad
   n_E,n_p\in\mathbb{Z}.
 \]
 На замкнутом шаге
 \[
-  \sum\Delta E=E_0\sum n_E,
+  \sum\Delta E=\ladderEnergy\sum n_E,
   \qquad
-  \sum\Delta p=p_0\sum n_p.
+  \sum\Delta p=\ladderMomentum\sum n_p.
 \]
 \end{proof}
 

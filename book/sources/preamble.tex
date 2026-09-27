@@ -92,8 +92,6 @@
   backgroundcolor=\color{gray!8},
 }
 
-\newcommand{\PlanckCell}{V_P}
-
 \usepackage[nomain]{glossaries-extra}
 
 \newglossary{notation}{not}{nto}{Условные обозначения}
@@ -107,6 +105,8 @@
 \input{glossary/notation-tooltips.tex}
 
 \input{glossary/notation-macros.tex}
+
+\DeclareRobustCommand{\PlanckCell}{\caPlanckCell}
 
 \DeclareMathOperator{\Arg}{Arg}
 
