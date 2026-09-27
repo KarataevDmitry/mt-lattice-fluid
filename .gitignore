@@ -1,3 +1,4 @@
+# --- Python / tooling ---
 __pycache__/
 *.py[cod]
 *$py.class
@@ -14,10 +15,32 @@ venv/
 htmlcov/
 dist/
 build/
+
+# --- CDP / local IDE habitat (not SSOT) ---
+.cdp/
+
+# --- Ad-hoc sim & verify output (SSOT envelope: mt_ca.app.results schema) ---
+runs/*
+!runs/.gitkeep
+
+# --- Book: TeX SSOT; PDF / Up* = local build & editor state ---
 book/sources/*.aux
 book/sources/*.log
 book/sources/*.out
 book/sources/*.toc
-book/sources/main.pdf
+book/sources/*.pdf
+book/sources/*.upa
+book/sources/*.upb
 book/out/
+
+# --- Data caches & torch dumps ---
 data/_cache/
+*.pt
+*.pth
+checkpoints/
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+*~
+*.swp

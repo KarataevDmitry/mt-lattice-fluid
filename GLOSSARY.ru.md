@@ -16,6 +16,7 @@
 | **Угловой шаблон** (гравитация) | в MODEL бывш. «stencil θ_f» | Явные углы на FCC-тетраэдрах / Regge-дефицит — **открытый** кусок §8.4, не то же, что `stencil=hex`. |
 | **Символика окрестности FCC** | `mt_ca.analysis.stencil_symbol` (имя модуля legacy) | $\sum_{\delta\in N_{12}} e^{2\pi i k\cdot\delta}$ на торе; проверка, не T-слой. |
 | **Верификация** | `verify_principles.py`, `verify_checks/suites.py` | Снимок «MODEL ↔ код»; `--ship`, `--suite`, `--scenario` (id как у `mt_ca.app`). |
+| **Окончания строк (LF)** | `.gitattributes`, `.editorconfig`, verify `Repo_text_eol` | Текст в git — Unix LF; после правок на Windows: `python tools/normalize_text_eol.py`. |
 | **Журнал разработки** | `DEVLOG.md` | Даты, impl, open leaves — не физика. |
 
 **Правило для текста:** в `model/` и книге — левая колонка; в Python и yaml — правая, пока не сделана явная миграция.

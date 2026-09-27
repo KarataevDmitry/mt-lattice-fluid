@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 import re
+import subprocess
 from pathlib import Path
 
 import torch
@@ -523,5 +524,44 @@ def check_model_purity() -> dict:
         "violations": hits[:12],
         "ok": len(hits) == 0,
         "note": "MODEL=physics only; impl/verify → DEVLOG.md",
+    }
+
+
+_TEXT_EOL_SUFFIXES = frozenset({".md", ".py", ".tex", ".json", ".yml", ".yaml", ".toml", ".sh"})
+
+
+def check_repo_text_eol() -> dict:
+    """Tracked text files must use LF (see .gitattributes / .editorconfig)."""
+    root = Path(__file__).resolve().parents[1]
+    proc = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        return {
+            "id": "Repo_text_eol",
+            "ok": False,
+            "count": 1,
+            "violations": ["git ls-files failed"],
+            "note": "Run from a git checkout",
+        }
+    rel_paths = [p for p in proc.stdout.decode("utf-8", errors="replace").split("\0") if p]
+    bad: list[str] = []
+    for rel in rel_paths:
+        if Path(rel).suffix.lower() not in _TEXT_EOL_SUFFIXES:
+            continue
+        path = root / rel
+        if not path.is_file():
+            continue
+        if b"\r\n" in path.read_bytes():
+            bad.append(rel)
+    return {
+        "id": "Repo_text_eol",
+        "count": len(bad),
+        "violations": bad[:16],
+        "ok": len(bad) == 0,
+        "note": "LF only; fix: python tools/normalize_text_eol.py",
     }
 

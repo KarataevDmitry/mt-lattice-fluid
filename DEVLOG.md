@@ -6,6 +6,10 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-27 · repo · LF normalization
+
+**Политика:** `.gitattributes` + `.editorconfig` · gate verify **`Repo_text_eol`** · `python tools/normalize_text_eol.py` (одноразово / после массовых правок на Windows).
+
 ## 2026-09-27 · §4.0.2 · Thm **T-CL** (аналитический классический предел)
 
 **MODEL:** `model/04-macro.md` §4.0.2 — параметры `ε=σ_R ℓ_P/λ`, `χ=(ℓ_P/λ)²`; цепочка T-CR → T-HL → NLSE+ν → Madelung/NS без `hL→0`. Книга: `04-macro.tex` \cref{thm:t-cl}.
