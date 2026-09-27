@@ -12,11 +12,15 @@ def test_t_hydro_limit_row() -> None:
 
 
 def test_classical_limit_sweep() -> None:
-    from mt_ca.t.hydro_limit import classical_limit_sweep_row
+    from mt_ca.t.hydro_limit import classical_limit_sweep_row, phi_bz_readout_row
 
     row = classical_limit_sweep_row(device="cpu")
     assert row["checks_ok"] is True
     assert row["coarse_to_gaussian"] is True
+    assert row["phi_readout_ok"] is True
+
+    phi = phi_bz_readout_row(device="cpu")
+    assert phi["phi_readout_ok"] is True
 
 
 def test_t_coarse_reexport() -> None:

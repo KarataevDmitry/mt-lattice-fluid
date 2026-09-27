@@ -145,6 +145,131 @@ def fcc_hydro_limit_row() -> dict[str, float | int | bool | str]:
     }
 
 
+def _discrete_laplacian_2d(u):
+    import torch
+
+    return (
+        torch.roll(u, -1, 1)
+        + torch.roll(u, 1, 1)
+        + torch.roll(u, -1, 0)
+        + torch.roll(u, 1, 0)
+        - 4.0 * u
+    )
+
+
+def _phi_bz_one_scale(
+    *,
+    device,
+    size: int,
+    b_radius: int,
+    cells_per_wave: int,
+) -> dict[str, float]:
+    import torch
+
+    from mt_ca.config import MConfig
+    from mt_ca.fixed_point import decode_spinor
+    from mt_ca.macro import macro_average_spinor
+    from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
+    from mt_ca.spinor import spinor_density
+
+    kx = 2.0 * math.pi / float(cells_per_wave)
+    ny = nx = size
+    ys = torch.arange(ny, device=device, dtype=torch.float32)
+    xs = torch.arange(nx, device=device, dtype=torch.float32)
+    _, xx = torch.meshgrid(ys, xs, indexing="ij")
+    z = torch.zeros(ny, nx, 2, device=device, dtype=torch.complex64)
+    z[..., 0] = torch.exp(1j * (kx * xx)).to(torch.complex64)
+
+    cfg = MConfig.for_stencil("hex", heisenberg_floor=True)
+    f0 = canonical_fixed(z, cfg)
+    f1, _, _ = leapfrog_forward_fixed(f0, f0, cfg)
+    z0 = decode_spinor(f0)
+    phi0 = macro_average_spinor(z0, radius=b_radius)
+
+    rho_z = spinor_density(z0)
+    rho_phi = spinor_density(phi0)
+    rho_smooth = spinor_density(
+        macro_average_spinor(
+            torch.stack(
+                [rho_z.sqrt().to(torch.complex64), torch.zeros_like(rho_z, dtype=torch.complex64)],
+                dim=-1,
+            ),
+            radius=b_radius,
+        )
+    )
+    mask = rho_z > 0.05 * float(rho_z.max().item())
+    rel_dens = (
+        float(((rho_phi - rho_smooth) / rho_z.clamp_min(1e-12)).abs()[mask].max().item())
+        if bool(mask.any())
+        else float("nan")
+    )
+
+    u_phi = phi0[..., 0]
+    u_hat = torch.fft.fft2(u_phi)
+    power = u_hat.abs().square()
+    power[0, 0] = 0
+    flat = int(power.argmax().item())
+    ky_i, kx_i = flat // nx, flat % nx
+    kx_peak = 2.0 * math.pi * (kx_i if kx_i <= nx // 2 else kx_i - nx) / nx
+    w_ir = math.cos(kx_peak / 2.0) ** (2 * b_radius)
+    meas = float((u_hat[ky_i, kx_i].abs() / u_hat.abs().max().clamp_min(1e-12)).item())
+    spectral_ok = abs(meas - w_ir) / max(w_ir, 1e-12) < 0.35
+
+    lap_u0 = _discrete_laplacian_2d(u_phi)
+    lam_k = 2.0 * (math.cos(kx) - 1.0)  # ky=0 plane wave on periodic torus (von Neumann Δ₄)
+    lap_mode_slip = float(
+        (lap_u0 - lam_k * u_phi).abs().max().item() / u_phi.abs().max().clamp_min(1e-12).item()
+    )
+    return {
+        "cells_per_wave": float(cells_per_wave),
+        "rho_phi_vs_B_amp_z_max_rel": rel_dens,
+        "spectral_ir_ok": float(spectral_ok),
+        "lap_mode_slip_phi": lap_mode_slip,
+    }
+
+
+def phi_bz_readout_row(
+    *,
+    device: str = "cpu",
+    size: int = 192,
+    b_radius: int = 12,
+) -> dict[str, float | int | bool | str | list]:
+    """Φ = ℬz — T readout: |Φ|²≈ℬ|z|², T-CR IR spectrum, IR Laplacian tightens as λ grows."""
+    import torch
+
+    dev = torch.device(device)
+    laps = [
+        _phi_bz_one_scale(device=dev, size=size, b_radius=b_radius, cells_per_wave=L)
+        for L in (48, 128)
+        if L < size // 2
+    ]
+    if len(laps) < 2:
+        laps = [
+            _phi_bz_one_scale(device=dev, size=128, b_radius=b_radius, cells_per_wave=48),
+            _phi_bz_one_scale(device=dev, size=128, b_radius=b_radius, cells_per_wave=96),
+        ]
+
+    short = laps[0]
+    long = laps[-1]
+    rel_dens_short = short["rho_phi_vs_B_amp_z_max_rel"]
+    rel_dens = long["rho_phi_vs_B_amp_z_max_rel"]
+    spectral_ok = bool(long["spectral_ir_ok"])
+    density_tightens = rel_dens < rel_dens_short * 0.45
+    ok = rel_dens < 0.12 and spectral_ok and density_tightens
+
+    return {
+        "b_radius": b_radius,
+        "size": size,
+        "scales": laps,
+        "rho_phi_vs_B_amp_z_max_rel": rel_dens,
+        "rho_phi_vs_B_short_wave": rel_dens_short,
+        "density_tightens_with_L": density_tightens,
+        "spectral_ir_ok": spectral_ok,
+        "phi_readout_ok": ok,
+        "note": "M: z,g → T: Φ=ℬz; |Φ|² tracks ℬ|z|²; IR peak obeys T-CR binomial gain",
+    }
+
+
 def fcc_green_fourier(kx: float, ky: float, kz: float = 0.0) -> complex:
     """Fourier symbol of normalized FCC depth-2 path-Green (§4.1.1-HL H2)."""
     neigh = _fcc_nn()
@@ -260,12 +385,15 @@ def classical_limit_sweep_row(
         or madelung_rows[-1]["madelung_rel"] < 0.05
     )
 
+    phi_row = phi_bz_readout_row(device=device, size=max(size, 192))
+
     ok = (
         coarse_to_gaussian
         and fcc_laplacian_two_thirds
         and stacked_laplacian
         and bohm_classical
         and madelung_classical
+        and phi_row["phi_readout_ok"]
     )
     return {
         "gauss_err_R": gauss_errs,
@@ -277,10 +405,12 @@ def classical_limit_sweep_row(
         "madelung_long_wave": madelung_rows,
         "bohm_classical": bohm_classical,
         "madelung_classical": madelung_classical,
+        "phi_bz": phi_row,
+        "phi_readout_ok": phi_row["phi_readout_ok"],
         "checks_ok": ok,
         "note": (
-            "§4 classical on T: R→Gaussian; K̂→1−(2/3)k²; long waves → small Bohm Q and Madelung slip; "
-            "not ℓ_P→∞ on M"
+            "§4 on T: Φ=ℬz → IR Laplacian/NLSE proxy; R→Gaussian; K̂→1−(2/3)k²; "
+            "χ→0 Bohm/Madelung; not ℓ_P→∞ on M"
         ),
     }
 

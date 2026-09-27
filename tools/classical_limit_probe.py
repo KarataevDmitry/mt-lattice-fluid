@@ -21,6 +21,7 @@ def main() -> None:
     print(row["note"])
     print("checks_ok:", row["checks_ok"])
     print("gauss_err_R:", row["gauss_err_R"])
+    print("phi_bz:", row["phi_bz"])
     print("bohm_scaling:", row["bohm_scaling"])
     print("madelung_long_wave:", row["madelung_long_wave"])
 

@@ -205,6 +205,7 @@ def check_classical_limit(device: str = "cpu") -> dict:
     from mt_ca.t.hydro_limit import classical_limit_sweep_row
 
     row = classical_limit_sweep_row(device=device)
+    phi = row["phi_bz"]
     return {
         "id": "T_classical_limit",
         "coarse_to_gaussian": row["coarse_to_gaussian"],
@@ -212,6 +213,10 @@ def check_classical_limit(device: str = "cpu") -> dict:
         "stacked_laplacian_ok": row["stacked_laplacian_ok"],
         "bohm_classical": row["bohm_classical"],
         "madelung_classical": row["madelung_classical"],
+        "phi_readout_ok": row["phi_readout_ok"],
+        "rho_phi_vs_B_amp_z_max_rel": phi["rho_phi_vs_B_amp_z_max_rel"],
+        "density_tightens_with_L": phi["density_tightens_with_L"],
+        "spectral_ir_ok": phi["spectral_ir_ok"],
         "ok": row["checks_ok"],
         "note": row["note"],
     }

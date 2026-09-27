@@ -10,7 +10,7 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **MODEL:** `model/04-macro.md` §4.0.2 — параметры `ε=σ_R ℓ_P/λ`, `χ=(ℓ_P/λ)²`; цепочка T-CR → T-HL → NLSE+ν → Madelung/NS без `hL→0`. Книга: `04-macro.tex` \cref{thm:t-cl}.
 
-**Verify (численный якорь, не SSOT):** `T_classical_limit` · `tools/classical_limit_probe.py` — согласован с ведущими порядками T-CL.
+**Verify (численный якорь, не SSOT):** `T_classical_limit` (+ `phi_bz` в sweep: Φ=ℬz, |Φ|², T-CR IR) · `tools/classical_limit_probe.py` — T-CL + readout.
 
 
 
