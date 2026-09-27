@@ -56,7 +56,7 @@ $z(x,t)=(z_1,z_2)^\top\in\mathbb{C}^2$, $|z|^2=z^\dagger z$.
 на $4\pi$ --- возвращать его.
 
 \begin{definition}[Дискретный вращатель]
-\label{def:rotation-gate}
+\label{def:discrete-rotator}
 $N_{\mathrm{ring}}=512$, $\omega=e^{i2\pi/N_{\mathrm{ring}}}$, $\Phi\in\mathbb{Z}_{N_{\mathrm{ring}}}$:
 \[
   R(\Phi):\ (U,V)\mapsto (U c_\Phi - V s_\Phi,\ U s_\Phi + V c_\Phi)\pmod N,
@@ -70,7 +70,7 @@ $U(2\pi)=-\mathbb{1}$, $U(4\pi)=+\mathbb{1}$.
 \end{corollary}
 
 \begin{proof}
-По \cref{def:rotation-gate} угол $\Phi=N_{\mathrm{ring}}/2$ соответствует повороту на~$\pi$
+По \cref{def:discrete-rotator} угол $\Phi=N_{\mathrm{ring}}/2$ соответствует повороту на~$\pi$
 в дискретном $SU(2)$.
 На спиноре $(z_1,z_2)$ это даёт $(-z_1,-z_2)=-z$:
 \[
@@ -158,7 +158,7 @@ n=z^\dagger\sigma z/|z|^2
 \[
   \lfloor\mathcal{N}\rfloor=R(\Phi)-Z
 \]
-на обеих компонентах (\cref{def:rotation-gate}).
+на обеих компонентах (\cref{def:discrete-rotator}).
 \end{proof}
 
 \subsection{Информационный бюджет ячейки}

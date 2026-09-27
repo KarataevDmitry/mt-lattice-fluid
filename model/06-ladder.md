@@ -124,7 +124,7 @@ $$
 #### §6·floor1·dressing·close · $R_{\mathrm{dress}}=1\cdot\mathrm{dl}$
 **Лемма:**
 1. Winding-1 на звезде: $\Delta\varphi_{\mathrm{ring}}=2\pi/N_{12}$. Из $N_\varphi=\lceil 2\pi/\Delta\varphi_{\min}\rceil$ следует $N_{12}<N_\varphi\Leftrightarrow 2\pi/N_{12}>\Delta\varphi_{\min}$ — вся ε-звезда над полом.
-2. Локальный баланс/gate только на $N(x)$ (A1 · §5.2); вторая оболочка за один $hT$ запрещена.
+2. Локальный баланс только на $N(x)$ (A1 · §5.2); вторая оболочка за один $hT$ запрещена.
 3. Ground легчайшего $Q$: multi-shell $\rho_\Theta$ = возбуждение → downhill к минимальному ореолу (логика C3 vs C2).
 $$\Rightarrow\quad R_{\mathrm{dress}}=R_{\min}=1\cdot\mathrm{dl},\quad N_{\mathrm{star}}=N_{12}.$$
 Полоса этажа 1 $N_{12}^{3}\ldots N_{12}^{4}$ — окно C4, **не** радиус e-halo.
@@ -132,7 +132,7 @@ $$\Rightarrow\quad R_{\mathrm{dress}}=R_{\min}=1\cdot\mathrm{dl},\quad N_{\mathr
 #### §6·floor1·dressing·f·close · форма $f$
 **Закрыто:** на M нет непрерывные параметры; §5.0.5 — облако = где сигнал $\ge$ пола; $\int\rho_\Theta\sim n_E\in\mathbb{Z}$; $\langle\rho_\Theta\rangle_T$ = binomial (§4.1).
 $$\rho_\Theta(x)=\mathbf{1}\big[|\Delta\varphi_N(x)|\ge\Delta\varphi_{\min}\big].$$
-$|\zeta|$ — scalar gate, без **выведенного** $\zeta_{\min}$ → не вторая свободная ось. Гладкость — T-binomial, не $f$ на M.
+$|\zeta|$ — скалярный отклик насыщения, без **выведенного** $\zeta_{\min}$ → не вторая свободная ось. Гладкость — T-binomial, не $f$ на M.
 **Отвергнуто:** continuum-ansätze (exp/Gauss/$1/r$); $\alpha$/$a_0$ внутри $f$.
 **Код:** `SI.floor1_dressing_f_close_row()` · verify **`Floor1_dressing_f_close`**.
 Конфайнмент: «вытащить кварк» = разорвать топологический узел → **пара планконов**, не один dV.

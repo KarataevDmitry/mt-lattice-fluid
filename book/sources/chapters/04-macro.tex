@@ -123,7 +123,7 @@ $\lambda$ --- длина волны наблюдаемой моды,
 \item \textbf{Спектр.} $|\widehat W_R(k)-G_R(k)|/G_R(k)=O(\varepsilon^4)$ при $k\sim 2\pi\caStepSpace/\lambda$.
 \item \textbf{Лапласиан.} $(K^{*R}-I)\Phi=\tfrac{2R}{3}\caStepSpace^2\nabla^2\Phi+O(\varepsilon^4|\Phi|)$ в IR.
 \item \textbf{Динамика.} Эффективное уравнение NLSE/GL с вязкостью $\nu$ и остатком $O(\varepsilon^4)$
-  (разложение gate на медленном $\Phi$, \cref{sec:gl-free-energy}).
+  (разложение насыщающей фазы на медленном $\Phi$, \cref{sec:gl-free-energy}).
 \item \textbf{Гидро.} Madelung-разложение даёт continuity+Euler/NS;
   квантовое давление Бома $Q_{\mathrm{Bohm}}=O(\chi)$ на гладких модах;
   при доминировании инерции и $\nu\nabla^2\mathbf v$ над $Q_{\mathrm{Bohm}}$ ---
@@ -146,7 +146,7 @@ $\lambda$ --- длина волны наблюдаемой моды,
   Q_{\mathrm{Bohm}}(x)\;:=\;-\frac{\planckHbar^2}{2m_{\mathrm{eff}}}\,
   \frac{\partial_x^2 u(x)}{u(x)},
 \]
-где $m_{\mathrm{eff}}$ --- эффективная масса пакета на~$\Tlayer$ из разложения gate
+где $m_{\mathrm{eff}}$ --- эффективная масса пакета на~$\Tlayer$ из разложения насыщающей фазы
 (\cref{sec:gl-free-energy}); $\partial_x$ --- производная по координате прибора.
 В силовом уравнении Madelung на~$\Tlayer$ входит $-\partial_x Q_{\mathrm{Bohm}}$.
 \end{definition}
@@ -207,7 +207,7 @@ $\bigl|\partial_x^2 u/u\bigr|\le 2\pi^2\eta\chi+O(\eta^2\chi)$.
 \begin{proof}[Доказательство пункта~\emph{(iv)} теоремы~\ref{thm:t-cl}]
 Madelung-разложение комплексного $\Phi=\sqrt\rho\,e^{iS/\planckHbar}$ на~$\Tlayer$
 даёт уравнение непрерывности для $\rho$ и уравнение импульса для $v=\partial_x S/m_{\mathrm{eff}}$
-с силой $-\partial_x Q_{\mathrm{Bohm}}$ плюс градиенты давления от нелинейности gate и вязкости $\nu$
+с силой $-\partial_x Q_{\mathrm{Bohm}}$ плюс градиенты давления от нелинейности насыщающей фазы и вязкости $\nu$
 (модель, \S4.1.1-HL).
 Для моды $\rho=\rho_0(1+\eta\cos(2\pi x/\lambda))$ с фазой, медленно меняющейся на масштабе $\lambda$,
 лемма~\ref{lem:bohm-chi} даёт $\sup|\partial_x Q_{\mathrm{Bohm}}|=O(\eta\chi/\lambda)=O(\chi/\lambda)$.
@@ -241,7 +241,7 @@ $\rho_0$, $|v|$ доминирование $\nu\partial_x^2 v$ и $\rho v\partia
 Физические величины на~$\Tlayer$ не должны зависеть от этой фазы с~$M$;
 поэтому в разложении допустимы инварианты $|\Phi|^2$, $|\Phi|^4$, $|\nabla\Phi|^2$.
 
-Нелинейность saturating gate при $\rho_E\ll K_P$ (\cref{def:kp}, гл.~\ref{ch:evolution})
+Нелинейность насыщающей фазы при $\rho_E\ll K_P$ (\cref{def:kp}, гл.~\ref{ch:evolution})
 даёт ведущий член насыщения $\sim|\Phi|^4$; разложение вращателя по градиентам фазы
 после~$\mathcal{B}$ --- член $\sim|\nabla\Phi|^2$.
 Не повторяя полностью рассуждений гл.~\ref{ch:evolution}, запишем полную свободную энергию:
@@ -257,7 +257,7 @@ $\rho_0$, $|v|$ доминирование $\nu\partial_x^2 v$ и $\rho v\partia
 \end{equation}
 Здесь $\mathcal{F}_0$ --- свободная энергия однородного фона (при $\Phi\equiv 0$ на выбранном вакууме);
 $\alpha$ --- квадратичный коэффициент (положение «дна'' потенциала на~$\Tlayer$);
-$\beta>0$ --- коэффициент насыщения, в замыкании модели $\beta\equiv\omega_{\mathrm{macro}}$ из saturating gate;
+$\beta>0$ --- коэффициент насыщения, в замыкании модели $\beta\equiv\omega_{\mathrm{macro}}$ из насыщающей фазы;
 множитель $\planckHbar^2/(2m)$ связывает градиентную энергию с механической лестницей ---
 по той же логике, что в \S4 т.~I выбор $L\propto mv^2$ фиксируется симметрией.
 

@@ -43,7 +43,7 @@ $$
 #### Постоянная тонкой структуры α
 **Закрыто:** α из дна (B_hV, Δφ_min, FCC/κ, N₄, SU(2)); M,d,U — вывод, не фундамент.
 π-tower **удалена** — не определение, не конкурент, не ярлык.
-Из §7.1 (насыщающая фаза): $r=\Delta\varphi_{\min}/(2\pi)=1/(4\pi)$, $1+r$ — числитель gate (**не** α).
+Из §7.1 (насыщающая фаза): $r=\Delta\varphi_{\min}/(2\pi)=1/(4\pi)$, $1+r$ — числитель насыщающей фазы (**не** α).
 В коде: `planck_hole_phase_residue` / `phase_saturation`; **α** = `alpha_preferred` = `alpha_from_fundamentals()` (§8.2·U0).
 
 #### §8.2·α·name · Историческое имя vs M-смысл
@@ -655,7 +655,7 @@ n_{\mathrm{SU}(2)} &= 3, &
 \end{aligned}
 $$
 
-($\Delta\varphi_{\min}$ — дно Heisenberg/Arg; в саму $\alpha$ ниже не входит, только в gate $\alpha^*$.)
+($\Delta\varphi_{\min}$ — дно Heisenberg/Arg; в саму $\alpha$ ниже не входит, только в насыщающей фазе $\alpha^*$.)
 
 Свёртка регистра (не новое дно — имя для $\lfloor B_{hV}\rfloor$, код `HV.mod_bits`):
 

@@ -77,7 +77,7 @@
 | `saturating_phase()` | угол $\varphi(\rho)$ на ячейке |
 | `apply_saturating_phase_collision()` | один шаг collision-пробы (§3.12.5 — отдельно) |
 
-**Удалено из кода и текста:** `gate`, `gate_phase`, `alpha_star`, `alpha_factor`, `ALPHA_STAR`, **`α*`** (ошибочное имя для $r$ / $1+r$).
+**Удалено из кода и текста:** `gate`, `gate_phase`, `saturating gate`, `alpha_star`, `alpha_factor`, `ALPHA_STAR`, **`α*`** (ошибочное имя для $r$ / $1+r$). В прозе: **насыщающая фаза**, **насыщающий импульс Φ**, **насыщающий отклик** `𝒩(z)`.
 
 **Не путать с α** — постоянная тонкой структуры, EM-сопряжение (§8.2·U0); в коде `alpha_preferred` / `alpha_fs`.
 
