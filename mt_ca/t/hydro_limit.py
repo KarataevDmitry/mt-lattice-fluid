@@ -145,6 +145,146 @@ def fcc_hydro_limit_row() -> dict[str, float | int | bool | str]:
     }
 
 
+def fcc_green_fourier(kx: float, ky: float, kz: float = 0.0) -> complex:
+    """Fourier symbol of normalized FCC depth-2 path-Green (§4.1.1-HL H2)."""
+    neigh = _fcc_nn()
+    counts: Counter[tuple] = Counter()
+    for u in neigh:
+        for d in neigh:
+            p = (u[0] + d[0], u[1] + d[1], u[2] + d[2])
+            counts[p] += 1
+    n_walks = len(neigh) ** 2
+    acc = 0.0 + 0.0j
+    for p, w in counts.items():
+        phase = kx * p[0] + ky * p[1] + kz * p[2]
+        acc += w * complex(math.cos(phase), math.sin(phase))
+    return acc / n_walks
+
+
+def classical_limit_sweep_row(
+    *,
+    device: str = "cpu",
+    size: int = 128,
+) -> dict[str, float | int | bool | str | list]:
+    """§4.0 / §4.1.1-HL — do coarse + long-wavelength limits land in classical T?
+
+    Not hL→0 on M: R-fold binomial → Gaussian (heat kernel); FCC K̂ → 1−(2/3)|k|²;
+    Bohm Q ~ 1/L² on smooth ρ; one-tick Madelung residual ~ O(k²) on long waves.
+    """
+    import torch
+
+    from mt_ca.config import MConfig
+    from mt_ca.conservation import madelung_div_j
+    from mt_ca.reversible import canonical_fixed, leapfrog_forward_fixed
+    from mt_ca.spinor import spinor_density
+    from mt_ca.t_analysis import estimate_phase_velocity_plane_wave
+
+    r_vals = [4, 16, 64, 256]
+    gauss_errs = [
+        float(binomial_spectral_row(r_passes=r)["max_rel_err_k_sigma_lt_0_30"]) for r in r_vals
+    ]
+    coarse_to_gaussian = gauss_errs[-1] < 1e-5 and gauss_errs[-1] < gauss_errs[0]
+
+    k_probe = 0.08
+    kh = fcc_green_fourier(k_probe, 0.0)
+    lap_coeff = (1.0 - kh.real) / (k_probe * k_probe)
+    fcc_laplacian_two_thirds = abs(lap_coeff - 2.0 / 3.0) < 8e-3
+
+    k_stack = 0.05
+    r_stack = 64
+    kh_r = fcc_green_fourier(k_stack, 0.0) ** r_stack
+    lap_coeff_r = (1.0 - kh_r.real) / (k_stack * k_stack)
+    expected_stack = r_stack * (2.0 / 3.0)
+    stacked_laplacian = abs(lap_coeff_r - expected_stack) / expected_stack < 0.08
+
+    dev = torch.device(device)
+    bohm_rows: list[dict[str, float]] = []
+    madelung_rows: list[dict[str, float]] = []
+    for cells_per_wave in (32, 64, 128):
+        kx = 2.0 * math.pi / float(cells_per_wave)
+        ny = nx = size
+        ys = torch.arange(ny, device=dev, dtype=torch.float32)
+        xs = torch.arange(nx, device=dev, dtype=torch.float32)
+        yy, xx = torch.meshgrid(ys, xs, indexing="ij")
+        amp = 0.08
+        env = 1.0 + amp * torch.cos(kx * xx)
+        phase = torch.exp(1j * (kx * xx))
+        z = torch.zeros(ny, nx, 2, device=dev, dtype=torch.complex64)
+        z[..., 0] = torch.sqrt(env).to(torch.complex64) * phase
+        rho = spinor_density(z)
+        u = torch.sqrt(rho.clamp_min(1e-12))
+        lap_u = (
+            torch.roll(u, -1, 1)
+            + torch.roll(u, 1, 1)
+            + torch.roll(u, -1, 0)
+            + torch.roll(u, 1, 0)
+            - 4.0 * u
+        )
+        q = -(lap_u / (2.0 * u.clamp_min(1e-12)))
+        q_max = float(q.abs().max().item())
+        bohm_rows.append(
+            {
+                "L_cells": float(cells_per_wave),
+                "Q_max": q_max,
+                "Q_max_L2": q_max * cells_per_wave * cells_per_wave,
+            }
+        )
+
+        from mt_ca.fixed_point import decode_spinor
+
+        cfg = MConfig.for_stencil("hex", heisenberg_floor=True)
+        f0 = canonical_fixed(z, cfg)
+        f1, _, _ = leapfrog_forward_fixed(f0, f0, cfg)
+        z0 = decode_spinor(f0)
+        z1d = decode_spinor(f1)
+        rho0 = spinor_density(z0)
+        rho1 = spinor_density(z1d)
+        resid = (rho1 - rho0 + madelung_div_j(z0)).abs()
+        mad = float((resid.max() / rho0.max().clamp_min(1e-12)).item())
+        omega = estimate_phase_velocity_plane_wave(z0[..., 0], z1d[..., 0], kx=kx, ky=0.0)
+        madelung_rows.append(
+            {
+                "L_cells": float(cells_per_wave),
+                "madelung_rel": mad,
+                "madelung_L2": mad * cells_per_wave * cells_per_wave,
+                "omega_tick": omega if omega == omega else float("nan"),
+            }
+        )
+
+    bohm_classical = (
+        bohm_rows[-1]["Q_max"] < bohm_rows[0]["Q_max"] * 0.2
+        and bohm_rows[-1]["Q_max"] < 0.001
+    )
+    madelung_classical = (
+        madelung_rows[-1]["madelung_rel"] < madelung_rows[0]["madelung_rel"] * 0.35
+        or madelung_rows[-1]["madelung_rel"] < 0.05
+    )
+
+    ok = (
+        coarse_to_gaussian
+        and fcc_laplacian_two_thirds
+        and stacked_laplacian
+        and bohm_classical
+        and madelung_classical
+    )
+    return {
+        "gauss_err_R": gauss_errs,
+        "coarse_to_gaussian": coarse_to_gaussian,
+        "fcc_lap_coeff_at_k": lap_coeff,
+        "fcc_laplacian_two_thirds": fcc_laplacian_two_thirds,
+        "stacked_laplacian_ok": stacked_laplacian,
+        "bohm_scaling": bohm_rows,
+        "madelung_long_wave": madelung_rows,
+        "bohm_classical": bohm_classical,
+        "madelung_classical": madelung_classical,
+        "checks_ok": ok,
+        "note": (
+            "§4 classical on T: R→Gaussian; K̂→1−(2/3)k²; long waves → small Bohm Q and Madelung slip; "
+            "not ℓ_P→∞ on M"
+        ),
+    }
+
+
 def hydro_limit_verify_row() -> dict[str, float | int | bool | str]:
     """Verify bundle — алгебра T-CR + path-Green (гладкое макроописание T)."""
     spec = binomial_spectral_row()

@@ -201,6 +201,22 @@ def check_t_hydro_limit_bundle(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
+def check_classical_limit(device: str = "cpu") -> dict:
+    from mt_ca.t.hydro_limit import classical_limit_sweep_row
+
+    row = classical_limit_sweep_row(device=device)
+    return {
+        "id": "T_classical_limit",
+        "coarse_to_gaussian": row["coarse_to_gaussian"],
+        "fcc_laplacian_two_thirds": row["fcc_laplacian_two_thirds"],
+        "stacked_laplacian_ok": row["stacked_laplacian_ok"],
+        "bohm_classical": row["bohm_classical"],
+        "madelung_classical": row["madelung_classical"],
+        "ok": row["checks_ok"],
+        "note": row["note"],
+    }
+
+
 def check_t_hydro_limit(device: str = "cpu") -> dict:
     from mt_ca.t.hydro_limit import fcc_hydro_limit_row
 

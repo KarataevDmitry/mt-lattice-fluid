@@ -121,6 +121,7 @@ def run_all(device: str) -> list[dict]:
         check_t_madelung_continuity(device=device),
         check_t_hydro_limit_bundle(device=device),
         check_t_hydro_limit(device=device),
+        check_classical_limit(device=device),
         check_so2_c4(device=device),
         check_arg_mass_carrier(device=device),
         check_u1_vac(device=device),
