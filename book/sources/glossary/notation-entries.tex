@@ -4,16 +4,16 @@
 % glossaries раскрывает description в преамбуле: математика только \(...\) (нижние индексы
 % внутри math: \(p_0\), не ASCII p\_0 в прозе). Не $...$ и не \Cref.
 
-\newcommand{\NotationDescMlayer}{микроуровень: решётка, локальный закон g.}
-\newcommand{\NotationDescTlayer}{макроуровень: осреднённая физика, SI, эксперимент.}
+\newcommand{\NotationDescMlayer}{решётка, локальный закон $g$.}
+\newcommand{\NotationDescTlayer}{осреднённая физика, readout, согласование с экспериментом.}
 \newcommand{\NotationDescLambda}{счётное множество узлов носителя.}
 \newcommand{\NotationDescVp}{планковская ячейка: объём $V_P=\ell_P^3$ на M (не скорость $v$). См. \hyperref[sec:carrier-object]{§0}, \hyperref[sec:planck-lattice]{§1}.}
 \newcommand{\NotationDescg}{локальный обратимый закон эволюции; конфигурация в такт t. См. \hyperref[sec:descent-ca]{§0}.}
-\newcommand{\NotationDesca}{элементарный шаг решётки (шаг--такт); в коде hL. См. \hyperref[sec:planck-lattice]{§1}.}
-\newcommand{\NotationDescdt}{длительность одного такта g (шаг--такт); в коде hT. См. \hyperref[sec:coords-dh-dt]{§0.1}.}
+\newcommand{\NotationDesca}{элементарный шаг решётки (шаг--такт); в нат.\ ед.\ на $M$: $a{=}1$; код \texttt{hL}. См. \hyperref[sec:planck-lattice]{§1}.}
+\newcommand{\NotationDescdt}{длительность одного такта $g$ (шаг--такт); в нат.\ ед.\ на $M$: $\Delta t{=}1$; код \texttt{hT}. См. \hyperref[sec:coords-dh-dt]{§0.1}.}
 \newcommand{\NotationDesctau}{номер такта (поколение CA); связь с \(t_{\mathrm{SI}}\) после SI-моста.}
-\newcommand{\NotationDescCzero}{тактовая скорость сигнала на M; \(c_0=a/\Delta t\) (шаг--такт). См. \hyperref[sec:two-c]{§1}.}
-\newcommand{\NotationDescCspeed}{макроскопическая скорость света на макроуровне (SI-мост). См. \hyperref[sec:two-c]{§1}.}
+\newcommand{\NotationDescCzero}{тактовая скорость сигнала; \(c_0=a/\Delta t\). См. \hyperref[sec:two-c]{§1}.}
+\newcommand{\NotationDescCspeed}{скорость света после SI-моста ($c=\kappa c_0$). См. \hyperref[sec:two-c]{§1}.}
 \newcommand{\NotationDesckgeom}{безразмерный коэффициент геометрии носителя (kappa в коде). См. \hyperref[sec:fcc-kappa]{§1}.}
 \newcommand{\NotationDescdhdt}{внешние координаты dh и dt (dh=a, dt=\(\Delta t\)). См. \hyperref[sec:coords-dh-dt]{§0.1}.}
 \newcommand{\NotationDescszero}{ступень действия на одну ячейку и один такт; порождает лестницу квантов. См. \hyperref[sec:theorem-51]{теорему~5.1}.}
@@ -21,16 +21,16 @@
 \newcommand{\NotationDescEzero}{энергетический квант: \(E_0=s_0/\Delta t\). См. \hyperref[sec:theorem-51]{§5.2.1}.}
 \newcommand{\NotationDescFzero}{силовой квант: \(F_0=s_0/(dh\cdot\Delta t)\). См. \hyperref[sec:theorem-51]{§5.2.1}.}
 \newcommand{\NotationDescmzero}{массовый квант лестницы: \(m_0=E_0/c_0^2\); SI-мост. См. \hyperref[sec:theorem-51]{§5.2.1}, \hyperref[sec:full-ladder]{§6}.}
-\newcommand{\NotationDescL}{длина в метрах (слой T).}
+\newcommand{\NotationDescL}{макроскопическая координата длины (readout).}
 \newcommand{\NotationDesclambda}{характерная длина на шаге шкалы (комптоновская, боровская, \ldots).}
 \newcommand{\NotationDesclambdaC}{комптоновская длина электрона.}
 \newcommand{\NotationDesclambdak}{шаги IR-лестницы.}
 \newcommand{\NotationDescellP}{планковская длина; на носителе \(\ell_P=a\) (SI-мост). См. \hyperref[sec:planck-lattice]{§1}.}
 \newcommand{\NotationDescNc}{безразмерное \(\lambda_C/\ell_P\); не «голое» N.}
 \newcommand{\NotationDescloglambda}{порядок длины в таблице шкалы.}
-\newcommand{\NotationDesctSI}{время в секундах (слой T).}
+\newcommand{\NotationDesctSI}{время прибора (осреднение по тактам).}
 \newcommand{\NotationDesctP}{планковское время; \(\Delta t=\kappa\,t_P\) (SI-мост).}
-\newcommand{\NotationDesclogtau}{порядок числа тактов (космология; verify: \texttt{log10\_N\_today}).}
+\newcommand{\NotationDesclogtau}{порядок числа тактов (логарифмическая шкала).}
 \newcommand{\NotationDescNring}{размер фазового кольца \(N_{\mathrm{ring}}\) (дискретная фаза).}
 \newcommand{\NotationDescBhv}{информационный бюджет ячейки $B_V$; связь с \(N_{\mathrm{ring}}\) (дискретная фаза). См. \hyperref[sec:planckon-internal-spectrum]{§5.0.4}.}
 \newcommand{\NotationDescphiPhi}{дискретная фаза $\phaseVarphi_{\mathrm{disc}}$ и импульс за тик $\symCapitalPhi$.}
@@ -42,58 +42,61 @@
 \newcommand{\NotationSecCarrierTitle}{\textit{Слои и носитель}}
 \newcommand{\NotationSecLatticeTitle}{\textit{Решётка: длина и время (не путать с \(N_{\mathrm{ring}}\))}}
 \newcommand{\NotationSecLadderTitle}{\textit{Лестница квантов на \((dh,dt)\)}}
-\newcommand{\NotationSecLengthTitle}{\textit{Длина в SI и по шкале}}
-\newcommand{\NotationSecTimeTitle}{\textit{Время в SI}}
+\newcommand{\NotationSecLengthTitle}{\textit{Длина по шкале}}
+\newcommand{\NotationSecTimeTitle}{\textit{Время}}
+\newcommand{\NotationSecCarrierTTitle}{\textit{Макроуровень}}
 \newcommand{\NotationSecPhaseTitle}{\textit{Фаза, регистр ячейки (логарифмы в основе 2)}}
 \newcommand{\NotationSecNamedNTitle}{\textit{Именованные N (не ось длины)}}
 
-\newnotationsection{symb:sec-carrier}{carrier-00}{\NotationSecCarrierTitle}
-\newnotationentry{symb:Mlayer}{carrier-01a}{\ensuremath{M}}{\NotationDescMlayer}{\NotationUnitDash}
-\newnotationentry{symb:Tlayer}{carrier-01b}{\ensuremath{T}}{\NotationDescTlayer}{\NotationUnitDash}
-\newnotationentry{symb:Lambda}{carrier-02}{\ensuremath{\Lambda}}{\NotationDescLambda}{\NotationUnitDash}
-\newnotationentry{symb:Vp}{carrier-03}{\ensuremath{V_P}}{\NotationDescVp}{\NotationUnitMetreCubed}
-\newnotationentry{symb:g}{carrier-04}{\ensuremath{g{,}\,\Psi^t}}{\NotationDescg}{\NotationUnitDash}
+\newnotationsectionM{symb:sec-carrier}{carrier-00}{\NotationSecCarrierTitle}
+\newnotationentryM{symb:Mlayer}{carrier-01a}{\ensuremath{M}}{\NotationDescMlayer}{\NotationUnitDash}
+\newnotationentryM{symb:Lambda}{carrier-02}{\ensuremath{\Lambda}}{\NotationDescLambda}{\NotationUnitDash}
+\newnotationentryM{symb:Vp}{carrier-03}{\ensuremath{V_P}}{\NotationDescVp}{\NotationUnitMetreCubed}
+\newnotationentryM{symb:g}{carrier-04}{\ensuremath{g{,}\,\Psi^t}}{\NotationDescg}{\NotationUnitDash}
 
-\newnotationsection{symb:sec-lattice}{lattice-00}{\NotationSecLatticeTitle}
-\newnotationentry{symb:a}{lattice-01}{\ensuremath{a}}{\NotationDesca}{\NotationUnitMetreMcode}
-\newnotationentry{symb:dt}{lattice-02}{\ensuremath{\Delta t}}{\NotationDescdt}{\NotationUnitSecondDtcode}
-\newnotationentry{symb:tau}{lattice-03}{\ensuremath{\tau\in\mathbb{Z}}}{\NotationDesctau}{\NotationUnitTick}
-\newnotationentry{symb:c0}{lattice-04}{\ensuremath{c_0}}{\NotationDescCzero}{\NotationUnitMetrePerSecond}
-\newnotationentry{symb:c}{lattice-05}{\ensuremath{c{=}\kappa c_0}}{\NotationDescCspeed}{\NotationUnitMetrePerSecond}
-\newnotationentry{symb:kgeom}{lattice-06}{\ensuremath{\kappa}}{\NotationDesckgeom}{\NotationUnitDash}
-\newnotationentry{symb:dhdt}{lattice-07}{\ensuremath{(dh{,}dt)}}{\NotationDescdhdt}{\NotationUnitDash}
+\newnotationsectionT{symb:sec-carrier-t}{carrier-t-00}{\NotationSecCarrierTTitle}
+\newnotationentryT{symb:Tlayer}{carrier-01b}{\ensuremath{T}}{\NotationDescTlayer}{\NotationUnitDash}
 
-\newnotationsection{symb:sec-ladder}{ladder-00}{\NotationSecLadderTitle}
-\newnotationentry{symb:s0}{ladder-01}{\ensuremath{s_0}}{\NotationDescszero}{\NotationUnitJouleSecond}
-\newnotationentry{symb:p0}{ladder-02}{\ensuremath{p_0}}{\NotationDescpzero}{\NotationUnitKgMetrePerSecond}
-\newnotationentry{symb:E0}{ladder-03}{\ensuremath{E_0}}{\NotationDescEzero}{\NotationUnitJoule}
-\newnotationentry{symb:F0}{ladder-04}{\ensuremath{F_0}}{\NotationDescFzero}{\NotationUnitNewton}
-\newnotationentry{symb:m0}{ladder-05}{\ensuremath{m_0}}{\NotationDescmzero}{\NotationUnitKilogram}
+\newnotationsectionM{symb:sec-lattice}{lattice-00}{\NotationSecLatticeTitle}
+\newnotationentryM{symb:a}{lattice-01}{\ensuremath{a}}{\NotationDesca}{\NotationUnitMetreMcode}
+\newnotationentryM{symb:dt}{lattice-02}{\ensuremath{\Delta t}}{\NotationDescdt}{\NotationUnitSecondDtcode}
+\newnotationentryM{symb:tau}{lattice-03}{\ensuremath{\tau\in\mathbb{Z}}}{\NotationDesctau}{\NotationUnitTick}
+\newnotationentryM{symb:c0}{lattice-04}{\ensuremath{c_0}}{\NotationDescCzero}{\NotationUnitMetrePerSecond}
+\newnotationentryM{symb:kgeom}{lattice-06}{\ensuremath{\kappa}}{\NotationDesckgeom}{\NotationUnitDash}
+\newnotationentryM{symb:dhdt}{lattice-07}{\ensuremath{(dh{,}dt)}}{\NotationDescdhdt}{\NotationUnitDash}
+\newnotationentryT{symb:c}{lattice-05}{\ensuremath{c{=}\kappa c_0}}{\NotationDescCspeed}{\NotationUnitMetrePerSecond}
 
-\newnotationsection{symb:sec-length}{length-00}{\NotationSecLengthTitle}
-\newnotationentry{symb:L}{length-01}{\ensuremath{L}}{\NotationDescL}{\NotationUnitMetre}
-\newnotationentry{symb:lambda}{length-02}{\ensuremath{\lambda}}{\NotationDesclambda}{\NotationUnitMetre}
-\newnotationentry{symb:lambdaC}{length-03}{\ensuremath{\lambda_C}}{\NotationDesclambdaC}{\NotationUnitMetre}
-\newnotationentry{symb:lambdak}{length-04}{\ensuremath{\lambda_k}}{\NotationDesclambdak}{\NotationUnitMetre}
-\newnotationentry{symb:ellP}{length-05}{\ensuremath{\ell_P}}{\NotationDescellP}{\NotationUnitMetre}
-\newnotationentry{symb:Nc}{length-06}{\ensuremath{N_c}}{\NotationDescNc}{\NotationUnitDash}
-\newnotationentry{symb:loglambda}{length-07}{\ensuremath{\log_{10}(\lambda/\ell_P)}}{\NotationDescloglambda}{\NotationUnitDash}
+\newnotationsectionM{symb:sec-ladder}{ladder-00}{\NotationSecLadderTitle}
+\newnotationentryM{symb:s0}{ladder-01}{\ensuremath{s_0}}{\NotationDescszero}{\NotationUnitJouleSecond}
+\newnotationentryM{symb:p0}{ladder-02}{\ensuremath{p_0}}{\NotationDescpzero}{\NotationUnitKgMetrePerSecond}
+\newnotationentryM{symb:E0}{ladder-03}{\ensuremath{E_0}}{\NotationDescEzero}{\NotationUnitJoule}
+\newnotationentryM{symb:F0}{ladder-04}{\ensuremath{F_0}}{\NotationDescFzero}{\NotationUnitNewton}
+\newnotationentryM{symb:m0}{ladder-05}{\ensuremath{m_0}}{\NotationDescmzero}{\NotationUnitKilogram}
 
-\newnotationsection{symb:sec-time}{time-00}{\NotationSecTimeTitle}
-\newnotationentry{symb:tSI}{time-01}{\ensuremath{t_{\mathrm{SI}}}}{\NotationDesctSI}{\NotationUnitSecond}
-\newnotationentry{symb:tP}{time-02}{\ensuremath{t_P}}{\NotationDesctP}{\NotationUnitSecond}
-\newnotationentry{symb:logtau}{time-03}{\ensuremath{\log_{10}|\tau|}}{\NotationDesclogtau}{\NotationUnitDash}
+\newnotationsectionT{symb:sec-length}{length-00}{\NotationSecLengthTitle}
+\newnotationentryT{symb:L}{length-01}{\ensuremath{L}}{\NotationDescL}{\NotationUnitMetre}
+\newnotationentryT{symb:lambda}{length-02}{\ensuremath{\lambda}}{\NotationDesclambda}{\NotationUnitMetre}
+\newnotationentryT{symb:lambdaC}{length-03}{\ensuremath{\lambda_C}}{\NotationDesclambdaC}{\NotationUnitMetre}
+\newnotationentryT{symb:lambdak}{length-04}{\ensuremath{\lambda_k}}{\NotationDesclambdak}{\NotationUnitMetre}
+\newnotationentryT{symb:ellP}{length-05}{\ensuremath{\ell_P}}{\NotationDescellP}{\NotationUnitMetre}
+\newnotationentryT{symb:Nc}{length-06}{\ensuremath{N_c}}{\NotationDescNc}{\NotationUnitDash}
+\newnotationentryT{symb:loglambda}{length-07}{\ensuremath{\log_{10}(\lambda/\ell_P)}}{\NotationDescloglambda}{\NotationUnitDash}
 
-\newnotationsection{symb:sec-phase}{phase-00}{\NotationSecPhaseTitle}
-\newnotationentry{symb:Nring}{phase-01}{\ensuremath{N_{\mathrm{ring}}{=}512}}{\NotationDescNring}{\NotationUnitDash}
-\newnotationentry{symb:BV}{phase-02}{\ensuremath{B_V}}{\NotationDescBhv}{\NotationUnitDash}
-\newnotationentry{symb:phiPhi}{phase-03}{\ensuremath{\varphi_{\mathrm{disc}}{,}\,\Phi}}{\NotationDescphiPhi}{\NotationUnitPhaseTick}
-\newnotationentry{symb:Nphi}{phase-04}{\ensuremath{N_\phi{=}13}}{\NotationDescNphi}{\NotationUnitDash}
+\newnotationsectionT{symb:sec-time}{time-00}{\NotationSecTimeTitle}
+\newnotationentryT{symb:tSI}{time-01}{\ensuremath{t_{\mathrm{SI}}}}{\NotationDesctSI}{\NotationUnitSecond}
+\newnotationentryT{symb:tP}{time-02}{\ensuremath{t_P}}{\NotationDesctP}{\NotationUnitSecond}
+\newnotationentryT{symb:logtau}{time-03}{\ensuremath{\log_{10}|\tau|}}{\NotationDesclogtau}{\NotationUnitDash}
 
-\newnotationsection{symb:sec-namedN}{namedN-00}{\NotationSecNamedNTitle}
-\newnotationentry{symb:N12}{namedN-01}{\ensuremath{N_{12}{=}12}}{\NotationDescNFCC}{\NotationUnitDash}
-\newnotationentry{symb:Npack}{namedN-02}{\ensuremath{N_{\mathrm{pack}}}}{\NotationDescNpack}{\NotationUnitDash}
-\newnotationentry{symb:Nhier}{namedN-03}{\ensuremath{N_{\mathrm{hier}}}}{\NotationDescNhier}{\NotationUnitDash}
+\newnotationsectionM{symb:sec-phase}{phase-00}{\NotationSecPhaseTitle}
+\newnotationentryM{symb:Nring}{phase-01}{\ensuremath{N_{\mathrm{ring}}{=}512}}{\NotationDescNring}{\NotationUnitDash}
+\newnotationentryM{symb:BV}{phase-02}{\ensuremath{B_V}}{\NotationDescBhv}{\NotationUnitDash}
+\newnotationentryM{symb:phiPhi}{phase-03}{\ensuremath{\varphi_{\mathrm{disc}}{,}\,\Phi}}{\NotationDescphiPhi}{\NotationUnitPhaseTick}
+\newnotationentryM{symb:Nphi}{phase-04}{\ensuremath{N_\phi{=}13}}{\NotationDescNphi}{\NotationUnitDash}
+
+\newnotationsectionM{symb:sec-namedN}{namedN-00}{\NotationSecNamedNTitle}
+\newnotationentryM{symb:N12}{namedN-01}{\ensuremath{N_{12}{=}12}}{\NotationDescNFCC}{\NotationUnitDash}
+\newnotationentryM{symb:Npack}{namedN-02}{\ensuremath{N_{\mathrm{pack}}}}{\NotationDescNpack}{\NotationUnitDash}
+\newnotationentryT{symb:Nhier}{namedN-03}{\ensuremath{N_{\mathrm{hier}}}}{\NotationDescNhier}{\NotationUnitDash}
 
 \input{glossary/notation-entries-physics.tex}
 \input{glossary/notation-entries-autogen.tex}

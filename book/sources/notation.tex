@@ -3,9 +3,12 @@
 \addcontentsline{toc}{chapter}{Условные обозначения}
 \label{ch:notation}
 
-% Все записи type=notation, порядок по полю sort (не noidx: иначе пусто до «следующего» прогона).
-% В таблице обозначений символы уже с расшифровкой — без pdftooltip (и без \pdfstringdef в math).
 \begingroup
 \RenewDocumentCommand \gls { m } { \glsentryname {#1} }
-\printunsrtglossary[type=notation,style=notationlong,sort=standard,nonumberlist,title={}]
+
+\section*{Слой \texorpdfstring{$M$}{M}}
+\printnotationglossary{M}
+
+\section*{Слой \texorpdfstring{$T$}{T}}
+\printnotationglossary{T}
 \endgroup
