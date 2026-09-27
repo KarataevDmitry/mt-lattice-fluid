@@ -35,7 +35,7 @@ def main() -> int:
     p.add_argument("--size", type=int, default=32)
     p.add_argument("--block", type=int, default=4)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
-    p.add_argument("--relax", type=int, default=128)
+    p.add_argument("--relaxation", type=int, default=128)
     p.add_argument("--delta", type=float, default=0.125, dest="delta_angle")
     p.add_argument("--constraints", type=Path, default=None)
     p.add_argument("--json", action="store_true")
@@ -56,7 +56,7 @@ def main() -> int:
         sim,
         cfg,
         nz=nz,
-        relax=args.relax,
+        relaxation=args.relaxation,
         delta_angle=args.delta_angle,
         axis="x",
         block=args.block,
@@ -81,7 +81,7 @@ def main() -> int:
         "seconds": round(elapsed, 2),
         "dims": f"{nz}^3",
         "calibration": {
-            "relax": cal["relax"],
+            "relaxation": cal["relaxation"],
             "delta_angle": cal["delta_angle"],
             "max_rel": cal["max_rel"],
             "rms_rel": cal["rms_rel"],

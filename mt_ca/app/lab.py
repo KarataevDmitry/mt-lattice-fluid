@@ -44,7 +44,7 @@ class LabSession:
         if ticks > 0:
             self.sim.step(ticks)
 
-    def relax(self, ticks: int) -> MatterSite:
+    def relaxation(self, ticks: int) -> MatterSite:
         self.step(ticks)
         return default_anchor(self.sim.z)
 
@@ -121,14 +121,14 @@ def planckon_lab_report(
     scenario_id: str = "floor0_planckon",
     *,
     edge: int = 48,
-    relax: int = 0,
+    relaxation: int = 0,
     steps: int = 128,
     device: str = "cpu",
 ) -> dict[str, Any]:
     """§5.0 instrument row — boil habitat + anchor (verify / probes)."""
     lab = open_lab(scenario_id, edge, device=device)
-    if relax > 0:
-        lab.step(relax)
+    if relaxation > 0:
+        lab.step(relaxation)
     lab.step(steps)
     anchor = default_anchor(lab.sim.z)
     inst = planckon_instrument(lab.sim.z, anchor=anchor, top_k=8, cfg=lab.cfg)
@@ -148,7 +148,7 @@ def planckon_lab_report(
     )
     return {
         **lab.meta,
-        "relax": relax,
+        "relaxation": relaxation,
         "steps": steps,
         "anchor": {"iz": anchor.iz, "y": anchor.y, "x": anchor.x},
         "b_anchor": inst["b_anchor"],

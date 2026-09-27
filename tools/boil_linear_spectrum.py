@@ -20,13 +20,13 @@ from mt_ca.instruments.catalog import InstrumentId
 def run_boil_linear_spectrum(
     *,
     size: int = 16,
-    relax: int = 64,
+    relaxation: int = 64,
     track_ticks: int = 256,
     max_k: int = 1,
     eps_quanta: float = 2.0,
 ) -> dict:
     lab = open_lab("habitat_boil", size, device="cpu")
-    lab.step(relax)
+    lab.step(relaxation)
 
     z_curr = lab.sim.z.clone()
     z_past = lab.sim.z_past.clone() if lab.sim.z_past is not None else z_curr.clone()
@@ -58,7 +58,7 @@ def run_boil_linear_spectrum(
 
     return {
         **lab.meta,
-        "relax": relax,
+        "relaxation": relaxation,
         "track_ticks": track_ticks,
         "max_k": max_k,
         "eps_quanta": eps_quanta,
@@ -76,7 +76,7 @@ def run_boil_linear_spectrum(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--size", type=int, default=16)
-    parser.add_argument("--relax", type=int, default=64)
+    parser.add_argument("--relaxation", type=int, default=64)
     parser.add_argument("--track-ticks", type=int, default=256)
     parser.add_argument("--max-k", type=int, default=1)
     parser.add_argument("--eps-quanta", type=float, default=2.0)
@@ -84,7 +84,7 @@ def main() -> None:
     args = parser.parse_args()
     rep = run_boil_linear_spectrum(
         size=args.size,
-        relax=args.relax,
+        relaxation=args.relaxation,
         track_ticks=args.track_ticks,
         max_k=args.max_k,
         eps_quanta=args.eps_quanta,
@@ -93,7 +93,7 @@ def main() -> None:
         print(json.dumps(rep, indent=2))
         return
     print("lattice:", rep.get("dimension"), rep.get("grid"), "scenario:", rep.get("scenario_id"))
-    print("relax:", rep["relax"], "max_k:", rep["max_k"], "eps_quanta:", rep["eps_quanta"])
+    print("relaxation:", rep["relaxation"], "max_k:", rep["max_k"], "eps_quanta:", rep["eps_quanta"])
     print("--- top |λ| modes (FD on z_curr, component 0) ---")
     for row in rep["modes"][:12]:
         t_note = row.get("inferred_T_ticks") if row.get("stable_mode") else "n/a (|λ|>1)"

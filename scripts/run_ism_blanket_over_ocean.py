@@ -26,7 +26,7 @@ def main() -> int:
     p.add_argument("--size", type=int, default=48)
     p.add_argument("--block", type=int, default=4)
     p.add_argument("--thickness", type=int, default=6)
-    p.add_argument("--relax", type=int, default=128)
+    p.add_argument("--relaxation", type=int, default=128)
     p.add_argument("--evolve", type=int, default=0)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--json", action="store_true")
@@ -48,8 +48,8 @@ def main() -> int:
 
     t0 = time.perf_counter()
     sim.set_field(boil_ocean_spinor_3d(nz, nz, nz, **kw))
-    if args.relax > 0:
-        sim.step(args.relax)
+    if args.relaxation > 0:
+        sim.step(args.relaxation)
     z_ocean = sim.z.clone()
 
     tau = tau_uniform_ism_blanket(nz, nz, constraints, device=sim.device)

@@ -132,7 +132,7 @@ def check_a8_macro_suppression(device: str = "cpu") -> dict:
 def check_a9_cr_smooth_modes(
     size: int = 64,
     burn_in: int = 32,
-    relax: int = 32,
+    relaxation: int = 32,
     device: str = "cpu",
 ) -> dict:
     from mt_ca.cauchy_riemann import cr_stationarity_tolerance
@@ -155,7 +155,7 @@ def check_a9_cr_smooth_modes(
     e0 = cauchy_riemann_energy(sim.z[..., 0])
     sim.step(burn_in)
     e1 = cauchy_riemann_energy(sim.z[..., 0])
-    sim.step(relax)
+    sim.step(relaxation)
     e2 = cauchy_riemann_energy(sim.z[..., 0])
 
     seed_max = cr_seed_ceiling()
@@ -168,7 +168,7 @@ def check_a9_cr_smooth_modes(
         "id": "A9",
         "cr_energy_initial": e0,
         "cr_energy_after_burn_in": e1,
-        "cr_energy_after_relax": e2,
+        "cr_energy_after_relaxation": e2,
         "cr_seed_ceiling": seed_max,
         "cr_dispersion_ceiling": stat_max,
         "nu_CA_natural": nu_CA_natural(),

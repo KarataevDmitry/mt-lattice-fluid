@@ -194,7 +194,7 @@ def setup_arm(
     nz: int,
     ny: int,
     nx: int,
-    relax: int,
+    relaxation: int,
 ) -> None:
     kw = {
         "device": sim.device,
@@ -210,8 +210,8 @@ def setup_arm(
         sim.set_field(boil_ocean_spinor_3d(nz, ny, nx, **kw))
     elif arm == "boil_relax_wall":
         sim.set_field(boil_ocean_spinor_3d(nz, ny, nx, **kw))
-        if relax > 0:
-            sim.step(relax)
+        if relaxation > 0:
+            sim.step(relaxation)
         sim.set_field(
             _apply_spinor_phase_wall(
                 sim.z,
@@ -241,7 +241,7 @@ def main() -> int:
     p.add_argument("--size", type=int, default=48)
     p.add_argument("--steps", type=int, default=512)
     p.add_argument("--sample-every", type=int, default=32)
-    p.add_argument("--relax", type=int, default=256)
+    p.add_argument("--relaxation", type=int, default=256)
     p.add_argument("--top-k", type=int, default=24)
     p.add_argument(
         "--arm",
@@ -265,7 +265,9 @@ def main() -> int:
     t0 = time.perf_counter()
     for arm in arms:
         sim = LatticeFluidSimulator(ny, nx, cfg, nz=nz, device=args.device)
-        setup_arm(arm, sim=sim, cfg=cfg, nz=nz, ny=ny, nx=nx, relax=args.relax)
+        setup_arm(
+            arm, sim=sim, cfg=cfg, nz=nz, ny=ny, nx=nx, relaxation=args.relaxation
+        )
         row = track_run(
             sim=sim,
             label=arm,

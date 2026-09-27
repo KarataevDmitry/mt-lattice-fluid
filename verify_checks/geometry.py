@@ -425,7 +425,7 @@ def check_planckon_instrument_fcc(size: int = 48, steps: int = 128, device: str 
     row = planckon_lab_report(
         "floor0_planckon",
         edge=size,
-        relax=0,
+        relaxation=0,
         steps=steps,
         device=device,
     )

@@ -40,7 +40,7 @@ class RunResult:
             "ny": self.spec.ny,
             "nx": self.spec.nx,
             "steps": self.spec.steps,
-            "relax": self.spec.relax,
+            "relaxation": self.spec.relaxation,
             "track": self.spec.track,
         }
         return d

@@ -63,11 +63,11 @@ def fft_peak_period(
 def run_boil_ocean_periodicity(
     *,
     ticks: int = 1024,
-    relax: int = 128,
+    relaxation: int = 128,
     size: int = 32,
 ) -> dict:
     lab = open_lab("habitat_boil", size, device="cpu")
-    lab.step(relax)
+    lab.step(relaxation)
 
     cy = size // 2
     sites = lab.snap_sites(
@@ -115,7 +115,7 @@ def run_boil_ocean_periodicity(
     return {
         **lab.meta,
         "ticks": ticks,
-        "relax": relax,
+        "relaxation": relaxation,
         "field_rho_contrast": {
             "ac_period": ac_lag,
             "ac": round(ac, 4),
@@ -129,12 +129,14 @@ def run_boil_ocean_periodicity(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ticks", type=int, default=1024)
-    parser.add_argument("--relax", type=int, default=128)
+    parser.add_argument("--relaxation", type=int, default=128)
     parser.add_argument("--size", type=int, default=32)
     args = parser.parse_args()
-    rep = run_boil_ocean_periodicity(ticks=args.ticks, relax=args.relax, size=args.size)
+    rep = run_boil_ocean_periodicity(
+        ticks=args.ticks, relaxation=args.relaxation, size=args.size
+    )
     print("lattice:", rep.get("dimension"), rep.get("grid"), "scenario:", rep.get("scenario_id"))
-    print("ticks:", rep["ticks"], "relax:", rep["relax"])
+    print("ticks:", rep["ticks"], "relaxation:", rep["relaxation"])
     print("field rho_contrast:", rep["field_rho_contrast"])
     for site, block in rep["sites"].items():
         print(f"--- {site} ---")

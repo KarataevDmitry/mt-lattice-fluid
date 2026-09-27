@@ -47,7 +47,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         embedding=args.embedding,
         block=args.block,
         sample_every=args.sample_every,
-        relax=args.relax,
+        relaxation=args.relaxation,
         track=args.track,
     )
     result = run(spec)
@@ -68,8 +68,8 @@ def cmd_panel(args: argparse.Namespace) -> int:
         args.scenario, args.size, device=args.device, steps=0, embedding=args.embedding
     )
     lab = open_lab_from_spec(spec)
-    if args.relax:
-        lab.relax(args.relax)
+    if args.relaxation:
+        lab.relaxation(args.relaxation)
     if args.steps:
         lab.step(args.steps)
     payload = {"lattice": lab.meta, "panel": lab.panel()}
@@ -98,7 +98,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=LatticeDimension.VOLUME_3P1,
     )
     run_p.add_argument("--steps", type=int, default=128)
-    run_p.add_argument("--relax", type=int, default=0)
+    run_p.add_argument("--relaxation", type=int, default=0)
     run_p.add_argument("--track", type=int, default=0)
     run_p.add_argument("--sample-every", type=int, default=None)
     run_p.add_argument("--block", type=int, default=8)
@@ -115,7 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
         type=_parse_embedding,
         default=LatticeDimension.VOLUME_3P1,
     )
-    panel_p.add_argument("--relax", type=int, default=0)
+    panel_p.add_argument("--relaxation", type=int, default=0)
     panel_p.add_argument("--steps", type=int, default=128)
     panel_p.add_argument("--device", default=_device_default())
     panel_p.add_argument("--json", action="store_true")
