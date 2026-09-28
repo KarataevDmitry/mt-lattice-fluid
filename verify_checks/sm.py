@@ -221,6 +221,28 @@ def check_neutron_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_annihilation_pdg_tau_bridge(device: str = "cpu") -> dict:
+    """§5.0.3 — PDG para-Ps τ vs QED leading and N_c/α⁵ ladder (not collision τ_M)."""
+    from mt_ca.si_constants import SI
+
+    row = SI.annihilation_pdg_tau_row(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["qed_matches_PDG"])
+        and bool(row["ladder_matches_PDG"])
+        and bool(row["collision_clock_separate_from_PDG"])
+    )
+    return {
+        "id": "Annihilation_PDG_tau_bridge",
+        "tau_qed_rel_err": row["tau_qed_rel_err"],
+        "tau_ladder_rel_err": row["tau_ladder_rel_err"],
+        "tau_M_over_tau_PDG": row["tau_M_over_tau_PDG"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_annihilation_m_t_bundle(device: str = "cpu") -> dict:
     """§5.0.3 — floor1 pm coarse dipole + Annihilation_T_stats (linked instruments)."""
     from mt_ca.annihilation_m_t_bundle import run_annihilation_m_t_bundle

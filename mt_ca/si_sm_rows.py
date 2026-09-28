@@ -442,3 +442,9 @@ class SISmRows:
             "note": "§8.4.4: N_gen=d; λ=3/13 same cluster weight as Weinberg; A,ρ,η soft",
         }
 
+    def annihilation_pdg_tau_row(self, *, device: str = "cpu") -> dict[str, float | int | str | bool]:
+        """§5.0.3 — para-Ps τ PDG vs QED/ladder; head-on τ_M separate."""
+        from mt_ca.annihilation_pdg_tau import run_annihilation_pdg_tau_bridge
+
+        return run_annihilation_pdg_tau_bridge(device=device)
+

@@ -26,7 +26,15 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Фикс:** `major+π/2` → ось «lobe–lobe»; пакеты вдоль **x** + `_rotate_spinor_2d`; ошибка оси **mod π** в lab frame vs injected `ang`.
 
-**Verify:** **`Annihilation_T_stats`** — back-to-back + `axis_tracks_pi` + ensemble (mean err ≈0.06 rad @ 12×); `hist_cv` только диагностика (π-flip). PDG τ — open.
+**Verify:** **`Annihilation_T_stats`** — back-to-back + `axis_tracks_pi` + ensemble (mean err ≈0.06 rad @ 12×); `hist_cv` только диагностика (π-flip).
+
+## 2026-09-29 · §5.0.3 · Annihilation_PDG_tau_bridge
+
+**Закрыто (T-door + лестница, не sim bound state):** $\tau_{\mathrm{PDG}}\approx 2\hbar/(m_e c^2\alpha^5)\approx (N_c/\alpha^5)\cdot 2\hbar/(m_P c^2)$ (~0.47% к 125.087 ps). $N_{\mathrm{ticks}}=\tau/hT\sim 3.3\times 10^{33}$.
+
+**Отделено:** head-on `tick_focus·hT` ~ $10^{-42}$ s ($\tau_M/\tau_{\mathrm{PDG}}\sim 10^{-33}$) — фокус T2, не para-Ps.
+
+**Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
 ---
 
@@ -36,7 +44,7 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/floor1_pm_coarse_t.py` · `tools/floor1_pm_coarse_probe.py` · `SI.floor1_pm_coarse_dipole_row()`.
 
-**Verify:** **`Floor1_pm_coarse_dipole`** PASS (~7 s cuda). Не заменяет `Annihilation_T_stats` (тор/ensemble/PDG τ).
+**Verify:** **`Floor1_pm_coarse_dipole`** PASS (~7 s cuda). Связка с T: **`Annihilation_M_T_bundle`** (~10 s cuda) · `tools/annihilation_m_t_bundle_probe.py`.
 
 ---
 

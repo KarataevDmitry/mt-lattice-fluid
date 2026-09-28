@@ -80,6 +80,9 @@ M_PROTON_GEV_PDG = 0.93827208816
 # Electron mass — PDG reference for rel_err only; prediction = α_fs²·m_H/N_φ (§8.2)
 M_ELECTRON_GEV_PDG = 0.00051099895
 
+# Para-positronium lifetime — PDG T-door (2022 central); QED leading + ladder bridge in verify
+TAU_PARA_PS_PDG_S = 125.087e-12
+
 # Neutron mass — PDG reference for rel_err only; prediction = m_p + 2·m_e (§8.2·7)
 M_NEUTRON_GEV_PDG = 0.93956542052
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
+from mt_ca.annihilation_pdg_tau import run_annihilation_pdg_tau_bridge
 from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
 from mt_ca.floor1_pm_coarse_t import default_sim_device, run_pm_coarse_dipole_probe
 
@@ -34,9 +35,12 @@ def run_annihilation_m_t_bundle(
     t_dual = bool(t_row["back_to_back_proxy"]) and int(t_row["peaks_on_delta"] or 0) >= 2
     axis_shared = pm.get("pm_axis_angle") is not None and bool(t_row["axis_tracks_pi"])
 
+    pdg = run_annihilation_pdg_tau_bridge(device=device)
+
     checks_ok = (
         bool(pm["checks_ok"])
         and bool(t_row["ok"])
+        and bool(pdg["checks_ok"])
         and m_dual
         and t_dual
         and axis_shared
@@ -61,6 +65,11 @@ def run_annihilation_m_t_bundle(
         },
         "link_dual_front_both_paths": m_dual and t_dual,
         "link_shared_dipole_instrument": axis_shared,
+        "pdg_tau_bridge": {
+            "checks_ok": pdg["checks_ok"],
+            "tau_qed_rel_err": pdg["tau_qed_rel_err"],
+            "tau_M_over_tau_PDG": pdg["tau_M_over_tau_PDG"],
+        },
         "wall_s": time.perf_counter() - t0,
         "note": (
             "§5.0.3 chain: pm_nn annihilation on A5 boil → coarse Δ|Φ| dipole; "

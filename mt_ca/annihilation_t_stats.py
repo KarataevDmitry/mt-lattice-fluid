@@ -16,6 +16,7 @@ import torch
 import torch.nn.functional as F
 
 from mt_ca.config import MConfig
+from mt_ca.si_constants import TAU_PARA_PS_PDG_S
 from mt_ca.seeds import make_wave_packet
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.t_validation import coarse_grain, collision_peak_count, covariance_isotropy, isotropy_ratio
@@ -197,7 +198,7 @@ def annihilation_t_stats_probe(
     from mt_ca.si_constants import SI
 
     tau_m_s = float(single["tick_focus"]) * SI.hT
-    tau_para_ps_PDG = 125.0e-12
+    tau_para_ps_PDG = TAU_PARA_PS_PDG_S
     gamma_pdg_hz = SI.hbar / tau_para_ps_PDG
 
     back_to_back = (
