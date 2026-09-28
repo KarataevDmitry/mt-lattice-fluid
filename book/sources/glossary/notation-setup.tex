@@ -5,7 +5,6 @@
 \newcommand{\notationentryunit}[1]{\glsentryuseri{#1}}
 
 \newcommand{\newnotationentryM}[5]{%
-  \notationBlkMaddkey{#1}%
   \newglossaryentry{#1}{%
     type=notationM, sort={#2},
     name={#3},
@@ -15,7 +14,6 @@
 }
 
 \newcommand{\newnotationentryT}[5]{%
-  \notationBlkTaddkey{#1}%
   \newglossaryentry{#1}{%
     type=notationT, sort={#2},
     name={#3},
@@ -27,55 +25,6 @@
 % Совместимость (новые записи — явно M или T).
 \newcommand{\newnotationentry}[5]{\newnotationentryM{#1}{#2}{#3}{#4}{#5}}
 
-% --- Печать по блокам (заголовок + отдельная longtable на блок) ---
-\gdef\notationBlkMlist{}
-\gdef\notationBlkTlist{}
-\gdef\notationBlkMtitle{}
-\gdef\notationBlkMkeys{}
-\gdef\notationBlkTtitle{}
-\gdef\notationBlkTkeys{}
-
-\newcommand{\notationBlkMaddkey}[1]{%
-  \ifdefvoid{\notationBlkMkeys}{%
-    \gdef\notationBlkMkeys{#1}%
-  }{%
-    \edef\notationBlkMkeys{\notationBlkMkeys,#1}%
-  }%
-}
-\newcommand{\notationBlkTaddkey}[1]{%
-  \ifdefvoid{\notationBlkTkeys}{%
-    \gdef\notationBlkTkeys{#1}%
-  }{%
-    \edef\notationBlkTkeys{\notationBlkTkeys,#1}%
-  }%
-}
-\newcommand{\notationBlkMcloseblock}{%
-  \ifdefvoid{\notationBlkMkeys}{}{%
-    \appto\notationBlkMlist{%
-      \notationBlkprint{M}{\notationBlkMtitle}{\notationBlkMkeys}%
-    }%
-    \gdef\notationBlkMkeys{}%
-  }%
-}
-\newcommand{\notationBlkTcloseblock}{%
-  \ifdefvoid{\notationBlkTkeys}{}{%
-    \appto\notationBlkTlist{%
-      \notationBlkprint{T}{\notationBlkTtitle}{\notationBlkTkeys}%
-    }%
-    \gdef\notationBlkTkeys{}%
-  }%
-}
-\newcommand{\notationBlkprint}[3]{%
-  \Needspace{9\baselineskip}%
-  \noindent #2\par
-  \vspace{0.3em}%
-  \ifstrequal{#1}{M}{%
-    \printunsrtglossary[type=notationM,style=notationlong,nonumberlist,sort=use]{#3}%
-  }{%
-    \printunsrtglossary[type=notationT,style=notationlong,nonumberlist,sort=use]{#3}%
-  }%
-}
-
 \newcommand{\notationlongtablecols}{@{}p{0.17\linewidth}p{0.53\linewidth}p{0.24\linewidth}@{}}
 \newcommand{\notationtablehead}{%
   \toprule
@@ -84,15 +33,33 @@
   \foreignlanguage{russian}{Единица} \\
   \midrule
 }
+\newcommand{\notationtableheadcontinue}{%
+  \midrule
+  \foreignlanguage{russian}{Обозначение} &
+  \foreignlanguage{russian}{Смысл} &
+  \foreignlanguage{russian}{Единица} \\
+  \midrule
+}
+% Если до конца страницы мало места — разрыв перед подсекцией (внутри longtable).
+\newcommand{\notationpagebreakifneeded}{%
+  \noalign{%
+    \ifdim\pagetotal>\dimexpr\pagegoal-10\baselineskip\relax
+      \pagebreak[3]%
+    \fi
+  }%
+}
+
+\newif\ifnotationtablehasbody
 \newglossarystyle{notationlong}{%
   \renewenvironment{theglossary}{%
+    \notationtablehasbodyfalse
     \small
     \setlength{\tabcolsep}{5pt}%
     \renewcommand{\arraystretch}{1.12}%
     \begin{longtable}{\notationlongtablecols}%
     \notationtablehead
     \endfirsthead
-    \notationtablehead
+    \notationtableheadcontinue
     \endhead
     \bottomrule
     \endfoot
@@ -102,9 +69,21 @@
   \renewcommand*{\glossaryheader}{}%
   \renewcommand*{\glsgroupheading}[1]{}%
   \renewcommand{\glossentry}[2]{%
-    \glstarget{##1}{\glossentryname{##1}} &
-    \glossentrydesc{##1}\glspostdescription\space ##2 &
-    \notationentryunit{##1}\tabularnewline
+    \ifglshasdesc{##1}{%
+      \notationtablehasbodytrue
+      \glstarget{##1}{\glossentryname{##1}} &
+      \glossentrydesc{##1}\glspostdescription\space ##2 &
+      \notationentryunit{##1}\tabularnewline
+    }{%
+      \ifnotationtablehasbody
+        \notationpagebreakifneeded
+        \noalign{\vspace{0.45em}}%
+      \fi
+      {\itshape\glossentryname{##1}} & & \tabularnewline
+      \ifnotationtablehasbody
+        \notationtableheadcontinue
+      \fi
+    }%
   }%
   \renewcommand{\subglossentry}[3]{}%
   \renewcommand*{\glsgroupskip}{}%
@@ -114,16 +93,14 @@
   \begingroup
   \setglossarysection{none}%
   \ifstrequal{#1}{M}{%
-    \notationBlkMlist
+    \printunsrtglossary[type=notationM,style=notationlong,sort=standard,nonumberlist]%
   }{%
-    \notationBlkTlist
+    \printunsrtglossary[type=notationT,style=notationlong,sort=standard,nonumberlist]%
   }%
   \endgroup
 }
 
 \newcommand{\newnotationsectionM}[3]{%
-  \notationBlkMcloseblock
-  \gdef\notationBlkMtitle{#3}%
   \newglossaryentry{#1}{%
     type=notationM, sort={#2},
     name={#3},
@@ -132,8 +109,6 @@
 }
 
 \newcommand{\newnotationsectionT}[3]{%
-  \notationBlkTcloseblock
-  \gdef\notationBlkTtitle{#3}%
   \newglossaryentry{#1}{%
     type=notationT, sort={#2},
     name={#3},
