@@ -1,12 +1,33 @@
-\section{Выбор FCC с двенадцатью соседями}
+\section{Выбор \latGCKgen\ с двенадцатью соседями}
 \label{sec:fcc-choice}
+
+\begin{definition}[Типы упаковки в трёх измерениях]
+\label{def:packing-types}
+Сравнивая носители, используем стандартную кристаллографическую терминологию
+(без англоязычных аббревиатур SC, BCC, FCC, HCP в прозе):
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.52\linewidth}cc@{}}
+\toprule
+название & сокр. & $|N|$ \\
+\midrule
+\latPK & \latPKshort & $6$ \\
+\latOCK & \latOCKshort & $8$ \\
+\latGCK & \latGCKshort & $12$ \\
+\latGPU & \latGPUshort & $12$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Носитель модели --- \latGCK\ $\carrierLattice\subset\mathbb{R}^3$.
+В формулах иногда пишут $\mathrm{FCC}$ как условное обозначение этого типа Браве.
+\end{definition}
 
 \begin{theorem}[Носитель в $(3{+}1)$]
 \label{thm:fcc-choice}
 Пусть выполнены: замощение без дыр; единственная длина~$\caStepSpace$;
 только светоподобные рёбра за один~$\htick$;
 изотропия вакуума; один носитель на узел; физическое пространство трёхмерно.
-Тогда носитель --- $\carrierLattice=\mathrm{FCC}$, $|N(x)|=12$ для всех узлов,
+Тогда $\carrierLattice$ --- \latGCK, $|N(x)|=12$ для всех узлов,
 $\kappa_{\mathrm{link}}=1/12$.
 \end{theorem}
 
@@ -18,34 +39,34 @@ $\kappa_{\mathrm{link}}=1/12$.
 Ячейку представляем шаром радиуса $\caStepSpace/2$: касание двух шаров есть ребро длины~$\caStepSpace$.
 В трёх измерениях плотнейшая упаковка равных шаров --- гранецентрированная кубическая или гексагональная плотная (теорема Кеплера).
 У каждого шара тогда ровно двенадцать соседей на расстоянии~$\caStepSpace$.
-Простая кубическая решётка имеет шесть соседей, объёмно-центрированная --- восемь; обе реже и отпадают, раз требуется максимальная плотность при одной длине ребра
+\latPK\ имеет шесть соседей, \latOCK --- восемь; обе реже и отпадают, раз требуется максимальная плотность при одной длине ребра
 (\cref{fig:carrier-packing-sc,fig:carrier-packing-bcc,fig:carrier-packing-fcc}).
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-packing-sc.tex}
-  \caption{Простая кубическая упаковка (SC): $|N|=6$.}
+  \caption{\latPK\ (\latPKshort): $|N|=6$.}
   \label{fig:carrier-packing-sc}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-packing-bcc.tex}
-  \caption{Объёмно-центрированная упаковка (BCC): $|N|=8$.}
+  \caption{\latOCK\ (\latOCKshort): $|N|=8$.}
   \label{fig:carrier-packing-bcc}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-packing-fcc.tex}
-  \caption{Гранецентрированная упаковка (FCC): $|N|=12$.}
+  \caption{\latGCK\ (\latGCKshort): $|N|=12$.}
   \label{fig:carrier-packing-fcc}
 \end{figure}
 
-Плотность и $|N|$ у FCC и HCP совпадают; их различает симметрия.
+Плотность и $|N|$ у \latGCKshort\ и \latGPUshort\ совпадают; их различает симметрия.
 \pfrom{требования изотропии вакуума}
-у FCC три равные кубические оси, у HCP --- выделенная ось слоёв.
-\phence носитель --- FCC.
+у \latGCKshort\ три равные кубические оси, у \latGPUshort --- выделенная ось слоёв.
+\phence носитель --- \latGCK.
 
 \emph{Световой конус.}
 Двенадцать соседей узла в начале координат, при ребре кубической ячейки $\caStepSpace\sqrt{2}$, суть все перестановки
@@ -84,7 +105,7 @@ $\kappa_{\mathrm{link}}=1/12$.
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-fcc-shell.tex}
-  \caption{Плотнейшая FCC-упаковка: $|N|=12$ касающихся сфер.}
+  \caption{Плотнейшая \latGCK: $|N|=12$ касающихся сфер.}
   \label{fig:carrier-fcc-shell}
 \end{figure}
 
@@ -116,19 +137,19 @@ $\kappa_{\mathrm{link}}=1/12$.
 \toprule
 решётка & $|N|$ & $\mathcal{K}(x)=\mathrm{conv}\,N(x)$ \\
 \midrule
-простая кубическая & $6$ & октаэдр \\
-объёмно-центрированная & $8$ & куб \\
-FCC / HCP (12 NN) & $12$ & кубооктаэдр / призма с шестиугольным основанием \\
+\latPKshort & $6$ & октаэдр \\
+\latOCKshort & $8$ & куб \\
+\latGCKshort\ / \latGPUshort & $12$ & кубооктаэдр / призма с шестиугольным основанием \\
 \bottomrule
 \end{tabular}
 \end{center}
-HCP с той же плотностью, что FCC, оставляет выделенную ось слоёв;
+\latGPU\ с той же плотностью, что \latGCK, оставляет выделенную ось слоёв;
 \pfrom{изотропии вакуума в \cref{thm:fcc-choice}}
-носитель --- FCC, а не HCP.
+носитель --- \latGCK, а не \latGPU.
 
-\begin{proposition}[Кубооктаэдр как оболочка FCC]
+\begin{proposition}[Кубооктаэдр как оболочка \latGCKshort]
 \label{prop:cubocta-fcc}
-Пусть $\carrierLattice=\mathrm{FCC}$ и $a=\caStepSpace$.
+Пусть $\carrierLattice$ --- \latGCK\ и $a=\caStepSpace$.
 Тогда $N(0)$ --- все перестановки $(\pm a/\sqrt{2},\pm a/\sqrt{2},0)$,
 и $\mathcal{K}(0)=\mathrm{conv}\,N(0)$ --- правильный кубооктаэдр с ребром $a/\sqrt{2}$,
 шестью квадратными и восемью треугольными гранями (\cref{fig:carrier-cuboctahedron}).
@@ -140,17 +161,17 @@ HCP с той же плотностью, что FCC, оставляет выде
 Такие плоскости --- координатные квадраты (четыре соседа в одной плоскости $x=\mathrm{const}$)
 и равносторонние треугольники на диагональных сечениях $x+y+z=\mathrm{const}$.
 Других вершин у выпуклой оболочки нет: все точки $N(0)$ уже вершины.
-Полученное тело совпадает с классическим кубооктаэдром (дуальный ромбическому додекаэдру --- ячейке Вороного FCC).
+Полученное тело совпадает с классическим кубооктаэдром (дуальный ромбическому додекаэдру --- ячейке Вороного на \latGCKshort).
 \end{proof}
 
 \begin{remark}[Что не рассматривается]
 Икосаэдр, додекаэдр или усечённый октаэдр \emph{не} возникают как $\mathrm{conv}\,N(x)$ у периодической решётки
 с одной длиной ребра~$\caStepSpace$ и первой координационной сферой в~$\mathbb{R}^3$:
 у Браве-носителя соседи --- фиксированный дискретный набор, а не произвольные двенадцать точек на сфере.
-Ячейка Вороного FCC --- ромбический додекаэдр; это \emph{зона одного узла}, а не однотактовая каузальная оболочка (\cref{def:one-tick-hull}).
+Ячейка Вороного на \latGCKshort --- ромбический додекаэдр; это \emph{зона одного узла}, а не однотактовая каузальная оболочка (\cref{def:one-tick-hull}).
 \end{remark}
 
-\subsection{Геометрия однотактового тела на FCC}
+\subsection{Геометрия однотактового тела на \latGCKshort}
 \label{sec:fcc-kappa}
 
 Далее метрика тела $\mathcal{K}(x)$ из \cref{prop:cubocta-fcc}.
@@ -178,7 +199,7 @@ HCP с той же плотностью, что FCC, оставляет выде
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-cuboctahedron.tex}
-  \caption{Кубооктаэдр --- выпуклая оболочка двенадцати соседей FCC.}
+  \caption{Кубооктаэдр --- выпуклая оболочка двенадцати соседей \latGCKshort.}
   \label{fig:carrier-cuboctahedron}
 \end{figure}
 
@@ -190,7 +211,7 @@ HCP с той же плотностью, что FCC, оставляет выде
 \end{figure}
 
 Объём ячейки Вороного считается отдельно.
-Кубическая ячейка со стороной $A=a\sqrt{2}$ имеет объём $A^3=2\sqrt{2}\,a^3$ и содержит четыре узла FCC, поэтому на один узел
+Кубическая ячейка со стороной $A=a\sqrt{2}$ имеет объём $A^3=2\sqrt{2}\,a^3$ и содержит четыре узла \latGCKshort, поэтому на один узел
 \[
   v_{\hv}=A^3/4=a^3/\sqrt{2}.
 \]

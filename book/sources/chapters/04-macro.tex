@@ -74,14 +74,14 @@ $W=\tfrac14[1,2,1]$ на соседях $\{-1,0,+1\}$.
 получаем $w_1*w_1=\tfrac14[1,2,1]$.
 \end{proof}
 
-\begin{remark}[Ортогональный срез и FCC]
+\begin{remark}[Ортогональный срез и \latGCKshort]
 На product-срезе (независимые null-шаги по осям) тот же аргумент по каждой оси
 и \ref{cond:C1} дают $\mathcal{B}$ из \cref{def:soft-readout}.
-На полном FCC соседство~$N_{12}$ не является кубом $(1{:}2{:}1)^{\otimes 3}$:
+На полном носителе \latGCKshort\ соседство~$N_{12}$ не является кубом $(1{:}2{:}1)^{\otimes 3}$:
 нативное ядро глубины~$2$ --- сумма по путям на графе~$N_{12}$
 (в \cref{thm:t-cr}: $w(0)=1/12$, изотропный второй момент $\tfrac43\delta_{ij}$).
 Сепарабельная формула в \cref{def:soft-readout} --- удобная запись на срезе;
-спектральные оценки T-CR переносятся на FCC-Green с той же шкалой~$\sigma_R$.
+спектральные оценки T-CR переносятся на ядро Грина по $N_{12}$ с той же шкалой~$\sigma_R$.
 \end{remark}
 
 \begin{remark}[Что не следует]
@@ -143,8 +143,8 @@ $R$ проходов складывают дисперсии: $\sigma_R^2=R/2$.
 УФ-моды без предела $\caStepSpace\to 0$; континуум --- свойство осреднения на~$T$, не аксиома~$M$.
 
 \smallskip
-\emph{FCC в $(3{+}1)$.}
-На FCC ядро depth-2 path-Green (\cref{def:soft-readout}, гл.~\ref{ch:macro})
+\emph{\latGCKshort\ в $(3{+}1)$.}
+На \latGCK\ ядро глубины~$2$ по путям (\cref{def:soft-readout}, гл.~\ref{ch:macro})
 даёт $w(0)=1/12$ и изотropный второй момент $M_{ij}=\tfrac43\delta_{ij}$
 (полное перечисление двухшаговых путей на~$N_{12}$).
 Separable накопление $W^{\otimes 2R}$ переносит одномерную оценку $O(k^4)$
@@ -167,7 +167,7 @@ $\lambda$ --- длина волны наблюдаемой моды,
   \chi=\Bigl(\frac{\caStepSpace}{\lambda}\Bigr)^2.
 \]
 При $\varepsilon\ll 1$, $\chi\ll 1$ и посылках \cref{thm:t-cr} и гидропредела
-(изотропный depth-2 Green на FCC, \S4.1.1-HL в модели):
+(изотропное ядро глубины~$2$ на \latGCKshort):
 \begin{enumerate}[label=(\roman*)]
 \item \textbf{Спектр.} $|\widehat W_R(k)-G_R(k)|/G_R(k)=O(\varepsilon^4)$ при $k\sim 2\pi\caStepSpace/\lambda$.
 \item \textbf{Лапласиан.} $(K^{*R}-I)\Phi=\tfrac{2R}{3}\caStepSpace^2\nabla^2\Phi+O(\varepsilon^4|\Phi|)$ в IR.

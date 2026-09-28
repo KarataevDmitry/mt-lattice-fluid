@@ -29,17 +29,17 @@
 $g$ --- перестановка (биекция) на~$\mathcal{C}$.
 \end{proof}
 
-\begin{lemma}[FCC-носитель и элементарная шкала]
+\begin{lemma}[\latGCKshort: носитель и элементарная шкала]
 \label{lem:fcc-scale}
-Носитель --- $\carrierLattice=\mathrm{FCC}$ с $|N(x)|=12$ (\cref{thm:fcc-choice}).
-Шаг~$\caStepSpace$ и такт~$\htick$ однозначно задаются однотактовым телом FCC (\cref{sec:fcc-kappa});
+Носитель --- \latGCK\ $\carrierLattice$ с $|N(x)|=12$ (\cref{thm:fcc-choice,def:packing-types}).
+Шаг~$\caStepSpace$ и такт~$\htick$ однозначно задаются однотактовым телом на \latGCKshort\ (\cref{sec:fcc-kappa});
 $\hv$ --- узел решётки (регистр поля и нормы (\cref{def:field-a3})).
 \end{lemma}
 
 \begin{proof}
 \pfrom{теоремы~\ref{thm:fcc-choice}}
 \[
-  \carrierLattice=\mathrm{FCC},\qquad |N(x)|=12.
+  \carrierLattice\ \text{--- \latGCK},\qquad |N(x)|=12.
 \]
 
 \smallskip
@@ -66,7 +66,7 @@ $\caSignalSpeed=\caStepSpace/\htick$.
 \smallskip
 \emph{Ячейка~$\hv$.}
 \puseref{определения поля и нормы}{def:field-a3}
-получаем: $\PlanckCell$ --- узел FCC (регистр~$z$); $dV$ --- объём Вороного ($V_P/\sqrt{2}$ при $a=\ell_P$).
+получаем: $\PlanckCell$ --- узел \latGCKshort\ (регистр~$z$); $dV$ --- объём Вороного ($V_P/\sqrt{2}$ при $a=\ell_P$).
 \end{proof}
 
 \begin{lemma}[Атомность регистра]
@@ -86,17 +86,17 @@ $\caSignalSpeed=\caStepSpace/\htick$.
 Топологический заряд $n\in\mathbb{Z}$ и полюс привязаны к границе одной ячейки~$\hv$;
 размазывание полюса по подузлам разнесло бы $n$.
 Потолок плотности и $|z|\ge z_{\min}>0$ фиксируют бюджет~$B_{\hv}$ на регистр.
-\phence формальное дробление~$\hv$ потребовало бы нескольких независимых алфавитов на месте одного узла FCC, то есть другого закона~$g$.
+\phence формальное дробление~$\hv$ потребовало бы нескольких независимых алфавитов на месте одного узла \latGCKshort, то есть другого закона~$g$.
 \end{proof}
 
 \begin{theorem}[Дискретность и минимальная ячейка $\hv$]
 \label{thm:discreteness}
 Пусть $g$ --- допустимый локальный закон на~$\layerMicro$,
-удовлетворяющий абсолютным условиям~\cref{ch:axioms} на геометрии FCC-носителя~\cref{ch:carrier}.
+удовлетворяющий абсолютным условиям~\cref{ch:axioms} на геометрии \latGCKgen~\cref{ch:carrier}.
 Тогда:
 \begin{enumerate}[label=(\roman*)]
 \item $g$ --- дискретная динамика на~$\carrierLattice$;
-\item существуют счётный FCC-носитель~$\carrierLattice$, элементарная ячейка~$\hv$, шаг~$\caStepSpace$ и такт~$\htick$;
+\item существуют счётный носитель~\latGCK\ $\carrierLattice$, элементарная ячейка~$\hv$, шаг~$\caStepSpace$ и такт~$\htick$;
 \item дробление регистра «ниже~$\caStepSpace$'' меняет алфавит: под-решётка несёт другой закон.
 \end{enumerate}
 \end{theorem}
@@ -112,11 +112,11 @@ $\caSignalSpeed=\caStepSpace/\htick$.
 \smallskip
 \emph{(ii).}
 \pfrom{теоремы~\ref{thm:fcc-choice} и леммы~\ref{lem:fcc-scale}}
-существуют $\carrierLattice=\mathrm{FCC}$, $|N|=12$, шаг $\caStepSpace$, такт $\htick$ и ячейка~$\hv$.
+существуют \latGCK\ $\carrierLattice$, $|N|=12$, шаг $\caStepSpace$, такт $\htick$ и ячейка~$\hv$.
 
 \smallskip
 \emph{(iii).}
-Если подрешётка с $\caStepSpace'<\caStepSpace$ несла тот же~$g$, на узле FCC было бы несколько регистров с общим топологическим зарядом.
+Если подрешётка с $\caStepSpace'<\caStepSpace$ несла тот же~$g$, на узле \latGCKshort\ было бы несколько регистров с общим топологическим зарядом.
 \pfrom{леммы~\ref{lem:register-atom}}
 это запрещено: заряд и полюс привязаны к одной~$\hv$, бюджет не делится без смены алфавита.
 \end{proof}
