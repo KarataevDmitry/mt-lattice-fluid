@@ -120,6 +120,21 @@ def check_discrete_rot_exp(device: str = "cpu") -> dict:
         "note": "§3.10.3: M gate R(Φ)=ω^Φ; not matrix exp(i·Θ·σ/2)",
     }
 
+def check_fcc_boil_ramp_habitat(device: str = "cpu") -> dict:
+    """§1.6.6 — 3D A5 brick class compatible with N₁₂ edges (habitat for floors 0–1)."""
+    from mt_ca.fcc_boil import default_fcc_boiling_ramp, fcc_boiling_ramp_ok
+
+    del device
+    dz, dy, dx = default_fcc_boiling_ramp()
+    ok = fcc_boiling_ramp_ok(dz, dy, dx) and not fcc_boiling_ramp_ok(1, 1, 1)
+    return {
+        "id": "FCC_boil_ramp",
+        "ramp": (dz, dy, dx),
+        "ok": ok,
+        "note": "Canon (0,0,1) ok; diagonal (1,1,1) rejected — fixes 3D norm blow-up under g",
+    }
+
+
 def check_fcc_n12(device: str = "cpu") -> dict:
     """§1.6 — default stencil FCC N₁₂; κ_link=1/12; 3D multi-tick with HF ON (A5)."""
     from mt_ca.config import MConfig

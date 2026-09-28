@@ -89,6 +89,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
         check_names=_names(
             check_a9_cr_smooth_modes,
             check_a10_winding,
+            check_fcc_boil_ramp_habitat,
             check_fcc_n12,
             check_vortex_hex_contour,
         ),

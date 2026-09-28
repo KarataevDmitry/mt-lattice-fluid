@@ -207,6 +207,13 @@ def vacuum_boil_fixed_3d(
         torch.arange(nx, device=device, dtype=torch.int64),
         indexing="ij",
     )
+    from mt_ca.fcc_boil import fcc_boiling_ramp_ok
+
+    if not fcc_boiling_ramp_ok(dz, dy, dx, n_phi=n_phi):
+        raise ValueError(
+            "3D VACUUM_BOIL: phase ramp incompatible with N₁₂ Heisenberg steps "
+            f"(dz,dy,dx)=({dz},{dy},{dx}); use single-axis ramp, e.g. (0,0,1)"
+        )
     phase_class = (dz * zz + dy * yy + dx * xx + off) % n_phi
     return _filled_brick_from_phase_class(
         phase_class, device=device, mod_bits=mod_bits, phase_bits=phase_bits
