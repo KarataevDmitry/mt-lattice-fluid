@@ -171,19 +171,19 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
 \begin{definition}[Битовый бюджет]
 \label{def:bit-budget}
 Пусть у системы задана термодинамическая энтропия~$\entropyS$.
-\textbf{Битовым бюджетом} $B$ этой системы \textbf{называют} величину
+\textbf{Битовым бюджетом} $B$ говорят о величине
 \[
   B := \frac{\entropyS}{\constBoltzmann\ln 2},
 \]
-измеряемую в битах (безразмерно).
+то есть об энтропии, пересчитанной в биты (безразмерно).
 \end{definition}
 
 \begin{definition}[Число различимых микросостояний]
 \label{def:distinguishable-microstates}
 Пусть у изолированной системы энтропия~$\entropyS$.
-\textbf{Числом различимых микросостояний} $\opNormN$ \textbf{называют} величину,
-для которой $\entropyS=\constBoltzmann\ln\opNormN$
-(логарифм числа микросостояний, согласованных с макроописанием).
+Под \textbf{числом различимых микросостояний} $\opNormN$ понимают величину,
+удовлетворяющую $\entropyS=\constBoltzmann\ln\opNormN$:
+это логарифм числа микросостояний, согласованных с макроописанием.
 \end{definition}
 
 \begin{definition}[Предел Бекенштейна]
@@ -191,11 +191,10 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
 Пусть причинно связанная область вписана в шар радиуса~$R$,
 имеет суммарную энергию~$\energyE$ (материя и поля),
 а $A$ --- площадь её минимальной причинной границы.
-\textbf{Пределом Бекенштейна} для такой области
-\textbf{называют} систему верхних оценок на энтропию~$\entropyS$,
-на $\ln\opNormN$ (\cref{def:distinguishable-microstates})
-и на битовый бюджет~$B$ (\cref{def:bit-budget}),
-приведённую в \cref{prop:bekenstein-inequalities}.
+Тогда \textbf{предел Бекенштейна} для такой области --- это система верхних оценок
+на энтропию~$\entropyS$, на $\ln\opNormN$ (\cref{def:distinguishable-microstates})
+и на битовый бюджет~$B$ (\cref{def:bit-budget});
+конкретные неравенства приведены в \cref{prop:bekenstein-inequalities}.
 \end{definition}
 
 \begin{proposition}[Неравенства Бекенштейна]
@@ -392,8 +391,8 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
 
 \begin{definition}[Носитель как множество узлов]
 \label{def:carrier-sites}
-\textbf{Носителем} микроуровня~$\layerMicro$ \textbf{называют} счётное множество узлов~$\carrierLattice$.
-\textbf{Временем}, согласованным с одним шагом сигнала, \textbf{называют} дискретную шкалу $t\in\spaceZ$.
+На микроуровне~$\layerMicro$ \textbf{носителем} имеют в виду счётное множество узлов~$\carrierLattice$.
+Время, согласованное с одним шагом сигнала, отождествляют с дискретной шкалой $t\in\spaceZ$.
 \end{definition}
 
 Требование конечной скорости уже названо.
@@ -403,20 +402,20 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
 \label{def:step-tick}
 Пусть на~$\layerMicro$ заданы элементарный шаг решётки~$\caStepSpace$,
 такт~$\caStepTime$ и тактовая скорость сигнала~$\caSignalSpeed$.
-\textbf{Согласованностью шага и такта} \textbf{называют} равенство
+Говорят, что шаг и такт \emph{согласованы}, если
 \begin{equation}
-  \caSignalSpeed = \frac{\caStepSpace}{\caStepTime}.
+  \caSignalSpeed = \frac{\caStepSpace}{\caStepTime};
 \end{equation}
-При этом за один $\caStepTime$ сигнал проходит путь не длиннее~$\caStepSpace$.
-\textbf{Номером такта} \textbf{называют} $\symTau\in\spaceZ$;
+тогда за один $\caStepTime$ сигнал не уходит дальше~$\caStepSpace$.
+\textbf{Номер такта} --- это $\symTau\in\spaceZ$;
 после планковской идентификации (\cref{def:si-bridge}) $t_{\mathrm{SI}}(\symTau)=\symTau\,\caStepTime$.
 \end{definition}
 
 \begin{definition}[Окрестность одного такта]
 \label{def:neighborhood}
 Пусть $x\in\carrierLattice$.
-\textbf{Окрестностью} узла~$x$ на один такт \textbf{называют} множество узлов, достижимых из~$x$
-ровно за один такт:
+\textbf{Окрестность} узла~$x$ на один такт --- это множество узлов, до которых из~$x$
+добираются ровно за один такт:
 \[
   N(x)\subset\carrierLattice.
 \]
@@ -432,14 +431,14 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
 \[
   z(x,t)=(z_1,z_2)^\top\in\spaceC^2.
 \]
-\textbf{Элементарной ячейкой} $\caPlanckCell$ \textbf{называют} один такой узел.
-\textbf{Плотностью поля} на узле \textbf{называют} $|z_1|^2+|z_2|^2$;
-\textbf{фазовыми степенями свободы} --- аргументы $z_k/|z_k|$, перемешиваемые при эволюции.
-\textbf{Глобальной конфигурацией} в такт~$t$ \textbf{называют}
+Один такой узел и есть \textbf{элементарная ячейка} $\caPlanckCell$.
+\textbf{Плотность поля} на узле --- $|z_1|^2+|z_2|^2$;
+\textbf{фазовые степени свободы} --- аргументы $z_k/|z_k|$, которые эволюция перемешивает.
+\textbf{Глобальная конфигурация} в такт~$t$ записывается как
 \[
   \symCapitalPsi^t=\{z(x,t)\}_{x\in\carrierLattice}.
 \]
-\textbf{Суммарной нормой} (аналог $\langle\wavePsi|\wavePsi\rangle$) \textbf{называют}
+\textbf{Суммарную норму} (аналог $\langle\wavePsi|\wavePsi\rangle$) определяют формулой
 \[
   N(t):=\sum_{x\in\carrierLattice} z^\dagger(x,t)\,z(x,t)=\sum_x\bigl(|z_1|^2+|z_2|^2\bigr).
 \]
@@ -561,23 +560,24 @@ $(k_{\symPhi},\phaseVarphi_{\mathrm{f}})$ с минимальным $k_{\symPhi}
 \begin{definition}[Внешние координаты \texorpdfstring{$\caCoordsDhDt$}{dh,dt}]
 \label{def:dh-dt}
 Пусть $\caStepSpace$ --- шаг решётки, $\htick$ --- длительность такта.
-\textbf{Внешними координатами} $\caCoordsDhDt$ на~$\layerMicro$ \textbf{называют} пару
+\textbf{Внешние координаты} $\caCoordsDhDt$ на~$\layerMicro$ --- это пара
 \[
   dh:=\caStepSpace,\qquad dt:=\htick,
 \]
-для которой $\caSignalSpeed=\caStepSpace/\htick$.
-В натуральных единицах симуляции $dh=dt=1$.
-\textbf{Ступенью действия} $\ladderAction$ на $(\hv,1\,\htick)$ \textbf{называют} квант, порождающий лестницу
-$\ladderMomentum=\ladderAction/\caStepSpace$, $\ladderEnergy=\ladderAction/\htick$, $\ladderForce=\ladderAction/(\caStepSpace\cdot\htick)$ без трёх независимых подгонок.
+при $\caSignalSpeed=\caStepSpace/\htick$.
+В натуральных единицах симуляции полагают $dh=dt=1$.
+Под \textbf{ступенью действия} $\ladderAction$ на $(\hv,1\,\htick)$ понимают квант, из которого
+одной подстановкой следуют $\ladderMomentum=\ladderAction/\caStepSpace$,
+$\ladderEnergy=\ladderAction/\htick$ и $\ladderForce=\ladderAction/(\caStepSpace\cdot\htick)$,
+без трёх независимых подгонок.
 \end{definition}
 
 \begin{definition}[Внутренние координаты]
 \label{def:internal-coords}
 Пусть регистр элементарной ячейки задаётся $(\symMu,k_{\symPhi},\phaseVarphi_{\mathrm{f}})$
-или эквивалентно $(\symMu,\phaseVarphi_{\mathrm{disc}})$.
-\textbf{Внутренними координатами} ячейки \textbf{называют} эту запись;
-спинор~$\spaceC^2$ --- две копии регистра.
-\textbf{Вакуумным состоянием} \textbf{называют} $\phaseVarphi_{\mathrm{f}}=0$, $\phaseVarphi_{\mathrm{disc}}=k_{\symPhi}\cdot 41$.
+или, эквивалентно, $(\symMu,\phaseVarphi_{\mathrm{disc}})$.
+Эту запись и называют \textbf{внутренними координатами}; спинор~$\spaceC^2$ хранит две копии регистра.
+\textbf{Вакуум} в этой записи --- $\phaseVarphi_{\mathrm{f}}=0$, $\phaseVarphi_{\mathrm{disc}}=k_{\symPhi}\cdot 41$.
 \end{definition}
 
 \begin{table}[ht]
@@ -609,12 +609,12 @@ $\caSignalSpeed$ & $\caStepSpace/\htick$ & $\caStepSpace/\htick$ \\
 \begin{definition}[Закон эволюции]
 \label{def:g-ca}
 Пусть $\symCapitalPsi^t=\{z(x,t)\}_{x\in\carrierLattice}$ --- глобальная конфигурация (\cref{def:field-a3}).
-\textbf{Законом эволюции} $g$ на~$\layerMicro$ \textbf{называют} локальное обратимое правило
+\textbf{Закон эволюции} $g$ на~$\layerMicro$ --- локальное обратимое отображение
 \[
   \symCapitalPsi^{t+1}=g(\symCapitalPsi^t),\qquad g^{-1}\circ g=\mathrm{id},
 \]
-с конечным регистром $Z\in\spaceZ_{\phaseRingCount}[i]$ на узле.
-Исторические примеры (Конвей, Rule~110) иллюстрируют класс CA, но не задают~$g$;
+при конечном регистре $Z\in\spaceZ_{\phaseRingCount}[i]$ на каждом узле.
+Исторические примеры (Конвей, Rule~110) иллюстрируют класс CA, но не фиксируют~$g$;
 см. приложение~\ref{app:background}.
 \end{definition}
 
