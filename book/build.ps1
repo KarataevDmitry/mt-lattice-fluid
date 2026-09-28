@@ -423,12 +423,31 @@ function Test-BookSiUnitFractions {
 
 Test-BookSiUnitFractions
 
+function Invoke-Biber {
+    param([Parameter(Mandatory)][string]$Job)
+    $biber = Get-Command biber -ErrorAction SilentlyContinue
+    if (-not $biber) {
+        throw 'biber not found (MiKTeX: install package biber). Required for references.bib.'
+    }
+    Write-Host 'biber ...'
+    & $biber.Source --output-directory="$OutWork" $Job
+    if ($LASTEXITCODE -ne 0) {
+        throw "biber failed (exit $LASTEXITCODE)"
+    }
+}
+
 Push-Location $Sources
 try {
-    foreach ($pass in 1..3) {
+    Write-Host 'xelatex pass 1/3 ...'
+    & $XeLaTeX -interaction=nonstopmode -halt-on-error `
+        -output-directory="$OutWork" -aux-directory="$OutWork" `
+        -jobname="$BuildJob" $MainTex
+    if ($LASTEXITCODE -ne 0) {
+        throw "xelatex failed (exit $LASTEXITCODE) on pass 1"
+    }
+    Invoke-Biber -Job $BuildJob
+    foreach ($pass in 2..3) {
         Write-Host "xelatex pass $pass/3 ..."
-        # aux + intermediate PDF in out/work; release PDF only in out/pdf after validation.
-        # (TeX does not require .aux next to the published PDF — only consistent -jobname + -aux-directory.)
         & $XeLaTeX -interaction=nonstopmode -halt-on-error `
             -output-directory="$OutWork" -aux-directory="$OutWork" `
             -jobname="$BuildJob" $MainTex

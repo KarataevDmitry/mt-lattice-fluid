@@ -48,6 +48,21 @@
 
 \setmonofont{Consolas}[Scale=0.92]
 
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  sorting=nyt,
+  maxbibnames=8,
+  giveninits=true,
+  uniquename=false,
+  url=false,
+  doi=false,
+  isbn=false,
+]{biblatex}
+\addbibresource{references.bib}
+\DefineBibliographyStrings{english}{andothers = {и др\adddot}}
+\DefineBibliographyStrings{russian}{andothers = {и др\adddot}}
+
 \newcommand{\bookauthorfullname}{Каратаев Дмитрий Александрович}
 
 \hypersetup{
