@@ -128,22 +128,34 @@ $\ell_P:=a$, $\caKappaGeom$ из однотактового тела (гл.~\ref
 Планковское время $t_P=\ell_P/c$ уже содержит макроскопическую скорость~$c$;
 $\caKappaGeom$ выводится из геометрии, после чего $c=\caKappaGeom \caSignalSpeed$ --- проверка согласованности.
 
-База $\mathrm{L,M,T}$ (как в СИ, другие кванты):
-\[
-  [t_P]=\mathrm{T},\qquad
-  [\ell_P]=[c\,t_P]=\mathrm{L},\qquad
-  [m_P]=\left[\frac{\planckHbar}{c^{2}t_P}\right]=\mathrm{M}.
-\]
-Безразмерная $\caKappaGeom$ даёт $[\Delta t]=\mathrm{T}$, $[\caSignalSpeed]=\ell_P/\Delta t=\mathrm{LT^{-1}}$,
-$[c]=\caKappaGeom \caSignalSpeed=\mathrm{LT^{-1}}$.
-Лестница §5.2.2: $[\ladderAction]=[\planckHbar]=\mathrm{ML^{2}T^{-1}}$,
-$[\ladderEnergy]=[\ladderAction/\htick]=\mathrm{ML^{2}T^{-2}}$,
-$[\ladderMomentum]=[\ladderAction/\ell_P]=\mathrm{MLT^{-1}}$,
-$[\ladderForce]=[\ladderMomentum/\htick]=\mathrm{MLT^{-2}}$,
-$[u_P]=[m_P c^{2}/\ell_P^{3}]=\mathrm{ML^{-1}T^{-2}}$
-(плотность энергии, $\NotationUnitJoulePerCubicMetre$).
-Все производные сходятся с СИ; $\alpha_{\mathrm{fs}}$ при этом остаётся $[\alpha]=1$
-(размерный контроль у \eqref{eq:alpha-fs}), а не комбинацией $[\mathrm{kg}]$, $[\mathrm{m}]$, $[\mathrm{s}]$ в числителе.
+Размерности записываем в базе $\mathrm{L}$, $\mathrm{M}$, $\mathrm{T}$ (как в СИ; остальные единицы --- производные).
+Планковские кванты:
+\begin{align}
+  [t_P] &= \mathrm{T}, &
+  [\ell_P] &= [c\,t_P] = \mathrm{L}, \\
+  [m_P] &= \left[\frac{\planckHbar}{c^{2}t_P}\right] &= \mathrm{M}.
+  \label{eq:si-dim-planck-base}
+\end{align}
+Безразмерная $\caKappaGeom$ из \cref{def:si-bridge} не меняет размерность времени и скорости:
+\begin{align}
+  [\htick] &= \mathrm{T}, &
+  [\caSignalSpeed] &= \frac{\ell_P}{\htick} = \mathrm{L\,T^{-1}}, \\
+  [c] &= [\caKappaGeom\,\caSignalSpeed] = \mathrm{L\,T^{-1}}.
+  \label{eq:si-dim-speed}
+\end{align}
+Лестница квантов на $(\ell_P,\htick)$ (§5.2.2) наследует размерности импульса, энергии и силы из одной ступени действия:
+\begin{align}
+  [\ladderAction] &= [\planckHbar] = \mathrm{M\,L^{2}T^{-1}}, \\
+  [\ladderEnergy] &= \left[\frac{\ladderAction}{\htick}\right] = \mathrm{M\,L^{2}T^{-2}}, \\
+  [\ladderMomentum] &= \left[\frac{\ladderAction}{\ell_P}\right] = \mathrm{M\,L\,T^{-1}}, \\
+  [\ladderForce] &= \left[\frac{\ladderMomentum}{\htick}\right] = \mathrm{M\,L\,T^{-2}}, \\
+  [u_P] &= \left[\frac{m_P c^{2}}{\ell_P^{3}}\right] = \mathrm{M\,L^{-1}T^{-2}}
+  \quad\text{($\NotationUnitJoulePerCubicMetre$, плотность энергии).}
+  \label{eq:si-dim-ladder}
+\end{align}
+Каждая строка \eqref{eq:si-dim-ladder} совпадает с привычной размерностью в СИ.
+Константа тонкой структуры остаётся безразмерной: $[\alpha_{\mathrm{fs}}]=1$ по \eqref{eq:alpha-fs},
+а не собирается как отношение килограммов, метров и секунд в числителе.
 
 \section{Постоянная тонкой структуры}
 
