@@ -20,6 +20,26 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-29 · §5.0.3 · Annihilation_T_stats ensemble
+
+**Проблема:** ось диполя из ковариации была сдвинута на **π/2**; посадка пакетов через `round(sep·cos/sin)` ломала углы не по сетке.
+
+**Фикс:** `major+π/2` → ось «lobe–lobe»; пакеты вдоль **x** + `_rotate_spinor_2d`; ошибка оси **mod π** в lab frame vs injected `ang`.
+
+**Verify:** **`Annihilation_T_stats`** — back-to-back + `axis_tracks_pi` + ensemble (mean err ≈0.06 rad @ 12×); `hist_cv` только диагностика (π-flip). PDG τ — open.
+
+---
+
+## 2026-09-29 · §5.0.3 · floor1-pm-coarse-dipole (M→T)
+
+**UoW:** после `pm_nn` на boil — coarse \(\Delta|Φ|\) на средней плоскости: ≥2 пика, контраст с `pp_nn` (без аннигиляции).
+
+**Код:** `mt_ca/floor1_pm_coarse_t.py` · `tools/floor1_pm_coarse_probe.py` · `SI.floor1_pm_coarse_dipole_row()`.
+
+**Verify:** **`Floor1_pm_coarse_dipole`** PASS (~7 s cuda). Не заменяет `Annihilation_T_stats` (тор/ensemble/PDG τ).
+
+---
+
 ## 2026-09-28 · §5.0.3 · floor1-n-body-chain (4 cores, FCC NN path)
 
 **UoW:** четыре планкона на цепочке FCC NN на `VACUUM_BOIL` — `+−+−`, `++−−`, `++++`; трекинг ядер, граф-расстояния, счётчик устойчивых \(|Q|=1\).
@@ -320,7 +340,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** заполнение на T on T — open
 - **§5.0.1 Arg mass:** **`m_H=m_P α_fs⁸ √(π/2)`** ✅ algebra · width/lineshape open
-- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; M→T coarse dipole on boil ✅ **`Floor1_pm_coarse_dipole`**; PDG τ / full ensemble `Annihilation_T_stats` — open
+- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; M→T coarse dipole on boil ✅ **`Floor1_pm_coarse_dipole`**; T-stats ensemble axis ✅ **`Annihilation_T_stats`** (π/2 dipole fix + spinor rotate seed); PDG τ bridge — open
 - **§5.2.2 κ_link:** sim ballistic check on `c` — open
 - **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
 - **§5.3.2 v_s:** численный `v_s` on макроописание T — open

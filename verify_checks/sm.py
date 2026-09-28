@@ -226,8 +226,11 @@ def check_annihilation_t_stats(device: str = "cpu") -> dict:
     from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
 
     row = annihilation_t_stats_probe(size=160, steps=64, block=8, ensemble=12, device=device)
-    # Partial DoD: dipole back-to-back on ΔΦ; full ensemble axis + PDG τ bridge open.
-    ok = bool(row["back_to_back_proxy"])
+    ok = (
+        bool(row["back_to_back_proxy"])
+        and bool(row["axis_tracks_pi"])
+        and bool(row["ensemble_isotropic"])
+    )
     return {
         "id": "Annihilation_T_stats",
         "probe_path": row["probe_path"],

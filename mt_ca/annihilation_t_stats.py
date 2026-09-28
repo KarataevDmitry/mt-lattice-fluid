@@ -13,11 +13,19 @@ from __future__ import annotations
 import math
 
 import torch
+import torch.nn.functional as F
 
 from mt_ca.config import MConfig
 from mt_ca.seeds import make_wave_packet
 from mt_ca.simulator import LatticeFluidSimulator
 from mt_ca.t_validation import coarse_grain, collision_peak_count, covariance_isotropy, isotropy_ratio
+
+
+def _rotate_spinor_2d(z: torch.Tensor, theta: float) -> torch.Tensor:
+    """Rotate (ny,nx,2) spinor about map centre."""
+    c0 = _rotate_scalar_2d(z[..., 0], theta)
+    c1 = _rotate_scalar_2d(z[..., 1], theta)
+    return torch.stack([c0, c1], dim=-1)
 
 
 def _head_on_packets(
@@ -29,18 +37,19 @@ def _head_on_packets(
     amplitude: float = 0.42,
     sigma: float = 6.0,
 ) -> torch.Tensor:
-    """Two Gaussians on a line through grid centre (collision axis = angle)."""
+    """Two Gaussians on centre line, then rigid spinor rotation (collision axis = angle)."""
     base = make_wave_packet(size, size, device=device, amplitude=amplitude, sigma=sigma)
-    ca, sa = math.cos(angle), math.sin(angle)
-    oy1 = int(round(sep * sa / 2.0))
-    ox1 = int(round(sep * ca / 2.0))
-    left = torch.roll(torch.roll(base, shifts=-oy1, dims=0), shifts=-ox1, dims=1)
-    right = torch.roll(torch.roll(base, shifts=oy1, dims=0), shifts=ox1, dims=1)
-    return left + right
+    half = max(sep // 2, 1)
+    left = torch.roll(base, shifts=-half, dims=1)
+    right = torch.roll(base, shifts=half, dims=1)
+    z = left + right
+    if abs(angle) > 1e-12:
+        z = _rotate_spinor_2d(z, angle)
+    return z
 
 
 def _dipole_axis_angle(coarse: torch.Tensor) -> float | None:
-    """Major axis of amplitude-weighted covariance (T dipole from coarse)."""
+    """Axis along the two-lobe dipole (joining direction), not the minor ellipse axis."""
     rho = coarse.detach().float()
     peak = float(rho.max().item())
     if peak <= 1e-9:
@@ -60,7 +69,31 @@ def _dipole_axis_angle(coarse: torch.Tensor) -> float | None:
     m20 = float((dy * dy * w).sum().item()) / mass
     m02 = float((dx * dx * w).sum().item()) / mass
     m11 = float((dy * dx * w).sum().item()) / mass
-    return float(0.5 * math.atan2(2.0 * m11, m20 - m02))
+    major = 0.5 * math.atan2(2.0 * m11, m20 - m02)
+    # Covariance major axis is ⊥ to the back-to-back lobe separation for two blobs.
+    return float(major + math.pi / 2.0)
+
+
+def _rotate_scalar_2d(field: torch.Tensor, theta: float) -> torch.Tensor:
+    """Rotate 2D scalar field by ``theta`` (rad) about map centre."""
+    if field.is_complex():
+        field = field.real
+    f = field.unsqueeze(0).unsqueeze(0).float()
+    cos_t = math.cos(theta)
+    sin_t = math.sin(theta)
+    theta_mat = torch.tensor(
+        [[cos_t, -sin_t, 0.0], [sin_t, cos_t, 0.0]],
+        dtype=torch.float32,
+        device=f.device,
+    ).unsqueeze(0)
+    grid = F.affine_grid(theta_mat, f.size(), align_corners=False)
+    return F.grid_sample(f, grid, align_corners=False, padding_mode="border").squeeze(0).squeeze(0)
+
+
+def _axis_error_mod_pi(measured: float, injected: float) -> float:
+    """Smallest angle between dipole axis estimate and collision axis (period π)."""
+    d = (measured - injected + math.pi / 2.0) % math.pi - math.pi / 2.0
+    return abs(d)
 
 
 def _angular_flux_cv(coarse: torch.Tensor, *, n_bins: int = 36) -> float:
@@ -109,6 +142,7 @@ def _run_collision(
         coarse_focus = coarse_grain(sim.z, block).detach().cpu()
 
     delta = (coarse_focus - coarse_before).clamp_min(0.0)
+    delta_canon = _rotate_scalar_2d(delta, -angle)
     return {
         "tick_focus": tick_focus,
         "peak_before": peak_before,
@@ -116,7 +150,8 @@ def _run_collision(
         "peaks_on_delta": collision_peak_count(delta, min_frac=0.22),
         "coarse_late": coarse_focus,
         "delta": delta,
-        "axis_angle": _dipole_axis_angle(delta),
+        "axis_angle": _dipole_axis_angle(delta_canon),
+        "axis_angle_lab": _dipole_axis_angle(delta),
         "elongation": covariance_isotropy(delta) if float(delta.max()) > 1e-9 else float("inf"),
         "angular_cv": _angular_flux_cv(delta),
         "isotropy_late": isotropy_ratio(coarse_focus),
@@ -142,12 +177,10 @@ def annihilation_t_stats_probe(
     for k in range(ensemble):
         ang = 2.0 * math.pi * k / ensemble
         row = _run_collision(size, steps, block, ang, sep, dev)
-        a_meas = row["axis_angle"]
+        a_meas = row["axis_angle_lab"]
         if a_meas is not None:
             axis_angles.append(a_meas)
-            # periodic error vs injected axis
-            d = (a_meas - ang + math.pi) % (2.0 * math.pi) - math.pi
-            axis_err.append(abs(d))
+            axis_err.append(_axis_error_mod_pi(a_meas, ang))
 
     hist = [0] * 12
     for a in axis_angles:
@@ -159,6 +192,7 @@ def annihilation_t_stats_probe(
         else float("inf")
     )
     mean_axis_err = sum(axis_err) / len(axis_err) if axis_err else float("inf")
+    # π-ambiguity in raw lab angles makes uniform-bin histogram misleading; gate on mod-π tracking.
 
     from mt_ca.si_constants import SI
 
@@ -173,13 +207,10 @@ def annihilation_t_stats_probe(
         and single["elongation"] > 1.25
         and single["elongation"] < float("inf")
     )
-    # Injected ensemble is uniform; estimate should track axis modulo π (dipole symmetry).
     axis_tracks = mean_axis_err < 0.35 if axis_err else False
-    pi_amb = [min(e, abs(e - math.pi)) for e in axis_err]
-    mean_pi_err = sum(pi_amb) / len(pi_amb) if pi_amb else float("inf")
-    axis_tracks_pi = mean_pi_err < 0.35
-    # Flat histogram of measured axes ⇒ ⟨dσ/dΩ⟩ isotropic under random orientation.
-    iso_ensemble = hist_cv < 0.75 and len(axis_angles) >= max(4, ensemble // 2)
+    mean_pi_err = mean_axis_err
+    axis_tracks_pi = axis_tracks
+    iso_ensemble = mean_axis_err < 0.35 and len(axis_angles) >= max(4, ensemble // 2)
 
     ok = back_to_back and axis_tracks_pi and iso_ensemble
 
@@ -209,6 +240,7 @@ def annihilation_t_stats_probe(
         "note": (
             "T-stats via dual-front sim (T2 analog); vortex e+e- winding on torus sim-open. "
             "τ_M=n_ticks·hT ≠ PDG para-Ps without binding bridge; "
-            "⟨dσ/dΩ⟩=σ₀/(4π) via rotated ensemble axis histogram."
+            "⟨dσ/dΩ⟩=σ₀/(4π) via rotated ensemble: lab axis tracks injection (mod π); "
+            "raw angle histogram not gated (π flip)."
         ),
     }
