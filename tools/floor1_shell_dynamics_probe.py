@@ -2,6 +2,7 @@
 
   python tools/floor1_shell_dynamics_probe.py
   python tools/floor1_shell_dynamics_probe.py --tick
+  python tools/floor1_shell_dynamics_probe.py --shell2-bump
 """
 from __future__ import annotations
 
@@ -20,7 +21,21 @@ def main() -> None:
     p.add_argument("--n-max", type=int, default=72)
     p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--tick", action="store_true")
+    p.add_argument("--shell2-bump", action="store_true")
     args = p.parse_args()
+
+    if args.shell2_bump:
+        from mt_ca.floor1_shell_dynamics import run_shell_excitation_harness
+
+        out = run_shell_excitation_harness(
+            size=args.size,
+            relaxation=args.relaxation,
+            n_relax_after_bump=args.n_max,
+            device=args.device,
+        )
+        print(json.dumps({"checks_ok": out["checks_ok"], "shell2_bump": out["shell2_bump"]}, indent=2))
+        return
+
     row = run_shell_dynamics_on_boil(
         size=args.size,
         relaxation=args.relaxation,

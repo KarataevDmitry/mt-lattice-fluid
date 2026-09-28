@@ -16,6 +16,8 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Критерии (частичный inter-shell graph):** ядро \(|Q|=1\) + shell-1 active; избыток на звезде vs антипод; norm ×12. Полный граф переходов — по-прежнему soft-open в MODEL.
 
+**Shell-2 pulse:** `--shell2-bump` · verify **`Floor1_shell_excitation_relax`** — локальный импульс на сфере 2, \(\Delta\)excess\(_2\) ≥ 0 после 36 тактов (не замороженный C3-attractor).
+
 ---
 
 ## 2026-09-28 · §5.0.3 · floor1-n-body-chain (4 cores, FCC NN path)

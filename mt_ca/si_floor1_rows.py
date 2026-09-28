@@ -1015,6 +1015,36 @@ class SIFloor1Rows:
             "note": row["note"],
         }
 
+    def floor1_shell_excitation_relax_row(
+        self,
+        *,
+        size: int = 24,
+        relaxation: int = 12,
+        n_relax_after_bump: int = 36,
+        device: str | None = None,
+    ) -> dict[str, float | int | str | bool | dict]:
+        """§5.0.4-B — shell-2 pulse relaxes on boil (C3 excitation not frozen attractor)."""
+        from mt_ca.floor1_shell_dynamics import default_sim_device, run_shell_excitation_harness
+
+        dev = device or default_sim_device()
+        row = run_shell_excitation_harness(
+            size=size,
+            relaxation=relaxation,
+            n_relax_after_bump=n_relax_after_bump,
+            device=dev,
+        )
+        bump = row["shell2_bump"]
+        return {
+            "theorem": "§5.0.4-B · floor1-shell2-excitation-relax",
+            "device": dev,
+            "derivation_closed": False,
+            "checks_ok": row["checks_ok"],
+            "shell2_relax_delta": bump["shell2_relax_delta"],
+            "shell2_excess_final": bump["shell2_excess_final"],
+            "core_stable_final": bump["core_stable_final"],
+            "note": bump["note"],
+        }
+
     def floor1_n_body_row(
         self,
         *,

@@ -277,6 +277,21 @@ def check_floor1_shell_transitions_boil(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_shell_excitation_relax(device: str = "cpu") -> dict:
+    """§5.0.4-B — shell-2 bump partially relaxes; ground shell-1 + core hold."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor1_shell_excitation_relax_row(device=device)
+    ok = bool(row["checks_ok"]) and bool(row["core_stable_final"]) and float(row["shell2_relax_delta"]) >= -0.05
+    return {
+        "id": "Floor1_shell_excitation_relax",
+        "shell2_relax_delta": row["shell2_relax_delta"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_n_body_chain(device: str = "cpu") -> dict:
     """§5.0.3 — four planckons on FCC chain: ± channels vs all-like."""
     from mt_ca.si_constants import SI
