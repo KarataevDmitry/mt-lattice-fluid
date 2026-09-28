@@ -4,7 +4,8 @@
 
 ## Сборка
 
-Требуется **XeLaTeX** (скрипт сам ставит **MiKTeX** через `winget`, если TeX нет, и дописывает `...\MiKTeX\miktex\bin\x64` в user PATH).
+Требуется **XeLaTeX** и **biber** (скрипт сам ставит **MiKTeX** через `winget`, если TeX нет, и дописывает `...\MiKTeX\miktex\bin\x64` в user PATH).
+Сборка: `xelatex` → `biber` → `xelatex` ×2; библиография — `sources/references.bib`.
 
 ```powershell
 cd book

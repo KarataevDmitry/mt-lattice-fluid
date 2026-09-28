@@ -9,7 +9,7 @@
 
 \begin{lemma}[Счётное пространство конфигураций]
 \label{lem:countable-config}
-При \cref{def:field-a3} пространство микросостояний
+В постановке поля и нормы (\cref{def:field-a3}) пространство микросостояний
 \[
   \mathcal{C}=\bigl\{z(x)\in\mathbb{C}^2\bigr\}_{x\in\carrierLattice}
 \]
@@ -33,7 +33,7 @@ $g$ --- перестановка (биекция) на~$\mathcal{C}$.
 \label{lem:fcc-scale}
 Носитель --- $\carrierLattice=\mathrm{FCC}$ с $|N(x)|=12$ (\cref{thm:fcc-choice}).
 Шаг~$\caStepSpace$ и такт~$\htick$ однозначно задаются однотактовым телом FCC (\cref{sec:fcc-kappa});
-$\hv$ --- узел решётки (регистр~\cref{def:field-a3}).
+$\hv$ --- узел решётки (регистр поля и нормы (\cref{def:field-a3})).
 \end{lemma}
 
 \begin{proof}
@@ -57,15 +57,16 @@ $\hv$ --- узел решётки (регистр~\cref{def:field-a3}).
 \emph{Шаг~$\htick$.}
 Тот же раздел задаёт $\caKappaGeom=R_{\mathrm{in}}/R_{\mathrm{out}}=1/\sqrt{2}$ и
 $\caSignalSpeed=\caStepSpace/\htick$.
-\pfrom{SI-моста (\cref{def:si-bridge}) при $\ell_P:=\caStepSpace$}
-\[
-  \htick=\caKappaGeom\,t_P,\qquad \caSignalSpeed=\sqrt{2}\,\speedC.
-\]
+\pfrom{планковской идентификации (\cref{def:si-bridge}) при $\ell_P:=\caStepSpace$}
+\begin{align}
+  \htick &= \caKappaGeom\,t_P, \\
+  \caSignalSpeed &= \sqrt{2}\,\speedC.
+\end{align}
 
 \smallskip
 \emph{Ячейка~$\hv$.}
-\pusing{\cref{def:field-a3}}
-$\PlanckCell$ --- узел FCC (регистр~$z$); $dV$ --- объём Вороного ($V_P/\sqrt{2}$ при $a=\ell_P$).
+\puseref{определения поля и нормы}{def:field-a3}
+получаем: $\PlanckCell$ --- узел FCC (регистр~$z$); $dV$ --- объём Вороного ($V_P/\sqrt{2}$ при $a=\ell_P$).
 \end{proof}
 
 \begin{lemma}[Атомность регистра]
@@ -78,10 +79,10 @@ $\PlanckCell$ --- узел FCC (регистр~$z$); $dV$ --- объём Вор�
 \pfrom{запрета двух совпадающих спиноров в одном~$\PlanckCell$}
 регистр на узле атомарен.
 \pusing{минимального фазового шага $\Delta\phi_{\min}=\tfrac12$}
-\[
-  \ladderAction=\frac{\planckHbar}{2},\qquad
-  \ladderMomentum=\frac{\planckHbar}{2\caStepSpace}.
-\]
+\begin{align}
+  \ladderAction &= \frac{\planckHbar}{2}, \\
+  \ladderMomentum &= \frac{\planckHbar}{2\caStepSpace}.
+\end{align}
 Топологический заряд $n\in\mathbb{Z}$ и полюс привязаны к границе одной ячейки~$\hv$;
 размазывание полюса по подузлам разнесло бы $n$.
 Потолок плотности и $|z|\ge z_{\min}>0$ фиксируют бюджет~$B_{\hv}$ на регистр.
@@ -142,7 +143,7 @@ $|z(x)|\ge z_{\min}>0$ на~$M$.
 
 \begin{corollary}[Замыкание $g$]
 \label{cor:g-closure}
-Допустимый закон~$g$ --- закон теоремы~\cref{thm:g-law}.
+Допустимый закон~$g$ --- закон из теоремы о законе $g$ (\cref{thm:g-law}).
 \end{corollary}
 
 \begin{corollary}[Лестница Ландау]

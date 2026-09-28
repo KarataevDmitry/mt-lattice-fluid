@@ -4,17 +4,20 @@
 \section{Введение}
 
 В этой главе формулируются шестнадцать абсолютных условий на допустимый локальный закон~$g$.
-Узлы, шаг, такт, окрестность и поле на узле уже появились в конце спуска:
-\cref{def:carrier-sites,def:step-tick,def:neighborhood,def:field-a3}
-(\cref{sec:planck-floor}).
+Узлы, шаг, такт, окрестность и поле на узле уже появились в конце спуска
+(\cref{sec:planck-floor}):
+носитель как множество узлов (\cref{def:carrier-sites}),
+элементарные шаг и такт (\cref{def:step-tick}),
+окрестность одного такта (\cref{def:neighborhood}),
+поле и норма (\cref{def:field-a3}).
 Физическое обоснование каждой группы дано в гл.~\ref{ch:axiom-rationale};
 здесь --- строгий реестр.
 
 \section{Каузальность, локальность, унитарность}
 
-В этой секции $\caStepSpace$ и~$\htick$ --- шаг и такт \cref{def:step-tick},
+В этой секции $\caStepSpace$ и~$\htick$ --- шаг и такт из определения элементарных шага и такта (\cref{def:step-tick}),
 $\caSignalSpeed=\caStepSpace/\htick$ --- тактовая скорость сигнала на~$\layerMicro$,
-$N(x)$ --- узлы, достижимые из~$x$ за один такт \cref{def:neighborhood}.
+$N(x)$ --- узлы, достижимые из~$x$ за один такт (окрестность одного такта, \cref{def:neighborhood}).
 
 \begin{axiom}[A1 · Каузальность]
 \label{ax:A1}
@@ -285,7 +288,7 @@ $\sum_x|z|^2\to 0$, или глобально $z\equiv 0$ устойчиво, и
 
 \begin{lemma}[Нет останов]
 \label{lem:231}
-При \cref{def:state-evolution} для всех $t\in\mathbb{Z}$: $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$, $\htick$ и $g$ постоянны.
+В постановке M-эволюции (\cref{def:state-evolution}) для всех $t\in\mathbb{Z}$: $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$, $\htick$ и $g$ постоянны.
 \end{lemma}
 
 \begin{proof}
@@ -296,7 +299,7 @@ $\sum_x|z|^2\to 0$, или глобально $z\equiv 0$ устойчиво, и
 при постоянных $\htick$ и~$g$.
 \pfrom{определения D1 (\ref{def:D1})}
 остановка потребовала бы прекращения~$g$, $\htick\to\infty$ или смены закона ---
-это уже другая постановка, не \cref{def:state-evolution}.
+это уже другая постановка, не M-эволюции (\cref{def:state-evolution}).
 \end{proof}
 
 \begin{lemma}[Сохранение информации]
@@ -378,7 +381,7 @@ $g$ обратима на $Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-\pusing{\cref{def:soft-readout}}
+\puseref{осреднения с биномиальным ядром}{def:soft-readout}
 \[
   \Phi=\mathcal{B}z,\qquad W=\tfrac14[1,2,1]^{\otimes 2R}
 \]
@@ -390,7 +393,7 @@ $g$ обратима на $Z_N[i]$.
 
 \begin{proposition}[D3 не нарушает $\Mlayer$]
 \label{prop:237}
-$\nu_{\mathrm{CA}}$-затухание на $\Tlayer$ --- не член $g$; $N$ invariant (\cref{lem:232}).
+$\nu_{\mathrm{CA}}$-затухание на $\Tlayer$ --- не член $g$; $N$ invariant (лемма~\ref{lem:232}).
 \end{proposition}
 
 \begin{proof}
@@ -406,8 +409,8 @@ $\nu_{\mathrm{CA}}$-затухание на $\Tlayer$ --- не член $g$; $N$
 \smallskip
 \emph{Второе утверждение.}
 Макроскопическое «затухание'' --- потеря различимости после необратимого~$\mathcal{B}$
-(\cref{lem:236}): прибор не видит часть микрофазы.
-На~$\Mlayer$ эта энергия не исчезает из~$N(t)$ (\cref{lem:232}):
+(лемма~\ref{lem:236}): прибор не видит часть микрофазы.
+На~$\Mlayer$ эта энергия не исчезает из~$N(t)$ (лемма~\ref{lem:232}):
 по \Axref{ax:A5} она уходит в микро-«кипение'' --- перераспределение фаз
 при $|z|\ge z_{\min}>0$; по \Axref{ax:A6} --- в рост локальной фазовой энтропии
 при фиксированном~$N$.
@@ -449,11 +452,11 @@ $\Phi=0$ на столкновениях; по \Axref{ax:A9} и связност
 
 \begin{lemma}[A5/A6 исключают физические D5]
 \label{lem:238b}
-Ни одна конфигурация из \cref{lem:238a} не A5-физична.
+Ни одна конфигурация из леммы~\ref{lem:238a} не A5-физична.
 \end{lemma}
 
 \begin{proof}
-\pusing{классификации \cref{lem:238a}}
+\pusing{классификации леммы~\ref{lem:238a}}
 пусть $z\equiv c$ --- неподвижная точка.
 При $c=0$ --- противоречие \Axref{ax:A5}.
 При $c\ne 0$ поле статично на всех тактах, что нарушает \Axref{ax:A5} и \Axref{ax:A6}.
@@ -500,11 +503,11 @@ $z(x)\equiv c$ на связном~$\carrierLattice$.
 \end{theorem}
 
 \begin{proof}
-Работаем в постановке \cref{def:state-evolution}: один такт~$\htick$, постоянный локальный закон~$g$.
+Работаем в постановке M-эволюции (\cref{def:state-evolution}): один такт~$\htick$, постоянный локальный закон~$g$.
 
 \smallskip
 \emph{(i) $\neg$D1.}
-По \cref{def:state-evolution} для каждого $t\in\mathbb{Z}$ выполняется $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$,
+Из постановки M-эволюции (\cref{def:state-evolution}) следует для каждого $t\in\mathbb{Z}$ выполняется $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$,
 шаг~$\htick$ и правило~$g$ не зависят от~$t$.
 Ни прекращение шага, ни $\htick\to\infty$, ни смена/обнуление~$g$ не следуют из такой эволуции ---
 это было бы изменением модели (лемма «Нет останов'', \ref{lem:231}).

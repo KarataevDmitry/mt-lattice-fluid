@@ -1,4 +1,5 @@
 % Связки для закрытых доказательств (учебниковый стиль).
+% Ссылки: «Из (имя) (\cref{label}) следует», не голый \cref в \pfrom/\pusing.
 
 \newcommand{\pfrom}[1]{\textit{Из #1 следует:}}
 \newcommand{\pfollows}{\textit{Отсюда следует:}}
@@ -6,3 +7,8 @@
 \newcommand{\pusing}[1]{\textit{Используя #1,}}
 \newcommand{\psubst}[1]{\textit{Подставляя #1, получаем}}
 \newcommand{\ptransform}[1]{\textit{Преобразуя #1, получаем}}
+
+% #1 — краткое имя (род. п.), #2 — label для \cref
+\newcommand{\pfromref}[2]{\textit{Из #1 (\cref{#2}) следует:}}
+\newcommand{\puseref}[2]{\textit{Используя #1 (\cref{#2}),}}
+\newcommand{\porref}[2]{\textit{По #1 (\cref{#2}),}}

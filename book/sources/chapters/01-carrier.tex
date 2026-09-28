@@ -150,11 +150,12 @@
 
 Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ и макроскопическая~$\speedC$ связаны этим же отношением, $\speedC=\caKappaGeom_{\mathrm{hex}} \caSignalSpeed$,
 поэтому
-\[
-  \htick=\caKappaGeom_{\mathrm{hex}}\,t_P,\qquad
-  \caSignalSpeed=\frac{2}{\sqrt{3}}\,c,\qquad
-  \kappa_{\mathrm{link}}=\frac{1}{|N|}=\frac{1}{6}.
-\]
+\begin{align}
+  \htick &= \caKappaGeom_{\mathrm{hex}}\,t_P, \\
+  \caSignalSpeed &= \frac{2}{\sqrt{3}}\,c, \\
+  \kappa_{\mathrm{link}} &= \frac{1}{|N|} = \frac{1}{6}.
+  \label{eq:hex-bridge-constants}
+\end{align}
 Число~$\speedC$ одно и на срезе, и на трёхмерном носителе, который будет выбран ниже;
 меняется только разбиение $\speedC=\caKappaGeom \caSignalSpeed$.
 
@@ -339,9 +340,12 @@ $\kappa_{\mathrm{link}}=1/12$.
 Формула $(8\sqrt{2}/3)\,a^3$ с отношением $16/3$ --- объём другого тела.
 
 Макроскопическая скорость связана с тактовой тем же отношением радиусов оболочки:
-\[
-  c=\caKappaGeom \caSignalSpeed,\qquad \htick=\caKappaGeom\, t_P,\qquad \caSignalSpeed=\sqrt{2}\,c,
-\]
+\begin{align}
+  c &= \caKappaGeom \caSignalSpeed, \\
+  \htick &= \caKappaGeom\, t_P, \\
+  \caSignalSpeed &= \sqrt{2}\,c,
+  \label{eq:hull-speed-bridge}
+\end{align}
 где $t_P=\caStepSpace/c$ --- учебниковая метка.
 Непрерывное определение $t_P=\caStepSpace/c$ предполагало бы $\caSignalSpeed=c$; на этой оболочке тактовая и макроскопическая скорости различаются множителем~$\sqrt{2}$.
 

@@ -33,7 +33,7 @@ $K_P=u_P$ --- планковское давление жидкости;
 
 \begin{theorem}[Лестница Ландау на ячейке]
 \label{thm:51}
-После \cref{thm:discreteness,thm:g-law} локальные механические величины на~$\hv$ образуют
+После теорем о дискретности и законе~$g$ (\cref{thm:discreteness,thm:g-law}) локальные механические величины на~$\hv$ образуют
 единственную лестницу $\ladderAction\to \ladderMomentum\to L_0\to \ladderForce\to \ladderEnergy$
 без трёх независимых подгоняемых параметров.
 \end{theorem}
@@ -66,10 +66,10 @@ $K_P=u_P$ --- планковское давление жидкости;
 \begin{proof}
 \pfrom{определения лестницы на $(\caStepSpace,\htick)$}
 квант действия, отнесённый к шагу, есть импульс; тот же квант, отнесённый к такту, --- энергия:
-\[
-  \ladderMomentum=\frac{\ladderAction}{\caStepSpace}=\frac{\planckHbar}{2\caStepSpace},\qquad
-  \ladderEnergy=\frac{\ladderAction}{\htick}.
-\]
+\begin{align}
+  \ladderMomentum &= \frac{\ladderAction}{\caStepSpace} = \frac{\planckHbar}{2\caStepSpace}, \\
+  \ladderEnergy &= \frac{\ladderAction}{\htick}.
+\end{align}
 \pusing{тактовой скорости $\caSignalSpeed=\caStepSpace/\htick$}
 \[
   \ladderEnergy=\ladderMomentum \caSignalSpeed.
@@ -186,10 +186,10 @@ $\ladderMomentum=m_{\arg}(\caSignalSpeed/2)$, $\ladderForce=m_{\arg} g_M$, $\Del
 и нет гиббсовского ансамбля по~$g$ (\cref{prop:determinism}).
 Их можно задать однозначно, если зафиксировать абсолютную энтропию по Планку
 (\cref{ch:axiom-rationale}) и связать макроскопические $U$, $P$, $V$ с лестницей
-\cref{thm:51} после осреднения~\cref{def:soft-readout}.
+Теорема~\ref{thm:51} после осреднения с биномиальным ядром (\cref{def:soft-readout}).
 
 \paragraph{Внутренняя энергия.}
-По \cref{lem:51e} энергия на~$M$ дискретна: $E=\sum_x n_E(x)\,\ladderEnergy$,
+Из леммы~\ref{lem:51e} следует энергия на~$M$ дискретна: $E=\sum_x n_E(x)\,\ladderEnergy$,
 $n_E\in\mathbb{Z}_{\ge 0}$.
 На~$T$ в объёме~$V$ прибор видит гладкую плотность возбуждений
 $\mathscr{n}_E(X)=\mathcal{B}*n_E$ и определяет

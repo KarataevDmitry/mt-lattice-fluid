@@ -145,14 +145,16 @@ $\opPartialK\stressSigmaIk$, снова из окрестности той же 
   \alphaFs = \frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}.
   \label{eq:alpha-fs}
 \end{equation}
-\[
-  \left[\alphaFs\right]
-  =\left[\frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}\right]
-  =\frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFaradPerMetre\bigr)\,(\mathrm{Дж\cdot с})\,\bigl(\NotationUnitMetrePerSecond\bigr)}
-  =\frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFarad\bigr)\,(\mathrm{В\cdot Кл})}
-  =1.
-\]
-Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж}=\mathrm{В\cdot Кл}$, $\mathrm{м}$ и $\mathrm{с}$ в знаменателе сокращаются).
+\begin{align}
+  [\alphaFs]
+  &= \left[\frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}\right]
+  = \frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFaradPerMetre\bigr)\,(\mathrm{Дж\cdot с})\,\bigl(\NotationUnitMetrePerSecond\bigr)}
+  \notag\\
+  &= \frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFarad\bigr)\,(\mathrm{В\cdot Кл})}
+  = 1.
+  \label{eq:alpha-fs-dim}
+\end{align}
+Coupling безразмерен: фарады, джоули и скорость в знаменателе сокращаются до единицы.
 Она стоит в законе свободным множителем:
 измерение есть, вывода из \eqref{eq:maxwell-hom}--\eqref{eq:newton} нет.
 Пока закон претендует только описать прибор, такой множитель терпим.
@@ -218,11 +220,12 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
   \entropyS = \frac{\constBoltzmann A}{4\lengthPlanck^2}.
   \label{eq:bh-entropy}
 \end{equation}
-\[
+\begin{equation}
   \left[\frac{\constBoltzmann A}{4\lengthPlanck^2}\right]
-  =\frac{\NotationUnitJoulePerKelvin\cdot\mathrm{м^2}}{\mathrm{м^2}}
-  =\NotationUnitJoulePerKelvin=\left[\entropyS\right].
-\]
+  = \NotationUnitJoulePerKelvin
+  = [\entropyS].
+  \label{eq:bh-entropy-dim}
+\end{equation}
 Чтобы область той же шкалы не схлопнулась в горизонт, энергия удовлетворяет
 \begin{equation}
   \energyE \le \frac{R\,\speedC^4}{2\constGrav},

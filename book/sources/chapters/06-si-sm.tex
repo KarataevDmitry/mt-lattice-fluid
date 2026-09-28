@@ -52,10 +52,15 @@
 
 \paragraph{Массы и степени~$\alpha$.}
 Энергетическая иерархия частиц (\cref{thm:vev}) задаёт \emph{масштаб массы}, не длину:
-$v\sim\alpha_{\mathrm{fs}}^{8}$, $m_H\sim\alpha_{\mathrm{fs}}^{8}$,
-$m_p\sim\alpha_{\mathrm{fs}}^{1}v$, $m_e\sim\alpha_{\mathrm{fs}}^{2}m_H$,
-$m_\nu\sim\alpha_{\mathrm{fs}}^{5}m_H$.
-Длина тела массы~$M$ на том же законе: $\lambda=\planckHbar/(Mc)=\ell_P\,m_P/M$.
+\begin{align}
+  v &\sim \alpha_{\mathrm{fs}}^{8}, &
+  m_H &\sim \alpha_{\mathrm{fs}}^{8}, \\
+  m_p &\sim \alpha_{\mathrm{fs}}^{1} v, &
+  m_e &\sim \alpha_{\mathrm{fs}}^{2} m_H, \\
+  m_\nu &\sim \alpha_{\mathrm{fs}}^{5} m_H.
+\end{align}
+Длина тела массы~$M$ на том же законе:
+$\lambda=\planckHbar/(Mc)=\ell_P\,m_P/M$.
 
 \begin{proposition}[Шаги шкалы $\lambda$ от планкона до метра]
 \label{prop:ladder-scale-steps}
@@ -120,9 +125,11 @@ $k=15$ & $\lambda\gg\sigma_R a$ --- непрерывный предел readout'
 \begin{definition}[Планковская идентификация]
 \label{def:si-bridge}
 $\ell_P:=a$, $\caKappaGeom$ из однотактового тела (гл.~\ref{ch:carrier}):
-\[
-  \Delta t=\caKappaGeom\, t_P,\quad \ladderEnergy=\caKappaGeom E_P,\quad c=\caKappaGeom \caSignalSpeed.
-\]
+\begin{align}
+  \htick &= \caKappaGeom\, t_P, \\
+  \ladderEnergy &= \caKappaGeom E_P, \\
+  c &= \caKappaGeom \caSignalSpeed.
+\end{align}
 \end{definition}
 
 Планковское время $t_P=\ell_P/c$ уже содержит макроскопическую скорость~$c$;
@@ -133,7 +140,7 @@ $\caKappaGeom$ выводится из геометрии, после чего $
 \begin{align}
   [t_P] &= \mathrm{T}, &
   [\ell_P] &= [c\,t_P] = \mathrm{L}, \\
-  [m_P] &= \left[\frac{\planckHbar}{c^{2}t_P}\right] &= \mathrm{M}.
+  [m_P] &= \left[\frac{\planckHbar}{c^{2}t_P}\right] = \mathrm{M}.
   \label{eq:si-dim-planck-base}
 \end{align}
 Безразмерная $\caKappaGeom$ из \cref{def:si-bridge} не меняет размерность времени и скорости:
