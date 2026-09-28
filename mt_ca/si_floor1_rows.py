@@ -936,3 +936,44 @@ class SIFloor1Rows:
             ),
         }
 
+    def floor1_two_body_row(
+        self,
+        *,
+        size: int = 24,
+        relaxation: int = 12,
+        n_max: int = 72,
+        device: str | None = None,
+    ) -> dict[str, float | int | str | bool | dict]:
+        """§5.0.3 / floor1 — two planckons on 3D VACUUM_BOIL at FCC NN."""
+        from mt_ca.floor1_two_body import default_sim_device, run_two_body_harness
+
+        dev = device or default_sim_device()
+        row = run_two_body_harness(
+            size=size,
+            relaxation=relaxation,
+            n_max=n_max,
+            device=dev,
+        )
+        return {
+            "theorem": "§5.0.3 · floor1-two-body-nn — ± pair vs like-like on A5 boil",
+            "size": size,
+            "relaxation": relaxation,
+            "n_max": n_max,
+            "device": dev,
+            "pm_event_tick": row["pm_event_tick"],
+            "annihilation_faster_than_like_like": row["annihilation_faster_than_like_like"],
+            "derivation_closed": False,
+            "checks_ok": row["checks_ok"],
+            "scenarios": {
+                k: {
+                    "scenario_ok": v["scenario_ok"],
+                    "norm_ok": v["norm_ok"],
+                    "event_tick": v["event_tick"],
+                    "initial_like_ok": v.get("initial_like_ok"),
+                    "pair_annihilated_final": v["pair_annihilated_final"],
+                }
+                for k, v in row["scenarios"].items()
+            },
+            "note": row["note"],
+        }
+

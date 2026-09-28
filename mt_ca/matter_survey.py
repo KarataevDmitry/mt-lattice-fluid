@@ -142,10 +142,12 @@ def survey_at_site(
     contour_radius: int = 2,
     rho_frac: float = 0.25,
     cfg: MConfig | None = None,
+    rho: torch.Tensor | None = None,
 ) -> SiteSurvey:
     """Single-site densitometer: ρ gate + dual-channel contour winding → b."""
     cfg = cfg or MConfig.for_stencil("fcc" if z.ndim == 4 else "hex")
-    rho = spinor_density(z)
+    if rho is None:
+        rho = spinor_density(z)
     nz, ny, nx = spatial_shape(z)
     margin = contour_radius + 1
     safe = torus_site_safe(site, nz, ny, nx, margin)

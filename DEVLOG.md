@@ -6,6 +6,24 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-28 · §5.0.3 · floor1-two-body-nn (FCC boil)
+
+**Критерий:** два планкона на 3D `VACUUM_BOIL` (single-axis ramp); сценарии `pp_nn` / `mm_nn` / `pm_nn` (опц. `pm_d2` в probe); Q по ядру (трек от посадки), `Q_net`, `event_tick` для ±; `pm` — оба ядра без устойчивого |Q|=1; `pp`/`mm` — посадка like-sign, без annihilation-канала; норма ≤ 12× от t=0.
+
+**Код:** `mt_ca/floor1_two_body.py` · `tools/floor1_two_body_probe.py` · `SI.floor1_two_body_row()`.
+
+**Verify:** **`Floor1_two_body_nn`** PASS · suite `floor1` (24³, relax 12, n_max 72; дефолт `cuda` как `--ship`).
+
+**Perf:** узкое место был Python-пробинг (`spinor_density` + обход куба на **каждом** тике), не шаг `g`. Сейчас: один `ρ` на снимок, `pp`/`mm`/`pm` — bulk `step(n_max)` + финальный probe; кэш excitation; harness ~15s на RTX 4060.
+
+**Не в MODEL/книгу** (dogfood sim; ядра дрейфуют — критерий операционный).
+
+## 2026-09-28 · §1.6.6 · A5-океан → этажи 0–1 (закрыто)
+
+**Проблема:** 3D FCC boil с ramp $(1,1,1)$ — $|Δk|>1$ на $N_{12}$ → взрыв $\Sigma|z|^2$; dogfood этажа 0/1 на 3+1 ложно «ломал'' $g$.
+
+**Закрыто:** `mt_ca/fcc_boil.py` + одноосный ramp в `vacuum_boil_fixed_3d`; verify **`FCC_boil_ramp`**; MODEL §1.6.6. Книга — только A5/океан (без сидов).
+
 ## 2026-09-28 · sim · `m_evolution_open` зелёный (A9 / A10 / FCC_N12)
 
 **Корень FCC:** 3D `VACUUM_BOIL` с ramp `dz=dy=dx=1` давал |Δclass|>1 на face-diagonal N₁₂ → взрыв нормы; canon **single-axis** ramp (`class_dx=1`, `dy=dz=0`) — fixed point `g`.
@@ -274,7 +292,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** заполнение на T on T — open
 - **§5.0.1 Arg mass:** **`m_H=m_P α_fs⁸ √(π/2)`** ✅ algebra · width/lineshape open
-- **§5.0.3 antimatter:** sim VORTEX_P + VORTEX_M → n_net→0 + 2-front — open
+- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; PDG τ / 2γ T-stats — open (`Annihilation_T_stats`)
 - **§5.2.2 κ_link:** sim ballistic check on `c` — open
 - **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
 - **§5.3.2 v_s:** численный `v_s` on макроописание T — open

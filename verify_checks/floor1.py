@@ -226,6 +226,35 @@ def check_floor1_outer_shell_catalog(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_two_body_nn(device: str = "cpu") -> dict:
+    """§5.0.3 — two planckons on 3D VACUUM_BOIL: pp/mm persist, pm annihilates."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor1_two_body_row(device=device)
+    scenarios = row["scenarios"]
+    ok = (
+        bool(row["checks_ok"])
+        and scenarios["pp_nn"]["scenario_ok"]
+        and scenarios["mm_nn"]["scenario_ok"]
+        and scenarios["pm_nn"]["scenario_ok"]
+        and bool(scenarios["pm_nn"]["pair_annihilated_final"])
+        and bool(row["annihilation_faster_than_like_like"])
+        and scenarios["pp_nn"].get("initial_like_ok")
+        and scenarios["mm_nn"].get("initial_like_ok")
+        and not scenarios["pp_nn"]["pair_annihilated_final"]
+        and not scenarios["mm_nn"]["pair_annihilated_final"]
+    )
+    return {
+        "id": "Floor1_two_body_nn",
+        "pm_event_tick": row["pm_event_tick"],
+        "annihilation_faster_than_like_like": row["annihilation_faster_than_like_like"],
+        "scenarios": scenarios,
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
     """§6·floor1·C3·bath·dogfood — VACUUM_BOIL moves; densitometer sees b=1."""
     from mt_ca.si_constants import SI
