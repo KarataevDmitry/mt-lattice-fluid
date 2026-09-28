@@ -225,6 +225,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
             check_electron_mass,
             check_neutron_mass,
             check_annihilation_t_stats,
+            check_annihilation_m_t_bundle,
             check_neutrino_mass,
             check_mechanical_quantum,
             check_quarter_quantum,

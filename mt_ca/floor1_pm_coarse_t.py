@@ -150,6 +150,8 @@ def run_pm_coarse_dipole_probe(
         "pp_peaks_on_delta": pp_m["peaks_on_delta"],
         "pm_elongation_delta": pm_m["elongation_delta"],
         "pp_elongation_delta": pp_m["elongation_delta"],
+        "pm_axis_angle": pm_m["axis_angle"],
+        "pp_axis_angle": pp_m["axis_angle"],
         "pm_dipole_proxy": pm_dipole,
         "pp_control_ok": pp_control,
         "pm_vs_pp_contrast": contrast,

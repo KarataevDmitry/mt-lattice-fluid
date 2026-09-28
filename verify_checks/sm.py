@@ -221,6 +221,27 @@ def check_neutron_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_annihilation_m_t_bundle(device: str = "cpu") -> dict:
+    """§5.0.3 — floor1 pm coarse dipole + Annihilation_T_stats (linked instruments)."""
+    from mt_ca.annihilation_m_t_bundle import run_annihilation_m_t_bundle
+
+    row = run_annihilation_m_t_bundle(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["link_dual_front_both_paths"])
+        and bool(row["link_shared_dipole_instrument"])
+    )
+    return {
+        "id": "Annihilation_M_T_bundle",
+        "m_peaks": row["m_floor1_pm"]["pm_peaks_on_delta"],
+        "t_peaks": row["t_head_on"]["peaks_on_delta"],
+        "link_dual_front_both_paths": row["link_dual_front_both_paths"],
+        "link_shared_dipole_instrument": row["link_shared_dipole_instrument"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_annihilation_t_stats(device: str = "cpu") -> dict:
     """§5.0.3 T-layer: lattice τ_M, dipole 2γ proxy, ensemble ⟨dσ/dΩ⟩ isotropy."""
     from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
