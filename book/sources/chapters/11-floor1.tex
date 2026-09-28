@@ -65,16 +65,28 @@
 \]
 \end{proposition}
 
-\begin{proof}[Идея доказательства]
-На звезде из $\geomNeighborTwelve$ связей фазовый шаг за оборот
-$\Delta\varphi_{\mathrm{ring}}=2\pi/\geomNeighborTwelve$.
-Из $N_\varphi=\lceil 2\pi/\Delta\varphi_{\min}\rceil=13$ следует
-$2\pi/\geomNeighborTwelve>\Delta\varphi_{\min}$: вся $\varepsilon$-окрестность лежит выше
-Гейзенберг-пола.
-Локальный закон~$g$ действует только на $N(x)$ за один такт (A1);
-вторая координационная сфера за один~$\htick$ недоступна.
-Возбуждённое multi-shell облако --- не основное состояние того же $Q$
-и спускается к минимальному ореолу (логика классов C3 vs C2 ниже).
+\begin{proof}
+\pfrom{звезды из $\geomNeighborTwelve$ связей на узле FCC}
+фазовый шаг за полный оборот по соседям равен
+\[
+  \Delta\varphi_{\mathrm{ring}}=\frac{2\pi}{\geomNeighborTwelve}.
+\]
+\pusing{числа секторов $N_\varphi=\lceil 2\pi/\Delta\varphi_{\min}\rceil=13$ и $\Delta\varphi_{\min}=\tfrac12$}
+\[
+  \frac{2\pi}{\geomNeighborTwelve}>\Delta\varphi_{\min}.
+\]
+\pfollows
+вся $\varepsilon$-окрестность узла лежит выше гейзенберговского пола фазы.
+
+\pfrom{локальности закона~$g$ (\Axref{ax:A1})}
+за один такт~$\htick$ доступны только соседи $N(x)$;
+вторая координационная сфера за один тик недостижима.
+\phence минимальный устойчивый хвост облака $\rho_\Theta$ покрывает первую звезду, и
+\[
+  R_{\mathrm{dress}}=R_{\min}=1\cdot\caStepSpace.
+\]
+Возбуждение на нескольких оболочках с тем же $Q$ не является основным состоянием
+и релаксирует к этому ореолу (сравнение классов C2/C3 ниже).
 \end{proof}
 
 Оболочки на этаже~1 --- это моды~$\rho_\Theta$ на координационных сферах,

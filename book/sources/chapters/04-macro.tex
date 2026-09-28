@@ -205,16 +205,19 @@ $\bigl|\partial_x^2 u/u\bigr|\le 2\pi^2\eta\chi+O(\eta^2\chi)$.
 \end{proof}
 
 \begin{proof}[Доказательство пункта~\emph{(iv)} теоремы~\ref{thm:t-cl}]
-Madelung-разложение комплексного $\Phi=\sqrt\rho\,e^{iS/\planckHbar}$ на~$\Tlayer$
-даёт уравнение непрерывности для $\rho$ и уравнение импульса для $v=\partial_x S/m_{\mathrm{eff}}$
+\pfrom{разложения Маделунга $\Phi=\sqrt\rho\,e^{iS/\planckHbar}$ на~$\Tlayer$}
+получаем уравнение непрерывности для $\rho$ и уравнение импульса для $v=\partial_x S/m_{\mathrm{eff}}$
 с силой $-\partial_x Q_{\mathrm{Bohm}}$ плюс градиенты давления от нелинейности насыщающей фазы и вязкости $\nu$
 (модель, \S4.1.1-HL).
-Для моды $\rho=\rho_0(1+\eta\cos(2\pi x/\lambda))$ с фазой, медленно меняющейся на масштабе $\lambda$,
-лемма~\ref{lem:bohm-chi} даёт $\sup|\partial_x Q_{\mathrm{Bohm}}|=O(\eta\chi/\lambda)=O(\chi/\lambda)$.
+
+\pusing{моды $\rho=\rho_0(1+\eta\cos(2\pi x/\lambda))$ и леммы~\ref{lem:bohm-chi}}
+\[
+  \sup_x|\partial_x Q_{\mathrm{Bohm}}(x)|=O\!\left(\frac{\eta\chi}{\lambda}\right)=O\!\left(\frac{\chi}{\lambda}\right).
+\]
 Инерционный член $\rho(\partial_t v+v\partial_x v)$ и вязкий $\nu\rho\partial_x^2 v$ на том же масштабе
-имеют порядок, определяемый макроскопической скоростью и $\nu$; при $\chi\to 0$ и фиксированных
-$\rho_0$, $|v|$ доминирование $\nu\partial_x^2 v$ и $\rho v\partial_x v$ над $-\partial_x Q_{\mathrm{Bohm}}$
-воспроизводит классическую гидродинамику (Навье--Стокс/Euler) как ведущее описание пакета.
+задаются макроскопической скоростью и $\nu$.
+\phence при $\chi\to 0$ и фиксированных $\rho_0$, $|v|$ доминируют $\nu\partial_x^2 v$ и $\rho v\partial_x v$
+над $-\partial_x Q_{\mathrm{Bohm}}$, и ведущим описанием пакета становится классическая гидродинамика (Навье--Стокс/Euler).
 \end{proof}
 
 \section{Свободная энергия Ginzburg--Landau}

@@ -46,13 +46,14 @@ $K_P=u_P$ --- планковское давление жидкости;
 \end{lemma}
 
 \begin{proof}
-Минимальный фазовый шаг на такт
+\pfrom{минимального фазового события на такт (A5, дискретный ротор)}
 \[
   \Delta\phi_{\min}=\tfrac12.
 \]
-Ненулевой осциллирующий фон задаёт минимальное событие изменения аргумента на~$\hv$ за такт~$\htick$:
+Ненулевой осциллирующий фон задаёт минимальное изменение аргумента на~$\hv$ за такт~$\htick$.
+\pfollows
 \[
-  \ladderAction=\planckHbar\,\Delta\phi_{\min}=\planckHbar/2.
+  \ladderAction=\planckHbar\,\Delta\phi_{\min}=\frac{\planckHbar}{2}.
 \]
 \end{proof}
 
@@ -63,19 +64,23 @@ $K_P=u_P$ --- планковское давление жидкости;
 \end{lemma}
 
 \begin{proof}
-Квант действия $\ladderAction$, отнесённый к шагу, есть импульс; тот же квант, отнесённый к такту, есть энергия:
+\pfrom{определения лестницы на $(\caStepSpace,\htick)$}
+квант действия, отнесённый к шагу, есть импульс; тот же квант, отнесённый к такту, --- энергия:
 \[
   \ladderMomentum=\frac{\ladderAction}{\caStepSpace}=\frac{\planckHbar}{2\caStepSpace},\qquad
   \ladderEnergy=\frac{\ladderAction}{\htick}.
 \]
-Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ связывает их: $\ladderEnergy=\ladderMomentum \caSignalSpeed$.
-Масса аргумента определяется через макроскопическую скорость света, уже выведенную из оболочки:
-$c=\kgeom \caSignalSpeed$ при $\kgeom=1/\sqrt{2}$, то есть $c^2=\caSignalSpeed^2/2$.
+\pusing{тактовой скорости $\caSignalSpeed=\caStepSpace/\htick$}
 \[
-  m_{\arg}=\frac{\ladderEnergy}{c^2}=\frac{\ladderEnergy}{\caSignalSpeed^2/2}=\frac{2\ladderEnergy}{\caSignalSpeed^2}=\frac{2\ladderMomentum}{\caSignalSpeed}.
+  \ladderEnergy=\ladderMomentum \caSignalSpeed.
 \]
-Отсюда $\ladderMomentum=m_{\arg} \caSignalSpeed/2$.
-Множитель $1/2$ --- это $\kgeom^2$.
+Масса аргумента определяется через макроскопическую скорость света из SI-моста:
+$c=\kgeom \caSignalSpeed$ при $\kgeom=1/\sqrt{2}$, откуда $c^2=\caSignalSpeed^2/2$.
+\ptransform{определения $m_{\arg}=\ladderEnergy/c^2$ и подстановки $c^2$}
+\[
+  m_{\arg}=\frac{\ladderEnergy}{c^2}=\frac{2\ladderEnergy}{\caSignalSpeed^2}=\frac{2\ladderMomentum}{\caSignalSpeed}.
+\]
+\pfollows $\ladderMomentum=m_{\arg} \caSignalSpeed/2$; множитель $1/2$ есть $\kgeom^2$.
 \end{proof}
 
 \begin{lemma}[5.1c]
@@ -143,13 +148,27 @@ $n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$ (CL-4, \cref{sec:congruenc
 \end{proof}
 
 \begin{proof}[Доказательство теоремы]
-Минимальное событие на ячейке несёт действие $\ladderAction=\planckHbar/2$ (\cref{lem:51a}).
-Деление на $\caStepSpace$ и на $\htick$ даёт импульс и энергию;
-масса через $c=\kgeom \caSignalSpeed$ превращает их в $\ladderMomentum=m_{\arg} \caSignalSpeed/2$ (\cref{lem:51b}).
-Сила одного кванта импульса за такт совпадает с $m_{\arg} g_M$ (\cref{lem:51c}).
-Приращение импульса на решётке целочисленно, а непрерывный интеграл $\int\Im(z^*\nabla z)$ на~$M$ не определён (\cref{lem:51d}).
-Три записи энергии $\ladderMomentum \caSignalSpeed$, $\ladderForce\caStepSpace$ и $L_0/\htick$ равны одному и тому же~$\ladderEnergy$ (\cref{lem:51e}).
-Свободного параметра, который можно было бы подогнать отдельно для импульса, силы и энергии, не остаётся.
+\pfrom{леммы~\ref{lem:51a}}
+\[
+  \ladderAction=\frac{\planckHbar}{2}.
+\]
+\pfrom{леммы~\ref{lem:51b}}
+деление на $\caStepSpace$ и $\htick$ даёт $\ladderMomentum$ и $\ladderEnergy$;
+масса через $c=\kgeom \caSignalSpeed$ даёт $\ladderMomentum=m_{\arg} \caSignalSpeed/2$.
+
+\pfrom{леммы~\ref{lem:51c}}
+сила одного кванта импульса за такт совпадает с $m_{\arg} g_M$ на ячейке~$\hv$.
+
+\pfrom{леммы~\ref{lem:51d}}
+приращение импульса на решётке целочисленно ($\Delta p\in\ladderMomentum\cdot\mathbb{Z}$),
+а интеграл $\int\Im(z^*\nabla z)$ на~$M$ не определён.
+
+\pfrom{леммы~\ref{lem:51e}}
+три записи энергии совпадают:
+\[
+  \ladderEnergy=\ladderMomentum \caSignalSpeed=\ladderForce\caStepSpace=\frac{L_0}{\htick}.
+\]
+\phence свободного параметра, подгоняемого отдельно для импульса, силы и энергии, не остаётся.
 \end{proof}
 
 \begin{corollary}[Закон Ньютона на ячейке]

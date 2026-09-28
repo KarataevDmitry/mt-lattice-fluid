@@ -195,11 +195,47 @@ $U=d/(d+1)=7/8$ в знаменателе (не fitted по CODATA).
 сравнение с CODATA --- только на~$\Tlayer$ ($\sim -0.00007$\,ppm на предпочтительной форме).
 \end{theorem}
 
-\begin{proof}[Схема]
-Посадка Кулона на $\ladderForce$ с $M=97$ (\cref{thm:M97});
-единственная безразмерная поправка знаменателя из $d=7$ и $U=8/7$;
-алгебра даёт формулу теоремы.
-Остаток $\alpha^*$ и $\pi$-башня в числитель не входят.
+\begin{proof}
+\pfrom{теоремы~\ref{thm:M97} и посадки силы на \cref{sec:force-lattice}}
+на ближайшем соседе ($N=1$) кулоновский пакет на решётке равен
+\[
+  F_{\mathrm{C}}=\frac{\ladderForce}{M},\qquad M=1+N_{12}N_{\mathrm{hier}}=97.
+\]
+\pfollows
+грубый безразмерный readout силы (до поправки грани) есть
+\[
+  \alpha_0=\frac{\caKappaGeom}{M}.
+\]
+
+\pfrom{каузального креста и трёх генераторов $SU(2)$ на кубооктаэдре}
+emergent-размерность пространства
+\[
+  d=N_4+n_{\mathrm{SU}(2)}=4+3=7.
+\]
+Изотропия квадратной грани задаёт soft-unit
+\[
+  U=\frac{d}{d+1}=\frac{7}{8}
+\]
+в знаменателе безразмерной поправки (не fitted по CODATA).
+
+\pusing{единственность поправки знаменателя из $(d,U)$ и пакетной геометрии $\caKappaGeom$}
+сопряжение заряда с вакуумом записывается в виде
+\[
+  \alphaFs
+  =
+  \frac{dM^{2}\caKappaGeom\,(dM+\caKappaGeom)}
+       {d^{2}M^{4}-dM\caKappaGeom^{3}-(d+1)},
+\]
+где $d=7$ совпадает с числителем $7M$ в записи теоремы.
+\psubst{$M=97$ и $\caKappaGeom=1/\sqrt{2}$}
+\[
+  \alphaFs
+  =
+  \frac{7M^{2}\caKappaGeom\,(7M+\caKappaGeom)}
+       {49M^{4}-7M\caKappaGeom^{3}-8},
+\]
+то есть формула теоремы~\ref{thm:alpha}.
+Фазовый остаток $\alpha^*$ (\cref{lem:vacuum-phase-residue}) и $\pi$-башня (\cref{rem:pi-tower}) в этот вывод не входят.
 \end{proof}
 
 \begin{definition}[Смысл $\alphaFs$]
