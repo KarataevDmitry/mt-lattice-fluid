@@ -214,27 +214,61 @@ $2^{\caBitBudget}\approx 535$: $\Gamma_{\hv}$ \emph{сжато} бит-бюдж�
 Orbit table одного планкона на одном узле (ветки ground и excited $n_E\ge1$) закрыта на sim;
 полный период поля на $\Lambda$ --- задача P0 (\cref{sec:floor0-open}).
 
-\section{Что ещё не закрыто}
+\section{Статус этажа~0-A}
 \label{sec:floor0-open}
 
-Следующие пункты явно открыты; они не отменяют алгебру вех и основное состояние.
+Критерий этажа~0-A: алгебра вех (\cref{sec:floor0-ne-ladder,prop:floor0-ne-ladder}),
+основное состояние (\cref{prop:floor0-vortex-ground}), монодромия $SU(2)$
+(\cref{prop:floor0-su2-monodromy}), каталог регистров (\cref{sec:floor0-catalog})
+и внутренняя динамика \emph{одного} планкона на \emph{одном} узле на кипящем океане
+(\cref{sec:floor0-phase-space}).
+
+\paragraph{Закрыто (алгебра и один узел на sim).}
+После релаксации vortex на ядре остаётся $n_E=0$ (\cref{prop:floor0-vortex-ground});
+в продолжающемся треке закона~$g$ на кипящем океане (A5) на том же узле
+встречаются тики с $n_E\ge 1$ (возбуждённые ветки), orbit table $\Gamma_{\hv}$
+с разделением ground / excited, и нулевые нарушения правил отбора S1--S4
+(\cref{ch:evolution}).
 
 \begin{table}[htbp]
   \centering
-  \caption{Открытые под-UoW этажа~0.}
+  \caption{Закрытые под-UoW этажа~0-A (один планкон, один $\hv$, кипящий океан).}
+  \label{tab:floor0-closed}
+  \begin{tabular}{@{}p{0.38\linewidth}p{0.52\linewidth}@{}}
+    \toprule
+    вопрос & итог \\
+    \midrule
+    лестница $n_E$, вехи $41,82,256,512$ &
+    \cref{prop:floor0-ne-ladder}, \cref{tab:floor0-landmarks} \\
+    основное состояние после релаксации &
+    $n_E=0$ при $b=1$, $|n|$ на контуре (\cref{prop:floor0-vortex-ground}) \\
+    возбуждения $n_E\ge 1$ в свободной эволюции &
+    в треке после релаксации; не в snapshot ground \\
+    $\Gamma_{\hv}$: orbit table, ветки ground / excited &
+    десятки различимых $(q,p)$ при сохранении $n=\pm1$ \\
+    отбор S1--S4 между уровнями $n_E$ &
+    схема \cref{ch:evolution}; проверено на треке ядра \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Открыто (вне этажа~0-A или весь $\Lambda$).}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Открытые под-UoW (этаж~0 и соседние этажи).}
   \label{tab:floor0-open}
   \begin{tabular}{@{}p{0.38\linewidth}p{0.52\linewidth}@{}}
     \toprule
     вопрос & статус \\
     \midrule
-    возбуждения $n_E\ge 1$ в свободной эволюции &
-    ряд $\Phi$/$n_E$ по тикам на ядре планкона на кипящем океане (закрыто на sim) \\
-    полный список внутренних состояний &
-    $\Gamma_{\hv}$: orbit table + ветки ground/excited на one $\hv$ (закрыто); P0 на $\Lambda$ --- open \\
-    правила отбора между внутренними уровнями &
-    S1--S4 на ядре (закрыто на sim) \\
+    P0: период поля на всей решётке $\Lambda$ &
+    $T_B$ (точный цикл CA), $T_C$ (наблюдаемые на attractor);
+    не путать с $T_A=512$ в одной ячейке \\
+    полный перечень $2^{B_{\hv}}$ классов &
+    не требуется; orbit table на одном узле достаточна \\
     внешние моды на $\varepsilon$-оболочке (1-я сфера соседей) &
-    \cref{ch:floor1} \\
+    \cref{ch:floor1} (§5.0.4-B) \\
     \bottomrule
   \end{tabular}
 \end{table}
