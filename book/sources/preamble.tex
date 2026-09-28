@@ -26,6 +26,10 @@
 
 \usepackage{cleveref}
 
+\ifdefined\BookVolume
+  \input{generated/construction-vol-refs.tex}%
+\fi
+
 \usepackage{enumitem}
 
 \usepackage{booktabs}
@@ -37,6 +41,24 @@
 \usepackage{listings}
 
 \usepackage{xstring}
+
+\newcommand{\NotationVolSee}[2]{%
+  \ifdefined\BookVolume
+    {#2 (\emph{Построение}, \VolRef{#1})}%
+  \else
+    \hyperref[#1]{#2}%
+  \fi
+}
+
+\ifdefined\BookVolume
+  \NewDocumentCommand{\bcref}{m}{%
+    \emph{Построение}, \VolRef{#1}%
+  }%
+  \newcommand{\bref}[1]{\VolRef{#1}}%
+\else
+  \NewDocumentCommand{\bcref}{m}{\cref{#1}}%
+  \newcommand{\bref}[1]{\ref{#1}}%
+\fi
 
 \usepackage{fontspec}
 
@@ -97,7 +119,11 @@
 % Ссылка на абсолютное условие: $A_5$, не «условiu 2.5» и не ??
 \newcommand{\Axref}[1]{%
   \StrBehind{#1}{ax:A}[\axidx]%
-  \hyperref[#1]{$A_{\axidx}$}%
+  \ifdefined\BookVolume
+    $A_{\axidx}$%
+  \else
+    \hyperref[#1]{$A_{\axidx}$}%
+  \fi
 }
 
 \renewcommand{\proofname}{Доказательство}

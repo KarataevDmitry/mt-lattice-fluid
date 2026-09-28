@@ -23,7 +23,7 @@
 ```powershell
 cd book
 ./build.ps1                          # construction (default)
-./build.ps1 -Volume floors
+./build.ps1 -Volume floors   # prebuild construction → generated/construction-vol-refs.tex
 ./build.ps1 -Volume cosmology
 ```
 

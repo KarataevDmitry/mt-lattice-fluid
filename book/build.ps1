@@ -335,7 +335,32 @@ if (-not (Test-Path -LiteralPath $mainPath)) {
     throw "Missing sources/$MainTex — see book/SERIES.md"
 }
 
+# floors: cross-refs from construction__build.aux → generated/construction-vol-refs.tex
+if ($Volume -eq 'floors') {
+    $constructionAux = Join-Path $OutWork 'construction__build.aux'
+    if (-not (Test-Path -LiteralPath $constructionAux)) {
+        Write-Host 'floors: building construction first (cross-volume .aux) ...'
+        & $PSCommandPath -Volume construction
+        if ($LASTEXITCODE -ne 0) {
+            throw 'construction build failed (required for floors cross-refs)'
+        }
+    }
+}
+
 New-Item -ItemType Directory -Force -Path $OutPdf, $OutWork | Out-Null
+
+if ($Volume -eq 'floors') {
+    $constructionAux = Join-Path $OutWork 'construction__build.aux'
+    if (-not (Test-Path -LiteralPath $constructionAux)) {
+        throw 'construction__build.aux missing after construction prebuild'
+    }
+    $genRefs = Join-Path (Split-Path $Root -Parent) 'scripts\gen_construction_vol_refs.py'
+    $volRefs = Join-Path $Sources 'generated\construction-vol-refs.tex'
+    & python $genRefs $constructionAux $volRefs
+    if ($LASTEXITCODE -ne 0) {
+        throw 'gen_construction_vol_refs.py failed'
+    }
+}
 # Conceptual figures: book/sources/figures/tikz/*.tex (hand-edited TikZ).
 # Legacy matplotlib PDFs (3D packing etc.): scripts/render_*_figures.py — only if -RenderFigures.
 if ($RenderFigures) {
@@ -438,7 +463,8 @@ function Invoke-Biber {
 
 Push-Location $Sources
 try {
-    Write-Host 'xelatex pass 1/3 ...'
+    $firstTotal = if ($Volume -eq 'floors') { 4 } else { 3 }
+    Write-Host "xelatex pass 1/$firstTotal ..."
     & $XeLaTeX -interaction=nonstopmode -halt-on-error `
         -output-directory="$OutWork" -aux-directory="$OutWork" `
         -jobname="$BuildJob" $MainTex
@@ -446,8 +472,10 @@ try {
         throw "xelatex failed (exit $LASTEXITCODE) on pass 1"
     }
     Invoke-Biber -Job $BuildJob
-    foreach ($pass in 2..3) {
-        Write-Host "xelatex pass $pass/3 ..."
+    $latexPasses = if ($Volume -eq 'floors') { 2..4 } else { 2..3 }
+    foreach ($pass in $latexPasses) {
+        $total = if ($Volume -eq 'floors') { 4 } else { 3 }
+        Write-Host "xelatex pass $pass/$total ..."
         & $XeLaTeX -interaction=nonstopmode -halt-on-error `
             -output-directory="$OutWork" -aux-directory="$OutWork" `
             -jobname="$BuildJob" $MainTex

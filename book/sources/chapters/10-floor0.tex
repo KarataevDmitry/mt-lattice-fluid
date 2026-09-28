@@ -7,7 +7,7 @@
 
 Этаж~0: один планкон в одной планковской ячейке~$\hv=\PlanckCell$
 (\cref{ch:floors-preface}).
-Занятость $b=1$, топологический заряд $n=\pm1$ на контуре (\cref{sec:planckon-floor0,ch:matter}).
+Занятость $b=1$, топологический заряд $n=\pm1$ на контуре (\bcref{sec:planckon-floor0}, \bcref{ch:matter}).
 Это не картина «орбитали внутри радиуса $r<\ell_P$'' --- ниже шага~$\caStepSpace$ пространства как континуума нет.
 И не этаж~2 (кварки, составные квантовые числа): здесь только внутренние степени свободы
 \emph{одного} локализованного возбуждения.
@@ -15,7 +15,7 @@
 На макроуровне~$\layerMacro$ атомные уровни и орбитали --- то, как прибор считывает составной узел;
 на~$\layerMicro$ у планкона заранее действует та же \emph{зонная логика},
 что у атома, ядра или кристалла: дискретные уровни, правила отбора, запрет Паули,
-конечный набор состояний (бит-бюджет $\caBitBudget$, \cref{ch:evolution}).
+конечный набор состояний (бит-бюджет $\caBitBudget$, \bcref{ch:evolution}).
 
 \begin{table}[htbp]
   \centering
@@ -29,7 +29,7 @@
     орбитали $(n,\ell,m)$ & внутренние: кольцо + $SU(2)$; внешние: оболочки соседей (\cref{ch:floor1}) \\
     запрет Паули & A16: два совпадающих спинора в одном $\hv$ запрещены; $b\in\{0,1\}$ \\
     запрещённый переход & скачок не кратен $\ladderEnergy$, $\Delta\varphi_{\min}$ или ломает $n$ без партнёра \\
-    запрещённая зона (кристалл) & щели $\omega(k)$ на зоне Бриллюэна вакуума (\cref{ch:matter}) \\
+    запрещённая зона (кристалл) & щели $\omega(k)$ на зоне Бриллюэна вакуума (\bcref{ch:matter}) \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -38,21 +38,21 @@
 \label{sec:floor0-registers}
 
 На одной ячейке независимых «полей Стандартной модели» нет.
-Из аксиом и закона~$g$ (\cref{ch:axioms,ch:evolution}) следуют два связанных регистра:
+Из аксиом и закона~$g$ (\bcref{ch:axioms}, \bcref{ch:evolution}) следуют два связанных регистра:
 
 \paragraph{Фазовое кольцо.}
 Накопленная фаза импульсного реестра
 $\Phi\in\mathbb{Z}_{\phaseRingCount}$, $\phaseRingCount=512$.
 Один полный оборот $U(1)$ на кольце --- $512$ дискретных тиков.
 Минимальный разрешённый скачок $\Delta\varphi_{\min}=\tfrac12$ рад.
-Из леммы~\ref{lem:51a} следует
+Из леммы~\bref{lem:51a} следует
 \[
   \Delta\varphi_{\mathrm{disc}}
   = \left\lfloor \phaseRingCount\,\frac{\Delta\varphi_{\min}}{2\pi}\right\rfloor
   = 41
 \]
 тик на $\mathbb{Z}_{\phaseRingCount}$.
-Один такой скачок --- один квант энергии $\ladderEnergy$ лестницы (\cref{thm:51,lem:51e}).
+Один такой скачок --- один квант энергии $\ladderEnergy$ лестницы (\bcref{thm:51}, \bcref{lem:51e}).
 
 \paragraph{Спинор на узле планкона.}
 Состояние $z\in\mathbb{C}^2$ в ячейке~$\hv$, где планкон ($b=1$).
@@ -67,7 +67,7 @@ $\Phi\in\mathbb{Z}_{\phaseRingCount}$, $\phaseRingCount=512$.
 \section{Лестница $n_E$ на кольце}
 \label{sec:floor0-ne-ladder}
 
-Энергия события на~$\layerMicro$ квантуется лестницей $E=n_E \ladderEnergy$ (\cref{lem:51e}).
+Энергия события на~$\layerMicro$ квантуется лестницей $E=n_E \ladderEnergy$ (\bcref{lem:51e}).
 Число $n_E$ считается по накопленным тикам фазы на кольце:
 \[
   n_E = \left\lfloor \frac{|\Phi|}{\Delta\varphi_{\mathrm{disc}}}\right\rfloor,
@@ -92,7 +92,7 @@ $\Phi\in\mathbb{Z}_{\phaseRingCount}$, $\phaseRingCount=512$.
 \end{table}
 
 Связь с запретом Паули: импульс $\pi$ на половине кольца ($256$ тиков) --- та же дискретная
-$\pi$-ротация, что в конгруэнтной лестнице CL-2 (\cref{ch:evolution}).
+$\pi$-ротация, что в конгруэнтной лестнице CL-2 (\bcref{ch:evolution}).
 Полный оборот $512$ тиков даёт $n_E=12$ --- двенадцать квантов $\ladderEnergy$ на один цикл фазы.
 
 \begin{proposition}[Лестница $n_E$]
@@ -108,7 +108,7 @@ $\pi$-ротация, что в конгруэнтной лестнице CL-2 (
 \begin{proof}
 \pfrom{определения $n_E$ и $\Delta\varphi_{\mathrm{disc}}=41$}
 первые две строки таблицы~\ref{tab:floor0-landmarks} дают $n_E=1$ при $|\Phi|=41$ и $n_E=2$ при $|\Phi|=82$.
-\pusing{CL-2 (\cref{ch:evolution}): половина кольца --- поворот на $\pi$}
+\pusing{CL-2 (\bcref{ch:evolution}): половина кольца --- поворот на $\pi$}
 $|\Phi|=\phaseRingCount/2=256$ и $256/41=6$ с остатком, откуда $n_E=6$.
 \pusing{полного оборота $|\Phi|=\phaseRingCount$}
 $512/41=12$ с остатком, откуда $n_E=12$ и $\Phi_{2\pi}=512$.
@@ -139,17 +139,17 @@ $b=1$, $|\Delta\varphi|_{\mathrm{core}}<\Delta\varphi_{\min}$, $n_E=0$,
 \end{proposition}
 
 \begin{proof}
-\pfrom{леммы~\ref{lem:51a} и схемы импульсного реестра (\cref{ch:evolution})}
+\pfrom{леммы~\bref{lem:51a} и схемы импульсного реестра (\bcref{ch:evolution})}
 скачок фазы меньше $\Delta\varphi_{\min}$ на ядре не даёт целого кванта $\ladderEnergy$,
 поэтому $n_E=\lfloor|\Phi|/41\rfloor=0$ после релаксации.
-\pfrom{локализации планкона (\cref{sec:planckon-floor0})}
+\pfrom{локализации планкона (\bcref{sec:planckon-floor0})}
 $b=1$ на ядре.
 \pfrom{устойчивости вихря при $n=\pm1$}
 контур несёт топологический заряд; ядро остаётся в допустимой зоне ротора $SU(2)$.
 \end{proof}
 
 Это \emph{нулевой} внутренний уровень по $n_E$ при ненулевом топологическом $n$:
-планкон уже локализован и массивен (\cref{ch:matter}), но фазовый реестр на кольце
+планкон уже локализован и массивен (\bcref{ch:matter}), но фазовый реестр на кольце
 в основном состоянии пуст.
 
 \section{Монодромия \texorpdfstring{$SU(2)$}{SU(2)} на ядре}
@@ -174,7 +174,7 @@ $\mathrm{Re}\langle z, R_\phi z\rangle$.
 \end{proposition}
 
 \begin{proof}
-\pfrom{CL-2 (\cref{ch:evolution}): $R(N_{\mathrm{ring}}/2)=-\mathbb{1}$ на спиноре}
+\pfrom{CL-2 (\bcref{ch:evolution}): $R(N_{\mathrm{ring}}/2)=-\mathbb{1}$ на спиноре}
 поворот на $\pi$ в дискретном роторе меняет знак $z$.
 \pfrom{двойного оборота $4\pi$}
 композиция двух таких полуоборотов возвращает знак, откуда $\langle z,R_{4\pi}z\rangle\approx+1$.
@@ -189,7 +189,7 @@ $\mathrm{Re}\langle z, R_\phi z\rangle$.
 \item \textbf{кольцо} --- $512$ положений $\varphi_{\mathrm{disc}}$ на $\mathbb{Z}_{\phaseRingCount}$;
   канонически это пара $(k_\varphi,\varphi_f)$ с $k_\varphi\in\mathbb{Z}_{13}$,
   $\varphi_f\in\mathbb{Z}_{41}$ и швом в $21$ тик
-  ($21=N_\varphi+N_{\mathrm{hier}}$, \cref{ch:evolution});
+  ($21=N_\varphi+N_{\mathrm{hier}}$, \bcref{ch:evolution});
 \item \textbf{лестница $n_E$} --- $13$ классов $0\ldots 12$
   ($n_E=\lfloor|\Phi|/41\rfloor$, полный оборот кольца даёт $n_E=12$);
 \item \textbf{ориентация $SU(2)$} --- точка на сфере Блоха;
@@ -198,7 +198,7 @@ $\mathrm{Re}\langle z, R_\phi z\rangle$.
 
 Наивное произведение этих чисел даёт миллиарды комбинаций.
 Однако вся ячейка $\hv$ ограничена бит-бюджетом Бекенштейна
-$2^{\caBitBudget}\approx 535$ (\cref{ch:evolution}): столько различимых состояний
+$2^{\caBitBudget}\approx 535$ (\bcref{ch:evolution}): столько различимых состояний
 \emph{всего}, а не на каждый регистр отдельно.
 Регистры связаны через представление $Z\in\mathbb{Z}_{\phaseRingCount}[i]$, а не перемножаются
 как независимые квантовые числа лабораторной таблицы.
@@ -211,7 +211,7 @@ $2^{\caBitBudget}\approx 535$ (\cref{ch:evolution}): столько различ
 \label{sec:floor0-phase-space}
 
 В модели уже есть обобщённые координаты $\caCoordsDhDt$ и импульсный квант $\ladderMomentum=\ladderAction/\caStepSpace$
-(\cref{ch:evolution}).
+(\bcref{ch:evolution}).
 На этаже~0, когда внешняя позиция $x$ зафиксирована, остаётся дискретное
 \textbf{внутреннее} пространство \emph{планкона} $\Gamma_{\hv}$ (бюджет ячейки~$\hv$ на узле планкона) --- пара $(q,p)$:
 
@@ -254,7 +254,7 @@ $2^{\caBitBudget}\approx 535$: $\Gamma_{\hv}$ \emph{сжато} бит-бюдж�
 После релаксации вихря на ядре остаётся $n_E=0$ (\cref{prop:floor0-vortex-ground});
 при дальнейшей эволюции закона~$g$ на кипящем океане (A5) на том же узле
 появляются такты с $n_E\ge 1$, орбиты в $\Gamma_{\hv}$ разделяются на основную и возбуждённые ветки,
-а правила отбора между уровнями $n_E$ из \cref{ch:evolution} не нарушаются.
+а правила отбора между уровнями $n_E$ из \bcref{ch:evolution} не нарушаются.
 
 \begin{table}[htbp]
   \centering
@@ -273,7 +273,7 @@ $2^{\caBitBudget}\approx 535$: $\Gamma_{\hv}$ \emph{сжато} бит-бюдж�
     орбиты $\Gamma_{\hv}$, основная и возбуждённые ветки &
     десятки различимых $(q,p)$ при сохранении $n=\pm1$ \\
     отбор между уровнями $n_E$ &
-    правила согласованности \cref{ch:evolution}; проверено на ядре \\
+    правила согласованности \bcref{ch:evolution}; проверено на ядре \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -318,7 +318,7 @@ $2^{\caBitBudget}\approx 535$: $\Gamma_{\hv}$ \emph{сжато} бит-бюдж�
 \paragraph{Связь с электроном.}
 Лабораторный электрон --- частица на~$\layerMacro$; планкон --- носитель на~$\layerMicro$
 (\cref{para:floors-three-carriers,para:floors-composite-ladder}).
-Масса, заряд и радиус (через облако $\rho_\Theta$, \cref{ch:matter}) выводятся на других этажах.
+Масса, заряд и радиус (через облако $\rho_\Theta$, \bcref{ch:matter}) выводятся на других этажах.
 Внутренний спектр этажа~0 --- \emph{микроскопический прототип зонной структуры}
 (дискретные уровни, отборы, Паули), общий для любого планкона,
 в том числе для того, что на~$\layerMacro$ читается как электрон.
