@@ -1,7 +1,9 @@
 % Макро-физика (Максвелл, Ньютон, КМ, …) — тултипы в формулах через макросы.
 
 \newcommand{\NotationSecMacroPhysicsTitle}{\textit{Макроскопическая физика (поля, операторы, SI)}}
-\newcommand{\NotationDescNabla}{оператор набла; ротор и дивергенция в уравнениях Максвелла.}
+\newcommand{\NotationDescNabla}{векторный дифференциальный оператор $\partial/\partial\mathbf{x}$;
+$\nabla\varphi$ --- градиент, $\nabla\cdot\mathbf{A}$ --- дивергенция, $\nabla\times\mathbf{A}$ --- ротор
+(уравнения Максвелла).}
 \newcommand{\NotationDescPartialT}{производная по времени (локальная на макроуровне).}
 \newcommand{\NotationDescEfld}{вектор электрического поля.}
 \newcommand{\NotationDescBfld}{вектор магнитной индукции.}
@@ -29,7 +31,7 @@
 \newcommand{\NotationDescVecP}{вектор импульса \(\mathbf{p}\) (пространственная часть \(p^\mu\)).}
 
 \newnotationsectionT{symb:sec-macrophys}{macrophys-00}{\NotationSecMacroPhysicsTitle}
-\newnotationentryT{symb:nabla}{macrophys-01}{\ensuremath{\nabla}}{\NotationDescNabla}{\ensuremath{\mathrm{м^{-1}}}}
+\newnotationentryT{symb:nabla}{macrophys-01}{\ensuremath{\nabla}}{\NotationDescNabla}{\NotationUnitDash}
 \newnotationentryT{symb:partialt}{macrophys-02}{\ensuremath{\partial_t}}{\NotationDescPartialT}{\ensuremath{\mathrm{с^{-1}}}}
 \newnotationentryT{symb:Efld}{macrophys-03}{\ensuremath{\mathbf{E}}}{\NotationDescEfld}{\NotationUnitVoltPerMetre}
 \newnotationentryT{symb:Bfld}{macrophys-04}{\ensuremath{\mathbf{B}}}{\NotationDescBfld}{\NotationUnitTesla}
