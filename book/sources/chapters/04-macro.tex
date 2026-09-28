@@ -58,13 +58,13 @@
 \end{theorem}
 
 \begin{proof}
-По \cref{def:soft-readout} ядро осреднения~$\mathcal{B}$ --- $R$-кратная свёртка
-с $W=\tfrac14[1,2,1]^{\otimes 2R}$ на ортогональном срезе (условия C0--C4:
-локальность, нормировка $\sum W=1$, чётность моментов, separable на product-срезе).
+\pusing{\cref{def:soft-readout} (C0--C4)}
+ядро $\mathcal{B}$ --- $R$-кратная свёртка с $W=\tfrac14[1,2,1]^{\otimes 2R}$ на ортогональном срезе.
 
 \smallskip
 \emph{Одномерная цепь.}
-Для одного прохода $W=[1,2,1]/4$ символ Фурье
+\pfrom{одного прохода $W=[1,2,1]/4$}
+символ Фурье
 $\widehat W(k)=\tfrac12+\tfrac12\cos k=\cos^2(k/2)$.
 После $R$ проходов $\widehat W_R(k)=\cos^{2R}(k/2)$.
 Один проход сдвигает узел на $-1,0,+1$ с вероятностями $1/4$, $1/2$, $1/4$,
@@ -72,11 +72,11 @@ $\widehat W(k)=\tfrac12+\tfrac12\cos k=\cos^2(k/2)$.
 $R$ проходов складывают дисперсии: $\sigma_R^2=R/2$.
 Гауссово ядро с той же дисперсией имеет символ $G_R(k)=\exp(-\sigma_R^2 k^2/2)=\exp(-Rk^2/4)$.
 
-Разложение $\ln\cos u=-u^2/2-u^4/12+O(u^6)$ при $u=k/2$ даёт
+\ptransform{разложения $\ln\cos u=-u^2/2-u^4/12+O(u^6)$ при $u=k/2$}
 \[
   \ln\cos(k/2)=-\frac{k^2}{8}-\frac{k^4}{192}+O(k^6).
 \]
-Умножение на $2R$ переносит это в логарифм символа:
+Умножение на $2R$ даёт логарифм символа:
 \[
   \ln\widehat W_R(k)=-\frac{Rk^2}{4}-\frac{Rk^4}{96}+O(Rk^6),
 \]
@@ -166,15 +166,18 @@ $\lambda\gg\caStepSpace$, $\chi=(\caStepSpace/\lambda)^2$.
 \end{lemma}
 
 \begin{proof}
-Безразмеризуем $s=x/\lambda$, $k=2\pi/\lambda$.
-Пишем $\rho/\rho_0=1+\eta\cos\theta$ с $\theta=ks$ и
+Безразмеризуем $s=x/\lambda$, $k=2\pi/\lambda$; положим $\rho/\rho_0=1+\eta\cos\theta$, $\theta=ks$,
 $u(s)=\sqrt{1+\eta\cos\theta}$.
-Производные по $x$: $\partial_x=k\partial_\theta$, $\partial_x^2=k^2\partial_\theta^2$.
+\phence $\partial_x=k\partial_\theta$, $\partial_x^2=k^2\partial_\theta^2$.
 
 \smallskip
 \emph{Разложение по $\eta$.}
-При $|\eta|<1$ имеем $(1+\eta\cos\theta)^{1/2}
-=1+\tfrac{\eta}{2}\cos\theta-\tfrac{\eta^2}{8}\cos^2\theta+O(\eta^3)$, откуда
+При $|\eta|<1$ разложим $(1+\eta\cos\theta)^{1/2}$:
+\[
+  (1+\eta\cos\theta)^{1/2}
+  =1+\tfrac{\eta}{2}\cos\theta-\tfrac{\eta^2}{8}\cos^2\theta+O(\eta^3),
+\]
+\pfollows
 \[
   u=1+\frac{\eta}{2}\cos\theta+O(\eta^2),\qquad
   u_\theta=-\frac{\eta}{2}\sin\theta+O(\eta^2),\qquad

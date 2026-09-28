@@ -70,9 +70,10 @@ $U(2\pi)=-\mathbb{1}$, $U(4\pi)=+\mathbb{1}$.
 \end{corollary}
 
 \begin{proof}
-По \cref{def:discrete-rotator} угол $\Phi=N_{\mathrm{ring}}/2$ соответствует повороту на~$\pi$
-в дискретном $SU(2)$.
-На спиноре $(z_1,z_2)$ это даёт $(-z_1,-z_2)=-z$:
+\pfrom{\cref{def:discrete-rotator}}
+угол $\Phi=N_{\mathrm{ring}}/2$ --- поворот на~$\pi$ в дискретном $SU(2)$.
+\pfollows
+на спиноре $(z_1,z_2)$
 \[
   U(2\pi)=-\mathbb{1},\qquad U(4\pi)=+\mathbb{1}.
 \]
@@ -115,22 +116,22 @@ n=z^\dagger\sigma z/|z|^2
 
 \begin{proof}
 \emph{Схема «лягушка''.}
-Норма $\sum_x|z|^2$ за такт сохраняется.
-Обновление первого порядка $z'=z+\gamma\Delta z$ с вещественным~$\gamma$ его не сохраняет:
+\pusing{инварианта $\sum_x|z|^2$}
+обновление первого порядка $z'=z+\gamma\Delta z$ не сохраняет норму тождественно:
 \[
-  |z'|^2-|z|^2=2\gamma\,\Re(z^*\Delta z)+\gamma^2|\Delta z|^2,
+  |z'|^2-|z|^2=2\gamma\,\Re(z^*\Delta z)+\gamma^2|\Delta z|^2.
 \]
-и правая часть не равна нулю тождественно.
-Допустима форма второго порядка по времени, в которой шаг вперёд и шаг назад входят симметрично:
+\pfollows
+нужна схема второго порядка:
 \[
   Z(x,t+\Delta t)+Z(x,t-\Delta t)=2Z(x,t)+\lfloor\mathcal{N}(x,t)\rfloor.
 \]
-Неизвестный предыдущий регистр выражается явно,
+\ptransform{выражением $Z(x,t-\Delta t)$}
 \[
   Z(x,t-\Delta t)=2Z(x,t)+\lfloor\mathcal{N}\rfloor-Z(x,t+\Delta t),
 \]
-и это есть $g^{-1}$.
-Округление $\lfloor\cdot\rfloor$ --- работа в кольце $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$.
+то есть $g^{-1}$.
+Округление $\lfloor\cdot\rfloor$ --- работа в $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$.
 
 \smallskip
 \emph{Голономия.}
@@ -183,17 +184,18 @@ n=z^\dagger\sigma z/|z|^2
 
 \begin{proof}
 \emph{CL-1.}
-Из схемы второго порядка
+\pfrom{схемы второго порядка}
 \[
   Z^++Z^-=2Z+\lfloor\mathcal{N}\rfloor
 \]
-предыдущий регистр выражается явно:
+\pfollows
 \[
   Z^-=2Z+\lfloor\mathcal{N}\rfloor-Z^+.
 \]
 
 \emph{CL-2.}
-Шаг кольца есть $2\pi/N_{\mathrm{ring}}$, поэтому половина кольца --- угол $\pi$:
+\pusing{шага кольца $2\pi/N_{\mathrm{ring}}$}
+половина кольца --- угол $\pi$:
 \[
   \frac{2\pi}{N_{\mathrm{ring}}}\cdot\frac{N_{\mathrm{ring}}}{2}=\pi,
   \qquad
@@ -225,10 +227,11 @@ n=z^\dagger\sigma z/|z|^2
   \qquad
   \gcd(13,512)=1.
 \]
-Кратности $41$ пробегают всё кольцо $\mathbb{Z}/512\mathbb{Z}$.
-Умножение на $13$ в этом кольце обратимо, тринадцать секторов различны.
+\pfrom{$\gcd(41,512)=\gcd(13,512)=1$}
+кратности $41$ пробегают $\mathbb{Z}/512\mathbb{Z}$; умножение на $13$ обратимо.
 
 \emph{CL-7, CL-8.}
+\pfrom{CL-4 и дискретности импульса}
 \[
   \Delta E=n_E \ladderEnergy,
   \qquad

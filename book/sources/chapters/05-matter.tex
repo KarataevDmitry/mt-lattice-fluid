@@ -90,24 +90,25 @@ $L_0=\ladderMomentum\caStepSpace=\ladderAction$, $g_M=\caSignalSpeed/(2\htick)$,
 \end{lemma}
 
 \begin{proof}
-Момент на одном шаге совпадает с действием:
+\pfrom{определения момента на шаге}
 \[
   L_0=\ladderMomentum\caStepSpace=\ladderAction.
 \]
-Из \cref{lem:51b} скорость, стоящая в $\ladderMomentum=m_{\arg} v$, равна $v=\caSignalSpeed/2$.
-Набрать её за один такт значит иметь ускорение
+\pfrom{леммы~\ref{lem:51b}}
+$\ladderMomentum=m_{\arg} v$ с $v=\caSignalSpeed/2$.
+Набрать $v$ за один такт --- ускорение
 \[
   g_M=\frac{\caSignalSpeed/2}{\htick}=\frac{\caSignalSpeed}{2\htick}.
 \]
-Сила, меняющая импульс на один квант за один такт,
+Сила одного кванта импульса за такт:
 \[
   \ladderForce=\frac{\ladderMomentum}{\htick}.
 \]
-Подставляем $\ladderMomentum=m_{\arg} \caSignalSpeed/2$:
+\psubst{$\ladderMomentum=m_{\arg} \caSignalSpeed/2$}
 \[
-  m_{\arg} g_M=m_{\arg}\cdot\frac{\caSignalSpeed}{2\htick}=\frac{\ladderMomentum}{\htick}=\ladderForce.
+  m_{\arg} g_M=\frac{\ladderMomentum}{\htick}=\ladderForce,
 \]
-Это и есть $F=mg$ на одной ячейке: ни масса, ни ускорение не вводятся отдельно от~$\ladderAction$.
+то есть $F=mg$ на ячейке~$\hv$.
 \end{proof}
 
 \begin{lemma}[5.1d]
@@ -117,16 +118,19 @@ $L_0=\ladderMomentum\caStepSpace=\ladderAction$, $g_M=\caSignalSpeed/(2\htick)$,
 \end{lemma}
 
 \begin{proof}
-В замкнутом~$g$ (\cref{thm:g-law}) импульс на связи дискретен: $\ladderMomentum=\ladderAction/\caStepSpace$.
-Удар $\lfloor\mathcal{N}\rfloor$ --- целое число фазовых квантов $\Delta\phi_{\mathrm{disc}}$
-на такт (\cref{sec:congruence}, CL-4), поэтому приращение импульса
-$\Delta p=\ladderMomentum\cdot n$ с $n\in\mathbb{Z}$.
+\pfrom{теоремы~\ref{thm:g-law}}
+$\ladderMomentum=\ladderAction/\caStepSpace$ на связи.
+\pusing{CL-4 (\cref{sec:congruence})}
+удар даёт целое число квантов $\Delta\phi_{\mathrm{disc}}$ на такт, откуда
+\[
+  \Delta p=\ladderMomentum\cdot n,\qquad n\in\mathbb{Z}.
+\]
 
 \smallskip
-Интеграл $\int\Im(z^*\nabla z)\,\mathrm{d}^3x$ предполагает гладкое поле и меру Лебега ---
-на~$M$ есть только суммы по узлам и разности по~$N(x)$.
-После осреднения~$\mathcal{B}$ (\cref{def:soft-readout}) дискретные потоки сходятся
-к маделунговому току на~$T$; на~$M$ интеграл не определён.
+\pfrom{отсутствия континуума на~$M$}
+интеграл $\int\Im(z^*\nabla z)\,\mathrm{d}^3x$ не определён (нет меры Лебега).
+\pusing{осреднения $\mathcal{B}$ (\cref{def:soft-readout})}
+тот же поток читается на~$T$ как маделунговый ток.
 \end{proof}
 
 \begin{lemma}[5.1e]
@@ -135,16 +139,16 @@ $\ladderEnergy=\ladderMomentum \caSignalSpeed=\ladderForce\caStepSpace=L_0/\htic
 \end{lemma}
 
 \begin{proof}
-Из \cref{lem:51b,lem:51c} и $\caSignalSpeed=\caStepSpace/\htick$:
+\pusing{лемм~\ref{lem:51b,lem:51c} и $\caSignalSpeed=\caStepSpace/\htick$}
 \begin{align*}
   \ladderEnergy&=\frac{\ladderAction}{\htick}=\frac{\ladderMomentum\caStepSpace}{\htick}=\ladderMomentum \caSignalSpeed,\\
   \ladderForce\caStepSpace&=\frac{\ladderMomentum}{\htick}\cdot\caStepSpace=\ladderMomentum \caSignalSpeed,\\
   \frac{L_0}{\htick}&=\frac{\ladderAction}{\htick}=\ladderEnergy.
 \end{align*}
-Три записи совпадают, поэтому лестница замыкается на одном кванте энергии.
-Число событий за такт есть целое число фазовых квантов импульса,
-$n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor$ (CL-4, \cref{sec:congruence}),
-и энергия события $E=n_E \ladderEnergy$ кратна тому же~$\ladderEnergy$.
+\pfollows
+три записи энергии совпадают.
+\pfrom{CL-4 (\cref{sec:congruence})}
+$n_E=\lfloor|\Phi|/\Delta\phi_{\mathrm{disc}}\rfloor\in\mathbb{Z}$ и $E=n_E \ladderEnergy$.
 \end{proof}
 
 \begin{proof}[Доказательство теоремы]

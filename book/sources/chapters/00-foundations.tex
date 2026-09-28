@@ -17,10 +17,15 @@
 \end{lemma}
 
 \begin{proof}
-На узле~$x$ состояние принимается из конечного кольца $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$;
-мощность кольца фиксируется информационным бюджетом~$B_{\hv}$ (\cref{sec:bit-budget}).
-При счётном~$\carrierLattice$ множество $\mathcal{C}$ есть счётное произведение конечных множеств, значит, $\mathcal{C}$ счётно.
-Норма сохраняется, и у шага есть обратный:
+\pusing{определения поля (\cref{def:field-a3}) и бюджета (\cref{sec:bit-budget})}
+на узле~$x$ состояние лежит в конечном кольце $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$;
+мощность кольца фиксирует $B_{\hv}$.
+\phence при счётном~$\carrierLattice$ пространство
+\[
+  \mathcal{C}=\bigl\{z(x)\in\mathbb{C}^2\bigr\}_{x\in\carrierLattice}
+\]
+есть счётное произведение конечных множеств и само счётно.
+\pfrom{сохранения нормы и обратимости шага (\Axref{ax:A13})}
 $g$ --- перестановка (биекция) на~$\mathcal{C}$.
 \end{proof}
 
@@ -32,24 +37,35 @@ $\hv$ --- узел решётки (регистр~\cref{def:field-a3}).
 \end{lemma}
 
 \begin{proof}
-Теорема~\ref{thm:fcc-choice} фиксирует $\carrierLattice=\mathrm{FCC}$ и $|N|=12$.
+\pfrom{теоремы~\ref{thm:fcc-choice}}
+\[
+  \carrierLattice=\mathrm{FCC},\qquad |N(x)|=12.
+\]
 
 \smallskip
 \emph{Шаг~$\caStepSpace$.}
-Пусть $a=\caStepSpace$ --- ребро кубооктаэдра однотактового тела (\cref{sec:fcc-kappa}).
-Объём ячейки Вороного FCC при $a=\caStepSpace$ равен $v_{\hv}=a^3/\sqrt{2}=\caStepSpace^3/\sqrt{2}$;
-это минимальный регистр, согласованный с плотнейшей упаковкой.
+\pusing{геометрии однотактового тела (\cref{sec:fcc-kappa})}
+пусть $a=\caStepSpace$ --- ребро кубооктаэдра.
+\pfollows
+объём ячейки Вороного
+\[
+  v_{\hv}=\frac{a^3}{\sqrt{2}}=\frac{\caStepSpace^3}{\sqrt{2}},
+\]
+минимальный регистр при плотнейшей упаковке.
 
 \smallskip
 \emph{Шаг~$\htick$.}
 Тот же раздел задаёт $\caKappaGeom=R_{\mathrm{in}}/R_{\mathrm{out}}=1/\sqrt{2}$ и
 $\caSignalSpeed=\caStepSpace/\htick$.
-После SI-моста (\cref{def:si-bridge}) $\htick=\caKappaGeom\,t_P$ при $\ell_P:=\caStepSpace$,
-откуда $\caSignalSpeed=\sqrt{2}\,\speedC$ --- согласованность тактовой и макроскопической скоростей.
+\pfrom{SI-моста (\cref{def:si-bridge}) при $\ell_P:=\caStepSpace$}
+\[
+  \htick=\caKappaGeom\,t_P,\qquad \caSignalSpeed=\sqrt{2}\,\speedC.
+\]
 
 \smallskip
 \emph{Ячейка~$\hv$.}
-По \cref{def:field-a3} $\PlanckCell$ --- узел FCC (место регистра~$z$); $dV$ --- объём Вороного этого узла ($V_P/\sqrt{2}$ при $a=\ell_P$).
+\pusing{\cref{def:field-a3}}
+$\PlanckCell$ --- узел FCC (регистр~$z$); $dV$ --- объём Вороного ($V_P/\sqrt{2}$ при $a=\ell_P$).
 \end{proof}
 
 \begin{lemma}[Атомность регистра]
@@ -85,27 +101,23 @@ $\caSignalSpeed=\caStepSpace/\htick$.
 \end{theorem}
 
 \begin{proof}
-\emph{(i)}~Предположим, что $g$ --- «поле на континууме'' в классическом смысле:
-несчётное семейство $z(x)$ при $x\in\mathbb{R}^3$ с непрерывными координатами и произвольными
-значениями в~$\mathbb{C}^2$.
-Тогда уже одна точка $x$ несёт несчётное число степеней свободы, тогда как допустимый закон
-действует на счётном пространстве конфигураций (\cref{lem:countable-config}) с конечным алфавитом
-на узле.
-Биективная эволюция~$g$ на таком пространстве не воспроизводит континуальный поток:
-у потока на~$\mathbb{R}^3$ степеней свободы больше, чем у конечного алфавита на узле.
-Следовательно, $g$ --- дискретная динамика на~$\carrierLattice$.
+\emph{(i).}
+Предположим, $g$ --- «поле на континууме'': $z(x)$ при $x\in\mathbb{R}^3$ с несчётными степенями свободы в точке.
+\pfrom{леммы~\ref{lem:countable-config}}
+допустимый закон действует на счётном $\mathcal{C}$ с конечным алфавитом на узле.
+Биективная эволюция на $\mathcal{C}$ не воспроизводит континуальный поток на~$\mathbb{R}^3$.
+\phence $g$ --- дискретная динамика на~$\carrierLattice$.
 
 \smallskip
-\emph{(ii)}~Носитель и шкала уже выведены.
-Теорема~\ref{thm:fcc-choice} даёт $\carrierLattice=\mathrm{FCC}$ и $|N|=12$.
-Объём ячейки Вороного при ребре $a=\caStepSpace$ равен $v_{\hv}=\caStepSpace^3/\sqrt{2}$ (\cref{sec:fcc-kappa}).
-Отношение радиусов оболочки $\caKappaGeom=1/\sqrt{2}$ фиксирует такт через макроскопическую скорость: $\htick=\caKappaGeom\, t_P$ при $\ell_P:=\caStepSpace$, откуда $\caSignalSpeed=\sqrt{2}\,\speedC$.
-Узел регистра --- одна ячейка этой решётки (\cref{def:field-a3}).
+\emph{(ii).}
+\pfrom{теоремы~\ref{thm:fcc-choice} и леммы~\ref{lem:fcc-scale}}
+существуют $\carrierLattice=\mathrm{FCC}$, $|N|=12$, шаг $\caStepSpace$, такт $\htick$ и ячейка~$\hv$.
 
 \smallskip
-\emph{(iii)}~Если бы подрешётка с шагом $\caStepSpace'<\caStepSpace$ несла тот же закон~$g$,
-на одном узле FCC оказалось бы несколько регистров с тем же топологическим зарядом на границе одной ячейки.
-Это запрещено \cref{lem:register-atom}: заряд и устойчивость полюса сидят на границе именно одной~$\hv$, а бюджет регистра не делится без смены алфавита.
+\emph{(iii).}
+Если подрешётка с $\caStepSpace'<\caStepSpace$ несла тот же~$g$, на узле FCC было бы несколько регистров с общим топологическим зарядом.
+\pfrom{леммы~\ref{lem:register-atom}}
+это запрещено: заряд и полюс привязаны к одной~$\hv$, бюджет не делится без смены алфавита.
 \end{proof}
 
 \begin{corollary}[Дискретность как следствие]

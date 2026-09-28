@@ -172,35 +172,35 @@ $[u_P]=[m_P c^{2}/\ell_P^{3}]=\mathrm{ML^{-1}T^{-2}}$ (энергия/объём
 \end{theorem}
 
 \begin{proof}
-По \cref{sec:bit-budget} информационный бюджет ячейки $B_{\hv}=2\pi/\ln 2$,
-$N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512$.
-Число иерархических ступеней ослабления на~$\Tlayer$
+\pfrom{\cref{sec:bit-budget}}
+\[
+  B_{\hv}=\frac{2\pi}{\ln 2},\qquad N_{\mathrm{ring}}=2^{\lfloor B_{\hv}\rfloor}=512.
+\]
+\pfollows
 \[
   N_{\mathrm{hier}}=\lfloor B_{\hv}\rfloor-1=8
 \]
---- битовая глубина минус один бит занятости планкона (\cref{ch:matter}).
+(битовая глубина минус бит занятости планкона, \cref{ch:matter}).
 
 \smallskip
 \emph{Пик.}
-Каждый электрослабый канал ослабляется на один фактор~$\alpha_{\mathrm{fs}}$
-(\cref{thm:alpha}); после $N_{\mathrm{hier}}$ ступеней
+\pusing{теоремы~\ref{thm:alpha}}
+каждый электрослабый канал ослабляется на $\alpha_{\mathrm{fs}}$; после $N_{\mathrm{hier}}$ ступеней
 \[
-  v_{\mathrm{peak}}=\alpha_{\mathrm{fs}}^{\,N_{\mathrm{hier}}} E_P
-  =\alpha_{\mathrm{fs}}^{8} E_P.
+  v_{\mathrm{peak}}=\alpha_{\mathrm{fs}}^{8} E_P.
 \]
 
 \smallskip
 \emph{Интеграл readout'а.}
-Теорема~\ref{thm:t-cr}: осреднение~$\mathcal{B}$ на масштабах $\gg\caStepSpace$
-даёт гауссово ядро ширины~$\sigma_R$.
-Для стандартной нормали отношение пиковой плотности к интегральной амплитуде
-равно $\sqrt{2\pi}$:
-локальный пик $v_{\mathrm{peak}}$ на~$M$ readout'ится как
+\pfrom{теоремы~\ref{thm:t-cr} и \cref{def:soft-readout}}
+осреднение~$\mathcal{B}$ даёт гауссово ядро; для нормали
+\[
+  \frac{\text{пик}}{\int}=\sqrt{2\pi}.
+\]
+\psubst{$v_{\mathrm{peak}}=\alpha_{\mathrm{fs}}^{8} E_P$}
 \[
   v=v_{\mathrm{peak}}\sqrt{2\pi}\approx 246\ \mathrm{GeV}.
 \]
-Множитель $\sqrt{2\pi}$ --- не подгонка, а следствие биномиального осреднения
-(\cref{def:soft-readout}) в гауссовом пределе.
 \end{proof}
 
 \section{Массы частиц}

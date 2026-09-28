@@ -238,8 +238,9 @@ $g$ обратим на дискретном алфавите: $\exists g^{-1}$,
 \end{proposition}
 
 \begin{proof}
-При фиксированном $\symCapitalPsi^t$ правая часть принимает одно значение.
-Индукция по такту даёт $\symCapitalPsi^t$ из $\symCapitalPsi^0$ и правила~$g$.
+\pfrom{определения $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$}
+при фиксированном $\symCapitalPsi^t$ правая часть однозначна.
+\phence индукция по~$t$ восстанавливает $\symCapitalPsi^t$ из $\symCapitalPsi^0$ и правила~$g$.
 \end{proof}
 
 На $\Tlayer$ частота исхода есть квадрат модуля амплитуды \eqref{eq:born};
@@ -288,10 +289,14 @@ $\sum_x|z|^2\to 0$, или глобально $z\equiv 0$ устойчиво, и
 \end{lemma}
 
 \begin{proof}
-По \cref{def:state-evolution} на каждом такте выполняется $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$,
-шаг~$\htick$ и закон~$g$ не зависят от~$t$.
-Остановка D1 требует либо прекращения применения~$g$, либо $\htick\to\infty$,
-либо смены/обнуления~$g$ --- это изменение постановки задачи.
+\pusing{определения~\ref{def:state-evolution}}
+\[
+  \symCapitalPsi^{t+1}=g(\symCapitalPsi^t)\quad\text{для всех }t\in\mathbb{Z},
+\]
+при постоянных $\htick$ и~$g$.
+\pfrom{определения D1 (\ref{def:D1})}
+остановка потребовала бы прекращения~$g$, $\htick\to\infty$ или смены закона ---
+это уже другая постановка, не \cref{def:state-evolution}.
 \end{proof}
 
 \begin{lemma}[Сохранение информации]
@@ -317,8 +322,11 @@ $N\to 0$ на $\Mlayer$ невозможно, если $N(0)>0$.
 \end{corollary}
 
 \begin{proof}
-Если $N(0)>0$, то индукция по \cref{lem:232} даёт $N(t)=N(0)>0$ для каждого~$t\in\mathbb{Z}$.
-Последовательность $(N(t))$ не может сходиться к нулю при положительном начальном значении.
+\pfrom{леммы~\ref{lem:232} при $N(0)>0$}
+\[
+  N(t)=N(0)>0\qquad\text{для всех }t\in\mathbb{Z}.
+\]
+\phence предел $N\to 0$ недостижим.
 \end{proof}
 
 \begin{lemma}[Фазовая энтропия и норма]
@@ -327,9 +335,10 @@ $N\to 0$ на $\Mlayer$ невозможно, если $N(0)>0$.
 \end{lemma}
 
 \begin{proof}
-При фиксированной норме~$N$ меняются аргументы~$z$ в $\varepsilon$-окрестности.
-Модуль $|z|$ при этом сохраняется.
-Рост фазовой энтропии не содержит механизма $N\to 0$.
+\pusing{фиксированной нормы $N$}
+меняются только аргументы~$z$; $|z|$ сохраняется.
+\pfollows
+рост фазовой энтропии не даёт механизма $N\to 0$.
 \end{proof}
 
 \begin{lemma}[Нет устойчивого $z\equiv 0$]
@@ -338,11 +347,12 @@ $z(x,t)\equiv 0$ не устойчивое состояние $g$.
 \end{lemma}
 
 \begin{proof}
-При $z\equiv 0$ унитарная фаза $z e^{i\Phi}$ остаётся нулём при любой~$\Phi$:
-локальный шаг не может вывести поле из «мёртвой'' точки --- эволюция останавливается.
-Вакуум --- осциллирующий фон с $\rho_{\mathrm{field}}>0$.
-Следовательно, состояние~$g$ имеет $\rho_{\mathrm{field}}>0$.
-Вместе с \cref{cor:232a} путь D2 через $N\to 0$ или глобальный $z\equiv 0$ закрыт.
+\pfrom{тождества $z\equiv 0$}
+фаза $z e^{i\Phi}$ остаётся нулём при любой~$\Phi$:
+локальный шаг не выводит поле из «мёртвой'' точки.
+\pusing{\Axref{ax:A5}}
+вакуум --- осциллирующий фон с $\rho_{\mathrm{field}}>0$.
+\phence глобально устойчивый $z\equiv 0$ исключён; вместе с \cref{cor:232a} ветвь $N\to 0$ D2 закрыта.
 \end{proof}
 
 \begin{lemma}[Микрообратимость]
@@ -351,13 +361,15 @@ $g$ обратима на $Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-\Axref{ax:A13} постулирует $g^{-1}$ с $g^{-1}(g(\symCapitalPsi))=\symCapitalPsi$ на $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$.
-Обратимость реализуется алгеброй «лягушка'':
+\pfrom{\Axref{ax:A13}}
+существует $g^{-1}$ с $g^{-1}(g(\symCapitalPsi))=\symCapitalPsi$ на $\mathbb{Z}_{N_{\mathrm{ring}}}[i]$.
+\pusing{схемы «лягушка'' (\cref{sec:congruence}, CL-1)}
 \[
-  Z^+(x,t)+Z^-(x,t)=2Z(x,t)+\lfloor\mathcal{N}(x,t)\rfloor
+  Z^+(x,t)+Z^-(x,t)=2Z(x,t)+\lfloor\mathcal{N}(x,t)\rfloor,
 \]
-(\cref{sec:congruence}, CL-1) при учёте фазовых импульсов~$\Phi$.
-Каждый микрошаг --- перестановка на конечном пространстве конфигураций.
+откуда явно восстанавливается $Z^-$ при учёте фазовых импульсов~$\Phi$.
+\pfollows
+микрошаг --- перестановка на конечном $\mathcal{C}$.
 \end{proof}
 
 \begin{lemma}[$\mathcal{B}$ необратима]
@@ -366,12 +378,14 @@ $g$ обратима на $Z_N[i]$.
 \end{lemma}
 
 \begin{proof}
-По \cref{def:soft-readout} $\Phi=\mathcal{B}z$ --- свёртка с ядром
-$W=\tfrac14[1,2,1]^{\otimes 2R}$ (на срезе) или эквивалентным $3\times 3$-ядром.
-Ядро $W$ не сосредоточено в одной точке и не равно $\delta$-функции,
-значит, существуют $z\ne z'$ с $\mathcal{B}z=\mathcal{B}z'$
-(добавление к $z$ осцилляции, ортогональной ядру на конечном $\carrierLattice$).
-Отображение $z\mapsto\mathcal{B}z$ не инъективно.
+\pusing{\cref{def:soft-readout}}
+\[
+  \Phi=\mathcal{B}z,\qquad W=\tfrac14[1,2,1]^{\otimes 2R}
+\]
+(на срезе) или эквивалентное $3\times 3$-ядро.
+\pfrom{$W\ne\delta$ и конечности $\carrierLattice$}
+существуют $z\ne z'$ с $\mathcal{B}z=\mathcal{B}z'$.
+\phence $\mathcal{B}$ не инъективна при $R\ge 1$.
 \end{proof}
 
 \begin{proposition}[D3 не нарушает $\Mlayer$]
@@ -381,7 +395,8 @@ $\nu_{\mathrm{CA}}$-затухание на $\Tlayer$ --- не член $g$; $N$
 
 \begin{proof}
 \emph{Первое утверждение.}
-Закон~$g$ на~$\Mlayer$ --- композиция локальных унитарных преобразований
+\pusing{структуры~$g$ на~$\Mlayer$}
+закон --- композиция локальных унитарных преобразований
 и фаз $e^{i\Phi(z)}$; в нём нет вещественного члена $\nu_{\mathrm{CA}}\nabla^2 z$,
  иначе $|z|$ перестал бы быть инвариантом в нарушение \Axref{ax:A3}.
 Кинематическая вязкость $\nu_{\mathrm{CA}}\nabla^2\Phi$ появляется только в эффективном
@@ -416,14 +431,20 @@ D5 $\Leftrightarrow$ $z(x,t)\equiv c$ на торе $\carrierLattice$, $c\in Z_N
 \end{lemma}
 
 \begin{proof}
-\emph{($\Rightarrow$)}~D5 означает $\lfloor\mathcal{N}\rfloor\equiv 0$ на всём $\carrierLattice$.
-В симметричной «лягушке'' это даёт $\Phi=0$ на всех столкновениях,
-дискретная CR-совместимость (\Axref{ax:A9}) и связность графа~$N$ $\Rightarrow$
-$z(x)=\langle z\rangle_N$ на каждом узле, то есть $z(x)\equiv c$ для некоторого $c\in Z_N[i]$.
+\emph{($\Rightarrow$).}
+\pfrom{D5 (\ref{def:D5})}
+$\lfloor\mathcal{N}\rfloor\equiv 0$ на всём $\carrierLattice$.
+\pfollows
+$\Phi=0$ на столкновениях; по \Axref{ax:A9} и связности~$N$
+\[
+  z(x)\equiv c\in Z_N[i].
+\]
 
 \smallskip
-\emph{($\Leftarrow$)}~Если $z(x)\equiv c$, то все локальные разности и $\lfloor\mathcal{N}\rfloor$ обнуляются,
-$(Z_t,Z_{t-1})$ не меняются и $g(\symCapitalPsi^*)=\symCapitalPsi^*$ --- неподвижная точка «лягушка''.
+\emph{($\Leftarrow$).}
+\pfrom{$z(x)\equiv c$}
+все $\lfloor\mathcal{N}\rfloor$ обнуляются, $(Z_t,Z_{t-1})$ не меняются.
+\phence $g(\symCapitalPsi^*)=\symCapitalPsi^*$.
 \end{proof}
 
 \begin{lemma}[A5/A6 исключают физические D5]
@@ -432,12 +453,11 @@ $(Z_t,Z_{t-1})$ не меняются и $g(\symCapitalPsi^*)=\symCapitalPsi^*$ 
 \end{lemma}
 
 \begin{proof}
-Пусть $z\equiv c$ --- неподвижная точка из \cref{lem:238a}.
-При $c=0$ конфигурация противоречит \Axref{ax:A5} (мёртвый вакуум без кипения).
-При $c\ne 0$ и отсутствии фазовой динамики поле статично на всех тактах:
-\Axref{ax:A5} требует осциллирующего фона, \Axref{ax:A6} --- запрещает глобально
-«замороженную'' голоморфность при фиксированном~$N$.
-Ни один случай не A5-физичен.
+\pusing{классификации \cref{lem:238a}}
+пусть $z\equiv c$ --- неподвижная точка.
+При $c=0$ --- противоречие \Axref{ax:A5}.
+При $c\ne 0$ поле статично на всех тактах, что нарушает \Axref{ax:A5} и \Axref{ax:A6}.
+\phence ни один случай не A5-физичен.
 \end{proof}
 
 \begin{theorem}[Нет физических неподвижных точек без кипения]
@@ -446,11 +466,12 @@ $(Z_t,Z_{t-1})$ не меняются и $g(\symCapitalPsi^*)=\symCapitalPsi^*$ 
 \end{theorem}
 
 \begin{proof}
-Пусть $g(\symCapitalPsi^*)=\symCapitalPsi^*$ --- A5-физичная неподвижная точка без микрокипения.
-По \cref{lem:238a} тогда $z(x)\equiv c$ на связном~$\carrierLattice$.
-\cref{lem:238b} исключает $c=0$ (мёртвый вакуум) и $c\ne 0$ (статичная конфигурация
-при требуемом A5-кипении и запрете A6 на «заморозку'').
-Таких точек нет.
+Пусть $g(\symCapitalPsi^*)=\symCapitalPsi^*$ --- A5-физичная точка без микрокипения.
+\pfrom{леммы~\ref{lem:238a}}
+$z(x)\equiv c$ на связном~$\carrierLattice$.
+\pfrom{леммы~\ref{lem:238b}}
+ни $c=0$, ни статичное $c\ne 0$ не допустимы.
+\phence таких точек нет.
 \end{proof}
 
 \begin{figure}[htbp]
