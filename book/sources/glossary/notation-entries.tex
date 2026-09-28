@@ -3,6 +3,8 @@
 % Имена макросов: нельзя \NotationDescc0 (TeX читает как \NotationDescc+0); только \NotationDescCzero.
 % glossaries раскрывает description в преамбуле: математика только \(...\) (нижние индексы
 % внутри math: \(p_0\), не ASCII p\_0 в прозе). Не $...$ и не \Cref.
+% Колонка «Обозначение» (поле name): только символы и индексы в имени ($N_{\mathrm{ring}}$,
+% $N_{12}$), без подстановки численных значений (${=}512$, ${=}13$ и т.п.).
 
 \newcommand{\NotationDescMlayer}{решётка, локальный закон $g$.}
 \newcommand{\NotationDescTlayer}{осреднённая физика, readout, согласование с экспериментом.}
@@ -13,7 +15,7 @@
 \newcommand{\NotationDescdt}{длительность одного такта $g$ (шаг--такт); в нат.\ ед.\ на $M$: $\Delta t{=}1$; код \texttt{hT}. См. \hyperref[sec:coords-dh-dt]{§0.1}.}
 \newcommand{\NotationDesctau}{номер такта (поколение CA); связь с \(t_{\mathrm{SI}}\) после SI-моста.}
 \newcommand{\NotationDescCzero}{тактовая скорость сигнала; \(c_0=a/\Delta t\). См. \hyperref[sec:two-c]{§1}.}
-\newcommand{\NotationDescCspeed}{скорость света после SI-моста ($c=\kappa c_0$). См. \hyperref[sec:two-c]{§1}.}
+\newcommand{\NotationDescCspeed}{скорость света после SI-моста: $c=\kappa c_0$. См. \hyperref[sec:two-c]{§1}.}
 \newcommand{\NotationDesckgeom}{безразмерный коэффициент геометрии носителя (kappa в коде). См. \hyperref[sec:fcc-kappa]{§1}.}
 \newcommand{\NotationDescdhdt}{внешние координаты dh и dt (dh=a, dt=\(\Delta t\)). См. \hyperref[sec:coords-dh-dt]{§0.1}.}
 \newcommand{\NotationDescszero}{ступень действия на одну ячейку и один такт; порождает лестницу квантов. См. \hyperref[sec:theorem-51]{теорему~5.1}.}
@@ -31,7 +33,7 @@
 \newcommand{\NotationDesctSI}{время прибора (осреднение по тактам).}
 \newcommand{\NotationDesctP}{планковское время; \(\Delta t=\kappa\,t_P\) (SI-мост).}
 \newcommand{\NotationDesclogtau}{порядок числа тактов (логарифмическая шкала).}
-\newcommand{\NotationDescNring}{размер фазового кольца \(N_{\mathrm{ring}}\) (дискретная фаза).}
+\newcommand{\NotationDescNring}{размер фазового кольца; \(N_{\mathrm{ring}}=2^{\lfloor B_V\rfloor}\) (дискретная фаза). См. \hyperref[thm:cell-bit-budget]{теорему о бит-бюджете}.}
 \newcommand{\NotationDescBhv}{информационный бюджет ячейки $B_V$; связь с \(N_{\mathrm{ring}}\) (дискретная фаза). См. \hyperref[sec:planckon-internal-spectrum]{§5.0.4}.}
 \newcommand{\NotationDescphiPhi}{дискретная фаза $\phaseVarphi_{\mathrm{disc}}$ и импульс за тик $\symCapitalPhi$.}
 \newcommand{\NotationDescNphi}{число секторов Heisenberg-кванта фазы.}
@@ -64,7 +66,7 @@
 \newnotationentryM{symb:c0}{lattice-04}{\ensuremath{c_0}}{\NotationDescCzero}{\NotationUnitMetrePerSecond}
 \newnotationentryM{symb:kgeom}{lattice-06}{\ensuremath{\kappa}}{\NotationDesckgeom}{\NotationUnitDash}
 \newnotationentryM{symb:dhdt}{lattice-07}{\ensuremath{(dh{,}dt)}}{\NotationDescdhdt}{\NotationUnitDash}
-\newnotationentryT{symb:c}{lattice-05}{\ensuremath{c{=}\kappa c_0}}{\NotationDescCspeed}{\NotationUnitMetrePerSecond}
+\newnotationentryT{symb:c}{lattice-05}{\ensuremath{c}}{\NotationDescCspeed}{\NotationUnitMetrePerSecond}
 
 \newnotationsectionM{symb:sec-ladder}{ladder-00}{\NotationSecLadderTitle}
 \newnotationentryM{symb:s0}{ladder-01}{\ensuremath{s_0}}{\NotationDescszero}{\NotationUnitJouleSecond}
@@ -88,15 +90,18 @@
 \newnotationentryT{symb:logtau}{time-03}{\ensuremath{\log_{10}|\tau|}}{\NotationDesclogtau}{\NotationUnitDash}
 
 \newnotationsectionM{symb:sec-phase}{phase-00}{\NotationSecPhaseTitle}
-\newnotationentryM{symb:Nring}{phase-01}{\ensuremath{N_{\mathrm{ring}}{=}512}}{\NotationDescNring}{\NotationUnitDash}
+\newnotationentryM{symb:Nring}{phase-01}{\ensuremath{N_{\mathrm{ring}}}}{\NotationDescNring}{\NotationUnitDash}
 \newnotationentryM{symb:BV}{phase-02}{\ensuremath{B_V}}{\NotationDescBhv}{\NotationUnitDash}
 \newnotationentryM{symb:phiPhi}{phase-03}{\ensuremath{\varphi_{\mathrm{disc}}{,}\,\Phi}}{\NotationDescphiPhi}{\NotationUnitPhaseTick}
-\newnotationentryM{symb:Nphi}{phase-04}{\ensuremath{N_\phi{=}13}}{\NotationDescNphi}{\NotationUnitDash}
+\newnotationentryM{symb:Nphi}{phase-04}{\ensuremath{N_\phi}}{\NotationDescNphi}{\NotationUnitDash}
 
 \newnotationsectionM{symb:sec-namedN}{namedN-00}{\NotationSecNamedNTitle}
-\newnotationentryM{symb:N12}{namedN-01}{\ensuremath{N_{12}{=}12}}{\NotationDescNFCC}{\NotationUnitDash}
+\newnotationentryM{symb:N12}{namedN-01}{\ensuremath{N_{12}}}{\NotationDescNFCC}{\NotationUnitDash}
 \newnotationentryM{symb:Npack}{namedN-02}{\ensuremath{N_{\mathrm{pack}}}}{\NotationDescNpack}{\NotationUnitDash}
 \newnotationentryT{symb:Nhier}{namedN-03}{\ensuremath{N_{\mathrm{hier}}}}{\NotationDescNhier}{\NotationUnitDash}
 
 \input{glossary/notation-entries-physics.tex}
 \input{glossary/notation-entries-autogen.tex}
+
+\notationBlkMcloseblock
+\notationBlkTcloseblock

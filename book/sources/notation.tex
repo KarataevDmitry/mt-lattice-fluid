@@ -7,11 +7,13 @@
 \begingroup
 \RenewDocumentCommand \gls { m } { \glsentryname {#1} }
 % glossaries с title={} пишет в TOC пустую «главу»; отфильтровываем только пустой заголовок.
+\Needspace{11\baselineskip}%
 \noindent{\large\bfseries Слой $M$}\par
-\vspace{0.4em}
+\vspace{0.35em}
 \printnotationglossary{M}
 
+\Needspace{11\baselineskip}%
 \noindent{\large\bfseries Слой $T$}\par
-\vspace{0.4em}
+\vspace{0.35em}
 \printnotationglossary{T}
 \endgroup
