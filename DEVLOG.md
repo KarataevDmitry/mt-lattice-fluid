@@ -6,6 +6,18 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-28 · §5.0.4-B · floor1-shell-transitions-boil
+
+**UoW:** один `VORTEX_P` на `VACUUM_BOIL`; профиль \(|\Delta\varphi|\) по координационным сферам FCC (proxy \(\rho_\Theta\)); антипод как фон кипения.
+
+**Код:** `mt_ca/floor1_shell_dynamics.py` · `tools/floor1_shell_dynamics_probe.py` · `SI.floor1_shell_transitions_boil_row()`.
+
+**Verify:** **`Floor1_shell_transitions_boil`** PASS · bulk (~1 s cuda); `--tick` — устойчивость «shell2 без shell1».
+
+**Критерии (частичный inter-shell graph):** ядро \(|Q|=1\) + shell-1 active; избыток на звезде vs антипод; norm ×12. Полный граф переходов — по-прежнему soft-open в MODEL.
+
+---
+
 ## 2026-09-28 · §5.0.3 · floor1-n-body-chain (4 cores, FCC NN path)
 
 **UoW:** четыре планкона на цепочке FCC NN на `VACUUM_BOIL` — `+−+−`, `++−−`, `++++`; трекинг ядер, граф-расстояния, счётчик устойчивых \(|Q|=1\).
@@ -75,7 +87,7 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Книга:** `11-floor1.tex` — `\cref{sec:floor1-shell-catalog}` + таблицы закрыто/открыто.
 
-**Soft-open:** полный граф переходов занятости сфер под $g$ в заполненной A5-ванне (связано с `Floor1_C3_gamma_close`).
+**Soft-open:** полный граф переходов занятости сфер под $g$ в заполненной A5-ванне — частичный dogfood ✅ **`Floor1_shell_transitions_boil`** (ground shell-1 на boil); полный отбор — open.
 
 ## 2026-09-27 · §5.0.4-A · Γ_hV orbit table + branches (floor 0)
 

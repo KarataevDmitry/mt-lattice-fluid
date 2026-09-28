@@ -255,6 +255,28 @@ def check_floor1_two_body_nn(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_shell_transitions_boil(device: str = "cpu") -> dict:
+    """§5.0.4-B — shell-1 ρ_Θ halo persists on VACUUM_BOIL; shell 2–3 bounded under g."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor1_shell_transitions_boil_row(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["ground_persists"])
+        and bool(row["core_stable_final"])
+        and bool(row["shell1_active_final"])
+        and float(row["shell1_excess_frac"]) >= 0.08
+    )
+    return {
+        "id": "Floor1_shell_transitions_boil",
+        "ground_persists": row["ground_persists"],
+        "shell2_frac_above_floor": row["shell2_frac_above_floor"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_n_body_chain(device: str = "cpu") -> dict:
     """§5.0.3 — four planckons on FCC chain: ± channels vs all-like."""
     from mt_ca.si_constants import SI

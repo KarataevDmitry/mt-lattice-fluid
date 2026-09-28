@@ -977,6 +977,44 @@ class SIFloor1Rows:
             "note": row["note"],
         }
 
+    def floor1_shell_transitions_boil_row(
+        self,
+        *,
+        size: int = 24,
+        relaxation: int = 12,
+        n_max: int = 72,
+        device: str | None = None,
+    ) -> dict[str, float | int | str | bool | dict]:
+        """§5.0.4-B — ρ_Θ shells on planted vortex in VACUUM_BOIL (partial g-graph dogfood)."""
+        from mt_ca.floor1_shell_dynamics import default_sim_device, run_shell_dynamics_harness
+
+        dev = device or default_sim_device()
+        row = run_shell_dynamics_harness(
+            size=size,
+            relaxation=relaxation,
+            n_max=n_max,
+            device=dev,
+            tick_resolve=False,
+        )
+        return {
+            "theorem": "§5.0.4-B · floor1-shell-transitions-boil — ground shell-1 under A5",
+            "size": size,
+            "relaxation": relaxation,
+            "n_max": n_max,
+            "device": dev,
+            "derivation_closed": False,
+            "checks_ok": row["checks_ok"],
+            "ground_persists": row["ground_persists"],
+            "core_stable_final": row["core_stable_final"],
+            "shell1_active_final": row["shell1_active_final"],
+            "shell1_excess_frac": row["shell1_excess_frac"],
+            "shell2_excess_frac": row["shell2_excess_frac"],
+            "shell3_excess_frac": row["shell3_excess_frac"],
+            "shell2_frac_above_floor": row["shell2_frac_above_floor"],
+            "partial_inter_shell_graph": row["partial_inter_shell_graph"],
+            "note": row["note"],
+        }
+
     def floor1_n_body_row(
         self,
         *,
