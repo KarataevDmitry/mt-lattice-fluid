@@ -5,6 +5,7 @@ Not global torus winding (see annihilation_t_stats.py).
 """
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -277,6 +278,7 @@ def run_two_body_scenario(
     n_max: int = 72,
     device: str | None = None,
     contour_radius: int = 2,
+    tick_resolve: bool = True,
 ) -> dict[str, Any]:
     q_a, q_b, graph_sep = scenario_charges(scenario)
     device = device or default_sim_device()
@@ -316,29 +318,88 @@ def run_two_body_scenario(
     )
     initial_like_ok = pair_like_persisted(pa0, pb0, like_sign) if is_like else None
 
+    t_wall0 = time.perf_counter()
     if relaxation > 0:
         sim.step(relaxation)
 
     ticks_sample: list[dict[str, Any]] = []
     track_a, track_b = site_a, site_b
+    event_tick: int | None = None
+    pa_f: CoreProbe | None = None
+    pb_f: CoreProbe | None = None
+    ticks_probed = 0
 
-    sim.step(n_max)
-    rho = spinor_density(sim.z)
-    pa_f, pb_f, _, _ = _probe_tracked_pair(
-        sim.z, track_a, track_b, site_a, site_b, contour_radius=contour_radius, cfg=cfg, rho=rho
-    )
+    def _record_tick(t: int, pa: CoreProbe, pb: CoreProbe, ann: bool) -> None:
+        ticks_sample.append(
+            {
+                "t": t,
+                "Q_a": pa.Q,
+                "Q_b": pb.Q,
+                "Q_net": pa.Q + pb.Q,
+                "pair_annihilated": ann,
+                "like_persisted": pair_like_persisted(pa, pb, like_sign) if is_like else None,
+            }
+        )
+
+    if tick_resolve:
+        consecutive_ann = 0
+        for t in range(1, n_max + 1):
+            sim.step(1)
+            rho = spinor_density(sim.z)
+            ticks_probed += 1
+            pa, pb, track_a, track_b = _probe_tracked_pair(
+                sim.z,
+                track_a,
+                track_b,
+                site_a,
+                site_b,
+                contour_radius=contour_radius,
+                cfg=cfg,
+                rho=rho,
+            )
+            ann = pair_annihilated(pa, pb)
+            if ann:
+                consecutive_ann += 1
+            else:
+                consecutive_ann = 0
+            if event_tick is None:
+                if consecutive_ann >= 2:
+                    event_tick = t - 1
+                elif t == n_max and ann:
+                    event_tick = t
+            if is_pm and consecutive_ann >= 2:
+                pa_f, pb_f = pa, pb
+                _record_tick(t, pa, pb, ann)
+                break
+            elif t == n_max:
+                pa_f, pb_f = pa, pb
+                _record_tick(t, pa, pb, ann)
+        if pa_f is None or pb_f is None:
+            rho = spinor_density(sim.z)
+            pa_f, pb_f, _, _ = _probe_tracked_pair(
+                sim.z,
+                track_a,
+                track_b,
+                site_a,
+                site_b,
+                contour_radius=contour_radius,
+                cfg=cfg,
+                rho=rho,
+            )
+    else:
+        sim.step(n_max)
+        rho = spinor_density(sim.z)
+        ticks_probed = 1
+        pa_f, pb_f, _, _ = _probe_tracked_pair(
+            sim.z, track_a, track_b, site_a, site_b, contour_radius=contour_radius, cfg=cfg, rho=rho
+        )
+        ann = pair_annihilated(pa_f, pb_f)
+        if is_pm and ann:
+            event_tick = n_max
+        _record_tick(n_max, pa_f, pb_f, ann)
+
     ann_final = pair_annihilated(pa_f, pb_f)
-    event_tick: int | None = n_max if (is_pm and ann_final) else None
-    ticks_sample.append(
-        {
-            "t": n_max,
-            "Q_a": pa_f.Q,
-            "Q_b": pb_f.Q,
-            "Q_net": pa_f.Q + pb_f.Q,
-            "pair_annihilated": ann_final,
-            "like_persisted": pair_like_persisted(pa_f, pb_f, like_sign) if is_like else None,
-        }
-    )
+    wall_s = time.perf_counter() - t_wall0
 
     n_late = sim.norm()
     norm_drift_rel = abs(n_late - n0) / max(n0, 1e-12)
@@ -364,6 +425,9 @@ def run_two_body_scenario(
         "norm_drift_rel": norm_drift_rel,
         "norm_ok": norm_ok,
         "event_tick": event_tick,
+        "tick_resolve": tick_resolve,
+        "ticks_probed": ticks_probed,
+        "wall_s": wall_s,
         "pair_annihilated_final": pair_annihilated(pa_f, pb_f),
         "initial_like_ok": initial_like_ok,
         "like_persisted_final": pair_like_persisted(pa_f, pb_f, like_sign) if is_like else None,
@@ -380,9 +444,11 @@ def run_two_body_harness(
     relaxation: int = 12,
     n_max: int = 72,
     device: str | None = None,
+    tick_resolve: bool = True,
 ) -> dict[str, Any]:
     """Run pp_nn, mm_nn, pm_nn and aggregate verify criteria."""
     device = device or default_sim_device()
+    t0 = time.perf_counter()
     rows = {
         sid: run_two_body_scenario(
             sid,
@@ -390,9 +456,11 @@ def run_two_body_harness(
             relaxation=relaxation,
             n_max=n_max,
             device=device,
+            tick_resolve=tick_resolve,
         )
         for sid in ("pp_nn", "mm_nn", "pm_nn")
     }
+    harness_wall_s = time.perf_counter() - t0
     pm_tick = rows["pm_nn"]["event_tick"]
     pp_ann = rows["pp_nn"]["pair_annihilated_final"]
     pm_final = rows["pm_nn"]["pair_annihilated_final"]
@@ -415,6 +483,8 @@ def run_two_body_harness(
         "relaxation": relaxation,
         "n_max": n_max,
         "device": device,
+        "tick_resolve": tick_resolve,
+        "harness_wall_s": harness_wall_s,
         "note": (
             "Two planckons on 3D VACUUM_BOIL (single-axis ramp); "
             "pm_nn: both cores lose stable |Q|=1; pp/mm: planted like-sign, no annihilation channel; "

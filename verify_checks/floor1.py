@@ -255,6 +255,28 @@ def check_floor1_two_body_nn(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_n_body_chain(device: str = "cpu") -> dict:
+    """§5.0.3 — four planckons on FCC chain: ± channels vs all-like."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor1_n_body_row(device=device)
+    scenarios = row["scenarios"]
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["pm_channel_opens"])
+        and scenarios["chain4_pp"]["n_stable_final"] >= 3
+        and scenarios["chain4_alt_pm"]["n_stable_final"] < scenarios["chain4_pp"]["n_stable_final"]
+    )
+    return {
+        "id": "Floor1_n_body_chain",
+        "pm_channel_opens": row["pm_channel_opens"],
+        "scenarios": scenarios,
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
     """§6·floor1·C3·bath·dogfood — VACUUM_BOIL moves; densitometer sees b=1."""
     from mt_ca.si_constants import SI

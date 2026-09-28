@@ -977,3 +977,43 @@ class SIFloor1Rows:
             "note": row["note"],
         }
 
+    def floor1_n_body_row(
+        self,
+        *,
+        size: int = 24,
+        relaxation: int = 12,
+        n_max: int = 72,
+        device: str | None = None,
+    ) -> dict[str, float | int | str | bool | dict]:
+        """§5.0.3 / floor1 — four planckons on FCC NN chain (bulk probe for ship wall time)."""
+        from mt_ca.floor1_n_body import default_sim_device, run_n_body_harness
+
+        dev = device or default_sim_device()
+        row = run_n_body_harness(
+            size=size,
+            relaxation=relaxation,
+            n_max=n_max,
+            device=dev,
+            tick_resolve=False,
+        )
+        return {
+            "theorem": "§5.0.3 · floor1-n-body-chain — ± vs like on A5 boil (4 cores)",
+            "size": size,
+            "relaxation": relaxation,
+            "n_max": n_max,
+            "device": dev,
+            "derivation_closed": False,
+            "checks_ok": row["checks_ok"],
+            "pm_channel_opens": row["pm_channel_opens"],
+            "scenarios": {
+                k: {
+                    "scenario_ok": v["scenario_ok"],
+                    "n_stable_final": v["n_stable_final"],
+                    "first_pm_pair_tick": v["first_pm_pair_tick"],
+                    "min_graph_dist_final": v["min_graph_dist_final"],
+                }
+                for k, v in row["scenarios"].items()
+            },
+            "note": row["note"],
+        }
+

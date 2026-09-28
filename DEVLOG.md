@@ -6,6 +6,20 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-28 · §5.0.3 · floor1-n-body-chain (4 cores, FCC NN path)
+
+**UoW:** четыре планкона на цепочке FCC NN на `VACUUM_BOIL` — `+−+−`, `++−−`, `++++`; трекинг ядер, граф-расстояния, счётчик устойчивых \(|Q|=1\).
+
+**Код:** `mt_ca/floor1_n_body.py` · `tools/floor1_n_body_probe.py` · `SI.floor1_n_body_row()`.
+
+**Verify:** **`Floor1_n_body_chain`** PASS · bulk `tick_resolve=False` (~15 s harness cuda); потиковый `--tick` для `first_pm_pair_tick` (медленно).
+
+**Критерии (dogfood):** ±-цепочки теряют больше ядер, чем `++++` (типично 2 vs 3); нет схлопывания всех like-ядр в один узел (`min_graph_dist≥1`); norm ×12.
+
+**Не в MODEL / книге.**
+
+---
+
 ## 2026-09-28 · §5.0.3 · floor1-two-body-nn (FCC boil)
 
 **Критерий:** два планкона на 3D `VACUUM_BOIL` (single-axis ramp); сценарии `pp_nn` / `mm_nn` / `pm_nn` (опц. `pm_d2` в probe); Q по ядру (трек от посадки), `Q_net`, `event_tick` для ±; `pm` — оба ядра без устойчивого |Q|=1; `pp`/`mm` — посадка like-sign, без annihilation-канала; норма ≤ 12× от t=0.
@@ -14,7 +28,7 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Verify:** **`Floor1_two_body_nn`** PASS · suite `floor1` (24³, relax 12, n_max 72; дефолт `cuda` как `--ship`).
 
-**Perf:** узкое место был Python-пробинг (`spinor_density` + обход куба на **каждом** тике), не шаг `g`. Сейчас: один `ρ` на снимок, `pp`/`mm`/`pm` — bulk `step(n_max)` + финальный probe; кэш excitation; harness ~15s на RTX 4060.
+**Perf:** узкое место — Python-пробинг (`spinor_density` + survey на тик), не шаг `g`. Verify: **потиковый** `tick_resolve=True` (реальный `event_tick`, ранний stop для `pm`); bulk `tick_resolve=False` — один `step(n_max)` + probe (быстрый smoke). Сравнение: `python tools/floor1_two_body_probe.py --compare-bulk`.
 
 **Не в MODEL/книгу** (dogfood sim; ядра дрейфуют — критерий операционный).
 
@@ -292,7 +306,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** заполнение на T on T — open
 - **§5.0.1 Arg mass:** **`m_H=m_P α_fs⁸ √(π/2)`** ✅ algebra · width/lineshape open
-- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; PDG τ / 2γ T-stats — open (`Annihilation_T_stats`)
+- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; PDG τ / 2γ T-stats — open (`Annihilation_T_stats`)
 - **§5.2.2 κ_link:** sim ballistic check on `c` — open
 - **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
 - **§5.3.2 v_s:** численный `v_s` on макроописание T — open
