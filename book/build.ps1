@@ -359,17 +359,11 @@ Stop-ProcessesLockingPdf -PdfPath $workPdf
 Get-ChildItem -LiteralPath $OutWork -Filter "$BuildJob.*" -ErrorAction SilentlyContinue |
     Remove-Item -Force -ErrorAction SilentlyContinue
 
-# One-time layout: flat book/out/* from older builds → ignore; remove stale deliverables at out root.
-$legacyPdf = Join-Path $OutLegacy "$JobName.pdf"
-if (Test-Path -LiteralPath $legacyPdf) {
-    Remove-Item -LiteralPath $legacyPdf -Force -ErrorAction SilentlyContinue
-    Write-Host "removed legacy: out/$JobName.pdf (use out/pdf/)"
+# Flat book/out/* (pre out/pdf + out/work layout) — delete any file at out/ root, keep only subdirs.
+Get-ChildItem -LiteralPath $OutLegacy -File -ErrorAction SilentlyContinue | ForEach-Object {
+    Remove-Item -LiteralPath $_.FullName -Force
+    Write-Host "removed legacy out/$($_.Name)"
 }
-Get-ChildItem -LiteralPath $OutLegacy -Filter "$BuildJob.*" -ErrorAction SilentlyContinue |
-    Remove-Item -Force -ErrorAction SilentlyContinue
-Get-ChildItem -LiteralPath $OutLegacy -Filter "$JobName.*" -ErrorAction SilentlyContinue |
-    Where-Object { $_.Extension -match '^\.(aux|log|out|toc|synctex\.gz)$' } |
-    Remove-Item -Force -ErrorAction SilentlyContinue
 
 # Stale artifacts in sources/ (from old builds without -aux-directory) break cross-refs.
 $staleInSources = @(

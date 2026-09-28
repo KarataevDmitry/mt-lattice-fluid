@@ -13,7 +13,7 @@ cd book
 ./build.ps1 -Volume observer
 ```
 
-PDF (можно коммитить): `book/out/pdf/<volume>.pdf`. Вспомогательные `.aux`/логи/`__build` — только `book/out/work/` (gitignore). См. [`SERIES.md`](SERIES.md).
+PDF (в git через **Git LFS**): `book/out/pdf/<volume>.pdf`. Клон: `git lfs install` (один раз на машине), затем обычный `git clone` — PDF подтянутся как LFS-объекты. Вспомогательные `.aux`/логи/`__build` — только `book/out/work/` (gitignore). См. [`SERIES.md`](SERIES.md).
 
 **Обозначения:** глава «Условные обозначения» (`notation.tex`) — таблица **Обозначение · Смысл · Единица**; записи в `glossary/notation-entries*.tex` (`\newnotationentry`, поле `user1`). `notation-macros.tex` — **camelCase** → `\gls{symb:…}` (клик в ту же главу). В каждом томе в frontmatter — `\input{notation.tex}`.
 
