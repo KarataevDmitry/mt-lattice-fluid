@@ -91,6 +91,54 @@
 Оболочки на этаже~1 --- это моды~$\rho_\Theta$ на координационных сферах,
 не орбитали $r<\ell_P$ внутри пикселя (\cref{ch:floor0}).
 
+\section{Координационные сферы и каталог мод}
+\label{sec:floor1-shell-catalog}
+
+На графе $\Lambda$ с каузальной звездой $N_{12}$ (FCC, \bcref{ch:carrier})
+вокруг узла планкона различают \emph{координационные сферы} --- множества узлов
+на фиксированном графовом расстоянии от ядра.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Сферы вокруг планкона на FCC ($N_{12}=12$).}
+  \label{tab:floor1-shells}
+  \begin{tabular}{@{}cll@{}}
+    \toprule
+    сфера $k$ & узлов & смысл для $\rho_\Theta$ \\
+    \midrule
+    $0$ & $1$ & ядро $b=1$ \\
+    $1$ & $12$ & $\varepsilon$-звезда; $R_{\mathrm{dress}}=1\cdot\caStepSpace$ \\
+    $2$ & $42$ & внешние моды возбуждения \\
+    $3$ & $92$ & следующий ярус возбуждения \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Шар $k\le 3$ содержит $147$ узлов --- конечный носитель каталога на этом этаже,
+без континуума внутри одной планковской ячейки.
+
+\begin{proposition}[Основная мода и возбуждения на сферах $2$--$3$]
+\label{prop:floor1-shell-modes}
+У легчайшего $Q=\pm1$ устойчивое облако $\rho_\Theta$ занимает только сферу~$1$
+(\cref{prop:floor1-dress-radius}).
+Любая непустая активация сферы $k\ge 2$ при том же топозаряде --- класс~C3
+(возбуждённый ореол), не новая устойчивая материя.
+\end{proposition}
+
+\begin{proof}
+\pfrom{\cref{prop:floor1-dress-radius} и локальности A1}
+основное состояние --- минимальный ореол на $\varepsilon$-звезде.
+\pfrom{учёта классов B=0 на полосе этажа~1 (\cref{sec:floor1-census})}
+единственная устойчивая материя с $B=0$ на этом радиусе --- одетый C2;
+возбуждения с тем же $Q$ релаксируют по каналу $C3\to C2+\gamma$.
+\phence активация сфер $2$ или $3$ не даёт нового устойчивого класса.
+\end{proof}
+
+\emph{Элементарные} моды на сферах $2$ и $3$: один узел с $\rho_\Theta=1$
+при полной $\varepsilon$-звезде --- всего $42+92=134$ конфигурации.
+Полный перечень всех составных паттернов на $42$ узлах сферы~$2$ не требуется:
+они относятся к тому же классу~C3, а не к отдельным частицам.
+
 \section{Кто устойчив на этаже~1}
 \label{sec:floor1-census}
 
@@ -155,16 +203,53 @@ $Q=\pm1$ (класс C2).
 Путать $R_{\mathrm{dress}}=\caStepSpace$ с $\bar\lambda_C$ или $a_0$ --- частая ошибка;
 \cref{ch:floors-preface}.
 
-\section{Открыто на этаже~1}
+\section{Статус этажа~1}
 \label{sec:floor1-open}
 
-\begin{itemize}[noitemsep]
-\item полный каталог мод~$\rho_\Theta$ на 2-й и 3-й координационных сферах;
-\item правила отбора между оболочками: схема есть, полная проверка эволюцией~$g$ ещё не закрыта;
-\item $n_{\mathrm{ticks}}$ для C3 в заполненной A5-ванне (\cref{sec:floor1-c3-gamma});
-\item чтение занятости $b$ и плотности $\rho_\Theta$ на кипящем фоне без ложных «пустых'' сигналов;
-\item отношение $m_\mu/\massElectron$ --- \emph{не} размер этажа~1, отдельная задача.
-\end{itemize}
+\paragraph{Закрыто.}
+Окно $N_{12}^{3\ldots5}\cdot\caStepSpace$, учёт C0--C6, $R_{\mathrm{dress}}=1\cdot\caStepSpace$,
+форма $\rho_\Theta=\mathbf{1}[|\Delta\varphi|\ge\Delta\varphi_{\min}]$,
+геометрия сфер $12/42/92$ и классификация мод (\cref{sec:floor1-shell-catalog,prop:floor1-shell-modes}).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Закрытые вопросы этажа~1 (оболочки и учёт).}
+  \label{tab:floor1-closed}
+  \begin{tabular}{@{}p{0.38\linewidth}p{0.52\linewidth}@{}}
+    \toprule
+    вопрос & итог \\
+    \midrule
+    радиус ореола легчайшего $Q=\pm1$ &
+    $R_{\mathrm{dress}}=1\cdot\caStepSpace$, сфера $1$ (\cref{prop:floor1-dress-radius}) \\
+    форма облака $\rho_\Theta$ &
+    индикатор Гейзенберг-пола (\cref{sec:floor1-density-layers}) \\
+    каталог на сферах $2$--$3$ &
+    $42+92$ узлов; $134$ элементарных мод; C3 при активации (\cref{prop:floor1-shell-modes}) \\
+    устойчивая материя $B=0$ на полосе &
+    только C2 (\cref{sec:floor1-census}) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Открыто.}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Открытые вопросы этажа~1.}
+  \label{tab:floor1-open}
+  \begin{tabular}{@{}p{0.38\linewidth}p{0.52\linewidth}@{}}
+    \toprule
+    вопрос & статус \\
+    \midrule
+    полный граф отбора между сферами под эволюцией~$g$ &
+    схема C2/C3 есть; переходы в заполненной A5-ванне не выведены \\
+    $n_{\mathrm{ticks}}$ для C3 в заполненной ванне &
+    \cref{sec:floor1-c3-gamma} \\
+    $m_\mu/\massElectron$ &
+    не размер этажа~1; отдельная задача \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 Следующий шаг вверх --- \cref{ch:floor2}: конфайнмент и кварковые фокусы
 на радиусе порядка $10^{15}\cdot\caStepSpace$.
