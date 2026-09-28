@@ -1,6 +1,9 @@
 """Solve O∘g^T ≈ O and detect exact CA cycles on trajectories (exact g from sim)."""
 from __future__ import annotations
 
+import hashlib
+from collections.abc import Callable
+
 import torch
 
 from mt_ca.analysis.functional_period import shift_residual
@@ -44,6 +47,15 @@ def ca_pair_fingerprint(f_curr: torch.Tensor, f_past: torch.Tensor) -> bytes:
     )
 
 
+def ca_pair_digest(f_curr: torch.Tensor, f_past: torch.Tensor) -> bytes:
+    """SHA-256 digest of leapfrog pair (streaming CA cycle search)."""
+    h = hashlib.sha256()
+    h.update(f_curr.detach().cpu().numpy().tobytes())
+    h.update(b"|")
+    h.update(f_past.detach().cpu().numpy().tobytes())
+    return h.digest()
+
+
 def solve_ca_trajectory_period(
     f_currs: list[torch.Tensor],
     f_pasts: list[torch.Tensor],
@@ -67,4 +79,49 @@ def solve_ca_trajectory_period(
         "cycle_period_T": None,
         "trajectory_ticks": len(f_currs),
         "note": "no repeat within stored trajectory — extend ticks or state space too large",
+    }
+
+
+def stream_ca_cycle_search(
+    sim,
+    *,
+    max_ticks: int,
+    sample_each_tick: Callable[[int], None] | None = None,
+) -> dict:
+    """Step ``sim`` up to ``max_ticks``; return on first exact repeat of (f_curr, f_past)."""
+    f_curr = sim._f_curr
+    f_past = sim._f_past
+    if f_curr is None or f_past is None:
+        raise RuntimeError("simulator has no leapfrog registers (_f_curr/_f_past)")
+    seen: dict[bytes, int] = {}
+    for t in range(max_ticks + 1):
+        key = ca_pair_digest(f_curr, f_past)
+        if key in seen:
+            period = t - seen[key]
+            return {
+                "solved": True,
+                "cycle_period_T": period,
+                "cycle_start_tick": seen[key],
+                "cycle_end_tick": t,
+                "trajectory_ticks": t,
+                "max_ticks": max_ticks,
+                "search_mode": "stream_digest",
+            }
+        seen[key] = t
+        if t >= max_ticks:
+            break
+        sim.step(1)
+        if sample_each_tick is not None:
+            sample_each_tick(t + 1)
+        f_curr = sim._f_curr
+        f_past = sim._f_past
+        assert f_curr is not None and f_past is not None
+    return {
+        "solved": False,
+        "cycle_period_T": None,
+        "trajectory_ticks": max_ticks,
+        "max_ticks": max_ticks,
+        "distinct_pairs_seen": len(seen),
+        "search_mode": "stream_digest",
+        "note": f"no CA pair repeat within T_max={max_ticks} (certifies T_B>{max_ticks} if attractor entered)",
     }

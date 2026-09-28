@@ -6,6 +6,25 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-28 · P0 · период поля `habitat_boil` 3+1 (probe)
+
+**Критерий:** MODEL §P0 в `model/05-floor0-spectrum.md` — $T_B$ exact CA, $T_C$ на `ρ_contrast`, $T_D$ из $\mu_k$.
+
+**Код:** `mt_ca/analysis/period_solver.py` — `stream_ca_cycle_search` (SHA-256 digest, без store траектории); `tools/boil_period_solve.py` — `--ca-stream` / `--max-ticks-stream`.
+
+**Снимок (CPU, rel 64):**
+
+| блок | прогон | итог |
+|------|--------|------|
+| **B** | 16³ stream $T_{\max}=1.2\times 10^4$ | $T_B>12000$ (12001 distinct pairs); exact $T_B$ — open |
+| **B** | 8³ stream $T_{\max}=8\times 10^4$ | $T_B>80000$ |
+| **C** | 16³, 15360 тиков, `t_max=4096`, $\varepsilon=10^{-4}$ | нет $T_C\le 4096$ на полевом contrast |
+| **D** | `boil_linear_spectrum` 16³ | $|\lambda|\approx 3.7\gg 1$ (FD); ring MSE растёт; $T_D$ v1 N/A |
+
+**Команды:** `python tools/boil_period_solve.py --size 16 --relaxation 64 --ca-stream --max-ticks-stream 12000 --t-max 4096` · contrast-only: `--ticks 15360` без `--ca-stream`.
+
+**Не закрыто:** численное $T_B$ на 16³ при больших $T_{\max}$; $T_C$ при больших окнах / других $\mathcal{O}$.
+
 ## 2026-09-27 · §5.0.4-A · Γ_hV orbit table + branches (floor 0)
 
 **Критерий готовности:** `mt_ca/floor0_gamma.py` + `run_floor0_gamma_hV` — planckon core on `VACUUM_BOIL`, track 128, projected Φ ledger; orbit rows ≤ Bekenstein cap; ветки **ground** ($n_E=0$ keys) и **excited** ($n_E\ge1$).

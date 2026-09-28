@@ -179,13 +179,13 @@ $\mu_k$ — один тик **полной** $g$ на фоне (FD/Jacobian). **
 | | Вопрос | Dogfood boil |
 |---|--------|--------------|
 | **A** | $T$ на кольце ячейки ($V_P$) | **512** (модель $\Delta=41$), не океан |
-| **B** | $T_B$ CA | **open** в окне (exact search) |
-| **C** | $T_C$ contrast | **нет** при $\varepsilon=10^{-4}$ |
-| **D** | $T_D$ moda $k$ | **нет**; $\lambda_{\mathrm{st}}(k)$ **есть** |
+| **B** | $T_B$ CA | **$T_B$ exact — open**; сертификат нижней границы: **16³** $T_B>1.2\times 10^4$, **8³** $T_B>8\times 10^4$ (streaming exact pair search, rel 64) |
+| **C** | $T_C$ contrast | **нет** $T_C\le 4096$ при $\varepsilon=10^{-4}$ на полевом `ρ_contrast` (**16³**, rel 64, $\ge 1.2\times 10^4$ тиков); C-ring отвергнута |
+| **D** | $T_D$ moda $k$ | **нет**; $\lambda_{\mathrm{st}}(k)$ **есть**; FD $|\mu_k|\gg 1$ → $T_D$ v1 **не определён** |
 
 **P0:** найти/отвергнуть $T_B$, $T_C$ (и $T_D$ при необходимости) для **полной** $g$ на `habitat_boil` **3+1**; явно развести с A.
 
-**Методы:** exact CA (`boil_period_solve --ca-cycle`), макроописание (`boil_functional_period`, `boil_period_solve`), symbolica $k$ + FD (`boil_linear_spectrum`). **Не $T$:** autocorr без functional; `best_shift` без $\varepsilon$; $\arg\mu$ при $|\mu|\gg 1$.
+**Методы:** exact CA (`boil_period_solve --ca-stream` / `--ca-cycle`), макроописание (`boil_functional_period`, `boil_period_solve`), symbolica $k$ + FD (`boil_linear_spectrum`). **Не $T$:** autocorr без functional; `best_shift` без $\varepsilon$; $\arg\mu$ при $|\mu|\gg 1$.
 
 ---
 

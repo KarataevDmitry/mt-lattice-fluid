@@ -3,6 +3,7 @@
 
 Usage:
   python tools/boil_period_solve.py
+  python tools/boil_period_solve.py --size 16 --relaxation 64 --ca-stream --max-ticks-stream 12000 --t-max 4096
   python tools/boil_period_solve.py --size 8 --ticks 4096 --ca-cycle
 """
 from __future__ import annotations
@@ -10,7 +11,11 @@ from __future__ import annotations
 import argparse
 import json
 
-from mt_ca.analysis.period_solver import solve_ca_trajectory_period, solve_observable_period
+from mt_ca.analysis.period_solver import (
+    solve_ca_trajectory_period,
+    solve_observable_period,
+    stream_ca_cycle_search,
+)
 from mt_ca.analysis.stencil_symbol import scan_fcc_low_k
 from mt_ca.app.lab import open_lab
 from mt_ca.instruments.catalog import InstrumentId
@@ -24,6 +29,8 @@ def run(
     t_max: int,
     mse_threshold: float,
     ca_cycle: bool,
+    ca_stream: bool,
+    max_ticks_stream: int,
     max_k: int,
 ) -> dict:
     lab = open_lab("habitat_boil", size, device="cpu")
@@ -35,15 +42,27 @@ def run(
     f_currs: list = []
     f_pasts: list = []
 
-    for _ in range(ticks):
-        z_p = lab.sim.z_past.clone() if lab.sim.z_past is not None else lab.sim.z.clone()
-        if ca_cycle:
-            assert lab.sim._f_curr is not None and lab.sim._f_past is not None
-            f_currs.append(lab.sim._f_curr.detach().cpu().clone())
-            f_pasts.append(lab.sim._f_past.detach().cpu().clone())
-        lab.step(1)
-        fld = lab.field_row(z_past=z_p)
-        contrast.append(float(fld[InstrumentId.RHO_CONTRAST.value]))
+    if ca_stream:
+        def _sample_contrast(_tick: int) -> None:
+            z_p = lab.sim.z_past.clone() if lab.sim.z_past is not None else lab.sim.z.clone()
+            fld = lab.field_row(z_past=z_p)
+            contrast.append(float(fld[InstrumentId.RHO_CONTRAST.value]))
+
+        ca_out = stream_ca_cycle_search(
+            lab.sim, max_ticks=max_ticks_stream, sample_each_tick=_sample_contrast
+        )
+        ticks = len(contrast)
+    else:
+        ca_out = None
+        for _ in range(ticks):
+            z_p = lab.sim.z_past.clone() if lab.sim.z_past is not None else lab.sim.z.clone()
+            if ca_cycle:
+                assert lab.sim._f_curr is not None and lab.sim._f_past is not None
+                f_currs.append(lab.sim._f_curr.detach().cpu().clone())
+                f_pasts.append(lab.sim._f_past.detach().cpu().clone())
+            lab.step(1)
+            fld = lab.field_row(z_past=z_p)
+            contrast.append(float(fld[InstrumentId.RHO_CONTRAST.value]))
 
     obs = solve_observable_period(contrast, t_max=t_max, mse_threshold=mse_threshold)
     out: dict = {
@@ -53,7 +72,9 @@ def run(
         "symbolic_fcc_low_k": symbol[:16],
         "rho_contrast_period": obs,
     }
-    if ca_cycle and f_currs:
+    if ca_stream and ca_out is not None:
+        out["ca_cycle"] = ca_out
+    elif ca_cycle and f_currs:
         out["ca_cycle"] = solve_ca_trajectory_period(f_currs, f_pasts)
     out["human_solution"] = _human(out)
     return out
@@ -86,10 +107,15 @@ def _human(rep: dict) -> list[str]:
                 f"CA (полная g): РЕШЕНО — пара состояния повторилась; cycle_period_T={ca['cycle_period_T']} "
                 f"(тики {ca['cycle_start_tick']}→{ca['cycle_end_tick']})."
             )
+        elif ca.get("search_mode") == "stream_digest" and ca.get("max_ticks") is not None:
+            lines.append(
+                f"CA (полная g): в окне T_max={ca['max_ticks']} точного повтора пары нет — "
+                f"фиксируем T_B>{ca['max_ticks']} (exact search, digest)."
+            )
         else:
             lines.append(
                 f"CA: за {ca.get('trajectory_ticks')} тиков повтора пары не было — "
-                "увеличь --ticks или уменьши --size для exact cycle search."
+                "увеличь --ticks / --max-ticks-stream или уменьши --size для exact cycle search."
             )
     lines.append(
         "Полная g: сим = exact композиция; symbolica T(O,k,boil) для импульса Φ / floor / LUT — open, не «невозможна»."
@@ -106,8 +132,16 @@ def main() -> None:
     p.add_argument("--mse-threshold", type=float, default=1e-4)
     p.add_argument("--max-k", type=int, default=2)
     p.add_argument("--ca-cycle", action="store_true", help="Store pairs and solve exact cycle (memory!)")
+    p.add_argument(
+        "--ca-stream",
+        action="store_true",
+        help="Streaming exact CA cycle search (no trajectory store; use --max-ticks-stream)",
+    )
+    p.add_argument("--max-ticks-stream", type=int, default=100_000)
     p.add_argument("--json", action="store_true")
     args = p.parse_args()
+    if args.ca_stream and args.ca_cycle:
+        p.error("use either --ca-stream or --ca-cycle, not both")
     rep = run(
         size=args.size,
         relaxation=args.relaxation,
@@ -115,6 +149,8 @@ def main() -> None:
         t_max=args.t_max,
         mse_threshold=args.mse_threshold,
         ca_cycle=args.ca_cycle,
+        ca_stream=args.ca_stream,
+        max_ticks_stream=args.max_ticks_stream,
         max_k=args.max_k,
     )
     if args.json:
