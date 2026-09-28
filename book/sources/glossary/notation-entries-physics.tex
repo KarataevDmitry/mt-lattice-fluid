@@ -1,10 +1,18 @@
 % Макро-физика (Максвелл, Ньютон, КМ, …) — тултипы в формулах через макросы.
 
-\newcommand{\NotationSecMacroPhysicsTitle}{\textit{Макроскопическая физика (поля, операторы, SI)}}
-\newcommand{\NotationDescNabla}{векторный дифференциальный оператор $\partial/\partial\mathbf{x}$;
-$\nabla\varphi$ --- градиент, $\nabla\cdot\mathbf{A}$ --- дивергенция, $\nabla\times\mathbf{A}$ --- ротор
-(уравнения Максвелла).}
-\newcommand{\NotationDescPartialT}{производная по времени (локальная на макроуровне).}
+\newcommand{\NotationSecOperatorsTitle}{\textit{Операторы}}
+\newcommand{\NotationSecMacroPhysicsTitle}{\textit{Макроскопическая физика (поля, константы, SI)}}
+\newcommand{\NotationDescNabla}{векторный дифференциальный оператор
+$(\partial/\partial x,\,\partial/\partial y,\,\partial/\partial z)$;
+на скаляр $\varphi$ даёт \emph{градиент} $\nabla\varphi$.}
+\newcommand{\NotationDescDiv}{дивергенция векторного поля $\mathbf{A}$; $\nabla\cdot\mathbf{A}$
+(уравнение непрерывности, Гаусса).}
+\newcommand{\NotationDescCurl}{ротор векторного поля $\mathbf{A}$; $\nabla\times\mathbf{A}$
+(уравнения Фарадея и Ампера--Максвелла).}
+\newcommand{\NotationDescLaplacian}{оператор Лапласа $\nabla^2=\nabla\cdot\nabla$
+(уравнение Пуассона, член $-\frac{\hbar^2}{2m}\nabla^2$ в КМ).}
+\newcommand{\NotationDescPartialT}{производная по времени $\partial/\partial t$ (локально на $T$);
+размерность задаётся операндом.}
 \newcommand{\NotationDescEfld}{вектор электрического поля.}
 \newcommand{\NotationDescBfld}{вектор магнитной индукции.}
 \newcommand{\NotationDescJfld}{плотность электрического тока.}
@@ -30,30 +38,35 @@ $\nabla\varphi$ --- градиент, $\nabla\cdot\mathbf{A}$ --- диверге
 \newcommand{\NotationDescGgrav}{гравитационная постоянная \(G\).}
 \newcommand{\NotationDescVecP}{вектор импульса \(\mathbf{p}\) (пространственная часть \(p^\mu\)).}
 
+\newnotationsectionT{symb:sec-operators}{macro-00}{\NotationSecOperatorsTitle}
+\newnotationentryT{symb:nabla}{macro-01}{\ensuremath{\nabla}}{\NotationDescNabla}{\NotationUnitDash}
+\newnotationentryT{symb:div}{macro-02}{\ensuremath{\nabla\cdot}}{\NotationDescDiv}{\NotationUnitDash}
+\newnotationentryT{symb:curl}{macro-03}{\ensuremath{\nabla\times}}{\NotationDescCurl}{\NotationUnitDash}
+\newnotationentryT{symb:laplacian}{macro-04}{\ensuremath{\nabla^2}}{\NotationDescLaplacian}{\NotationUnitDash}
+\newnotationentryT{symb:partialt}{macro-05}{\ensuremath{\partial_t}}{\NotationDescPartialT}{\NotationUnitDash}
+
 \newnotationsectionT{symb:sec-macrophys}{macrophys-00}{\NotationSecMacroPhysicsTitle}
-\newnotationentryT{symb:nabla}{macrophys-01}{\ensuremath{\nabla}}{\NotationDescNabla}{\NotationUnitDash}
-\newnotationentryT{symb:partialt}{macrophys-02}{\ensuremath{\partial_t}}{\NotationDescPartialT}{\ensuremath{\mathrm{с^{-1}}}}
-\newnotationentryT{symb:Efld}{macrophys-03}{\ensuremath{\mathbf{E}}}{\NotationDescEfld}{\NotationUnitVoltPerMetre}
-\newnotationentryT{symb:Bfld}{macrophys-04}{\ensuremath{\mathbf{B}}}{\NotationDescBfld}{\NotationUnitTesla}
-\newnotationentryT{symb:Jfld}{macrophys-05}{\ensuremath{\mathbf{j}}}{\NotationDescJfld}{\NotationUnitAmperePerMetreSq}
-\newnotationentryT{symb:rhoQ}{macrophys-06}{\ensuremath{\rho}}{\NotationDescRhoQ}{\ensuremath{\mathrm{Кл/м^3}}}
-\newnotationentryT{symb:rhoM}{macrophys-07}{\ensuremath{\rho}}{\NotationDescRhoM}{\NotationUnitKgPerMetreCubed}
-\newnotationentryT{symb:eps0}{macrophys-08}{\ensuremath{\varepsilon_0}}{\NotationDescEpsZero}{\NotationUnitFaradPerMetre}
-\newnotationentryT{symb:mu0}{macrophys-09}{\ensuremath{\mu_0}}{\NotationDescMuZero}{\NotationUnitHenryPerMetre}
-\newnotationentryT{symb:Vfld}{macrophys-10}{\ensuremath{\mathbf{v}}}{\NotationDescVfld}{\NotationUnitMetrePerSecond}
-\newnotationentryT{symb:Rfld}{macrophys-11}{\ensuremath{\mathbf{r}}}{\NotationDescRfld}{\NotationUnitMetre}
-\newnotationentryT{symb:Ffld}{macrophys-12}{\ensuremath{\mathbf{F}}}{\NotationDescFfld}{\NotationUnitNewton}
-\newnotationentryT{symb:Pfld}{macrophys-13}{\ensuremath{p}}{\NotationDescPfld}{\NotationUnitPascal}
-\newnotationentryT{symb:Sentropy}{macrophys-14}{\ensuremath{S}}{\NotationDescSentropy}{\NotationUnitJoulePerKelvin}
-\newnotationentryT{symb:Ttemp}{macrophys-15}{\ensuremath{T}}{\NotationDescTtemp}{\NotationUnitKelvin}
-\newnotationentryT{symb:Hham}{macrophys-16}{\ensuremath{H}}{\NotationDescHham}{\NotationUnitJoule}
-\newnotationentryT{symb:Psi}{macrophys-17}{\ensuremath{\psi}}{\NotationDescPsi}{\ensuremath{\mathrm{м^{-3/2}}}}
-\newnotationentryT{symb:hbar}{macrophys-18}{\ensuremath{\hbar}}{\NotationDescHbar}{\NotationUnitJouleSecond}
-\newnotationentryT{symb:echar}{macrophys-19}{\ensuremath{e}}{\NotationDescEcharge}{\NotationUnitCoulomb}
-\newnotationentryT{symb:me}{macrophys-20}{\ensuremath{m_e}}{\NotationDescMe}{\NotationUnitKilogram}
-\newnotationentryT{symb:Mmass}{macrophys-21}{\ensuremath{m}}{\NotationDescMmass}{\NotationUnitKilogram}
-\newnotationentryT{symb:varphi}{macrophys-22}{\ensuremath{\varphi}}{\NotationDescVarphi}{\NotationUnitJoule}
-\newnotationentryT{symb:clight}{macrophys-23}{\ensuremath{c}}{\NotationDescClight}{\NotationUnitMetrePerSecond}
-\newnotationentryT{symb:kB}{macrophys-24}{\ensuremath{k_B}}{\NotationDesckB}{\NotationUnitJoulePerKelvin}
-\newnotationentryT{symb:Ggrav}{macrophys-25}{\ensuremath{G}}{\NotationDescGgrav}{\ensuremath{\mathrm{м^3/(кг{\cdot}с^2)}}}
-\newnotationentryT{symb:vecP}{macrophys-26}{\ensuremath{\mathbf{p}}}{\NotationDescVecP}{\NotationUnitKgMetrePerSecond}
+\newnotationentryT{symb:Efld}{macrophys-01}{\ensuremath{\mathbf{E}}}{\NotationDescEfld}{\NotationUnitVoltPerMetre}
+\newnotationentryT{symb:Bfld}{macrophys-02}{\ensuremath{\mathbf{B}}}{\NotationDescBfld}{\NotationUnitTesla}
+\newnotationentryT{symb:Jfld}{macrophys-03}{\ensuremath{\mathbf{j}}}{\NotationDescJfld}{\NotationUnitAmperePerMetreSq}
+\newnotationentryT{symb:rhoQ}{macrophys-04}{\ensuremath{\rho}}{\NotationDescRhoQ}{\ensuremath{\mathrm{Кл/м^3}}}
+\newnotationentryT{symb:rhoM}{macrophys-05}{\ensuremath{\rho}}{\NotationDescRhoM}{\NotationUnitKgPerMetreCubed}
+\newnotationentryT{symb:eps0}{macrophys-06}{\ensuremath{\varepsilon_0}}{\NotationDescEpsZero}{\NotationUnitFaradPerMetre}
+\newnotationentryT{symb:mu0}{macrophys-07}{\ensuremath{\mu_0}}{\NotationDescMuZero}{\NotationUnitHenryPerMetre}
+\newnotationentryT{symb:Vfld}{macrophys-08}{\ensuremath{\mathbf{v}}}{\NotationDescVfld}{\NotationUnitMetrePerSecond}
+\newnotationentryT{symb:Rfld}{macrophys-09}{\ensuremath{\mathbf{r}}}{\NotationDescRfld}{\NotationUnitMetre}
+\newnotationentryT{symb:Ffld}{macrophys-10}{\ensuremath{\mathbf{F}}}{\NotationDescFfld}{\NotationUnitNewton}
+\newnotationentryT{symb:Pfld}{macrophys-11}{\ensuremath{p}}{\NotationDescPfld}{\NotationUnitPascal}
+\newnotationentryT{symb:Sentropy}{macrophys-12}{\ensuremath{S}}{\NotationDescSentropy}{\NotationUnitJoulePerKelvin}
+\newnotationentryT{symb:Ttemp}{macrophys-13}{\ensuremath{T}}{\NotationDescTtemp}{\NotationUnitKelvin}
+\newnotationentryT{symb:Hham}{macrophys-14}{\ensuremath{H}}{\NotationDescHham}{\NotationUnitJoule}
+\newnotationentryT{symb:Psi}{macrophys-15}{\ensuremath{\psi}}{\NotationDescPsi}{\ensuremath{\mathrm{м^{-3/2}}}}
+\newnotationentryT{symb:hbar}{macrophys-16}{\ensuremath{\hbar}}{\NotationDescHbar}{\NotationUnitJouleSecond}
+\newnotationentryT{symb:echar}{macrophys-17}{\ensuremath{e}}{\NotationDescEcharge}{\NotationUnitCoulomb}
+\newnotationentryT{symb:me}{macrophys-18}{\ensuremath{m_e}}{\NotationDescMe}{\NotationUnitKilogram}
+\newnotationentryT{symb:Mmass}{macrophys-19}{\ensuremath{m}}{\NotationDescMmass}{\NotationUnitKilogram}
+\newnotationentryT{symb:varphi}{macrophys-20}{\ensuremath{\varphi}}{\NotationDescVarphi}{\NotationUnitJoule}
+\newnotationentryT{symb:clight}{macrophys-21}{\ensuremath{c}}{\NotationDescClight}{\NotationUnitMetrePerSecond}
+\newnotationentryT{symb:kB}{macrophys-22}{\ensuremath{k_B}}{\NotationDesckB}{\NotationUnitJoulePerKelvin}
+\newnotationentryT{symb:Ggrav}{macrophys-23}{\ensuremath{G}}{\NotationDescGgrav}{\ensuremath{\mathrm{м^3/(кг{\cdot}с^2)}}}
+\newnotationentryT{symb:vecP}{macrophys-24}{\ensuremath{\mathbf{p}}}{\NotationDescVecP}{\NotationUnitKgMetrePerSecond}
