@@ -25,6 +25,18 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Не закрыто:** численное $T_B$ на 16³ при больших $T_{\max}$; $T_C$ при больших окнах / других $\mathcal{O}$.
 
+## 2026-09-28 · §5.0.4-B · каталог ρ_Θ на сферах 2–3 (floor 1)
+
+**Критерий:** `model/05-floor1-shells.md` — геометрия FCC $12/42/92$, шар $147$; C2 = сфера $1$; сферы $\ge 2$ → C3; $134$ элементарных одноузловых мод.
+
+**Код:** `mt_ca/floor1_shells.py` · `SI.floor1_outer_shell_catalog_row()` · probe `tools/floor1_shell_probe.py`.
+
+**Verify:** **`Floor1_outer_shell_catalog`** PASS · suite `floor1`.
+
+**Книга:** `11-floor1.tex` — `\cref{sec:floor1-shell-catalog}` + таблицы закрыто/открыто.
+
+**Soft-open:** полный граф переходов занятости сфер под $g$ в заполненной A5-ванне (связано с `Floor1_C3_gamma_close`).
+
 ## 2026-09-27 · §5.0.4-A · Γ_hV orbit table + branches (floor 0)
 
 **Критерий готовности:** `mt_ca/floor0_gamma.py` + `run_floor0_gamma_hV` — planckon core on `VACUUM_BOIL`, track 128, projected Φ ledger; orbit rows ≤ Bekenstein cap; ветки **ground** ($n_E=0$ keys) и **excited** ($n_E\ge1$).
@@ -238,9 +250,9 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§3.6 isotropy:** macro radial probe — open
 - **§3.7 GPU:** T1-круг · Gaussian head-on · vortex axis ratio · hex §3.8 if square shows
 - **§5.0.5:** `ρ_Θ` — Heisenberg matter/phase-density (аналог `ρ_e`); не путать с `|z|²` океана — sim UoW
-- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅; **n_E≥1** + **selection S1–S4** ✅; **Γ_hV orbit table + branches** ✅ (`Floor0_gamma_hV`); P0 / §5.0.4-B — open
+- **§5.0.4-A:** внутренний спектр планкона — landmarks + vortex ground + SU(2) 2π/4π ✅; **n_E≥1** + **selection S1–S4** ✅; **Γ_hV orbit table + branches** ✅ (`Floor0_gamma_hV`); P0 — open
 - **Глоссарий:** `model/00-glossary.md` — планкон / **планковская дырка** ($b=0$, аналогия дырочной проводимости) / планковская ячейка / вакуум; sweep MODEL+book (`scripts/apply_planckon_glossary.py`)
-- **§5.0.4-B:** внешние оболочки ε / отбор — open (этаж 1)
+- **§5.0.4-B:** каталог ρ_Θ на сферах 2–3 (12/42/92, 134 elementary) ✅ `model/05-floor1-shells.md` · **`Floor1_outer_shell_catalog`**; полный отбор сфер под g в ванне — soft-open
 - **§1.6.5:** один КА-схема; `|N|` только от упаковки размерности — не «гекс↔FCC переключатель»
 - **§1.6.4:** Minkowski `(3+1)FCC ↔ (2+1)hex` — погружение слоя `{111}`; якорь `c` на 4D — open bulk-coupling
 - **§1.6 / §5.2.4:** 3D FCC кандидат; лестница BZ/умклапп/`N_pack`; asympt. κ_FCC — open

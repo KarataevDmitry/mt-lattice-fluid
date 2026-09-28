@@ -129,6 +129,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
             check_floor1_dressing,
             check_floor1_dressing_close,
             check_floor1_dressing_f_close,
+            check_floor1_outer_shell_catalog,
             check_floor1_leftovers_close,
             check_floor1_C3_gamma_close,
             check_floor1_C3_bath_dogfood,

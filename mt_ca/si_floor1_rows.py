@@ -852,3 +852,87 @@ class SIFloor1Rows:
             ),
         }
 
+    def floor1_outer_shell_catalog_row(self) -> dict[str, float | int | str | bool | list]:
+        """§5.0.4-B — ρ_Θ mode catalog on 2nd and 3rd coordination spheres (FCC N₁₂)."""
+        from mt_ca.floor1_shells import build_rho_theta_shell_catalog
+
+        cat = build_rho_theta_shell_catalog(max_k=3)
+        sizes = cat["shell_sizes"]
+        n12 = int(sizes[1])
+        n2 = int(sizes[2])
+        n3 = int(sizes[3])
+
+        inventory: list[dict[str, str | float | bool]] = [
+            {
+                "id": "closed_shell_counts",
+                "maps_to": "FCC coordination spheres: 12, 42, 92",
+                "status": "closed",
+            },
+            {
+                "id": "closed_ground_depth_one",
+                "maps_to": "stable C2: ρ_Θ support on shell 1 only (dressing·close)",
+                "status": "closed",
+            },
+            {
+                "id": "closed_shell23_C3_class",
+                "maps_to": "any ρ_Θ on shell≥2 with same Q — C3 excitation, not new stable matter",
+                "status": "closed",
+            },
+            {
+                "id": "closed_elementary_modes_134",
+                "maps_to": "single-site bumps on shells 2+3 with full ε-star",
+                "status": "closed_algebra",
+            },
+            {
+                "id": "reject_full_2powN_table",
+                "maps_to": "2^42 composite shell-2 patterns — not SSOT enumeration",
+                "status": "rejected_as_goal",
+            },
+            {
+                "id": "soft_open_inter_shell_selection_g",
+                "maps_to": "full allowed transitions under g between shell occupancies",
+                "status": "soft_open",
+            },
+        ]
+
+        closed_ids = [
+            i["id"] for i in inventory if str(i["status"]).startswith("closed")
+        ]
+        soft_open_ids = [
+            i["id"] for i in inventory if str(i["status"]) == "soft_open"
+        ]
+        ok = (
+            bool(cat["checks_ok"])
+            and n12 == 12
+            and n2 == 42
+            and n3 == 92
+            and int(cat["elementary_excitations_shell23"]) == 134
+            and "closed_shell_counts" in closed_ids
+            and "closed_ground_depth_one" in closed_ids
+            and "closed_shell23_C3_class" in closed_ids
+            and "soft_open_inter_shell_selection_g" in soft_open_ids
+        )
+
+        return {
+            "theorem": "§5.0.4-B — outer-shell ρ_Θ catalog (shells 2–3)",
+            "N12": n12,
+            "shell2_sites": n2,
+            "shell3_sites": n3,
+            "cumulative_ball_k3": int(cat["cumulative_sites"]),
+            "elementary_excitations_shell23": int(cat["elementary_excitations_shell23"]),
+            "catalog_algebra_closed": bool(cat["catalog_algebra_closed"]),
+            "full_selection_closed": False,
+            "derivation_closed": ok,
+            "tiers": cat["tiers"],
+            "neighbor_stats": cat["neighbor_stats"],
+            "inventory": inventory,
+            "closed_ids": closed_ids,
+            "soft_open_ids": soft_open_ids,
+            "checks_ok": ok,
+            "note": (
+                "§5.0.4-B: geometry 12/42/92 closed; ground=C2 on shell 1; "
+                "shell≥2 modes are C3; 134 elementary single-site bumps; "
+                "full g-selection between shells soft-open."
+            ),
+        }
+

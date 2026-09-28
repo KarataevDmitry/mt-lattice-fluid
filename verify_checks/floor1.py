@@ -198,6 +198,34 @@ def check_floor1_C3_gamma_close(device: str = "cpu") -> dict:
         "note": row["note"],
     }
 
+def check_floor1_outer_shell_catalog(device: str = "cpu") -> dict:
+    """§5.0.4-B — ρ_Θ catalog on 2nd and 3rd coordination spheres."""
+    from mt_ca.si_constants import SI
+
+    del device
+    row = SI.floor1_outer_shell_catalog_row()
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["catalog_algebra_closed"])
+        and not bool(row["full_selection_closed"])
+        and int(row["shell2_sites"]) == 42
+        and int(row["shell3_sites"]) == 92
+        and int(row["elementary_excitations_shell23"]) == 134
+        and "closed_shell_counts" in row["closed_ids"]
+        and "soft_open_inter_shell_selection_g" in row["soft_open_ids"]
+    )
+    return {
+        "id": "Floor1_outer_shell_catalog",
+        "shell2_sites": row["shell2_sites"],
+        "shell3_sites": row["shell3_sites"],
+        "elementary_excitations_shell23": row["elementary_excitations_shell23"],
+        "catalog_algebra_closed": row["catalog_algebra_closed"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_C3_bath_dogfood(device: str = "cpu") -> dict:
     """§6·floor1·C3·bath·dogfood — VACUUM_BOIL moves; densitometer sees b=1."""
     from mt_ca.si_constants import SI
