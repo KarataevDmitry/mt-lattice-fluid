@@ -36,6 +36,12 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · §5.0.3 · Annihilation_PDG_tau_strict
+
+**Жёстче bridge:** τ только из §8.2 `m_e_GeV`/`m_p_GeV` + `alpha_preferred`; rtol от `m_e_rel_err`; upstream τ **хуже** CODATA-path на ≥0.2% (`codata_not_sole_winner`); `log10(τ/hT)` vs PDG в пределах `log10(1+rtol)`; ortho/para ratio leading ~25% slack (не fitted); collision `τ_M` отдельно. Probe: `tools/annihilation_pdg_tau_probe.py --strict`. Bundle гейтит **strict**, не мягкий bridge.
+
+**Код:** `TAU_ORTHO_PS_PDG_S` · verify **`Annihilation_PDG_tau_strict`**.
+
 ---
 
 ## 2026-09-29 · §5.0.3 · floor1-pm-coarse-dipole (M→T)
@@ -348,7 +354,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** заполнение на T on T — open
 - **§5.0.1 Arg mass:** **`m_H=m_P α_fs⁸ √(π/2)`** ✅ algebra · width/lineshape open
-- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; M→T coarse dipole on boil ✅ **`Floor1_pm_coarse_dipole`**; T-stats ensemble axis ✅ **`Annihilation_T_stats`** (π/2 dipole fix + spinor rotate seed); PDG τ bridge — open
+- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; M→T coarse dipole ✅ **`Floor1_pm_coarse_dipole`**; T-stats ensemble ✅ **`Annihilation_T_stats`**; PDG τ QED/ladder ✅ **`Annihilation_PDG_tau_bridge`** + upstream strict ✅ **`Annihilation_PDG_tau_strict`**; sim bound-state $n_{\mathrm{ticks}}$ — open
 - **§5.2.2 κ_link:** sim ballistic check on `c` — open
 - **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
 - **§5.3.2 v_s:** численный `v_s` on макроописание T — open

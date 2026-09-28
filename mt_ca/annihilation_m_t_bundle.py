@@ -8,7 +8,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from mt_ca.annihilation_pdg_tau import run_annihilation_pdg_tau_bridge
+from mt_ca.annihilation_pdg_tau import run_annihilation_pdg_tau_bridge, run_annihilation_pdg_tau_strict
 from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
 from mt_ca.floor1_pm_coarse_t import default_sim_device, run_pm_coarse_dipole_probe
 
@@ -36,11 +36,12 @@ def run_annihilation_m_t_bundle(
     axis_shared = pm.get("pm_axis_angle") is not None and bool(t_row["axis_tracks_pi"])
 
     pdg = run_annihilation_pdg_tau_bridge(device=device)
+    pdg_strict = run_annihilation_pdg_tau_strict(device=device)
 
     checks_ok = (
         bool(pm["checks_ok"])
         and bool(t_row["ok"])
-        and bool(pdg["checks_ok"])
+        and bool(pdg_strict["checks_ok"])
         and m_dual
         and t_dual
         and axis_shared
@@ -69,6 +70,12 @@ def run_annihilation_m_t_bundle(
             "checks_ok": pdg["checks_ok"],
             "tau_qed_rel_err": pdg["tau_qed_rel_err"],
             "tau_M_over_tau_PDG": pdg["tau_M_over_tau_PDG"],
+        },
+        "pdg_tau_strict": {
+            "checks_ok": pdg_strict["checks_ok"],
+            "tau_rel_err_upstream": pdg_strict["tau_rel_err_upstream"],
+            "tau_rel_err_CODATA_m_e": pdg_strict["tau_rel_err_CODATA_m_e"],
+            "ortho_para_ratio_rel_err": pdg_strict["ortho_para_ratio_rel_err"],
         },
         "wall_s": time.perf_counter() - t0,
         "note": (

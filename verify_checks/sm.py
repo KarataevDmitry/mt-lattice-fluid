@@ -221,6 +221,29 @@ def check_neutron_mass(device: str = "cpu") -> dict:
     }
 
 
+def check_annihilation_pdg_tau_strict(device: str = "cpu") -> dict:
+    """§5.0.3 — strict PDG τ: upstream m_e, ortho/para ratio, anti-CODATA circularity."""
+    from mt_ca.si_constants import SI
+
+    row = SI.annihilation_pdg_tau_strict_row(device=device)
+    ok = (
+        bool(row["checks_ok"])
+        and bool(row["anti_circular_mass"])
+        and bool(row["tracks_mass_error"])
+        and float(row["ortho_para_ratio_rel_err"]) <= 0.27
+        and bool(row.get("codata_not_sole_winner", False))
+    )
+    return {
+        "id": "Annihilation_PDG_tau_strict",
+        "tau_rel_err_upstream": row["tau_rel_err_upstream"],
+        "tau_rel_err_CODATA_m_e": row["tau_rel_err_CODATA_m_e"],
+        "ortho_para_ratio_rel_err": row["ortho_para_ratio_rel_err"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_annihilation_pdg_tau_bridge(device: str = "cpu") -> dict:
     """§5.0.3 — PDG para-Ps τ vs QED leading and N_c/α⁵ ladder (not collision τ_M)."""
     from mt_ca.si_constants import SI

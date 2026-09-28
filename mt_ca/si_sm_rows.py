@@ -448,3 +448,9 @@ class SISmRows:
 
         return run_annihilation_pdg_tau_bridge(device=device)
 
+    def annihilation_pdg_tau_strict_row(self, *, device: str = "cpu") -> dict[str, float | int | str | bool]:
+        """§5.0.3 — strict PDG τ: upstream masses, ortho/para ratio, anti-CODATA."""
+        from mt_ca.annihilation_pdg_tau import run_annihilation_pdg_tau_strict
+
+        return run_annihilation_pdg_tau_strict(device=device)
+
