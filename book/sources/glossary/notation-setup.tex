@@ -4,25 +4,21 @@
 
 \newcommand{\notationentryunit}[1]{\glsentryuseri{#1}}
 
-\newcommand{\notationprintlayer}{}
-
 \newcommand{\newnotationentryM}[5]{%
   \newglossaryentry{#1}{%
-    type=notation, sort={#2},
+    type=notationM, sort={#2},
     name={#3},
     description={#4},
-    user1={#5},
-    user2={M}%
+    user1={#5}%
   }%
 }
 
 \newcommand{\newnotationentryT}[5]{%
   \newglossaryentry{#1}{%
-    type=notation, sort={#2},
+    type=notationT, sort={#2},
     name={#3},
     description={#4},
-    user1={#5},
-    user2={T}%
+    user1={#5}%
   }%
 }
 
@@ -55,41 +51,42 @@
   \renewcommand*{\glossaryheader}{}%
   \renewcommand*{\glsgroupheading}[1]{}%
   \renewcommand{\glossentry}[2]{%
-    \def\notation@entrylayer{\glsentryfield{##1}{user2}}%
-    \ifdefstring{\notation@entrylayer}{\notationprintlayer}{%
-      \ifglshasdesc{##1}{%
-        \glstarget{##1}{\glossentryname{##1}} &
-        \glossentrydesc{##1}\glspostdescription\space ##2 &
-        \notationentryunit{##1}\tabularnewline
-      }{%
-        \glstarget{##1}{\glossentryname{##1}} & & \tabularnewline
-      }%
-    }{}%
+    \ifglshasdesc{##1}{%
+      \glstarget{##1}{\glossentryname{##1}} &
+      \glossentrydesc{##1}\glspostdescription\space ##2 &
+      \notationentryunit{##1}\tabularnewline
+    }{%
+      \glstarget{##1}{\glossentryname{##1}} & & \tabularnewline
+    }%
   }%
   \renewcommand{\subglossentry}[3]{}%
   \renewcommand*{\glsgroupskip}{}%
 }
 
 \newcommand{\printnotationglossary}[1]{%
-  \edef\notationprintlayer{#1}%
-  \printunsrtglossary[type=notation,style=notationlong,sort=standard,nonumberlist,title={}]%
+  \begingroup
+  \setglossarysection{none}%
+  \ifstrequal{#1}{M}{%
+    \printunsrtglossary[type=notationM,style=notationlong,sort=standard,nonumberlist]%
+  }{%
+    \printunsrtglossary[type=notationT,style=notationlong,sort=standard,nonumberlist]%
+  }%
+  \endgroup
 }
 
 \newcommand{\newnotationsectionM}[3]{%
   \newglossaryentry{#1}{%
-    type=notation, sort={#2},
+    type=notationM, sort={#2},
     name={#3},
-    description={},
-    user2={M}%
+    description={}%
   }%
 }
 
 \newcommand{\newnotationsectionT}[3]{%
   \newglossaryentry{#1}{%
-    type=notation, sort={#2},
+    type=notationT, sort={#2},
     name={#3},
-    description={},
-    user2={T}%
+    description={}%
   }%
 }
 

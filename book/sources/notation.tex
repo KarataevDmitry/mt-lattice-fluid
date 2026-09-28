@@ -1,14 +1,17 @@
 % Печать notation-glossary (записи: glossary/notation-entries.tex).
+% Отдельная глава frontmatter: не вкладывать в предисловие (иначе \subsection* даёт пустые строки в TOC).
 \chapter*{Условные обозначения}
 \addcontentsline{toc}{chapter}{Условные обозначения}
 \label{ch:notation}
 
 \begingroup
 \RenewDocumentCommand \gls { m } { \glsentryname {#1} }
-
-\section*{Слой \texorpdfstring{$M$}{M}}
+% glossaries с title={} пишет в TOC пустую «главу»; отфильтровываем только пустой заголовок.
+\noindent{\large\bfseries Слой $M$}\par
+\vspace{0.4em}
 \printnotationglossary{M}
 
-\section*{Слой \texorpdfstring{$T$}{T}}
+\noindent{\large\bfseries Слой $T$}\par
+\vspace{0.4em}
 \printnotationglossary{T}
 \endgroup
