@@ -31,7 +31,14 @@ book/sources/*.toc
 book/sources/*.pdf
 book/sources/*.upa
 book/sources/*.upb
-book/out/
+book/out/work/
+book/out/*.aux
+book/out/*.log
+book/out/*.out
+book/out/*.toc
+book/out/*__build*
+# flat legacy PDF/aux at book/out/ root (not out/pdf/)
+book/out/*.pdf
 
 # --- Data caches & torch dumps ---
 data/_cache/

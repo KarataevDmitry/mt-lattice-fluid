@@ -1,9 +1,24 @@
-# Build artifacts (sources → out/)
-out/*
-!out/.gitkeep
+# LaTeX scratch (sources → out/work/)
+out/work/*
+!out/work/.gitkeep
 
-# Legacy pdf/ tree (removed — use out/)
-pdf/
+# Legacy flat layout under out/ (before out/pdf + out/work)
+out/*
+!out/pdf/
+!out/work/
+out/*.aux
+out/*.log
+out/*.out
+out/*.toc
+out/*.pdf
+out/*__build*
+
+# Published PDFs live in out/pdf/ (tracked in git)
+!out/pdf/*
+!out/pdf/.gitkeep
+
+# Legacy top-level book/pdf/ (removed — use out/pdf/)
+/pdf/
 
 # Local editor / scratch
 *.synctex.gz

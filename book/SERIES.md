@@ -9,7 +9,7 @@
 3. **Каждый том заканчивается блоком «Критические эксперименты»** — предсказание + что считается провалом модели; без этого мало смысла. Шаблоны: `sources/volumes/chapter-critical-experiments-<id>.tex`.
 4. **§4.8 (системные кванты):** алгебра fractal в construction / macro; узел наблюдателя, **R_eff**, сравнение видов — том **observer**.
 
-| ID | Содержание | `main-*.tex` | PDF `out/` |
+| ID | Содержание | `main-*.tex` | PDF `out/pdf/` |
 |----|------------|--------------|------------|
 | **construction** | Построение: спуск, **g**, macro, **matter**, **α**, SI-лестница | `main-construction.tex` | `construction.pdf` |
 | **floors** | Этажи 0–2 (отдельно от построения) | `main-floors.tex` | `floors.pdf` |

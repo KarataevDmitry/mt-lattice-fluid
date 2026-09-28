@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# Build book/out/<volume>.pdf (XeLaTeX × 3). Default: construction.
+# Build book/out/pdf/<volume>.pdf (XeLaTeX × 3). Aux → book/out/work/. Default: construction.
 param(
     [ValidateSet('construction', 'floors', 'cosmology', 'observer', 'chemistry', 'compute')]
     [string]$Volume = 'construction',
@@ -96,7 +96,9 @@ if ($env:Path -notlike "*$texBin*") {
 
 $Root = $PSScriptRoot
 $Sources = Join-Path $Root 'sources'
-$Out = Join-Path $Root 'out'
+$OutPdf = Join-Path $Root 'out/pdf'
+$OutWork = Join-Path $Root 'out/work'
+$OutLegacy = Join-Path $Root 'out'
 
 $VolumeMap = @{
     construction = @{ Main = 'main-construction.tex'; Job = 'construction' }
@@ -302,12 +304,38 @@ Close the viewer manually: $pdfFull
     Write-Host "PDF unlocked."
 }
 
+function Test-ValidPdf {
+    param([Parameter(Mandatory)][string]$Path)
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return $false
+    }
+    $info = Get-Item -LiteralPath $Path
+    if ($info.Length -lt 4096) {
+        return $false
+    }
+    $head = [System.IO.File]::ReadAllBytes($Path)[0..4]
+    $magic = [Text.Encoding]::ASCII.GetString($head)
+    if ($magic -notlike '%PDF*') {
+        return $false
+    }
+    $tailBytes = [System.IO.File]::ReadAllBytes($Path)
+    $tail = [Text.Encoding]::ASCII.GetString($tailBytes[($tailBytes.Length - 32)..($tailBytes.Length - 1)])
+    return $tail -match '%%EOF'
+}
+
+function Assert-ValidPdf {
+    param([Parameter(Mandatory)][string]$Path)
+    if (-not (Test-ValidPdf -Path $Path)) {
+        throw "Invalid or truncated PDF: $Path"
+    }
+}
+
 $mainPath = Join-Path $Sources $MainTex
 if (-not (Test-Path -LiteralPath $mainPath)) {
     throw "Missing sources/$MainTex — see book/SERIES.md"
 }
 
-New-Item -ItemType Directory -Force -Path $Out | Out-Null
+New-Item -ItemType Directory -Force -Path $OutPdf, $OutWork | Out-Null
 # Conceptual figures: book/sources/figures/tikz/*.tex (hand-edited TikZ).
 # Legacy matplotlib PDFs (3D packing etc.): scripts/render_*_figures.py — only if -RenderFigures.
 if ($RenderFigures) {
@@ -323,8 +351,25 @@ if ($RenderFigures) {
         if ($LASTEXITCODE -ne 0) { throw "render_axiom_figures.py failed (exit $LASTEXITCODE)" }
     }
 }
-$pdf = Join-Path $Out "$JobName.pdf"
+$pdf = Join-Path $OutPdf "$JobName.pdf"
+$BuildJob = "${JobName}__build"
+$workPdf = Join-Path $OutWork "$BuildJob.pdf"
 Stop-ProcessesLockingPdf -PdfPath $pdf
+Stop-ProcessesLockingPdf -PdfPath $workPdf
+Get-ChildItem -LiteralPath $OutWork -Filter "$BuildJob.*" -ErrorAction SilentlyContinue |
+    Remove-Item -Force -ErrorAction SilentlyContinue
+
+# One-time layout: flat book/out/* from older builds → ignore; remove stale deliverables at out root.
+$legacyPdf = Join-Path $OutLegacy "$JobName.pdf"
+if (Test-Path -LiteralPath $legacyPdf) {
+    Remove-Item -LiteralPath $legacyPdf -Force -ErrorAction SilentlyContinue
+    Write-Host "removed legacy: out/$JobName.pdf (use out/pdf/)"
+}
+Get-ChildItem -LiteralPath $OutLegacy -Filter "$BuildJob.*" -ErrorAction SilentlyContinue |
+    Remove-Item -Force -ErrorAction SilentlyContinue
+Get-ChildItem -LiteralPath $OutLegacy -Filter "$JobName.*" -ErrorAction SilentlyContinue |
+    Where-Object { $_.Extension -match '^\.(aux|log|out|toc|synctex\.gz)$' } |
+    Remove-Item -Force -ErrorAction SilentlyContinue
 
 # Stale artifacts in sources/ (from old builds without -aux-directory) break cross-refs.
 $staleInSources = @(
@@ -346,19 +391,31 @@ Push-Location $Sources
 try {
     foreach ($pass in 1..3) {
         Write-Host "xelatex pass $pass/3 ..."
-        # aux + pdf must live in $Out; otherwise TeX reads sources/main.aux and refs stay ??.
+        # aux + intermediate PDF in out/work; release PDF only in out/pdf after validation.
+        # (TeX does not require .aux next to the published PDF — only consistent -jobname + -aux-directory.)
         & $XeLaTeX -interaction=nonstopmode -halt-on-error `
-            -output-directory="$Out" -aux-directory="$Out" `
-            -jobname="$JobName" $MainTex
+            -output-directory="$OutWork" -aux-directory="$OutWork" `
+            -jobname="$BuildJob" $MainTex
         if ($LASTEXITCODE -ne 0) {
             throw "xelatex failed (exit $LASTEXITCODE) on pass $pass"
         }
     }
 
-    if (-not (Test-Path $pdf)) {
-        throw "PDF not produced: $pdf"
+    if (-not (Test-Path -LiteralPath $workPdf)) {
+        throw "PDF not produced: $workPdf"
     }
-    Write-Host "Built: $pdf"
+    Assert-ValidPdf -Path $workPdf
+
+    Stop-ProcessesLockingPdf -PdfPath $pdf
+    $publishTmp = Join-Path $OutPdf "$JobName.pdf.publish"
+    if (Test-Path -LiteralPath $publishTmp) {
+        Remove-Item -LiteralPath $publishTmp -Force
+    }
+    Copy-Item -LiteralPath $workPdf -Destination $publishTmp -Force
+    Assert-ValidPdf -Path $publishTmp
+    Move-Item -LiteralPath $publishTmp -Destination $pdf -Force
+    Assert-ValidPdf -Path $pdf
+    Write-Host "Built: $pdf ($((Get-Item -LiteralPath $pdf).Length) bytes)"
 }
 finally {
     Pop-Location
