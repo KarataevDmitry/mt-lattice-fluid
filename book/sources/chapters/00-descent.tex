@@ -170,15 +170,23 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
 
 \begin{definition}[Предел Бекенштейна]
 \label{def:bekenstein-bound}
-\textbf{Предел Бекенштейна} --- верхние оценки на энтропию, число различимых микросостояний
-и битовый бюджет $B=\entropyS/(\constBoltzmann\ln 2)$
-в причинно связанной области, вписанной в шар радиуса~$R$,
-с суммарной энергией~$\energyE$ (материя и поля) и площадью~$A$ минимальной причинной границы.
+Пусть причинно связанная область вписана в шар радиуса~$R$,
+имеет суммарную энергию~$\energyE$ (материя и поля),
+а $A$ --- площадь её минимальной причинной границы.
+\textbf{Пределом Бекенштейна} для такой области
+\textbf{называют} систему верхних оценок на энтропию~$\entropyS$,
+на $\ln\opNormN$ (число различимых микросостояний)
+и на битовый бюджет $B:=\entropyS/(\constBoltzmann\ln 2)$,
+приведённую в \cref{prop:bekenstein-inequalities}.
+\end{definition}
+
+\begin{proposition}[Неравенства Бекенштейна]
+\label{prop:bekenstein-inequalities}
 Планковская площадь
 \[
   \lengthPlanck^2=\frac{\planckHbar\,\constGrav}{\speedC^3}.
 \]
-Для энтропии~$\entropyS$ и числа~$\opNormN$ имеем:
+Для области из \cref{def:bekenstein-bound}:
 \begin{align}
   \entropyS &\le \frac{2\symPi\,\constBoltzmann\, R\,\energyE}{\planckHbar\,\speedC},
   \label{eq:bekenstein-S}\\
@@ -205,7 +213,7 @@ Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж
   R_s=\frac{2\constGrav\,\energyE}{\speedC^4}.
   \label{eq:energy-bound}
 \end{equation}
-\end{definition}
+\end{proposition}
 
 У шара радиуса~$R$ правая часть \eqref{eq:state-count} пропорциональна~$R^2$.
 Набор независимых значений поля в каждой точке объёма рос бы как объём, то есть как~$R^3$,
