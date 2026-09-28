@@ -1,0 +1,26 @@
+\section{Каузальность и наблюдаемая скорость света}
+
+По решётке сигнал проходит за такт не дальше~$\caSignalSpeed\htick=\caStepSpace$.
+На микроуровне мировая линия --- ломаная по рёбрам $N(x)$ со скоростью звена~$\caSignalSpeed$;
+массивная частица --- зигзаг внутри того же конуса (\cref{fig:carrier-worldlines-fcc,fig:carrier-worldlines-hex}).
+Макроскопический наблюдатель, осредняя поле на масштабах $\gg\caStepSpace$,
+восстанавливает null-линию со скоростью $\speedC=\caKappaGeom \caSignalSpeed$ на FCC.
+Локальная структура размера порядка~$\caStepSpace$ несёт конус~$\caSignalSpeed$;
+составная структура, простирающаяся на многие ячейки, усредняется до макроскопической~$c$.
+Сверхсветовое распространение на~$T$ здесь не возникает: сигнал не покидает
+микроскопический световой конус~$\caSignalSpeed$.
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-worldlines-fcc.tex}
+  \caption{Мировые линии на FCC ($\caKappaGeom=1/\sqrt{2}$): микро-null, зигзаг и макро-фотон $\speedC=\caKappaGeom \caSignalSpeed$.}
+  \label{fig:carrier-worldlines-fcc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-worldlines-hex.tex}
+  \caption{Мировые линии на гекс-срезе $(2{+}1)$ ($\caKappaGeom_{\mathrm{hex}}=\sqrt{3}/2$).}
+  \label{fig:carrier-worldlines-hex}
+\end{figure}
+

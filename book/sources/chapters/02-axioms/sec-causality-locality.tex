@@ -1,0 +1,65 @@
+\section{Каузальность, локальность, унитарность}
+
+В этой секции $\caStepSpace$ и~$\htick$ --- шаг и такт из определения элементарных шага и такта (\cref{def:step-tick}),
+$\caSignalSpeed=\caStepSpace/\htick$ --- тактовая скорость сигнала на~$\layerMicro$,
+$N(x)$ --- узлы, достижимые из~$x$ за один такт (окрестность одного такта, \cref{def:neighborhood}).
+
+\begin{axiom}[A1 · Каузальность]
+\label{ax:A1}
+За один такт~$\htick$ сигнал проходит не дальше одного шага~$\caStepSpace$.
+$N(x)$ --- узлы, до которых он доходит за этот такт.
+\end{axiom}
+
+\begin{axiom}[A2 · Локальность]
+\label{ax:A2}
+Закон $g$ локален: новое значение $z(x,t+1)$ зависит только от поля в $\varepsilon$-окрестности $x$:
+\[
+  z(x,t+1)=g\bigl(\{z(y,t)\}_{y\in N(x)}\bigr).
+\]
+\end{axiom}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a1-neighborhood.tex}
+  \caption{$A_1$: световая окрестность $N(x)$, $\caSignalSpeed\htick=\caStepSpace$.}
+  \label{fig:axiom-a1-neighborhood}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a2-local-law.tex}
+  \caption{$A_2$: локальный закон $z(x,t{+}1)=g(\{z(y,t)\}_{y\in N(x)})$.}
+  \label{fig:axiom-a2-local-law}
+\end{figure}
+
+\begin{axiom}[A3 · Унитарность / сохранение информации]
+\label{ax:A3}
+Норма $N(t)$ --- инвариант эволюции:
+\[
+N(t+1)=N(t)\quad\text{для всех }t.
+\]
+Линейная часть $g_{\mathrm{lin}}$ --- произведение локальных унитарных операторов на рёбрах $N(x)$.
+Нелинейная часть --- только унитарная фаза $z\mapsto z\,e^{i\Phi(z)}$ на $\mathbb{C}^2$; модуль $|z|$ не диссипирует.
+\end{axiom}
+
+\begin{axiom}[A4 · U(1) заряд и SU(2) спин]
+\label{ax:A4}
+Состояние узла --- спинор $z=(z_1,z_2)^\top\in\mathbb{C}^2$.
+Глобальная U(1)-фаза $z\to z\,e^{i\theta}$ --- симметрия вакуума.
+Локальное столкновение реализуется SU(2)-вращателем $R(\Phi)$ на обеих компонентах.
+\end{axiom}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a3-phase.tex}
+  \caption{$A_3$: сохранение нормы $|z|$, меняется только фаза.}
+  \label{fig:axiom-a3-phase}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a4-su2.tex}
+  \caption{$A_4$: $SU(2)$-вращатель $R(\Phi)$ на $\mathbb{C}^2$.}
+  \label{fig:axiom-a4-su2}
+\end{figure}
+

@@ -43,10 +43,10 @@ book/
 | PDF гл. | Файл | Содержание |
 |---------|------|------------|
 | — | `frontmatter.tex` | Предисловие |
-| 1 | `chapters/00-descent.tex` | Требования, макромир, микромир, КМ, КТП, планковский мир |
+| 1 | `chapters/00-descent.tex` + `chapters/00-descent/sec-*.tex` | Спуск: требования → планковский мир → CA (по `\section`) |
 | 2 | `chapters/00-axiom-rationale.tex` | Перенос требований |
-| 3 | `chapters/02-axioms.tex` | Реестр $A_1$–$A_{16}$, теорема 2.3 |
-| 4 | `chapters/01-carrier.tex` | Геометрия: гекс-срез и FCC |
+| 3 | `chapters/02-axioms.tex` + `chapters/02-axioms/sec-*.tex` | Реестр $A_1$–$A_{16}$, теорема 2.3 |
+| 4 | `chapters/01-carrier.tex` + `chapters/01-carrier/sec-*.tex` | Геометрия: гекс-срез и FCC |
 | 5 | `chapters/00-foundations.tex` | Теорема дискретности |
 | 6 | `chapters/03-evolution.tex` | Закон $g$ |
 | 7 | `chapters/04-macro.tex` | Переход $M\to T$, теорема T-CR |

@@ -1,0 +1,30 @@
+\section{Две скорости и мост $\speedC=\caKappaGeom \caSignalSpeed$}
+\label{sec:two-c}
+
+На гексагональном срезе $(2{+}1)$ коэффициент
+\[
+\caKappaGeom_{\mathrm{hex}}=\sqrt{3}/2
+\]
+(\cref{sec:hex-slice}); на FCC-носителе
+\[
+\caKappaGeom_{\mathrm{FCC}}=1/\sqrt{2}
+\]
+(\cref{sec:fcc-kappa}).
+Величина $\caKappaGeom$ --- отношение радиусов вписанной и описанной сфер однотактового тела.
+Тождество $\speedC=\caKappaGeom \caSignalSpeed$ служит проверкой согласованности макроописания
+после фиксации $\htick=\caKappaGeom t_P$ (\cref{fig:carrier-two-speeds-micro,fig:carrier-two-speeds-macro}).
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-two-speeds-micro.tex}
+  \caption{Микро: дискретный шаг по решётке, тактовая скорость $\caSignalSpeed$.}
+  \label{fig:carrier-two-speeds-micro}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-two-speeds-macro.tex}
+  \caption{Макро: осреднённый фронт, $\speedC=\caKappaGeom \caSignalSpeed$.}
+  \label{fig:carrier-two-speeds-macro}
+\end{figure}
+

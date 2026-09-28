@@ -1,0 +1,119 @@
+\section{Микромир}
+\label{sec:macro-open}
+\label{sec:microworld}
+
+Внутри вещества непрерывные уравнения, только что записанные, ещё держат механику и электродинамику прибора.
+Они перестают держать сам опыт, как только отсчёт становится единичным.
+
+Ансамбль подготовленных одинаково атомов даёт частоты исходов.
+Один запуск прибора даёт один исход.
+Уравнения поля содержат частоты и не содержат границу между системой, прибором и записью результата.
+Сохранение того, что в ансамбле выглядит как полная вероятность, здесь ещё не объясняет одиночный отсчёт.
+
+Числа~$\speedC$, $\planckHbar$, $\constGrav$, $\chargeE$ и массы фермионов измерены с большой точностью.
+Безразмерное число, которое из них собирается, --- постоянная тонкой структуры
+\begin{equation}
+  \alphaFs = \frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}.
+  \label{eq:alpha-fs}
+\end{equation}
+\begin{align}
+  [\alphaFs]
+  &= \left[\frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}\right]
+  = \frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFaradPerMetre\bigr)\,(\mathrm{Дж\cdot с})\,\bigl(\NotationUnitMetrePerSecond\bigr)}
+  \notag\\
+  &= \frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFarad\bigr)\,(\mathrm{В\cdot Кл})}
+  = 1.
+  \label{eq:alpha-fs-dim}
+\end{align}
+Coupling безразмерен: фарады, джоули и скорость в знаменателе сокращаются до единицы.
+Она стоит в законе свободным множителем:
+измерение есть, вывода из \eqref{eq:maxwell-hom}--\eqref{eq:newton} нет.
+Пока закон претендует только описать прибор, такой множитель терпим.
+Как только тот же закон считается фундаментальным, вписанное число означает, что измерение не выведено.
+
+\begin{remark}[Формула \eqref{eq:alpha-fs} --- мост, не онтология]
+\label{rem:alpha-fs-bridge}
+Запись $\alphaFs=\chargeE^2/(4\symPi\constEpsZero\planckHbar \speedC)$ удобна на~$\layerMacro$:
+безразмерное число \emph{собрано} из измеренных размерных величин.
+На~$\layerMicro$ тот же объект --- coupling фазы и вакуума и отношение квантов силы $\ladderForce$
+(\cref{ch:alpha}, \cref{def:alpha-meaning}); $\chargeE$ не входит в его \emph{определение}.
+\end{remark}
+
+Чёрная дыра делает ограниченность плотности видимой числом.
+
+\begin{definition}[Битовый бюджет]
+\label{def:bit-budget}
+Пусть у системы задана термодинамическая энтропия~$\entropyS$.
+\textbf{Битовым бюджетом} $B$ говорят о величине
+\[
+  B := \frac{\entropyS}{\constBoltzmann\ln 2},
+\]
+то есть об энтропии, пересчитанной в биты (безразмерно).
+\end{definition}
+
+\begin{definition}[Число различимых микросостояний]
+\label{def:distinguishable-microstates}
+Пусть у изолированной системы энтропия~$\entropyS$.
+Под \textbf{числом различимых микросостояний} $\opNormN$ понимают величину,
+удовлетворяющую $\entropyS=\constBoltzmann\ln\opNormN$:
+это логарифм числа микросостояний, согласованных с макроописанием.
+\end{definition}
+
+\begin{definition}[Предел Бекенштейна]
+\label{def:bekenstein-bound}
+Пусть причинно связанная область вписана в шар радиуса~$R$,
+имеет суммарную энергию~$\energyE$ (материя и поля),
+а $A$ --- площадь её минимальной причинной границы.
+Тогда \textbf{предел Бекенштейна} для такой области --- это система верхних оценок
+на энтропию~$\entropyS$, на $\ln\opNormN$ (\cref{def:distinguishable-microstates})
+и на битовый бюджет~$B$ (\cref{def:bit-budget});
+конкретные неравенства приведены в \cref{prop:bekenstein-inequalities}.
+\end{definition}
+
+\begin{proposition}[Неравенства Бекенштейна]
+\label{prop:bekenstein-inequalities}
+Планковская площадь
+\[
+  \lengthPlanck^2=\frac{\planckHbar\,\constGrav}{\speedC^3}.
+\]
+Для области из \cref{def:bekenstein-bound}:
+\begin{align}
+  \entropyS &\le \frac{2\symPi\,\constBoltzmann\, R\,\energyE}{\planckHbar\,\speedC},
+  \label{eq:bekenstein-S}\\
+  B &\le \frac{2\symPi\, R\,\energyE}{\planckHbar\,\speedC\,\ln 2},
+  \label{eq:bekenstein-bits}\\
+  \ln\opNormN &\le \frac{\entropyS}{\constBoltzmann}
+  \le \frac{A}{4\lengthPlanck^2}.
+  \label{eq:state-count}
+\end{align}
+На горизонте чёрной дыры площади~$A$ достигается насыщение:
+\begin{equation}
+  \entropyS = \frac{\constBoltzmann A}{4\lengthPlanck^2}.
+  \label{eq:bh-entropy}
+\end{equation}
+\begin{equation}
+  \left[\frac{\constBoltzmann A}{4\lengthPlanck^2}\right]
+  = \NotationUnitJoulePerKelvin
+  = [\entropyS].
+  \label{eq:bh-entropy-dim}
+\end{equation}
+Чтобы область той же шкалы не схлопнулась в горизонт, энергия удовлетворяет
+\begin{equation}
+  \energyE \le \frac{R\,\speedC^4}{2\constGrav},
+  \qquad
+  R_s=\frac{2\constGrav\,\energyE}{\speedC^4}.
+  \label{eq:energy-bound}
+\end{equation}
+\end{proposition}
+
+У шара радиуса~$R$ правая часть \eqref{eq:state-count} пропорциональна~$R^2$.
+Набор независимых значений поля в каждой точке объёма рос бы как объём, то есть как~$R^3$,
+а непрерывное значение в каждой точке $x\in\spaceRthree$ даёт несчётное множество конфигураций.
+Общая теория относительности и квантовая теория поля локально друг другу не противоречат
+и счёта \eqref{eq:state-count} не содержат.
+
+Там, где одновременно существенны $\planckHbar$, $\constGrav$ и~$\speedC$, масштаб есть~$\lengthPlanck$ из \eqref{eq:bh-entropy}.
+Поле в каждой точке счёт \eqref{eq:state-count} нарушает.
+Следующий этаж --- запись того же сохранения и той же обратимости,
+при которой спектр атома и два знака спина уже получаются.
+

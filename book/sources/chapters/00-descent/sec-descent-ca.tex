@@ -1,0 +1,64 @@
+\section{Локальный обратимый автомат}
+\label{sec:descent-ca}
+
+Когда на каждом узле конечный алфавит, время дискретно, а обновление локально,
+микроуровень~$\layerMicro$ есть \emph{клеточный автомат}:
+\[
+  s(x,t+1)=f\bigl(\{s(y,t)\}_{y\in N(x)}\bigr),
+\]
+но с физическими ограничениями из спуска: сохранение нормы, обратимость, спин~$1/2$, заряд~$\in\spaceZ$.
+
+\begin{definition}[Закон эволюции]
+\label{def:g-ca}
+Пусть $\symCapitalPsi^t=\{z(x,t)\}_{x\in\carrierLattice}$ --- глобальная конфигурация (\cref{def:field-a3}).
+\textbf{Закон эволюции} $g$ на~$\layerMicro$ --- локальное обратимое отображение
+\[
+  \symCapitalPsi^{t+1}=g(\symCapitalPsi^t),\qquad g^{-1}\circ g=\mathrm{id},
+\]
+при конечном регистре $Z\in\spaceZ_{\phaseRingCount}[i]$ на каждом узле.
+Исторические примеры (Конвей, Rule~110) иллюстрируют класс CA, но не фиксируют~$g$;
+см. приложение~\ref{app:background}.
+\end{definition}
+
+\subsection{Словарь: термины клеточного автомата и слой~\texorpdfstring{$M$}{M}}
+\label{sec:ca-terminology}
+
+В литературе по клеточным автоматам и «цифровой физике'' те же объекты часто называют иначе,
+чем в QED и в гл.~\ref{ch:carrier} о двух скоростях.
+Ниже --- соответствие без отождествления микро- и макроскорости.
+
+\begin{table}[ht]
+\centering
+\caption{КА-терминология и наша запись на~$M$.}
+\label{tab:ca-glossary}
+\small
+\begin{tabular}{@{}p{3.4cm}p{4.8cm}p{4.6cm}@{}}
+\toprule
+Термин КА & На~$M$ & Замечание \\
+\midrule
+ячейка, site & узел $\hv\in\carrierLattice$ & регистр $Z\in\spaceZ_{\phaseRingCount}[i]$ \\
+состояние $s(x)$ & спинор $z(x)\in\spaceC^2$ & в коде --- фиксированная точка на $Z$ \\
+окрестность & $N(x)$ (\cref{def:neighborhood}) & световая за один такт, не Мур \\
+правило, $f$ & закон $g$ (\cref{def:g-ca}) & обратим; $g^{-1}\circ g=\mathrm{id}$ \\
+поколение, generation & такт $dt=\htick$ & $t\in\spaceZ$ \\
+шаг решётки & $dh=\caStepSpace$ & один hop по $\carrierLattice$ \\
+\emph{скорость света} CA & $\caSignalSpeed=dh/dt=\caStepSpace/\htick$ & \textbf{тактовая} скорость сигнала \\
+макроскорость & $\speedC=\kgeom \caSignalSpeed$ & мост~$\layerMacro$, CODATA (\cref{sec:two-c}) \\
+световой конус & $|x-y|\le \caSignalSpeed\cdot\caStepTime\cdot dh$ & каузальность одного такта \\
+алфавит & $\spaceZ_{\phaseRingCount}[i]\times Q(2^{-6})$ & конечный, не $\{0,1\}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+В учебниках по CA «скорость света'' почти всегда означает \emph{не} экспериментальную $\speedC$,
+а нормировку «одна ячейка за один такт'': $\caSignalSpeed=1$ в natural units.
+У нас то же: за один~$dt$ сигнал не дальше одного ребра длины~$dh$ (\cref{def:step-tick}).
+Макроскопическая скорость света в вакууме~$\speedC$ появляется только после осреднения на~$\layerMacro$
+и связана с~$\caSignalSpeed$ коэффициентом~$\kgeom$ (гл.~\ref{ch:carrier}, \cref{sec:two-c}).
+Путать $\caSignalSpeed$ и $\speedC$ --- типичная ошибка при чтении CA-литературы рядом с физикой поля.
+
+Закон~$g$ не подбирается под таблицу Rule~110: он \emph{замыкается} из абсолютных условий
+и геометрии носителя (гл.~\ref{ch:axioms}, \ref{ch:carrier}, \ref{ch:evolution}).
+Макромир~$\layerMacro$, с которого начался спуск, --- осреднение $\opBoundary$ по~$\layerMicro$;
+гладкие уравнения QED и Маделунга --- его имена, не ядро автомата.
+

@@ -1,0 +1,80 @@
+\section{Квантовая механика}
+\label{sec:qm}
+
+Классическая траектория не выдерживает атом:
+устойчивые орбиты и линейчатый спектр ей противоречат.
+Кулоновская задача для электрона,
+\begin{equation}
+  \Bigl(-\frac{\planckHbar^2}{2\massElectron}\opNabla^2 - \frac{\chargeE^2}{4\symPi\constEpsZero r}\Bigr)\wavePsi = \energyE\wavePsi,
+  \label{eq:hydrogen}
+\end{equation}
+даёт дискретные уровни
+\begin{equation}
+  E_n = -\frac{\massElectron \speedC^2\alphaFs^2}{2n^2},
+  \qquad n=1,2,\ldots
+  \label{eq:rydberg}
+\end{equation}
+Опыт интерференции показывает ещё и то, что складываются не частоты исходов, а амплитуды:
+\begin{equation}
+  w \propto |\wavePsi_1+\wavePsi_2|^2,
+  \label{eq:interference}
+\end{equation}
+иначе тёмных полос не было бы.
+Состояние, из которого такие амплитуды читаются, есть вектор;
+частота исхода на макроэтаже есть квадрат его модуля,
+\begin{equation}
+  w(a) = |\langle a|\wavePsi\rangle|^2.
+  \label{eq:born}
+\end{equation}
+Обратимость, уже видная в \eqref{eq:newton}, здесь означает,
+что эволюция не меняет полную норму.
+Уравнение Шрёдингера
+\begin{equation}
+  i\planckHbar\,\opPartialT\wavePsi = \hamiltonianH\wavePsi,
+  \qquad \hamiltonianH^\dagger = \hamiltonianH,
+  \label{eq:schrodinger}
+\end{equation}
+сохраняет
+\begin{equation}
+  \langle\wavePsi|\wavePsi\rangle = \mathrm{const}
+  \label{eq:norm}
+\end{equation}
+и по состоянию в один момент восстанавливает состояние в предыдущий.
+
+Опыт со спином электрона даёт два исхода,
+\begin{equation}
+  s_z = \pm\frac{\planckHbar}{2},
+  \label{eq:spin-z}
+\end{equation}
+и ещё одно свойство поворота.
+Поворот на угол~$\symTheta$ вокруг оси~$\mathbf{n}$ действует как
+\begin{equation}
+  U(\mathbf{n},\symTheta)
+  = \exp\bigl(-i\symTheta\,\mathbf{n}\cdot\boldsymbol{\sigma}/2\bigr).
+  \label{eq:spin-rotation}
+\end{equation}
+Оборот на $2\symPi$ меняет знак, оборот на $4\symPi$ возвращает состояние:
+\begin{equation}
+  U(2\symPi)=-\mathbb{1},
+  \qquad
+  U(4\symPi)=+\mathbb{1}.
+  \label{eq:spin-4pi}
+\end{equation}
+Запись состояния --- столбец $\wavePsi\in\spaceC^2$.
+Общий множитель-фаза $e^{i\symAlpha}$ не меняет частот \eqref{eq:born}
+и соответствует сохранению заряда, уже записанному \eqref{eq:continuity}.
+Локальный поворот двух компонент лежит в $SU(2)$.
+
+Физическая величина, построенная из такого состояния,
+не имеет права зависеть от того, где проведён разрез аргумента на $2\symPi$.
+Комбинация, которая разреза не видит, собирается из амплитуды и сопряжённой амплитуды:
+\begin{equation}
+  \langle\wavePsi|O|\wavePsi\rangle.
+  \label{eq:observable}
+\end{equation}
+
+Квантовая механика закрывает эти факты для одной системы с заданным числом степеней свободы.
+Одиночный отсчёт прибора по-прежнему стоит рядом с уравнением.
+Когда степеней свободы много и частицы рождаются и исчезают,
+та же норма и тот же световой конус записываются как теория поля.
+

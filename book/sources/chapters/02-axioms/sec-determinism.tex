@@ -1,0 +1,34 @@
+\section{Детерминизм и «квантовая случайность''}
+
+\begin{proposition}[Детерминизм $\Mlayer$]
+\label{prop:determinism}
+Поскольку новое состояние есть функция предыдущего,
+\[
+  \symCapitalPsi^{t+1}=g(\symCapitalPsi^t),
+\]
+на каждом такте значение одно, и траектория $\symCapitalPsi^t$ восстанавливается из $\symCapitalPsi^0$.
+\end{proposition}
+
+\begin{proof}
+\pfrom{определения $\symCapitalPsi^{t+1}=g(\symCapitalPsi^t)$}
+при фиксированном $\symCapitalPsi^t$ правая часть однозначна.
+\phence индукция по~$t$ восстанавливает $\symCapitalPsi^t$ из $\symCapitalPsi^0$ и правила~$g$.
+\end{proof}
+
+На $\Tlayer$ частота исхода есть квадрат модуля амплитуды \eqref{eq:born};
+она возникает из динамического хаоса фаз и грубости прибора (\cref{fig:axiom-layer-m,fig:axiom-layer-t}).
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-layer-m.tex}
+  \caption{$\mathcal{M}$: детерминированное микрополе $z(x,t)$.}
+  \label{fig:axiom-layer-m}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-layer-t.tex}
+  \caption{$\mathcal{T}$: грубый макро-readout $\Phi=\mathcal{B}z$.}
+  \label{fig:axiom-layer-t}
+\end{figure}
+

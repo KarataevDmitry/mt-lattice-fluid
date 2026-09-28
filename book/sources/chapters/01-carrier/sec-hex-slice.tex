@@ -1,0 +1,95 @@
+\section{Гексагональный срез $(2{+}1)$}
+\label{sec:hex-slice}
+
+\subsection{Регулярные замощения плоскости}
+
+Локальный закон на плоскости требует замощения без разрывов.
+На плоскости существуют ровно три регулярных типа: треугольник, квадрат и шестиугольник
+(\cref{fig:carrier-tiling-triangle,fig:carrier-tiling-square,fig:carrier-tiling-hex}).
+Число соседей $|N(x)|$ на одном такте --- отдельный вопрос: узлы стоят в центрах плиток
+или в вершинах, и квадратная решётка допускает диагональ $\caStepSpace\sqrt{2}$, недостижимую за один~$\htick$
+(\cref{fig:carrier-neighbors-tri,fig:carrier-neighbors-sq,fig:carrier-neighbors-hex}).
+Наиплотнейшая изотропная упаковка центров даёт гексагональную ячейку Вороного, $|N|=6$
+(\cref{fig:carrier-hex-neighbors}).
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-tiling-triangle.tex}
+  \caption{Треугольное замощение (выделена одна плитка).}
+  \label{fig:carrier-tiling-triangle}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-tiling-square.tex}
+  \caption{Квадратное замощение (выделена одна плитка).}
+  \label{fig:carrier-tiling-square}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-tiling-hex.tex}
+  \caption{Шестиугольное замощение (выделена одна плитка).}
+  \label{fig:carrier-tiling-hex}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-neighbors-tri.tex}
+  \caption{Треугольная решётка: $|N(x)|=3$.}
+  \label{fig:carrier-neighbors-tri}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-neighbors-sq.tex}
+  \caption{Квадратная решётка: $|N(x)|=4$; диагональ $\caStepSpace\sqrt{2}$ недостижима за один такт.}
+  \label{fig:carrier-neighbors-sq}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-neighbors-hex.tex}
+  \caption{Гексагональная решётка: $|N(x)|=6$.}
+  \label{fig:carrier-neighbors-hex}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-hex-neighbors.tex}
+  \caption{Гексагональная ячейка Вороного: ребро $a=\caStepSpace$ и $|N(x)|=6$.}
+  \label{fig:carrier-hex-neighbors}
+\end{figure}
+
+\subsection{Константы на гексагональном слое}
+
+Центр правильного шестиугольника и его вершина разделены ребром~$a=\caStepSpace$.
+Апофема --- расстояние от центра до стороны --- есть высота равностороннего треугольника со стороной~$a$:
+\[
+  R_{\mathrm{in}}=\frac{\sqrt{3}}{2}\,a.
+\]
+Это чистая геометрия однотактового тела, без соседей
+(\cref{fig:carrier-hex-radii}).
+Отношение к радиусу до вершины $R_{\mathrm{out}}=a$ даёт геометрический множитель среза
+\[
+  \caKappaGeom_{\mathrm{hex}}=\frac{R_{\mathrm{in}}}{R_{\mathrm{out}}}=\frac{\sqrt{3}}{2}.
+\]
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/carrier-hex-radii.tex}
+  \caption{Вписанный и описанный радиусы правильного шестиугольника: $\caKappaGeom_{\mathrm{hex}}$.}
+  \label{fig:carrier-hex-radii}
+\end{figure}
+
+Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ и макроскопическая~$\speedC$ связаны этим же отношением, $\speedC=\caKappaGeom_{\mathrm{hex}} \caSignalSpeed$,
+поэтому
+\begin{align}
+  \htick &= \caKappaGeom_{\mathrm{hex}}\,t_P, \\
+  \caSignalSpeed &= \frac{2}{\sqrt{3}}\,c, \\
+  \kappa_{\mathrm{link}} &= \frac{1}{|N|} = \frac{1}{6}.
+  \label{eq:hex-bridge-constants}
+\end{align}
+Число~$\speedC$ одно и на срезе, и на трёхмерном носителе, который будет выбран ниже;
+меняется только разбиение $\speedC=\caKappaGeom \caSignalSpeed$.
+

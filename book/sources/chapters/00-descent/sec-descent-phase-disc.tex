@@ -1,0 +1,104 @@
+\section{Дискретизация фазы}
+\label{sec:descent-phase-disc}
+\label{sec:coords-internal}
+
+На макроэтаже волновая функция допускает запись Маделунга,
+\[
+  \wavePsi=\sqrt{\massDensity}\,e^{i\phaseVarphi/\planckHbar},
+\]
+с плотностью $\massDensity=|\wavePsi|^2$ и фазой~$\phaseVarphi$.
+На узле~$\caPlanckCell$ тот же смысл несут $|z|^2$ и аргументы компонент $z_k$.
+Континуумная фаза $\phaseVarphi\in\spaceR$ на одной планковской ячейке не определена бесконечно точно:
+требование обратимости и конечного числа различимых состояний:
+из предела Бекенштейна (\cref{def:bekenstein-bound}), в частности из \eqref{eq:state-count},
+следует \emph{конечное кольцо фаз}.
+
+\begin{theorem}[Информационный бюджет элементарной ячейки]
+\label{thm:cell-bit-budget}
+Пусть элементарная ячейка~$\hv$ имеет объём порядка $v_{\hv}\sim\caStepSpace^3$
+и линейный размер $R\sim\caStepSpace$.
+Из предела Бекенштейна (\cref{def:bekenstein-bound}) и оценки энергии \eqref{eq:energy-bound}
+следует, что регистр ячейки насыщает битовый бюджет (\cref{def:bit-budget})
+\[
+  B_{\hv}=\frac{2\symPi}{\ln 2}\quad\text{(бит, мост $\layerMacro$)},\qquad
+  \phaseRingCount=2^{\lfloor B_{\hv}\rfloor}=2^{9}=512,
+\]
+\[
+  B_{\hv}=\log_2 \phaseRingCount+\varepsilon_B,\qquad \varepsilon_B\approx 0{,}065.
+\]
+Минимальный фазовый шаг квантовой механики $\symCapitalDelta\symPhi_{\min}=\tfrac12$
+переносится на кольце $\mathbb{Z}_{\phaseRingCount}$ целыми тиками:
+\[
+  \phaseSectorCount=\left\lceil \frac{2\symPi}{\symCapitalDelta\symPhi_{\min}}\right\rceil=13,\qquad
+  \symCapitalDelta\symPhi_{\mathrm{disc}}
+  =\left\lceil \phaseRingCount\,\frac{\symCapitalDelta\symPhi_{\min}}{2\symPi}\right\rceil=41.
+\]
+\end{theorem}
+
+\begin{proof}
+\pfrom{предела Бекенштейна (\cref{def:bekenstein-bound}) при $R\sim\caStepSpace$ и энергии $E$ в объёме $v_{\hv}\sim R^3$}
+\[
+  B_{\hv}\le \frac{2\symPi R E}{\planckHbar\,\speedC\,\ln 2}
+\]
+(\eqref{eq:bekenstein-bits}).
+\pusing{оценки \eqref{eq:energy-bound} при $R=\caStepSpace$}
+насыщение достигается при $E=E_P=\planckHbar\,\speedC/\caStepSpace$ (планковская плотность на ячейке).
+\psubst{$R=\caStepSpace$ и $E=E_P$}
+\[
+  B_{\hv}=\frac{2\symPi}{\ln 2}.
+\]
+\pfollows
+\[
+  \lfloor B_{\hv}\rfloor=9,\qquad
+  \phaseRingCount=2^{9}=512,\qquad
+  \varepsilon_B=B_{\hv}-\lfloor B_{\hv}\rfloor\approx 0{,}065.
+\]
+
+\smallskip
+\emph{Фазовое кольцо.}
+\pfrom{требования $\symCapitalDelta\symPhi_{\min}=\tfrac12$ на макроэтаже}
+полный оборот $2\symPi$ на $\mathbb{Z}_{\phaseRingCount}$ разбивается на не менее
+$\lceil 2\symPi/\symCapitalDelta\symPhi_{\min}\rceil=13$ секторов Heisenberg-кванта.
+\psubst{$\phaseRingCount=512$}
+\[
+  \symCapitalDelta\symPhi_{\mathrm{disc}}
+  =\left\lceil \phaseRingCount\,\frac{\symCapitalDelta\symPhi_{\min}}{2\symPi}\right\rceil=41.
+\]
+\end{proof}
+Один такт~$\htick$ --- полный оборот $\spaceZ_{\phaseRingCount}$;
+генератор вращения $\symOmegaLower=e^{i2\symPi/\phaseRingCount}$, состояние на $S^1$ --- $\symOmegaLower^{\phaseVarphi_{\mathrm{disc}}}$.
+
+\begin{remark}[Фаза, $\symOmegaLower$ и импульс $\symCapitalPhi$]
+\label{rem:phi-omega-Phi}
+$\phaseVarphi_{\mathrm{disc}}\in\spaceZ_{\phaseRingCount}$ --- \emph{координата} фазы (аддитивный индекс).
+$\symOmegaLower$ --- генератор, не вторая координата.
+$\symCapitalPhi\in\spaceZ_{\phaseRingCount}$ --- \emph{импульс за такт} ($R(\symCapitalPhi)=\symOmegaLower^{\symCapitalPhi}$), не регистр $\phaseVarphi_{\mathrm{disc}}$.
+В мосте~$\layerMacro$: $\phaseVarphi=\phaseVarphi_{\mathrm{disc}}\cdot(2\symPi/\phaseRingCount)$;
+поправка Швингера $a_e\sim\alphaFs/(2\symPi)$ читается там же, на~$\layerMicro$ --- в тиках кольца.
+\end{remark}
+
+Спинор на узле кодируется в конечном кольце Гауссовых целых
+\[
+  Z=U+iV\in\spaceZ_{\phaseRingCount}[i],
+\]
+амплитуда --- на сетке $Q(2^{-6})$, $\symMu\in\spaceZ_{64}$.
+Дискретная фаза раскладывается по Heisenberg-кванту:
+\[
+  \phaseVarphi_{\mathrm{disc}} \equiv k_{\symPhi}\cdot\symCapitalDelta\symPhi_{\mathrm{disc}}+\phaseVarphi_{\mathrm{f}}
+  \pmod{\phaseRingCount},
+\]
+$k_{\symPhi}\in\spaceZ_{13}$ --- сектор, $\phaseVarphi_{\mathrm{f}}\in\{0,\ldots,40\}$ --- тонкая фаза.
+
+\begin{proposition}[Каноническая фаза и шов]
+\label{prop:canonical-phase}
+Каждому $\phaseVarphi_{\mathrm{disc}}\in\spaceZ_{\phaseRingCount}$ сопоставляется единственная каноническая пара
+$(k_{\symPhi},\phaseVarphi_{\mathrm{f}})$ с минимальным $k_{\symPhi}$.
+Наивная карта $\spaceZ_{13}\times\spaceZ_{41}\to\spaceZ_{\phaseRingCount}$ имеет $21$ коллизию;
+\[
+  \phaseRingCount=\phaseSectorCount\cdot\symCapitalDelta\symPhi_{\mathrm{disc}}-(\phaseSectorCount+\vevHierarchySteps)=13\cdot 41-21.
+\]
+\end{proposition}
+
+Фазовый остаток планковской дырки на~$\layerMicro$: $\symAlpha_*-1=\symCapitalDelta\symPhi_{\mathrm{disc}}/\phaseRingCount=41/512$;
+в мосте~$\layerMacro$ то же число носит имя $1/(4\symPi)$ и не совпадает с $\alphaFs$ из \eqref{eq:alpha-fs}.
+

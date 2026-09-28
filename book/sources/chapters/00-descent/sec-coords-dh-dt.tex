@@ -1,0 +1,43 @@
+\section{Обобщённые координаты}
+\label{sec:coords-dh-dt}
+\label{ch:native-coords}
+
+\begin{definition}[Внешние координаты \texorpdfstring{$\caCoordsDhDt$}{dh,dt}]
+\label{def:dh-dt}
+Пусть $\caStepSpace$ --- шаг решётки, $\htick$ --- длительность такта.
+\textbf{Внешние координаты} $\caCoordsDhDt$ на~$\layerMicro$ --- это пара
+\[
+  dh:=\caStepSpace,\qquad dt:=\htick,
+\]
+при $\caSignalSpeed=\caStepSpace/\htick$.
+В натуральных единицах симуляции полагают $dh=dt=1$.
+Под \textbf{ступенью действия} $\ladderAction$ на $(\hv,1\,\htick)$ понимают квант, из которого
+одной подстановкой следуют $\ladderMomentum=\ladderAction/\caStepSpace$,
+$\ladderEnergy=\ladderAction/\htick$ и $\ladderForce=\ladderAction/(\caStepSpace\cdot\htick)$,
+без трёх независимых подгонок.
+\end{definition}
+
+\begin{definition}[Внутренние координаты]
+\label{def:internal-coords}
+Пусть регистр элементарной ячейки задаётся $(\symMu,k_{\symPhi},\phaseVarphi_{\mathrm{f}})$
+или, эквивалентно, $(\symMu,\phaseVarphi_{\mathrm{disc}})$.
+Эту запись и называют \textbf{внутренними координатами}; спинор~$\spaceC^2$ хранит две копии регистра.
+\textbf{Вакуум} в этой записи --- $\phaseVarphi_{\mathrm{f}}=0$, $\phaseVarphi_{\mathrm{disc}}=k_{\symPhi}\cdot 41$.
+\end{definition}
+
+\begin{table}[ht]
+\centering
+\caption{Лестница $\ladderAction$ и мост $\layerMicro\to\layerMacro$.}
+\label{tab:dh-dt-bridge}
+\begin{tabular}{@{}lll@{}}
+\toprule
+На $\layerMicro$ & $\caCoordsDhDt$ & Мост $\layerMacro$ \\
+\midrule
+$\ladderAction$ & на $(\hv,1\,\htick)$ & $\planckHbar/2$ \\
+$\ladderMomentum$ & $\ladderAction/\caStepSpace$ & $\planckHbar/(2\caStepSpace)$ \\
+$\ladderEnergy$ & $\ladderAction/\htick$ & $\planckHbar/(2\htick)$ \\
+$\caSignalSpeed$ & $\caStepSpace/\htick$ & $\caStepSpace/\htick$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+

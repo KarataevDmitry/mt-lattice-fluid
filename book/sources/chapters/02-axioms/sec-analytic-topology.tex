@@ -1,0 +1,44 @@
+\section{Аналитичность и топология}
+
+\begin{axiom}[A9 · Дискретная аналитичность (Коши--Риман)]
+\label{ax:A9}
+$g$ --- оператор удержания дискретной голоморфности: голономия $\zeta=(\sum_N z)\cdot z^*$
+вместо ложных скачков $\Arg(\sum z)-\Arg z$.
+CR-единственность на связном $\carrierLattice$ задаёт глобальное поле (риманова поверхность $\carrierLattice\times S^1$).
+\end{axiom}
+
+\begin{axiom}[A10 · Топологическая квантованность заряда]
+\label{ax:A10}
+Устойчивый дефект --- полюс на $\partial(\hv)$. Топологический заряд
+\[
+  n=\frac{1}{2\pi}\oint_{\partial(\hv)} d\arg z \in \mathbb{Z}.
+\]
+\end{axiom}
+
+\begin{axiom}[A11 · Устойчивость солитона]
+\label{ax:A11}
+Размазанное (не голоморфное) состояние не устойчиво: вращатель с $K_P$ и $\Delta\phi_{\min}$
+выталкивает полюс --- самофокусировка vortex, не smear.
+\end{axiom}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a9-holonomy.tex}
+  \caption{$A_9$: дискретная голономия $\zeta$.}
+  \label{fig:axiom-a9-holonomy}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a10-winding.tex}
+  \caption{$A_{10}$: квантование намотки $\oint d\arg z=2\pi n$.}
+  \label{fig:axiom-a10-winding}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \input{figures/tikz/axiom-a11-vortex.tex}
+  \caption{$A_{11}$: устойчивый полюс (anti-smear), не размазанное состояние.}
+  \label{fig:axiom-a11-vortex}
+\end{figure}
+
