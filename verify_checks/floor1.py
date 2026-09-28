@@ -277,6 +277,22 @@ def check_floor1_shell_transitions_boil(device: str = "cpu") -> dict:
     }
 
 
+def check_floor1_pm_coarse_dipole(device: str = "cpu") -> dict:
+    """§5.0.3 — pm_nn on boil: coarse Δ|Φ| dipole proxy vs pp control."""
+    from mt_ca.si_constants import SI
+
+    row = SI.floor1_pm_coarse_dipole_row(device=device)
+    ok = bool(row["checks_ok"]) and bool(row["pm_dipole_proxy"])
+    return {
+        "id": "Floor1_pm_coarse_dipole",
+        "pm_elongation_delta": row["pm_elongation_delta"],
+        "pm_peaks_on_delta": row["pm_peaks_on_delta"],
+        "derivation_closed": row["derivation_closed"],
+        "ok": ok,
+        "note": row["note"],
+    }
+
+
 def check_floor1_shell_excitation_relax(device: str = "cpu") -> dict:
     """§5.0.4-B — shell-2 bump partially relaxes; ground shell-1 + core hold."""
     from mt_ca.si_constants import SI

@@ -320,7 +320,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 - **§4.9.2a birth:** $V\mapsto(n,Q,\chi,s,E,b,m)$ формулы ON · `SI.birth_row` live ($m_e$, $m_p$ check)
 - **§5.0 binary ρ:** заполнение на T on T — open
 - **§5.0.1 Arg mass:** **`m_H=m_P α_fs⁸ √(π/2)`** ✅ algebra · width/lineshape open
-- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; PDG τ / 2γ T-stats — open (`Annihilation_T_stats`)
+- **§5.0.3 antimatter:** two-body NN on boil ✅ **`Floor1_two_body_nn`**; four-body FCC chain ✅ **`Floor1_n_body_chain`**; M→T coarse dipole on boil ✅ **`Floor1_pm_coarse_dipole`**; PDG τ / full ensemble `Annihilation_T_stats` — open
 - **§5.2.2 κ_link:** sim ballistic check on `c` — open
 - **§5.3 gas:** sim EOS / `P(ρ)` макроописание — open
 - **§5.3.2 v_s:** численный `v_s` on макроописание T — open

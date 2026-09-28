@@ -1015,6 +1015,32 @@ class SIFloor1Rows:
             "note": row["note"],
         }
 
+    def floor1_pm_coarse_dipole_row(
+        self,
+        *,
+        size: int = 24,
+        relaxation: int = 12,
+        n_max: int = 72,
+        device: str | None = None,
+    ) -> dict[str, float | int | str | bool | dict]:
+        """§5.0.3 · floor1 — pm annihilation coarse dipole proxy on boil (M→T bridge)."""
+        from mt_ca.floor1_pm_coarse_t import default_sim_device, run_pm_coarse_dipole_harness
+
+        dev = device or default_sim_device()
+        row = run_pm_coarse_dipole_harness(
+            size=size, relaxation=relaxation, n_max=n_max, device=dev
+        )
+        return {
+            "theorem": "§5.0.3 · floor1-pm-coarse-dipole",
+            "device": dev,
+            "derivation_closed": False,
+            "checks_ok": row["checks_ok"],
+            "pm_dipole_proxy": row["pm_dipole_proxy"],
+            "pm_elongation_delta": row["pm_elongation_delta"],
+            "pm_peaks_on_delta": row["pm_peaks_on_delta"],
+            "note": row["note"],
+        }
+
     def floor1_shell_excitation_relax_row(
         self,
         *,

@@ -133,6 +133,7 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
             check_floor1_outer_shell_catalog,
             check_floor1_shell_transitions_boil,
             check_floor1_shell_excitation_relax,
+            check_floor1_pm_coarse_dipole,
             check_floor1_leftovers_close,
             check_floor1_C3_gamma_close,
             check_floor1_C3_bath_dogfood,
