@@ -185,12 +185,17 @@ def vacuum_boil_fixed_3d(
     frac_bits: int = PLANCK_CELL.frac_bits,
     phase_bits: int = PLANCK_CELL.phase_bits,
     n_phi: int = PLANCK_CELL.N_phi,
-    class_dz: int = 1,
-    class_dy: int = 1,
+    class_dz: int = 0,
+    class_dy: int = 0,
     class_dx: int = 1,
     class_offset: int = 0,
 ) -> torch.Tensor:
-    """3+1 FCC habitat — filled brick ocean (§1.6 · §0.5)."""
+    """3+1 FCC habitat — filled brick ocean (§1.6 · §0.5).
+
+    Phase class must change by at most one Heisenberg tick along every N₁₂ edge.
+    A diagonal ramp (dz=dy=dx=1) violates that on face-diagonal FCC links; canon
+    default is a single-axis ramp (here +x only).
+    """
     _ = frac_bits
     dz = int(class_dz) % n_phi
     dy = int(class_dy) % n_phi
@@ -239,8 +244,8 @@ def boil_ocean_spinor_3d(
     mod_bits: int = PLANCK_CELL.mod_bits,
     frac_bits: int = PLANCK_CELL.frac_bits,
     phase_bits: int = PLANCK_CELL.phase_bits,
-    class_dz: int = 1,
-    class_dy: int = 1,
+    class_dz: int = 0,
+    class_dy: int = 0,
     class_dx: int = 1,
     class_offset: int = 0,
 ) -> torch.Tensor:

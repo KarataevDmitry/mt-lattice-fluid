@@ -157,6 +157,22 @@ def winding_channels(
     return {"rel": w_rel, "u1": w_u1, "auto": w_auto}
 
 
+def winding_at_planted_core(
+    z: torch.Tensor,
+    *,
+    radius: int = 20,
+    channel: str = "auto",
+) -> float:
+    """A10 evolution probe: contour at grid center (VORTEX_* seeds plant there)."""
+    if z.ndim == 4:
+        z = gate_plane_z(z, z.shape[0] // 2)
+    cy, cx = z.shape[0] // 2, z.shape[1] // 2
+    r = min(radius, cy - 2, cx - 2)
+    if r < 4:
+        return float("nan")
+    return winding_number(z, center=(cy, cx), radius=r, channel=channel)
+
+
 def winding_robust(
     z: torch.Tensor,
     *,

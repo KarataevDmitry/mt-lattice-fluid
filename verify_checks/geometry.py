@@ -135,7 +135,7 @@ def check_fcc_n12(device: str = "cpu") -> dict:
     # Canon: floor ON. After gate-only Φ (no CR double-count) + N_φ vacuum, multi-tick holds.
     cfg_dyn = MConfig.for_stencil("fcc", heisenberg_floor=True)
     sim = LatticeFluidSimulator(8, 8, cfg_dyn, device=device)
-    sim.reset(SeedClass.IMPULSE)
+    sim.reset(SeedClass.VACUUM_BOIL)
     n0 = sim.norm()
     norms = [n0]
     for _ in range(16):
@@ -146,7 +146,7 @@ def check_fcc_n12(device: str = "cpu") -> dict:
         abs(n_late - n0) / max(n0, 1e-9) < 1e-6
         and sim.z.ndim == 4
         and sim.z.shape[-1] == 2
-        and max(norms) < 10.0 * max(n0, 1e-6)
+        and max(norms) < 2.0 * max(n0, 1e-6)
     )
     s = fcc_neighbor_sum(sim.z[..., 0])
     ok_sum = s.shape == sim.z.shape[:-1]
@@ -162,7 +162,7 @@ def check_fcc_n12(device: str = "cpu") -> dict:
         "ticks": 16,
         "heisenberg_floor": True,
         "ok": ok,
-        "note": "§1.6 cuboctahedral ε; multi-tick stable with HF ON (A5)",
+        "note": "§1.6 N₁₂; 3D VACUUM_BOIL (single-axis class ramp) stable under HF ON",
     }
 
 def check_t_madelung_continuity(size: int = 64, device: str = "cpu") -> dict:

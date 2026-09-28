@@ -6,6 +6,14 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 ---
 
+## 2026-09-28 · sim · `m_evolution_open` зелёный (A9 / A10 / FCC_N12)
+
+**Корень FCC:** 3D `VACUUM_BOIL` с ramp `dz=dy=dx=1` давал |Δclass|>1 на face-diagonal N₁₂ → взрыв нормы; canon **single-axis** ramp (`class_dx=1`, `dy=dz=0`) — fixed point `g`.
+
+**Probes:** A9 → habitat `VACUUM_BOIL` (не PLANE_WAVE на boil); A10 → `winding_at_planted_core`; FCC_N12 → 3D boil + Σ|z|² drift.
+
+**Verify:** suite **`m_evolution_open`** PASS · в **`--ship`**.
+
 ## 2026-09-28 · P0 · период поля `habitat_boil` 3+1 (probe)
 
 **Критерий:** MODEL §P0 в `model/05-floor0-spectrum.md` — $T_B$ exact CA, $T_C$ на `ρ_contrast`, $T_D$ из $\mu_k$.
@@ -59,7 +67,7 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **SSOT группировки:** `verify_checks/suites.py` · CLI: `--list` · `--ship` · `--suite t_macro` · `--scenario floor0_planckon` (те же id, что `python -m mt_ca.app.cli run`).
 
-**Профили:** `--ship` = 10 suite (116 checks), **без** `m_evolution_open` и `cosmology` · на CPU **PASS** (2026-09-27). **`m_evolution_open`:** `A9`, `A10`, `FCC_N12`, `Vortex_hex` — **FAIL** на CPU/CUDA (вне ship; пороги/стабильность, не ломают α-лестницу).
+**Профили:** `--ship` = 11 suite (+ **`m_evolution_open`**), **без** `cosmology` · CPU **PASS** (2026-09-28). Ранее A9/A10/FCC_N12 — sim/probe долг (не опровержение A1–A16 в `m_axioms`).
 
 **Сценарии → suite:** поле `ScenarioSpec.verify_suites` в `mt_ca/app/scenario.py` · `python -m mt_ca.app.cli list` колонка `verify`.
 
@@ -195,7 +203,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **m_p, m_e, m_n, m_ν** | §8.2 таблица: `m_p=α·v/2·(1+κ²/N₁₂)`, `m_e=α²m_H/N_φ`, `m_n=m_p+2m_e`, ν-atm | `Proton_mass`, `Electron_mass`, `Neutron_mass`, `Neutrino_mass`, `Compton_e` | ppm–% хвосты FCC/packing (тот же класс, что у `m_p` edge); **Γ, τ, BR** — динамика T, не статическая лестница |
 | **EW / сильное / GR скелет** | §8.4 таблица forces | `sm` + части `alpha`/`carrier` в ship | census sim, IR, θ_f, GW, Λ |
 | **M→T** | Thm **T-CR**, **T-HL**, **T-CL** (§4.0.2) | suite **`t_macro`**: hydro + **`T_classical_limit`** + **`phi_bz`** | `ω_macro` FCC live fit (H5); `ν_eff` vs `ν_CA` |
-| **M динамика** | A9/A10 смысл в MODEL | suite **`m_evolution_open`** — **красное** | stationarity A9 · winding nan A10 · norm blow-up FCC_N12 — чинить критерии/сетку |
+| **M динамика** | A9/A10 смысл в MODEL | **`m_evolution_open`** PASS (2026-09-28) | PLANE_WAVE CR на boil; multi-axis 3D boil; absolute ν_CA band aspirational |
 
 **Команды (агент / человек):** `verify_principles.py --ship` · `--scenario birth_plane_wave` · `--suite t_macro` · `Model_purity` в suite `gate`.
 
@@ -203,7 +211,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 | # | Условие (суть) | Что требует от **`g`** | MODEL | gap | verify | impl | следующий шаг |
 |---|----------------|------------------------|-------|-----|--------|------|---------------|
-| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | sim | **`FCC_N12`** в **`m_evolution_open`**: FAIL norm drift (HF ON, 16 tick) · в ship нет | `laplacian` fcc · default | стабильность probe vs claim A1 |
+| **A1** | **Каузальность** — за **`hT`** не дальше **`l_P`** | равные light-like NN; канон **FCC N₁₂**; Мур/2-я оболочка ✕ | §1.3 · §1.6 | sim | **`FCC_N12`** PASS (3D boil single-axis ramp) | `laplacian` fcc · `seeds` boil_3d | true Bravais parity UoW open |
 | **A2** | **Локальность** | **`g(x)`** только из ε-окрестности | §2 · §0.3 | — | — (структура) | `projected_collision` | — |
 | **A3** | **Унитарность** | **`Σ|z|²`** invariant; rotation, не damping | §2 · §5.2.1 | — | **`Leapfrog`** · **`A3`** · **`A3_global_norm`** PASS | `reversible` · `z_ring` | гладкая непрерывность → **T** |
 | **A4** | **U(1)/SU(2) спинор** | **`z∈ℂ²`**, **`R(Φ)`** unitary | §2 · §3.10 | — | **`A4`** · **`SU2_360/720`** PASS | Rot_LUT · `su2_apply` | — |
@@ -211,8 +219,8 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 | **A6** | **2-й закон локально** | mixing ↑ entropy | §2 | model | **`A3_diffusive`** anti · full **`g`** не доказано | legacy `linear_step` | вывести для full **`g`** или ослабить claim |
 | **A7** | **`ρ ≤ ρ_P`** | **`K_P`** в Φ; clamp | §2 · §3.12.5 | sim | **`A7`** PASS | `bekenstein_scale_spinor` | — |
 | **A8** | **Macro-линейность** | **`w(ρ)`** затухает | §2 · §3.4 | T | **`A8`** PASS | gate **`w(ρ)`** | макроописание T probes |
-| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | sim | **`m_evolution_open`:** **`A9`** FAIL stationarity (HF ON) · в ship нет | `cr_phi_int` in Φ | absolute ν_CA band · GPU/CPU |
-| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | sim | seeds OK · **`A10`** evolution **FAIL** (winding nan) в open suite | `topology` · seeds | contour slice + HF |
+| **A9** | **CR / голоморфность** | **`g`** держит аналитичность | §2 · §3.9 | sim | **`A9`** PASS on **VACUUM_BOIL** habitat | gate ζ only | ν_CA ceiling aspirational (`plateau_ok`) |
+| **A10** | **`n ∈ ℤ`** | winding **`∂(hV)`** | §2 · §5.0 | sim | **`A10`** PASS (`winding_at_planted_core`) | `topology` · seeds | long-run on wandering peak — open |
 | **A11** | **Soliton / anti-smear** | **`K_P+Δφ`** держит ядро | §2 · §3.7–§3.9 | sim | **`A11`** PASS | saturating Φ | — |
 | **A12** | **Lorentz / isotropy (T)** | macro круг **`κ=1/√2`** | §2 · §1.1 · §4.1 | T | T1 PASS (512²) | `macro` binomial | radial probe — open |
 | **A13** | **Обратимость** | схема «лягушка» на **`ℤ`** | §2 · §3.12 | — | **`Leapfrog`** PASS | `projected_step_fixed` | — |

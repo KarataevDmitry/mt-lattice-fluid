@@ -85,14 +85,14 @@ VERIFY_SUITES: dict[str, VerifySuiteSpec] = {
     ),
     "m_evolution_open": VerifySuiteSpec(
         id="m_evolution_open",
-        description="§3.9 CR / A10 winding / FCC N₁₂ stability — flaky GPU thresholds (open).",
+        description="§3.9 CR on boil · A10 planted contour · FCC N₁₂ 3D boil · hex vortex.",
         check_names=_names(
             check_a9_cr_smooth_modes,
             check_a10_winding,
             check_fcc_n12,
             check_vortex_hex_contour,
         ),
-        ship=False,
+        ship=True,
     ),
     "t_macro": VerifySuiteSpec(
         id="t_macro",

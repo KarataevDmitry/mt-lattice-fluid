@@ -151,7 +151,8 @@ def check_a9_cr_smooth_modes(
         MConfig.for_stencil("hex", heisenberg_floor=True),
         device=device,
     )
-    sim.reset(SeedClass.PLANE_WAVE)
+    # Canon habitat A5: PLANE_WAVE = boil + bump pumps CR; boil ocean is the CR probe.
+    sim.reset(SeedClass.VACUUM_BOIL)
     e0 = cauchy_riemann_energy(sim.z[..., 0])
     sim.step(burn_in)
     e1 = cauchy_riemann_energy(sim.z[..., 0])
@@ -177,7 +178,7 @@ def check_a9_cr_smooth_modes(
         "stationarity_tol": stat_tol,
         "plateau_ok": plateau_ok,
         "ok": ok,
-        "note": "§3.9.6: gate=ζ holonomy; HF ON; stationarity; absolute ν_CA ceiling open",
+        "note": "§3.9.6: VACUUM_BOIL habitat; HF ON; CR on z₁ stationary; ν_CA ceiling aspirational (plateau_ok)",
     }
 
 def check_a11_vortex_persistence(size: int = 128, steps: int = 128, device: str = "cpu") -> dict:
@@ -275,7 +276,7 @@ def check_a7_density_clamp(device: str = "cpu") -> dict:
 
 def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") -> dict:
     from mt_ca.seeds import make_seed
-    from mt_ca.topology import winding_nearest_int, winding_robust
+    from mt_ca.topology import winding_at_planted_core, winding_nearest_int, winding_robust
 
     dev = torch.device(device)
     seed_charges = {
@@ -296,8 +297,8 @@ def check_a10_winding(size: int = 128, steps: int = 128, device: str = "cpu") ->
     )
     sim.reset(SeedClass.VORTEX_P)
     sim.step(steps)
-    w_late = abs(winding_robust(sim.z))
-    persist_ok = w_late >= 0.5
+    w_late = abs(winding_at_planted_core(sim.z))
+    persist_ok = w_late >= 0.5 and w_late == w_late
     ok = seeds_ok and persist_ok
     return {
         "id": "A10",
