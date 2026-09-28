@@ -13,7 +13,7 @@ cd book
 ./build.ps1 -Volume observer
 ```
 
-PDF (в git через **Git LFS**): `book/out/pdf/<volume>.pdf`. Клон: `git lfs install` (один раз на машине), затем обычный `git clone` — PDF подтянутся как LFS-объекты. Вспомогательные `.aux`/логи/`__build` — только `book/out/work/` (gitignore). См. [`SERIES.md`](SERIES.md).
+Готовые PDF: `book/out/pdf/<volume>.pdf` (Git LFS; на машине один раз `git lfs install`, потом обычный clone). Сборочный мусор XeLaTeX: `book/out/work/`. См. [`SERIES.md`](SERIES.md).
 
 **Обозначения:** глава «Условные обозначения» (`notation.tex`) — таблица **Обозначение · Смысл · Единица**; записи в `glossary/notation-entries*.tex` (`\newnotationentry`, поле `user1`). `notation-macros.tex` — **camelCase** → `\gls{symb:…}` (клик в ту же главу). В каждом томе в frontmatter — `\input{notation.tex}`.
 
@@ -32,7 +32,7 @@ book/
     figures/         # PDF-иллюстрации (генерятся scripts/render_carrier_figures.py)
     appendix/
   out/pdf/           # готовые PDF (в git)
-  out/work/          # xelatex scratch (gitignore)
+  out/work/          # вспомогательные файлы XeLaTeX
 ```
 
 Правка текста — прямо в `sources/*.tex`. Без одноразовых патч-скриптов и дампов в `book/`: справочники и черновики — вне репо или в `model/` / KB, не рядом с LaTeX.
