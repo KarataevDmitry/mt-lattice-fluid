@@ -252,6 +252,7 @@ Removed: `grid.py`, `*_hex_slice` scenario aliases, `run_spec_cube`/`open_simula
 
 ## §3. Open UoW (индекс)
 
+- **M-habitat-FCC-boil:** ✅ 2026-09-28 · `m_evolution_open` в ship · META §3.7.1
 - **§3.9 DA:** long-run exact `n` conservation on contour (макроописание T шум); D2Q9 ladder §3.8 step 2 only if hex fails vortex test
 - **§3.10 SU(2):** full SM electron-from-`hV` sim (algebra `m_e=α²·m_H/N_φ` ✅ · `Electron_mass`; sim census still open)
 - **§3.11 symmetries:** long-run **`g·P≠P·g`** on vortex (chirality dance §9.2)
