@@ -37,7 +37,9 @@ alwaysApply: true
 ## Перед ship
 
 ```bash
-python verify_principles.py --device cpu
+python verify_principles.py --ship
 ```
 
-**`Model_purity` must PASS.** Иначе правь MODEL, не ослабляй gate.
+Дефолт `verify_principles.py`: `cuda`, если доступна; иначе `cpu`. Явный `--device cpu` — только для CI / машины без GPU.
+
+**`Model_purity` must PASS** (входит в `--ship`). Иначе правь MODEL, не ослабляй gate.

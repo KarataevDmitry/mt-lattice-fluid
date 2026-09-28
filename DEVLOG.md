@@ -556,7 +556,8 @@ z' = z · exp(iφ)
 ## §6. Команды verify
 
 ```bash
-python verify_principles.py --device cpu
+python verify_principles.py --ship   # device: cuda if available (default in verify_principles.py)
+python verify_principles.py --device cpu   # CI / no-GPU only
 python validate_mt.py          # T1/T2/T3 — CUDA
 python scripts/run_symmetry_probe.py
 ```
