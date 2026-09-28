@@ -381,6 +381,48 @@ foreach ($f in $staleInSources) {
     }
 }
 
+function Test-BookSiUnitFractions {
+    $slashUnitPattern = [regex]'\\mathrm\{[^}]*\/[^}]*\}'
+    $roots = @(
+        (Join-Path $Sources 'chapters')
+        (Join-Path $Sources 'glossary')
+        (Join-Path $Sources 'appendix')
+        (Join-Path $Sources 'volumes')
+        (Join-Path $Sources 'frontmatter.tex')
+        (Join-Path $Sources 'notation.tex')
+    )
+    $offenders = @()
+    foreach ($root in $roots) {
+        if (-not (Test-Path -LiteralPath $root)) { continue }
+        $files =
+            if ((Get-Item -LiteralPath $root).PSIsContainer) {
+                Get-ChildItem -LiteralPath $root -Filter '*.tex' -Recurse -File
+            } else {
+                @(Get-Item -LiteralPath $root)
+            }
+        foreach ($file in $files) {
+            if ($file.Name -eq 'notation-units.tex') { continue }
+            $lineNo = 0
+            foreach ($line in [System.IO.File]::ReadLines($file.FullName)) {
+                $lineNo++
+                $trim = $line.TrimStart()
+                if ($trim.StartsWith('%')) { continue }
+                if ($slashUnitPattern.IsMatch($line)) {
+                    $rel = $file.FullName.Replace($Root + '\', '').Replace($Root + '/', '')
+                    $offenders += "${rel}:${lineNo}: $line"
+                }
+            }
+        }
+    }
+    if ($offenders.Count -gt 0) {
+        Write-Host 'SI unit slash notation forbidden (use \SiFrac / \NotationUnit…):'
+        $offenders | ForEach-Object { Write-Host "  $_" }
+        throw "Book_si_unit_fractions: $($offenders.Count) line(s)"
+    }
+}
+
+Test-BookSiUnitFractions
+
 Push-Location $Sources
 try {
     foreach ($pass in 1..3) {

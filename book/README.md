@@ -15,7 +15,7 @@ cd book
 
 Готовые PDF: `book/out/pdf/<volume>.pdf` (Git LFS; на машине один раз `git lfs install`, потом обычный clone). Сборочный мусор XeLaTeX: `book/out/work/`. См. [`SERIES.md`](SERIES.md).
 
-**Обозначения:** глава «Условные обозначения» (`notation.tex`) — таблица **Обозначение · Смысл · Единица**; записи в `glossary/notation-entries*.tex` (`\newnotationentry`, поле `user1`). `notation-macros.tex` — **camelCase** → `\gls{symb:…}` (клик в ту же главу). В каждом томе в frontmatter — `\input{notation.tex}`.
+**Обозначения:** глава «Условные обозначения» (`notation.tex`) — таблица **Обозначение · Смысл · Единица**; записи в `glossary/notation-entries*.tex` (`\newnotationentry`, поле `user1`). `notation-macros.tex` — **camelCase** → `\gls{symb:…}` (клик в ту же главу). В каждом томе в frontmatter — `\input{notation.tex}`. Составные единицы SI в тексте и таблице — через `\SiFrac` / макросы `\NotationUnit…` из `glossary/notation-units.tex` (дроби `\frac`, не слэш в `\mathrm{…/…}`); `build.ps1` это проверяет.
 
 ## Структура каталога
 

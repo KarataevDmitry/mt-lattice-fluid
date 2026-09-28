@@ -1,4 +1,10 @@
 % Колонка «Единица» в таблице условных обозначений (SI на T, если не оговорено).
+% Составные единицы --- только \SiFrac / \SiFracEnsure, не «Кл/В» в \mathrm.
+
+\makeatletter
+\newcommand{\SiFrac}[2]{\frac{\mathrm{#1}}{\mathrm{#2}}}
+\newcommand{\SiFracEnsure}[2]{\ensuremath{\SiFrac{#1}{#2}}}
+\makeatother
 
 \newcommand{\NotationUnitDash}{\ensuremath{---}}
 \newcommand{\NotationUnitMetre}{\ensuremath{\mathrm{м}}}
@@ -9,20 +15,26 @@
 \newcommand{\NotationUnitNewton}{\ensuremath{\mathrm{Н}}}
 \newcommand{\NotationUnitPascal}{\ensuremath{\mathrm{Па}}}
 \newcommand{\NotationUnitKelvin}{\ensuremath{\mathrm{К}}}
-\newcommand{\NotationUnitMetrePerSecond}{\ensuremath{\mathrm{м/с}}}
+\newcommand{\NotationUnitMetrePerSecond}{\SiFracEnsure{м}{с}}
 \newcommand{\NotationUnitHertz}{\ensuremath{\mathrm{Гц}}}
 \newcommand{\NotationUnitRadian}{\ensuremath{\mathrm{рад}}}
 \newcommand{\NotationUnitCoulomb}{\ensuremath{\mathrm{Кл}}}
+\newcommand{\NotationUnitVolt}{\ensuremath{\mathrm{В}}}
+\newcommand{\NotationUnitFarad}{\SiFracEnsure{Кл}{В}}
 \newcommand{\NotationUnitJouleSecond}{\ensuremath{\mathrm{Дж{\cdot}с}}}
-\newcommand{\NotationUnitKgMetrePerSecond}{\ensuremath{\mathrm{кг{\cdot}м/с}}}
-\newcommand{\NotationUnitKgPerMetreCubed}{\ensuremath{\mathrm{кг/м^3}}}
-\newcommand{\NotationUnitAmperePerMetre}{\ensuremath{\mathrm{А/м}}}
-\newcommand{\NotationUnitVoltPerMetre}{\ensuremath{\mathrm{В/м}}}
+\newcommand{\NotationUnitKgMetrePerSecond}{\SiFracEnsure{кг{\cdot}м}{с}}
+\newcommand{\NotationUnitKgPerMetreCubed}{\SiFracEnsure{кг}{м^3}}
+\newcommand{\NotationUnitCoulombPerMetreCubed}{\SiFracEnsure{Кл}{м^3}}
+\newcommand{\NotationUnitJoulePerCubicMetre}{\SiFracEnsure{Дж}{м^3}}
+\newcommand{\NotationUnitAmperePerMetre}{\SiFracEnsure{А}{м}}
+\newcommand{\NotationUnitVoltPerMetre}{\SiFracEnsure{В}{м}}
 \newcommand{\NotationUnitTesla}{\ensuremath{\mathrm{Тл}}}
-\newcommand{\NotationUnitAmperePerMetreSq}{\ensuremath{\mathrm{А/м^2}}}
-\newcommand{\NotationUnitFaradPerMetre}{\ensuremath{\mathrm{Ф/м}}}
-\newcommand{\NotationUnitHenryPerMetre}{\ensuremath{\mathrm{Гн/м}}}
-\newcommand{\NotationUnitJoulePerKelvin}{\ensuremath{\mathrm{Дж/К}}}
+\newcommand{\NotationUnitAmperePerMetreSq}{\SiFracEnsure{А}{м^2}}
+\newcommand{\NotationUnitFaradPerMetre}{\SiFracEnsure{Ф}{м}}
+\newcommand{\NotationUnitHenryPerMetre}{\SiFracEnsure{Гн}{м}}
+\newcommand{\NotationUnitJoulePerKelvin}{\SiFracEnsure{Дж}{К}}
+\newcommand{\NotationUnitGravConstant}{\SiFracEnsure{м^3}{кг{\cdot}с^2}}
+\newcommand{\NotationUnitWavefunction}{\ensuremath{\frac{1}{\mathrm{м}^{3/2}}}}
 \newcommand{\NotationUnitMetreMcode}{\NotationUnitMetre}
 \newcommand{\NotationUnitSecondDtcode}{\NotationUnitSecond}
 \newcommand{\NotationUnitTick}{тик ($\tau\in\mathbb{Z}$)}

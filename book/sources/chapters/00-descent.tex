@@ -145,6 +145,14 @@ $\opPartialK\stressSigmaIk$, снова из окрестности той же 
   \alphaFs = \frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}.
   \label{eq:alpha-fs}
 \end{equation}
+\[
+  \left[\alphaFs\right]
+  =\left[\frac{\chargeE^2}{4\symPi\constEpsZero\planckHbar \speedC}\right]
+  =\frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFaradPerMetre\bigr)\,(\mathrm{Дж\cdot с})\,\bigl(\NotationUnitMetrePerSecond\bigr)}
+  =\frac{\mathrm{Кл}^2}{\bigl(\NotationUnitFarad\bigr)\,(\mathrm{В\cdot Кл})}
+  =1.
+\]
+Coupling безразмерен ($\mathrm{Ф}=\NotationUnitFarad$, $\mathrm{Дж}=\mathrm{В\cdot Кл}$, $\mathrm{м}$ и $\mathrm{с}$ в знаменателе сокращаются).
 Она стоит в законе свободным множителем:
 измерение есть, вывода из \eqref{eq:maxwell-hom}--\eqref{eq:newton} нет.
 Пока закон претендует только описать прибор, такой множитель терпим.
@@ -158,56 +166,50 @@ $\opPartialK\stressSigmaIk$, снова из окрестности той же 
 (\cref{ch:alpha}, \cref{def:alpha-meaning}); $\chargeE$ не входит в его \emph{определение}.
 \end{remark}
 
-\begin{remark}[Размерный анализ \eqref{eq:alpha-fs}]
-\label{rem:alpha-fs-dim}
-В СИ (оси $\mathrm{L,M,T,I}$): $[\chargeE]=\mathrm{IT}$, $[\planckHbar]=\mathrm{ML^{2}T^{-1}}$, $[\speedC]=\mathrm{LT^{-1}}$.
-Из закона Кулона $F=q_1 q_2/(4\symPi\constEpsZero r^2)$ при $[F]=\mathrm{MLT^{-2}}$, $[r]=\mathrm{L}$:
-\[
-  [\constEpsZero]=\mathrm{M^{-1}L^{-3}T^{4}I^{2}}.
-\]
-Произведение в знаменателе:
-\[
-  [\constEpsZero\planckHbar \speedC]
-  =\mathrm{M^{-1}L^{-3}T^{4}I^{2}}\cdot\mathrm{ML^{2}T^{-1}}\cdot\mathrm{LT^{-1}}
-  =\mathrm{T^{2}I^{2}},
-\]
-\[
-  \left[\frac{\chargeE^{2}}{4\symPi\constEpsZero\planckHbar \speedC}\right]
-  =\frac{\mathrm{I^{2}T^{2}}}{\mathrm{T^{2}I^{2}}}=1.
-\]
-Coupling обязан быть безразмерным; формула --- единственная способность линейки СИ
-\emph{свести} заряд, действие и скорость к числу без новой размерности.
-\end{remark}
-
 Чёрная дыра делает ограниченность плотности видимой числом.
-Энтропия горизонта пропорциональна его площади~$A$:
+
+\begin{definition}[Предел Бекенштейна]
+\label{def:bekenstein-bound}
+\textbf{Предел Бекенштейна} --- верхние оценки на энтропию, число различимых микросостояний
+и битовый бюджет $B=\entropyS/(\constBoltzmann\ln 2)$
+в причинно связанной области, вписанной в шар радиуса~$R$,
+с суммарной энергией~$\energyE$ (материя и поля) и площадью~$A$ минимальной причинной границы.
+Планковская площадь
+\[
+  \lengthPlanck^2=\frac{\planckHbar\,\constGrav}{\speedC^3}.
+\]
+Для энтропии~$\entropyS$ и числа~$\opNormN$ имеем:
+\begin{align}
+  \entropyS &\le \frac{2\symPi\,\constBoltzmann\, R\,\energyE}{\planckHbar\,\speedC},
+  \label{eq:bekenstein-S}\\
+  B &\le \frac{2\symPi\, R\,\energyE}{\planckHbar\,\speedC\,\ln 2},
+  \label{eq:bekenstein-bits}\\
+  \ln\opNormN &\le \frac{\entropyS}{\constBoltzmann}
+  \le \frac{A}{4\lengthPlanck^2}.
+  \label{eq:state-count}
+\end{align}
+На горизонте чёрной дыры площади~$A$ достигается насыщение:
 \begin{equation}
-  \entropyS = \frac{\constBoltzmann A}{4\lengthPlanck^2},
-  \qquad
-  \lengthPlanck^2 = \frac{\planckHbar \constGrav}{\speedC^3}.
+  \entropyS = \frac{\constBoltzmann A}{4\lengthPlanck^2}.
   \label{eq:bh-entropy}
 \end{equation}
-Размерный контроль: $[\constGrav]=\mathrm{L^{3}M^{-1}T^{-2}}$, $[\planckHbar \constGrav/\speedC^{3}]=\mathrm{L^{2}}$,
-$[A/\lengthPlanck^{2}]=1$, энтропия $[\entropyS]=\mathrm{ML^{2}T^{-2}K^{-1}}$ согласуется с $[\constBoltzmann A/\lengthPlanck^{2}]$.
-Число различимых состояний в причинно связанной области поэтому конечно,
+\[
+  \left[\frac{\constBoltzmann A}{4\lengthPlanck^2}\right]
+  =\frac{\NotationUnitJoulePerKelvin\cdot\mathrm{м^2}}{\mathrm{м^2}}
+  =\NotationUnitJoulePerKelvin=\left[\entropyS\right].
+\]
+Чтобы область той же шкалы не схлопнулась в горизонт, энергия удовлетворяет
 \begin{equation}
-  \ln\opNormN \le \frac{A}{4\lengthPlanck^2}.
-  \label{eq:state-count}
-\end{equation}
-У шара радиуса~$R$ правая часть пропорциональна~$R^2$.
-Набор независимых значений поля в каждой точке объёма рос бы как объём, то есть как~$R^3$,
-а непрерывное значение в каждой точке $x\in\spaceRthree$ даёт несчётное множество конфигураций.
-Энергия в той же области ограничена сверху по той же причине.
-Горизонт Шварцшильда
-\begin{equation}
-  R_s = \frac{2\constGrav\energyE}{\speedC^4}
-  \label{eq:schwarzschild}
-\end{equation}
-достигает радиуса области, когда энергия слишком велика:
-\begin{equation}
-  \energyE \le \frac{R \speedC^4}{2\constGrav}.
+  \energyE \le \frac{R\,\speedC^4}{2\constGrav},
+  \qquad
+  R_s=\frac{2\constGrav\,\energyE}{\speedC^4}.
   \label{eq:energy-bound}
 \end{equation}
+\end{definition}
+
+У шара радиуса~$R$ правая часть \eqref{eq:state-count} пропорциональна~$R^2$.
+Набор независимых значений поля в каждой точке объёма рос бы как объём, то есть как~$R^3$,
+а непрерывное значение в каждой точке $x\in\spaceRthree$ даёт несчётное множество конфигураций.
 Общая теория относительности и квантовая теория поля локально друг другу не противоречат
 и счёта \eqref{eq:state-count} не содержат.
 
@@ -378,7 +380,7 @@ $[A/\lengthPlanck^{2}]=1$, энтропия $[\entropyS]=\mathrm{ML^{2}T^{-2}K^{
   \caSignalSpeed = \frac{\caStepSpace}{\caStepTime}.
 \end{equation}
 За один $\caStepTime$ сигнал не дальше одного $\caStepSpace$.
-Номер такта --- $\symTau\in\spaceZ$; $t_{\mathrm{SI}}(\symTau)=\symTau\,\caStepTime$ после моста (\cref{def:si-bridge}).
+Номер такта --- $\symTau\in\spaceZ$; $t_{\mathrm{SI}}(\symTau)=\symTau\,\caStepTime$ после планковской идентификации (\cref{def:si-bridge}).
 \end{definition}
 
 \begin{definition}[Окрестность одного такта]
@@ -429,21 +431,62 @@ $\caPlanckCell$ --- этот узел.
 с плотностью $\massDensity=|\wavePsi|^2$ и фазой~$\phaseVarphi$.
 На узле~$\caPlanckCell$ тот же смысл несут $|z|^2$ и аргументы компонент $z_k$.
 Континуумная фаза $\phaseVarphi\in\spaceR$ на одной планковской ячейке не определена бесконечно точно:
-требование обратимости и конечного числа различимых состояний
-(\eqref{eq:state-count}) задаёт \emph{конечное кольцо фаз}.
+требование обратимости и конечного числа различимых состояний:
+из предела Бекенштейна (\cref{def:bekenstein-bound}), в частности из \eqref{eq:state-count},
+следует \emph{конечное кольцо фаз}.
 
-Счёт \eqref{eq:state-count} на ячейке объёма~$v_{\hv}\sim\caStepSpace^3$ даёт информационный бюджет
+\begin{theorem}[Информационный бюджет элементарной ячейки]
+\label{thm:cell-bit-budget}
+Пусть элементарная ячейка~$\hv$ имеет объём порядка $v_{\hv}\sim\caStepSpace^3$
+и линейный размер $R\sim\caStepSpace$.
+Из предела Бекенштейна (\cref{def:bekenstein-bound}) и оценки энергии \eqref{eq:energy-bound}
+следует, что регистр ячейки насыщает бит-бюджет
 \[
-  B_{\hv}=\frac{2\symPi}{\ln 2}\quad\text{(мост $\layerMacro$)},\qquad
-  \phaseRingCount=2^{\lfloor B_{\hv}\rfloor}=512,\qquad
-  B_{\hv}=\log_2 \phaseRingCount+\symVarepsilon_B,\quad \symVarepsilon_B\approx 0{,}065.
+  B_{\hv}=\frac{2\symPi}{\ln 2}\quad\text{(бит, мост $\layerMacro$)},\qquad
+  \phaseRingCount=2^{\lfloor B_{\hv}\rfloor}=2^{9}=512,
 \]
-Минимальный фазовый шаг, уже видимый в квантовой механике как $\symCapitalDelta\symPhi_{\min}=\tfrac12$,
-на кольце есть целое число тиков:
 \[
-  \symCapitalDelta\symPhi_{\mathrm{disc}}=41,\qquad
-  \phaseSectorCount=\lceil 2\symPi/\symCapitalDelta\symPhi_{\min}\rceil=13.
+  B_{\hv}=\log_2 \phaseRingCount+\varepsilon_B,\qquad \varepsilon_B\approx 0{,}065.
 \]
+Минимальный фазовый шаг квантовой механики $\symCapitalDelta\symPhi_{\min}=\tfrac12$
+переносится на кольце $\mathbb{Z}_{\phaseRingCount}$ целыми тиками:
+\[
+  \phaseSectorCount=\left\lceil \frac{2\symPi}{\symCapitalDelta\symPhi_{\min}}\right\rceil=13,\qquad
+  \symCapitalDelta\symPhi_{\mathrm{disc}}
+  =\left\lceil \phaseRingCount\,\frac{\symCapitalDelta\symPhi_{\min}}{2\symPi}\right\rceil=41.
+\]
+\end{theorem}
+
+\begin{proof}
+\pfrom{предела Бекенштейна (\cref{def:bekenstein-bound}) при $R\sim\caStepSpace$ и энергии $E$ в объёме $v_{\hv}\sim R^3$}
+\[
+  B_{\hv}\le \frac{2\symPi R E}{\planckHbar\,\speedC\,\ln 2}
+\]
+(\eqref{eq:bekenstein-bits}).
+\pusing{оценки \eqref{eq:energy-bound} при $R=\caStepSpace$}
+насыщение достигается при $E=E_P=\planckHbar\,\speedC/\caStepSpace$ (планковская плотность на ячейке).
+\psubst{$R=\caStepSpace$ и $E=E_P$}
+\[
+  B_{\hv}=\frac{2\symPi}{\ln 2}.
+\]
+\pfollows
+\[
+  \lfloor B_{\hv}\rfloor=9,\qquad
+  \phaseRingCount=2^{9}=512,\qquad
+  \varepsilon_B=B_{\hv}-\lfloor B_{\hv}\rfloor\approx 0{,}065.
+\]
+
+\smallskip
+\emph{Фазовое кольцо.}
+\pfrom{требования $\symCapitalDelta\symPhi_{\min}=\tfrac12$ на макроэтаже}
+полный оборот $2\symPi$ на $\mathbb{Z}_{\phaseRingCount}$ разбивается на не менее
+$\lceil 2\symPi/\symCapitalDelta\symPhi_{\min}\rceil=13$ секторов Heisenberg-кванта.
+\psubst{$\phaseRingCount=512$}
+\[
+  \symCapitalDelta\symPhi_{\mathrm{disc}}
+  =\left\lceil \phaseRingCount\,\frac{\symCapitalDelta\symPhi_{\min}}{2\symPi}\right\rceil=41.
+\]
+\end{proof}
 Один такт~$\htick$ --- полный оборот $\spaceZ_{\phaseRingCount}$;
 генератор вращения $\symOmegaLower=e^{i2\symPi/\phaseRingCount}$, состояние на $S^1$ --- $\symOmegaLower^{\phaseVarphi_{\mathrm{disc}}}$.
 
@@ -593,7 +636,7 @@ $\caSignalSpeed$ & $\caStepSpace/\htick$ & $\caStepSpace/\htick$ \\
 \midrule
 $\phaseVarphi_{\mathrm{disc}}$, $k_{\symPhi}$, $\symMu$; $dh$, $dt$ & $\planckHbar$, $\timePlanck$, $\lengthPlanck$, $\speedC$ \\
 $\symCapitalDelta\symPhi_{\mathrm{disc}}/\phaseRingCount$ & $\symAlpha_*-1=1/(4\symPi)$ \\
-$\log_2 \phaseRingCount+\symVarepsilon_B$ & $B_{\hv}=2\symPi/\ln 2$ \\
+$\log_2 \phaseRingCount+\varepsilon_B$ & $B_{\hv}=2\symPi/\ln 2$ \\
 $\phaseSectorCount=13$ & $\lceil 4\symPi\rceil$ \\
 \bottomrule
 \end{tabular}
