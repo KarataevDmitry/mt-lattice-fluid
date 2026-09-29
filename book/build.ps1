@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# Build book/out/pdf/<volume>.pdf (XeLaTeX × 3). Aux → book/out/work/. Default: construction.
+# Build book/out/pdf/<volume>.pdf (XeLaTeX + biber until refs/cites resolve). Aux → book/out/work/. Default: construction.
 param(
     [ValidateSet('construction', 'floors', 'cosmology', 'observer', 'chemistry', 'compute')]
     [string]$Volume = 'construction',
@@ -461,27 +461,142 @@ function Invoke-Biber {
     }
 }
 
-Push-Location $Sources
-try {
-    $firstTotal = if ($Volume -eq 'floors') { 4 } else { 3 }
-    Write-Host "xelatex pass 1/$firstTotal ..."
+function Get-LaTeXLogUndefined {
+    param([Parameter(Mandatory)][string]$LogPath)
+    $refs = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    $cites = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    if (-not (Test-Path -LiteralPath $LogPath)) {
+        return [PSCustomObject]@{ References = @(); Citations = @() }
+    }
+    $refPat = [regex]'(?:Reference|Hyper reference) `([^'']+)'' on page \d+ undefined'
+    $citePat = [regex]'Citation `([^'']+)'' on page \d+ undefined'
+    foreach ($line in [System.IO.File]::ReadLines($LogPath)) {
+        $m = $refPat.Match($line)
+        if ($m.Success) {
+            $refs.Add($m.Groups[1].Value) | Out-Null
+            continue
+        }
+        $m = $citePat.Match($line)
+        if ($m.Success) {
+            $cites.Add($m.Groups[1].Value) | Out-Null
+        }
+    }
+    [PSCustomObject]@{
+        References = @($refs | Sort-Object)
+        Citations = @($cites | Sort-Object)
+    }
+}
+
+# Labels cited from another volume PDF (SERIES.md) — not errors for this build.
+$CrossVolumeRefPatternsByVolume = @{
+    construction = @('^ch:floor', '^ch:floors-preface')
+    floors       = @()
+    cosmology    = @()
+    observer     = @()
+    chemistry    = @()
+    compute      = @()
+}
+
+function Test-CrossVolumeReference {
+    param(
+        [Parameter(Mandatory)][string]$Label,
+        [Parameter(Mandatory)][string]$Vol
+    )
+    $patterns = $CrossVolumeRefPatternsByVolume[$Vol]
+    if (-not $patterns) { return $false }
+    foreach ($pat in $patterns) {
+        if ($Label -match $pat) { return $true }
+    }
+    return $false
+}
+
+function Split-UndefinedReferences {
+    param(
+        [Parameter(Mandatory)][string[]]$References,
+        [Parameter(Mandatory)][string]$Vol
+    )
+    $internal = [System.Collections.Generic.List[string]]::new()
+    $external = [System.Collections.Generic.List[string]]::new()
+    foreach ($r in $References) {
+        if ($r -match ',') {
+            $internal.Add("$r (malformed \ref — use \cref or separate \ref keys)") | Out-Null
+            continue
+        }
+        if (Test-CrossVolumeReference -Label $r -Vol $Vol) {
+            $external.Add($r) | Out-Null
+        } else {
+            $internal.Add($r) | Out-Null
+        }
+    }
+    [PSCustomObject]@{
+        Internal = @($internal)
+        External = @($external)
+    }
+}
+
+function Format-UndefinedKeySet {
+    param([string[]]$Refs, [string[]]$Cites)
+    @($Refs + $Cites | Sort-Object -Unique) -join '|'
+}
+
+function Invoke-XeLaTeXBook {
+    param([Parameter(Mandatory)][string]$PassLabel)
+    Write-Host "xelatex $PassLabel ..."
     & $XeLaTeX -interaction=nonstopmode -halt-on-error `
         -output-directory="$OutWork" -aux-directory="$OutWork" `
         -jobname="$BuildJob" $MainTex
     if ($LASTEXITCODE -ne 0) {
-        throw "xelatex failed (exit $LASTEXITCODE) on pass 1"
+        throw "xelatex failed (exit $LASTEXITCODE) ($PassLabel)"
     }
+}
+
+Push-Location $Sources
+try {
+    $logPath = Join-Path $OutWork "$BuildJob.log"
+    $maxXeLaTeXPasses = if ($Volume -eq 'floors') { 10 } else { 8 }
+
+    Invoke-XeLaTeXBook -PassLabel 'pass 1 (initial)'
     Invoke-Biber -Job $BuildJob
-    $latexPasses = if ($Volume -eq 'floors') { 2..4 } else { 2..3 }
-    foreach ($pass in $latexPasses) {
-        $total = if ($Volume -eq 'floors') { 4 } else { 3 }
-        Write-Host "xelatex pass $pass/$total ..."
-        & $XeLaTeX -interaction=nonstopmode -halt-on-error `
-            -output-directory="$OutWork" -aux-directory="$OutWork" `
-            -jobname="$BuildJob" $MainTex
-        if ($LASTEXITCODE -ne 0) {
-            throw "xelatex failed (exit $LASTEXITCODE) on pass $pass"
+
+    $pass = 2
+    $prevKeySet = ''
+    while ($pass -le $maxXeLaTeXPasses) {
+        Invoke-XeLaTeXBook -PassLabel "pass $pass"
+        $undef = Get-LaTeXLogUndefined -LogPath $logPath
+        $keySet = Format-UndefinedKeySet -Refs $undef.References -Cites $undef.Citations
+        if ($keySet -eq '') {
+            Write-Host "Cross-references and citations resolved (xelatex pass $pass)."
+            break
         }
+        if ($keySet -eq $prevKeySet) {
+            Write-Host "Cross-refs stable after xelatex pass $pass (no further progress)."
+            break
+        }
+        $prevKeySet = $keySet
+        if ($undef.Citations.Count -gt 0) {
+            Write-Host "  undefined citations: $($undef.Citations -join ', ')"
+            Invoke-Biber -Job $BuildJob
+        }
+        if ($undef.References.Count -gt 0) {
+            Write-Host "  undefined references: $($undef.References.Count) key(s), continuing ..."
+        }
+        $pass++
+    }
+
+    $undef = Get-LaTeXLogUndefined -LogPath $logPath
+    $refSplit = Split-UndefinedReferences -References $undef.References -Vol $Volume
+    if ($refSplit.External.Count -gt 0) {
+        Write-Host "Cross-volume references (expected for $Volume): $($refSplit.External -join ', ')"
+    }
+    if ($undef.Citations.Count -gt 0 -or $refSplit.Internal.Count -gt 0) {
+        $parts = @()
+        if ($refSplit.Internal.Count -gt 0) {
+            $parts += "references: $($refSplit.Internal -join ', ')"
+        }
+        if ($undef.Citations.Count -gt 0) {
+            $parts += "citations: $($undef.Citations -join ', ')"
+        }
+        throw "LaTeX build incomplete ($($parts -join '; ')). See $logPath"
     }
 
     if (-not (Test-Path -LiteralPath $workPdf)) {

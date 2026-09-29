@@ -1,14 +1,15 @@
 \chapter{Критические эксперименты (построение)}
+\label{ch:critical-construction}
 
-Том \emph{construction} не считается закрытым без явного списка проверок:
-что должно \emph{сломаться}, если неверны $g$, SI-замыкание или $\symAlpha$.
-Сопоставление чисел с PDG/CODATA --- по правилам \cref{ch:measurement-processing}
-(прямые/косвенные величины, GUM, Стьюдент, $E_n$, без кругового входа).
+Том \emph{construction} заканчивается \textbf{журналом вычислительной лаборатории}
+(\cref{ch:computational-laboratory}): полные постановки, критерии принятия и анализ
+по \cref{ch:measurement-processing}.
+Ниже --- записи серии CE-M; каждая помечена статусом в реестре воспроизводимых прогонов.
+Decisive-провал модели --- когда наблюдаемое стабильно нарушает критерий при сходящейся постановке.
 
-\begin{itemize}
-  \item \textbf{Реестр verify} --- согласованность алгебры и SI-строки (\texttt{verify\_principles.py}); это не замена физического опыта, а контроль внутренней согласованности.
-  \item \textbf{Macro T с микро-M} --- гладкость, дисперсия $\symOmegaLower(k)$, фронт импульса, $c=1$ на binomial-карте (MODEL~\S4.6--4.7; манифест~\S7).
-  \item \textbf{Открыто / decisive} --- NLSE-коэффициент \texttt{T6}, полные live-sim на \latGCKshort/гекс-срезе для заявленных T-предсказаний; формулировать как предсказание + критерий провала.
-\end{itemize}
+\input{volumes/lab-construction-records.tex}
 
-Дальнейшие тома серии заканчиваются аналогичным блоком под свой класс опытов (см.\ \texttt{book/SERIES.md}).
+\medskip
+\noindent\textbf{Открытые линии (вне журнала CE-M).}
+NLSE-коэффициент T6; полные live-sim на \latGCKshort/гекс-срезе для заявленных T-предсказаний;
+bound-state lattice для para-Ps $\tau$ --- оформляются новыми записями \texttt{labrecord} по мере закрытия UoW.

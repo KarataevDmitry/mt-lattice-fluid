@@ -36,6 +36,12 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · book · вычислительная лаборатория + журналы CE-*
+
+**Книга:** гл. `computational-laboratory`, макросы `labrecord`/`labseries`; журналы `lab-construction-records` (CE-M), `lab-floors-records` (CE-F, CE-A); предисловие; SERIES §5–7.
+
+---
+
 ## 2026-09-29 · §5.0.3 · Annihilation_PDG_tau_strict
 
 **Жёстче bridge:** τ только из §8.2 `m_e_GeV`/`m_p_GeV` + `alpha_preferred`; rtol от `m_e_rel_err`; upstream τ **хуже** CODATA-path на ≥0.2% (`codata_not_sole_winner`); `log10(τ/hT)` vs PDG в пределах `log10(1+rtol)`; ortho/para ratio leading ~25% slack (не fitted); collision `τ_M` отдельно. Probe: `tools/annihilation_pdg_tau_probe.py --strict`. Bundle гейтит **strict**, не мягкий bridge.

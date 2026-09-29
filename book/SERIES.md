@@ -8,7 +8,9 @@
 2. **Физика дальше дробится** по мере копания (новые тома, когда появляется **свой класс критических экспериментов**, а не «ещё одна глава»).
 3. **Каждый том заканчивается блоком «Критические эксперименты»** — предсказание + что считается провалом модели; без этого мало смысла. Шаблоны: `sources/volumes/chapter-critical-experiments-<id>.tex`.
 4. **§4.8 (системные кванты):** алгебра fractal в construction / macro; узел наблюдателя, **R_eff**, сравнение видов — том **observer**.
-5. **Обработка результатов измерений** — общая глава `sources/chapters/measurement-processing.tex`, подключается через `volumes/include-measurement-processing.tex` **в каждом томе** сразу перед «Критическими экспериментами» (в construction — после `06-si-sm`). Прямые/косвенные, GUM, Стьюдент, $E_n$, круговость входа.
+5. **Вычислительная лаборатория** — `sources/chapters/computational-laboratory.tex` + макросы `glossary/lab-protocol.tex` (`labrecord`, `labseries`). Серия = затянувшаяся лаба: MODEL / аппарат / журнал прогонов.
+6. **Обработка результатов измерений** — `measurement-processing.tex` через `include-measurement-processing.tex` **в каждом томе** после гл. лаборатории, перед «Критическими экспериментами». GUM, Стьюдент, $E_n$.
+7. **Критические эксперименты** — не буллет-лист: `\input{volumes/lab-*-records.tex}` с полными постановками (construction: `lab-construction-records.tex`; floors: `lab-floors-records.tex`).
 
 | ID | Содержание | `main-*.tex` | PDF `out/pdf/` |
 |----|------------|--------------|------------|
@@ -34,13 +36,13 @@ cd book
 
 ## construction — главы
 
-`volumes/vol-construction-body.tex`: `00-descent` … `05-matter`, `07-alpha`, `06-si-sm`, **обработка измерений**, **критические эксперименты**, приложение CA.
+`volumes/vol-construction-body.tex`: `00-descent` … `06-si-sm`, **вычисл. лаборатория**, **обработка измерений**, **журнал CE-M**, приложение CA.
 
 **Не входит:** этажи 0–2 → `floors`; нарратив наблюдателя → `observer`.
 
 ## floors — главы
 
-`volumes/vol-floors-body.tex`: `09-floors-preface`, `10-floor0` … `12-floor2`, **обработка измерений**, **критические эксперименты (этажи)**.
+`volumes/vol-floors-body.tex`: `09-floors-preface` … `12-floor2`, **лаборатория**, **метрология**, **журнал CE-F / CE-A**.
 
 Граница с construction может сдвигаться; новые rung’и — расширение этого тома или новый том по правилу (3).
 

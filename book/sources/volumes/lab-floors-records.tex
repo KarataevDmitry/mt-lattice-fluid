@@ -1,0 +1,85 @@
+% Журнал вычислительных опытов — том floors (серии CE-F, CE-A).
+
+\begin{labseries}{Серия CE-F: этаж~1, составные узлы и оболочки}{sec:lab-series-ce-f}
+
+\begin{labrecord}{CE-F-01 · Двухтельное столкновение $p^+p^-$, $p^+p^+$, $p^-p^-$ на кипящем вакууме}{lab:ce-f-01}
+\labgoal{Проверить §5.0.3: аннигиляция только в канале разных знаков; однознаковые пары не должны
+  «гаснуть'' по тому же критерию.}
+\labhypothesis{При ближнем столкновении на A5-boil пара $p^+p^-$ теряет норму/узел по порогу сценария;
+  $p^+p^+$ и $p^-p^-$ --- нет (контроль).}
+\labmodel{MODEL~\S5.0.3; этаж~1, динамика на кипящем вакууме.}
+\labsetup{Два планкон-узла на FCC-решётке, NN-столкновение; tick-resolve по полному шагу $g$;
+  начальное состояние --- вихрь на boil; размер куба достаточен для изоляции.}
+\labobservables{Флаг аннигиляции; остаточная норма; число тактов до события.}
+\labcriterion{PASS: pm аннигилирует; pp и mm --- нет; воспроизводимость при смене чётности центра.}
+\labanalysis{Тип~A: несколько seeds; тип~B: порог --- свойство сценария, не PDG.}
+\labconclusion{Канал аннигиляции на этаже~1 подтверждён на минимальной двухтельной постановке;
+  перенос на $n$-тело --- CE-F-02.}
+\labreproduce{Реестр: \texttt{Floor1\_two\_body\_nn}.}
+\end{labrecord}
+
+\begin{labrecord}{CE-F-02 · Цепочка из четырёх узлов (FCC-альтернация знаков)}{lab:ce-f-02}
+\labgoal{Устойчивость аннигиляционной логики при $n>2$ без раннего обрыва прогона в не-pm каналах.}
+\labhypothesis{Чередующаяся цепочка даёт каскад pm-событий; однородный знак --- контроль без ложного гашения.}
+\labmodel{MODEL~\S5.0.3; $n$-телесная постановка на том же аппарате.}
+\labsetup{Четыре узла вдоль NN-цепи; варианты \texttt{chain4\_alt\_pm}, \texttt{cluster\_ppmm}, \texttt{chain4\_pp}.}
+\labobservables{Число аннигиляций; финальная норма; wall-time (диагностика, не критерий физики).}
+\labcriterion{Согласованность с CE-F-01 на pm-подцепях; pp-контроль не аннигилирует.}
+\labanalysis{Серия CE-F: один аппарат, разные IC; выводы независимы от одного seed.}
+\labconclusion{Минимальный $n$-body dogfood закрыт; спектроскопия bound-state --- открыта.}
+\labreproduce{Реестр: \texttt{Floor1\_n\_body\_chain}.}
+\end{labrecord}
+
+\begin{labrecord}{CE-F-03 · Оболочка~1: переходы на boil vs антипод}{lab:ce-f-03}
+\labgoal{§5.0.4-B: гало первой оболочки на кипящем вакууме ведёт себя иначе, чем референс на антиподе.}
+\labhypothesis{Счётчики переходов/возбуждений различаются между boil и antipodal reference при том же ядре.}
+\labmodel{MODEL~\S5.0.4-B; \texttt{model/05-floor1-shells}.}
+\labsetup{Вихрь на boil; сравнение сценариев shell-1; релаксация и импульс shell-2 --- CE-F-04.}
+\labobservables{Число переходов; метрики возбуждения гало; время релаксации.}
+\labcriterion{Пороги сценария shell-transitions и excitation-relax PASS в реестре.}
+\labanalysis{Качественный контраст + численные пороги; не сравнение с PDG.}
+\labconclusion{Динамика оболочек на этаже~1 воспроизводима; связь с спектром --- open.}
+\labreproduce{\texttt{Floor1\_shell\_transitions\_boil}, \texttt{Floor1\_shell\_excitation\_relax}.}
+\end{labrecord}
+
+\end{labseries}
+
+\begin{labseries}{Серия CE-A: мост $M\to T$ для аннигиляции (диполь и $\tau$)}{sec:lab-series-ce-a}
+
+\begin{labrecord}{CE-A-01 · Крупномасштабный диполь $\Delta|\Phi|$ после pm}{lab:ce-a-01}
+\labgoal{Связать аннигиляцию на решётке с прокси двухфронтовой структуры на средней плоскости.}
+\labhypothesis{После pm на boil coarse-поле даёт $\ge 2$ пика на $\Delta|\Phi|$ и ось диполя, согласованную с инструментом T-ансамбля.}
+\labmodel{MODEL~\S5.0.3; общий угол диполя с head-on T2.}
+\labsetup{\texttt{pm\_nn} $\to$ осреднение на mid-plane; контроль \texttt{pp\_nn}.}
+\labobservables{Число пиков на $\Delta$; угол оси; флаг annihilated.}
+\labcriterion{pm: dipole proxy и peaks; pp: контроль без той же картины.}
+\labanalysis{Прокси-измерение (тип~A на сетке); не $\tau_{\mathrm{PDG}}$.}
+\labconclusion{M-путь даёт dual-front картину, согласуемую с T-статистикой в CE-A-02.}
+\labreproduce{\texttt{Floor1\_pm\_coarse\_dipole}.}
+\end{labrecord}
+
+\begin{labrecord}{CE-A-02 · Head-on ансамбль: ось, mod-$\pi$, отделение $\tau_M$ от PDG}{lab:ce-a-02}
+\labgoal{Статистика T2-прокси: back-to-back, отслеживание оси инъекции; $\tau_M=n_{\mathrm{ticks}}\cdot hT$ не тождественно para-Ps.}
+\labhypothesis{Ансамбль вращений даёт стабильную ось (mod $\pi$); $\tau_M/\tau_{\mathrm{PDG}}\ll 1$ (разные часы).}
+\labmodel{MODEL~\S5.0.3; \cref{ch:measurement-processing} для ансамбля.}
+\labsetup{Гауссовы пакеты head-on; ensemble $\ge 8$; размер/шаги сценария фиксированы в реестре.}
+\labobservables{$\tau_M$; ошибка оси к инъекции; peaks on $\delta$; CV гистограммы угла (диагностика).}
+\labcriterion{PASS: back-to-back proxy, axis tracks $\pi$, collision clock separate; Стьюдент для среднего угла при малом $n$.}
+\labanalysis{Тип~A по ансамблю (\cref{sec:student}); PDG $\tau$ --- косвенное сравнение в CE-A-03, не здесь.}
+\labconclusion{T-статистика диполя закрыта на классе head-on; bound-state lattice $\tau$ --- open.}
+\labreproduce{\texttt{Annihilation\_T\_stats}, bundle \texttt{Annihilation\_M\_T\_bundle}.}
+\end{labrecord}
+
+\begin{labrecord}{CE-A-03 · Para-Ps $\tau$: QED, лестница, strict upstream}{lab:ce-a-03}
+\labgoal{Сопоставить $\tau_{^1S_0}$ с PDG без подмены head-on $\tau_M$; strict --- без кругового CODATA $m_e$.}
+\labhypothesis{$\tau\approx 2\hbar/(m_e c^2\alpha^5)$ и лестница $N_c/\alpha^5$ совпадают; upstream $m_e$ даёт больший $E_n$, чем CODATA-path.}
+\labmodel{MODEL~\S5.0.3; \eqref{eq:para-ps-tau}--\eqref{eq:tau-relative-unc}.}
+\labsetup{Массы §8.2 upstream; $\alpha_{\mathrm{preferred}}$; отдельно CODATA-path как диагностика; ortho/para ratio leading.}
+\labobservables{$\tau_{\mathrm{mod}}$; $E_n$ к PDG; ratio $\tau_{\mathrm{ortho}}/\tau_{\mathrm{para}}$; $\tau_M/\tau_{\mathrm{PDG}}$.}
+\labcriterion{Strict: rtol от $m_e$ rel err, anti-circular, $u$-логика \cref{sec:compare-reference}; bridge --- мягче, не единственный gate.}
+\labanalysis{Косвенное измерение (\cref{sec:indirect-gum}); radiative gap para-Ps --- тип~B; ortho ratio $\sim 25\%$ --- leading, не fit.}
+\labconclusion{Алгебраический мост T-door закрыт; sim-bound $n_{\mathrm{ticks}}\to 125\,$ps --- открытый вычислительный опыт.}
+\labreproduce{\texttt{Annihilation\_PDG\_tau\_strict}, \texttt{Annihilation\_PDG\_tau\_bridge}.}
+\end{labrecord}
+
+\end{labseries}
