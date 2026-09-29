@@ -32,6 +32,8 @@ cd book
 
 `build.ps1` гоняет XeLaTeX столько раз, сколько нужно (до стабилизации ссылок в `.log`), с повторным `biber` при undefined citations. Ссылки на другой том (напр. `ch:floor*` из `construction`) не считаются ошибкой.
 
+Перед сборкой **construction** / **floors**: `scripts/gen_lab_records_tex.py` → `sources/generated/lab-ce-a-0{2,3}-analysis.tex` (поля **Анализ** CE-A-02/03 из прогонов `mt_ca`).
+
 `-Volume`: `construction` | `floors` | `cosmology` | `observer` | `chemistry` | `compute`
 
 ## construction — главы

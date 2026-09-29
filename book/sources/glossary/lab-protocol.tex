@@ -27,3 +27,9 @@
 \newcommand{\labanalysis}[1]{\item[\textbf{Анализ.}] #1}
 \newcommand{\labconclusion}[1]{\item[\textbf{Вывод.}] #1}
 \newcommand{\labreproduce}[1]{\item[\textbf{Воспроизводимость.}] #1}
+
+% Анализ из сгенерированного фрагмента (scripts/gen\_lab\_records\_tex.py):
+\newcommand{\labanalysisfile}[1]{%
+  \item[\textbf{Анализ.}] \IfFileExists{#1}{\input{#1}}{%
+    \emph{[нет файла #1 --- запустите \texttt{scripts/gen\_lab\_records\_tex.py}]}}%
+}

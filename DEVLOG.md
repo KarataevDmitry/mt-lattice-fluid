@@ -36,6 +36,18 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · book · auto lab journal (CE-A-02/03)
+
+**`scripts/gen_lab_records_tex.py`** → `book/sources/generated/lab-auto-floors.tex`; `\LabAnalysisCEATwo/Three` в `lab-floors-records.tex`. **`build.ps1`** (construction/floors) гоняет gen перед XeLaTeX.
+
+---
+
+## 2026-09-29 · CE-A-03 · GUM / $E_n$ в журнале и strict
+
+**Книга:** CE-A-03 — численный разбор $\tau$, GUM, $E_n^{\mathrm{(up)}}\approx 2$, CODATA-path $E_n\gg 1$ (тип B); CE-A-02 — Стьюдент. **Код:** `tau_para_gum_relative_unc`, `E_n_*` в strict; gate $E_n\leq 2.5$.
+
+---
+
 ## 2026-09-29 · book · вычислительная лаборатория + журналы CE-*
 
 **Книга:** гл. `computational-laboratory`, макросы `labrecord`/`labseries`; журналы `lab-construction-records` (CE-M), `lab-floors-records` (CE-F, CE-A); предисловие; SERIES §5–7.

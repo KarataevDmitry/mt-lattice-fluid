@@ -349,6 +349,15 @@ if ($Volume -eq 'floors') {
 
 New-Item -ItemType Directory -Force -Path $OutPdf, $OutWork | Out-Null
 
+$genLab = Join-Path (Split-Path $Root -Parent) 'scripts\gen_lab_records_tex.py'
+if ($Volume -in @('floors', 'construction')) {
+    Write-Host 'gen lab CE-A analysis fragments ...'
+    & python $genLab --device cpu
+    if ($LASTEXITCODE -ne 0) {
+        throw 'gen_lab_records_tex.py failed'
+    }
+}
+
 if ($Volume -eq 'floors') {
     $constructionAux = Join-Path $OutWork 'construction__build.aux'
     if (-not (Test-Path -LiteralPath $constructionAux)) {
@@ -490,7 +499,9 @@ function Get-LaTeXLogUndefined {
 # Labels cited from another volume PDF (SERIES.md) — not errors for this build.
 $CrossVolumeRefPatternsByVolume = @{
     construction = @('^ch:floor', '^ch:floors-preface')
-    floors       = @()
+    floors       = @(
+        '^ch:(macro|si-sm|critical-construction|alpha|carrier|axioms|evolution|matter|descent|foundations)$'
+    )
     cosmology    = @()
     observer     = @()
     chemistry    = @()

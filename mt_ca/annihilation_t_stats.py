@@ -193,6 +193,15 @@ def annihilation_t_stats_probe(
         else float("inf")
     )
     mean_axis_err = sum(axis_err) / len(axis_err) if axis_err else float("inf")
+    if len(axis_err) >= 2:
+        axis_pi_err_std = (
+            sum((e - mean_axis_err) ** 2 for e in axis_err) / (len(axis_err) - 1)
+        ) ** 0.5
+    else:
+        axis_pi_err_std = float("nan")
+    axis_pi_err_sem = (
+        axis_pi_err_std / math.sqrt(len(axis_err)) if axis_err and axis_pi_err_std == axis_pi_err_std else float("nan")
+    )
     # π-ambiguity in raw lab angles makes uniform-bin histogram misleading; gate on mod-π tracking.
 
     from mt_ca.si_constants import SI
@@ -233,6 +242,9 @@ def annihilation_t_stats_probe(
         "ensemble_axis_hist_cv": hist_cv if hist_cv == hist_cv else None,
         "mean_axis_tracking_err_rad": mean_axis_err if mean_axis_err == mean_axis_err else None,
         "mean_axis_pi_err_rad": mean_pi_err if mean_pi_err == mean_pi_err else None,
+        "axis_pi_err_std_rad": axis_pi_err_std if axis_pi_err_std == axis_pi_err_std else None,
+        "axis_pi_err_sem_rad": axis_pi_err_sem if axis_pi_err_sem == axis_pi_err_sem else None,
+        "ensemble_n": ensemble,
         "back_to_back_proxy": back_to_back,
         "ensemble_isotropic": iso_ensemble,
         "axis_tracks_injection": axis_tracks,
