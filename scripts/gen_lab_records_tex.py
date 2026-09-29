@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit book/sources/generated/lab-auto-floors.tex from mt_ca probes."""
+"""Emit generated/lab-si-pdg-table.tex only; journal prose is hand-authored in lab-journal/."""
 from __future__ import annotations
 
 import argparse

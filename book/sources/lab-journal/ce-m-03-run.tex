@@ -1,0 +1,25 @@
+% Ручной фрагмент журнала.
+\label{exp:cem03}
+\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]
+\item \textbf{Запуск реестра.} \texttt{python verify\_principles.py --suite sm --device cpu}.
+\item \textbf{Проверки verify.} \texttt{Higgs\_mass}, \texttt{Proton\_mass}, \texttt{Electron\_mass}, \texttt{Neutron\_mass}.
+\item \textbf{Итог реестра.} \textbf{PASS}.
+\item \textbf{Сводная таблица модель vs PDG} --- табл.~\ref{tab:si-pdg-ce-m} (глава SI / приложение).
+\end{enumerate}
+\medskip
+\begin{table}[htbp]
+\centering
+\small
+\caption{CE-M-03: итоги verify suite \texttt{sm}}
+\label{tab:exp-ce-m-03-checks}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Проверка & Итог & $|\delta|$ \\
+\midrule
+\texttt{Higgs\_mass} & \textbf{PASS} & $4{,}73\times 10^{-4}$ \\
+\texttt{Proton\_mass} & \textbf{PASS} & $3{,}16\times 10^{-3}$ \\
+\texttt{Electron\_mass} & \textbf{PASS} & $4{,}50\times 10^{-3}$ \\
+\texttt{Neutron\_mass} & \textbf{PASS} & $3{,}44\times 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

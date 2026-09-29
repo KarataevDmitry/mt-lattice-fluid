@@ -32,7 +32,7 @@ cd book
 
 `build.ps1` гоняет XeLaTeX столько раз, сколько нужно (до стабилизации ссылок в `.log`), с повторным `biber` при undefined citations. Межтомные номера: `generated/construction-vol-refs.tex` (для **floors**, макросы `\bcref`/`\bref`) и `generated/floors-vol-refs.tex` (для **construction**, `\fcref`/`\fvolrefs`); сборка **construction** при необходимости сначала гоняет **floors** (и наоборот), без рекурсии — флаги `-SkipFloorsPrebuild` / `-SkipConstructionPrebuild`.
 
-Перед сборкой **construction** / **floors**: `scripts/gen_lab_records_tex.py` → `lab-si-pdg-table.tex`, `lab-ce-m-0{0,1,2,3,4}-{analysis,experiment}.tex`, `lab-ce-a-0{2,3}-{analysis,experiment}.tex` (журнал CE-M / CE-A, не «мы решили что ок»).
+Перед сборкой **construction**: `scripts/gen_lab_records_tex.py` → только `generated/lab-si-pdg-table.tex` (сводка модель/PDG). **Журнал CE** (постановка, ход, анализ, погрешность) --- `book/sources/lab-journal/*.tex`, правка вручную после прогона verify.
 
 `-Volume`: `construction` | `floors` | `cosmology` | `observer` | `chemistry` | `compute`
 

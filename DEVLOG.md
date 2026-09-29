@@ -36,9 +36,11 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
-## 2026-09-29 · book · протоколы прогона CE-* (не только карточки)
+## 2026-09-29 · book · журнал CE руками (не автоген prose)
 
-**Книга:** `\labexperimentfile` + `generated/lab-ce-*-experiment.tex` (команда, таблицы, PASS/FAIL) после каждой карточки CE-M / CE-A-02/03. Ген: `build_ce_m*_experiment_latex` в `lab_records_tex.py`.
+**Книга:** `book/sources/lab-journal/*-{run,analysis}.tex`; макросы `\labjournalrun`, `\labjournalanalysis`. Четыре раздела карточки — `lab-protocol.tex`.
+
+**Код:** `gen_lab_records_tex.py` → только `generated/lab-si-pdg-table.tex`. Протоколы опытов в Python удалены из `lab_records_tex.py`.
 
 ## 2026-09-29 · steer · полное квантование = факт на M, CE доказывает
 

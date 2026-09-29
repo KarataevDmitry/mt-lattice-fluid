@@ -63,16 +63,17 @@
 \newcommand{\labuncertainty}[1]{\labsetpart{4}\item[\textbf{Расчёт погрешности.}] #1}
 \newcommand{\labconclusion}[1]{\labsetpart{4}\item[\textbf{Выводы.}] #1}
 
-\newcommand{\labanalysisfile}[1]{%
-  \labsetpart{4}%
-  \item[\textbf{Анализ.}] \IfFileExists{#1}{\input{#1}}{%
-    \emph{[нет файла #1 --- запустите \texttt{scripts/gen\_lab\_records\_tex.py}]}}%
-}
-
-\newcommand{\labexperimentfile}[1]{%
+% Ручной журнал: book/sources/lab-journal/<id>-{run,analysis}.tex
+\newcommand{\labjournalrun}[1]{%
   \labsetpart{3}%
   \item[\textbf{Регистрация прогона.}]%
   \IfFileExists{#1}{\input{#1}}{%
-    \emph{[нет файла #1 --- \texttt{python scripts/gen\_lab\_records\_tex.py}]}%
-  }%
+    \emph{[нет файла #1 --- допишите фрагмент в \texttt{lab-journal/}]}}%
+}
+
+\newcommand{\labjournalanalysis}[1]{%
+  \labsetpart{4}%
+  \item[\textbf{Анализ.}]%
+  \IfFileExists{#1}{\input{#1}}{%
+    \emph{[нет файла #1 --- допишите фрагмент в \texttt{lab-journal/}]}}%
 }
