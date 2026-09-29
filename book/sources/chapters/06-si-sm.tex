@@ -234,15 +234,86 @@ $\caKappaGeom$ выводится из геометрии, после чего $
 Численное сравнение с данными PDG приведено в приложении; здесь зафиксированы формулы вывода.
 
 \section{Четыре взаимодействия}
+\label{sec:four-forces-map}
 
-\begin{proposition}[Один закон --- четыре макроскопических канала]
-Электромагнетизм: фазы на рёбрах, $\Phi_\square$, излучение с $n=0$.
-Слабое: лево- и право-спиновые проекторы, переворот $SU(2)$; $\sin^2\theta_W=3/13$
-из геометрии кластера $12+1$.
-Сильное: составные узлы, $\alpha_s(v)=d/(N_{\mathrm{hier}}\pi)$.
-Гравитация: деформация метрики на~$T$,
-$G_{\mu\nu}=\mathcal{E}(\delta[\mathrm{strain}])=8\pi\ell_P^2 T_{\mu\nu}$.
+\begin{remark}[Не сводка учебника СМ]
+Один абзац «EM + слабое + сильное + GR'' без цепочки из~$g$ --- \emph{коммуналка}:
+читатель узнаёт формулировки PDG, но не видит, что уже выведено из носителя FCC,
+бит-бюджета $B_{\hv}$ и осреднения~$\mathcal{B}$.
+Ниже --- \textbf{карта каналов}: у каждого пункта указан якорь в тексте монографии
+или явный статус «открыто''.
+\end{remark}
+
+Один локальный закон~$g$ (\cref{ch:evolution}) на решётке \latGCKshort\ не порождает
+четыре независимых Лагранжиана на~$\Mlayer$; на~$\Tlayer$ те же кванты читаются
+четырьмя \emph{макро-каналами} (разные проекции / топоклассы / оболочки).
+
+\begin{proposition}[Канал электромагнетизма]
+\label{prop:channel-em}
+На~$\Tlayer$: калибровочная фаза на рёбрах, петлевой поток $\Phi_\square$,
+макро-Maxwell после $\mathcal{B}$ (\cref{ch:macro,def:soft-readout});
+скорость света $c^2=K_P/\mu_P$ и изотропия фронта (\cref{ch:carrier});
+безразмерное coupling --- $\alpha_{\mathrm{fs}}$ (\cref{ch:alpha,thm:alpha}).
+Излучение с $n_E=0$ --- голографический сектор давления, не отдельный fitted knob
+(\cref{ch:matter}).
 \end{proposition}
 
-Полный вывод гравитационных волн, полного спектра барионов и матрицы CKM
-оставлен для дальнейшей работы и не ослабляет формулировок теорем выше.
+\begin{proposition}[Голый угол Вайнберга из кластера $|N_{12}|+1$]
+\label{prop:weinberg-bare}
+Пространственная размерность $d=3$ (\cref{ch:carrier}) и локальный FCC-кластер
+$|N_{12}|+1=13$ (центр + двенадцать соседей) задают долю хирально-смешанного
+нейтрального сектора до бегунка на $M_Z$:
+\begin{equation}
+\label{eq:sin2-bare}
+  \sin^2\theta_W^{(\mathrm{bare})}
+  = \frac{d}{|N_{12}|+1}
+  = \frac{3}{13}.
+\end{equation}
+Совпадает с $N_\phi=\lceil 2\pi/\Delta\phi_{\min}\rceil=13$ (\cref{ch:matter}) ---
+одна «тринадцатка'' упаковки и Heisenberg-фазы, не второй параметр.
+Хиральные проекторы $P_L,P_R$ и SU(2)-переворот на столкновении --- \cref{ch:evolution}
+(слабый канал, не импорт группы снаружи).
+\end{proposition}
+
+\begin{proof}[Идея]
+\pfrom{$(3{+}1)$ и $|N_{12}|=12$}
+из $d$ пространственных степеней свободы на тике каузальной оболочки ровно $d$ участвуют
+в направлении слабого смешивания; остальные $N_{\mathrm{cluster}}-d$ --- внутренние фазовые слоты.
+Отсюда \eqref{eq:sin2-bare}.
+Сдвиг $3/13\to\sin^2\theta_W(\mu=M_Z)$ --- мягкий бегунок (как у $\alpha_{\mathrm{fs}}$),
+не подмена голой геометрии fitted-числом PDG.
+\end{proof}
+
+\begin{proposition}[Семя $\alpha_s$ на шкале $v$]
+\label{prop:alpha-s-seed}
+С тем же $N_{\mathrm{hier}}=8$, что в \cref{thm:vev}, и тем же $d=3$:
+\begin{equation}
+\label{eq:alpha-s-seed}
+  \alpha_s(v)=\frac{d}{N_{\mathrm{hier}}\,\pi}=\frac{3}{8\pi}.
+\end{equation}
+Бегунок $v\to M_Z$ с коэффициентом $1/(d\pi)\ln(v/\mu)$ --- отдельная лемма
+(контроль PDG на полюсе $Z$); confining-узлы и полный спектр барионов на~$\Mlayer$ ---
+\cref{ch:floor1,ch:floor2}, sim-полоса открыта.
+\end{proposition}
+
+\begin{proof}[Идея]
+\pfrom{\cref{thm:vev} и $d$ из носителя}
+сильный канал --- короткий packing/confining на той же $\pi$-ступени башни $\alpha_{\mathrm{fs}}$
+(\cref{ch:alpha}), масштабированный числом иерархических битов $N_{\mathrm{hier}}$.
+Отсюда \eqref{eq:alpha-s-seed}; численный контроль --- приложение / реестр сверок.
+\end{proof}
+
+\begin{remark}[Гравитация: не одна строка GR]
+\label{rem:channel-gr-open-in-book}
+Паспорт «$G_{\mu\nu}=\mathcal{E}(\delta[\mathrm{strain}])=8\pi\ell_P^{2}T_{\mu\nu}$''
+\emph{имеет смысл} только после определения T-strain из той же среды, что EM и слабый сектор
+($G=\ell_P^{2}$ в планковских единицах, $F_0=m_{\mathrm{arg}}g_M$ из арены $s_0$).
+Вынести его сюда без этой цепочки --- та же коммуналка, что списком SM.
+Полный вывод strain$\to$Эйнштейн, GW, $\Lambda$ и угловой шаблон $\theta_f$ ---
+открытая линия (\cref{ch:critical-construction}); не ослабляет \cref{thm:vev,prop:weinberg-bare,prop:alpha-s-seed}.
+\end{remark}
+
+\begin{remark}[CKM и поколения]
+$N_{\mathrm{gen}}=d$ и $\lambda=\sin\theta_{12}=3/13$ --- тот же вес кластера, что
+\eqref{eq:sin2-bare}; углы $A,\rho,\eta$ и полная матрица --- открыто.
+\end{remark}
