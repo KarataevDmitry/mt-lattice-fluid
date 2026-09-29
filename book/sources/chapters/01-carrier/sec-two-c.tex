@@ -14,22 +14,66 @@
 Тождество $\speedC=\caKappaGeom \caSignalSpeed$ служит проверкой согласованности макроописания
 после фиксации $\htick=\caKappaGeom t_P$ (\cref{fig:carrier-two-speeds-micro,fig:carrier-two-speeds-macro}).
 
-\begin{remark}[Факт: $c_0/c=\sqrt{2}$ на FCC; каузальность одного такта]
-\label{rem:two-c-burden}
-На~$\Mlayer$ тактовая скорость звена $\caSignalSpeed=\caStepSpace/\htick$;
-после SI-моста (\cref{def:si-bridge}) при $\caKappaGeom=1/\sqrt{2}$:
+\begin{definition}[Две скорости и continuum-упаковка $t_P$]
+\label{def:two-speeds-formal}
+\begin{itemize}
+  \item \textbf{Скорость звена на $\Mlayer$:}
+  $\caSignalSpeed:=\caStepSpace/\htick$ (\cref{def:minkowski-carrier-split}).
+  \item \textbf{Макроскопическая скорость на $\Tlayer$:}
+  $\speedC:=\caKappaGeom\,\caSignalSpeed$ с якорем CODATA после SI-моста (\cref{def:si-bridge}).
+  \item \textbf{Continuum-упаковка:}
+  определение $t_P:=\ell_P/\speedC$ в рамке одной скорости $\speedC$ на всех масштабах
+  и подстановка $t_P$ вместо $\htick$ при чтении $\caSignalSpeed=\ell_P/t_P$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}[Каузальный предел одного такта на $\Mlayer$]
+\label{prop:m-one-tick-cone}
+За один такт $t\to t+1$ закон~$g$ не переносит информацию за пределы каузальной звезды $N(x)$
+(аксиома~$A_1$, \cref{ax:A1}): для дискретного фронта
+$\|\Delta x\|_\infty\le \caStepSpace$.
+Следовательно, максимальная скорость сигнала на $\Mlayer$ за такт равна $\caSignalSpeed$;
+превышение за один $\htick$ без нарушения $A_1$ невозможно.
+\end{proposition}
+
+\begin{proposition}[Отношение $\caSignalSpeed/\speedC$ при FCC]
+\label{prop:c0-over-c}
+При $\caKappaGeom_{\mathrm{FCC}}=1/\sqrt{2}$ и \cref{def:si-bridge}:
 \[
-  \frac{\caSignalSpeed}{\speedC}=\frac{1}{\caKappaGeom}=\sqrt{2},
-  \qquad
-  \htick=\frac{t_P}{\sqrt{2}}.
+  \htick=\caKappaGeom\, t_P,\qquad
+  \speedC=\caKappaGeom\,\caSignalSpeed,\qquad
+  \frac{\caSignalSpeed}{\speedC}=\frac{1}{\caKappaGeom}=\sqrt{2}.
 \]
-Учебниковое $t_P=\ell_P/c$ \emph{подразумевает} одну скорость на всех масштабах;
-здесь макроскопическая $\speedC$ (CODATA) --- осреднённый T-фронт, а не скорость одного NN-шага.
-Каузальность одного такта: сигнал не дальше одного light-like ребра (\cref{sec:c-light-cone}).
-Утверждение «CODATA-$c$ на одном шаге $\ell_P$'' --- \textbf{ложное} (ошибка continuum-упаковки $t_P=\ell_P/c$).
-Геометрический факт $\caSignalSpeed/\speedC=\sqrt{2}$ воспроизводим: \textbf{CE-M-00}
-(\texttt{Kappa\_bottom\_up}); согласование макро-фронта с $\speedC$ после $\mathcal{B}$ --- \textbf{CE-M-01}
-(suite \texttt{t\_macro}).
+Величина $\caKappaGeom$ задаётся геометрией однотактового тела (\cref{sec:fcc-kappa}),
+не отношением $\speedC/\caSignalSpeed$ как свободным параметром.
+\end{proposition}
+
+\begin{proposition}[Предел скорости наблюдаемого фронта на $\Tlayer$]
+\label{prop:t-speed-limit}
+Скорость распространения EM-вакуумного фронта, извлекаемая прибором на $\Tlayer$
+после readout $\mathcal{B}$ на масштабах $\gg\caStepSpace$,
+согласована с $\speedC$ (\cref{sec:c-light-cone,ch:macro}; сверка --- CE-M-01).
+Утверждение $\caSignalSpeed>\speedC$ в SI \emph{не} определяет на $\Tlayer$
+состояние с групповой скоростью $v>\speedC$:
+$\caSignalSpeed$ относится к паре $(\caStepSpace,\htick)$ на $\Mlayer$,
+$\speedC$ --- к изотропному макро-якорю $\caKappaGeom\,\caSignalSpeed$.
+\end{proposition}
+
+\begin{corollary}[Нет кинематического доступа к $\Mlayer$]
+\label{cor:no-m-kinematic-access}
+По \cref{cor:no-continuum,sec:no-continuum-carrier} шаг $\caStepSpace=\ell_P$ не является
+пределом $h\to 0$ для масштаба тела или прибора на $\Tlayer$.
+Отображение «уменьшение линейного размера $\Rightarrow$ замена $\speedC$ на $\caSignalSpeed$''
+не входит в класс допустимых морфизмов модели: наблюдатель остаётся на $\Tlayer$
+с конусом $\speedC$; кинематика $\caSignalSpeed$ --- свойство обновления на $\carrierLattice\times\mathbb{Z}$.
+\end{corollary}
+
+\begin{remark}[Сверка]
+\label{rem:two-c-burden}
+\cref{prop:c0-over-c} --- CE-M-00 (\texttt{Kappa\_bottom\_up});
+\cref{prop:t-speed-limit} --- CE-M-01 (suite \texttt{t\_macro}).
+Ложное тождество «$\speedC$ на шаге $\ell_P$ при $t_P=\ell_P/\speedC$'' есть частный случай
+неверной continuum-упаковки из \cref{def:two-speeds-formal}.
 \end{remark}
 
 \begin{figure}[htbp]
