@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from mt_ca.lab_records_tex import generate_floors_lab_fragments  # noqa: E402
+from mt_ca.lab_records_tex import generate_all_lab_fragments  # noqa: E402
 
 
 def main() -> int:
@@ -21,7 +21,7 @@ def main() -> int:
         default=ROOT / "book" / "sources",
     )
     args = p.parse_args()
-    fragments = generate_floors_lab_fragments(device=args.device)
+    fragments = generate_all_lab_fragments(device=args.device)
     for rel, tex in fragments.items():
         out = args.sources_dir / rel
         out.parent.mkdir(parents=True, exist_ok=True)

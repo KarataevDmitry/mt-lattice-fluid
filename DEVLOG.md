@@ -36,9 +36,15 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · book · CE-M SI/PDG журнал (не «решили что ок»)
+
+**Книга:** § «Журнал опытов» в `06-si-sm.tex` + `tab:si-pdg-ce-m`; карточки CE-M-02/03 с `\labanalysisfile`; приложение `appendix/02-si-pdg-experiments.tex` (команды воспроизведения).
+
+**Код:** `mt_ca/lab_records_tex.py` — `lab-si-pdg-table.tex`, `lab-ce-m-02/03-analysis.tex`; `gen_lab_records_tex.py` → `generate_all_lab_fragments`. Verify-столбец = `Higgs_mass`, `Alpha_si_bridge`, `Alpha_bridges`, …
+
 ## 2026-09-29 · book · auto lab journal (CE-A-02/03)
 
-**`scripts/gen_lab_records_tex.py`** → `book/sources/generated/lab-auto-floors.tex`; `\LabAnalysisCEATwo/Three` в `lab-floors-records.tex`. **`build.ps1`** (construction/floors) гоняет gen перед XeLaTeX.
+**`scripts/gen_lab_records_tex.py`** → `book/sources/generated/lab-ce-a-0{2,3}-analysis.tex`; floors журнал. **`build.ps1`** (construction/floors) гоняет gen перед XeLaTeX.
 
 ---
 

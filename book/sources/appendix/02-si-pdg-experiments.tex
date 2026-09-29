@@ -1,0 +1,30 @@
+\chapter{Журнал опытов: SI, PDG и реестр сверок}
+\label{app:si-pdg-experiments}
+
+\section{Зачем это приложение}
+\label{sec:si-pdg-experiments}
+
+Глава~\ref{ch:si-sm} фиксирует \emph{формулы} вывода ($v$, массы, $\sin^2\theta_W$, $\alpha_s$).
+Сходство с СИ и таблицами PDG/CODATA --- не постулат и не «мы решили, что всё ок'',
+а \textbf{серия вычислительных экспериментов} серии CE-M
+(\cref{ch:computational-laboratory,ch:critical-construction,sec:lab-series-ce-m}).
+
+Каждая строка ниже --- косвенное или алгебраическое сравнение с эталоном;
+методика $u$, $E_n$, анти-круговость --- \cref{ch:measurement-processing}.
+Аннигиляция и этажи --- серии CE-A / CE-F (\cref{ch:critical-floors}).
+
+\section{Таблица CE-M (автогенерация)}
+\label{sec:si-pdg-table}
+
+\input{generated/lab-si-pdg-table.tex}
+
+\section{Воспроизведение}
+\begin{itemize}
+  \item Обновить числа в книге:
+    \texttt{python scripts/gen\_lab\_records\_tex.py} из корня репозитория.
+  \item Прогнать реестр:
+    \texttt{python verify\_principles.py --suite alpha --suite sm --device cpu}
+    (полный ship: \texttt{--ship}).
+  \item Полные постановки CE-M-01--03 --- в конце тома \emph{construction},
+    глава «Критические эксперименты''; поля \textbf{Анализ} подставляются из тех же прогонов.
+\end{itemize}

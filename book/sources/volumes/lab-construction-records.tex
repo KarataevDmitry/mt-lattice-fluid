@@ -30,10 +30,24 @@
 \labobservables{Безразмерные отношения ($\alpha^{-1}$, $m_p/m_e$, hop-лестница); размерные якоря при фиксированных $\hbar,G,c$.}
 \labcriterion{$E_n\lesssim 1$ для независимых косвенных величин (\cref{sec:compare-reference});
   явная пометка зависимых якорей (\cref{sec:multiple-observables}).}
-\labanalysis{GUM по \eqref{eq:gum-relative}; отделение ppm-зазора Швингера (тип~B модели QED) от табличного $u(\alpha)$.}
+\labanalysisfile{generated/lab-ce-m-02-analysis.tex}
 \labconclusion{Замыкание SI-строки на каркасе модели --- закрытый класс алгебраических опытов;
   мягкие этажи выше лептонного окна остаются open в MODEL.}
 \labreproduce{Реестр: \texttt{Alpha\_si\_bridge}, \texttt{Alpha\_upstairs\_mass\_probe}, связанные unit-checks.}
+\labstatus{Закрыт (алгебра + таблица \cref{tab:si-pdg-ce-m}).}
+\end{labrecord}
+
+\begin{labrecord}{CE-M-03 · Лестница масс $v$, $m_H$, $m_p$, $m_e$, $m_n$ vs PDG}{lab:ce-m-03}
+\labgoal{Численно проверить формулы \cref{thm:vev} и \cref{prop:ladder-scale-steps} без подгонки масс под PDG.}
+\labhypothesis{Относительные ошибки $m_H,m_p,m_e,m_n$ и $v$ ниже заявленных порогов verify; $\sin^2\theta_W^{(bare)}=3/13$.}
+\labmodel{Раздел «Массы частиц'' настоящей главы; \cref{prop:weinberg-bare,prop:alpha-s-seed}.}
+\labsetup{Upstream §8.2 из \texttt{SI.*\_mass\_row()}; эталон --- константы PDG в коде реестра.}
+\labobservables{GeV-шкала, $\alpha^{-1}$, $\sin^2\theta_W$, $\alpha_s(M_Z)$ --- см. \cref{tab:si-pdg-ce-m}.}
+\labcriterion{PASS реестра \texttt{Higgs\_mass}, \texttt{Proton\_mass}, \texttt{Electron\_mass}, \texttt{Neutron\_mass}; $|\delta|$ в таблице.}
+\labanalysisfile{generated/lab-ce-m-03-analysis.tex}
+\labconclusion{SI-лестница масс на каркасе модели --- закрытый вычислительный блок; не путать с lattice-bound $\tau$ (CE-A).}
+\labreproduce{\texttt{python verify\_principles.py --suite sm}; таблица --- \texttt{gen\_lab\_records\_tex.py}.}
+\labstatus{Закрыт (реестр sm).}
 \end{labrecord}
 
 \end{labseries}

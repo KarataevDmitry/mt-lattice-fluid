@@ -126,6 +126,145 @@ def _fragment_header() -> str:
     )
 
 
+def build_ce_m02_analysis_latex(*, device: str = "cpu") -> str:
+    del device
+    from mt_ca.si_constants import SI
+
+    br = SI.alpha_si_bridge_row()
+    up = SI.alpha_upstairs_mass_probe_row()
+    a_inv = 1.0 / float(br["alpha_preferred"])
+    approx = r"\approx"
+    return _tex_paragraph(
+        rf"Алгебра SI-моста: $\alpha^{{-1}}_{{\mathrm{{pref}}}}{approx}{tex_decimal(a_inv, 6)}$ "
+        rf"(M={int(br['M'])}, $d={int(br['d'])}$, без $u(\alpha)$); "
+        rf"контраст T-door $\approx {tex_decimal(float(br['T_lab_contrast_ppm']), 2)}\,$ppm. "
+        rf"Каскад масс: $v{approx}{tex_decimal(float(up['v_GeV']), 2)}\,$GeV, "
+        rf"$\delta m_H/m_H{approx}{tex_sci(float(up['m_H_rel_err']))}$, "
+        rf"$\delta m_p{approx}{tex_sci(float(up['m_p_rel_err']))}$, "
+        rf"$\delta m_e{approx}{tex_sci(float(up['m_e_rel_err']))}$ vs PDG (upstream §8.2). "
+        r"Критерии: \texttt{Alpha\_si\_bridge}, \texttt{Alpha\_upstairs\_mass\_probe}."
+    )
+
+
+def build_ce_m03_analysis_latex(*, device: str = "cpu") -> str:
+    del device
+    from mt_ca.si_constants import (
+        M_ELECTRON_GEV_PDG,
+        M_HIGGS_GEV_PDG,
+        M_NEUTRON_GEV_PDG,
+        M_PROTON_GEV_PDG,
+        SI,
+    )
+
+    h = SI.higgs_mass_row()
+    p = SI.proton_mass_row()
+    e = SI.electron_mass_row()
+    n = SI.neutron_mass_row()
+    f = SI.force_ansatz_row()
+    w = SI.weinberg_row()
+    sin2_rel = abs(float(w["sin2_theta_W_bare"]) - float(w["sin2_theta_W_PDG_MSbar"])) / float(
+        w["sin2_theta_W_PDG_MSbar"]
+    )
+    lines = [
+        rf"$v={tex_decimal(float(h['v_GeV']), 2)}$ GeV (PDG ${tex_decimal(246.22, 2)}$); "
+        rf"$m_H={tex_decimal(float(h['m_H_GeV']), 2)}$ GeV ($|\delta|\approx {tex_sci(float(h['m_H_rel_err']))}$); "
+        rf"$m_p={tex_decimal(float(p['m_p_GeV']), 4)}$ GeV ($|\delta|\approx {tex_sci(float(p['m_p_rel_err']))}$); "
+        rf"$m_e={tex_decimal(float(e['m_e_GeV']), 6)}$ GeV ($|\delta|\approx {tex_sci(float(e['m_e_rel_err']))}$); "
+        rf"$m_n={tex_decimal(float(n['m_n_GeV']), 4)}$ GeV ($|\delta|\approx {tex_sci(float(n['m_n_rel_err']))}$). "
+        rf"$\sin^2\theta_W^{{(bare)}}=3/13$ ($|\delta|$ к MSbar $\approx {tex_sci(sin2_rel)}$). "
+        rf"$\alpha_s(M_Z)={tex_decimal(float(f['alpha_s_MZ_model']), 5)}$ ($|\delta|\approx {tex_sci(float(f['alpha_s_MZ_rel_err']))}$). "
+        r"Проверки: \texttt{Higgs\_mass}, \texttt{Proton\_mass}, \texttt{Electron\_mass}, \texttt{Neutron\_mass}."
+    ]
+    return _tex_paragraph("".join(lines))
+
+
+def build_si_pdg_table_latex(*, device: str = "cpu") -> str:
+    del device
+    from mt_ca.si_constants import (
+        M_ELECTRON_GEV_PDG,
+        M_HIGGS_GEV_PDG,
+        M_NEUTRON_GEV_PDG,
+        M_PROTON_GEV_PDG,
+        SI,
+    )
+
+    h = SI.higgs_mass_row()
+    p = SI.proton_mass_row()
+    e = SI.electron_mass_row()
+    n = SI.neutron_mass_row()
+    f = SI.force_ansatz_row()
+    w = SI.weinberg_row()
+    br = SI.alpha_si_bridge_row()
+
+    def row(label: str, model: float, pdg: float, rel: float, check: str, dec: int = 4) -> str:
+        return (
+            f"{label} & {tex_decimal(model, dec)} & {tex_decimal(pdg, dec)} & "
+            f"${tex_sci(rel)}$ & \\texttt{{{check}}} \\\\"
+        )
+
+    body = "\n".join(
+        [
+            row(r"$v$ [GeV]", float(h["v_GeV"]), 246.22, abs(float(h["v_GeV"]) - 246.22) / 246.22, "Higgs\\_mass", 2),
+            row(r"$m_H$ [GeV]", float(h["m_H_GeV"]), M_HIGGS_GEV_PDG, float(h["m_H_rel_err"]), "Higgs\\_mass", 2),
+            row(r"$m_p$ [GeV]", float(p["m_p_GeV"]), M_PROTON_GEV_PDG, float(p["m_p_rel_err"]), "Proton\\_mass", 4),
+            row(r"$m_e$ [GeV]", float(e["m_e_GeV"]), M_ELECTRON_GEV_PDG, float(e["m_e_rel_err"]), "Electron\\_mass", 6),
+            row(r"$m_n$ [GeV]", float(n["m_n_GeV"]), M_NEUTRON_GEV_PDG, float(n["m_n_rel_err"]), "Neutron\\_mass", 4),
+            row(
+                r"$\alpha^{-1}$",
+                1.0 / float(br["alpha_preferred"]),
+                137.035999177,
+                abs(1.0 / float(br["alpha_preferred"]) - 137.035999177) / 137.035999177,
+                "Alpha\\_si\\_bridge",
+                6,
+            ),
+            row(
+                r"$\sin^2\theta_W$ (bare)",
+                float(w["sin2_theta_W_bare"]),
+                float(w["sin2_theta_W_PDG_MSbar"]),
+                abs(float(w["bare_rel_err_vs_PDG"])),
+                "Alpha\\_bridges",
+                5,
+            ),
+            row(
+                r"$\alpha_s(M_Z)$",
+                float(f["alpha_s_MZ_model"]),
+                float(f["alpha_s_MZ_pdg"]),
+                float(f["alpha_s_MZ_rel_err"]),
+                "---",
+                5,
+            ),
+        ]
+    )
+    return "\n".join(
+        [
+            r"\begin{table}[htbp]",
+            r"\centering",
+            r"\caption{Серия CE-M: модель (upstream §8.2) vs эталон PDG/CODATA. "
+            r"Не натурный эксперимент --- воспроизводимый прогон реестра.}",
+            r"\label{tab:si-pdg-ce-m}",
+            r"\small",
+            r"\begin{tabular}{@{}lrrrl@{}}",
+            r"\toprule",
+            r"Наблюдаемая & Модель & Эталон & $|\delta|$ & Verify \\",
+            r"\midrule",
+            body,
+            r"\bottomrule",
+            r"\end{tabular}",
+            r"\end{table}",
+            "",
+        ]
+    )
+
+
+def generate_construction_lab_fragments(*, device: str = "cpu") -> dict[str, str]:
+    hdr = _fragment_header()
+    return {
+        "generated/lab-si-pdg-table.tex": hdr + build_si_pdg_table_latex(device=device),
+        "generated/lab-ce-m-02-analysis.tex": hdr + build_ce_m02_analysis_latex(device=device) + "\n",
+        "generated/lab-ce-m-03-analysis.tex": hdr + build_ce_m03_analysis_latex(device=device) + "\n",
+    }
+
+
 def generate_floors_lab_fragments(*, device: str = "cpu") -> dict[str, str]:
     """Map relative path under book/sources/ → fragment body (no preamble)."""
     ce_a02 = build_ce_a02_analysis_latex(device=device)
@@ -135,3 +274,10 @@ def generate_floors_lab_fragments(*, device: str = "cpu") -> dict[str, str]:
         "generated/lab-ce-a-02-analysis.tex": hdr + ce_a02 + "\n",
         "generated/lab-ce-a-03-analysis.tex": hdr + ce_a03 + "\n",
     }
+
+
+def generate_all_lab_fragments(*, device: str = "cpu") -> dict[str, str]:
+    out: dict[str, str] = {}
+    out.update(generate_construction_lab_fragments(device=device))
+    out.update(generate_floors_lab_fragments(device=device))
+    return out
