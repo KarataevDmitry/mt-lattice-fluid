@@ -226,18 +226,22 @@ def check_annihilation_pdg_tau_strict(device: str = "cpu") -> dict:
     from mt_ca.si_constants import SI
 
     row = SI.annihilation_pdg_tau_strict_row(device=device)
+    en_up = float(row.get("E_n_upstream", 0.0))
     ok = (
         bool(row["checks_ok"])
         and bool(row["anti_circular_mass"])
         and bool(row["tracks_mass_error"])
         and float(row["ortho_para_ratio_rel_err"]) <= 0.27
         and bool(row.get("codata_not_sole_winner", False))
+        and en_up <= 2.5
     )
     return {
         "id": "Annihilation_PDG_tau_strict",
         "tau_rel_err_upstream": row["tau_rel_err_upstream"],
         "tau_rel_err_CODATA_m_e": row["tau_rel_err_CODATA_m_e"],
         "ortho_para_ratio_rel_err": row["ortho_para_ratio_rel_err"],
+        "E_n_upstream": en_up,
+        "E_n_CODATA_m_e_path": row.get("E_n_CODATA_m_e_path"),
         "derivation_closed": row["derivation_closed"],
         "ok": ok,
         "note": row["note"],

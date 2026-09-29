@@ -10,7 +10,16 @@ import math
 from typing import Any
 
 from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
-from mt_ca.si_constants import C, EV_J, SI, TAU_ORTHO_PS_PDG_S, TAU_PARA_PS_PDG_S
+from mt_ca.si_constants import (
+    C,
+    EV_J,
+    SI,
+    TAU_ORTHO_PS_PDG_S,
+    TAU_PARA_PS_PDG_S,
+    TAU_PARA_PS_PDG_U_S,
+    U_ALPHA_FS_REL_CODATA,
+    U_M_E_REL_CODATA,
+)
 
 
 def tau_para_ps_qed_leading(*, m_e_kg: float, alpha: float) -> float:
@@ -28,6 +37,25 @@ def tau_para_ps_ladder(*, m_P_kg: float, m_e_kg: float, alpha: float) -> float:
     n_c = m_P_kg / m_e_kg
     c = SI.c
     return (n_c / alpha**5) * (2.0 * SI.hbar / (m_P_kg * c * c))
+
+
+def tau_para_gum_relative_unc(*, m_e_rel: float, alpha_rel: float = U_ALPHA_FS_REL_CODATA) -> float:
+    """Relative u(τ)/τ from \eqref{eq:tau-relative-unc} (independent inputs)."""
+    return math.sqrt(m_e_rel**2 + (5.0 * alpha_rel) ** 2)
+
+
+def en_score_vs_reference(
+    *,
+    y_mod: float,
+    y_ref: float,
+    u_mod_rel: float,
+    u_ref_rel: float,
+) -> float:
+    """|y_mod-y_ref|/y_ref divided by combined relative u (\\cref{sec:compare-reference})."""
+    u_comb = math.sqrt(u_mod_rel**2 + u_ref_rel**2)
+    if u_comb <= 0.0:
+        return float("inf")
+    return abs(y_mod - y_ref) / y_ref / u_comb
 
 
 def ortho_para_lifetime_ratio_qed_leading(alpha: float) -> float:
@@ -85,6 +113,22 @@ def run_annihilation_pdg_tau_strict(
     tau_m = float(t_probe["tau_M_s"])
     collision_separate = tau_m / tau_pdg < 1e-20
 
+    u_tau_pdg_rel = TAU_PARA_PS_PDG_U_S / tau_pdg
+    u_tau_mod_upstream = tau_para_gum_relative_unc(m_e_rel=m_e_rel)
+    u_tau_mod_codata = tau_para_gum_relative_unc(m_e_rel=U_M_E_REL_CODATA)
+    en_upstream = en_score_vs_reference(
+        y_mod=tau_up,
+        y_ref=tau_pdg,
+        u_mod_rel=u_tau_mod_upstream,
+        u_ref_rel=u_tau_pdg_rel,
+    )
+    en_codata_path = en_score_vs_reference(
+        y_mod=tau_cod,
+        y_ref=tau_pdg,
+        u_mod_rel=u_tau_mod_codata,
+        u_ref_rel=u_tau_pdg_rel,
+    )
+
     checks_ok = (
         upstream_pass
         and ladder_pass
@@ -117,6 +161,11 @@ def run_annihilation_pdg_tau_strict(
         "anti_circular_mass": anti_circular,
         "tracks_mass_error": tracks_mass,
         "codata_not_sole_winner": codata_not_sole_winner,
+        "u_tau_PDG_rel": u_tau_pdg_rel,
+        "u_tau_mod_upstream_rel": u_tau_mod_upstream,
+        "u_tau_mod_CODATA_inputs_rel": u_tau_mod_codata,
+        "E_n_upstream": en_upstream,
+        "E_n_CODATA_m_e_path": en_codata_path,
         "checks_ok": checks_ok,
         "derivation_closed": False,
         "note": (

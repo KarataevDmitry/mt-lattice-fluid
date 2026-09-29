@@ -64,8 +64,12 @@
 \labmodel{MODEL~\S5.0.3; \cref{ch:measurement-processing} для ансамбля.}
 \labsetup{Гауссовы пакеты head-on; ensemble $\ge 8$; размер/шаги сценария фиксированы в реестре.}
 \labobservables{$\tau_M$; ошибка оси к инъекции; peaks on $\delta$; CV гистограммы угла (диагностика).}
-\labcriterion{PASS: back-to-back proxy, axis tracks $\pi$, collision clock separate; Стьюдент для среднего угла при малом $n$.}
-\labanalysis{Тип~A по ансамблю (\cref{sec:student}); PDG $\tau$ --- косвенное сравнение в CE-A-03, не здесь.}
+\labcriterion{PASS: back-to-back proxy, axis tracks $\pi$, collision clock separate; для среднего угла $\bar\theta$ при $n$ прогонах
+  интервал $\bar\theta\pm t_{n-1,0.975}\,s/\sqrt{n}$ (\cref{sec:student}), не замена $\pm s$.}
+\labanalysis{Тип~A: типичный прогон реестра ($n=12$): $\bar\varepsilon_{\pi}\approx 6\times 10^{-2}\,\mathrm{rad}$
+  по ошибке оси к инъекции (mod~$\pi$); $t_{11,0.975}\approx 2{,}20$.
+  Полуинтервал $t\,s/\sqrt{n}$ порядка $10^{-2}\,\mathrm{rad}$ --- статистика прокси, не PDG.
+  PDG $\tau$ --- только CE-A-03.}
 \labconclusion{T-статистика диполя закрыта на классе head-on; bound-state lattice $\tau$ --- open.}
 \labreproduce{\texttt{Annihilation\_T\_stats}, bundle \texttt{Annihilation\_M\_T\_bundle}.}
 \end{labrecord}
@@ -76,9 +80,28 @@
 \labmodel{MODEL~\S5.0.3; \eqref{eq:para-ps-tau}--\eqref{eq:tau-relative-unc}.}
 \labsetup{Массы §8.2 upstream; $\alpha_{\mathrm{preferred}}$; отдельно CODATA-path как диагностика; ortho/para ratio leading.}
 \labobservables{$\tau_{\mathrm{mod}}$; $E_n$ к PDG; ratio $\tau_{\mathrm{ortho}}/\tau_{\mathrm{para}}$; $\tau_M/\tau_{\mathrm{PDG}}$.}
-\labcriterion{Strict: rtol от $m_e$ rel err, anti-circular, $u$-логика \cref{sec:compare-reference}; bridge --- мягче, не единственный gate.}
-\labanalysis{Косвенное измерение (\cref{sec:indirect-gum}); radiative gap para-Ps --- тип~B; ortho ratio $\sim 25\%$ --- leading, не fit.}
-\labconclusion{Алгебраический мост T-door закрыт; sim-bound $n_{\mathrm{ticks}}\to 125\,$ps --- открытый вычислительный опыт.}
+\labcriterion{Strict: $|\tau_{\mathrm{up}}-\tau_{\mathrm{PDG}}|/\tau_{\mathrm{PDG}}$ в полосе от $m_e$ §8.2;
+  anti-circular; $E_n$ upstream $\lesssim 2{,}5$ при GUM-переносе; bridge (CODATA $m_e$) --- диагностика, не единственный gate.}
+\labanalysis{%
+\textbf{Эталон:} $\tau_{\mathrm{PDG}}=125{,}087\,\mathrm{ps}$, $u(\tau)\approx 0{,}027\,\mathrm{ps}$
+($u/\tau\approx 2{,}2\times 10^{-4}$).
+\textbf{Косвенные модели} (ведущий QED, \eqref{eq:para-ps-tau}):
+$\tau_{\mathrm{up}}\approx 123{,}94\,\mathrm{ps}$ ($\delta/\tau\approx 9{,}2\times 10^{-3}$, upstream $m_e$);
+$\tau_{\mathrm{CODATA}\,m_e}\approx 124{,}49\,\mathrm{ps}$ ($\delta/\tau\approx 4{,}7\times 10^{-3}$).
+\textbf{GUM} (\eqref{eq:tau-relative-unc}): для upstream доминирует $u(m_e)/m_e\approx 4{,}5\times 10^{-3}$
+(§8.2 vs PDG-электрон), $5\,u(\alpha)/\alpha$ из CODATA --- второй порядок;
+$u_{\mathrm{mod}}/\tau\approx 4{,}5\times 10^{-3}$.
+Тогда $u_{\mathrm{comb}}/\tau\approx\sqrt{(4{,}5\times 10^{-3})^2+(2{,}2\times 10^{-4})^2}$
+и $E_n^{\mathrm{(up)}}\approx 2{,}0$ (\eqref{eq:en-score}) --- согласие в пределах $\sim 2\sigma$ по заявленным $u$,
+без подгонки $\alpha^5$.
+\textbf{CODATA-path:} при $u(m_e)$ таблицы $\sim 10^{-10}$ остаток $4{,}7\times 10^{-3}$ даёт $E_n\gg 1$:
+это не «точное попадание'', а \emph{систематика типа~B} (ведущий порядок без полной $\Gamma_{\mathrm{QED}}$),
+поэтому strict запрещает считать CODATA-$m_e$ единственным входом.
+\textbf{Ortho/para:} отношение $\tau_{\mathrm{ortho}}/\tau_{\mathrm{para}}$ leading $\approx 8{,}5\times 10^2$
+vs PDG $\approx 1{,}14\times 10^3$ ($\delta_{\mathrm{rel}}\approx 26\%$) --- тот же класс типа~B, не $E_n$ к узкому $u$.
+Числа воспроизводимы: \texttt{Annihilation\_PDG\_tau\_strict} (поля \texttt{E\_n\_upstream}, \texttt{u\_tau\_*}).}
+\labconclusion{Алгебраический мост T-door закрыт в полосе upstream-$E_n$; sim-bound $n_{\mathrm{ticks}}\to 125\,$ps --- открытый опыт.}
+\labstatus{Закрыт (алгебра strict); lattice $\tau$ --- открыт.}
 \labreproduce{\texttt{Annihilation\_PDG\_tau\_strict}, \texttt{Annihilation\_PDG\_tau\_bridge}.}
 \end{labrecord}
 
