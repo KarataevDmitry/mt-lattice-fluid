@@ -36,6 +36,10 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · book · бремя доказательства + CE-M-00/01 ($c_0$ vs $c$)
+
+**Книга:** `sec:lab-burden-of-proof`; `rem:two-c-burden` ($c_0/c=\sqrt{2}$, не сверхсвет на T); `rem:not-full-qft`; CE-M-00 (`Kappa_bottom_up`), CE-M-01 (`t_macro` autogen). MODEL: Следствие 0.9 переименовано — не «полная КТП».
+
 ## 2026-09-29 · book · CE-M SI/PDG журнал (не «решили что ок»)
 
 **Книга:** § «Журнал опытов» в `06-si-sm.tex` + `tab:si-pdg-ce-m`; карточки CE-M-02/03 с `\labanalysisfile`; приложение `appendix/02-si-pdg-experiments.tex` (команды воспроизведения).

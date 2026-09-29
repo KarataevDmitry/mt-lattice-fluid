@@ -2,6 +2,20 @@
 
 \begin{labseries}{Серия CE-M: макро-\Tlayer\ с дискретного \Mlayer}{sec:lab-series-ce-m}
 
+\begin{labrecord}{CE-M-00 · Две скорости: $c_0=\caSignalSpeed$ и CODATA-$c$}{lab:ce-m-00}
+\labgoal{Снять ложное «$c$ на планковском шаге'': зафиксировать $\caKappaGeom$ из геометрии FCC,
+  проверить $\htick=\caKappaGeom t_P$, $c=\caKappaGeom c_0$, $c_0/c=\sqrt{2}$ без подгонки $\kappa$ из отношения скоростей.}
+\labhypothesis{Алгебра SI-моста согласована; $\caSignalSpeed$ --- тактовая скорость звена, $\speedC$ --- макро-T после осреднения (\cref{rem:two-c-burden,sec:two-c}).}
+\labmodel{MODEL §1.4--1.6; \cref{def:si-bridge,sec:c-light-cone}.}
+\labsetup{Строки \texttt{SI.kappa\_bottom\_up\_row()}: $\ell_P,t_P$ из $(\hbar,G,c)$; $\kappa$ из вписанной сферы кубооктаэдра.}
+\labobservables{$\htick/t_P$, $c_0/c$, $E_0/E_P$; флаг \texttt{kappa\_not\_defined\_as\_c\_over\_c0}.}
+\labcriterion{PASS \texttt{Kappa\_bottom\_up}: тождества в пределах $10^{-12}$; $c_0/c\approx\sqrt{2}$.}
+\labanalysisfile{generated/lab-ce-m-00-analysis.tex}
+\labconclusion{Continuum-упаковка $t_P=\ell_P/c$ \emph{не} описывает M-тик; каузальность --- один NN-шаг за $\htick$, не CODATA-$c$ на звене.}
+\labreproduce{\texttt{python verify\_principles.py --suite carrier} (проверка \texttt{Kappa\_bottom\_up}).}
+\labstatus{Закрыт (алгебра + реестр carrier).}
+\end{labrecord}
+
 \begin{labrecord}{CE-M-01 · Скорость макро-фронта на binomial-карте}{lab:ce-m-01}
 \labgoal{Проверить, что после осреднения $\mathcal{B}$ (\cref{sec:readout}) дискретная динамика
   даёт макроскорость света $c$ в натуральных единицах карты, согласованную с постулатом T1.}
@@ -13,11 +27,11 @@
 \labobservables{Положение фронта vs такт; угловая/частотная дисперсия; фазовая скорость в IR.}
 \labcriterion{Отклонение эффективной скорости от $1$ в пределах заявленного численного допуска сетки;
   отсутствие runaway-энергии (баланс A3).}
-\labanalysis{Тип~A: повтор с другим seed / размером; сходимость при увеличении линейного размера.
-  Систематика сетки --- тип~B, отдельно от сравнения с CODATA $c$.}
+\labanalysisfile{generated/lab-ce-m-01-analysis.tex}
 \labconclusion{Базовый макро-слой T согласован с дискретным $g$ на классе гладких возбуждений;
   decisive-провал --- устойчивое $c\neq 1$ при сходящейся сетке.}
-\labreproduce{Реестр сверок: макро-инварианты (suite \texttt{t\_macro}); сценарии дисперсии и фронта.}
+\labreproduce{Реестр: suite \texttt{t\_macro} (\texttt{T\_classical\_limit}, \texttt{T\_hydro\_limit\_bundle}, \ldots).}
+\labstatus{Закрыт (реестр \texttt{t\_macro}, прокси IR-волны).}
 \end{labrecord}
 
 \begin{labrecord}{CE-M-02 · SI-мост и $\alpha$ без кругового входа}{lab:ce-m-02}

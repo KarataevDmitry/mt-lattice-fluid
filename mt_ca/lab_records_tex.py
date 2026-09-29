@@ -126,6 +126,48 @@ def _fragment_header() -> str:
     )
 
 
+def build_ce_m00_analysis_latex(*, device: str = "cpu") -> str:
+    del device
+    from mt_ca.si_constants import SI
+
+    row = SI.kappa_bottom_up_row()
+    kappa = float(row["kappa_geom_FCC"])
+    c0_over_c = float(row["c0_over_c"])
+    ht_over_tp = float(row["hT_over_t_P"])
+    inv_kappa = 1.0 / kappa
+    approx = r"\approx"
+    return _tex_paragraph(
+        rf"Геометрия: $\kappa={tex_decimal(kappa, 6)}$ (вписанная сфера 1-tick; "
+        rf"\texttt{{kappa\_not\_defined\_as\_c\_over\_c0}}). "
+        rf"Планковский мост: $hT/t_P={tex_decimal(ht_over_tp, 6)}$; "
+        rf"$c_0/c={tex_decimal(c0_over_c, 4)}{approx}{tex_decimal(inv_kappa, 4)}$ "
+        rf"(не CODATA-$c$ на звене $\ell_P$). "
+        rf"$E_0/E_P={tex_decimal(float(row['E_0_over_E_P']), 6)}$. "
+        r"Проверка: \texttt{Kappa\_bottom\_up} (suite \texttt{carrier})."
+    )
+
+
+def build_ce_m01_analysis_latex(*, device: str = "cpu") -> str:
+    from mt_ca.t.hydro_limit import classical_limit_sweep_row
+
+    row = classical_limit_sweep_row(device=device, size=128)
+    phi = row["phi_bz"]
+    mad = row["madelung_long_wave"][-1]
+    omega = float(mad.get("omega_tick") or float("nan"))
+    lap = float(row["fcc_lap_coeff_at_k"])
+    approx = r"\approx"
+    omega_s = tex_decimal(omega, 4) if math.isfinite(omega) else r"\mathrm{?}"
+    return _tex_paragraph(
+        rf"Прокси IR на карте ($\Phi=\mathcal{{B}}z$): binomial$\to$Gaussian "
+        rf"(\texttt{{coarse\_to\_gaussian}}={str(row['coarse_to_gaussian']).lower()}); "
+        rf"FCC $\hat K\to 1-(2/3)k^2$ (коэфф. ${approx}{tex_decimal(lap, 4)}$ при $k=0.08$). "
+        rf"Длинноволновый Madelung/Bohm $\to$ классика; фазовая скорость одного тика "
+        rf"$\omega{approx}{omega_s}$ (natural, цель $\approx 1$ для macro-$c$). "
+        rf"Readout $\Phi$: \texttt{{phi\_readout\_ok}}={str(phi.get('phi_readout_ok', False)).lower()}. "
+        r"Проверки: \texttt{T\_classical\_limit}, \texttt{T\_hydro\_limit\_bundle} (suite \texttt{t\_macro})."
+    )
+
+
 def build_ce_m02_analysis_latex(*, device: str = "cpu") -> str:
     del device
     from mt_ca.si_constants import SI
@@ -260,6 +302,8 @@ def generate_construction_lab_fragments(*, device: str = "cpu") -> dict[str, str
     hdr = _fragment_header()
     return {
         "generated/lab-si-pdg-table.tex": hdr + build_si_pdg_table_latex(device=device),
+        "generated/lab-ce-m-00-analysis.tex": hdr + build_ce_m00_analysis_latex(device=device) + "\n",
+        "generated/lab-ce-m-01-analysis.tex": hdr + build_ce_m01_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-02-analysis.tex": hdr + build_ce_m02_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-03-analysis.tex": hdr + build_ce_m03_analysis_latex(device=device) + "\n",
     }

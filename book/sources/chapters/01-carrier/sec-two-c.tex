@@ -14,6 +14,23 @@
 Тождество $\speedC=\caKappaGeom \caSignalSpeed$ служит проверкой согласованности макроописания
 после фиксации $\htick=\caKappaGeom t_P$ (\cref{fig:carrier-two-speeds-micro,fig:carrier-two-speeds-macro}).
 
+\begin{remark}[Планковский такт быстрее учебникового --- и это не «сверхсвет»]
+\label{rem:two-c-burden}
+На~$\Mlayer$ тактовая скорость звена $\caSignalSpeed=\caStepSpace/\htick$;
+после SI-моста (\cref{def:si-bridge}) при $\caKappaGeom=1/\sqrt{2}$:
+\[
+  \frac{\caSignalSpeed}{\speedC}=\frac{1}{\caKappaGeom}=\sqrt{2},
+  \qquad
+  \htick=\frac{t_P}{\sqrt{2}}.
+\]
+Учебниковое $t_P=\ell_P/c$ \emph{подразумевает} одну скорость на всех масштабах;
+здесь макроскопическая $\speedC$ (CODATA) --- осреднённый T-фронт, а не скорость одного NN-шага.
+Каузальность одного такта: сигнал не дальше одного light-like ребра (\cref{sec:c-light-cone}).
+Утверждение «наблюдаемая $c$ на планковском шаге'' без этой оговорки --- \textbf{ложное};
+его снимает не словесная оговорка, а запись опыта \textbf{CE-M-00} (алгебра $\kappa$, реестр \texttt{Kappa\_bottom\_up})
+и \textbf{CE-M-01} (макро-фронт после $\mathcal{B}$, suite \texttt{t\_macro}).
+\end{remark}
+
 \begin{figure}[htbp]
   \centering
   \input{figures/tikz/carrier-two-speeds-micro.tex}
