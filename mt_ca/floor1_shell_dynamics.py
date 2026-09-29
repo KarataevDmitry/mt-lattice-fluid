@@ -148,7 +148,7 @@ def run_shell2_excitation_relax(
     far = ((cz + nz // 2) % nz, (cy + sim.ny // 2) % sim.ny, (cx + sim.nx // 2) % sim.nx)
     from mt_ca.floor1_two_body import _excitation_only_3d, _roll_site
 
-    sim.set_field(_vortex_on_boil_field(sim, core, cfg=cfg, dev=dev))
+    sim.set_field(_vortex_on_boil_field(sim, cfg=cfg, dev=dev))
     n0 = sim.norm()
     t0 = time.perf_counter()
     if relaxation > 0:
@@ -248,7 +248,7 @@ def run_shell_dynamics_on_boil(
     assert nz is not None
     cz, cy, cx = nz // 2, sim.ny // 2, sim.nx // 2
     core = (cz, cy, cx)
-    sim.set_field(_vortex_on_boil_field(sim, core, cfg=cfg, dev=dev))
+    sim.set_field(_vortex_on_boil_field(sim, cfg=cfg, dev=dev))
     n0 = sim.norm()
 
     t0 = time.perf_counter()
