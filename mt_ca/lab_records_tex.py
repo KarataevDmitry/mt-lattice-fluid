@@ -134,11 +134,19 @@ def _tex_verdict(ok: bool) -> str:
     return r"\textbf{PASS}" if ok else r"\textbf{FAIL}"
 
 
+def _tex_tab_cell(s: str) -> str:
+    if not s or s == "---" or s.startswith("$") or s.startswith(r"\textbf"):
+        return s
+    if any(t in s for t in (r"\times", r"\mathrm", "{,", "^", r"\delta", r"\alpha")):
+        return f"${s}$"
+    return s
+
+
 def _data_table(caption: str, label: str, headers: tuple[str, ...], rows: list[tuple[str, ...]]) -> str:
     ncol = len(headers)
     align = "@{}" + "l" * ncol + "@{}"
     head = " & ".join(headers) + r" \\"
-    body = "\n".join(" & ".join(cells) + r" \\" for cells in rows)
+    body = "\n".join(" & ".join(_tex_tab_cell(c) for c in cells) + r" \\" for cells in rows)
     return "\n".join(
         [
             r"\begin{table}[htbp]",
@@ -167,12 +175,16 @@ def _experiment_shell(
     blocks: list[str],
 ) -> str:
     chk = ", ".join(_tex_check(c) for c in checks)
+    cmd_tex = r"\texttt{" + command.replace("_", r"\_") + "}"
     lines = [
-        rf"\subsubsection{{Протокол прогона ({ce_id})}}",
         rf"\label{{exp:{ce_id.lower().replace('-', '')}}}",
-        r"\noindent\textbf{Команда:} \texttt{" + command.replace("_", r"\_") + r"}\\[0.35em]",
-        rf"\noindent\textbf{{Проверки:}} {chk}\\[0.35em]",
-        rf"\noindent\textbf{{Итог реестра:}} {_tex_verdict(ok)}\par\medskip",
+        r"\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]",
+        rf"\item \textbf{{Запуск реестра.}} {cmd_tex}.",
+        rf"\item \textbf{{Проверки verify.}} {chk}.",
+        rf"\item \textbf{{Итог реестра.}} {_tex_verdict(ok)}.",
+        r"\item \textbf{Таблица наблюдаемых.}",
+        r"\end{enumerate}",
+        r"\medskip",
     ]
     lines.extend(blocks)
     return "\n".join(lines) + "\n"
@@ -201,7 +213,7 @@ def build_ce_m00_experiment_latex(*, device: str = "cpu") -> str:
         ["Kappa_bottom_up"],
         "python verify_principles.py --suite carrier",
         ok,
-        [tbl, r"\noindent\textit{Смысл:} " + build_ce_m00_analysis_latex()],
+        [tbl],
     )
 
 
@@ -255,7 +267,7 @@ def build_ce_m01_experiment_latex(*, device: str = "cpu") -> str:
         ["T_classical_limit", "T_hydro_limit_bundle"],
         "python verify_principles.py --suite t_macro --device cpu",
         ok,
-        [tbl1, tbl2, flags, r"\noindent\textit{Смысл:} " + build_ce_m01_analysis_latex(device=device)],
+        [tbl1, tbl2, flags],
     )
 
 
@@ -280,7 +292,7 @@ def build_ce_m04_experiment_latex(*, device: str = "cpu") -> str:
         ["Excitations_full_quantization"],
         "python verify_principles.py --suite carrier",
         ok,
-        [tbl, r"\noindent\textit{Смысл:} " + build_ce_m04_analysis_latex()],
+        [tbl],
     )
 
 
@@ -310,7 +322,7 @@ def build_ce_m02_experiment_latex(*, device: str = "cpu") -> str:
         ["Alpha_si_bridge", "Alpha_upstairs_mass_probe"],
         "python verify_principles.py --suite alpha --device cpu",
         ok,
-        [tbl, r"\noindent\textit{Смысл:} " + build_ce_m02_analysis_latex()],
+        [tbl],
     )
 
 
@@ -347,7 +359,7 @@ def build_ce_m03_experiment_latex(*, device: str = "cpu") -> str:
         [c["id"] for c in checks],
         "python verify_principles.py --suite sm --device cpu",
         ok,
-        [tbl_checks, tbl_pdg, r"\noindent\textit{Смысл:} " + build_ce_m03_analysis_latex()],
+        [tbl_checks, tbl_pdg],
     )
 
 
@@ -377,7 +389,7 @@ def build_ce_a02_experiment_latex(*, device: str = "cpu", ensemble: int = 12) ->
         ["Annihilation_T_stats"],
         "python verify_principles.py --suite sm --device cpu",
         ok,
-        [tbl, r"\noindent\textit{Смысл:} " + build_ce_a02_analysis_latex(device=device, ensemble=ensemble)],
+        [tbl],
     )
 
 
@@ -403,7 +415,7 @@ def build_ce_a03_experiment_latex(*, device: str = "cpu") -> str:
         ["Annihilation_PDG_tau_strict"],
         "python verify_principles.py --suite sm --device cpu",
         ok,
-        [tbl, r"\noindent\textit{Смысл:} " + build_ce_a03_analysis_latex(device=device)],
+        [tbl],
     )
 
 

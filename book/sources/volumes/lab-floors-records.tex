@@ -61,16 +61,18 @@
 \begin{labrecord}{CE-A-02 · Head-on ансамбль: ось, mod-$\pi$, отделение $\tau_M$ от PDG}{lab:ce-a-02}
 \labgoal{Статистика T2-прокси: back-to-back, отслеживание оси инъекции; $\tau_M=n_{\mathrm{ticks}}\cdot hT$ не тождественно para-Ps.}
 \labhypothesis{Ансамбль вращений даёт стабильную ось (mod $\pi$); $\tau_M/\tau_{\mathrm{PDG}}\ll 1$ (разные часы).}
-\labmodel{MODEL~\S5.0.3; \cref{ch:measurement-processing} для ансамбля.}
-\labsetup{Гауссовы пакеты head-on; ensemble $\ge 8$; размер/шаги сценария фиксированы в реестре.}
 \labobservables{$\tau_M$; ошибка оси к инъекции; peaks on $\delta$; CV гистограммы угла (диагностика).}
 \labcriterion{PASS: back-to-back proxy, axis tracks $\pi$, collision clock separate; для среднего угла $\bar\theta$ при $n$ прогонах
   интервал $\bar\theta\pm t_{n-1,0.975}\,s/\sqrt{n}$ (\cref{sec:student}), не замена $\pm s$.}
-\labanalysisfile{generated/lab-ce-a-02-analysis.tex}
-\labconclusion{T-статистика диполя закрыта на классе head-on; bound-state lattice $\tau$ --- open.}
+\labmodel{MODEL~\S5.0.3; \cref{ch:measurement-processing} для ансамбля.}
+\labsetup{Гауссовы пакеты head-on; ensemble $\ge 8$; размер/шаги сценария фиксированы в реестре.}
 \labreproduce{\texttt{Annihilation\_T\_stats}, bundle \texttt{Annihilation\_M\_T\_bundle}.}
-\end{labrecord}
 \labexperimentfile{generated/lab-ce-a-02-experiment.tex}
+\labanalysisfile{generated/lab-ce-a-02-analysis.tex}
+\labuncertainty{Тип~A: $t_{n-1,0.975}\,\mathrm{SE}$ для оси (mod~$\pi$); прокси угла, не спектроскопия PDG (\cref{sec:student}).}
+\labconclusion{T-статистика диполя закрыта на классе head-on; bound-state lattice $\tau$ --- open.}
+\labstatus{Закрыт (реестр T-stats).}
+\end{labrecord}
 
 \begin{labrecord}{CE-A-03 · Para-Ps $\tau$: QED, лестница, strict upstream}{lab:ce-a-03}
 \labgoal{Сопоставить $\tau_{^1S_0}$ с PDG без подмены head-on $\tau_M$; strict --- без кругового CODATA $m_e$.}
@@ -80,11 +82,12 @@
 \labobservables{$\tau_{\mathrm{mod}}$; $E_n$ к PDG; ratio $\tau_{\mathrm{ortho}}/\tau_{\mathrm{para}}$; $\tau_M/\tau_{\mathrm{PDG}}$.}
 \labcriterion{Strict: $|\tau_{\mathrm{up}}-\tau_{\mathrm{PDG}}|/\tau_{\mathrm{PDG}}$ в полосе от $m_e$ §8.2;
   anti-circular; $E_n$ upstream $\lesssim 2{,}5$ при GUM-переносе; bridge (CODATA $m_e$) --- диагностика, не единственный gate.}
+\labreproduce{\texttt{Annihilation\_PDG\_tau\_strict}, \texttt{Annihilation\_PDG\_tau\_bridge}.}
+\labexperimentfile{generated/lab-ce-a-03-experiment.tex}
 \labanalysisfile{generated/lab-ce-a-03-analysis.tex}
+\labuncertainty{GUM: \eqref{eq:tau-relative-unc}, $E_n$ (\eqref{eq:en-score}); upstream $m_e$ vs CODATA-path --- тип~B (\cref{sec:compare-reference}).}
 \labconclusion{Алгебраический мост T-door закрыт в полосе upstream-$E_n$; sim-bound $n_{\mathrm{ticks}}\to 125\,$ps --- открытый опыт.}
 \labstatus{Закрыт (алгебра strict); lattice $\tau$ --- открыт.}
-\labreproduce{\texttt{Annihilation\_PDG\_tau\_strict}, \texttt{Annihilation\_PDG\_tau\_bridge}.}
 \end{labrecord}
-\labexperimentfile{generated/lab-ce-a-03-experiment.tex}
 
 \end{labseries}
