@@ -126,6 +126,287 @@ def _fragment_header() -> str:
     )
 
 
+def _tex_check(name: str) -> str:
+    return r"\texttt{" + name.replace("_", r"\_") + "}"
+
+
+def _tex_verdict(ok: bool) -> str:
+    return r"\textbf{PASS}" if ok else r"\textbf{FAIL}"
+
+
+def _data_table(caption: str, label: str, headers: tuple[str, ...], rows: list[tuple[str, ...]]) -> str:
+    ncol = len(headers)
+    align = "@{}" + "l" * ncol + "@{}"
+    head = " & ".join(headers) + r" \\"
+    body = "\n".join(" & ".join(cells) + r" \\" for cells in rows)
+    return "\n".join(
+        [
+            r"\begin{table}[htbp]",
+            r"\centering",
+            r"\small",
+            rf"\caption{{{caption}}}",
+            rf"\label{{{label}}}",
+            rf"\begin{{tabular}}{{{align}}}",
+            r"\toprule",
+            head,
+            r"\midrule",
+            body,
+            r"\bottomrule",
+            r"\end{tabular}",
+            r"\end{table}",
+            "",
+        ]
+    )
+
+
+def _experiment_shell(
+    ce_id: str,
+    checks: list[str],
+    command: str,
+    ok: bool,
+    blocks: list[str],
+) -> str:
+    chk = ", ".join(_tex_check(c) for c in checks)
+    lines = [
+        rf"\subsubsection{{Протокол прогона ({ce_id})}}",
+        rf"\label{{exp:{ce_id.lower().replace('-', '')}}}",
+        r"\noindent\textbf{Команда:} \texttt{" + command.replace("_", r"\_") + r"}\\[0.35em]",
+        rf"\noindent\textbf{{Проверки:}} {chk}\\[0.35em]",
+        rf"\noindent\textbf{{Итог реестра:}} {_tex_verdict(ok)}\par\medskip",
+    ]
+    lines.extend(blocks)
+    return "\n".join(lines) + "\n"
+
+
+def build_ce_m00_experiment_latex(*, device: str = "cpu") -> str:
+    del device
+    from verify_checks.carrier import check_kappa_bottom_up
+
+    rep = check_kappa_bottom_up()
+    ok = bool(rep["ok"])
+    rows = [
+        (r"$\kappa_{\mathrm{geom}}$ (FCC)", tex_decimal(float(rep["kappa_geom_FCC"]), 6)),
+        (r"$hT/t_P$", tex_decimal(float(rep["hT_over_t_P"]), 6)),
+        (r"$c_0/c$", tex_decimal(float(rep["c0_over_c"]), 6)),
+        (r"$E_0/E_P$", tex_decimal(float(rep["E_0_over_E_P"]), 6)),
+    ]
+    tbl = _data_table(
+        r"CE-M-00: наблюдаемые SI-моста (строка \texttt{kappa\_bottom\_up\_row})",
+        "tab:exp-ce-m-00",
+        ("Величина", "Значение"),
+        rows,
+    )
+    return _experiment_shell(
+        "CE-M-00",
+        ["Kappa_bottom_up"],
+        "python verify_principles.py --suite carrier",
+        ok,
+        [tbl, r"\noindent\textit{Смысл:} " + build_ce_m00_analysis_latex()],
+    )
+
+
+def build_ce_m01_experiment_latex(*, device: str = "cpu") -> str:
+    from verify_checks.geometry import check_classical_limit, check_t_hydro_limit_bundle
+
+    sweep = check_classical_limit(device=device)
+    hydro = check_t_hydro_limit_bundle(device=device)
+    ok = bool(sweep["ok"]) and bool(hydro["ok"])
+    from mt_ca.t.hydro_limit import classical_limit_sweep_row
+
+    row = classical_limit_sweep_row(device=device, size=128)
+    gauss_rows = [
+        (f"$R={r}$", tex_sci(float(e))) for r, e in zip([4, 16, 64, 256], row["gauss_err_R"], strict=True)
+    ]
+    tbl1 = _data_table(
+        "CE-M-01: сходимость binomial readout к Gaussian",
+        "tab:exp-ce-m-01-gauss",
+        ("Проходы $R$", r"$\max$ rel.\ err."),
+        gauss_rows,
+    )
+    mad_rows = [
+        (
+            str(int(m["L_cells"])),
+            tex_sci(float(m["madelung_rel"])),
+            tex_decimal(float(m["omega_tick"]), 4) if math.isfinite(float(m["omega_tick"])) else "---",
+        )
+        for m in row["madelung_long_wave"]
+    ]
+    tbl2 = _data_table(
+        "CE-M-01: длинноволновый Madelung и фазовая скорость (natural)",
+        "tab:exp-ce-m-01-mad",
+        (r"$\lambda/\Delta x$", r"$\mathrm{Madelung\ rel}$", r"$\omega_{\mathrm{tick}}$"),
+        mad_rows,
+    )
+    flags = _data_table(
+        r"CE-M-01: флаги \texttt{T\_classical\_limit}",
+        "tab:exp-ce-m-01-flags",
+        ("Критерий", "Значение"),
+        [
+            ("coarse $\\to$ Gaussian", str(row["coarse_to_gaussian"])),
+            ("FCC Laplacian $\\approx 2/3$", str(row["fcc_laplacian_two_thirds"])),
+            ("Bohm classical", str(row["bohm_classical"])),
+            ("Madelung classical", str(row["madelung_classical"])),
+            (r"$\hat K$ stack", str(row["stacked_laplacian_ok"])),
+            ("phi readout", str(row["phi_readout_ok"])),
+        ],
+    )
+    return _experiment_shell(
+        "CE-M-01",
+        ["T_classical_limit", "T_hydro_limit_bundle"],
+        "python verify_principles.py --suite t_macro --device cpu",
+        ok,
+        [tbl1, tbl2, flags, r"\noindent\textit{Смысл:} " + build_ce_m01_analysis_latex(device=device)],
+    )
+
+
+def build_ce_m04_experiment_latex(*, device: str = "cpu") -> str:
+    del device
+    from verify_checks.carrier import check_excitations_full_quantization
+
+    rep = check_excitations_full_quantization()
+    ok = bool(rep["ok"])
+    tbl = _data_table(
+        "CE-M-04: кванты возбуждения на $M$",
+        "tab:exp-ce-m-04",
+        ("Наблюдаемая", "Значение"),
+        [
+            (r"$\nu_0$ [Hz]", tex_sci(float(rep["nu0_Hz"]))),
+            (r"$\hbar\nu_0=2E_0$", str(rep["hbar_nu0_equals_2E0"])),
+            (r"Пример $n_E$", str(int(rep["n_E_example"]))),
+        ],
+    )
+    return _experiment_shell(
+        "CE-M-04",
+        ["Excitations_full_quantization"],
+        "python verify_principles.py --suite carrier",
+        ok,
+        [tbl, r"\noindent\textit{Смысл:} " + build_ce_m04_analysis_latex()],
+    )
+
+
+def build_ce_m02_experiment_latex(*, device: str = "cpu") -> str:
+    del device
+    from verify_checks.alpha import check_alpha_si_bridge, check_alpha_upstairs_mass_probe
+
+    br = check_alpha_si_bridge()
+    up = check_alpha_upstairs_mass_probe()
+    ok = bool(br["ok"]) and bool(up["ok"])
+    tbl = _data_table(
+        "CE-M-02: SI-мост и каскад масс",
+        "tab:exp-ce-m-02",
+        ("Поле", "Значение"),
+        [
+            (r"$\alpha^{-1}_{\mathrm{pref}}$", tex_decimal(1.0 / float(br["alpha_preferred"]), 8)),
+            ("M seats", str(int(br["M"]))),
+            ("T-lab contrast [ppm]", tex_sci(float(br["T_lab_contrast_ppm"]))),
+            ("$v$ [GeV]", tex_decimal(float(up["v_GeV"]), 4)),
+            (r"$\delta m_H/m_H$", tex_sci(float(up["m_H_rel_err"]))),
+            (r"$\delta m_p$", tex_sci(float(up["m_p_rel_err"]))),
+            (r"$\delta m_e$", tex_sci(float(up["m_e_rel_err"]))),
+        ],
+    )
+    return _experiment_shell(
+        "CE-M-02",
+        ["Alpha_si_bridge", "Alpha_upstairs_mass_probe"],
+        "python verify_principles.py --suite alpha --device cpu",
+        ok,
+        [tbl, r"\noindent\textit{Смысл:} " + build_ce_m02_analysis_latex()],
+    )
+
+
+def build_ce_m03_experiment_latex(*, device: str = "cpu") -> str:
+    del device
+    from verify_checks.sm import (
+        check_electron_mass,
+        check_higgs_mass,
+        check_neutron_mass,
+        check_proton_mass,
+    )
+
+    checks = [
+        check_higgs_mass(),
+        check_proton_mass(),
+        check_electron_mass(),
+        check_neutron_mass(),
+    ]
+    ok = all(bool(c["ok"]) for c in checks)
+    rows = []
+    for c in checks:
+        cid = str(c["id"])
+        rel = c.get("m_H_rel_err") or c.get("m_p_rel_err") or c.get("m_e_rel_err") or c.get("m_n_rel_err")
+        rows.append((_tex_check(cid), _tex_verdict(bool(c["ok"])), tex_sci(float(rel)) if rel is not None else "---"))
+    tbl_checks = _data_table(
+        r"CE-M-03: итоги verify suite \texttt{sm}",
+        "tab:exp-ce-m-03-checks",
+        ("Проверка", "Итог", r"$|\delta|$"),
+        rows,
+    )
+    tbl_pdg = build_si_pdg_table_latex()
+    return _experiment_shell(
+        "CE-M-03",
+        [c["id"] for c in checks],
+        "python verify_principles.py --suite sm --device cpu",
+        ok,
+        [tbl_checks, tbl_pdg, r"\noindent\textit{Смысл:} " + build_ce_m03_analysis_latex()],
+    )
+
+
+def build_ce_a02_experiment_latex(*, device: str = "cpu", ensemble: int = 12) -> str:
+    from mt_ca.annihilation_t_stats import annihilation_t_stats_probe
+
+    row = annihilation_t_stats_probe(size=160, steps=64, block=8, ensemble=ensemble, device=device)
+    from verify_checks.sm import check_annihilation_t_stats
+
+    rep = check_annihilation_t_stats(device=device)
+    ok = bool(rep["ok"])
+    tbl = _data_table(
+        "CE-A-02: ансамбль head-on (прокси T2)",
+        "tab:exp-ce-a-02",
+        ("Наблюдаемое", "Значение"),
+        [
+            ("ensemble", str(int(row.get("ensemble_axes") or 0))),
+            (r"$\bar\varepsilon_\pi$ [rad]", tex_sci(float(row["mean_axis_tracking_err_rad"]))),
+            ("SEM [rad]", tex_sci(float(row.get("axis_pi_err_sem_rad") or 0.0))),
+            (r"$\tau_M/\tau_{\mathrm{PDG}}$", tex_sci(float(rep["tau_M_over_tau_PDG"]))),
+            ("back-to-back proxy", str(rep["back_to_back_proxy"])),
+            ("axis tracks injection", str(rep["axis_tracks_injection"])),
+        ],
+    )
+    return _experiment_shell(
+        "CE-A-02",
+        ["Annihilation_T_stats"],
+        "python verify_principles.py --suite sm --device cpu",
+        ok,
+        [tbl, r"\noindent\textit{Смысл:} " + build_ce_a02_analysis_latex(device=device, ensemble=ensemble)],
+    )
+
+
+def build_ce_a03_experiment_latex(*, device: str = "cpu") -> str:
+    from verify_checks.sm import check_annihilation_pdg_tau_strict
+
+    rep = check_annihilation_pdg_tau_strict(device=device)
+    ok = bool(rep["ok"])
+    tbl = _data_table(
+        r"CE-A-03: strict $\tau_{\mathrm{para}}$ vs PDG",
+        "tab:exp-ce-a-03",
+        ("Наблюдаемое", "Значение"),
+        [
+            (r"$\delta\tau/\tau$ (upstream)", tex_sci(float(rep["tau_rel_err_upstream"]))),
+            (r"$\delta\tau/\tau$ (CODATA $m_e$ path)", tex_sci(float(rep["tau_rel_err_CODATA_m_e"]))),
+            (r"$E_n^{(\mathrm{up})}$", tex_decimal(float(rep["E_n_upstream"]), 2)),
+            (r"$E_n$ (CODATA path)", tex_decimal(float(rep["E_n_CODATA_m_e_path"]), 1)),
+            ("ortho/para ratio rel.", tex_sci(float(rep["ortho_para_ratio_rel_err"]))),
+        ],
+    )
+    return _experiment_shell(
+        "CE-A-03",
+        ["Annihilation_PDG_tau_strict"],
+        "python verify_principles.py --suite sm --device cpu",
+        ok,
+        [tbl, r"\noindent\textit{Смысл:} " + build_ce_a03_analysis_latex(device=device)],
+    )
+
+
 def build_ce_m00_analysis_latex(*, device: str = "cpu") -> str:
     del device
     from mt_ca.si_constants import SI
@@ -326,6 +607,11 @@ def generate_construction_lab_fragments(*, device: str = "cpu") -> dict[str, str
         "generated/lab-ce-m-04-analysis.tex": hdr + build_ce_m04_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-02-analysis.tex": hdr + build_ce_m02_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-03-analysis.tex": hdr + build_ce_m03_analysis_latex(device=device) + "\n",
+        "generated/lab-ce-m-00-experiment.tex": hdr + build_ce_m00_experiment_latex(device=device),
+        "generated/lab-ce-m-01-experiment.tex": hdr + build_ce_m01_experiment_latex(device=device),
+        "generated/lab-ce-m-04-experiment.tex": hdr + build_ce_m04_experiment_latex(device=device),
+        "generated/lab-ce-m-02-experiment.tex": hdr + build_ce_m02_experiment_latex(device=device),
+        "generated/lab-ce-m-03-experiment.tex": hdr + build_ce_m03_experiment_latex(device=device),
     }
 
 
@@ -337,6 +623,8 @@ def generate_floors_lab_fragments(*, device: str = "cpu") -> dict[str, str]:
     return {
         "generated/lab-ce-a-02-analysis.tex": hdr + ce_a02 + "\n",
         "generated/lab-ce-a-03-analysis.tex": hdr + ce_a03 + "\n",
+        "generated/lab-ce-a-02-experiment.tex": hdr + build_ce_a02_experiment_latex(device=device),
+        "generated/lab-ce-a-03-experiment.tex": hdr + build_ce_a03_experiment_latex(device=device),
     }
 
 

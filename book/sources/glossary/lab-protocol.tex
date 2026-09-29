@@ -33,3 +33,11 @@
   \item[\textbf{Анализ.}] \IfFileExists{#1}{\input{#1}}{%
     \emph{[нет файла #1 --- запустите \texttt{scripts/gen\_lab\_records\_tex.py}]}}%
 }
+
+% Полный протокол прогона (команда, таблицы наблюдаемых, PASS/FAIL) после карточки:
+\newcommand{\labexperimentfile}[1]{%
+  \IfFileExists{#1}{\input{#1}}{%
+    \subsubsection*{Протокол прогона}%
+    \emph{[нет файла #1 --- \texttt{python scripts/gen\_lab\_records\_tex.py}]}%
+  }%
+}

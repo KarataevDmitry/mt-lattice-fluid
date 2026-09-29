@@ -32,7 +32,7 @@ cd book
 
 `build.ps1` гоняет XeLaTeX столько раз, сколько нужно (до стабилизации ссылок в `.log`), с повторным `biber` при undefined citations. Ссылки на другой том (напр. `ch:floor*` из `construction`) не считаются ошибкой.
 
-Перед сборкой **construction** / **floors**: `scripts/gen_lab_records_tex.py` → `lab-si-pdg-table.tex`, `lab-ce-m-0{0,1,2,3,4}-analysis.tex`, `lab-ce-a-0{2,3}-analysis.tex` (журнал CE-M / CE-A, не «мы решили что ок»).
+Перед сборкой **construction** / **floors**: `scripts/gen_lab_records_tex.py` → `lab-si-pdg-table.tex`, `lab-ce-m-0{0,1,2,3,4}-{analysis,experiment}.tex`, `lab-ce-a-0{2,3}-{analysis,experiment}.tex` (журнал CE-M / CE-A, не «мы решили что ок»).
 
 `-Volume`: `construction` | `floors` | `cosmology` | `observer` | `chemistry` | `compute`
 

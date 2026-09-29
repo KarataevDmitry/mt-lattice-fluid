@@ -36,6 +36,10 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · book · протоколы прогона CE-* (не только карточки)
+
+**Книга:** `\labexperimentfile` + `generated/lab-ce-*-experiment.tex` (команда, таблицы, PASS/FAIL) после каждой карточки CE-M / CE-A-02/03. Ген: `build_ce_m*_experiment_latex` в `lab_records_tex.py`.
+
 ## 2026-09-29 · steer · полное квантование = факт на M, CE доказывает
 
 **Книга:** `cor:full-quantization` + `rem:full-quant-proof`; CE-M-04 (`Excitations_full_quantization`). Бремя доказательства — не смягчение утверждений, а реестр+журнал. $c_0/c=\sqrt{2}$ — геометрический факт (CE-M-00).
