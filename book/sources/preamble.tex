@@ -28,6 +28,8 @@
 
 \ifdefined\BookVolume
   \input{generated/construction-vol-refs.tex}%
+\else
+  \input{generated/floors-vol-refs.tex}%
 \fi
 
 \usepackage{enumitem}
@@ -55,9 +57,24 @@
     \emph{Построение}, \VolRef{#1}%
   }%
   \newcommand{\bref}[1]{\VolRef{#1}}%
+  \NewDocumentCommand{\CiteConstruction}{m}{%
+    \emph{Построение}, \VolRef{#1}%
+  }%
+  \NewDocumentCommand{\fcref}{m}{\cref{#1}}%
+  \NewDocumentCommand{\fvolrefs}{m}{\cref{#1}}%
 \else
   \NewDocumentCommand{\bcref}{m}{\cref{#1}}%
   \newcommand{\bref}[1]{\ref{#1}}%
+  \NewDocumentCommand{\CiteConstruction}{m}{\cref{#1}}%
+  \NewDocumentCommand{\fcref}{m}{%
+    \emph{Этажи}, \VolRef{#1}%
+  }%
+  \NewDocumentCommand{\fvolrefs}{m}{%
+    \emph{Этажи},%
+    \foreach \lbl [count=\i] in {#1} {%
+      \ifnum\i>1, \fi\VolRef{\lbl}%
+    }%
+  }%
 \fi
 
 \usepackage{fontspec}

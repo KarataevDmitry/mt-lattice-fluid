@@ -30,7 +30,7 @@ cd book
 ./build.ps1 -Volume cosmology
 ```
 
-`build.ps1` гоняет XeLaTeX столько раз, сколько нужно (до стабилизации ссылок в `.log`), с повторным `biber` при undefined citations. Ссылки на другой том (напр. `ch:floor*` из `construction`) не считаются ошибкой.
+`build.ps1` гоняет XeLaTeX столько раз, сколько нужно (до стабилизации ссылок в `.log`), с повторным `biber` при undefined citations. Межтомные номера: `generated/construction-vol-refs.tex` (для **floors**, макросы `\bcref`/`\bref`) и `generated/floors-vol-refs.tex` (для **construction**, `\fcref`/`\fvolrefs`); сборка **construction** при необходимости сначала гоняет **floors** (и наоборот), без рекурсии — флаги `-SkipFloorsPrebuild` / `-SkipConstructionPrebuild`.
 
 Перед сборкой **construction** / **floors**: `scripts/gen_lab_records_tex.py` → `lab-si-pdg-table.tex`, `lab-ce-m-0{0,1,2,3,4}-{analysis,experiment}.tex`, `lab-ce-a-0{2,3}-{analysis,experiment}.tex` (журнал CE-M / CE-A, не «мы решили что ок»).
 

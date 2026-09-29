@@ -3,7 +3,9 @@
 param(
     [ValidateSet('construction', 'floors', 'cosmology', 'observer', 'chemistry', 'compute')]
     [string]$Volume = 'construction',
-    [switch]$RenderFigures
+    [switch]$RenderFigures,
+    [switch]$SkipFloorsPrebuild,
+    [switch]$SkipConstructionPrebuild
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -335,12 +337,30 @@ if (-not (Test-Path -LiteralPath $mainPath)) {
     throw "Missing sources/$MainTex — see book/SERIES.md"
 }
 
+# construction: cross-refs from floors__build.aux → generated/floors-vol-refs.tex
+if ($Volume -eq 'construction' -and -not $SkipFloorsPrebuild) {
+    $floorsAux = Join-Path $OutWork 'floors__build.aux'
+    if (-not (Test-Path -LiteralPath $floorsAux)) {
+        Write-Host 'construction: building floors first (cross-volume .aux) ...'
+        & $PSCommandPath -Volume floors -SkipConstructionPrebuild
+        if ($LASTEXITCODE -ne 0) {
+            throw 'floors build failed (required for construction cross-refs)'
+        }
+    }
+    $genRefs = Join-Path (Split-Path $Root -Parent) 'scripts\gen_construction_vol_refs.py'
+    $floorVolRefs = Join-Path $Sources 'generated\floors-vol-refs.tex'
+    & python $genRefs $floorsAux $floorVolRefs
+    if ($LASTEXITCODE -ne 0) {
+        throw 'gen_construction_vol_refs.py failed (floors-vol-refs)'
+    }
+}
+
 # floors: cross-refs from construction__build.aux → generated/construction-vol-refs.tex
-if ($Volume -eq 'floors') {
+if ($Volume -eq 'floors' -and -not $SkipConstructionPrebuild) {
     $constructionAux = Join-Path $OutWork 'construction__build.aux'
     if (-not (Test-Path -LiteralPath $constructionAux)) {
         Write-Host 'floors: building construction first (cross-volume .aux) ...'
-        & $PSCommandPath -Volume construction
+        & $PSCommandPath -Volume construction -SkipFloorsPrebuild
         if ($LASTEXITCODE -ne 0) {
             throw 'construction build failed (required for floors cross-refs)'
         }
@@ -498,7 +518,7 @@ function Get-LaTeXLogUndefined {
 
 # Labels cited from another volume PDF (SERIES.md) — not errors for this build.
 $CrossVolumeRefPatternsByVolume = @{
-    construction = @('^ch:floor', '^ch:floors-preface')
+    construction = @('^ch:floor', '^ch:floors-preface', '^ch:critical-floors$')
     floors       = @(
         '^ch:(macro|si-sm|critical-construction|alpha|carrier|axioms|evolution|matter|descent|foundations)$'
     )
@@ -523,7 +543,7 @@ function Test-CrossVolumeReference {
 
 function Split-UndefinedReferences {
     param(
-        [Parameter(Mandatory)][string[]]$References,
+        [AllowEmptyCollection()][string[]]$References = @(),
         [Parameter(Mandatory)][string]$Vol
     )
     $internal = [System.Collections.Generic.List[string]]::new()
@@ -595,7 +615,7 @@ try {
     }
 
     $undef = Get-LaTeXLogUndefined -LogPath $logPath
-    $refSplit = Split-UndefinedReferences -References $undef.References -Vol $Volume
+    $refSplit = Split-UndefinedReferences -References @($undef.References) -Vol $Volume
     if ($refSplit.External.Count -gt 0) {
         Write-Host "Cross-volume references (expected for $Volume): $($refSplit.External -join ', ')"
     }
