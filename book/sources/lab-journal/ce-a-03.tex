@@ -1,0 +1,33 @@
+\label{exp:cea03}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Сверить $\tau_{^1S_0}$ с PDG по \eqref{eq:para-ps-tau} (strict upstream $m_e$); не путать с $\tau_M$ из CE-A-02.
+
+\textbf{Критерий.} PASS \texttt{Annihilation\_PDG\_tau\_strict}; $E_n^{(\mathrm{up})}\lesssim 2{,}5$.
+
+\subsubsection*{Теоретическая часть}
+GUM: \eqref{eq:tau-relative-unc}, \eqref{eq:en-score}; CODATA-$m_e$ path --- диагностика типа~B.
+
+\subsubsection*{Ход эксперимента}
+\texttt{Annihilation\_PDG\_tau\_strict}; опционально \texttt{Annihilation\_PDG\_tau\_bridge}.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{CE-A-03}
+\label{tab:exp-ce-a-03}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Наблюдаемое & Значение \\
+\midrule
+$\delta\tau/\tau$ (upstream) & $9{,}20\times 10^{-3}$ \\
+$E_n^{(\mathrm{up})}$ & $2{,}04$ \\
+$E_n$ (CODATA path) & $22{,}0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+Strict upstream в полосе; CODATA-path раздувает $E_n$ (leading $\Gamma$).
+
+\textbf{Статус:} закрыт (алгебра); lattice $\tau$ open.

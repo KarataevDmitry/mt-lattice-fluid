@@ -1,0 +1,33 @@
+\label{exp:cem04}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Закрепить \cref{cor:full-quantization}: на $M$ энергия $n_E\in\mathbb{Z}$; $\hbar\nu_0=2E_0$; волна на $M$ --- не онтология.
+
+\textbf{Критерий.} PASS \texttt{Excitations\_full\_quantization}.
+
+\subsubsection*{Теоретическая часть}
+Следствие 0.9 / Thm~5.2; Madelung и $|\Phi|^2$ --- только~\Tlayer\ (\cref{rem:full-quant-proof}).
+
+\subsubsection*{Ход эксперимента}
+\texttt{python verify\_principles.py --suite carrier}.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Кванты на $M$}
+\label{tab:exp-ce-m-04}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Наблюдаемая & Значение \\
+\midrule
+$\nu_0$ [Hz] & $2{,}62\times 10^{43}$ \\
+$\hbar\nu_0=2E_0$ & True \\
+Пример $n_E$ & $1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+Алгебраические тождества в допуске реестра (тип~B).
+
+\textbf{Статус:} закрыт.

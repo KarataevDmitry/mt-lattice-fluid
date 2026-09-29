@@ -1,0 +1,64 @@
+\label{exp:cem01}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Проверить классический предел дискретной динамики $g$ после осреднения $\mathcal{B}$ (\cref{def:soft-readout}):
+сходимость readout, FCC-Laplacian, Madelung/Bohm на IR-шкале.
+
+\textbf{Гипотеза.} Флаги \texttt{T\_classical\_limit} истинны; ошибка coarse$\to$Gaussian падает с ростом $R$.
+
+\textbf{Наблюдаемые.} Ошибка vs $R$; Madelung rel; $\omega_{\mathrm{tick}}$; флаги verify.
+
+\textbf{Критерий.} PASS \texttt{T\_classical\_limit}, \texttt{T\_hydro\_limit\_bundle}.
+
+\subsubsection*{Теоретическая часть}
+Макро-поле на~\Tlayer\ --- readout $\Phi=\mathcal{B}z$ (\cref{ch:macro}).
+В IR ожидается $\hat K\to 1-(2/3)k^2$ на FCC и классическая дисперсия NLSE/Madelung.
+
+\subsubsection*{Ход эксперимента}
+\texttt{python verify\_principles.py --suite t\_macro --device cpu}.
+
+\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*]
+\item Прогон suite \texttt{t\_macro}.
+\item Снять таблицы сходимости и Madelung (ниже).
+\item Зафикировать булевы флаги классического предела.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Binomial $\to$ Gaussian}
+\label{tab:exp-ce-m-01-gauss}
+\begin{tabular}{@{}ll@{}}
+\toprule
+$R$ & $\max$ rel.\ err. \\
+\midrule
+4 & $8{,}04\times 10^{-5}$ \\
+16 & $1{,}57\times 10^{-5}$ \\
+64 & $3{,}93\times 10^{-6}$ \\
+256 & $9{,}83\times 10^{-7}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Длинноволновый Madelung}
+\label{tab:exp-ce-m-01-mad}
+\begin{tabular}{@{}lll@{}}
+\toprule
+$\lambda/\Delta x$ & rel & $\omega_{\mathrm{tick}}$ \\
+\midrule
+32 & $4{,}17\times 10^{-2}$ & $0{,}0016$ \\
+64 & $2{,}81\times 10^{-2}$ & $0{,}0008$ \\
+128 & $2{,}76\times 10^{-2}$ & $0{,}0002$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+Сходимость по $R$ подтверждена; Madelung rel $\sim 10^{-2}$ --- сеточная систематика (тип~B).
+$\omega_{\mathrm{tick}}$ --- прокси одного такта, не тождественен macro-$c$ без калибровки шкалы.
+
+\textbf{Вывод.} T-гидродинамический предел согласован с $g$ на гладких возбуждениях.
+\textbf{Статус:} закрыт.

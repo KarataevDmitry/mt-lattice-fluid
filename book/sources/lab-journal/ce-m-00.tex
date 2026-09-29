@@ -1,0 +1,55 @@
+\label{exp:cem00}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Исключить смешение тактовой скорости звена $\caSignalSpeed$ с CODATA-$\speedC$:
+показать, что $\caKappaGeom$ фиксируется геометрией FCC, а не подгонкой из отношения скоростей,
+и что тождество $t_P=\ell_P/c$ \emph{не} описывает M-тик.
+
+\textbf{Гипотеза.} При SI-мосте (\cref{def:si-bridge}) выполняются $\htick=\caKappaGeom t_P$, $\speedC=\caKappaGeom c_0$,
+$c_0/c=1/\caKappaGeom=\sqrt{2}$; флаг \texttt{kappa\_not\_defined\_as\_c\_over\_c0} истинен (\cref{prop:c0-over-c,rem:two-c-burden}).
+
+\textbf{Наблюдаемые.} $\kappa_{\mathrm{geom}}$, $hT/t_P$, $c_0/c$, $E_0/E_P$ из \texttt{kappa\_bottom\_up\_row}.
+
+\textbf{Критерий принятия.} PASS \texttt{Kappa\_bottom\_up}: остатки тождеств $<10^{-12}$; $|c_0/c-\sqrt{2}|<10^{-6}$.
+
+\subsubsection*{Теоретическая часть}
+На~\Mlayer\ один такт~$g$ --- один NN-шаг (\cref{prop:m-one-tick-cone}).
+Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ и макро-$\speedC$ после осреднения --- разные объекты (\cref{def:two-speeds-formal}).
+Для FCC $\caKappaGeom=1/\sqrt{2}$ (\cref{sec:fcc-kappa}); SI-мост задаёт $\htick=\caKappaGeom t_P$, $\speedC=\caKappaGeom\caSignalSpeed$ (\cref{def:si-bridge}).
+Отсюда $c_0/c=\sqrt{2}$ без определения $\kappa$ как $c/\speedC$ на звене.
+
+\subsubsection*{Ход эксперимента}
+Алгебра \texttt{mt\_ca.si\_constants.SI}, поле на решётке не требуется.
+
+\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]
+\item Зафиксировать коммит репозитория и версию Python.
+\item Выполнить \texttt{python verify\_principles.py --suite carrier}.
+\item Убедиться в PASS \texttt{Kappa\_bottom\_up}.
+\item Перенести числа в табл.~\ref{tab:exp-ce-m-00}; сравнить $c_0/c$ с $1/\kappa_{\mathrm{geom}}$.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Наблюдаемые SI-моста (CE-M-00)}
+\label{tab:exp-ce-m-00}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Величина & Значение \\
+\midrule
+$\kappa_{\mathrm{geom}}$ (FCC) & $0{,}707107$ \\
+$hT/t_P$ & $0{,}707107$ \\
+$c_0/c$ & $1{,}414214$ \\
+$E_0/E_P$ & $0{,}707107$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+Три проекции одной строки совпадают: $\kappa=hT/t_P=E_0/E_P$.
+$c_0/c$ совпадает с $1/\kappa_{\mathrm{geom}}$ и с $\sqrt{2}$ --- проверка \cref{prop:c0-over-c}.
+
+Погрешность: тип~B, допуск реестра $10^{-12}$ на алгебраические остатки (\cref{sec:compare-reference}); ансамбль не нужен.
+
+\textbf{Вывод.} Continuum-упаковка $t_P=\ell_P/c$ не описывает M-тик; каузальность --- $c_0$ на звене $\ell_P$.
+\textbf{Статус:} закрыт (PASS \texttt{Kappa\_bottom\_up}).

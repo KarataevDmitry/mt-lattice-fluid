@@ -1,0 +1,34 @@
+\label{exp:cem03}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Сверить \cref{thm:vev,prop:ladder-scale-steps} с PDG без подгонки масс.
+
+\textbf{Критерий.} PASS \texttt{Higgs\_mass}, \texttt{Proton\_mass}, \texttt{Electron\_mass}, \texttt{Neutron\_mass}.
+
+\subsubsection*{Теоретическая часть}
+Массы и $v$ из лестницы главы SI; $\sin^2\theta_W^{(\mathrm{bare})}=3/13$; $\alpha_s(M_Z)$ из \cref{prop:alpha-s-seed}.
+
+\subsubsection*{Ход эксперимента}
+\texttt{python verify\_principles.py --suite sm}. Сводная таблица модель/PDG --- табл.~\ref{tab:si-pdg-ce-m} (глава~\cref{ch:si-sm}, приложение).
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Итоги verify \texttt{sm}}
+\label{tab:exp-ce-m-03-checks}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Проверка & Итог & $|\delta|$ \\
+\midrule
+\texttt{Higgs\_mass} & PASS & $4{,}73\times 10^{-4}$ \\
+\texttt{Proton\_mass} & PASS & $3{,}16\times 10^{-3}$ \\
+\texttt{Electron\_mass} & PASS & $4{,}50\times 10^{-3}$ \\
+\texttt{Neutron\_mass} & PASS & $3{,}44\times 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+Строки табл.~\ref{tab:si-pdg-ce-m} в полосе verify; зависимые якоря не считать независимыми (\cref{sec:multiple-observables}).
+
+\textbf{Статус:} закрыт.

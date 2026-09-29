@@ -1,0 +1,35 @@
+\label{exp:cea02}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Статистика head-on T2: ось mod~$\pi$, интервал Стьюдента для $\bar\varepsilon_\pi$; отделить $\tau_M$ от $\tau_{\mathrm{PDG}}$.
+
+\textbf{Критерий.} PASS \texttt{Annihilation\_T\_stats}; интервал $\bar\theta\pm t_{n-1,0.975}\,\mathrm{SE}$ (\cref{sec:student}).
+
+\subsubsection*{Теоретическая часть}
+Ансамбль вращений инъекции; $\tau_M=n_{\mathrm{ticks}} hT$ --- часы столкновения, не para-Ps (\cref{ch:measurement-processing}).
+
+\subsubsection*{Ход эксперимента}
+\texttt{python verify\_principles.py --suite sm}; $n=12$ в реестре.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{CE-A-02}
+\label{tab:exp-ce-a-02}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Наблюдаемое & Значение \\
+\midrule
+$\bar\varepsilon_\pi$ [rad] & $6{,}37\times 10^{-2}$ \\
+SEM [rad] & $1{,}03\times 10^{-2}$ \\
+$\tau_M/\tau_{\mathrm{PDG}}$ & $4{,}88\times 10^{-33}$ \\
+back-to-back & True \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+$t_{11,0.975}=2{,}201$; полуинтервал $\approx 2{,}26\times 10^{-2}\,\mathrm{rad}$.
+Тип~A; не спектроскопия PDG.
+
+\textbf{Статус:} закрыт.

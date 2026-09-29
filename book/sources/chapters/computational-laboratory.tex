@@ -48,30 +48,12 @@
 \section{Единый протокол записи опыта}
 \label{sec:lab-protocol}
 
-Каждая запись в журнале тома --- как лист лабораторной практики: \textbf{четыре раздела}
-(макросы \texttt{labrecord} в преамбуле книги автоматически группируют поля):
-
-\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*]
-\item \textbf{Постановка} --- цель, гипотеза, наблюдаемые, критерий PASS/FAIL.
-\item \textbf{Теоретическая часть} --- опора в MODEL и ссылки на главы (теоремы, определения).
-\item \textbf{Ход эксперимента} --- условия, команда реестра, шаги прогона и таблица сырых чисел
-  (\texttt{labjournalrun} $\to$ \texttt{book/sources/lab-journal/}, правка \emph{вручную} после прогона).
-\item \textbf{Анализ, расчёт погрешности и выводы} --- обработка по \cref{ch:measurement-processing},
-  явный блок погрешности (\texttt{labuncertainty}), вывод и статус записи.
-\end{enumerate}
+Каждая запись --- один файл \texttt{book/sources/lab-journal/<id>.tex}: обычный \LaTeX{},
+четыре подзаголовка \texttt{\textbackslash subsubsection*\{Постановка\}} и т.\,д., без макросов журнала.
+В \texttt{lab-*-records.tex} только \texttt{\textbackslash input\{lab-journal/ce-m-00.tex\}}.
 
 \begin{labrecord}{Шаблон (пустая форма)}{lab:template}
-\labgoal{Какой вопрос MODEL ставит на $\Tlayer$ или на sim-прокси.}
-\labhypothesis{Численное или качественное предсказание \emph{до} прогона.}
-\labobservables{Что именно извлекается из поля (норма, спектр, ось, время жизни прокси, \ldots).}
-\labcriterion{PASS/FAIL: пороги, допуски, $E_n$ к эталону, ансамбль + Стьюдент.}
-\labmodel{Пункты MODEL (§, теорема), которые опыт должен поддержать или опровергнуть; \cref{ch:carrier} и т.\,д.}
-\labsetup{Носитель, размер, границы, начальное состояние, число тактов, прибор чтения.}
-\labreproduce{Идентификатор в реестре; команда \texttt{verify\_principles.py}.}
-\labanalysis{Тип~A/B, перенос $u$, отделение систематики модели от табличного $u$.}
-\labuncertainty{GUM / Стьюдент / алгебраический допуск реестра --- явно, не «в уме''.}
-\labconclusion{Подтверждено / частично / не проверено / опровергнуто; что переносится в следующий опыт.}
-\labstatus{Закрыт / открыт / провал.}
+\input{lab-journal/template.tex}
 \end{labrecord}
 
 Серии опытов (\texttt{labseries}) объединяют прогоны с общим аппаратом

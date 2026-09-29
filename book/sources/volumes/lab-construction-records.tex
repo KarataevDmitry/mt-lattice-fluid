@@ -1,91 +1,25 @@
-% Журнал вычислительных опытов — том construction (серия CE-M).
+% Журнал CE-M — том construction.
 
 \begin{labseries}{Серия CE-M: макро-\Tlayer\ с дискретного \Mlayer}{sec:lab-series-ce-m}
 
 \begin{labrecord}{CE-M-00 · Две скорости: $c_0=\caSignalSpeed$ и CODATA-$c$}{lab:ce-m-00}
-\labgoal{Снять ложное «$c$ на планковском шаге'': зафиксировать $\caKappaGeom$ из геометрии FCC,
-  проверить $\htick=\caKappaGeom t_P$, $c=\caKappaGeom c_0$, $c_0/c=\sqrt{2}$ без подгонки $\kappa$ из отношения скоростей.}
-\labhypothesis{Алгебра SI-моста согласована; $\caSignalSpeed$ --- тактовая скорость звена, $\speedC$ --- макро-T после осреднения (\cref{rem:two-c-burden,sec:two-c}).}
-\labobservables{$\htick/t_P$, $c_0/c$, $E_0/E_P$; флаг \texttt{kappa\_not\_defined\_as\_c\_over\_c0}.}
-\labcriterion{PASS \texttt{Kappa\_bottom\_up}: тождества в пределах $10^{-12}$; $c_0/c\approx\sqrt{2}$.}
-\labmodel{MODEL §1.4--1.6; \cref{def:two-speeds-formal,prop:c0-over-c,prop:m-one-tick-cone,cor:no-m-kinematic-access,def:si-bridge}.}
-\labsetup{Строки \texttt{SI.kappa\_bottom\_up\_row()}: $\ell_P,t_P$ из $(\hbar,G,c)$; $\kappa$ из вписанной сферы кубооктаэдра (алгебра, без поля на решётке).}
-\labreproduce{\texttt{python verify\_principles.py --suite carrier} (проверка \texttt{Kappa\_bottom\_up}).}
-\labjournalrun{lab-journal/ce-m-00-run.tex}
-\labjournalanalysis{lab-journal/ce-m-00-analysis.tex}
-\labuncertainty{Тип~B (алгебра реестра): остатки тождеств SI-строки $\lesssim 10^{-12}$; $c_0/c$ сравнивается с $1/\kappa_{\mathrm{geom}}$ в double precision (\cref{sec:compare-reference}). Статистический ансамбль не требуется.}
-\labconclusion{Continuum-упаковка $t_P=\ell_P/c$ \emph{не} описывает M-тик; каузальность --- один NN-шаг за $\htick$, не CODATA-$c$ на звене.}
-\labstatus{Закрыт (алгебра + реестр carrier).}
+\input{lab-journal/ce-m-00.tex}
 \end{labrecord}
 
 \begin{labrecord}{CE-M-01 · Скорость макро-фронта на binomial-карте}{lab:ce-m-01}
-\labgoal{Проверить, что после осреднения $\mathcal{B}$ (\cref{sec:readout}) дискретная динамика
-  даёт макроскорость света $c$ в натуральных единицах карты, согласованную с постулатом T1.}
-\labhypothesis{Фронт импульса и дисперсионная полоса на крупной сетке соответствуют $c=1$
-  в шкале карты; анизотропия рёбер FCC усредняется на наблюдаемом масштабе.}
-\labobservables{Положение фронта vs такт; угловая/частотная дисперсия; фазовая скорость в IR.}
-\labcriterion{Отклонение эффективной скорости от $1$ в пределах заявленного численного допуска сетки;
-  отсутствие runaway-энергии (баланс A3).}
-\labmodel{MODEL~\S4.6--4.7; макро-волна и дисперсия $\symOmegaLower(k)$; \cref{ch:macro,def:soft-readout}.}
-\labsetup{Тор или открытая карта с периодическими границами; возбуждение импульсом или широкополосным шумом;
-  применение $\mathcal{B}$ с параметром $R$ из \cref{def:soft-readout}; длинная эволюция до стационарной полосы.}
-\labreproduce{Реестр: suite \texttt{t\_macro} (\texttt{T\_classical\_limit}, \texttt{T\_hydro\_limit\_bundle}, \ldots).}
-\labjournalrun{lab-journal/ce-m-01-run.tex}
-\labjournalanalysis{lab-journal/ce-m-01-analysis.tex}
-\labuncertainty{Дискретизация карты: сходимость binomial$\to$Gaussian по $R$; IR-скорость $\omega_{\mathrm{tick}}$ --- численный прокси с сеточным остатком (тип~B). См. \cref{sec:compare-reference}.}
-\labconclusion{Базовый макро-слой T согласован с дискретным $g$ на классе гладких возбуждений;
-  decisive-провал --- устойчивое $c\neq 1$ при сходящейся сетке.}
-\labstatus{Закрыт (реестр \texttt{t\_macro}, прокси IR-волны).}
+\input{lab-journal/ce-m-01.tex}
 \end{labrecord}
 
 \begin{labrecord}{CE-M-04 · Полное квантование возбуждений на \Mlayer}{lab:ce-m-04}
-\labgoal{Зафиксировать следствие 0.9 / Thm~5.2: на $M$ нет ontologic «волны''; энергия --- $n_E\in\mathbb{Z}$ квантов $\ladderEnergy$;
-  свет/звук --- occupancy мод; Madelung/$|\Phi|^2$ --- только $T$.}
-\labhypothesis{Строка \texttt{excitations\_full\_quantization\_row} закрывает лестницу $E_0$ и $\hbar\nu_0=2E_0$; флаги \texttt{no\_fundamental\_wave\_on\_M}, \texttt{continuum\_wave\_is\_T\_only} истинны.}
-\labobservables{$\nu_0=1/hT$, $\hbar\nu_0$ vs $2E_0$; пример $n_E$ из дискретного $\Phi$; сектор фотона $n=0$.}
-\labcriterion{PASS \texttt{Excitations\_full\_quantization} (suite \texttt{carrier}).}
-\labmodel{\cref{cor:full-quantization,rem:full-quant-proof}; MODEL Следствие 0.9, §5.2.5.}
-\labsetup{Алгебра SI: \texttt{elementary\_quanta\_row}, \texttt{energy\_quantum\_row}, $hT$, $E_0$ из SI-моста.}
-\labreproduce{\texttt{python verify\_principles.py --suite carrier}.}
-\labjournalrun{lab-journal/ce-m-04-run.tex}
-\labjournalanalysis{lab-journal/ce-m-04-analysis.tex}
-\labuncertainty{Алгебраические тождества $E_0$, $\hbar\nu_0$ --- тип~B с допуском реестра; не смешивать с спектром поля на решётке.}
-\labconclusion{Полное квантование на $M$ --- закрытый блок теории+реестра; это не заменяет CE по массам/$\tau$/GR.}
-\labstatus{Закрыт (реестр carrier).}
+\input{lab-journal/ce-m-04.tex}
 \end{labrecord}
 
 \begin{labrecord}{CE-M-02 · SI-мост и $\alpha$ без кругового входа}{lab:ce-m-02}
-\labgoal{Замкнуть размерную линейку §7--§8.2: $\kappa$, $hT$, $c=\kappa c_0$, coupling $\alpha$ из геометрии насыщающей фазы,
-  не подставляя $\alpha$ как свободный fit-параметр.}
-\labhypothesis{Предпочтительная $\alpha_{\mathrm{fs}}$ из M-определения согласуется с T-дверью CODATA
-  в пределах заявленных $u$; оптический Бор --- только контраст, не определение $N_{a_0}$.}
-\labobservables{Безразмерные отношения ($\alpha^{-1}$, $m_p/m_e$, hop-лестница); размерные якоря при фиксированных $\hbar,G,c$.}
-\labcriterion{$E_n\lesssim 1$ для независимых косвенных величин (\cref{sec:compare-reference});
-  явная пометка зависимых якорей (\cref{sec:multiple-observables}).}
-\labmodel{\cref{ch:si-sm}, \cref{ch:alpha}; MODEL~\S7, \S8.1--8.2.}
-\labsetup{Алгебраическая цепочка: фундаментальные целые и $\kappa$ $\to$ $E_0,p_0,u_P$ $\to$ массы upstairs $\to$ сравнение с таблицей.}
-\labreproduce{Реестр: \texttt{Alpha\_si\_bridge}, \texttt{Alpha\_upstairs\_mass\_probe}, связанные unit-checks.}
-\labjournalrun{lab-journal/ce-m-02-run.tex}
-\labjournalanalysis{lab-journal/ce-m-02-analysis.tex}
-\labuncertainty{GUM для косвенных величин: $u(\alpha)$ не входит в определение $\alpha_{\mathrm{pref}}$; сравнение масс --- $|\delta|$ из upstream §8.2 (\cref{sec:compare-reference,sec:multiple-observables}).}
-\labconclusion{Замыкание SI-строки на каркасе модели --- закрытый класс алгебраических опытов;
-  мягкие этажи выше лептонного окна остаются open в MODEL.}
-\labstatus{Закрыт (алгебра + таблица \cref{tab:si-pdg-ce-m}).}
+\input{lab-journal/ce-m-02.tex}
 \end{labrecord}
 
 \begin{labrecord}{CE-M-03 · Лестница масс $v$, $m_H$, $m_p$, $m_e$, $m_n$ vs PDG}{lab:ce-m-03}
-\labgoal{Численно проверить формулы \cref{thm:vev} и \cref{prop:ladder-scale-steps} без подгонки масс под PDG.}
-\labhypothesis{Относительные ошибки $m_H,m_p,m_e,m_n$ и $v$ ниже заявленных порогов verify; $\sin^2\theta_W^{(bare)}=3/13$.}
-\labobservables{GeV-шкала, $\alpha^{-1}$, $\sin^2\theta_W$, $\alpha_s(M_Z)$ --- см. \cref{tab:si-pdg-ce-m}.}
-\labcriterion{PASS реестра \texttt{Higgs\_mass}, \texttt{Proton\_mass}, \texttt{Electron\_mass}, \texttt{Neutron\_mass}; $|\delta|$ в таблице.}
-\labmodel{Раздел «Массы частиц'' настоящей главы; \cref{prop:weinberg-bare,prop:alpha-s-seed}.}
-\labsetup{Upstream §8.2 из \texttt{SI.*\_mass\_row()}; эталон --- константы PDG в коде реестра.}
-\labreproduce{\texttt{python verify\_principles.py --suite sm}; таблица --- \texttt{gen\_lab\_records\_tex.py}.}
-\labjournalrun{lab-journal/ce-m-03-run.tex}
-\labjournalanalysis{lab-journal/ce-m-03-analysis.tex}
-\labuncertainty{Для каждой строки таблицы: $|\delta|$ к PDG и при необходимости $E_n$ с переносом $u$ эталона (\cref{ch:measurement-processing}); зависимые якоря помечены в реестре.}
-\labconclusion{SI-лестница масс на каркасе модели --- закрытый вычислительный блок; не путать с lattice-bound $\tau$ (CE-A).}
-\labstatus{Закрыт (реестр sm).}
+\input{lab-journal/ce-m-03.tex}
 \end{labrecord}
 
 \end{labseries}

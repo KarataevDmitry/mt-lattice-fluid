@@ -8,7 +8,7 @@
 2. **Физика дальше дробится** по мере копания (новые тома, когда появляется **свой класс критических экспериментов**, а не «ещё одна глава»).
 3. **Каждый том заканчивается блоком «Критические эксперименты»** — предсказание + что считается провалом модели; без этого мало смысла. Шаблоны: `sources/volumes/chapter-critical-experiments-<id>.tex`.
 4. **§4.8 (системные кванты):** алгебра fractal в construction / macro; узел наблюдателя, **R_eff**, сравнение видов — том **observer**.
-5. **Вычислительная лаборатория** — `sources/chapters/computational-laboratory.tex` + макросы `glossary/lab-protocol.tex` (`labrecord`, `labseries`). Серия = затянувшаяся лаба: MODEL / аппарат / журнал прогонов.
+5. **Вычислительная лаборатория** — `computational-laboratory.tex`; журнал CE в `sources/lab-journal/*.tex` (ручной \LaTeX{}, четыре `\subsubsection*`). Обёртка: `labrecord` / `labseries` только дают заголовок и `\input`.
 6. **Обработка результатов измерений** — `measurement-processing.tex` через `include-measurement-processing.tex` **в каждом томе** после гл. лаборатории, перед «Критическими экспериментами». GUM, Стьюдент, $E_n$.
 7. **Критические эксперименты** — не буллет-лист: `\input{volumes/lab-*-records.tex}` с полными постановками (construction: `lab-construction-records.tex`; floors: `lab-floors-records.tex`).
 

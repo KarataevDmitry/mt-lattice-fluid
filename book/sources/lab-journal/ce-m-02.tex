@@ -1,0 +1,36 @@
+\label{exp:cem02}
+
+\subsubsection*{Постановка}
+\textbf{Цель.} Замкнуть SI-цепочку §7--§8.2: $\alpha_{\mathrm{pref}}$ из геометрии ($M=97$), массы upstairs без fit.
+
+\textbf{Критерий.} PASS \texttt{Alpha\_si\_bridge}, \texttt{Alpha\_upstairs\_mass\_probe}; $E_n\lesssim 1$ для независимых косвенных (\cref{sec:compare-reference}).
+
+\subsubsection*{Теоретическая часть}
+См. \cref{ch:alpha,ch:si-sm}: coupling из насыщающей фазы; массы --- косвенные величины с upstream §8.2.
+
+\subsubsection*{Ход эксперимента}
+\texttt{python verify\_principles.py --suite alpha --device cpu}.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{CE-M-02: SI-мост и массы}
+\label{tab:exp-ce-m-02}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Поле & Значение \\
+\midrule
+$\alpha^{-1}_{\mathrm{pref}}$ & $137{,}03599919$ \\
+$v$ [GeV] & $246{,}0873$ \\
+$|\delta m_H/m_H|$ & $4{,}73\times 10^{-4}$ \\
+$|\delta m_p|$ & $3{,}16\times 10^{-3}$ \\
+$|\delta m_e|$ & $4{,}50\times 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Анализ, расчёт погрешности и выводы}
+$\alpha^{-1}$ согласован с CODATA как следствие геометрии, не как вход.
+Погрешности масс --- $|\delta|$ к PDG при фиксированной лестнице.
+
+\textbf{Статус:} закрыт.

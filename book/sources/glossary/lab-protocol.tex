@@ -1,40 +1,10 @@
-% Протокол вычислительной лаборатории серии (см. ch:computational-laboratory).
-% Структура записи: постановка → теория → ход → анализ/погрешность/выводы.
-
-\newcounter{labpart}
-\newif\iflabdescopen
-
-\newcommand{\labclosepart}{%
-  \iflabdescopen
-    \end{description}%
-    \labdescopenfalse
-  \fi
-}
-
-\newcommand{\labopenpart}[1]{%
-  \labclosepart
-  \subsubsection*{#1}%
-  \begin{description}[style=nextline,leftmargin=2.8cm,font=\normalfont]%
-  \labdescopentrue
-}
-
-\newcommand{\labsetpart}[1]{%
-  \ifnum\value{labpart}=#1\relax\else
-    \ifnum#1=1 \labopenpart{Постановка}%
-    \else\ifnum#1=2 \labopenpart{Теоретическая часть}%
-    \else\ifnum#1=3 \labopenpart{Ход эксперимента}%
-    \else \labopenpart{Анализ, расчёт погрешности и выводы}%
-    \fi\fi\fi
-    \setcounter{labpart}{#1}%
-  \fi
-}
-
-\newcommand{\labstatus}[1]{\labsetpart{4}\item[\textbf{Статус записи.}] #1\par}
+% Журнал CE: полный текст опыта --- в book/sources/lab-journal/<id>.tex (обычный LaTeX).
+% labrecord = только заголовок подраздела + \input.
 
 \newenvironment{labseries}[2]{%
   \section{#1}%
   \label{#2}%
-  \noindent\emph{Серия связанных прогонов; общий аппарат и реестр воспроизводимости --- \cref{ch:computational-laboratory}.}\par\medskip
+  \par\medskip
 }{%
   \par\medskip
 }
@@ -42,38 +12,6 @@
 \newenvironment{labrecord}[2]{%
   \subsection{#1}%
   \label{#2}%
-  \setcounter{labpart}{0}%
 }{%
-  \labclosepart
-  \setcounter{labpart}{0}%
   \par\medskip
-}
-
-\newcommand{\labgoal}[1]{\labsetpart{1}\item[\textbf{Цель.}] #1}
-\newcommand{\labhypothesis}[1]{\labsetpart{1}\item[\textbf{Гипотеза / предсказание.}] #1}
-\newcommand{\labobservables}[1]{\labsetpart{1}\item[\textbf{Наблюдаемые.}] #1}
-\newcommand{\labcriterion}[1]{\labsetpart{1}\item[\textbf{Критерий принятия.}] #1}
-
-\newcommand{\labmodel}[1]{\labsetpart{2}\item[\textbf{Опора в MODEL / теория.}] #1}
-
-\newcommand{\labsetup}[1]{\labsetpart{3}\item[\textbf{Условия и объект.}] #1}
-\newcommand{\labreproduce}[1]{\labsetpart{3}\item[\textbf{Воспроизводимость (команда / реестр).}] #1}
-
-\newcommand{\labanalysis}[1]{\labsetpart{4}\item[\textbf{Анализ.}] #1}
-\newcommand{\labuncertainty}[1]{\labsetpart{4}\item[\textbf{Расчёт погрешности.}] #1}
-\newcommand{\labconclusion}[1]{\labsetpart{4}\item[\textbf{Выводы.}] #1}
-
-% Ручной журнал: book/sources/lab-journal/<id>-{run,analysis}.tex
-\newcommand{\labjournalrun}[1]{%
-  \labsetpart{3}%
-  \item[\textbf{Регистрация прогона.}]%
-  \IfFileExists{#1}{\input{#1}}{%
-    \emph{[нет файла #1 --- допишите фрагмент в \texttt{lab-journal/}]}}%
-}
-
-\newcommand{\labjournalanalysis}[1]{%
-  \labsetpart{4}%
-  \item[\textbf{Анализ.}]%
-  \IfFileExists{#1}{\input{#1}}{%
-    \emph{[нет файла #1 --- допишите фрагмент в \texttt{lab-journal/}]}}%
 }
