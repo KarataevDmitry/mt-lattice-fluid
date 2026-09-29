@@ -168,6 +168,25 @@ def build_ce_m01_analysis_latex(*, device: str = "cpu") -> str:
     )
 
 
+def build_ce_m04_analysis_latex(*, device: str = "cpu") -> str:
+    del device
+    from mt_ca.si_constants import SI
+
+    row = SI.excitations_full_quantization_row()
+    nu0 = float(row["nu0_Hz"])
+    e0 = float(row["E0_J"])
+    hbar_nu0 = float(row["hbar_nu0_J"])
+    n_ex = int(row["n_E_from_phi_example"])
+    approx = r"\approx"
+    return _tex_paragraph(
+        rf"$\nu_0=1/hT{approx}{tex_sci(nu0)}\,$Hz; "
+        rf"$\hbar\nu_0{approx}{tex_sci(hbar_nu0)}\,$J vs $2E_0{approx}{tex_sci(2*e0)}\,$J. "
+        rf"Пример $n_E={n_ex}$ из дискретного $\Phi$. "
+        rf"Флаги: волна на $M$ --- нет; фотон $n=0$; Madelung --- $T$. "
+        r"Проверка: \texttt{Excitations\_full\_quantization}."
+    )
+
+
 def build_ce_m02_analysis_latex(*, device: str = "cpu") -> str:
     del device
     from mt_ca.si_constants import SI
@@ -304,6 +323,7 @@ def generate_construction_lab_fragments(*, device: str = "cpu") -> dict[str, str
         "generated/lab-si-pdg-table.tex": hdr + build_si_pdg_table_latex(device=device),
         "generated/lab-ce-m-00-analysis.tex": hdr + build_ce_m00_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-01-analysis.tex": hdr + build_ce_m01_analysis_latex(device=device) + "\n",
+        "generated/lab-ce-m-04-analysis.tex": hdr + build_ce_m04_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-02-analysis.tex": hdr + build_ce_m02_analysis_latex(device=device) + "\n",
         "generated/lab-ce-m-03-analysis.tex": hdr + build_ce_m03_analysis_latex(device=device) + "\n",
     }

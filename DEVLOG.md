@@ -36,9 +36,13 @@ SSOT: [`MODEL.md`](MODEL.md) + [`model/`](model/) · META: [`META.md`](META.md) 
 
 **Код:** `mt_ca/annihilation_pdg_tau.py` · `TAU_PARA_PS_PDG_S` · verify **`Annihilation_PDG_tau_bridge`** · в **`Annihilation_M_T_bundle`**.
 
+## 2026-09-29 · steer · полное квантование = факт на M, CE доказывает
+
+**Книга:** `cor:full-quantization` + `rem:full-quant-proof`; CE-M-04 (`Excitations_full_quantization`). Бремя доказательства — не смягчение утверждений, а реестр+журнал. $c_0/c=\sqrt{2}$ — геометрический факт (CE-M-00).
+
 ## 2026-09-29 · book · бремя доказательства + CE-M-00/01 ($c_0$ vs $c$)
 
-**Книга:** `sec:lab-burden-of-proof`; `rem:two-c-burden` ($c_0/c=\sqrt{2}$, не сверхсвет на T); `rem:not-full-qft`; CE-M-00 (`Kappa_bottom_up`), CE-M-01 (`t_macro` autogen). MODEL: Следствие 0.9 переименовано — не «полная КТП».
+**Книга:** `sec:lab-burden-of-proof`; `rem:two-c-burden`; CE-M-00 (`Kappa_bottom_up`), CE-M-01 (`t_macro` autogen).
 
 ## 2026-09-29 · book · CE-M SI/PDG журнал (не «решили что ок»)
 

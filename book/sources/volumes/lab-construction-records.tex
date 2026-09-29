@@ -34,6 +34,20 @@
 \labstatus{Закрыт (реестр \texttt{t\_macro}, прокси IR-волны).}
 \end{labrecord}
 
+\begin{labrecord}{CE-M-04 · Полное квантование возбуждений на \Mlayer}{lab:ce-m-04}
+\labgoal{Зафиксировать следствие 0.9 / Thm~5.2: на $M$ нет ontologic «волны''; энергия --- $n_E\in\mathbb{Z}$ квантов $\ladderEnergy$;
+  свет/звук --- occupancy мод; Madelung/$|\Phi|^2$ --- только $T$.}
+\labhypothesis{Строка \texttt{excitations\_full\_quantization\_row} закрывает лестницу $E_0$ и $\hbar\nu_0=2E_0$; флаги \texttt{no\_fundamental\_wave\_on\_M}, \texttt{continuum\_wave\_is\_T\_only} истинны.}
+\labmodel{\cref{cor:full-quantization,rem:full-quant-proof}; MODEL Следствие 0.9, §5.2.5.}
+\labsetup{Алгебра SI: \texttt{elementary\_quanta\_row}, \texttt{energy\_quantum\_row}, $hT$, $E_0$ из SI-моста.}
+\labobservables{$\nu_0=1/hT$, $\hbar\nu_0$ vs $2E_0$; пример $n_E$ из дискретного $\Phi$; сектор фотона $n=0$.}
+\labcriterion{PASS \texttt{Excitations\_full\_quantization} (suite \texttt{carrier}).}
+\labanalysisfile{generated/lab-ce-m-04-analysis.tex}
+\labconclusion{Полное квантование на $M$ --- закрытый блок теории+реестра; это не заменяет CE по массам/$\tau$/GR.}
+\labreproduce{\texttt{python verify\_principles.py --suite carrier}.}
+\labstatus{Закрыт (реестр carrier).}
+\end{labrecord}
+
 \begin{labrecord}{CE-M-02 · SI-мост и $\alpha$ без кругового входа}{lab:ce-m-02}
 \labgoal{Замкнуть размерную линейку §7--§8.2: $\kappa$, $hT$, $c=\kappa c_0$, coupling $\alpha$ из геометрии насыщающей фазы,
   не подставляя $\alpha$ как свободный fit-параметр.}
