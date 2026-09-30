@@ -1,34 +1,57 @@
 \label{exp:cem03}
 
 \subsubsection*{Постановка}
-\textbf{Цель.} Сверить \cref{thm:vev,prop:ladder-scale-steps} с PDG без подгонки масс.
+\textbf{Физический вопрос.}
+Стандартная модель фиксирует массы фермионов, бозона Хиггса и масштаб $v$ как измеренные величины.
+Модель утверждает, что те же числа выводятся из лестницы масштабов и bare-параметров (\cref{thm:vev,prop:ladder-scale-steps}) без подгонки каждой массы отдельно.
 
-\textbf{Критерий.} PASS \texttt{Higgs\_mass}, \texttt{Proton\_mass}, \texttt{Electron\_mass}, \texttt{Neutron\_mass}.
+\textbf{Что проверяем.}
+\begin{enumerate}[label=\textbf{(\alph*)},leftmargin=*,itemsep=0.25em]
+\item $v$ и массы $m_H$, $m_p$, $m_e$, $m_n$ из формул главы SI согласуются с PDG в полосе модели.
+\item Bare $\sin^2\theta_W^{(\mathrm{bare})}=3/13$ и $\alpha_s(M_Z)$ из seed (\cref{prop:alpha-s-seed}) остаются в согласованном блоке с массами.
+\item Сводная таблица модель/PDG (\cref{tab:si-pdg-ce-m}, глава~\cref{ch:si-sm}) не смешивает зависимые якоря как независимые тесты (\cref{sec:multiple-observables}).
+\end{enumerate}
+
+\textbf{Рабочая гипотеза.}
+Относительные отклонения масс остаются $\mathcal{O}(10^{-3})$--$\mathcal{O}(10^{-4})$ при фиксированной лестнице; ни одна строка сводной таблицы не выходит за verify-полосу без объяснения upstream.
+
+\textbf{Наблюдаемые.}
+Строки сводной таблицы PDG; контрольные $|\delta|$ по отдельным массам (табл.~\ref{tab:exp-ce-m-03-checks}).
+
+\textbf{Критерий согласия с теорией.}
+Каждая масса в полосе, зафиксированной для SM-suite; интерпретация только с учётом графа зависимостей якорей.
 
 \subsubsection*{Теоретическая часть}
-Массы и $v$ из лестницы главы SI; $\sin^2\theta_W^{(\mathrm{bare})}=3/13$; $\alpha_s(M_Z)$ из \cref{prop:alpha-s-seed}.
+Теорема о $v$ и шаги лестницы задают дискретные масштабы; массы частиц --- функции этих масштабов и bare coupling (\cref{ch:si-sm,ch:alpha}).
+Сравнение с PDG --- проверка \emph{всего блока} предсказаний, а не «одна масса = один степень свободы''.
 
 \subsubsection*{Ход эксперимента}
-\texttt{python verify\_principles.py --suite sm}. Сводная таблица модель/PDG --- табл.~\ref{tab:si-pdg-ce-m} (глава~\cref{ch:si-sm}, приложение).
+Воспроизведение: \texttt{python verify\_principles.py --suite sm}.
+Сводка модель/PDG: табл.~\ref{tab:si-pdg-ce-m} (глава~\cref{ch:si-sm}, приложение).
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{Итоги verify \texttt{sm}}
+\caption{Относительные отклонения масс к PDG (CE-M-03)}
 \label{tab:exp-ce-m-03-checks}
 \begin{tabular}{@{}lll@{}}
 \toprule
-Проверка & Итог & $|\delta|$ \\
+Наблюдаемая & Согласие с полосой & $|\delta|$ \\
 \midrule
-\texttt{Higgs\_mass} & PASS & $4{,}73\times 10^{-4}$ \\
-\texttt{Proton\_mass} & PASS & $3{,}16\times 10^{-3}$ \\
-\texttt{Electron\_mass} & PASS & $4{,}50\times 10^{-3}$ \\
-\texttt{Neutron\_mass} & PASS & $3{,}44\times 10^{-3}$ \\
+$m_H$ & да & $4{,}73\times 10^{-4}$ \\
+$m_p$ & да & $3{,}16\times 10^{-3}$ \\
+$m_e$ & да & $4{,}50\times 10^{-3}$ \\
+$m_n$ & да & $3{,}44\times 10^{-3}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsubsection*{Анализ, расчёт погрешности и выводы}
-Строки табл.~\ref{tab:si-pdg-ce-m} в полосе verify; зависимые якоря не считать независимыми (\cref{sec:multiple-observables}).
+Все четыре массы в одном порядке отклонения от PDG; это согласовано с одной лестницей, а не с четырьмя независимыми fits.
+Строки табл.~\ref{tab:si-pdg-ce-m} читаются вместе с \cref{sec:multiple-observables}: повторное использование $v$ или $m_e$ в разных строках не удваивает статистический вес.
 
-\textbf{Статус:} закрыт.
+Погрешность: тип~B (сравнение с PDG как внешним эталоном).
+
+\textbf{Вывод.}
+Лестница масс и bare-параметры дают SM-спектр в заявленной полосе без построчной подгонки.
+\textbf{Статус записи:} опыт закрыт по сводной таблице и табл.~\ref{tab:exp-ce-m-03-checks}.

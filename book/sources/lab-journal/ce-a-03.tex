@@ -1,20 +1,44 @@
 \label{exp:cea03}
 
 \subsubsection*{Постановка}
-\textbf{Цель.} Сверить $\tau_{^1S_0}$ с PDG по \eqref{eq:para-ps-tau} (strict upstream $m_e$); не путать с $\tau_M$ из CE-A-02.
+\textbf{Физический вопрос.}
+Время жизни пара-позитрония $^1S_0$ измерено в QED с высокой точностью (PDG).
+Модель даёт формулу \eqref{eq:para-ps-tau} через upstream-массу $m_e$ и coupling без подстановки CODATA-$m_e$ «внутрь $\Gamma$''.
+Согласуется ли $\tau_{^1S_0}$ с PDG в полосе GUM, и что ломается, если подставить CODATA-$m_e$ напрямую?
 
-\textbf{Критерий.} PASS \texttt{Annihilation\_PDG\_tau\_strict}; $E_n^{(\mathrm{up})}\lesssim 2{,}5$.
+\textbf{Что проверяем.}
+\begin{enumerate}[label=\textbf{(\alph*)},leftmargin=*,itemsep=0.25em]
+\item Strict upstream path: $\delta\tau/\tau$ и $E_n^{(\mathrm{up})}$ (\eqref{eq:tau-relative-unc}, \eqref{eq:en-score}).
+\item Диагностика CODATA-$m_e$ path: ожидаемо завышенный $E_n$ (leading $\Gamma$ не согласован с strict).
+\item Отделение от $\tau_M$ lattice-столкновения (CE-A-02).
+\end{enumerate}
+
+\textbf{Рабочая гипотеза.}
+Upstream даёт $E_n^{(\mathrm{up})}\lesssim 2{,}5$; CODATA-path раздувает $E_n$ порядка $20+$ --- артефакт смешения входов.
+
+\textbf{Наблюдаемые.}
+$\delta\tau/\tau$ (upstream), $E_n^{(\mathrm{up})}$, $E_n$ (CODATA path) --- табл.~\ref{tab:exp-ce-a-03}.
+
+\textbf{Критерий согласия с теорией.}
+Strict upstream в полосе GUM; CODATA-path не используется как критерий приёмки; lattice-$\tau$ остаётся open (отдельная программа).
 
 \subsubsection*{Теоретическая часть}
-GUM: \eqref{eq:tau-relative-unc}, \eqref{eq:en-score}; CODATA-$m_e$ path --- диагностика типа~B.
+GUM сравнивает модель и эталон с явным учётом независимых вкладов в неопределённость (\cref{ch:measurement-processing}).
+QED-$\tau$ --- макро-observable; вывод через лестницу требует одной цепочки масс и $\alpha$, без двойного использования CODATA-$m_e$.
 
 \subsubsection*{Ход эксперимента}
-\texttt{Annihilation\_PDG\_tau\_strict}; опционально \texttt{Annihilation\_PDG\_tau\_bridge}.
+Прогоны \texttt{Annihilation\_PDG\_tau\_strict}; опционально \texttt{Annihilation\_PDG\_tau\_bridge} для диагностики.
+
+\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]
+\item Вычислить $\tau$ по \eqref{eq:para-ps-tau} с upstream $m_e$.
+\item Оценить $\delta\tau/\tau$ и $E_n^{(\mathrm{up})}$.
+\item Повторить с CODATA-$m_e$ только как контроль смешения входов.
+\end{enumerate}
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{CE-A-03}
+\caption{Para-Ps $\tau$: upstream vs CODATA path (CE-A-03)}
 \label{tab:exp-ce-a-03}
 \begin{tabular}{@{}ll@{}}
 \toprule
@@ -28,6 +52,11 @@ $E_n$ (CODATA path) & $22{,}0$ \\
 \end{table}
 
 \subsubsection*{Анализ, расчёт погрешности и выводы}
-Strict upstream в полосе; CODATA-path раздувает $E_n$ (leading $\Gamma$).
+Strict upstream: $E_n^{(\mathrm{up})}\approx 2$ --- согласие с PDG в рамках GUM; относительная ошибка $\tau$ $\sim 10^{-2}$ трактуется по \eqref{eq:tau-relative-unc}.
+CODATA-path $E_n\approx 22$ показывает, почему нельзя подставлять измеренное $m_e$ в ту же $\Gamma$, что уже зависит от лестницы.
 
-\textbf{Статус:} закрыт (алгебра); lattice $\tau$ open.
+Lattice-время $\tau_M$ из CE-A-02 к para-Ps не привязано --- \textbf{open} до отдельной калибровки тактов.
+
+\textbf{Вывод.}
+Алгебра $\tau_{^1S_0}$ с upstream согласована с PDG; смешение входов ломает $E_n$.
+\textbf{Статус записи:} QED-сверка закрыта (upstream); эмуляция lattice-$\tau$ open.

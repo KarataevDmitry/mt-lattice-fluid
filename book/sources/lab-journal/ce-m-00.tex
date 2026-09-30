@@ -1,31 +1,42 @@
 \label{exp:cem00}
 
 \subsubsection*{Постановка}
-\textbf{Цель.} Исключить смешение тактовой скорости звена $\caSignalSpeed$ с CODATA-$\speedC$:
-показать, что $\caKappaGeom$ фиксируется геометрией FCC, а не подгонкой из отношения скоростей,
-и что тождество $t_P=\ell_P/c$ \emph{не} описывает M-тик.
+\textbf{Физический вопрос.}
+На микроуровне~$M$ каузальность ограничена тактовой скоростью звена $c_0=\caStepSpace/\htick$;
+в учебниках и CODATA фигурирует макроскопическая $\speedC$ и continuum-упаковка $t_P=\ell_P/c$.
+Смешиваются ли эти объекты, если задать SI-мост \emph{снизу вверх} от геометрии FCC, а не подгонкой $\kappa=c/c_0$?
 
-\textbf{Гипотеза.} При SI-мосте (\cref{def:si-bridge}) выполняются $\htick=\caKappaGeom t_P$, $\speedC=\caKappaGeom c_0$,
-$c_0/c=1/\caKappaGeom=\sqrt{2}$; флаг \texttt{kappa\_not\_defined\_as\_c\_over\_c0} истинен (\cref{prop:c0-over-c,rem:two-c-burden}).
+\textbf{Что проверяем.}
+\begin{enumerate}[label=\textbf{(\alph*)},leftmargin=*,itemsep=0.25em]
+\item Одна безразмерная константа $\caKappaGeom$ одновременно связывает шаг времени, шаг энергии и макро-$c$ (\cref{def:si-bridge,sec:fcc-kappa}).
+\item Отношение $c_0/c$ следует из геометрии ($\caKappaGeom=1/\sqrt{2}$ на FCC), а не вводится как определение $\kappa$ (\cref{prop:c0-over-c,rem:two-c-burden}).
+\item Планковский тик continuum ($t_P$ при $c$) \emph{не} тождественен одному шагу~$g$ на~$M$ (\cref{prop:m-one-tick-cone,def:two-speeds-formal}).
+\end{enumerate}
 
-\textbf{Наблюдаемые.} $\kappa_{\mathrm{geom}}$, $hT/t_P$, $c_0/c$, $E_0/E_P$ из \texttt{kappa\_bottom\_up\_row}.
+\textbf{Рабочая гипотеза.}
+При фиксированных CODATA-константах алгебра SI-моста замыкается: $\kappa_{\mathrm{geom}}=hT/t_P=E_0/E_P$ и $c_0/c=1/\kappa_{\mathrm{geom}}=\sqrt{2}$ с остатками только машинного округления.
 
-\textbf{Критерий принятия.} PASS \texttt{Kappa\_bottom\_up}: остатки тождеств $<10^{-12}$; $|c_0/c-\sqrt{2}|<10^{-6}$.
+\textbf{Наблюдаемые.}
+$\kappa_{\mathrm{geom}}$, $hT/t_P$, $c_0/c$, $E_0/E_P$ (табл.~\ref{tab:exp-ce-m-00}) --- четыре проекции одной строки констант.
+
+\textbf{Критерий согласия с теорией.}
+Совпадение трёх проекций $\kappa$; $|c_0/c-\sqrt{2}|<10^{-6}$; алгебраические остатки SI-тождеств $<10^{-12}$ (\cref{sec:compare-reference}, тип~B).
 
 \subsubsection*{Теоретическая часть}
-На~\Mlayer\ один такт~$g$ --- один NN-шаг (\cref{prop:m-one-tick-cone}).
-Тактовая скорость $\caSignalSpeed=\caStepSpace/\htick$ и макро-$\speedC$ после осреднения --- разные объекты (\cref{def:two-speeds-formal}).
-Для FCC $\caKappaGeom=1/\sqrt{2}$ (\cref{sec:fcc-kappa}); SI-мост задаёт $\htick=\caKappaGeom t_P$, $\speedC=\caKappaGeom\caSignalSpeed$ (\cref{def:si-bridge}).
-Отсюда $c_0/c=\sqrt{2}$ без определения $\kappa$ как $c/\speedC$ на звене.
+Один такт~$g$ на~$M$ --- один шаг по $N_{12}$ внутри светового конуса (\cref{prop:m-one-tick-cone}).
+Тактовая скорость $c_0$ и скорость, с которой макроскопический фронт после осреднения сопоставляется с $\speedC$, --- разные уровни описания (\cref{def:two-speeds-formal}).
+SI-мост \emph{определяет} $\htick=\caKappaGeom t_P$ и $\speedC=\caKappaGeom c_0$, где $\caKappaGeom$ выводится из изотропии FCC (\cref{sec:fcc-kappa}), а не из измеренного отношения $c/c_0$.
+
+Опыт чисто алгебраический: поле $z$ на решётке не эволюционирует; проверяется согласованность определений перед любыми гидро- и SM-сверками.
 
 \subsubsection*{Ход эксперимента}
-Алгебра \texttt{mt\_ca.si\_constants.SI}, поле на решётке не требуется.
+Модуль констант \texttt{mt\_ca.si\_constants.SI}; воспроизведение:
+\texttt{python verify\_principles.py --suite carrier}.
 
 \begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]
-\item Зафиксировать коммит репозитория и версию Python.
-\item Выполнить \texttt{python verify\_principles.py --suite carrier}.
-\item Убедиться в PASS \texttt{Kappa\_bottom\_up}.
-\item Перенести числа в табл.~\ref{tab:exp-ce-m-00}; сравнить $c_0/c$ с $1/\kappa_{\mathrm{geom}}$.
+\item Зафиксировать коммит и окружение (\cref{ch:computational-laboratory}).
+\item Вычислить строку SI-моста и перенести значения в табл.~\ref{tab:exp-ce-m-00}.
+\item Сравнить $c_0/c$ с $1/\kappa_{\mathrm{geom}}$ и с $\sqrt{2}$.
 \end{enumerate}
 
 \begin{table}[htbp]
@@ -46,10 +57,11 @@ $E_0/E_P$ & $0{,}707107$ \\
 \end{table}
 
 \subsubsection*{Анализ, расчёт погрешности и выводы}
-Три проекции одной строки совпадают: $\kappa=hT/t_P=E_0/E_P$.
-$c_0/c$ совпадает с $1/\kappa_{\mathrm{geom}}$ и с $\sqrt{2}$ --- проверка \cref{prop:c0-over-c}.
+Три проекции $\kappa$ совпадают побитово в таблице: геометрия FCC, время и энергия на звене --- одна константа.
+$c_0/c=\sqrt{2}$ --- следствие $\caKappaGeom$, не подгонка (\cref{prop:c0-over-c}).
 
-Погрешность: тип~B, допуск реестра $10^{-12}$ на алгебраические остатки (\cref{sec:compare-reference}); ансамбль не нужен.
+Погрешность: тип~B (алгебра + float); ансамбль не требуется.
 
-\textbf{Вывод.} Continuum-упаковка $t_P=\ell_P/c$ не описывает M-тик; каузальность --- $c_0$ на звене $\ell_P$.
-\textbf{Статус:} закрыт (PASS \texttt{Kappa\_bottom\_up}).
+\textbf{Вывод.}
+Continuum-формула $t_P=\ell_P/c$ описывает \emph{макро}упаковку; микро-тик и $c_0$ живут на~$M$ и связываются с CODATA только через явный мост.
+\textbf{Статус записи:} опыт закрыт по согласованию с \cref{rem:two-c-burden}.

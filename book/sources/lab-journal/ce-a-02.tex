@@ -1,20 +1,43 @@
 \label{exp:cea02}
 
 \subsubsection*{Постановка}
-\textbf{Цель.} Статистика head-on T2: ось mod~$\pi$, интервал Стьюдента для $\bar\varepsilon_\pi$; отделить $\tau_M$ от $\tau_{\mathrm{PDG}}$.
+\textbf{Физический вопрос.}
+При head-on столкновении $e^+e^-$ (прокси pm на решётке) ожидается почти противоположный выход двух фотонов: ось реакции и угол в плоскости должны быть согласованы с мод~$\pi$ (с точностью до дискретности).
+Отдельно: \emph{тактовое} время столкновения $\tau_M=n_{\mathrm{ticks}}\,hT$ на~$M$ не тождественно лабораторному $\tau_{^1S_0}$ ortho/para-позитрония в PDG --- это разные часы (\cref{ch:measurement-processing}).
 
-\textbf{Критерий.} PASS \texttt{Annihilation\_T\_stats}; интервал $\bar\theta\pm t_{n-1,0.975}\,\mathrm{SE}$ (\cref{sec:student}).
+\textbf{Что проверяем.}
+\begin{enumerate}[label=\textbf{(\alph*)},leftmargin=*,itemsep=0.25em]
+\item Ансамбль вращений начальной инъекции ($n=12$): оценка $\bar\varepsilon_\pi$ и разброса оси mod~$\pi$.
+\item Флаг back-to-back в модели столкновения на решётке.
+\item Отношение $\tau_M/\tau_{\mathrm{PDG}}$ как диагностика масштаба времени, \emph{не} как проверка QED-$\tau$.
+\end{enumerate}
+
+\textbf{Рабочая гипотеза.}
+$\bar\varepsilon_\pi$ мало при head-on; интервал Стьюдента для среднего не перекрывает $\pi/2$; $\tau_M/\tau_{\mathrm{PDG}}\ll 1$ (разные определения времени).
+
+\textbf{Наблюдаемые.}
+$\bar\varepsilon_\pi$, SEM, $\tau_M/\tau_{\mathrm{PDG}}$, back-to-back (табл.~\ref{tab:exp-ce-a-02}).
+
+\textbf{Критерий согласия с теорией.}
+Интервал $\bar\theta\pm t_{n-1,0.975}\,\mathrm{SE}$ (\cref{sec:student}); осознанное отделение $\tau_M$ от PDG-$\tau$ (CE-A-03).
 
 \subsubsection*{Теоретическая часть}
-Ансамбль вращений инъекции; $\tau_M=n_{\mathrm{ticks}} hT$ --- часы столкновения, не para-Ps (\cref{ch:measurement-processing}).
+Ансамбль на~$T$ --- тип~A: вращаем только фазу инъекции, не меняя микро-правило $g$.
+$\tau_M$ считает такты до фиксированного readout-события; PDG-$\tau$ --- распад связанного атомного состояния после QED и bound state --- другой эксперимент.
 
 \subsubsection*{Ход эксперимента}
-\texttt{python verify\_principles.py --suite sm}; $n=12$ в реестре.
+Воспроизведение: \texttt{python verify\_principles.py --suite sm}; $n=12$ в реестре.
+
+\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]
+\item Собрать углы оси mod~$\pi$ по ансамблю.
+\item Вычислить $\bar\varepsilon_\pi$, SEM, доверительный полуинтервал.
+\item Записать $\tau_M$ и отношение к $\tau_{\mathrm{PDG}}$ без интерпретации как спектроскопии.
+\end{enumerate}
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{CE-A-02}
+\caption{Head-on ансамбль: ось и часы (CE-A-02)}
 \label{tab:exp-ce-a-02}
 \begin{tabular}{@{}ll@{}}
 \toprule
@@ -23,13 +46,17 @@
 $\bar\varepsilon_\pi$ [rad] & $6{,}37\times 10^{-2}$ \\
 SEM [rad] & $1{,}03\times 10^{-2}$ \\
 $\tau_M/\tau_{\mathrm{PDG}}$ & $4{,}88\times 10^{-33}$ \\
-back-to-back & True \\
+back-to-back & да \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsubsection*{Анализ, расчёт погрешности и выводы}
-$t_{11,0.975}=2{,}201$; полуинтервал $\approx 2{,}26\times 10^{-2}\,\mathrm{rad}$.
-Тип~A; не спектроскопия PDG.
+$t_{11,0.975}=2{,}201$; полуинтервал $\approx 2{,}26\times 10^{-2}\,\mathrm{rad}$ --- ось остаётся в полосе head-on mod~$\pi$.
+$\tau_M/\tau_{\mathrm{PDG}}\sim 10^{-33}$ подчёркивает: lattice-такты не калибруются в para-Ps без отдельного моста (CE-A-03).
 
-\textbf{Статус:} закрыт.
+Тип~A для углов; $\tau$ --- диагностика типа~B.
+
+\textbf{Вывод.}
+Геометрия выхода на~$T$ согласована с head-on; lattice-время столкновения не смешивать с PDG-$\tau_{^1S_0}$.
+\textbf{Статус записи:} опыт закрыт по табл.~\ref{tab:exp-ce-a-02}.

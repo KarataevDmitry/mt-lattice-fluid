@@ -1,20 +1,43 @@
 \label{exp:cem02}
 
 \subsubsection*{Постановка}
-\textbf{Цель.} Замкнуть SI-цепочку §7--§8.2: $\alpha_{\mathrm{pref}}$ из геометрии ($M=97$), массы upstairs без fit.
+\textbf{Физический вопрос.}
+Постоянная тонкой структуры $\alpha$ и масштаб $v$ в Стандартной модели обычно \emph{входят} как параметры.
+В модели coupling и массы upstairs должны вытекать из геометрии насыщающей фазы и лестницы §7--§8 без кругового «подставили $\alpha$ из CODATA, получили $\alpha$''.
 
-\textbf{Критерий.} PASS \texttt{Alpha\_si\_bridge}, \texttt{Alpha\_upstairs\_mass\_probe}; $E_n\lesssim 1$ для независимых косвенных (\cref{sec:compare-reference}).
+\textbf{Что проверяем.}
+\begin{enumerate}[label=\textbf{(\alph*)},leftmargin=*,itemsep=0.25em]
+\item $\alpha^{-1}_{\mathrm{pref}}$ из геометрического счёта ($M=97$ и связанные факторы, \cref{ch:alpha}) согласуется с CODATA как \emph{выход}, не как fit.
+\item Массы $m_H$, $m_p$, $m_e$ (и связанные якоря) из upstairs-лестницы дают относительные отклонения $|\delta m/m|$ к PDG в заявленной полосе модели.
+\item Независимые косвенные наблюдаемые не раздувают $E_n$ сверх порога сравнения (\cref{sec:compare-reference}).
+\end{enumerate}
+
+\textbf{Рабочая гипотеза.}
+При фиксированной лестнице и SI-мосте CE-M-00 относительные ошибки масс остаются на уровне $10^{-3}$--$10^{-4}$, а $\alpha^{-1}$ попадает в полосу CODATA без дополнительных свободных параметров.
+
+\textbf{Наблюдаемые.}
+$\alpha^{-1}_{\mathrm{pref}}$, $v$, $|\delta m_H/m_H|$, $|\delta m_p|$, $|\delta m_e|$ (табл.~\ref{tab:exp-ce-m-02}).
+
+\textbf{Критерий согласия с теорией.}
+$|\delta m/m|$ в полосе, зафиксированной для upstream-якорей; $\alpha^{-1}$ согласован с экспериментом как следствие геометрии; $E_n\lesssim 1$ для независимых косвенных.
 
 \subsubsection*{Теоретическая часть}
-См. \cref{ch:alpha,ch:si-sm}: coupling из насыщающей фазы; массы --- косвенные величины с upstream §8.2.
+Глава~\cref{ch:alpha} связывает $\alpha_{\mathrm{pref}}$ с фазой насыщения и дискретным счётом степеней свободы; глава~\cref{ch:si-sm} задаёт массы через лестницу и $v$.
+Массы на~$T$ --- \emph{косвенные}: они зависят от выбранных upstairs-якорей (\cref{sec:multiple-observables}); сравнение с PDG всегда сопровождается явным перечнем зависимостей.
 
 \subsubsection*{Ход эксперимента}
-\texttt{python verify\_principles.py --suite alpha --device cpu}.
+Воспроизведение: \texttt{python verify\_principles.py --suite alpha --device cpu}.
+
+\begin{enumerate}[label=\textbf{Шаг \arabic*:},leftmargin=*,itemsep=0.35em]
+\item Зафиксировать коммит; прогнать suite \texttt{alpha}.
+\item Снять $\alpha^{-1}_{\mathrm{pref}}$ и $v$ из SI-цепочки.
+\item Вычислить $|\delta m/m|$ для $H$, $p$, $e$ относительно PDG при той же лестнице.
+\end{enumerate}
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{CE-M-02: SI-мост и массы}
+\caption{SI-мост и массы upstairs (CE-M-02)}
 \label{tab:exp-ce-m-02}
 \begin{tabular}{@{}ll@{}}
 \toprule
@@ -30,7 +53,11 @@ $|\delta m_e|$ & $4{,}50\times 10^{-3}$ \\
 \end{table}
 
 \subsubsection*{Анализ, расчёт погрешности и выводы}
-$\alpha^{-1}$ согласован с CODATA как следствие геометрии, не как вход.
-Погрешности масс --- $|\delta|$ к PDG при фиксированной лестнице.
+$\alpha^{-1}_{\mathrm{pref}}$ совпадает с CODATA в пределах заявленной точности модели --- coupling не подставлен задним числом.
+Ошибки масс --- относительные $|\delta|$ к PDG при \emph{одной} фиксированной лестнице; это не независимые «пять разных экспериментов'', а согласованный блок (\cref{sec:multiple-observables}).
 
-\textbf{Статус:} закрыт.
+Погрешность: тип~B для алгебры $\alpha$; массы --- сравнение с внешним эталоном PDG (тип~B) плюс учёт зависимых якорей.
+
+\textbf{Вывод.}
+Цепочка §7--§8.2 замкнута: геометрия $\to$ $\alpha$, лестница $\to$ $v$ и массы без fit $\alpha$ из эксперимента.
+\textbf{Статус записи:} опыт закрыт по табл.~\ref{tab:exp-ce-m-02} и порогам \cref{sec:compare-reference}.
